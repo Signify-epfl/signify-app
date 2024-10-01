@@ -33,7 +33,10 @@
 
 - **Sign Language Expansion**: We plan to expand to British and French sign languages to enrich the learning experience and broaden accessibility.
 - **Additional Learning Modes**: Introducing more diverse exercises and quizzes to enhance the user experience.
+## Design and Mockups
 
+The design and user interface mockups for **Signify** are available on Figma. This includes wireframes, high-fidelity screens, and prototypes that showcase the overall user experience and visual flow of the app.  
+You can view the Figma project here: [Signify Figma Project](https://www.figma.com/files/team/1415806088953386120/project/284550251/Signify-Team?fuid=1415806084792420415)
 ## Contributing
 
 Contributions are welcome! Please submit a pull request or open an issue to discuss any changes.
