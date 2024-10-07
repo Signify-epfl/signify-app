@@ -39,6 +39,10 @@ android {
             useSupportLibrary = true
         }
         manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
+
+        ndk {
+            abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a"))
+        }
     }
 
     buildTypes {
@@ -169,6 +173,13 @@ dependencies {
 
             // Networking with OkHttp
             implementation(libs.okhttp)
+            // MediaPipe Hands solution
+            implementation("com.google.mediapipe:tasks-vision:0.20230731")
+            // CameraX dependencies for accessing the phone's camera
+            implementation("androidx.camera:camera-core:1.3.0")
+            implementation("androidx.camera:camera-camera2:1.3.0")
+            implementation("androidx.camera:camera-lifecycle:1.3.0")
+            implementation("androidx.camera:camera-view:1.3.0")
 
             // Testing Unit
             testImplementation(libs.junit)
