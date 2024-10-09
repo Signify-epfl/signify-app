@@ -3,6 +3,7 @@
 agp = "8.4.2"
 camera = "17.0.0"
 cameraCamera2 = "1.2.3"
+coilCompose = "2.1.0"
 json = "20240303"
 kotlin = "1.9.0"
 gms = "4.4.2"
@@ -90,6 +91,7 @@ androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref =
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "ui" }
 camera = { module = "com.android.support:camera", version.ref = "camera" }
 camera-camera2 = { module = "com.androidx.camera:camera-camera2", version.ref = "cameraCamera2" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 core-ktx = { module = "com.google.android.play:core-ktx", version.ref = "coreKtxVersion" }
 firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
 firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
