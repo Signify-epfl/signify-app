@@ -8,4 +8,5 @@ object Route {
     const val CHALLENGE = "Challenge"
     const val AUTH = "Auth"
     const val WELCOME = "Welcome"
+    const val FRIENDS = "Friends"
 }
