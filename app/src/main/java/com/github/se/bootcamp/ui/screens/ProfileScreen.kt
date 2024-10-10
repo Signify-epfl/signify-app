@@ -67,7 +67,6 @@ fun ProfileScreen(
     hardExercises: Int,
     dailyQuests: Int,
     weeklyQuests: Int,
-    onSettingsClick: () -> Unit,
     onGraphClick: () -> Unit,
     navigationActions: NavigationActions
 ) {
@@ -101,7 +100,7 @@ fun ProfileScreen(
                 }
 
 
-                Button(onClick = onSettingsClick,
+                Button(onClick = { navigationActions.navigateTo("Settings") },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF05A9FB))
                 ) {
                     Icon(Icons.Outlined.Settings , tint = Color.White, contentDescription = "Settings")
@@ -114,7 +113,8 @@ fun ProfileScreen(
                         Surface(
                             shape = RoundedCornerShape(8.dp),
                             color = Color.LightGray,
-                            modifier = Modifier.padding(16.dp)
+                            modifier = Modifier
+                                .padding(16.dp)
                                 .border(2.dp, Color.Gray, RoundedCornerShape(12.dp))
                                 .clip(RoundedCornerShape(12.dp))
                         ) {

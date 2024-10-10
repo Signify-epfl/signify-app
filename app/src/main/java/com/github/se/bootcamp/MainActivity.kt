@@ -127,7 +127,6 @@ fun SignifyAppPreview() {
           hardExercises = 0,
           dailyQuests = 1,
           weeklyQuests = 0,
-          onSettingsClick = { /* Handle settings click */ },
           onGraphClick = { /* Handle graph click */ },
           navigationActions = navigationActions
         )
@@ -143,6 +142,14 @@ fun SignifyAppPreview() {
           onSearchUser = { /* Handle search user */ },
           navigationActions = navigationActions
         )
+      }
+
+      composable(Route.SETTINGS){
+        SettingsScreen(
+          profilePictureUrl = null, // Replace with actual URL or null
+          navigationActions = navigationActions
+        )
+
       }
 
     }
