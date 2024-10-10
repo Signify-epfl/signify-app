@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -29,9 +30,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.bootcamp.R
+import com.github.se.bootcamp.ui.navigation.NavigationActions
 import kotlinx.coroutines.delay
 
-@Preview @Composable fun WelcomeScreen() {
+@Composable fun WelcomeScreen(navigationActions: NavigationActions) {
 
     // List of image resource ids for hand sign animation
     val images = listOf(
@@ -44,22 +46,23 @@ import kotlinx.coroutines.delay
         R.drawable.letter_y
     )
 
+    // Welcome text to display
     val welcomeText = "Welcome to Signify"
 
     // Indexes of the letters to highlight
     val highlightIndices = listOf(11, 12, 13, 14, 15, 16, 17)
 
     // State to keep track of the current image index
-    var currentImage by remember { mutableStateOf(0) }
+    var currentImage by remember { mutableIntStateOf(0) }
 
     // LaunchedEffect to change the image every 1 second
     LaunchedEffect(Unit) {
         while (currentImage < images.size - 1) {
-            delay(600)  // 1 second delay between images
+            delay(600)  // delay between images
             currentImage += 1
         }
-        // After the animation ends, navigate to the main screen
-        delay(2000)  // Optional pause after the last image
+        delay(2000)  // Pause after the last image
+        navigationActions.navigateTo("Auth")
     }
     Column (
         modifier = Modifier.fillMaxSize()
@@ -88,7 +91,7 @@ fun HighlightedText(text: String, highlightIndex: Int) {
         text = buildAnnotatedString {
             // Iterate over each character in the string
             for (i in text.indices) {
-                // If it's the character to highlight, apply a different color
+                // If it's the character to highlight, underline it
                 if (i == highlightIndex) {
                     withStyle(style = SpanStyle(textDecoration = TextDecoration.Underline, color = Color.White)) {
                         append(text[i])

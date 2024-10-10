@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.bootcamp.R
+import com.github.se.bootcamp.ui.navigation.NavigationActions
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -44,7 +45,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 @Composable
-fun SignInScreen() {
+fun LoginScreen(navigationActions: NavigationActions) {
   val context = LocalContext.current
 
   val launcher =
@@ -52,6 +53,7 @@ fun SignInScreen() {
           onAuthComplete = { result ->
             Log.d("SignInScreen", "User signed in: ${result.user?.displayName}")
             Toast.makeText(context, "Login successful!", Toast.LENGTH_LONG).show()
+            navigationActions.navigateTo("Challenge")
           },
           onAuthError = {
             Log.e("SignInScreen", "Failed to sign in: ${it.statusCode}")
@@ -131,11 +133,10 @@ fun GoogleSignInButton(onSignInClick: () -> Unit) {
       onClick = onSignInClick,
       colors = ButtonDefaults.buttonColors(containerColor = Color.White), // Button color
       shape = RoundedCornerShape(50), // Circular edges for the button
-      border = BorderStroke(1.dp, Color.LightGray),
+      border = BorderStroke(1.dp, Color.White),
       modifier =
           Modifier.padding(8.dp)
-              .height(48.dp) // Adjust height as needed
-              .testTag("loginButton")) {
+              .height(48.dp)) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
