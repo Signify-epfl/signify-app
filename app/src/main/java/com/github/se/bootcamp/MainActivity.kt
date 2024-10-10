@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
           val context = LocalContext.current
           val handLandMarkImplementation = HandLandMarkImplementation("hand_landmarker.task","RFC_model_ir9_opset19.onnx")
           val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
-          MainAimScreen(handLandMarkViewModel)
+          SignifyAppPreview()
         }
       }
     }
@@ -64,21 +64,7 @@ fun SignifyApp() {
         MainAimScreen(handLandMarkViewModel)
       }
       //composable(Route.PRACTICE) { PracticeScreen() }
-      composable(Route.PROFILE) { ProfileScreen(
-        userId = "Test ID 1",
-        userName = "Test Name 1",
-        profilePictureUrl = null, // Replace with actual URL or null
-        numberOfDays = 30,
-        lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F'),
-        easyExercises = 1,
-        hardExercises = 0,
-        dailyQuests = 1,
-        weeklyQuests = 0,
-        onSettingsClick = { /* Handle settings click */ },
-        onHelpClick = { /* Handle help click */ },
-        onFriendsClick = { /* Handle friends click */ },
-        onGraphClick = { /* Handle graph click */ }
-      ) }
+      //composable(Route.PROFILE) { ProfileScreen()}
       //composable(Route.QUEST) { QuestScreen() }
       //composable(Route.CHALLENGE) { ChallengeScreen() }
     }
@@ -130,7 +116,35 @@ fun SignifyAppPreview() {
       startDestination = Screen.PROFILE,
       route = Route.PROFILE,
     ) {
-      composable(Screen.PROFILE) { /* Call the profile screen composable with the naviAct as a parameter */ }
+      composable(Screen.PROFILE) {
+        ProfileScreen(
+          userId = "Test ID 1",
+          userName = "Test Name 1",
+          profilePictureUrl = null, // Replace with actual URL or null
+          numberOfDays = 30,
+          lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F'),
+          easyExercises = 1,
+          hardExercises = 0,
+          dailyQuests = 1,
+          weeklyQuests = 0,
+          onSettingsClick = { /* Handle settings click */ },
+          onGraphClick = { /* Handle graph click */ },
+          navigationActions = navigationActions
+        )
+      }
+
+      composable(Route.FRIENDS) {
+        FriendsListScreen(
+          currentFriends = listOf("Friend 1", "Friend 2", "Friend 3"), // replace with actual data
+          friendRequests = listOf("Friend 4"), // replace with actual data
+          onRemoveFriend = { /* Handle remove friend */ },
+          onAcceptFriendRequest = { /* Handle accept friend request */ },
+          onRejectFriendRequest = { /* Handle reject friend request */ },
+          onSearchUser = { /* Handle search user */ },
+          navigationActions = navigationActions
+        )
+      }
+
     }
 
     navigation(
