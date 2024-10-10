@@ -6,7 +6,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -16,18 +20,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.se.bootcamp.R
-import java.util.Locale
+import com.github.se.bootcamp.ui.navigation.NavigationActions
 
 @Composable
-fun ExerciseScreen(difficulty: DifficultyLevel,word: String = "FGINSY") {
+fun ExerciseScreen(navigationActions : NavigationActions, difficulty : DifficultyLevel, word : String) {
 
     val context = LocalContext.current
 
@@ -40,11 +41,24 @@ fun ExerciseScreen(difficulty: DifficultyLevel,word: String = "FGINSY") {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
             .background(Color(0xFF333333)),
 
         contentAlignment = Alignment.Center // Center all content in the Box
     ) {
+
+        IconButton(
+            onClick = { navigationActions.goBack() },
+            modifier = Modifier
+                .padding(16.dp) // Add some padding to position it away from the edges
+                .align(Alignment.TopStart) // Align the button to the top-left corner
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Back",
+                tint = Color.White // Customize icon color if needed
+            )
+        }
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center // Center content in the Column as well
@@ -71,7 +85,7 @@ fun ExerciseScreen(difficulty: DifficultyLevel,word: String = "FGINSY") {
                             painter = painterResource(id = imageResId),
                             contentDescription = "Sign image",
                             modifier = Modifier
-                                .size(80.dp)
+                                .size(120.dp)
                         )
                     }
 
@@ -81,23 +95,16 @@ fun ExerciseScreen(difficulty: DifficultyLevel,word: String = "FGINSY") {
                     Text("Image for letter $currentLetter not found.")
                 }
 
-            } else {
-                // Minimal instructions for hard mode
-
-
-
             }
 
             // Display the current word and letter
 
             val wordDisplay = buildString {
-                // Add the part before the current letter
+
                 append(word.substring(0, currentLetterIndex).lowercase())
 
-                // Add the current letter with spaces and uppercase it
                 append(" ${word[currentLetterIndex].uppercase()} ")
 
-                // Add the part after the current letter
                 append(word.substring(currentLetterIndex + 1).lowercase())
             }
 
@@ -136,11 +143,12 @@ fun ExerciseScreen(difficulty: DifficultyLevel,word: String = "FGINSY") {
 
         }
 
-        // Success Button aligned at the bottom of the screen
+        // REMOVE THIS WHEN CAMERA SUCCESS
+
         Box(
             modifier = Modifier
-                .fillMaxSize(),
-            contentAlignment = Alignment.BottomCenter // Place button at the bottom center
+                .fillMaxSize().padding(30.dp),
+            contentAlignment = Alignment.BottomCenter
         ) {
             Button(
                 onClick = {
@@ -182,10 +190,4 @@ fun onSuccess(
 
 enum class DifficultyLevel {
     EASY, HARD
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ExerciseScreenPreview() {
-    ExerciseScreen(DifficultyLevel.HARD)  // Uses the default value "HELLO"
 }
