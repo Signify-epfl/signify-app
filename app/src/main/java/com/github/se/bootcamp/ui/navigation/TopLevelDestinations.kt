@@ -44,9 +44,9 @@ object TopLevelDestinations {
 }
 
 val LIST_TOP_LEVEL_DESTINATION = listOf(
-    TopLevelDestinations.CHALLENGE,
-    TopLevelDestinations.QUEST,
-    TopLevelDestinations.MAIN_AIM,
     TopLevelDestinations.PRACTICE,
-    TopLevelDestinations.PROFILE
+    TopLevelDestinations.MAIN_AIM,
+    TopLevelDestinations.PROFILE,
+    TopLevelDestinations.QUEST,
+    TopLevelDestinations.CHALLENGE
 )
