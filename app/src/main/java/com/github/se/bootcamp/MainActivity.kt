@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.github.se.bootcamp.ui.navigation.BottomNavigationMenu
 import com.github.se.bootcamp.ui.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.bootcamp.ui.navigation.NavigationActions
@@ -27,7 +29,7 @@ class MainActivity : ComponentActivity() {
     setContent {
       BootcampTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-          MainAimScreen()
+          SignifyAppPreview()
         }
       }
     }
@@ -106,6 +108,25 @@ fun SignifyAppPreview() {
       route = Route.PRACTICE,
     ) {
       composable(Screen.PRACTICE) { PracticeScreen(navigationActions) }
+      composable(
+        route = "${Screen.EXERCISE}/{difficulty}/{word}",
+        arguments = listOf(
+          navArgument("difficulty") { type = NavType.StringType }, // Define difficulty argument
+          navArgument("word") { type = NavType.StringType } // Define word argument
+        )
+      ) { backStackEntry ->
+        // Get the arguments from the backStackEntry
+        val difficulty = backStackEntry.arguments?.getString("difficulty") ?: "EASY" // Default to EASY
+        val word = backStackEntry.arguments?.getString("word") ?: "default"
+
+        // Pass the arguments to ExerciseScreen
+        ExerciseScreen(
+          difficulty = DifficultyLevel.valueOf(difficulty), // Convert string to enum
+          word = word,
+          navigationActions = navigationActions
+
+        )
+      }
     }
 
     navigation(

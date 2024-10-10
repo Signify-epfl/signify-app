@@ -25,6 +25,11 @@ open class NavigationActions(
             //}
         }
     }
+    // New function to navigate to ExerciseScreen with arguments
+    open fun navigateToExerciseScreen(difficulty: String, word: String) {
+        val route = "${Screen.EXERCISE}/$difficulty/$word"
+        navController.navigate(route)
+    }
 
     open fun navigateTo(screen: String) {
         navController.navigate(screen)
