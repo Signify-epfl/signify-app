@@ -8,10 +8,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.github.se.bootcamp.model.hand.HandLandMarkImplementation
+import com.github.se.bootcamp.model.hand.HandLandMarkViewModel
 import com.github.se.bootcamp.ui.navigation.BottomNavigationMenu
 import com.github.se.bootcamp.ui.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.bootcamp.ui.navigation.NavigationActions
@@ -27,7 +30,10 @@ class MainActivity : ComponentActivity() {
     setContent {
       BootcampTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-          MainAimScreen()
+          val context = LocalContext.current
+          val handLandMarkImplementation = HandLandMarkImplementation("hand_landmarker.task","RFC_model_ir9_opset19.onnx")
+          val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
+          MainAimScreen(handLandMarkViewModel)
         }
       }
     }
@@ -51,7 +57,12 @@ fun SignifyApp() {
     }
   ) {
     NavHost(navController = navController, startDestination = Route.MAIN_AIM) {
-      composable(Route.MAIN_AIM) { MainAimScreen() }
+      composable(Route.MAIN_AIM) {
+        val context = LocalContext.current
+        val handLandMarkImplementation = HandLandMarkImplementation("hand_landmarker.task","RFC_model_ir9_opset19.onnx")
+        val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
+        MainAimScreen(handLandMarkViewModel)
+      }
       //composable(Route.PRACTICE) { PracticeScreen() }
       composable(Route.PROFILE) { ProfileScreen(
         userId = "Test ID 1",

@@ -1,42 +1,40 @@
 package com.github.se.bootcamp.ui.screens
-
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.ImageFormat
-import android.graphics.Rect
-import android.graphics.YuvImage
-import android.os.SystemClock
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.vector.DefaultStrokeLineWidth
+import androidx.compose.ui.graphics.vector.VectorProperty
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import com.google.mediapipe.framework.image.BitmapImageBuilder
-import com.google.mediapipe.framework.image.MPImage
-import com.google.mediapipe.tasks.core.BaseOptions
-import com.google.mediapipe.tasks.vision.core.RunningMode
+import com.github.se.bootcamp.model.hand.HandLandMarkViewModel
+import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarker
-import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarker.HandLandmarkerOptions
-import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarkerResult
-import java.io.ByteArrayOutputStream
 import java.util.concurrent.Executors
 
 @Composable
-fun MainAimScreen() {
+fun MainAimScreen(handLandMarkViewModel: HandLandMarkViewModel) {
     val context = LocalContext.current
     var permissionGranted by remember { mutableStateOf(false) }
 
@@ -60,7 +58,7 @@ fun MainAimScreen() {
 
     if (permissionGranted) {
         CameraPreviewView()
-        LandMarkView()
+        LandMarkView(handLandMarkViewModel)
     }
 }
 
@@ -82,7 +80,6 @@ fun CameraPreviewView() {
                 // Setup preview use case
                 val preview =
                     Preview.Builder().build().also { it.setSurfaceProvider(previewView.surfaceProvider) }
-
                 try {
                     // Bind camera lifecycle to the preview
                     cameraProvider.unbindAll()
@@ -96,33 +93,21 @@ fun CameraPreviewView() {
 }
 
 @Composable
-fun LandMarkView() {
-    val context = LocalContext.current
-    val baseOptionsBuilder = BaseOptions.builder().setModelAssetPath("hand_landmarker.task")
-    val baseOptions = baseOptionsBuilder.build()
+fun LandMarkView(handLandMarkViewModel: HandLandMarkViewModel) {
+    val landmarksState = handLandMarkViewModel.landMarks().collectAsState()
+    Log.d("HandLandMarkViewModel", "LandMarkView ${landmarksState.value?.get(0)}")
+    // Camera preview with image analysis
+    CameraPreviewWithAnalysisView(handLandMarkViewModel)
 
-    val handLandmarker = remember {
-        val optionsBuilder =
-            HandLandmarkerOptions.builder()
-                .setBaseOptions(baseOptions)
-                .setMinHandDetectionConfidence(0.5f)
-                .setRunningMode(RunningMode.LIVE_STREAM)
-                .setResultListener { result, mpImage -> returnLivestreamResult(result, mpImage) }
-                .setErrorListener { error -> returnLivestreamError(error) }
-
-        val options = optionsBuilder.build()
-        HandLandmarker.createFromOptions(context, options)
-    }
-
-    CameraPreviewWithAnalysisView(handLandmarker)
+    // Draw the hand landmarks
+    DrawHandLandmarks(landmarks = landmarksState.value, handLandMarkViewModel.getSolution())
 }
 
 @Composable
-fun CameraPreviewWithAnalysisView(handLandmarker: HandLandmarker) {
+fun CameraPreviewWithAnalysisView(handLandMarkViewModel: HandLandMarkViewModel ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val previewView = remember { PreviewView(context) }
-
     AndroidView(factory = { previewView }, modifier = Modifier.fillMaxSize())
 
     LaunchedEffect(Unit) {
@@ -142,7 +127,7 @@ fun CameraPreviewWithAnalysisView(handLandmarker: HandLandmarker) {
                         .build()
 
                 imageAnalysis.setAnalyzer(Executors.newSingleThreadExecutor()) { imageProxy ->
-                    processImageProxyThrottled(handLandmarker, imageProxy)
+                    handLandMarkViewModel.processImageProxyThrottled(imageProxy)
                 }
 
                 try {
@@ -155,91 +140,79 @@ fun CameraPreviewWithAnalysisView(handLandmarker: HandLandmarker) {
             ContextCompat.getMainExecutor(context))
     }
 }
+@Composable
 
-fun processImageProxy(handLandmarker: HandLandmarker, imageProxy: ImageProxy) {
-    try {
-        val bitmap = imageProxy.toBitmap()
+fun DrawHandLandmarks(landmarks: List<NormalizedLandmark>?, text: String) {
+    if (landmarks == null || landmarks.isEmpty()) return
 
-        if (bitmap != null) {
-            val frameTime = SystemClock.uptimeMillis()
-            val mpImage = BitmapImageBuilder(bitmap).build()
-            handLandmarker.detectAsync(mpImage, frameTime)
-        } else {
-            Log.e("HandLandmarker", "Bitmap conversion failed")
-        }
-    } catch (e: Exception) {
-        Log.e("HandLandmarker", "Error processing image proxy", e)
-    } finally {
-        imageProxy.close()
-    }
-}
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        // Define the connections between landmarks (adjust based on hand model)
+        val connections = listOf(
+            listOf(0, 1, 2, 3, 4),    // Thumb
+            listOf(0, 5, 6, 7, 8),    // Index Finger
+            listOf(0, 9, 10, 11, 12), // Middle Finger
+            listOf(0, 13, 14, 15, 16), // Ring Finger
+            listOf(0, 17, 18, 19, 20)  // Pinky
+        )
 
-var lastProcessedTime = 0L
+        // Scaling factors to map landmarks to screen size
+        val widthScale = size.width
+        val heightScale = size.height
 
-fun processImageProxyThrottled(handLandmarker: HandLandmarker, imageProxy: ImageProxy) {
-    val currentTime = SystemClock.uptimeMillis()
-    if (currentTime - lastProcessedTime >= 500) {
-        processImageProxy(handLandmarker, imageProxy)
-        lastProcessedTime = currentTime
-    } else {
-        imageProxy.close()
-    }
-}
+        // Custom styles for the landmark points and connections
+        val pointRadius = 10f  // Radius of the points
+        val pointColor = Color.Cyan  // Color for the points
+        val lineColor = Color.White  // Color for the lines
+        val lineWidth = 5f  // Line thickness
 
-fun ImageProxy.toBitmap(): Bitmap? {
-    return try {
-        val yBuffer = planes[0].buffer // Y
-        val uBuffer = planes[1].buffer // U
-        val vBuffer = planes[2].buffer // V
+        // Iterate over the connection lists and draw lines between the connected points
+        connections.forEach { connection ->
+            val path = Path()
+            connection.forEachIndexed { index, pointIndex ->
+                val landmark = landmarks[pointIndex]
+                val x = landmark.y() * widthScale
+                val y = landmark.x() * heightScale
 
-        val ySize = yBuffer.remaining()
-        val uSize = uBuffer.remaining()
-        val vSize = vBuffer.remaining()
+                if (index == 0) {
+                    path.moveTo(x, y)
+                } else {
+                    path.lineTo(x, y)
+                }
 
-        val nv21 = ByteArray(ySize + uSize + vSize)
-
-        yBuffer.get(nv21, 0, ySize)
-        vBuffer.get(nv21, ySize, vSize)
-        uBuffer.get(nv21, ySize + vSize, uSize)
-
-        val yuvImage = YuvImage(nv21, ImageFormat.NV21, width, height, null)
-        val out = ByteArrayOutputStream()
-        yuvImage.compressToJpeg(Rect(0, 0, width, height), 100, out)
-        val imageBytes = out.toByteArray()
-        BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-    } catch (e: Exception) {
-        Log.e("ImageProxyToBitmap", "Failed to convert ImageProxy to Bitmap", e)
-        null
-    }
-}
-
-fun returnLivestreamError(runtimeException: RuntimeException?) {
-    runtimeException?.printStackTrace()
-}
-
-fun returnLivestreamResult(handLandmarkerResult: HandLandmarkerResult?, mpImage: MPImage?) {
-
-    if (handLandmarkerResult == null) {
-        Log.d("HandLandmarkerResult", "No hands detected.")
-        return
-    }
-
-    val data = mutableListOf<List<Float>>()
-
-    for (hand in handLandmarkerResult.landmarks()) {
-        val dataAux = mutableListOf<Float>()
-
-        for (landmark in hand) {
-            val x = landmark.x()
-            val y = landmark.y()
-
-            dataAux.add(x)
-            dataAux.add(y)
-
-            Log.d("HandLandmarkerResult", "x: $x, y: $y")
+                // Draw a circle for each landmark point
+                drawCircle(
+                    color = pointColor,
+                    radius = pointRadius,
+                    center = androidx.compose.ui.geometry.Offset(x, y)
+                )
+            }
+            // Draw the path for the connected landmarks
+            drawPath(
+                path = path,
+                color = lineColor, // Line color
+                style = Stroke(
+                    width = lineWidth, // Line thickness
+                    cap = StrokeCap.Round,
+                    join = StrokeJoin.Round
+                )
+            )
         }
 
-        data.add(dataAux)
+        val fontSize = 60f  // Make the font size large
+        val textColor = Color.Magenta  // Set a fancy color for the text
+        val textX = size.width * 0.5f  // X coordinate at the center
+        val textY = size.height * 0.1f  // Y coordinate near the top
+
+        drawContext.canvas.nativeCanvas.apply {
+            // Set up the paint for the text
+            val paint = android.graphics.Paint().apply {
+                this.color = textColor.toArgb()
+                this.textSize = fontSize
+                this.isAntiAlias = true
+                this.setShadowLayer(10f, 0f, 0f, android.graphics.Color.BLACK) // Adding a shadow for a fancier look
+                this.textAlign = android.graphics.Paint.Align.CENTER
+            }
+            drawText(text, textX, textY, paint)
+        }
     }
-    Log.d("HandLandmarkerResult", "Hand landmark data: $data")
 }

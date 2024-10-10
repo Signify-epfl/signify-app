@@ -181,7 +181,10 @@ dependencies {
             implementation("androidx.camera:camera-camera2:1.3.0")
             implementation("androidx.camera:camera-lifecycle:1.3.0")
             implementation("androidx.camera:camera-view:1.3.0")
-
+    // Microsoft onnx
+    implementation ("com.microsoft.onnxruntime:onnxruntime-android:1.15.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
             // Testing Unit
             testImplementation(libs.junit)
             androidTestImplementation(libs.mockk)
