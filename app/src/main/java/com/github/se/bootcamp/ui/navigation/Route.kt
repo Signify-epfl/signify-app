@@ -9,4 +9,5 @@ object Route {
     const val AUTH = "Auth"
     const val WELCOME = "Welcome"
     const val FRIENDS = "Friends"
+    const val SETTINGS = "Settings"
 }
