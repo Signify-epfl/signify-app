@@ -6,4 +6,6 @@ object Route {
     const val PROFILE = "Profile"
     const val QUEST = "Quest"
     const val CHALLENGE = "Challenge"
+    const val AUTH = "Auth"
+    const val WELCOME = "Welcome"
 }

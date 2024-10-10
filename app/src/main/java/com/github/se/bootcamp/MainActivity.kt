@@ -10,10 +10,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.github.se.bootcamp.ui.navigation.BottomNavigationMenu
+import com.github.se.bootcamp.ui.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.bootcamp.ui.navigation.NavigationActions
 import com.github.se.bootcamp.ui.navigation.Route
+import com.github.se.bootcamp.ui.navigation.Screen
 import com.github.se.bootcamp.ui.navigation.TopLevelDestination
 import com.github.se.bootcamp.ui.screens.*
 import com.github.se.bootcamp.ui.theme.BootcampTheme
@@ -24,7 +27,7 @@ class MainActivity : ComponentActivity() {
     setContent {
       BootcampTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-          SignifyApp()
+          MainAimScreen()
         }
       }
     }
@@ -42,13 +45,14 @@ fun SignifyApp() {
     bottomBar = {
       BottomNavigationMenu(
         onTabSelect = { destination -> navigationActions.navigateTo(destination) },
+        tabList = LIST_TOP_LEVEL_DESTINATION,
         selectedItem = currentRoute
       )
     }
   ) {
     NavHost(navController = navController, startDestination = Route.MAIN_AIM) {
       composable(Route.MAIN_AIM) { MainAimScreen() }
-      composable(Route.PRACTICE) { PracticeScreen() }
+      //composable(Route.PRACTICE) { PracticeScreen() }
       composable(Route.PROFILE) { ProfileScreen(
         userId = "Test ID 1",
         userName = "Test Name 1",
@@ -64,8 +68,66 @@ fun SignifyApp() {
         onFriendsClick = { /* Handle friends click */ },
         onGraphClick = { /* Handle graph click */ }
       ) }
-      composable(Route.QUEST) { QuestScreen() }
-      composable(Route.CHALLENGE) { ChallengeScreen() }
+      //composable(Route.QUEST) { QuestScreen() }
+      //composable(Route.CHALLENGE) { ChallengeScreen() }
     }
   }
 }
+
+@Composable
+fun SignifyAppPreview() {
+  val navController = rememberNavController()
+  val navigationActions = NavigationActions(navController)
+
+  NavHost(navController = navController, startDestination = Route.WELCOME) {
+    navigation(
+      startDestination = Screen.WELCOME,
+      route = Route.WELCOME,
+    ) {
+      composable(Screen.WELCOME) { WelcomeScreen(navigationActions) }
+    }
+
+    navigation(
+        startDestination = Screen.AUTH,
+        route = Route.AUTH,
+    ) {
+        composable(Screen.AUTH) { LoginScreen(navigationActions) }
+    }
+
+    navigation(
+      startDestination = Screen.CHALLENGE,
+      route = Route.CHALLENGE,
+    ) {
+      composable(Screen.CHALLENGE) { ChallengeScreen(navigationActions) }
+    }
+
+    navigation(
+      startDestination = Screen.PRACTICE,
+      route = Route.PRACTICE,
+    ) {
+      composable(Screen.PRACTICE) { PracticeScreen(navigationActions) }
+    }
+
+    navigation(
+      startDestination = Screen.QUEST,
+      route = Route.QUEST,
+    ) {
+      composable(Screen.QUEST) { QuestScreen(navigationActions) }
+    }
+
+    navigation(
+      startDestination = Screen.PROFILE,
+      route = Route.PROFILE,
+    ) {
+      composable(Screen.PROFILE) { /* Call the profile screen composable with the naviAct as a parameter */ }
+    }
+
+    navigation(
+      startDestination = Screen.MAIN_AIM,
+      route = Route.MAIN_AIM,
+    ) {
+      composable(Screen.MAIN_AIM) { /* Call the Main screen composable with the naviAct as a parameter */ }
+    }
+  }
+}
+

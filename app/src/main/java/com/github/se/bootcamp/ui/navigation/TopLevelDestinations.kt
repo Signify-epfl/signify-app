@@ -12,35 +12,34 @@ data class TopLevelDestination(
 
 object TopLevelDestinations {
 
-
     val PRACTICE = TopLevelDestination(
         route = Route.PRACTICE,
         icon = Icons.Outlined.Edit,
-        textId = Screen.PRACTICE
+        textId = "Practice"
     )
 
     val PROFILE = TopLevelDestination(
         route = Route.PROFILE,
         icon = Icons.Outlined.Person,
-        textId = Screen.PROFILE
+        textId = "Profile"
     )
 
     val MAIN_AIM = TopLevelDestination(
         route = Route.MAIN_AIM,
         icon = Icons.Outlined.ThumbUp,
-        textId = Screen.MAIN_AIM
+        textId = "Main"
     )
 
     val QUEST = TopLevelDestination(
         route = Route.QUEST,
         icon = Icons.Outlined.DateRange,
-        textId = Screen.QUEST
+        textId = "Quest"
     )
 
     val CHALLENGE = TopLevelDestination(
         route = Route.CHALLENGE,
         icon = Icons.Outlined.Star,
-        textId = Screen.CHALLENGE
+        textId = "Challenge"
     )
 }
 
