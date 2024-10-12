@@ -131,9 +131,7 @@ fun GoogleSignInButton(onSignInClick: () -> Unit) {
       colors = ButtonDefaults.buttonColors(containerColor = Color.White), // Button color
       shape = RoundedCornerShape(50), // Circular edges for the button
       border = BorderStroke(1.dp, Color.White),
-      modifier =
-          Modifier.padding(8.dp)
-              .height(48.dp)) {
+      modifier = Modifier.padding(8.dp).height(48.dp)) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
