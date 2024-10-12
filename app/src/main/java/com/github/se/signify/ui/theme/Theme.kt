@@ -1,4 +1,4 @@
-package com.github.se.bootcamp.ui.theme
+package com.github.se.signify.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

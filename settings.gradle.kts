@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "bootcamp"
+rootProject.name = "signify"
 include(":app")
  

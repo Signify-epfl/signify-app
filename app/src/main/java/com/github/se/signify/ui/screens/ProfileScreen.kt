@@ -1,11 +1,9 @@
-package com.github.se.bootcamp.ui.screens
+package com.github.se.signify.ui.screens
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,7 +23,6 @@ import androidx.compose.foundation.verticalScroll
 //noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Icon
 //noinspection UsingMaterialAndMaterial3Libraries
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
@@ -49,10 +46,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import coil.compose.rememberImagePainter
-import com.github.se.bootcamp.R
-import com.github.se.bootcamp.ui.navigation.BottomNavigationMenu
-import com.github.se.bootcamp.ui.navigation.LIST_TOP_LEVEL_DESTINATION
-import com.github.se.bootcamp.ui.navigation.NavigationActions
+import com.github.se.signify.R
+import com.github.se.signify.ui.navigation.BottomNavigationMenu
+import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
+import com.github.se.signify.ui.navigation.NavigationActions
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

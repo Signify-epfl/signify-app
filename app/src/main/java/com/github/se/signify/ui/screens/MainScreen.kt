@@ -1,6 +1,5 @@
-package com.github.se.bootcamp.ui.screens
+package com.github.se.signify.ui.screens
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.util.Log
 import android.widget.Toast
@@ -22,15 +21,12 @@ import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.graphics.vector.DefaultStrokeLineWidth
-import androidx.compose.ui.graphics.vector.VectorProperty
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import com.github.se.bootcamp.model.hand.HandLandMarkViewModel
+import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
-import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarker
 import java.util.concurrent.Executors
 
 @Composable

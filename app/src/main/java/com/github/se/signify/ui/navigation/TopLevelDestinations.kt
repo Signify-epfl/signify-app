@@ -1,4 +1,4 @@
-package com.github.se.bootcamp.ui.navigation
+package com.github.se.signify.ui.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
