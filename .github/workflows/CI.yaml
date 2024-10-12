@@ -59,15 +59,15 @@ jobs:
 
 
       #- name: Decode secrets
-          #      env:
-          #GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
-          #run: |
-          #echo "$GOOGLE_SERVICES" | base64 --decode > ./app/google-services.json
+      #  env:
+      #    GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+      #    run: |
+      #    echo "$GOOGLE_SERVICES" | base64 --decode > ./app/google-services.json
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
           
-          # Remove the "#" if you want to enforce the formatting check when pushing on your repo
+
       - name: KTFmt Check
         run: |
           ./gradlew ktfmtCheck
@@ -92,11 +92,11 @@ jobs:
       #      script: ./gradlew connectedCheck --parallel --build-cache
 
             # This step generates the coverage report which will be used later in the semster for monitoring purposes
-      - name: Generate coverage
-        run: |
-              ./gradlew jacocoTestReport
-      - name: Upload coverage
-        uses: actions/upload-artifact@v4
-        with:
-           name: Coverage report
-           path: app/build/reports/jacoco/jacocoTestReport
+      #- name: Generate coverage
+      #  run: |
+      #        ./gradlew jacocoTestReport
+      #- name: Upload coverage
+      #  uses: actions/upload-artifact@v4
+      #  with:
+      #     name: Coverage report
+      #     path: app/build/reports/jacoco/jacocoTestReport

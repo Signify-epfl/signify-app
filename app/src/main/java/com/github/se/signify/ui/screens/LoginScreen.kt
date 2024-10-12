@@ -57,7 +57,7 @@ fun LoginScreen(navigationActions: NavigationActions) {
   val launcher =
       rememberFirebaseAuthLauncher(
           onAuthComplete = { result ->
-            Log.d("SignInScreen", "User signed in: ${result.user?.displayName}")
+               Log.d("SignInScreen", "User signed in: ${result.user?.displayName}")
             Toast.makeText(context, "Login successful!", Toast.LENGTH_LONG).show()
             navigationActions.navigateTo("Challenge")
           },
