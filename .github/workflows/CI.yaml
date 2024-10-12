@@ -14,8 +14,8 @@ on:
 jobs:
   signify-ci:
     name: CI-Signify
-    runs-on:
-      group: runners_v2
+    runs-on: ubuntu-latest
+
 
     env:
       app_name: SignifyDebug
