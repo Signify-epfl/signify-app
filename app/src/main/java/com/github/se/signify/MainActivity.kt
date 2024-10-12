@@ -30,7 +30,8 @@ class MainActivity : ComponentActivity() {
       BootcampTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
           val context = LocalContext.current
-          val handLandMarkImplementation = HandLandMarkImplementation("hand_landmarker.task","RFC_model_ir9_opset19.onnx")
+          val handLandMarkImplementation =
+              HandLandMarkImplementation("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
           val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
           SignifyAppPreview()
         }
@@ -47,27 +48,26 @@ fun SignifyApp() {
   val currentRoute = navController.currentDestination?.route ?: Route.MAIN_AIM
 
   androidx.compose.material3.Scaffold(
-    bottomBar = {
-      BottomNavigationMenu(
-        onTabSelect = { destination -> navigationActions.navigateTo(destination) },
-        tabList = LIST_TOP_LEVEL_DESTINATION,
-        selectedItem = currentRoute
-      )
-    }
-  ) {
-    NavHost(navController = navController, startDestination = Route.MAIN_AIM) {
-      composable(Route.MAIN_AIM) {
-        val context = LocalContext.current
-        val handLandMarkImplementation = HandLandMarkImplementation("hand_landmarker.task","RFC_model_ir9_opset19.onnx")
-        val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
-        MainAimScreen(handLandMarkViewModel)
+      bottomBar = {
+        BottomNavigationMenu(
+            onTabSelect = { destination -> navigationActions.navigateTo(destination) },
+            tabList = LIST_TOP_LEVEL_DESTINATION,
+            selectedItem = currentRoute)
+      }) {
+        NavHost(navController = navController, startDestination = Route.MAIN_AIM) {
+          composable(Route.MAIN_AIM) {
+            val context = LocalContext.current
+            val handLandMarkImplementation =
+                HandLandMarkImplementation("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
+            val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
+            MainAimScreen(handLandMarkViewModel)
+          }
+          // composable(Route.PRACTICE) { PracticeScreen() }
+          // composable(Route.PROFILE) { ProfileScreen()}
+          // composable(Route.QUEST) { QuestScreen() }
+          // composable(Route.CHALLENGE) { ChallengeScreen() }
+        }
       }
-      //composable(Route.PRACTICE) { PracticeScreen() }
-      //composable(Route.PROFILE) { ProfileScreen()}
-      //composable(Route.QUEST) { QuestScreen() }
-      //composable(Route.CHALLENGE) { ChallengeScreen() }
-    }
-  }
 }
 
 @Composable
@@ -77,8 +77,8 @@ fun SignifyAppPreview() {
 
   NavHost(navController = navController, startDestination = Route.WELCOME) {
     navigation(
-      startDestination = Screen.WELCOME,
-      route = Route.WELCOME,
+        startDestination = Screen.WELCOME,
+        route = Route.WELCOME,
     ) {
       composable(Screen.WELCOME) { WelcomeScreen(navigationActions) }
     }
@@ -87,78 +87,73 @@ fun SignifyAppPreview() {
         startDestination = Screen.AUTH,
         route = Route.AUTH,
     ) {
-        composable(Screen.AUTH) { LoginScreen(navigationActions) }
+      composable(Screen.AUTH) { LoginScreen(navigationActions) }
     }
 
     navigation(
-      startDestination = Screen.CHALLENGE,
-      route = Route.CHALLENGE,
+        startDestination = Screen.CHALLENGE,
+        route = Route.CHALLENGE,
     ) {
       composable(Screen.CHALLENGE) { ChallengeScreen(navigationActions) }
     }
 
     navigation(
-      startDestination = Screen.PRACTICE,
-      route = Route.PRACTICE,
+        startDestination = Screen.PRACTICE,
+        route = Route.PRACTICE,
     ) {
       composable(Screen.PRACTICE) { PracticeScreen(navigationActions) }
     }
 
     navigation(
-      startDestination = Screen.QUEST,
-      route = Route.QUEST,
+        startDestination = Screen.QUEST,
+        route = Route.QUEST,
     ) {
       composable(Screen.QUEST) { QuestScreen(navigationActions) }
     }
 
     navigation(
-      startDestination = Screen.PROFILE,
-      route = Route.PROFILE,
+        startDestination = Screen.PROFILE,
+        route = Route.PROFILE,
     ) {
       composable(Screen.PROFILE) {
         ProfileScreen(
-          userId = "Test ID 1",
-          userName = "Test Name 1",
-          profilePictureUrl = null, // Replace with actual URL or null
-          numberOfDays = 30,
-          lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F'),
-          easyExercises = 1,
-          hardExercises = 0,
-          dailyQuests = 1,
-          weeklyQuests = 0,
-          onGraphClick = { /* Handle graph click */ },
-          navigationActions = navigationActions
-        )
+            userId = "Test ID 1",
+            userName = "Test Name 1",
+            profilePictureUrl = null, // Replace with actual URL or null
+            numberOfDays = 30,
+            lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F'),
+            easyExercises = 1,
+            hardExercises = 0,
+            dailyQuests = 1,
+            weeklyQuests = 0,
+            onGraphClick = { /* Handle graph click */},
+            navigationActions = navigationActions)
       }
 
       composable(Route.FRIENDS) {
         FriendsListScreen(
-          currentFriends = listOf("Friend 1", "Friend 2", "Friend 3"), // replace with actual data
-          friendRequests = listOf("Friend 4"), // replace with actual data
-          onRemoveFriend = { /* Handle remove friend */ },
-          onAcceptFriendRequest = { /* Handle accept friend request */ },
-          onRejectFriendRequest = { /* Handle reject friend request */ },
-          onSearchUser = { /* Handle search user */ },
-          navigationActions = navigationActions
-        )
+            currentFriends = listOf("Friend 1", "Friend 2", "Friend 3"), // replace with actual data
+            friendRequests = listOf("Friend 4"), // replace with actual data
+            onRemoveFriend = { /* Handle remove friend */},
+            onAcceptFriendRequest = { /* Handle accept friend request */},
+            onRejectFriendRequest = { /* Handle reject friend request */},
+            onSearchUser = { /* Handle search user */},
+            navigationActions = navigationActions)
       }
 
-      composable(Route.SETTINGS){
+      composable(Route.SETTINGS) {
         SettingsScreen(
-          profilePictureUrl = null, // Replace with actual URL or null
-          navigationActions = navigationActions
-        )
-
+            profilePictureUrl = null, // Replace with actual URL or null
+            navigationActions = navigationActions)
       }
-
     }
 
     navigation(
-      startDestination = Screen.MAIN_AIM,
-      route = Route.MAIN_AIM,
+        startDestination = Screen.MAIN_AIM,
+        route = Route.MAIN_AIM,
     ) {
-      composable(Screen.MAIN_AIM) { /* Call the Main screen composable with the naviAct as a parameter */ }
+      composable(
+          Screen.MAIN_AIM) { /* Call the Main screen composable with the naviAct as a parameter */}
     }
   }
 }
-

@@ -1,7 +1,7 @@
 package com.github.se.signify.ui.navigation
 
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -19,18 +19,18 @@ fun BottomNavigationMenu(
     tabList: List<TopLevelDestination>,
     selectedItem: String
 ) {
-    BottomNavigation(
-        modifier = Modifier.fillMaxWidth().height(60.dp),
-        backgroundColor = Color(0xFF05A9FB),
-        content = {
-            tabList.forEach { tab ->
-                BottomNavigationItem(
-                    icon = { Icon(tab.icon, contentDescription = null, tint = Color.White) },
-                    label = {Text(color = Color.White, text = tab.textId)},
-                    selected = tab.route == selectedItem,
-                    onClick = { onTabSelect(tab) },
-                    modifier = Modifier.clip(RoundedCornerShape(50.dp)))
-            }
-        },
-    )
+  BottomNavigation(
+      modifier = Modifier.fillMaxWidth().height(60.dp),
+      backgroundColor = Color(0xFF05A9FB),
+      content = {
+        tabList.forEach { tab ->
+          BottomNavigationItem(
+              icon = { Icon(tab.icon, contentDescription = null, tint = Color.White) },
+              label = { Text(color = Color.White, text = tab.textId) },
+              selected = tab.route == selectedItem,
+              onClick = { onTabSelect(tab) },
+              modifier = Modifier.clip(RoundedCornerShape(50.dp)))
+        }
+      },
+  )
 }
