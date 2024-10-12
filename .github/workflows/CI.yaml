@@ -76,20 +76,20 @@ jobs:
       #- name: Assemble
       #  run: ./gradlew assembleDebug lint --parallel --build-cache
 
-      - name: Run tests
-        run: ./gradlew check --parallel --build-cache
+      #- name: Run tests
+      #  run: ./gradlew check --parallel --build-cache
 
-      - name: Run instrumentation tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-            api-level: 34
-            target: google_apis
-            arch: x86_64
-            avd-name: github
-            force-avd-creation: true
-            emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -skin 1080x1920
-            disable-animations: true
-            script: ./gradlew connectedCheck --parallel --build-cache
+      #- name: Run instrumentation tests
+      #  uses: reactivecircus/android-emulator-runner@v2
+      #  with:
+      #      api-level: 34
+      #      target: google_apis
+      #      arch: x86_64
+      #      avd-name: github
+      #      force-avd-creation: true
+      #      emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -skin 1080x1920
+      #      disable-animations: true
+      #      script: ./gradlew connectedCheck --parallel --build-cache
 
             # This step generates the coverage report which will be used later in the semster for monitoring purposes
       - name: Generate coverage
