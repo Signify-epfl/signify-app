@@ -1,8 +1,7 @@
-package com.github.se.bootcamp.model.hand
+package com.github.se.signify.model.hand
 
 import android.content.Context
 import androidx.camera.core.ImageProxy
-import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmark
 import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarker
 import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarkerResult
 

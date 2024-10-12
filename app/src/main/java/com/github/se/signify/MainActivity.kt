@@ -1,4 +1,4 @@
-package com.github.se.bootcamp
+package com.github.se.signify
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -13,16 +13,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.github.se.bootcamp.model.hand.HandLandMarkImplementation
-import com.github.se.bootcamp.model.hand.HandLandMarkViewModel
-import com.github.se.bootcamp.ui.navigation.BottomNavigationMenu
-import com.github.se.bootcamp.ui.navigation.LIST_TOP_LEVEL_DESTINATION
-import com.github.se.bootcamp.ui.navigation.NavigationActions
-import com.github.se.bootcamp.ui.navigation.Route
-import com.github.se.bootcamp.ui.navigation.Screen
-import com.github.se.bootcamp.ui.navigation.TopLevelDestination
-import com.github.se.bootcamp.ui.screens.*
-import com.github.se.bootcamp.ui.theme.BootcampTheme
+import com.github.se.signify.model.hand.HandLandMarkImplementation
+import com.github.se.signify.model.hand.HandLandMarkViewModel
+import com.github.se.signify.ui.navigation.BottomNavigationMenu
+import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
+import com.github.se.signify.ui.navigation.NavigationActions
+import com.github.se.signify.ui.navigation.Route
+import com.github.se.signify.ui.navigation.Screen
+import com.github.se.signify.ui.screens.*
+import com.github.se.signify.ui.theme.BootcampTheme
 
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {

@@ -40,7 +40,7 @@ jobs:
 
       # Kernel-based Virtual Machine (KVM) is an open source virtualization technology built into Linux. Enabling it allows the Android emulator to run faster.
       #
-      # For the bootcamp, the runners already have KVM enabled, so this step is commented out. But for your projects, you will need to uncomment it.
+      # For the signify, the runners already have KVM enabled, so this step is commented out. But for your projects, you will need to uncomment it.
       #- name: Enable KVM group perms
       #  run: |
       #    echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -97,7 +97,7 @@ jobs:
           ./gradlew check --parallel --build-cache
 
       - name: Run instrumentation tests
-        # This action assumes that Android sdk is already present inthe runner. Which is true for the bootcamp, but won't be for your own project.
+        # This action assumes that Android sdk is already present inthe runner. Which is true for the signify, but won't be for your own project.
         # If you want to use this CI for your project, replace the following line with: uses: reactivecircus/android-emulator-runner@v2
         uses: RandyLutcavich/android-emulator-runner-without-sdk-setup@v1.0.3
         with:

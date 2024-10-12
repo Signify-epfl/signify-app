@@ -1,4 +1,4 @@
-package com.github.se.bootcamp.ui.navigation
+package com.github.se.signify.ui.navigation
 
 object Screen {
     const val MAIN_AIM = "Main Aim Screen"

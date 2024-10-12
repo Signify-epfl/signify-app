@@ -1,4 +1,4 @@
-package com.github.se.bootcamp.model.hand
+package com.github.se.signify.model.hand
 
 import ai.onnxruntime.OnnxTensor
 import ai.onnxruntime.OrtEnvironment

@@ -1,4 +1,4 @@
-package com.github.se.bootcamp.ui.screens
+package com.github.se.signify.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -26,11 +25,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.se.bootcamp.R
-import com.github.se.bootcamp.ui.navigation.NavigationActions
+import com.github.se.signify.R
+import com.github.se.signify.ui.navigation.NavigationActions
 import kotlinx.coroutines.delay
 
 @Composable fun WelcomeScreen(navigationActions: NavigationActions) {

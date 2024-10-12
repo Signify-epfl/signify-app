@@ -1,4 +1,4 @@
-package com.github.se.bootcamp.ui.navigation
+package com.github.se.signify.ui.navigation
 
 object Route {
     const val MAIN_AIM = "MainAim"

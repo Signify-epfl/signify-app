@@ -1,10 +1,9 @@
-package com.github.se.bootcamp.ui.screens
+package com.github.se.signify.ui.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
@@ -27,9 +26,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.material3.Surface
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
-import com.github.se.bootcamp.ui.navigation.BottomNavigationMenu
-import com.github.se.bootcamp.ui.navigation.LIST_TOP_LEVEL_DESTINATION
-import com.github.se.bootcamp.ui.navigation.NavigationActions
+import com.github.se.signify.ui.navigation.BottomNavigationMenu
+import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
+import com.github.se.signify.ui.navigation.NavigationActions
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

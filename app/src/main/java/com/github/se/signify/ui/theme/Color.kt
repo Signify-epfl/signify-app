@@ -1,4 +1,4 @@
-package com.github.se.bootcamp.ui.theme
+package com.github.se.signify.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -13,7 +13,7 @@ plugins {
 }
 
 android {
-    namespace = "com.github.se.bootcamp"
+    namespace = "com.github.se.signify"
     compileSdk = 34
 
 
@@ -28,7 +28,7 @@ android {
 
 
     defaultConfig {
-        applicationId = "com.github.se.bootcamp"
+        applicationId = "com.github.se.signify"
         minSdk = 29
         targetSdk = 34
         versionCode = 1
