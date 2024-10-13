@@ -27,6 +27,10 @@ class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
+      val context = LocalContext.current
+      val handLandMarkImplementation =
+          HandLandMarkImplementation("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
+      val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
       SignifyTheme { Surface(modifier = Modifier.fillMaxSize()) { SignifyAppPreview() } }
     }
   }
