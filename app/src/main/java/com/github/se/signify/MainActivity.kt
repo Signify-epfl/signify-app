@@ -21,21 +21,13 @@ import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Route
 import com.github.se.signify.ui.navigation.Screen
 import com.github.se.signify.ui.screens.*
-import com.github.se.signify.ui.theme.BootcampTheme
+import com.github.se.signify.ui.theme.SignifyTheme
 
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
-      BootcampTheme {
-        Surface(modifier = Modifier.fillMaxSize()) {
-          val context = LocalContext.current
-          val handLandMarkImplementation =
-              HandLandMarkImplementation("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
-          val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
-          SignifyAppPreview()
-        }
-      }
+      SignifyTheme { Surface(modifier = Modifier.fillMaxSize()) { SignifyAppPreview() } }
     }
   }
 }

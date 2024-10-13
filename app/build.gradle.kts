@@ -24,7 +24,7 @@ android {
         localProperties.load(FileInputStream(localPropertiesFile))
     }
 
-    val mapsApiKey: String = localProperties.getProperty("MAPS_API_KEY") ?: ""
+    //val mapsApiKey: String = localProperties.getProperty("MAPS_API_KEY") ?: ""
 
 
     defaultConfig {
@@ -38,7 +38,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
+        //manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
 
         ndk {
             abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a"))

@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -103,6 +104,7 @@ fun LoginScreen(navigationActions: NavigationActions) {
           // Welcome Text
 
           Text(
+              modifier = Modifier.width(250.dp).height(200.dp).testTag("IntroMessage"),
               text = "Signify is what you need to communicate with deaf and hard of hearing people",
               style =
                   TextStyle(
@@ -113,8 +115,7 @@ fun LoginScreen(navigationActions: NavigationActions) {
                       color = Color(0xFF05A9FB),
                       textAlign = TextAlign.Center,
                       letterSpacing = 0.25.sp,
-                  ),
-              modifier = Modifier.width(250.dp).height(200.dp))
+                  ))
 
           Spacer(modifier = Modifier.height(120.dp))
 
@@ -136,37 +137,38 @@ fun LoginScreen(navigationActions: NavigationActions) {
 @Composable
 fun GoogleSignInButton(onSignInClick: () -> Unit) {
   Button(
+      modifier = Modifier.padding(8.dp).height(48.dp).testTag("loginButton"),
       onClick = onSignInClick,
       colors = ButtonDefaults.buttonColors(containerColor = Color.White), // Button color
       shape = RoundedCornerShape(50), // Circular edges for the button
       border = BorderStroke(1.dp, Color.White),
-      modifier = Modifier.padding(8.dp).height(48.dp)) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.width(200.dp)) {
-              // Load the Google logo from resources
-              Image(
-                  painter = painterResource(id = R.drawable.google_logo),
-                  contentDescription = "Google Logo",
-                  modifier =
-                      Modifier.size(30.dp) // Size of the Google logo
-                          .padding(end = 8.dp))
+  ) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.width(200.dp)) {
+          // Load the Google logo from resources
+          Image(
+              painter = painterResource(id = R.drawable.google_logo),
+              contentDescription = "Google Logo",
+              modifier =
+                  Modifier.size(30.dp) // Size of the Google logo
+                      .padding(end = 8.dp))
 
-              // Text for the button
-              Text(
-                  text = "Sign in with Google",
-                  style =
-                      TextStyle(
-                          fontSize = 14.sp,
-                          lineHeight = 17.sp,
-                          fontWeight = FontWeight(500),
-                          color = Color(0xFF3C4043),
-                          textAlign = TextAlign.Center,
-                          letterSpacing = 0.25.sp,
-                      ))
-            }
-      }
+          // Text for the button
+          Text(
+              text = "Sign in with Google",
+              style =
+                  TextStyle(
+                      fontSize = 14.sp,
+                      lineHeight = 17.sp,
+                      fontWeight = FontWeight(500),
+                      color = Color(0xFF3C4043),
+                      textAlign = TextAlign.Center,
+                      letterSpacing = 0.25.sp,
+                  ))
+        }
+  }
 }
 
 @Composable
