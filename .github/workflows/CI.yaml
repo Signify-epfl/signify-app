@@ -100,8 +100,8 @@ jobs:
         with:
           projectBaseDir: ./
           args: >
-            -Dsonar.projectKey=your_project_key
-            -Dsonar.organization=your_organization
+            -Dsonar.projectKey=Signify-epfl_signify-app
+            -Dsonar.organization=signify-epfl
             -Dsonar.host.url=https://sonarcloud.io
             -Dsonar.coverage.exclusions=**/test/**
             -Dsonar.java.coveragePlugin=jacoco
