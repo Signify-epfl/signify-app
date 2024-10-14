@@ -16,7 +16,6 @@ jobs:
     name: CI-Signify
     runs-on: ubuntu-latest
 
-
     env:
       app_name: SignifyDebug
 
@@ -33,10 +32,7 @@ jobs:
 
       - name: Remove current gradle cache
         run: rm -rf ~/.gradle
-          
-          # Kernel-based Virtual Machine (KVM) is an open source virtualization technology built into Linux. Enabling it allows the Android emulator to run faster.
-          #
-          # For the bootcamp, the runners already have KVM enabled, so this step is commented out. But for your projects, you will need to uncomment it.
+
       - name: Enable KVM group perms
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -57,7 +53,6 @@ jobs:
             ~/.gradle/wrapper
           key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
 
-
       - name: Decode secrets
         env:
           GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
@@ -66,13 +61,10 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
-          
 
       - name: KTFmt Check
-        run: |
-          ./gradlew ktfmtCheck
+        run: ./gradlew ktfmtCheck
 
-        # This step runs gradle commands to build the application
       - name: Assemble
         run: ./gradlew assembleDebug lint --parallel --build-cache
 
@@ -82,21 +74,38 @@ jobs:
       - name: Run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-            api-level: 34
-            target: google_apis
-            arch: x86_64
-            avd-name: github
-            force-avd-creation: true
-            emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -skin 1080x1920
-            disable-animations: true
-            script: ./gradlew connectedCheck --parallel --build-cache
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          avd-name: github
+          force-avd-creation: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -skin 1080x1920
+          disable-animations: true
+          script: ./gradlew connectedCheck --parallel --build-cache
 
-            # This step generates the coverage report which will be used later in the semster for monitoring purposes
       - name: Generate coverage
-        run: |
-              ./gradlew jacocoTestReport
+        run: ./gradlew jacocoTestReport
+
       - name: Upload coverage
         uses: actions/upload-artifact@v4
         with:
-           name: Coverage report
-           path: app/build/reports/jacoco/jacocoTestReport
+          name: Coverage report
+          path: app/build/reports/jacoco/jacocoTestReport
+
+      # SonarCloud Analysis
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: ./
+          args: >
+            -Dsonar.projectKey=your_project_key
+            -Dsonar.organization=your_organization
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.coverage.exclusions=**/test/**
+            -Dsonar.java.coveragePlugin=jacoco
+            -Dsonar.jacoco.reportPaths=app/build/reports/jacoco/jacocoTestReport.xml
+            -Dsonar.coverage.minimumCoverage=60
+            -Dsonar.duplication.exclusions=**/*.java
+            -Dsonar.cpd.duplicationThreshold=5
