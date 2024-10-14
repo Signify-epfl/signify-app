@@ -22,7 +22,7 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 
 @RunWith(AndroidJUnit4::class)
-class LoginTest : TestCase() {
+class LoginScreenTest : TestCase() {
   @get:Rule val composeTestRule = createComposeRule()
 
   private lateinit var navigationActions: NavigationActions
