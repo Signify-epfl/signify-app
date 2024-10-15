@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -22,7 +23,7 @@ import com.github.se.signify.R
 fun ReusableButtonWithIcon(onClickAction: () -> Unit, icon: ImageVector, iconDescription: String) {
   OutlinedButton(
       onClick = onClickAction,
-      modifier = Modifier.padding(8.dp),
+      modifier = Modifier.padding(8.dp).testTag(iconDescription + "Button"),
       border =
           ButtonDefaults.outlinedButtonBorder.copy(
               width = 2.dp, brush = SolidColor(colorResource(R.color.dark_gray))),
@@ -43,7 +44,7 @@ fun ReusableTextButton(
           ButtonDefaults.outlinedButtonBorder.copy(
               width = 2.dp, brush = SolidColor(colorResource(R.color.dark_gray))),
       colors = ButtonDefaults.buttonColors(colorResource(R.color.blue)),
-      modifier = Modifier.fillMaxWidth().height(40.dp)) {
+      modifier = Modifier.fillMaxWidth().height(40.dp).testTag(text + "Button")) {
         Text(
             text,
             fontWeight = FontWeight.Bold,

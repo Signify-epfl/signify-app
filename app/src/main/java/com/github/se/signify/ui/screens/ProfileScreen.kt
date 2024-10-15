@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -82,12 +83,12 @@ fun ProfileScreen(
               modifier = Modifier.fillMaxWidth(),
               horizontalArrangement = Arrangement.SpaceBetween) {
                 ReusableButtonWithIcon(
-                    { isHelpBoxVisible = !isHelpBoxVisible }, Icons.Outlined.Info, "Help")
+                    { isHelpBoxVisible = !isHelpBoxVisible }, Icons.Outlined.Info, "help")
 
                 ReusableButtonWithIcon(
                     { navigationActions.navigateTo("Settings") },
                     Icons.Outlined.Settings,
-                    "Settings")
+                    "settings")
 
                 if (isHelpBoxVisible) {
                   Dialog(onDismissRequest = { isHelpBoxVisible = false }) {
@@ -106,10 +107,12 @@ fun ProfileScreen(
                               horizontalAlignment = Alignment.CenterHorizontally) {
                                 Text(
                                     stringResource(R.string.help_profile_screen),
+                                    modifier = Modifier.testTag("helpProfileText"),
                                     color = colorResource(R.color.dark_gray))
                                 Spacer(modifier = Modifier.height(16.dp))
                                 Button(
                                     onClick = { isHelpBoxVisible = false },
+                                    modifier = Modifier.testTag("closeButton"),
                                     colors =
                                         ButtonDefaults.buttonColors(
                                             containerColor = colorResource(R.color.blue))) {
@@ -124,7 +127,7 @@ fun ProfileScreen(
           Spacer(modifier = Modifier.height(24.dp))
 
           Row(
-              modifier = Modifier.fillMaxWidth(),
+              modifier = Modifier.fillMaxWidth().testTag("userInfo"),
               horizontalArrangement = Arrangement.Center,
               verticalAlignment = Alignment.CenterVertically) {
 
@@ -157,7 +160,7 @@ fun ProfileScreen(
                           painterResource(id = R.drawable.flame), // Replace with your icon resource
                       contentDescription = "Days Icon",
                       tint = Color.Red,
-                      modifier = Modifier.size(32.dp))
+                      modifier = Modifier.size(32.dp).testTag("flameIcon"))
                   Spacer(modifier = Modifier.width(4.dp))
                   Text(text = "$numberOfDays days", fontWeight = FontWeight.Bold)
                 }
@@ -177,7 +180,8 @@ fun ProfileScreen(
                   Modifier.fillMaxWidth()
                       .border(2.dp, colorResource(R.color.dark_gray), RoundedCornerShape(12.dp))
                       .clip(RoundedCornerShape(8.dp))
-                      .padding(12.dp)) {
+                      .padding(12.dp)
+                      .testTag("lettersBox")) {
                 HorizontalLetterList(lettersLearned)
               }
 
@@ -189,11 +193,7 @@ fun ProfileScreen(
           Spacer(modifier = Modifier.height(32.dp))
 
           // Performance Graph Button
-          ReusableTextButton(
-              {
-                /** navigationActions.navigateTo()* */
-              },
-              "My Stats")
+          ReusableTextButton({ navigationActions.navigateTo("Stats") }, "My Stats")
 
           Spacer(modifier = Modifier.height(64.dp))
         }
@@ -205,7 +205,7 @@ fun HorizontalLetterList(lettersLearned: List<Char>) {
   val allLetters = ('A'..'Z').toList() // All capital letters from A to Z
   val scrollState = rememberScrollState()
 
-  Row(modifier = Modifier.fillMaxWidth().horizontalScroll(scrollState)) {
+  Row(modifier = Modifier.fillMaxWidth().horizontalScroll(scrollState).testTag("lettersList")) {
     allLetters.forEach { letter ->
       val isLearned = letter in lettersLearned
       Text(
@@ -222,7 +222,10 @@ fun HorizontalLetterList(lettersLearned: List<Char>) {
 fun ProfilePicture(profilePictureUrl: String?) {
   Box(
       modifier =
-          Modifier.size(80.dp).clip(CircleShape).background(colorResource(R.color.dark_gray))) {
+          Modifier.size(80.dp)
+              .clip(CircleShape)
+              .background(colorResource(R.color.dark_gray))
+              .testTag("profilePicture")) {
         profilePictureUrl?.let {
           // Load image with Coil or any other image loading library
           Image(
