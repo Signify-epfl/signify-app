@@ -191,7 +191,7 @@ fun ProfileScreen(
           // Performance Graph Button
           ReusableTextButton(
               {
-              /** navigationActions.navigateTo()* */
+                /** navigationActions.navigateTo()* */
               },
               "My Stats")
 
