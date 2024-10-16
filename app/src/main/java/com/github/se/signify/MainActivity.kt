@@ -1,6 +1,5 @@
 package com.github.se.signify
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,8 +14,6 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.github.se.signify.model.hand.HandLandMarkImplementation
 import com.github.se.signify.model.hand.HandLandMarkViewModel
-import com.github.se.signify.ui.navigation.BottomNavigationMenu
-import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Route
 import com.github.se.signify.ui.navigation.Screen
@@ -36,45 +33,15 @@ class MainActivity : ComponentActivity() {
   }
 }
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Composable
-fun SignifyApp() {
-  val navController = rememberNavController()
-  val navigationActions = NavigationActions(navController)
-  val currentRoute = navController.currentDestination?.route ?: Route.MAIN_AIM
-
-  androidx.compose.material3.Scaffold(
-      bottomBar = {
-        BottomNavigationMenu(
-            onTabSelect = { destination -> navigationActions.navigateTo(destination) },
-            tabList = LIST_TOP_LEVEL_DESTINATION,
-            selectedItem = currentRoute)
-      }) {
-        NavHost(navController = navController, startDestination = Route.MAIN_AIM) {
-          composable(Route.MAIN_AIM) {
-            val context = LocalContext.current
-            val handLandMarkImplementation =
-                HandLandMarkImplementation("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
-            val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
-            MainAimScreen(handLandMarkViewModel)
-          }
-          // composable(Route.PRACTICE) { PracticeScreen() }
-          // composable(Route.PROFILE) { ProfileScreen()}
-          // composable(Route.QUEST) { QuestScreen() }
-          // composable(Route.CHALLENGE) { ChallengeScreen() }
-        }
-      }
-}
-
 @Composable
 fun SignifyAppPreview() {
   val navController = rememberNavController()
   val navigationActions = NavigationActions(navController)
 
-  NavHost(navController = navController, startDestination = Route.WELCOME) {
+  NavHost(navController = navController, startDestination = Route.CHALLENGE) {
     navigation(
-        startDestination = Screen.WELCOME,
-        route = Route.WELCOME,
+        startDestination = Screen.CHALLENGE,
+        route = Route.CHALLENGE,
     ) {
       composable(Screen.WELCOME) { WelcomeScreen(navigationActions) }
     }
@@ -92,6 +59,9 @@ fun SignifyAppPreview() {
     ) {
       composable(Screen.CHALLENGE) { ChallengeScreen(navigationActions) }
     }
+
+    composable(Route.NEW_CHALLENGE) { NewChallengeScreen(navigationActions) }
+    composable(Route.CHALLENGE_HISTORY) { ChallengeHistoryScreen(navigationActions, 1, 1) }
 
     navigation(
         startDestination = Screen.PRACTICE,
@@ -131,14 +101,13 @@ fun SignifyAppPreview() {
             onSearchUser = { /* Handle search user */},
             navigationActions = navigationActions)
       }
+      composable(Route.STATS) { MyStatsScreen(navigationActions = navigationActions) }
 
       composable(Route.SETTINGS) {
         SettingsScreen(
             profilePictureUrl = null, // Replace with actual URL or null
             navigationActions = navigationActions)
       }
-
-      composable(Route.STATS) { MyStatsScreen(navigationActions = navigationActions) }
     }
 
     navigation(
