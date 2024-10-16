@@ -116,6 +116,8 @@ fun SignifyAppPreview() {
     ) {
       composable(
           Screen.MAIN_AIM) { /* Call the Main screen composable with the naviAct as a parameter */}
+      composable(Screen.EXERCISE_EASY) { ExerciseScreenEasy(navigationActions) }
+      composable(Screen.EXERCISE_HARD) { ExerciseScreenHard(navigationActions) }
     }
   }
 }
