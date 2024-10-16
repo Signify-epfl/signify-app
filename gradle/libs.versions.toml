@@ -66,6 +66,7 @@ lifecycleRuntimeKtx = "2.8.4"
 fragmentKtx = "1.8.2"
 kotlinxSerializationJson = "1.6.2"
 androidxCoreKtx = "1.6.1"
+sonar = "3.3"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
@@ -128,3 +129,4 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ktfmt = { id = "com.ncorti.ktfmt.gradle", version.ref = "ktfmt" }
 gms = { id = "com.google.gms.google-services", version.ref = "gms" }
+sonar = { id = "org.sonarqube", version.ref = "sonar" }
