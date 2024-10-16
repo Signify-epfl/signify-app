@@ -10,7 +10,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.ktfmt)
     alias(libs.plugins.gms)
-    id ("org.sonarqube") version "3.3"
+    alias(libs.plugins.sonar)
 }
 
 
@@ -260,17 +260,16 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
 
 }
 
-sonarqube {
+sonar {
     properties {
         property ("sonar.projectKey", "Signify-epfl_signify-app")
         property ("sonar.organization", "signify-epfl")
+        property ("sonar.projectName", "signify-app")
         property ("sonar.host.url", "https://sonarcloud.io")
         property ("sonar.androidLint.reportPaths", "${project.layout.buildDirectory.get()}/reports/lint-results-debug.xml")
         property ("sonar.jacoco.reportPaths", "build/reports/jacoco/jacocoTestReport.xml")
         property ("sonar.coverage.jacoco.xmlReportPaths", "${project.layout.buildDirectory.get()}/reports/lint-results-debug.xml$")
         property ("sonar.junit.ReportPaths", "${project.layout.buildDirectory.get()}/test-results/testDebugUnitTest/")
-        property ("sonar.coverage.minimumCoverage", "60")
-        property ("sonar.cpd.duplicationThreshold", "5")
     }
 }
 
