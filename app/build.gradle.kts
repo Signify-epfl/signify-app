@@ -265,6 +265,7 @@ sonarqube {
     properties {
         property ("sonar.projectKey", "Signify-epfl_signify-app")
         property ("sonar.organization", "signify-epfl")
+        property ("sonar.projectName", "signify-app")
         property ("sonar.java.coveragePlugin", "jacoco")
         property ("sonar.sources", "app/src/main/java")
         property ("sonar.login", "<SONAR_TOKEN>")

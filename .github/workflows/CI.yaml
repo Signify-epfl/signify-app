@@ -30,8 +30,7 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Remove current gradle cache
-        run: rm -rf ~/.gradle
+
 
       - name: Enable KVM group perms
         run: |
