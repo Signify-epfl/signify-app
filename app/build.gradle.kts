@@ -2,6 +2,7 @@ import com.android.build.api.dsl.Packaging
 import org.jetbrains.kotlin.util.capitalizeDecapitalize.toLowerCaseAsciiOnly
 import java.io.FileInputStream
 import java.util.Properties
+import kotlin.script.experimental.api.ScriptCompilationConfiguration.Default.properties
 
 plugins {
     jacoco
@@ -9,8 +10,13 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.ktfmt)
     alias(libs.plugins.gms)
+    id("org.sonarqube") version "3.3"
 
 }
+
+
+
+
 
 android {
     namespace = "com.github.se.signify"
@@ -124,6 +130,8 @@ android {
         res.setSrcDirs(emptyList<File>())
         resources.setSrcDirs(emptyList<File>())
     }
+
+
 }
 
 
@@ -213,6 +221,7 @@ dependencies {
 }
 
 
+
 tasks.withType<Test> {
     // Configure Jacoco for each tests
     configure<JacocoTaskExtension> {
@@ -249,7 +258,24 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
         include("outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec")
         include("outputs/code_coverage/debugAndroidTest/connected/*/coverage.ec")
     })
+
 }
+
+sonarqube {
+    properties {
+        property ("sonar.projectKey", "Signify-epfl_signify-app")
+        property ("sonar.organization", "signify-epfl")
+        property ("sonar.host.url", "https://sonarcloud.io")
+        property ("sonar.jacoco.reportPaths", "app/build/reports/jacoco/jacocoTestReport.xml")
+        property ("sonar.coverage.exclusions", "**/test/**")
+        property ("sonar.java.coveragePlugin", "jacoco")
+        property ("sonar.coverage.minimumCoverage", "60")
+        property ("sonar.duplication.exclusions", "**/*.java")
+        property ("sonar.cpd.duplicationThreshold", "5")
+    }
+}
+
+
 
 
 
