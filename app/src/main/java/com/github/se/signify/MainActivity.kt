@@ -138,10 +138,7 @@ fun SignifyAppPreview() {
             navigationActions = navigationActions)
       }
 
-        composable(Route.STATS) {
-            MyStatsScreen(
-                navigationActions = navigationActions)
-        }
+      composable(Route.STATS) { MyStatsScreen(navigationActions = navigationActions) }
     }
 
     navigation(

@@ -64,176 +64,176 @@ fun ProfileScreen(
     lettersLearned: List<Char>,
     navigationActions: NavigationActions
 ) {
-    Scaffold(
-        bottomBar = {
-            BottomNavigationMenu(
-                onTabSelect = { route -> navigationActions.navigateTo(route) },
-                tabList = LIST_TOP_LEVEL_DESTINATION,
-                selectedItem = navigationActions.currentRoute())
-        },
-        content = {
-            Column(
-                modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                var isHelpBoxVisible by remember { mutableStateOf(false) }
+  Scaffold(
+      bottomBar = {
+        BottomNavigationMenu(
+            onTabSelect = { route -> navigationActions.navigateTo(route) },
+            tabList = LIST_TOP_LEVEL_DESTINATION,
+            selectedItem = navigationActions.currentRoute())
+      },
+      content = {
+        Column(
+            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+          var isHelpBoxVisible by remember { mutableStateOf(false) }
 
-                // Top row with Settings and Help buttons
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween) {
-                    ReusableButtonWithIcon(
-                        { isHelpBoxVisible = !isHelpBoxVisible }, Icons.Outlined.Info, "help")
+          // Top row with Settings and Help buttons
+          Row(
+              modifier = Modifier.fillMaxWidth(),
+              horizontalArrangement = Arrangement.SpaceBetween) {
+                ReusableButtonWithIcon(
+                    { isHelpBoxVisible = !isHelpBoxVisible }, Icons.Outlined.Info, "help")
 
-                    ReusableButtonWithIcon(
-                        { navigationActions.navigateTo("Settings") },
-                        Icons.Outlined.Settings,
-                        "settings")
+                ReusableButtonWithIcon(
+                    { navigationActions.navigateTo("Settings") },
+                    Icons.Outlined.Settings,
+                    "settings")
 
-                    if (isHelpBoxVisible) {
-                        Dialog(onDismissRequest = { isHelpBoxVisible = false }) {
-                            Surface(
-                                shape = RoundedCornerShape(8.dp),
-                                color = Color.LightGray,
-                                modifier =
-                                Modifier.padding(16.dp)
-                                    .clip(RoundedCornerShape(12.dp))
-                                    .border(
-                                        4.dp,
-                                        colorResource(R.color.dark_gray),
-                                        RoundedCornerShape(12.dp))) {
-                                Column(
-                                    modifier = Modifier.padding(16.dp).fillMaxWidth(),
-                                    horizontalAlignment = Alignment.CenterHorizontally) {
-                                    Text(
-                                        stringResource(R.string.help_profile_screen),
-                                        modifier = Modifier.testTag("helpProfileText"),
-                                        color = colorResource(R.color.dark_gray))
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                    Button(
-                                        onClick = { isHelpBoxVisible = false },
-                                        modifier = Modifier.testTag("closeButton"),
-                                        colors =
+                if (isHelpBoxVisible) {
+                  Dialog(onDismissRequest = { isHelpBoxVisible = false }) {
+                    Surface(
+                        shape = RoundedCornerShape(8.dp),
+                        color = Color.LightGray,
+                        modifier =
+                            Modifier.padding(16.dp)
+                                .clip(RoundedCornerShape(12.dp))
+                                .border(
+                                    4.dp,
+                                    colorResource(R.color.dark_gray),
+                                    RoundedCornerShape(12.dp))) {
+                          Column(
+                              modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                              horizontalAlignment = Alignment.CenterHorizontally) {
+                                Text(
+                                    stringResource(R.string.help_profile_screen),
+                                    modifier = Modifier.testTag("helpProfileText"),
+                                    color = colorResource(R.color.dark_gray))
+                                Spacer(modifier = Modifier.height(16.dp))
+                                Button(
+                                    onClick = { isHelpBoxVisible = false },
+                                    modifier = Modifier.testTag("closeButton"),
+                                    colors =
                                         ButtonDefaults.buttonColors(
                                             containerColor = colorResource(R.color.blue))) {
-                                        Text("Close")
+                                      Text("Close")
                                     }
-                                }
-                            }
+                              }
                         }
-                    }
+                  }
+                }
+              }
+
+          Spacer(modifier = Modifier.height(24.dp))
+
+          Row(
+              modifier = Modifier.fillMaxWidth().testTag("userInfo"),
+              horizontalArrangement = Arrangement.Center,
+              verticalAlignment = Alignment.CenterVertically) {
+
+                // User Info : user id and user name
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                  Text(
+                      text = userId,
+                      fontWeight = FontWeight.Bold,
+                      color = colorResource(R.color.dark_gray))
+                  Text(
+                      text = userName,
+                      fontWeight = FontWeight.Bold,
+                      color = colorResource(R.color.dark_gray))
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.width(24.dp))
 
-                Row(
-                    modifier = Modifier.fillMaxWidth().testTag("userInfo"),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically) {
+                // Profile Picture
+                ProfilePicture(profilePictureUrl)
 
-                    // User Info : user id and user name
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        Text(
-                            text = userId,
-                            fontWeight = FontWeight.Bold,
-                            color = colorResource(R.color.dark_gray))
-                        Text(
-                            text = userName,
-                            fontWeight = FontWeight.Bold,
-                            color = colorResource(R.color.dark_gray))
-                    }
+                Spacer(modifier = Modifier.width(24.dp))
 
-                    Spacer(modifier = Modifier.width(24.dp))
+                // Number of days
 
-                    // Profile Picture
-                    ProfilePicture(profilePictureUrl)
-
-                    Spacer(modifier = Modifier.width(24.dp))
-
-                    // Number of days
-
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            painter =
-                            painterResource(id = R.drawable.flame), // Replace with your icon resource
-                            contentDescription = "Days Icon",
-                            tint = Color.Red,
-                            modifier = Modifier.size(32.dp).testTag("flameIcon"))
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(text = "$numberOfDays days", fontWeight = FontWeight.Bold)
-                    }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                  Icon(
+                      painter =
+                          painterResource(id = R.drawable.flame), // Replace with your icon resource
+                      contentDescription = "Days Icon",
+                      tint = Color.Red,
+                      modifier = Modifier.size(32.dp).testTag("flameIcon"))
+                  Spacer(modifier = Modifier.width(4.dp))
+                  Text(text = "$numberOfDays days", fontWeight = FontWeight.Bold)
                 }
+              }
 
-                Spacer(modifier = Modifier.height(64.dp))
+          Spacer(modifier = Modifier.height(64.dp))
 
-                // Letters learned
-                Text(
-                    text = "All letters learned",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    color = colorResource(R.color.dark_gray))
+          // Letters learned
+          Text(
+              text = "All letters learned",
+              fontWeight = FontWeight.Bold,
+              fontSize = 16.sp,
+              color = colorResource(R.color.dark_gray))
 
-                Box(
-                    modifier =
-                    Modifier.fillMaxWidth()
-                        .border(2.dp, colorResource(R.color.dark_gray), RoundedCornerShape(12.dp))
-                        .clip(RoundedCornerShape(8.dp))
-                        .padding(12.dp)
-                        .testTag("lettersBox")) {
-                    HorizontalLetterList(lettersLearned)
-                }
+          Box(
+              modifier =
+                  Modifier.fillMaxWidth()
+                      .border(2.dp, colorResource(R.color.dark_gray), RoundedCornerShape(12.dp))
+                      .clip(RoundedCornerShape(8.dp))
+                      .padding(12.dp)
+                      .testTag("lettersBox")) {
+                HorizontalLetterList(lettersLearned)
+              }
 
-                Spacer(modifier = Modifier.height(64.dp))
+          Spacer(modifier = Modifier.height(64.dp))
 
-                // Friends List button
-                ReusableTextButton({ navigationActions.navigateTo("Friends") }, "My Friends")
+          // Friends List button
+          ReusableTextButton({ navigationActions.navigateTo("Friends") }, "My Friends")
 
-                Spacer(modifier = Modifier.height(32.dp))
+          Spacer(modifier = Modifier.height(32.dp))
 
-                // Performance Graph Button
-                ReusableTextButton({ navigationActions.navigateTo("Stats") }, "My Stats")
+          // Performance Graph Button
+          ReusableTextButton({ navigationActions.navigateTo("Stats") }, "My Stats")
 
-                Spacer(modifier = Modifier.height(64.dp))
-            }
-        })
+          Spacer(modifier = Modifier.height(64.dp))
+        }
+      })
 }
 
 @Composable
 fun HorizontalLetterList(lettersLearned: List<Char>) {
-    val allLetters = ('A'..'Z').toList() // All capital letters from A to Z
-    val scrollState = rememberScrollState()
+  val allLetters = ('A'..'Z').toList() // All capital letters from A to Z
+  val scrollState = rememberScrollState()
 
-    Row(modifier = Modifier.fillMaxWidth().horizontalScroll(scrollState).testTag("lettersList")) {
-        allLetters.forEach { letter ->
-            val isLearned = letter in lettersLearned
-            Text(
-                text = letter.toString(),
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = if (isLearned) colorResource(R.color.blue) else Color.Gray,
-                modifier = Modifier.padding(horizontal = 8.dp))
-        }
+  Row(modifier = Modifier.fillMaxWidth().horizontalScroll(scrollState).testTag("lettersList")) {
+    allLetters.forEach { letter ->
+      val isLearned = letter in lettersLearned
+      Text(
+          text = letter.toString(),
+          fontSize = 24.sp,
+          fontWeight = FontWeight.Bold,
+          color = if (isLearned) colorResource(R.color.blue) else Color.Gray,
+          modifier = Modifier.padding(horizontal = 8.dp))
     }
+  }
 }
 
 @Composable
 fun ProfilePicture(profilePictureUrl: String?) {
-    Box(
-        modifier =
-        Modifier.size(80.dp)
-            .clip(CircleShape)
-            .background(colorResource(R.color.dark_gray))
-            .testTag("profilePicture")) {
+  Box(
+      modifier =
+          Modifier.size(80.dp)
+              .clip(CircleShape)
+              .background(colorResource(R.color.dark_gray))
+              .testTag("profilePicture")) {
         profilePictureUrl?.let {
-            // Load image with Coil or any other image loading library
-            Image(
-                painter = rememberImagePainter(data = it),
-                contentDescription = "Profile picture",
-                modifier = Modifier.fillMaxSize())
+          // Load image with Coil or any other image loading library
+          Image(
+              painter = rememberImagePainter(data = it),
+              contentDescription = "Profile picture",
+              modifier = Modifier.fillMaxSize())
         }
             ?: Text(
                 text = "Profile", modifier = Modifier.align(Alignment.Center), color = Color.White)
-    }
+      }
 }
