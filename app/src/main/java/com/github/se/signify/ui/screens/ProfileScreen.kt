@@ -1,7 +1,5 @@
 package com.github.se.signify.ui.screens
 
-//noinspection UsingMaterialAndMaterial3Libraries
-//noinspection UsingMaterialAndMaterial3Libraries
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,14 +20,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,13 +38,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import coil.compose.rememberImagePainter
 import com.github.se.signify.R
+import com.github.se.signify.ui.ReusableButtonWithIcon
+import com.github.se.signify.ui.ReusableTextButton
 import com.github.se.signify.ui.navigation.BottomNavigationMenu
 import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.ui.navigation.NavigationActions
@@ -59,11 +62,6 @@ fun ProfileScreen(
     profilePictureUrl: String?,
     numberOfDays: Int,
     lettersLearned: List<Char>,
-    easyExercises: Int,
-    hardExercises: Int,
-    dailyQuests: Int,
-    weeklyQuests: Int,
-    onGraphClick: () -> Unit,
     navigationActions: NavigationActions
 ) {
   Scaffold(
@@ -84,20 +82,13 @@ fun ProfileScreen(
           Row(
               modifier = Modifier.fillMaxWidth(),
               horizontalArrangement = Arrangement.SpaceBetween) {
-                Button(
-                    onClick = { isHelpBoxVisible = !isHelpBoxVisible },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF05A9FB))) {
-                      Icon(Icons.Outlined.Info, tint = Color.White, contentDescription = "Help")
-                    }
+                ReusableButtonWithIcon(
+                    { isHelpBoxVisible = !isHelpBoxVisible }, Icons.Outlined.Info, "help")
 
-                Button(
-                    onClick = { navigationActions.navigateTo("Settings") },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF05A9FB))) {
-                      Icon(
-                          Icons.Outlined.Settings,
-                          tint = Color.White,
-                          contentDescription = "Settings")
-                    }
+                ReusableButtonWithIcon(
+                    { navigationActions.navigateTo("Settings") },
+                    Icons.Outlined.Settings,
+                    "settings")
 
                 if (isHelpBoxVisible) {
                   Dialog(onDismissRequest = { isHelpBoxVisible = false }) {
@@ -106,24 +97,25 @@ fun ProfileScreen(
                         color = Color.LightGray,
                         modifier =
                             Modifier.padding(16.dp)
-                                .border(2.dp, Color.Gray, RoundedCornerShape(12.dp))
-                                .clip(RoundedCornerShape(12.dp))) {
+                                .clip(RoundedCornerShape(12.dp))
+                                .border(
+                                    4.dp,
+                                    colorResource(R.color.dark_gray),
+                                    RoundedCornerShape(12.dp))) {
                           Column(
                               modifier = Modifier.padding(16.dp).fillMaxWidth(),
                               horizontalAlignment = Alignment.CenterHorizontally) {
                                 Text(
-                                    "This is your personal space where you can:\n" +
-                                        "\n" +
-                                        "- View and edit your profile.\n" +
-                                        "\n" +
-                                        "- Track your progress: See how far you have come in your ASL journey, with clear insights into what you have learned and what is next.",
-                                    color = Color.Black)
+                                    stringResource(R.string.help_profile_screen),
+                                    modifier = Modifier.testTag("helpProfileText"),
+                                    color = colorResource(R.color.dark_gray))
                                 Spacer(modifier = Modifier.height(16.dp))
                                 Button(
                                     onClick = { isHelpBoxVisible = false },
+                                    modifier = Modifier.testTag("closeButton"),
                                     colors =
                                         ButtonDefaults.buttonColors(
-                                            containerColor = Color(0xFF05A9FB))) {
+                                            containerColor = colorResource(R.color.blue))) {
                                       Text("Close")
                                     }
                               }
@@ -135,186 +127,73 @@ fun ProfileScreen(
           Spacer(modifier = Modifier.height(24.dp))
 
           Row(
-              modifier = Modifier.fillMaxWidth(),
+              modifier = Modifier.fillMaxWidth().testTag("userInfo"),
               horizontalArrangement = Arrangement.Center,
               verticalAlignment = Alignment.CenterVertically) {
-                // User Info: Display Test ID and Test Name in a Column
+
+                // User Info : user id and user name
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    // modifier = Modifier.fillMaxWidth()
                 ) {
-                  Text(text = userId, fontWeight = FontWeight.Bold) // Test ID
-                  Text(text = userName, fontWeight = FontWeight.Bold) // Test Name
+                  Text(
+                      text = userId,
+                      fontWeight = FontWeight.Bold,
+                      color = colorResource(R.color.dark_gray))
+                  Text(
+                      text = userName,
+                      fontWeight = FontWeight.Bold,
+                      color = colorResource(R.color.dark_gray))
                 }
 
                 Spacer(modifier = Modifier.width(24.dp))
 
-                // Profile Picture and Number of Days
-
+                // Profile Picture
                 ProfilePicture(profilePictureUrl)
 
                 Spacer(modifier = Modifier.width(24.dp))
 
-                Box(
-                    modifier =
-                        Modifier
-                            // .background(Color.Blue, shape = RoundedCornerShape(8.dp))
-                            .padding(vertical = 4.dp, horizontal = 16.dp)) {
-                      Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            painter =
-                                painterResource(
-                                    id = R.drawable.flame), // Replace with your icon resource
-                            contentDescription = "Days Icon",
-                            tint = Color.Red,
-                            modifier = Modifier.size(16.dp))
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = "$numberOfDays days",
-                            // color = Color.White,
-                            fontWeight = FontWeight.Bold)
-                      }
-                    }
+                // Number of days
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                  Icon(
+                      painter =
+                          painterResource(id = R.drawable.flame), // Replace with your icon resource
+                      contentDescription = "Days Icon",
+                      tint = Color.Red,
+                      modifier = Modifier.size(32.dp).testTag("flameIcon"))
+                  Spacer(modifier = Modifier.width(4.dp))
+                  Text(text = "$numberOfDays days", fontWeight = FontWeight.Bold)
+                }
               }
 
           Spacer(modifier = Modifier.height(64.dp))
 
           // Letters learned
-          Text(text = "All letters learned", fontWeight = FontWeight.Bold)
+          Text(
+              text = "All letters learned",
+              fontWeight = FontWeight.Bold,
+              fontSize = 16.sp,
+              color = colorResource(R.color.dark_gray))
 
           Box(
               modifier =
                   Modifier.fillMaxWidth()
-                      .border(2.dp, Color.Gray, RoundedCornerShape(12.dp))
+                      .border(2.dp, colorResource(R.color.dark_gray), RoundedCornerShape(12.dp))
                       .clip(RoundedCornerShape(8.dp))
                       .padding(12.dp)
-              // .background(Color(0xFFDCF1FA))
-              ) {
+                      .testTag("lettersBox")) {
                 HorizontalLetterList(lettersLearned)
               }
 
           Spacer(modifier = Modifier.height(64.dp))
 
-          Row(
-              modifier = Modifier.fillMaxWidth(),
-              horizontalArrangement = Arrangement.SpaceBetween,
-              verticalAlignment = Alignment.CenterVertically) {
-
-                // Number of exercises achieved (Easy & Hard boxes)
-                Text(text = "Exercises \n achieved", fontWeight = FontWeight.Bold)
-
-                // Easy Exercises
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                  Text(text = "Easy :")
-                  Spacer(modifier = Modifier.width(8.dp))
-                  Box(
-                      modifier =
-                          Modifier.size(48.dp)
-                              .border(2.dp, Color.Gray, RoundedCornerShape(8.dp))
-                              .clip(RoundedCornerShape(8.dp))
-                              .background(Color(0xFFDCF1FA)),
-                      contentAlignment = Alignment.Center) {
-                        Text(
-                            text = if (easyExercises > 0) "$easyExercises" else "Ø",
-                            color = Color.Black,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp)
-                      }
-                }
-
-                // Spacer(modifier = Modifier.width(32.dp)) // Space between Easy and Hard
-
-                // Hard Exercises
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                  Text(text = "Hard :")
-                  Spacer(modifier = Modifier.width(8.dp))
-                  Box(
-                      modifier =
-                          Modifier.size(48.dp)
-                              .border(2.dp, Color.Gray, RoundedCornerShape(8.dp))
-                              .clip(RoundedCornerShape(8.dp))
-                              .background(Color(0xFFDCF1FA)),
-                      contentAlignment = Alignment.Center) {
-                        Text(
-                            text = if (hardExercises > 0) "$hardExercises" else "Ø",
-                            color = Color.Black,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp)
-                      }
-                }
-              }
-
-          Spacer(modifier = Modifier.height(16.dp))
-
-          Row(
-              modifier = Modifier.fillMaxWidth(),
-              horizontalArrangement = Arrangement.SpaceBetween,
-              verticalAlignment = Alignment.CenterVertically) {
-
-                // Number of quests achieved
-                Text(text = "Questions \n achieved", fontWeight = FontWeight.Bold)
-
-                // Daily Quests
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                  Text(text = "Daily :")
-                  Spacer(modifier = Modifier.width(8.dp))
-                  Box(
-                      modifier =
-                          Modifier.size(48.dp)
-                              .border(2.dp, Color.Gray, RoundedCornerShape(8.dp))
-                              .clip(RoundedCornerShape(8.dp))
-                              .background(Color(0xFFDCF1FA)),
-                      contentAlignment = Alignment.Center) {
-                        Text(
-                            text = if (dailyQuests > 0) "$dailyQuests" else "Ø",
-                            color = Color.Black,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp)
-                      }
-                }
-
-                // Spacer(modifier = Modifier.width(24.dp))
-
-                // Weekly Quests
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                  Text(text = "Weekly :")
-                  Spacer(modifier = Modifier.width(8.dp))
-                  Box(
-                      modifier =
-                          Modifier.size(48.dp)
-                              .border(2.dp, Color.Gray, RoundedCornerShape(8.dp))
-                              .clip(RoundedCornerShape(8.dp))
-                              .background(Color(0xFFDCF1FA)),
-                      contentAlignment = Alignment.Center) {
-                        Text(
-                            text = if (weeklyQuests > 0) "$weeklyQuests" else "Ø",
-                            color = Color.Black,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp)
-                      }
-                }
-              }
-
-          Spacer(modifier = Modifier.height(64.dp))
-
           // Friends List button
-          Button(
-              onClick = { navigationActions.navigateTo("Friends") },
-              colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF05A9FB)),
-              modifier = Modifier.fillMaxWidth()) {
-                Text("My Friends", fontWeight = FontWeight.Bold)
-              }
+          ReusableTextButton({ navigationActions.navigateTo("Friends") }, "My Friends")
 
           Spacer(modifier = Modifier.height(32.dp))
 
           // Performance Graph Button
-
-          Button(
-              onClick = onGraphClick,
-              colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF05A9FB)),
-              modifier = Modifier.fillMaxWidth()) {
-                Text("Performance Graph", fontWeight = FontWeight.Bold)
-              }
+          ReusableTextButton({ navigationActions.navigateTo("Stats") }, "My Stats")
 
           Spacer(modifier = Modifier.height(64.dp))
         }
@@ -326,14 +205,14 @@ fun HorizontalLetterList(lettersLearned: List<Char>) {
   val allLetters = ('A'..'Z').toList() // All capital letters from A to Z
   val scrollState = rememberScrollState()
 
-  Row(modifier = Modifier.fillMaxWidth().horizontalScroll(scrollState)) {
+  Row(modifier = Modifier.fillMaxWidth().horizontalScroll(scrollState).testTag("lettersList")) {
     allLetters.forEach { letter ->
       val isLearned = letter in lettersLearned
       Text(
           text = letter.toString(),
           fontSize = 24.sp,
           fontWeight = FontWeight.Bold,
-          color = if (isLearned) Color(0xFF2E7D32) else Color.Gray,
+          color = if (isLearned) colorResource(R.color.blue) else Color.Gray,
           modifier = Modifier.padding(horizontal = 8.dp))
     }
   }
@@ -341,13 +220,20 @@ fun HorizontalLetterList(lettersLearned: List<Char>) {
 
 @Composable
 fun ProfilePicture(profilePictureUrl: String?) {
-  Box(modifier = Modifier.size(80.dp).clip(CircleShape).background(Color.LightGray)) {
-    profilePictureUrl?.let {
-      // Load image with Coil or any other image loading library
-      Image(
-          painter = rememberImagePainter(data = it),
-          contentDescription = "Profile picture",
-          modifier = Modifier.fillMaxSize())
-    } ?: Text(text = "Profile", modifier = Modifier.align(Alignment.Center))
-  }
+  Box(
+      modifier =
+          Modifier.size(80.dp)
+              .clip(CircleShape)
+              .background(colorResource(R.color.dark_gray))
+              .testTag("profilePicture")) {
+        profilePictureUrl?.let {
+          // Load image with Coil or any other image loading library
+          Image(
+              painter = rememberImagePainter(data = it),
+              contentDescription = "Profile picture",
+              modifier = Modifier.fillMaxSize())
+        }
+            ?: Text(
+                text = "Profile", modifier = Modifier.align(Alignment.Center), color = Color.White)
+      }
 }

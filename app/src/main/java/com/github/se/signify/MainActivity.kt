@@ -118,11 +118,6 @@ fun SignifyAppPreview() {
             profilePictureUrl = null, // Replace with actual URL or null
             numberOfDays = 30,
             lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F'),
-            easyExercises = 1,
-            hardExercises = 0,
-            dailyQuests = 1,
-            weeklyQuests = 0,
-            onGraphClick = { /* Handle graph click */},
             navigationActions = navigationActions)
       }
 
@@ -142,6 +137,8 @@ fun SignifyAppPreview() {
             profilePictureUrl = null, // Replace with actual URL or null
             navigationActions = navigationActions)
       }
+
+      composable(Route.STATS) { MyStatsScreen(navigationActions = navigationActions) }
     }
 
     navigation(
