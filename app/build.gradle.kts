@@ -265,6 +265,9 @@ sonarqube {
     properties {
         property ("sonar.projectKey", "Signify-epfl_signify-app")
         property ("sonar.organization", "signify-epfl")
+        property ("sonar.java.coveragePlugin", "jacoco")
+        property ("sonar.sources", "app/src/main/java")
+        property ("sonar.login", "<SONAR_TOKEN>")
         property ("sonar.host.url", "https://sonarcloud.io")
         property ("sonar.jacoco.reportPaths", "app/build/reports/jacoco/jacocoTestReport.xml")
         property ("sonar.coverage.exclusions", "**/test/**")
