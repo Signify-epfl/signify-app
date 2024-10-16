@@ -266,14 +266,17 @@ sonarqube {
         property ("sonar.projectKey", "Signify-epfl_signify-app")
         property ("sonar.organization", "signify-epfl")
         property ("sonar.java.coveragePlugin", "jacoco")
-        property ("sonar.sources", "app/src/main/java")
+        property ("sonar.sources", "src/main/java")
         property ("sonar.host.url", "https://sonarcloud.io")
-        property ("sonar.jacoco.reportPaths", "app/build/reports/jacoco/jacocoTestReport.xml")
+        property ("sonar.jacoco.reportPaths", "build/reports/jacoco/jacocoTestReport.xml")
         property ("sonar.coverage.exclusions", "**/test/**")
         property ("sonar.java.coveragePlugin", "jacoco")
         property ("sonar.coverage.minimumCoverage", "60")
         property ("sonar.duplication.exclusions", "**/*.java")
         property ("sonar.cpd.duplicationThreshold", "5")
+
+        // Use the Sonar token from the environment variable
+        property ("sonar.login", System.getenv("SONAR_TOKEN"))
     }
 }
 
