@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.screens.Home
+package com.github.se.signify.ui.screens.home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background

@@ -18,18 +18,18 @@ import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Route
 import com.github.se.signify.ui.navigation.Screen
 import com.github.se.signify.ui.screens.*
-import com.github.se.signify.ui.screens.Challenge.ChallengeHistoryScreen
-import com.github.se.signify.ui.screens.Challenge.ChallengeScreen
-import com.github.se.signify.ui.screens.Challenge.NewChallengeScreen
-import com.github.se.signify.ui.screens.Home.ASLRecognition
-import com.github.se.signify.ui.screens.Home.ExerciseScreenEasy
-import com.github.se.signify.ui.screens.Home.ExerciseScreenHard
-import com.github.se.signify.ui.screens.Home.HomeScreen
-import com.github.se.signify.ui.screens.Home.QuestScreen
-import com.github.se.signify.ui.screens.Profile.FriendsListScreen
-import com.github.se.signify.ui.screens.Profile.MyStatsScreen
-import com.github.se.signify.ui.screens.Profile.ProfileScreen
-import com.github.se.signify.ui.screens.Profile.SettingsScreen
+import com.github.se.signify.ui.screens.challenge.ChallengeHistoryScreen
+import com.github.se.signify.ui.screens.challenge.ChallengeScreen
+import com.github.se.signify.ui.screens.challenge.NewChallengeScreen
+import com.github.se.signify.ui.screens.home.ASLRecognition
+import com.github.se.signify.ui.screens.home.ExerciseScreenEasy
+import com.github.se.signify.ui.screens.home.ExerciseScreenHard
+import com.github.se.signify.ui.screens.home.HomeScreen
+import com.github.se.signify.ui.screens.home.QuestScreen
+import com.github.se.signify.ui.screens.profile.FriendsListScreen
+import com.github.se.signify.ui.screens.profile.MyStatsScreen
+import com.github.se.signify.ui.screens.profile.ProfileScreen
+import com.github.se.signify.ui.screens.profile.SettingsScreen
 import com.github.se.signify.ui.theme.SignifyTheme
 
 class MainActivity : ComponentActivity() {

@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.screens.Home
+package com.github.se.signify.ui.screens.home
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold

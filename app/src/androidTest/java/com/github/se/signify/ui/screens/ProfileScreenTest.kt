@@ -11,7 +11,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
-import com.github.se.signify.ui.screens.Profile.ProfileScreen
+import com.github.se.signify.ui.screens.profile.ProfileScreen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
