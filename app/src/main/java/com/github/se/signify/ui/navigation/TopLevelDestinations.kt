@@ -12,11 +12,11 @@ object TopLevelDestinations {
           icon = R.drawable.battleicon, // Custom battle icon
           textId = "Challenge")
 
-  val MAIN_AIM =
+  val HOME =
       TopLevelDestination(
-          route = Route.MAIN_AIM,
+          route = Route.HOME,
           icon = R.drawable.homeicon, // Custom home icon
-          textId = "Main")
+          textId = "Home")
 
   val PROFILE =
       TopLevelDestination(
@@ -26,5 +26,4 @@ object TopLevelDestinations {
 }
 
 val LIST_TOP_LEVEL_DESTINATION =
-    listOf(
-        TopLevelDestinations.CHALLENGE, TopLevelDestinations.MAIN_AIM, TopLevelDestinations.PROFILE)
+    listOf(TopLevelDestinations.CHALLENGE, TopLevelDestinations.HOME, TopLevelDestinations.PROFILE)
