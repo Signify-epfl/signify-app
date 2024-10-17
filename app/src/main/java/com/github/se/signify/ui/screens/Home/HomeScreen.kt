@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.screens
+package com.github.se.signify.ui.screens.Home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -50,62 +50,72 @@ import com.github.se.signify.R
 import com.github.se.signify.ui.navigation.BottomNavigationMenu
 import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.ui.navigation.NavigationActions
+import com.github.se.signify.ui.navigation.Screen
 
 data class Exercise(val name: String)
 
 @Composable
 fun HomeScreen(navigationActions: NavigationActions) {
-  // Placeholder exercises
-  val exerciseOnClick: Exercise.() -> Unit = { navigationActions.navigateTo("Practice") }
-  val defaultExercises =
-      listOf(
-          Exercise("Easy"),
-          Exercise("Medium"),
-          Exercise("Hard"),
-      )
+    // Define navigation based on exercise name
+    val exerciseOnClick: (Exercise) -> Unit = { exercise ->
+        when (exercise.name) {
+            "Easy" -> navigationActions.navigateTo(Screen.EXERCISE_EASY)
+            "Medium" -> navigationActions.navigateTo(Screen.EXERCISE_HARD)
+            "Hard" -> navigationActions.navigateTo(Screen.EXERCISE_HARD)
+            else -> navigationActions.navigateTo("EXERCISE_UNKNOWN")
+        }
+    }
 
-  Scaffold(
-      bottomBar = {
-        BottomNavigationMenu(
-            onTabSelect = { route -> navigationActions.navigateTo(route) },
-            tabList = LIST_TOP_LEVEL_DESTINATION,
-            selectedItem = navigationActions.currentRoute())
-      },
-      content = { padding ->
-        Column(
-            modifier =
-                Modifier.fillMaxSize()
+    val defaultExercises = listOf(
+        Exercise("Easy"),
+        Exercise("Medium"),
+        Exercise("Hard"),
+    )
+
+    Scaffold(
+        bottomBar = {
+            BottomNavigationMenu(
+                onTabSelect = { route -> navigationActions.navigateTo(route) },
+                tabList = LIST_TOP_LEVEL_DESTINATION,
+                selectedItem = navigationActions.currentRoute())
+        },
+        content = { padding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
                     .padding(padding)
                     .padding(16.dp)
                     .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally) {
-              Row(
-                  modifier = Modifier.fillMaxWidth(),
-                  horizontalArrangement = Arrangement.SpaceBetween,
-              ) {
-                StreakCounter()
-                QuestsButton(onClick = { navigationActions.navigateTo("Quest") })
-              }
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    StreakCounter()
+                    QuestsButton(onClick = { navigationActions.navigateTo("Quest") })
+                }
 
-              Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-              CameraFeedbackToggle()
+                CameraFeedbackToggle()
 
-              Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-              CameraFeedback(onClick = { navigationActions.navigateTo("MainAim") })
+                CameraFeedback(onClick = { navigationActions.navigateTo(Screen.PRACTICE) })
 
-              Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-              LetterDictionary()
+                LetterDictionary()
 
-              Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-              ExerciseList(defaultExercises, exerciseOnClick)
+                ExerciseList(defaultExercises, exerciseOnClick)
             }
 
-        HelpButton()
-      })
+            HelpButton()
+        }
+    )
 }
 
 @Composable

@@ -22,6 +22,9 @@ import com.github.se.signify.ui.screens.Challenge.ChallengeHistoryScreen
 import com.github.se.signify.ui.screens.Challenge.ChallengeScreen
 import com.github.se.signify.ui.screens.Challenge.NewChallengeScreen
 import com.github.se.signify.ui.screens.Home.ASLRecognition
+import com.github.se.signify.ui.screens.Home.ExerciseScreenEasy
+import com.github.se.signify.ui.screens.Home.ExerciseScreenHard
+import com.github.se.signify.ui.screens.Home.HomeScreen
 import com.github.se.signify.ui.screens.Home.QuestScreen
 import com.github.se.signify.ui.screens.Profile.FriendsListScreen
 import com.github.se.signify.ui.screens.Profile.MyStatsScreen
@@ -116,13 +119,7 @@ fun SignifyAppPreview() {
             navigationActions = navigationActions)
       }
     }
-
-    navigation(
-        startDestination = Screen.MAIN_AIM,
-        route = Route.MAIN_AIM,
-    ) {
-      composable(Screen.MAIN_AIM) { ASLRecognition(handLandMarkViewModel, navigationActions) }
-    }
+      composable(Screen.PRACTICE) { ASLRecognition(handLandMarkViewModel, navigationActions) }
       composable(Screen.EXERCISE_EASY) { ExerciseScreenEasy(navigationActions) }
       composable(Screen.EXERCISE_HARD) { ExerciseScreenHard(navigationActions) }
   }

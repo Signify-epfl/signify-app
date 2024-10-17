@@ -8,6 +8,9 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
+import com.github.se.signify.ui.screens.Home.Exercise
+import com.github.se.signify.ui.screens.Home.ExerciseList
+import com.github.se.signify.ui.screens.Home.HomeScreen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.screens
+package com.github.se.signify.ui.screens.Home
 
 import android.widget.Toast
 import androidx.compose.foundation.background
