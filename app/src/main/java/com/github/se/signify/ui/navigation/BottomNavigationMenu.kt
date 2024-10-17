@@ -9,14 +9,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material3.Icon
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.github.se.signify.R
 
 @Composable
 fun BottomNavigationMenu(
@@ -28,7 +30,7 @@ fun BottomNavigationMenu(
   Box(
       modifier =
           modifier
-              .border(2.dp, Color(0xFF05A9FB)) // Top blue line
+              .border(2.dp, colorResource(R.color.blue)) // Top blue line
               .padding(bottom = 2.dp)
               .testTag("BottomNavigationBar")) {
         BottomNavigation(

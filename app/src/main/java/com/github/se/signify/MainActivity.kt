@@ -38,10 +38,10 @@ fun SignifyAppPreview() {
   val navController = rememberNavController()
   val navigationActions = NavigationActions(navController)
 
-  NavHost(navController = navController, startDestination = Route.CHALLENGE) {
+  NavHost(navController = navController, startDestination = Route.WELCOME) {
     navigation(
-        startDestination = Screen.CHALLENGE,
-        route = Route.CHALLENGE,
+        startDestination = Screen.WELCOME,
+        route = Route.WELCOME,
     ) {
       composable(Screen.WELCOME) { WelcomeScreen(navigationActions) }
     }

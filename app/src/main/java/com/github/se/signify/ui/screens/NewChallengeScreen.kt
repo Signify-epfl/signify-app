@@ -4,23 +4,29 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Icon
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.IconButton
+//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.material.Scaffold
+//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import com.github.se.signify.R
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.ui.ReusableTextButton
 import com.github.se.signify.ui.navigation.NavigationActions
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun NewChallengeScreen(navigationActions: NavigationActions) {
   Scaffold(
@@ -30,7 +36,7 @@ fun NewChallengeScreen(navigationActions: NavigationActions) {
             modifier =
                 Modifier.fillMaxWidth()
                     .height(4.dp)
-                    .background(Color(0xFF05A9FB))
+                    .background(colorResource(R.color.blue))
                     .testTag("TopBlueBar"))
       },
       content = {
@@ -45,7 +51,7 @@ fun NewChallengeScreen(navigationActions: NavigationActions) {
                           .padding(bottom = 24.dp) // Added space below the arrow button
                           .testTag("BackButton")) {
                     Icon(
-                        imageVector = Icons.Default.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back",
                         tint = Color.Black)
                   }
@@ -59,7 +65,7 @@ fun NewChallengeScreen(navigationActions: NavigationActions) {
                   "My Friends",
                   60.dp,
                   Color.DarkGray,
-                  Color(0xFF05A9FB),
+                  colorResource(R.color.blue),
                   26.sp,
                   Color.DarkGray,
               )
@@ -73,7 +79,7 @@ fun NewChallengeScreen(navigationActions: NavigationActions) {
                   "Create a Challenge",
                   60.dp,
                   Color.DarkGray,
-                  Color(0xFF05A9FB),
+                  colorResource(R.color.blue),
                   26.sp,
                   Color.DarkGray,
               )
@@ -86,7 +92,7 @@ fun NewChallengeScreen(navigationActions: NavigationActions) {
                   modifier =
                       Modifier.fillMaxWidth()
                           .border(2.dp, Color.Black)
-                          .background(Color(0xFF05A9FB))
+                          .background(colorResource(R.color.blue))
                           .padding(16.dp)
                           .testTag("MyFriendsChallengeBox")) {
                     Column(

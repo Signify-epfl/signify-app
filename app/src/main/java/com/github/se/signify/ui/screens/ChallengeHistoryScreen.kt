@@ -4,18 +4,22 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Icon
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.IconButton
+//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.material.Scaffold
+//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,7 +27,7 @@ import com.github.se.signify.R
 import com.github.se.signify.ui.ReusableTextButton
 import com.github.se.signify.ui.navigation.NavigationActions
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ChallengeHistoryScreen(
     navigationActions: NavigationActions,
@@ -37,7 +41,7 @@ fun ChallengeHistoryScreen(
             modifier =
                 Modifier.fillMaxWidth()
                     .height(4.dp)
-                    .background(Color(0xFF05A9FB))
+                    .background(colorResource(R.color.blue))
                     .testTag("TopBlueBar"))
       },
       content = {
@@ -73,7 +77,7 @@ fun ChallengeHistoryScreen(
                     Box(
                         modifier =
                             Modifier.size(50.dp)
-                                .border(2.dp, Color(0xFF05A9FB))
+                                .border(2.dp, colorResource(R.color.blue))
                                 .background(Color.White)
                                 .testTag("FriendsChallengesCountBox"),
                         contentAlignment = Alignment.Center) {
@@ -101,7 +105,7 @@ fun ChallengeHistoryScreen(
                     Box(
                         modifier =
                             Modifier.size(50.dp)
-                                .border(2.dp, Color(0xFF05A9FB))
+                                .border(2.dp, colorResource(R.color.blue))
                                 .background(Color.White)
                                 .testTag("ChallengesCreatedCountBox"),
                         contentAlignment = Alignment.Center) {
@@ -121,7 +125,7 @@ fun ChallengeHistoryScreen(
                   textTag = "GraphsStatisticsButton",
                   text = stringResource(R.string.graphs_history),
                   height = 240.dp,
-                  borderColor = Color(0xFF05A9FB),
+                  borderColor = colorResource(R.color.blue),
                   backgroundColor = Color.Black,
                   textSize = 30.sp,
                   textColor = Color.White,
