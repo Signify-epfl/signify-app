@@ -51,10 +51,19 @@ import com.github.se.signify.ui.navigation.BottomNavigationMenu
 import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.ui.navigation.NavigationActions
 
-data class Exercise(val name: String)
+data class Exercise(val name: String, val onClick: () -> Unit)
 
 @Composable
 fun HomeScreen(navigationActions: NavigationActions) {
+  // Placeholder exercises
+  val exerciseOnClick = { navigationActions.navigateTo("Practice") }
+  val exercises =
+      listOf(
+          Exercise("Easy", exerciseOnClick),
+          Exercise("Medium", exerciseOnClick),
+          Exercise("Hard", exerciseOnClick),
+      )
+
   Scaffold(
       bottomBar = {
         BottomNavigationMenu(
@@ -92,7 +101,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
 
               Spacer(modifier = Modifier.height(16.dp))
 
-              ExerciseList()
+              ExerciseList(exercises)
             }
 
         HelpButton()
@@ -178,8 +187,7 @@ fun LetterDictionary() {
 }
 
 @Composable
-fun ExerciseList() {
-  val exercises = listOf(Exercise("Easy"), Exercise("Medium"), Exercise("Hard"))
+fun ExerciseList(exercises: List<Exercise>) {
   LazyVerticalGrid(
       columns = GridCells.Fixed(2),
       modifier =
@@ -199,7 +207,7 @@ fun ExerciseList() {
 @Composable
 fun ExerciseButton(exercise: Exercise) {
   Button(
-      onClick = {},
+      onClick = exercise.onClick,
       modifier =
           Modifier.aspectRatio(2f)
               .fillMaxWidth()
