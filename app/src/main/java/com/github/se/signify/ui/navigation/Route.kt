@@ -3,7 +3,6 @@ package com.github.se.signify.ui.navigation
 object Route {
   const val MAIN_AIM = "MainAim"
   const val HOME = "Home"
-  const val PRACTICE = "Practice"
   const val PROFILE = "Profile"
   const val QUEST = "Quest"
   const val CHALLENGE = "Challenge"

@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.screens
+package com.github.se.signify.ui.screens.Home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -50,13 +50,22 @@ import com.github.se.signify.R
 import com.github.se.signify.ui.navigation.BottomNavigationMenu
 import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.ui.navigation.NavigationActions
+import com.github.se.signify.ui.navigation.Screen
 
 data class Exercise(val name: String)
 
 @Composable
 fun HomeScreen(navigationActions: NavigationActions) {
-  // Placeholder exercises
-  val exerciseOnClick: Exercise.() -> Unit = { navigationActions.navigateTo("Practice") }
+  // Define navigation based on exercise name
+  val exerciseOnClick: (Exercise) -> Unit = { exercise ->
+    when (exercise.name) {
+      "Easy" -> navigationActions.navigateTo(Screen.EXERCISE_EASY)
+      "Medium" -> navigationActions.navigateTo(Screen.EXERCISE_HARD)
+      "Hard" -> navigationActions.navigateTo(Screen.EXERCISE_HARD)
+      else -> navigationActions.navigateTo("EXERCISE_UNKNOWN")
+    }
+  }
+
   val defaultExercises =
       listOf(
           Exercise("Easy"),
@@ -93,7 +102,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
 
               Spacer(modifier = Modifier.height(16.dp))
 
-              CameraFeedback(onClick = { navigationActions.navigateTo("MainAim") })
+              CameraFeedback(onClick = { navigationActions.navigateTo(Screen.PRACTICE) })
 
               Spacer(modifier = Modifier.height(16.dp))
 
