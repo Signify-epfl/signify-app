@@ -114,7 +114,7 @@ fun SignifyAppPreview() {
         route = Route.MAIN_AIM,
     ) {
       composable(
-          Screen.MAIN_AIM) { ASLRecognition(handLandMarkViewModel) }
+          Screen.MAIN_AIM) { ASLRecognition(handLandMarkViewModel, navigationActions) }
     }
   }
 }
