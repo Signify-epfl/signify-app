@@ -3,6 +3,7 @@ package com.github.se.signify.ui.screens
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -78,7 +79,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
 
               Spacer(modifier = Modifier.height(16.dp))
 
-              CameraFeedback()
+              CameraFeedback(onClick = { navigationActions.navigateTo("MainAim") })
 
               Spacer(modifier = Modifier.height(16.dp))
 
@@ -119,13 +120,14 @@ fun CameraFeedbackToggle() {
 
 // This should be hooked to the camera feedback screen later on.
 @Composable
-fun CameraFeedback() {
+fun CameraFeedback(onClick: () -> Unit = {}) {
   Box(
       modifier =
           Modifier.fillMaxWidth()
               .aspectRatio(4f / 3f)
               .border(2.dp, colorResource(R.color.blue), RoundedCornerShape(8.dp))
-              .background(colorResource(R.color.black), RoundedCornerShape(8.dp))) {
+              .background(colorResource(R.color.black), RoundedCornerShape(8.dp))
+              .clickable { onClick() }) {
         Text(
             text = "Camera\nFeedback",
             modifier = Modifier.align(Alignment.Center),
