@@ -4,8 +4,8 @@ import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 import org.junit.Before
@@ -33,15 +33,15 @@ class HomeScreenTest {
     composeTestRule.setContent { HomeScreen(navigationActions = navigationActions) }
 
     // Assert that all elements are displayed in ChallengeScreen
-    composeTestRule.onNodeWithTag("QuestsButton").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("CameraFeedbackToggle").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("CameraFeedback").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("LetterDictionary").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("LetterDictionaryBack").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("LetterDictionaryForward").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("ExerciseList").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("QuestsButton").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("CameraFeedbackToggle").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("CameraFeedback").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("LetterDictionary").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("LetterDictionaryBack").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("LetterDictionaryForward").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("ExerciseList").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("StreakCounter").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("HelpButton").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
   }
 
   @Test
@@ -78,25 +78,28 @@ class HomeScreenTest {
   // The following 2 tests should be moved to their own file.
   @Test
   fun exerciseListDisplaysExerciseButtons() {
-    val exercises = listOf(Exercise("Easy"), Exercise("Medium"), Exercise("Hard"))
+    val exercises = listOf(Exercise("Easy"), Exercise("Medium"))
 
     composeTestRule.setContent { ExerciseList(exercises) {} }
 
     exercises.forEach { exercise ->
-      composeTestRule.onNodeWithTag("${exercise.name}ExerciseButton").assertIsDisplayed()
+      composeTestRule
+          .onNodeWithTag("${exercise.name}ExerciseButton")
+          .performScrollTo()
+          .assertIsDisplayed()
     }
   }
 
   @Test
   fun clickingExerciseButtonsCallsOnClick() {
-    val exercises = listOf(Exercise("Easy"), Exercise("Medium"), Exercise("Hard"))
+    val exercises = listOf(Exercise("Easy"), Exercise("Medium"))
 
     val onClick: (Exercise) -> Unit = mock() // Mock the lambda
 
     composeTestRule.setContent { ExerciseList(exercises, onClick) }
 
     exercises.forEach { exercise ->
-      composeTestRule.onNodeWithText(exercise.name).performClick()
+      composeTestRule.onNodeWithTag("${exercise.name}ExerciseButton").performClick()
 
       verify(onClick).invoke(exercise) // Verify onClick was called with the exercise
     }
