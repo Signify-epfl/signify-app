@@ -9,7 +9,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
@@ -54,10 +53,10 @@ fun NewChallengeScreen(navigationActions: NavigationActions) {
                     textTag = "MyFriendsButton",
                     text = "My Friends",
                     height = 60.dp,
-                    borderColor = Color.DarkGray,
+                    borderColor = colorResource(R.color.dark_gray),
                     backgroundColor = colorResource(R.color.blue),
                     textSize = 26.sp,
-                    textColor = Color.DarkGray)
+                    textColor = colorResource(R.color.dark_gray))
 
                 Spacer(modifier = Modifier.height(40.dp)) // Increased space between buttons
 
@@ -67,10 +66,10 @@ fun NewChallengeScreen(navigationActions: NavigationActions) {
                     textTag = "CreateChallengeButton",
                     text = "Create a Challenge",
                     height = 60.dp,
-                    borderColor = Color.DarkGray,
+                    borderColor = colorResource(R.color.dark_gray),
                     backgroundColor = colorResource(R.color.blue),
                     textSize = 26.sp,
-                    textColor = Color.DarkGray)
+                    textColor = colorResource(R.color.dark_gray))
 
                 Spacer(
                     modifier =
@@ -80,7 +79,7 @@ fun NewChallengeScreen(navigationActions: NavigationActions) {
                 Box(
                     modifier =
                         Modifier.fillMaxWidth()
-                            .border(2.dp, Color.Black)
+                            .border(2.dp, colorResource(R.color.black))
                             .background(colorResource(R.color.blue))
                             .padding(16.dp)
                             .testTag("MyFriendsChallengeBox")) {
@@ -90,7 +89,7 @@ fun NewChallengeScreen(navigationActions: NavigationActions) {
                             Text(
                                 text = "My Friends Challenge",
                                 fontSize = 20.sp,
-                                color = Color.Black,
+                                color = colorResource(R.color.black),
                                 modifier = Modifier.testTag("FriendsChallengeTitle"))
 
                             Spacer(
@@ -105,10 +104,10 @@ fun NewChallengeScreen(navigationActions: NavigationActions) {
                                   textTag = "ChallengeButton$i",
                                   text = "Challenge $i",
                                   height = 40.dp,
-                                  borderColor = Color.DarkGray,
-                                  backgroundColor = Color.White,
+                                  borderColor = colorResource(R.color.dark_gray),
+                                  backgroundColor = colorResource(R.color.white),
                                   textSize = 20.sp,
-                                  textColor = Color.DarkGray)
+                                  textColor = colorResource(R.color.dark_gray))
                               Spacer(modifier = Modifier.height(16.dp))
                             }
                           }

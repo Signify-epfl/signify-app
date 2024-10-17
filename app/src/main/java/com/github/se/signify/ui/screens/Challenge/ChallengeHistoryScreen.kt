@@ -9,7 +9,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -62,19 +61,19 @@ fun ChallengeHistoryScreen(
                       Text(
                           text = "Number of friends challenges achieved",
                           fontSize = 16.sp,
-                          color = Color.Black,
+                          color = colorResource(R.color.white),
                           modifier = Modifier.testTag("FriendsChallengesText"))
                       Box(
                           modifier =
                               Modifier.size(50.dp)
                                   .border(2.dp, colorResource(R.color.blue))
-                                  .background(Color.White)
+                                  .background(colorResource(R.color.white))
                                   .testTag("FriendsChallengesCountBox"),
                           contentAlignment = Alignment.Center) {
                             Text(
                                 text = "$friendsChallengesAchieved",
                                 fontSize = 20.sp,
-                                color = Color.Black,
+                                color = colorResource(R.color.black),
                                 modifier = Modifier.testTag("FriendsChallengesCount"))
                           }
                     }
@@ -90,19 +89,19 @@ fun ChallengeHistoryScreen(
                       Text(
                           text = "Number of challenges created",
                           fontSize = 16.sp,
-                          color = Color.Black,
+                          color = colorResource(R.color.black),
                           modifier = Modifier.testTag("ChallengesCreatedText"))
                       Box(
                           modifier =
                               Modifier.size(50.dp)
                                   .border(2.dp, colorResource(R.color.blue))
-                                  .background(Color.White)
+                                  .background(colorResource(R.color.white))
                                   .testTag("ChallengesCreatedCountBox"),
                           contentAlignment = Alignment.Center) {
                             Text(
                                 text = "$challengesCreated",
                                 fontSize = 20.sp,
-                                color = Color.Black,
+                                color = colorResource(R.color.black),
                                 modifier = Modifier.testTag("ChallengesCreatedCount"))
                           }
                     }
@@ -116,9 +115,9 @@ fun ChallengeHistoryScreen(
                     text = stringResource(R.string.graphs_history),
                     height = 240.dp,
                     borderColor = colorResource(R.color.blue),
-                    backgroundColor = Color.Black,
+                    backgroundColor = colorResource(R.color.black),
                     textSize = 30.sp,
-                    textColor = Color.White)
+                    textColor = colorResource(R.color.white))
               }
         }
       })
