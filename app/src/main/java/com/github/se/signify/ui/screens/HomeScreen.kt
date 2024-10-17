@@ -51,17 +51,17 @@ import com.github.se.signify.ui.navigation.BottomNavigationMenu
 import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.ui.navigation.NavigationActions
 
-data class Exercise(val name: String, val onClick: () -> Unit)
+data class Exercise(val name: String)
 
 @Composable
 fun HomeScreen(navigationActions: NavigationActions) {
   // Placeholder exercises
-  val exerciseOnClick = { navigationActions.navigateTo("Practice") }
-  val exercises =
+  val exerciseOnClick: Exercise.() -> Unit = { navigationActions.navigateTo("Practice") }
+  val defaultExercises =
       listOf(
-          Exercise("Easy", exerciseOnClick),
-          Exercise("Medium", exerciseOnClick),
-          Exercise("Hard", exerciseOnClick),
+          Exercise("Easy"),
+          Exercise("Medium"),
+          Exercise("Hard"),
       )
 
   Scaffold(
@@ -101,7 +101,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
 
               Spacer(modifier = Modifier.height(16.dp))
 
-              ExerciseList(exercises)
+              ExerciseList(defaultExercises, exerciseOnClick)
             }
 
         HelpButton()
@@ -115,7 +115,8 @@ fun QuestsButton(onClick: () -> Unit = {}) {
       modifier =
           Modifier.clip(CircleShape)
               .border(2.dp, colorResource(R.color.black), CircleShape)
-              .background(colorResource(R.color.blue))) {
+              .background(colorResource(R.color.blue))
+              .testTag("QuestsButton")) {
         Icon(
             Icons.Outlined.DateRange,
             tint = colorResource(R.color.black),
@@ -129,6 +130,7 @@ fun CameraFeedbackToggle() {
       onClick = {},
       colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.blue)),
       border = BorderStroke(2.dp, colorResource(R.color.black)),
+      modifier = Modifier.testTag("CameraFeedbackToggle"),
   ) {
     Text("Toggle Camera")
   }
@@ -142,7 +144,8 @@ fun CameraFeedback(onClick: () -> Unit = {}) {
           Modifier.aspectRatio(4f / 3f)
               .border(2.dp, colorResource(R.color.blue), RoundedCornerShape(8.dp))
               .background(colorResource(R.color.black), RoundedCornerShape(8.dp))
-              .clickable { onClick() }) {
+              .clickable { onClick() }
+              .testTag("CameraFeedback")) {
         Text(
             text = "Camera\nFeedback",
             modifier = Modifier.align(Alignment.Center),
@@ -154,10 +157,10 @@ fun CameraFeedback(onClick: () -> Unit = {}) {
 @Composable
 fun LetterDictionary() {
   Row(
-      modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+      modifier = Modifier.fillMaxWidth().wrapContentHeight().testTag("LetterDictionary"),
       horizontalArrangement = Arrangement.SpaceBetween,
       verticalAlignment = Alignment.CenterVertically) {
-        IconButton(onClick = {}) {
+        IconButton(onClick = {}, modifier = Modifier.testTag("LetterDictionaryBack")) {
           Icon(
               Icons.AutoMirrored.Outlined.ArrowBack,
               tint = colorResource(R.color.black),
@@ -177,7 +180,7 @@ fun LetterDictionary() {
                     modifier = Modifier.size(32.dp))
               }
             }
-        IconButton(onClick = {}) {
+        IconButton(onClick = {}, modifier = Modifier.testTag("LetterDictionaryForward")) {
           Icon(
               Icons.AutoMirrored.Outlined.ArrowForward,
               tint = colorResource(R.color.black),
@@ -187,7 +190,7 @@ fun LetterDictionary() {
 }
 
 @Composable
-fun ExerciseList(exercises: List<Exercise>) {
+fun ExerciseList(exercises: List<Exercise>, onExerciseClick: (exercise: Exercise) -> Unit) {
   LazyVerticalGrid(
       columns = GridCells.Fixed(2),
       modifier =
@@ -197,21 +200,23 @@ fun ExerciseList(exercises: List<Exercise>) {
               .clip(RoundedCornerShape(8.dp))
               .background(colorResource(R.color.dark_gray))
               .heightIn(max = 128.dp)
-              .padding(8.dp),
+              .padding(8.dp)
+              .testTag("ExerciseList"),
       horizontalArrangement = Arrangement.spacedBy(8.dp),
       verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        items(exercises) { exercise -> ExerciseButton(exercise) }
+        items(exercises) { exercise -> ExerciseButton(exercise, onExerciseClick) }
       }
 }
 
 @Composable
-fun ExerciseButton(exercise: Exercise) {
+fun ExerciseButton(exercise: Exercise, onClick: (exercise: Exercise) -> Unit) {
   Button(
-      onClick = exercise.onClick,
+      onClick = { onClick(exercise) },
       modifier =
           Modifier.aspectRatio(2f)
               .fillMaxWidth()
-              .border(2.dp, colorResource(R.color.black), RoundedCornerShape(8.dp)),
+              .border(2.dp, colorResource(R.color.black), RoundedCornerShape(8.dp))
+              .testTag("ExerciseButton"),
       shape = RoundedCornerShape(8.dp),
       colors =
           ButtonDefaults.buttonColors(colorResource(R.color.blue), colorResource(R.color.black))) {
@@ -225,22 +230,29 @@ fun HelpButton() {
   Box(modifier = Modifier.fillMaxWidth().padding(8.dp), contentAlignment = Alignment.TopCenter) {
     IconButton(
         onClick = {},
-        modifier = Modifier.clip(CircleShape).background(colorResource(R.color.blue))) {
-          Icon(
-              Icons.Outlined.Info, tint = colorResource(R.color.white), contentDescription = "Help")
-        }
+        modifier =
+            Modifier.clip(CircleShape)
+                .background(colorResource(R.color.blue))
+                .testTag("HelpButton"),
+    ) {
+      Icon(
+          Icons.Outlined.Info,
+          tint = colorResource(R.color.white),
+          contentDescription = "Help",
+          modifier = Modifier.testTag("HelpIcon"))
+    }
   }
 }
 
 // This counter should be replaced by a shared Composable later on.
 @Composable
 fun StreakCounter() {
-  Row {
+  Row(modifier = Modifier.testTag("StreakCounter")) {
     Icon(
         painter = painterResource(id = R.drawable.flame),
         contentDescription = "Streak Icon",
         tint = colorResource(R.color.red),
-        modifier = Modifier.size(32.dp).testTag("flameIcon"))
+        modifier = Modifier.size(32.dp).testTag("FlameIcon"))
     Spacer(modifier = Modifier.width(8.dp))
     Text(
         text = "4",
