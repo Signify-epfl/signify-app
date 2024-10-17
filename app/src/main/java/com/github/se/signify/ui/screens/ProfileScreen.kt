@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -48,7 +49,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import coil.compose.rememberImagePainter
 import com.github.se.signify.R
-import com.github.se.signify.ui.ReusableButtonWithIcon
 import com.github.se.signify.ui.ReusableTextButton
 import com.github.se.signify.ui.navigation.BottomNavigationMenu
 import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
@@ -82,13 +82,35 @@ fun ProfileScreen(
           Row(
               modifier = Modifier.fillMaxWidth(),
               horizontalArrangement = Arrangement.SpaceBetween) {
-                ReusableButtonWithIcon(
-                    { isHelpBoxVisible = !isHelpBoxVisible }, Icons.Outlined.Info, "help")
+                Box(
+                    modifier =
+                        Modifier.size(30.dp)
+                            .background(Color(0xFF05A9FB), shape = RoundedCornerShape(30))
+                            .border(2.dp, Color.White, shape = RoundedCornerShape(30))
+                            .clickable { isHelpBoxVisible = !isHelpBoxVisible }
+                            .testTag("helpButton"),
+                    contentAlignment = Alignment.Center) {
+                      Icon(
+                          Icons.Outlined.Info,
+                          contentDescription = "Help",
+                          tint = Color.White,
+                          modifier = Modifier.size(30.dp).testTag("InfoIcon"))
+                    }
 
-                ReusableButtonWithIcon(
-                    { navigationActions.navigateTo("Settings") },
-                    Icons.Outlined.Settings,
-                    "settings")
+                Box(
+                    modifier =
+                        Modifier.size(30.dp)
+                            .background(Color(0xFF05A9FB), shape = RoundedCornerShape(30))
+                            .border(2.dp, Color.White, shape = RoundedCornerShape(30))
+                            .clickable { navigationActions.navigateTo("Settings") }
+                            .testTag("settingsButton"),
+                    contentAlignment = Alignment.Center) {
+                      Icon(
+                          Icons.Outlined.Settings,
+                          contentDescription = "Settings",
+                          tint = Color.White,
+                          modifier = Modifier.size(30.dp).testTag("settingsIcon"))
+                    }
 
                 if (isHelpBoxVisible) {
                   Dialog(onDismissRequest = { isHelpBoxVisible = false }) {
@@ -188,12 +210,28 @@ fun ProfileScreen(
           Spacer(modifier = Modifier.height(64.dp))
 
           // Friends List button
-          ReusableTextButton({ navigationActions.navigateTo("Friends") }, "My Friends")
+          ReusableTextButton(
+              { navigationActions.navigateTo("Friends") },
+              "My FriendsButton",
+              "My Friends",
+              40.dp,
+              Color.DarkGray,
+              Color(0xFF05A9FB),
+              16.sp,
+              Color.DarkGray)
 
           Spacer(modifier = Modifier.height(32.dp))
 
           // Performance Graph Button
-          ReusableTextButton({ navigationActions.navigateTo("Stats") }, "My Stats")
+          ReusableTextButton(
+              { navigationActions.navigateTo("Stats") },
+              "My StatsButton",
+              "My Stats",
+              40.dp,
+              Color.DarkGray,
+              Color(0xFF05A9FB),
+              16.sp,
+              Color.DarkGray)
 
           Spacer(modifier = Modifier.height(64.dp))
         }
