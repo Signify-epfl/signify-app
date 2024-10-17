@@ -10,7 +10,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.screens.Home.ExerciseScreenEasy
+import com.github.se.signify.ui.screens.home.ExerciseScreenEasy
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
