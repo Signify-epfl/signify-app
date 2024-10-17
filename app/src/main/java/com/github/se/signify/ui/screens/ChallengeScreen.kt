@@ -3,18 +3,20 @@ package com.github.se.signify.ui.screens
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -22,18 +24,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.github.se.signify.R
+import com.github.se.signify.ui.SquareButton
+import com.github.se.signify.ui.UtilButton
 import com.github.se.signify.ui.navigation.BottomNavigationMenu
 import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Route
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ChallengeScreen(navigationActions: NavigationActions) {
   var isHelpBoxVisible by remember { mutableStateOf(false) }
@@ -56,26 +58,18 @@ fun ChallengeScreen(navigationActions: NavigationActions) {
                   modifier =
                       Modifier.fillMaxWidth()
                           .height(4.dp)
-                          .background(Color(0xFF05A9FB))
+                          .background(colorResource(R.color.blue))
                           .testTag("TopBlueLine"))
 
               // Info button centered 24dp (1cm) below the blue line
               Spacer(modifier = Modifier.height(24.dp))
 
-              Box(
-                  modifier =
-                      Modifier.size(30.dp)
-                          .background(Color(0xFF05A9FB), shape = RoundedCornerShape(30))
-                          .border(2.dp, Color.White, shape = RoundedCornerShape(30))
-                          .clickable { isHelpBoxVisible = !isHelpBoxVisible }
-                          .testTag("InfoButton"),
-                  contentAlignment = Alignment.Center) {
-                    Icon(
-                        Icons.Outlined.Info,
-                        contentDescription = "Help",
-                        tint = Color.White,
-                        modifier = Modifier.size(30.dp).testTag("InfoIcon"))
-                  }
+              UtilButton(
+                  { isHelpBoxVisible = !isHelpBoxVisible },
+                  "InfoButton",
+                  "InfoIcon",
+                  Icons.Outlined.Info,
+                  "Help")
 
               Spacer(modifier = Modifier.height(90.dp)) // Space before the square buttons
 
@@ -119,57 +113,11 @@ fun ChallengeScreen(navigationActions: NavigationActions) {
 }
 
 @Composable
-fun SquareButton(
-    iconRes: Int,
-    label: String,
-    onClick: () -> Unit,
-    size: Dp,
-    iconSize: Dp, // Icon size passed here
-    labelFontSize: TextUnit,
-    iconTint: Color,
-    textColor: Color,
-    iconOffset: Dp = 0.dp,
-    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
-) {
-  Column(
-      horizontalAlignment = Alignment.CenterHorizontally,
-      modifier =
-          modifier
-              .size(size) // Button size
-              .border(2.dp, Color.Black, RoundedCornerShape(12.dp)) // Black border
-              .background(Color(0xFF05A9FB), RoundedCornerShape(12.dp)) // Blue inside
-              .padding(16.dp)
-              .clickable { onClick() }) {
-
-        // Text on top of the icon
-        Text(
-            text = label,
-            fontSize = labelFontSize,
-            color = textColor,
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Icon in the center of the square
-        Box(contentAlignment = Alignment.Center) {
-          Icon(
-              painter = painterResource(id = iconRes),
-              contentDescription = label,
-              tint = iconTint, // Set icon tint to dark gray
-              modifier =
-                  Modifier.size(iconSize) // Applying the icon size
-                      .offset(x = iconOffset) // Use the offset if specified
-              )
-        }
-      }
-}
-
-@Composable
 fun InfoPopup(onDismiss: () -> Unit) {
   Dialog(onDismissRequest = { onDismiss() }) {
     Surface(
         shape = RoundedCornerShape(12.dp),
-        color = Color(0xFF05A9FB), // Blue background for the popup
+        color = colorResource(R.color.blue), // Blue background for the popup
         modifier =
             Modifier.border(
                     2.dp,
