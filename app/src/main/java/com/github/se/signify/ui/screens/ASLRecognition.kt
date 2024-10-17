@@ -31,7 +31,7 @@ import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 import java.util.concurrent.Executors
 
 @Composable
-fun MainAimScreen(handLandMarkViewModel: HandLandMarkViewModel) {
+fun ASLRecognition(handLandMarkViewModel: HandLandMarkViewModel) {
   val context = LocalContext.current
   var permissionGranted by remember { mutableStateOf(false) }
 

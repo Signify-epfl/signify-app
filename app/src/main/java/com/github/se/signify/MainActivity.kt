@@ -24,10 +24,6 @@ class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
-      val context = LocalContext.current
-      val handLandMarkImplementation =
-          HandLandMarkImplementation("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
-      val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
       SignifyTheme { Surface(modifier = Modifier.fillMaxSize()) { SignifyAppPreview() } }
     }
   }
@@ -37,7 +33,10 @@ class MainActivity : ComponentActivity() {
 fun SignifyAppPreview() {
   val navController = rememberNavController()
   val navigationActions = NavigationActions(navController)
-
+    val context = LocalContext.current
+    val handLandMarkImplementation =
+        HandLandMarkImplementation("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
+    val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
   NavHost(navController = navController, startDestination = Route.WELCOME) {
     navigation(
         startDestination = Screen.WELCOME,
@@ -115,7 +114,7 @@ fun SignifyAppPreview() {
         route = Route.MAIN_AIM,
     ) {
       composable(
-          Screen.MAIN_AIM) { /* Call the Main screen composable with the naviAct as a parameter */}
+          Screen.MAIN_AIM) { ASLRecognition(handLandMarkViewModel) }
     }
   }
 }
