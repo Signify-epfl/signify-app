@@ -22,16 +22,17 @@ class ChallengeHistoryScreenTest {
   @Before
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
+    composeTestRule.setContent {
+      ChallengeHistoryScreen(
+        navigationActions = navigationActions,
+        friendsChallengesAchieved = 5,
+        challengesCreated = 3)
+    }
   }
 
   @Test
   fun challengeHistoryScreenDisplaysCorrectElements(): Unit = runBlocking {
-    composeTestRule.setContent {
-      ChallengeHistoryScreen(
-          navigationActions = navigationActions,
-          friendsChallengesAchieved = 5,
-          challengesCreated = 3)
-    }
+
 
     // Assert that the key elements are displayed
     composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
@@ -50,12 +51,7 @@ class ChallengeHistoryScreenTest {
 
   @Test
   fun pressingBackArrowNavigatesToChallengeScreen() {
-    composeTestRule.setContent {
-      ChallengeHistoryScreen(
-          navigationActions = navigationActions,
-          friendsChallengesAchieved = 5,
-          challengesCreated = 3)
-    }
+
 
     composeTestRule.onNodeWithTag("BackButton").performClick()
 

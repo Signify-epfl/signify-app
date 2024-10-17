@@ -19,11 +19,12 @@ class ChallengeScreenTest {
   @Before
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
+    composeTestRule.setContent { ChallengeScreen(navigationActions = navigationActions) }
+
   }
 
   @Test
   fun challengeScreenDisplaysCorrectElements() {
-    composeTestRule.setContent { ChallengeScreen(navigationActions = navigationActions) }
 
     // Assert that all elements are displayed in ChallengeScreen
     composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
@@ -47,7 +48,6 @@ class ChallengeScreenTest {
 
   @Test
   fun pressingHistoryButtonNavigatesToChallengeHistoryScreen() {
-    composeTestRule.setContent { ChallengeScreen(navigationActions = navigationActions) }
 
     composeTestRule.onNodeWithTag("HistoryButton").performClick()
 
@@ -56,7 +56,6 @@ class ChallengeScreenTest {
 
   @Test
   fun pressingChallengeButtonNavigatesToNewChallengeScreen() {
-    composeTestRule.setContent { ChallengeScreen(navigationActions = navigationActions) }
 
     composeTestRule.onNodeWithTag("ChallengeButton").performClick()
 
@@ -65,7 +64,6 @@ class ChallengeScreenTest {
 
   @Test
   fun pressingInfoButtonShowsInfoPopup() {
-    composeTestRule.setContent { ChallengeScreen(navigationActions = navigationActions) }
 
     composeTestRule.onNodeWithTag("InfoButton").performClick()
 

@@ -29,20 +29,23 @@ class ProfileScreenTest {
     navigationActions = mock(NavigationActions::class.java)
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.PROFILE)
+      // Initialize the state of isHelpBoxVisible to true
+      composeTestRule.setContent {
+          val isHelpBoxVisible = remember { mutableStateOf(true) }
+          ProfileScreen(
+              userId = "Test ID 1",
+              userName = "Test Name 1",
+              profilePictureUrl = null, // Replace with actual URL or null
+              numberOfDays = 30,
+              lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F'),
+              navigationActions)
+      }
   }
+
 
   @Test
   fun buttonsAreCorrectlyDisplayed() {
 
-    composeTestRule.setContent {
-      ProfileScreen(
-          userId = "Test ID 1",
-          userName = "Test Name 1",
-          profilePictureUrl = null, // Replace with actual URL or null
-          numberOfDays = 30,
-          lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F'),
-          navigationActions)
-    }
 
     composeTestRule.onNodeWithTag("settingsButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("InfoButton").assertIsDisplayed()
@@ -55,15 +58,6 @@ class ProfileScreenTest {
   @Test
   fun buttonsHaveClickAction() {
 
-    composeTestRule.setContent {
-      ProfileScreen(
-          userId = "Test ID 1",
-          userName = "Test Name 1",
-          profilePictureUrl = null, // Replace with actual URL or null
-          numberOfDays = 30,
-          lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F'),
-          navigationActions)
-    }
 
     composeTestRule.onNodeWithTag("settingsButton").assertHasClickAction()
     composeTestRule.onNodeWithTag("InfoButton").assertHasClickAction()
@@ -73,15 +67,7 @@ class ProfileScreenTest {
 
   @Test
   fun buttonsPerformClick() {
-    composeTestRule.setContent {
-      ProfileScreen(
-          userId = "Test ID 1",
-          userName = "Test Name 1",
-          profilePictureUrl = null, // Replace with actual URL or null
-          numberOfDays = 30,
-          lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F'),
-          navigationActions)
-    }
+
 
     composeTestRule.onNodeWithTag("settingsButton").performClick()
     composeTestRule.onNodeWithTag("InfoButton").performClick()
@@ -91,15 +77,7 @@ class ProfileScreenTest {
 
   @Test
   fun userInfoAreDisplayed() {
-    composeTestRule.setContent {
-      ProfileScreen(
-          userId = "Test ID 1",
-          userName = "Test Name 1",
-          profilePictureUrl = null, // Replace with actual URL or null
-          numberOfDays = 30,
-          lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F'),
-          navigationActions)
-    }
+
 
     composeTestRule.onNodeWithTag("userInfo").assertIsDisplayed()
     composeTestRule.onNodeWithTag("flameIcon").assertIsDisplayed()
@@ -109,31 +87,14 @@ class ProfileScreenTest {
 
   @Test
   fun letterListScrolls() {
-    composeTestRule.setContent {
-      ProfileScreen(
-          userId = "Test ID 1",
-          userName = "Test Name 1",
-          profilePictureUrl = null, // Replace with actual URL or null
-          numberOfDays = 30,
-          lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F'),
-          navigationActions)
-    }
+
 
     composeTestRule.onNodeWithTag("lettersList").performScrollTo()
   }
 
   @Test
   fun dialogIsDisplayed_whenHelpBoxIsVisible() {
-    // Initialize the state of isHelpBoxVisible to true
-    composeTestRule.setContent {
-      ProfileScreen(
-          userId = "Test ID 1",
-          userName = "Test Name 1",
-          profilePictureUrl = null, // Replace with actual URL or null
-          numberOfDays = 30,
-          lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F'),
-          navigationActions)
-    }
+
 
     // Assert that the help dialog is displayed when the help button is clicked
     composeTestRule.onNodeWithTag("InfoButton").performClick()
@@ -142,17 +103,7 @@ class ProfileScreenTest {
 
   @Test
   fun dialogCloses_whenCloseButtonClicked() {
-    // Initialize the state of isHelpBoxVisible to true
-    composeTestRule.setContent {
-      val isHelpBoxVisible = remember { mutableStateOf(true) }
-      ProfileScreen(
-          userId = "Test ID 1",
-          userName = "Test Name 1",
-          profilePictureUrl = null, // Replace with actual URL or null
-          numberOfDays = 30,
-          lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F'),
-          navigationActions)
-    }
+
 
     // Click the 'Close' button in the dialog
     composeTestRule.onNodeWithTag("InfoButton").performClick()

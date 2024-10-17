@@ -19,11 +19,12 @@ class NewChallengeScreenTest {
   @Before
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
+    composeTestRule.setContent { NewChallengeScreen(navigationActions = navigationActions) }
+
   }
 
   @Test
   fun newChallengeScreenDisplaysCorrectElements() {
-    composeTestRule.setContent { NewChallengeScreen(navigationActions = navigationActions) }
 
     // Assert that all expected elements are displayed
     composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
@@ -41,7 +42,6 @@ class NewChallengeScreenTest {
 
   @Test
   fun pressingBackArrowNavigatesToChallengeScreen() {
-    composeTestRule.setContent { NewChallengeScreen(navigationActions = navigationActions) }
 
     composeTestRule.onNodeWithTag("BackButton").performClick()
 
@@ -50,7 +50,6 @@ class NewChallengeScreenTest {
 
   @Test
   fun pressingMyFriendsButtonNavigatesToFriendsScreen() {
-    composeTestRule.setContent { NewChallengeScreen(navigationActions = navigationActions) }
 
     composeTestRule.onNodeWithTag("MyFriendsButton").performClick()
 
