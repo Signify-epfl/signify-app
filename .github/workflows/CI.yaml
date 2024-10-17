@@ -19,6 +19,10 @@ jobs:
     env:
       app_name: SignifyDebug
 
+    defaults:
+      run:
+        working-directory: ./${{ env.base_folder }}
+
 
     steps:
       - name: Checkout
