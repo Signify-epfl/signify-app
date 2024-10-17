@@ -8,7 +8,6 @@ import android.os.SystemClock
 import android.util.Log
 import androidx.camera.core.ImageProxy
 import com.google.mediapipe.framework.image.BitmapImageBuilder
-import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 import com.google.mediapipe.tasks.core.BaseOptions
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarker
@@ -19,21 +18,48 @@ import java.nio.FloatBuffer
 import java.util.Collections
 import java.util.concurrent.Executors
 
+/**
+ * Implementation of the HandLandMarkRepository interface using MediaPipe's HandLandmarker and ONNX
+ * runtime for hand landmark detection and gesture recognition. This class handles the
+ * initialization of the hand landmark detection model and the gesture classification using an ONNX
+ * model for American Sign Language (ASL) recognition.
+ *
+ * @property pathToTask The file path to the MediaPipe hand detection model.
+ * @property pathToModel The file path to the ONNX model used for gesture classification.
+ */
 class HandLandMarkImplementation(private val pathToTask: String, private val pathToModel: String) :
     HandLandMarkRepository {
 
+  // HandLandmarker instance for detecting hand landmarks
   private lateinit var handLandmarker: HandLandmarker
+
+  // Stores the latest result from the HandLandmarker
   private var handLandMarkerResult: HandLandmarkerResult? = null
+
+  // Path to the ONNX model used for gesture classification
   private lateinit var RFC_model: String
+
+  // ONNX session used for running the classification model
   private lateinit var session: OrtSession
+
+  // Time when the last frame was processed, used for throttling
   private var lastProcessedTime = 0L
+
+  // Stores the solution (recognized gesture) output from the model
   private var solution = ""
 
+  /**
+   * Initializes the HandLandmarker and ONNX session with the provided context. Sets up the hand
+   * detection model and gesture recognition model.
+   *
+   * @param context The application context used for initialization.
+   * @param onSuccess Callback invoked when initialization is successful.
+   * @param onFailure Callback invoked if initialization fails with an exception.
+   */
   override fun init(context: Context, onSuccess: () -> Unit, onFailure: (e: Exception) -> Unit) {
     try {
       val baseOptions = BaseOptions.builder().setModelAssetPath(pathToTask).build()
 
-      // Create HandLandmarker options
       val options =
           HandLandmarkerOptions.builder()
               .setBaseOptions(baseOptions)
@@ -47,29 +73,44 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
               .setErrorListener { returnLivestreamError(it) }
               .build()
 
-      // Initialize the HandLandmarker
       handLandmarker = HandLandmarker.createFromOptions(context, options)
 
+      // Load the ONNX model from assets to a temporary file
       RFC_model =
           context.assets.open(pathToModel).use { inputStream ->
             val tempFile = File(context.cacheDir, pathToModel)
             inputStream.copyTo(tempFile.outputStream())
             tempFile.absolutePath
           }
+
+      // Initialize the ONNX runtime environment and session
       val env = OrtEnvironment.getEnvironment()
       session = env.createSession(RFC_model)
 
       onSuccess()
-      /** Initialize the model using pathToModel */
     } catch (e: Exception) {
       onFailure(e)
     }
   }
 
+  /**
+   * Retrieves the latest hand landmarks result from the HandLandmarker.
+   *
+   * @param onSuccess Callback that receives the result of hand landmark detection.
+   */
   override fun getHandLandMarkerResult(onSuccess: (result: HandLandmarkerResult) -> Unit) {
     onSuccess(handLandMarkerResult!!)
   }
 
+  /**
+   * Processes a camera frame (ImageProxy) to detect hand landmarks and recognize gestures. Converts
+   * the image into a bitmap, processes it through the HandLandmarker, and updates the result. It
+   * also runs gesture classification via the ONNX model.
+   *
+   * @param imageProxy The camera frame to process.
+   * @param onSuccess Callback invoked when landmarks are successfully detected.
+   * @param onFailure Callback invoked if the image processing fails.
+   */
   override fun processImageProxy(
       imageProxy: ImageProxy,
       onSuccess: (result: HandLandmarkerResult) -> Unit,
@@ -81,13 +122,13 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
       if (bitmap != null) {
         val frameTime = SystemClock.uptimeMillis()
         val mpImage = BitmapImageBuilder(bitmap).build()
-
-        // Offload detection and inference to a background thread
         Executors.newSingleThreadExecutor().execute {
           handLandmarker.detectAsync(mpImage, frameTime)
 
           if (handLandMarkerResult != null && handLandMarkerResult?.landmarks()?.size != 0) {
             onSuccess(handLandMarkerResult!!)
+          } else {
+            solution = ""
           }
         }
       } else {
@@ -101,10 +142,22 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
     }
   }
 
+  /**
+   * Handles errors that occur during the livestream hand landmark detection process.
+   *
+   * @param runtimeException The exception to be handled.
+   */
   private fun returnLivestreamError(runtimeException: RuntimeException?) {
     runtimeException?.printStackTrace()
   }
 
+  /**
+   * Processes the result of hand landmark detection and runs the gesture classification model.
+   * Converts the landmarks to the expected format for the ONNX model and retrieves the gesture.
+   *
+   * @param handLandmarkerResult The result from the HandLandmarker containing hand landmarks.
+   * @param context The application context, used for logging.
+   */
   private fun returnLivestreamResult(
       handLandmarkerResult: HandLandmarkerResult?,
       context: Context
@@ -112,20 +165,30 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
     if (handLandmarkerResult == null || handLandmarkerResult.landmarks().isEmpty()) {
       return
     }
-    val landmarks = handLandmarkerResult.landmarks()[0]
 
+    val handednesses = handLandmarkerResult.handednesses()[0] // Assume the first hand
+    Log.d("ModelOutput", "The handedness is: ${handednesses[0]}")
+    val isRightHand =
+        handednesses[0].categoryName() == "Left" // Mirror the hand for right-handed detection
+    Log.d("ModelOutput", "Is right hand: $isRightHand")
+
+    val landmarks = handLandmarkerResult.landmarks()[0] // Get the first hand's landmarks
     val dataFrame = mutableListOf<Float>()
 
+    // Convert landmarks to the expected input format for ONNX model
     for (landmark in landmarks) {
-      val rotatedX = landmark.y()
+      val rotatedX = if (isRightHand) 1.0f - landmark.y() else landmark.y()
       val rotatedY = landmark.x()
       dataFrame.add(rotatedX)
       dataFrame.add(rotatedY)
     }
 
+    // Ensure the input size is always 84 floats (42 x, y pairs)
     while (dataFrame.size < 84) {
       dataFrame.add(0.0f)
     }
+
+    // Create ONNX tensor input and run inference
     val floatArray = dataFrame.toFloatArray()
     val tensorInput =
         OnnxTensor.createTensor(
@@ -133,19 +196,28 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
 
     val result = session.run(Collections.singletonMap("float_input", tensorInput))
     val x = result[0].value as Array<*>
-    solution = x.get(0).toString()
-    Log.d("ModelOutput", "The letter is: ${x.get(0)}")
+    solution = x[0].toString()
+    Log.d("ModelOutput", "The letter is: ${x[0]}")
 
     result.close()
     tensorInput.close()
   }
 
-  private fun getHandLandMarks(): MutableList<MutableList<NormalizedLandmark>>? {
-    return handLandMarkerResult?.landmarks()
-  }
-
+  /**
+   * Returns the initialized HandLandmarker instance.
+   *
+   * @return The HandLandmarker object used for hand detection.
+   */
   override fun getHandLandmarker(): HandLandmarker = handLandmarker
 
+  /**
+   * Processes the image proxy using a throttled mechanism, ensuring that frames are processed only
+   * if a certain time interval (250ms) has passed since the last frame.
+   *
+   * @param imageProxy The camera frame to process.
+   * @param onSuccess Callback invoked when landmarks are successfully detected.
+   * @param onFailure Callback invoked if the image processing fails.
+   */
   override fun processImageProxyThrottled(
       imageProxy: ImageProxy,
       onSuccess: (result: HandLandmarkerResult) -> Unit,
@@ -160,5 +232,10 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
     }
   }
 
-  override fun getSolution(): String = solution
+  /**
+   * Retrieves the latest gesture output (recognized ASL letter).
+   *
+   * @return A string representing the recognized gesture.
+   */
+  override fun gestureOutput(): String = solution
 }

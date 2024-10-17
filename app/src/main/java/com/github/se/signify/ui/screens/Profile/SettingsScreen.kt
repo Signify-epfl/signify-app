@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.screens
+package com.github.se.signify.ui.screens.Profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
