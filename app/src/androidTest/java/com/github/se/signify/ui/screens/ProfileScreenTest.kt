@@ -1,7 +1,5 @@
 package com.github.se.signify.ui.screens
 
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
@@ -29,23 +27,20 @@ class ProfileScreenTest {
     navigationActions = mock(NavigationActions::class.java)
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.PROFILE)
-      // Initialize the state of isHelpBoxVisible to true
-      composeTestRule.setContent {
-          val isHelpBoxVisible = remember { mutableStateOf(true) }
-          ProfileScreen(
-              userId = "Test ID 1",
-              userName = "Test Name 1",
-              profilePictureUrl = null, // Replace with actual URL or null
-              numberOfDays = 30,
-              lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F'),
-              navigationActions)
-      }
+    // Initialize the state of isHelpBoxVisible to true
+    composeTestRule.setContent {
+      ProfileScreen(
+          userId = "Test ID 1",
+          userName = "Test Name 1",
+          profilePictureUrl = null, // Replace with actual URL or null
+          numberOfDays = 30,
+          lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F'),
+          navigationActions)
+    }
   }
-
 
   @Test
   fun buttonsAreCorrectlyDisplayed() {
-
 
     composeTestRule.onNodeWithTag("settingsButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("InfoButton").assertIsDisplayed()
@@ -58,7 +53,6 @@ class ProfileScreenTest {
   @Test
   fun buttonsHaveClickAction() {
 
-
     composeTestRule.onNodeWithTag("settingsButton").assertHasClickAction()
     composeTestRule.onNodeWithTag("InfoButton").assertHasClickAction()
     composeTestRule.onNodeWithTag("My FriendsButton").assertHasClickAction()
@@ -67,7 +61,6 @@ class ProfileScreenTest {
 
   @Test
   fun buttonsPerformClick() {
-
 
     composeTestRule.onNodeWithTag("settingsButton").performClick()
     composeTestRule.onNodeWithTag("InfoButton").performClick()
@@ -78,7 +71,6 @@ class ProfileScreenTest {
   @Test
   fun userInfoAreDisplayed() {
 
-
     composeTestRule.onNodeWithTag("userInfo").assertIsDisplayed()
     composeTestRule.onNodeWithTag("flameIcon").assertIsDisplayed()
     composeTestRule.onNodeWithTag("profilePicture").assertIsDisplayed()
@@ -88,13 +80,11 @@ class ProfileScreenTest {
   @Test
   fun letterListScrolls() {
 
-
     composeTestRule.onNodeWithTag("lettersList").performScrollTo()
   }
 
   @Test
   fun dialogIsDisplayed_whenHelpBoxIsVisible() {
-
 
     // Assert that the help dialog is displayed when the help button is clicked
     composeTestRule.onNodeWithTag("InfoButton").performClick()
@@ -103,7 +93,6 @@ class ProfileScreenTest {
 
   @Test
   fun dialogCloses_whenCloseButtonClicked() {
-
 
     // Click the 'Close' button in the dialog
     composeTestRule.onNodeWithTag("InfoButton").performClick()

@@ -20,7 +20,6 @@ class NewChallengeScreenTest {
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
     composeTestRule.setContent { NewChallengeScreen(navigationActions = navigationActions) }
-
   }
 
   @Test
