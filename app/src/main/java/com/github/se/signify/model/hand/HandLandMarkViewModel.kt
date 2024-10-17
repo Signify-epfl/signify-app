@@ -6,20 +6,31 @@ import androidx.camera.core.ImageProxy
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
-import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarker
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel for managing hand landmark detection using the HandLandMarkRepository. This ViewModel
+ * maintains the state of detected hand landmarks and provides functionality to process camera image
+ * frames for hand recognition.
+ *
+ * @property handLandMarkRepository The repository responsible for processing images and providing
+ *   hand landmark data.
+ * @property context The application context used to initialize the repository.
+ */
 class HandLandMarkViewModel(
     private val handLandMarkRepository: HandLandMarkRepository,
     context: Context
 ) : ViewModel() {
-  // StateFlow to store the for one hand landmarks
+
+  // Mutable state flow that holds the detected hand landmarks (or null if none detected)
   private val _handLandmarks = MutableStateFlow<List<NormalizedLandmark>?>(null)
+
+  // Exposes the hand landmarks as an immutable state flow
   private val handLandmarks: StateFlow<List<NormalizedLandmark>?> = _handLandmarks
 
-  // Initializing the repository
+  // Initialization block to set up the HandLandMarkRepository with success/failure callbacks
   init {
     handLandMarkRepository.init(
         context = context,
@@ -29,31 +40,19 @@ class HandLandMarkViewModel(
         })
   }
 
-  // Process the image and update hand landmarks
-  fun processImageProxy(imageProxy: ImageProxy) {
-    handLandMarkRepository.processImageProxy(
-        imageProxy = imageProxy,
-        onSuccess = { result ->
-          viewModelScope.launch {
-            _handLandmarks.value = result.landmarks()[0] // First hand
-          }
-        },
-        onFailure = { exception ->
-          Log.e("HandLandMarkViewModel", "Error processing image", exception)
-        })
-  }
-
-  // Function to expose landmarks as a StateFlow
-  fun landMarks(): StateFlow<List<NormalizedLandmark>?> = handLandmarks
-
-  fun getHandLandmarker(): HandLandmarker = handLandMarkRepository.getHandLandmarker()
-
+  /**
+   * Processes an ImageProxy (camera frame) for hand landmark detection using the repository's
+   * throttled image processing method. Updates the landmarks state on success or logs an error on
+   * failure.
+   *
+   * @param imageProxy The camera frame to be processed for hand landmarks.
+   */
   fun processImageProxyThrottled(imageProxy: ImageProxy) {
     handLandMarkRepository.processImageProxyThrottled(
         imageProxy = imageProxy,
         onSuccess = { result ->
           viewModelScope.launch {
-            _handLandmarks.value = result.landmarks()[0] // First hand
+            _handLandmarks.value = result.landmarks()[0] // Process the first hand's landmarks
           }
         },
         onFailure = { exception ->
@@ -61,5 +60,17 @@ class HandLandMarkViewModel(
         })
   }
 
-  fun getSolution(): String = handLandMarkRepository.getSolution()
+  /**
+   * Returns the solution (predicted gesture) from the repository after processing.
+   *
+   * @return A string representing the recognized hand gesture.
+   */
+  fun getSolution(): String = handLandMarkRepository.gestureOutput()
+
+  /**
+   * Provides a StateFlow of the detected hand landmarks to be observed by the UI.
+   *
+   * @return A StateFlow containing a list of normalized landmarks or null if no landmarks detected.
+   */
+  fun landMarks(): StateFlow<List<NormalizedLandmark>?> = handLandmarks
 }

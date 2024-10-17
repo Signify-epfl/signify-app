@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.screens
+package com.github.se.signify.ui.screens.Profile
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text

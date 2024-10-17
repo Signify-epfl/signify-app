@@ -3,7 +3,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.screens.NewChallengeScreen
+import com.github.se.signify.ui.screens.Challenge.NewChallengeScreen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
