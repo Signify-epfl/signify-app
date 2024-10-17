@@ -6,4 +6,7 @@
         \nHere, you can change your settings and customize your profile.
         \nYou’ll also get to add your friends to learn together.
         \nYou’ll find a recap of your progress in the statistics board.</string>
+    <string name="description_challenge">Here you can challenge your friends to sign language face-offs.</string>
+    <string name="graphs_history">Graphs and statistics for the challenges</string>
+
 </resources>
