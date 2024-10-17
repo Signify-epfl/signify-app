@@ -3,7 +3,16 @@ package com.github.se.signify.ui.screens.Challenge
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -61,7 +70,7 @@ fun ChallengeHistoryScreen(
                       Text(
                           text = "Number of friends challenges achieved",
                           fontSize = 16.sp,
-                          color = colorResource(R.color.white),
+                          color = colorResource(R.color.black),
                           modifier = Modifier.testTag("FriendsChallengesText"))
                       Box(
                           modifier =
