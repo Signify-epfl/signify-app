@@ -216,7 +216,7 @@ fun ExerciseButton(exercise: Exercise, onClick: (exercise: Exercise) -> Unit) {
           Modifier.aspectRatio(2f)
               .fillMaxWidth()
               .border(2.dp, colorResource(R.color.black), RoundedCornerShape(8.dp))
-              .testTag("ExerciseButton"),
+              .testTag("${exercise.name}ExerciseButton"),
       shape = RoundedCornerShape(8.dp),
       colors =
           ButtonDefaults.buttonColors(colorResource(R.color.blue), colorResource(R.color.black))) {
