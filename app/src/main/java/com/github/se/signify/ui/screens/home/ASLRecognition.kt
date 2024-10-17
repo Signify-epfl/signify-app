@@ -19,15 +19,15 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -116,7 +117,9 @@ fun ASLRecognition(
               contentColor = MaterialTheme.colors.onSurface,
               navigationIcon = {
                 IconButton(onClick = { navigationActions.goBack() }) {
-                  Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                  Icon(
+                      imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                      contentDescription = "Back")
                 }
               })
         },
@@ -146,12 +149,10 @@ fun ASLRecognition(
                   // Button: "More on American Sign Language"
                   Button(
                       onClick = { /* For now, do nothing */},
-                      colors =
-                          androidx.compose.material.ButtonDefaults.buttonColors(
-                              backgroundColor = PrimaryColor), // Blue color
                       modifier =
                           Modifier.width(336.dp) // Match the width of the box above
-                              .height(50.dp)) {
+                              .height(50.dp)
+                              .background(colorResource(R.color.blue))) {
                         Text(
                             text = "More on ASL Alphabet",
                             color = Color.White) // One-line text with white color
@@ -203,7 +204,7 @@ fun HandGestureImage(gesture: String) {
 @Composable
 fun DrawnOutPut(landmarks: List<NormalizedLandmark>?, text: String) {
   val displayText =
-      if (landmarks == null || landmarks.isEmpty()) {
+      if (landmarks.isNullOrEmpty()) {
         "Make a sign"
       } else {
         text
