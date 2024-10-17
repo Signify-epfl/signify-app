@@ -3,7 +3,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.screens.Challenge.ChallengeScreen
+import com.github.se.signify.ui.screens.challenge.ChallengeScreen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -19,11 +19,11 @@ class ChallengeScreenTest {
   @Before
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
+    composeTestRule.setContent { ChallengeScreen(navigationActions = navigationActions) }
   }
 
   @Test
   fun challengeScreenDisplaysCorrectElements() {
-    composeTestRule.setContent { ChallengeScreen(navigationActions = navigationActions) }
 
     // Assert that all elements are displayed in ChallengeScreen
     composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
@@ -47,7 +47,6 @@ class ChallengeScreenTest {
 
   @Test
   fun pressingHistoryButtonNavigatesToChallengeHistoryScreen() {
-    composeTestRule.setContent { ChallengeScreen(navigationActions = navigationActions) }
 
     composeTestRule.onNodeWithTag("HistoryButton").performClick()
 
@@ -56,7 +55,6 @@ class ChallengeScreenTest {
 
   @Test
   fun pressingChallengeButtonNavigatesToNewChallengeScreen() {
-    composeTestRule.setContent { ChallengeScreen(navigationActions = navigationActions) }
 
     composeTestRule.onNodeWithTag("ChallengeButton").performClick()
 
@@ -65,7 +63,6 @@ class ChallengeScreenTest {
 
   @Test
   fun pressingInfoButtonShowsInfoPopup() {
-    composeTestRule.setContent { ChallengeScreen(navigationActions = navigationActions) }
 
     composeTestRule.onNodeWithTag("InfoButton").performClick()
 

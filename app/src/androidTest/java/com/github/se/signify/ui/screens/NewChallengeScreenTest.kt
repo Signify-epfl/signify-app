@@ -3,7 +3,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.screens.Challenge.NewChallengeScreen
+import com.github.se.signify.ui.screens.challenge.NewChallengeScreen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -19,11 +19,11 @@ class NewChallengeScreenTest {
   @Before
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
+    composeTestRule.setContent { NewChallengeScreen(navigationActions = navigationActions) }
   }
 
   @Test
   fun newChallengeScreenDisplaysCorrectElements() {
-    composeTestRule.setContent { NewChallengeScreen(navigationActions = navigationActions) }
 
     // Assert that all expected elements are displayed
     composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
@@ -41,7 +41,6 @@ class NewChallengeScreenTest {
 
   @Test
   fun pressingBackArrowNavigatesToChallengeScreen() {
-    composeTestRule.setContent { NewChallengeScreen(navigationActions = navigationActions) }
 
     composeTestRule.onNodeWithTag("BackButton").performClick()
 
@@ -50,7 +49,6 @@ class NewChallengeScreenTest {
 
   @Test
   fun pressingMyFriendsButtonNavigatesToFriendsScreen() {
-    composeTestRule.setContent { NewChallengeScreen(navigationActions = navigationActions) }
 
     composeTestRule.onNodeWithTag("MyFriendsButton").performClick()
 

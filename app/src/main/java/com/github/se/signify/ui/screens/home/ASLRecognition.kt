@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.screens.Home
+package com.github.se.signify.ui.screens.home
 
 import android.Manifest
 import android.annotation.SuppressLint

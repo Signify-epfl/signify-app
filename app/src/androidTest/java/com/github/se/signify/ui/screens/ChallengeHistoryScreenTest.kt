@@ -5,7 +5,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.screens.Challenge.ChallengeHistoryScreen
+import com.github.se.signify.ui.screens.challenge.ChallengeHistoryScreen
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -22,16 +22,16 @@ class ChallengeHistoryScreenTest {
   @Before
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
-  }
-
-  @Test
-  fun challengeHistoryScreenDisplaysCorrectElements(): Unit = runBlocking {
     composeTestRule.setContent {
       ChallengeHistoryScreen(
           navigationActions = navigationActions,
           friendsChallengesAchieved = 5,
           challengesCreated = 3)
     }
+  }
+
+  @Test
+  fun challengeHistoryScreenDisplaysCorrectElements(): Unit = runBlocking {
 
     // Assert that the key elements are displayed
     composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
@@ -50,12 +50,6 @@ class ChallengeHistoryScreenTest {
 
   @Test
   fun pressingBackArrowNavigatesToChallengeScreen() {
-    composeTestRule.setContent {
-      ChallengeHistoryScreen(
-          navigationActions = navigationActions,
-          friendsChallengesAchieved = 5,
-          challengesCreated = 3)
-    }
 
     composeTestRule.onNodeWithTag("BackButton").performClick()
 
