@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,8 +32,8 @@ fun NewChallengeScreen(navigationActions: NavigationActions) {
                     .background(colorResource(R.color.blue))
                     .testTag("TopBlueBar"))
       },
-      content = {
-        Box(modifier = Modifier.fillMaxSize()) {
+      content = { padding ->
+        Box(modifier = Modifier.fillMaxSize().padding(padding)) {
           // Back button aligned to the top-left corner
           BackButton { navigationActions.goBack() }
 
