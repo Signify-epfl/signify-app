@@ -123,5 +123,7 @@ fun SignifyAppPreview() {
     ) {
       composable(Screen.MAIN_AIM) { ASLRecognition(handLandMarkViewModel, navigationActions) }
     }
+      composable(Screen.EXERCISE_EASY) { ExerciseScreenEasy(navigationActions) }
+      composable(Screen.EXERCISE_HARD) { ExerciseScreenHard(navigationActions) }
   }
 }

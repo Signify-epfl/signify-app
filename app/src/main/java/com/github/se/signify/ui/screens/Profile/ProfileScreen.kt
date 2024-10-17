@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,15 +20,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,11 +49,12 @@ import androidx.compose.ui.window.Dialog
 import coil.compose.rememberImagePainter
 import com.github.se.signify.R
 import com.github.se.signify.ui.ReusableTextButton
+import com.github.se.signify.ui.UtilButton
 import com.github.se.signify.ui.navigation.BottomNavigationMenu
 import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.ui.navigation.NavigationActions
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ProfileScreen(
     userId: String,
@@ -82,35 +82,18 @@ fun ProfileScreen(
           Row(
               modifier = Modifier.fillMaxWidth(),
               horizontalArrangement = Arrangement.SpaceBetween) {
-                Box(
-                    modifier =
-                        Modifier.size(30.dp)
-                            .background(Color(0xFF05A9FB), shape = RoundedCornerShape(30))
-                            .border(2.dp, Color.White, shape = RoundedCornerShape(30))
-                            .clickable { isHelpBoxVisible = !isHelpBoxVisible }
-                            .testTag("helpButton"),
-                    contentAlignment = Alignment.Center) {
-                      Icon(
-                          Icons.Outlined.Info,
-                          contentDescription = "Help",
-                          tint = Color.White,
-                          modifier = Modifier.size(30.dp).testTag("InfoIcon"))
-                    }
-
-                Box(
-                    modifier =
-                        Modifier.size(30.dp)
-                            .background(Color(0xFF05A9FB), shape = RoundedCornerShape(30))
-                            .border(2.dp, Color.White, shape = RoundedCornerShape(30))
-                            .clickable { navigationActions.navigateTo("Settings") }
-                            .testTag("settingsButton"),
-                    contentAlignment = Alignment.Center) {
-                      Icon(
-                          Icons.Outlined.Settings,
-                          contentDescription = "Settings",
-                          tint = Color.White,
-                          modifier = Modifier.size(30.dp).testTag("settingsIcon"))
-                    }
+                UtilButton(
+                    { isHelpBoxVisible = !isHelpBoxVisible },
+                    "InfoButton",
+                    "InfoIcon",
+                    Icons.Outlined.Info,
+                    "Help")
+                UtilButton(
+                    { navigationActions.navigateTo("Settings") },
+                    "settingsButton",
+                    "settingsIcon",
+                    Icons.Outlined.Settings,
+                    "Settings")
 
                 if (isHelpBoxVisible) {
                   Dialog(onDismissRequest = { isHelpBoxVisible = false }) {
@@ -136,8 +119,7 @@ fun ProfileScreen(
                                     onClick = { isHelpBoxVisible = false },
                                     modifier = Modifier.testTag("closeButton"),
                                     colors =
-                                        ButtonDefaults.buttonColors(
-                                            containerColor = colorResource(R.color.blue))) {
+                                        ButtonDefaults.buttonColors(colorResource(R.color.blue))) {
                                       Text("Close")
                                     }
                               }

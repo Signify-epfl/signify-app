@@ -1,19 +1,34 @@
 package com.github.se.signify.ui
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -77,5 +92,94 @@ fun ReusableTextButton(
             color = textColor,
             fontSize = textSize,
             textAlign = TextAlign.Center)
+      }
+}
+
+@Composable
+fun SquareButton(
+    iconRes: Int,
+    label: String,
+    onClick: () -> Unit,
+    size: Dp,
+    iconSize: Dp, // Icon size passed here
+    labelFontSize: TextUnit,
+    iconTint: Color,
+    textColor: Color,
+    iconOffset: Dp = 0.dp,
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
+) {
+  Column(
+      horizontalAlignment = Alignment.CenterHorizontally,
+      modifier =
+          modifier
+              .size(size) // Button size
+              .border(2.dp, Color.Black, RoundedCornerShape(12.dp)) // Black border
+              .background(Color(0xFF05A9FB), RoundedCornerShape(12.dp)) // Blue inside
+              .padding(16.dp)
+              .clickable { onClick() }) {
+
+        // Text on top of the icon
+        Text(
+            text = label,
+            fontSize = labelFontSize,
+            color = textColor,
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Icon in the center of the square
+        Box(contentAlignment = Alignment.Center) {
+          Icon(
+              painter = painterResource(id = iconRes),
+              contentDescription = label,
+              tint = iconTint, // Set icon tint to dark gray
+              modifier =
+                  Modifier.size(iconSize) // Applying the icon size
+                      .offset(x = iconOffset) // Use the offset if specified
+              )
+        }
+      }
+}
+
+@Composable
+fun UtilButton(
+    onClick: () -> Unit,
+    testTagButton: String,
+    testTagIcon: String,
+    icon: ImageVector,
+    contentDescription: String
+) {
+  Box(
+      modifier =
+          Modifier.size(30.dp)
+              .background(Color.White, shape = RoundedCornerShape(30))
+              .border(2.dp, Color.White, shape = RoundedCornerShape(30))
+              .clickable { onClick() }
+              .testTag(testTagButton),
+      contentAlignment = Alignment.Center) {
+        Icon(
+            icon,
+            contentDescription = contentDescription,
+            tint = colorResource(R.color.blue),
+            modifier = Modifier.size(30.dp).testTag(testTagIcon))
+      }
+}
+
+@Composable
+fun BackButton(onClick: () -> Unit) {
+  Box(
+      modifier = Modifier.padding(16.dp) // Optional padding to adjust positioning
+      ) {
+        IconButton(
+            onClick = { onClick() },
+            modifier =
+                Modifier.align(Alignment.TopStart)
+                    .testTag("BackButton") // Align to the top left corner
+            ) {
+              Icon(
+                  imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                  contentDescription = "BackButton",
+                  tint = colorResource(R.color.blue))
+            }
       }
 }
