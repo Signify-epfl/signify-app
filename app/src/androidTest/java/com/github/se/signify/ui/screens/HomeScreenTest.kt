@@ -75,7 +75,7 @@ class HomeScreenTest {
 
     composeTestRule.onNodeWithTag("CameraFeedback").performClick()
 
-    verify(navigationActions).navigateTo("MainAim")
+    verify(navigationActions).navigateTo(Screen.PRACTICE)
   }
 
   // The following 2 tests should be moved to their own file.

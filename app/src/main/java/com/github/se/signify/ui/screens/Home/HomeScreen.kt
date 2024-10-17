@@ -56,66 +56,65 @@ data class Exercise(val name: String)
 
 @Composable
 fun HomeScreen(navigationActions: NavigationActions) {
-    // Define navigation based on exercise name
-    val exerciseOnClick: (Exercise) -> Unit = { exercise ->
-        when (exercise.name) {
-            "Easy" -> navigationActions.navigateTo(Screen.EXERCISE_EASY)
-            "Medium" -> navigationActions.navigateTo(Screen.EXERCISE_HARD)
-            "Hard" -> navigationActions.navigateTo(Screen.EXERCISE_HARD)
-            else -> navigationActions.navigateTo("EXERCISE_UNKNOWN")
-        }
+  // Define navigation based on exercise name
+  val exerciseOnClick: (Exercise) -> Unit = { exercise ->
+    when (exercise.name) {
+      "Easy" -> navigationActions.navigateTo(Screen.EXERCISE_EASY)
+      "Medium" -> navigationActions.navigateTo(Screen.EXERCISE_HARD)
+      "Hard" -> navigationActions.navigateTo(Screen.EXERCISE_HARD)
+      else -> navigationActions.navigateTo("EXERCISE_UNKNOWN")
     }
+  }
 
-    val defaultExercises = listOf(
-        Exercise("Easy"),
-        Exercise("Medium"),
-        Exercise("Hard"),
-    )
+  val defaultExercises =
+      listOf(
+          Exercise("Easy"),
+          Exercise("Medium"),
+          Exercise("Hard"),
+      )
 
-    Scaffold(
-        bottomBar = {
-            BottomNavigationMenu(
-                onTabSelect = { route -> navigationActions.navigateTo(route) },
-                tabList = LIST_TOP_LEVEL_DESTINATION,
-                selectedItem = navigationActions.currentRoute())
-        },
-        content = { padding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
+  Scaffold(
+      bottomBar = {
+        BottomNavigationMenu(
+            onTabSelect = { route -> navigationActions.navigateTo(route) },
+            tabList = LIST_TOP_LEVEL_DESTINATION,
+            selectedItem = navigationActions.currentRoute())
+      },
+      content = { padding ->
+        Column(
+            modifier =
+                Modifier.fillMaxSize()
                     .padding(padding)
                     .padding(16.dp)
                     .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    StreakCounter()
-                    QuestsButton(onClick = { navigationActions.navigateTo("Quest") })
-                }
+            horizontalAlignment = Alignment.CenterHorizontally) {
+              Row(
+                  modifier = Modifier.fillMaxWidth(),
+                  horizontalArrangement = Arrangement.SpaceBetween,
+              ) {
+                StreakCounter()
+                QuestsButton(onClick = { navigationActions.navigateTo("Quest") })
+              }
 
-                Spacer(modifier = Modifier.height(16.dp))
+              Spacer(modifier = Modifier.height(16.dp))
 
-                CameraFeedbackToggle()
+              CameraFeedbackToggle()
 
-                Spacer(modifier = Modifier.height(16.dp))
+              Spacer(modifier = Modifier.height(16.dp))
 
-                CameraFeedback(onClick = { navigationActions.navigateTo(Screen.PRACTICE) })
+              CameraFeedback(onClick = { navigationActions.navigateTo(Screen.PRACTICE) })
 
-                Spacer(modifier = Modifier.height(16.dp))
+              Spacer(modifier = Modifier.height(16.dp))
 
-                LetterDictionary()
+              LetterDictionary()
 
-                Spacer(modifier = Modifier.height(16.dp))
+              Spacer(modifier = Modifier.height(16.dp))
 
-                ExerciseList(defaultExercises, exerciseOnClick)
+              ExerciseList(defaultExercises, exerciseOnClick)
             }
 
-            HelpButton()
-        }
-    )
+        HelpButton()
+      })
 }
 
 @Composable
