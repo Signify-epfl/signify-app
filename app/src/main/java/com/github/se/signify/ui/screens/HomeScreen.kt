@@ -75,7 +75,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
                   horizontalArrangement = Arrangement.SpaceBetween,
               ) {
                 StreakCounter()
-                QuestsButton()
+                QuestsButton(onClick = { navigationActions.navigateTo("Quest") })
               }
 
               Spacer(modifier = Modifier.height(16.dp))
@@ -100,9 +100,9 @@ fun HomeScreen(navigationActions: NavigationActions) {
 }
 
 @Composable
-fun QuestsButton() {
+fun QuestsButton(onClick: () -> Unit = {}) {
   IconButton(
-      onClick = {},
+      onClick = { onClick() },
       modifier =
           Modifier.clip(CircleShape)
               .border(2.dp, colorResource(R.color.black), CircleShape)
