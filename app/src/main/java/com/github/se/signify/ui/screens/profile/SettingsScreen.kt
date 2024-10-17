@@ -3,13 +3,28 @@ package com.github.se.signify.ui.screens.profile
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,30 +36,23 @@ import com.github.se.signify.ui.navigation.NavigationActions
 
 @Composable
 fun SettingsScreen(profilePictureUrl: String?, navigationActions: NavigationActions) {
-  var username by remember { mutableStateOf("Test Name 1") }
+  val username by remember { mutableStateOf("Test Name 1") }
   var showEditOptions by remember { mutableStateOf(false) }
 
   Column(
-      modifier =
-          Modifier.fillMaxSize()
-              // .background(Color.DarkGray)
-              .padding(16.dp),
+      modifier = Modifier.fillMaxSize().padding(16.dp),
       horizontalAlignment = Alignment.CenterHorizontally,
       verticalArrangement = Arrangement.spacedBy(64.dp)) {
 
         // Back Button
-        Box(
-            modifier =
-                Modifier.fillMaxWidth() // Occupe toute la largeur disponible
-                    .align(Alignment.Start) // Aligne uniquement l'icône à gauche
-            ) {
-              IconButton(onClick = { navigationActions.goBack() }) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color(0xFF05A9FB))
-              }
-            }
+        Box(modifier = Modifier.fillMaxWidth().align(Alignment.Start)) {
+          IconButton(onClick = { navigationActions.goBack() }) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Back",
+                tint = Color(0xFF05A9FB))
+          }
+        }
         // Editable Username
 
         Row(
@@ -55,8 +63,7 @@ fun SettingsScreen(profilePictureUrl: String?, navigationActions: NavigationActi
                     .clickable { showEditOptions = true }
                     .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center // Centrer le contenu dans la Row
-            ) {
+            horizontalArrangement = Arrangement.Center) {
               Icon(
                   imageVector = Icons.Outlined.Edit,
                   contentDescription = "Edit Username",
@@ -106,18 +113,12 @@ fun SettingsScreen(profilePictureUrl: String?, navigationActions: NavigationActi
 
         // Cancel and Save Buttons
         Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-          Button(
-              onClick = { /* TODO: Implement cancel action */},
-              colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFD32F2F)),
-              modifier = Modifier.weight(1f)) {
-                Text(text = "Cancel", color = Color.White)
-              }
-          Button(
-              onClick = { /* TODO: Implement save action */},
-              colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF2E7D32)),
-              modifier = Modifier.weight(1f)) {
-                Text(text = "Save", color = Color.White)
-              }
+          Button(onClick = { /* TODO: Implement cancel action */}) {
+            Text(text = "Cancel", color = Color.White)
+          }
+          Button(onClick = { /* TODO: Implement save action */}) {
+            Text(text = "Save", color = Color.White)
+          }
         }
       }
 }
