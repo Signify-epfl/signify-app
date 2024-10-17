@@ -17,7 +17,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 
 @RunWith(AndroidJUnit4::class)
-class PracticeScreenEasyTest {
+class ExerciseScreenEasyTest {
 
   @get:Rule val composeTestRule = createComposeRule()
 
@@ -29,7 +29,7 @@ class PracticeScreenEasyTest {
   }
 
   @Test
-  fun practiceScreenEasy_displaysComponentsCorrectly() {
+  fun exerciseScreenEasy_displaysComponentsCorrectly() {
     composeTestRule.setContent { ExerciseScreenEasy(navigationActions = mockNavigationActions) }
 
     // Verify if the back button is displayed

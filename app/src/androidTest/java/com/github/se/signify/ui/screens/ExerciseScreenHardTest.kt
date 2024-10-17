@@ -17,7 +17,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 
 @RunWith(AndroidJUnit4::class)
-class PracticeScreenHardTest {
+class ExerciseScreenHardTest {
 
   @get:Rule val composeTestRule = createComposeRule()
 
@@ -29,7 +29,7 @@ class PracticeScreenHardTest {
   }
 
   @Test
-  fun practiceScreenEasy_displaysComponentsCorrectly() {
+  fun exerciseScreenHard_displaysComponentsCorrectly() {
     composeTestRule.setContent { ExerciseScreenHard(navigationActions = mockNavigationActions) }
 
     // Verify if the back button is displayed
@@ -38,11 +38,11 @@ class PracticeScreenHardTest {
     // Check if the formatted word is displayed correctly
 
     var expectedWordDisplay =
-        "Fgyf" // FGYF first word, F is the current letter, and the others are lowercased
+        "Fgyffg" // FGYFFG first word, F is the current letter, and the others are lowercased
     composeTestRule.onNodeWithTag("FirstWordTag").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FirstWordTag").assertTextEquals(expectedWordDisplay)
 
-    expectedWordDisplay = "fgyg" // FGYG first word, lowercased
+    expectedWordDisplay = "fgygfg" // FGYGFG first word, lowercased
     composeTestRule.onNodeWithTag("SecondWordTag").assertIsDisplayed()
     composeTestRule.onNodeWithTag("SecondWordTag").assertTextEquals(expectedWordDisplay)
 
@@ -56,7 +56,7 @@ class PracticeScreenHardTest {
     composeTestRule.setContent { ExerciseScreenHard(navigationActions = mockNavigationActions) }
 
     // Check the initial word display (before clicking the success button)
-    val initialWordDisplay = "Fgyf"
+    val initialWordDisplay = "Fgyffg"
     composeTestRule.onNodeWithTag("FirstWordTag").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FirstWordTag").assertTextEquals(initialWordDisplay)
 
@@ -65,7 +65,7 @@ class PracticeScreenHardTest {
 
     // After clicking, the word display should update to the next letter or show a toast
     // In this example, we assume it moves to the next letter; you can update this based on behavior
-    val nextLetterDisplay = "fGyf" // Assuming it moves to the next letter
+    val nextLetterDisplay = "fGyffg" // Assuming it moves to the next letter
     composeTestRule.onNodeWithTag("FirstWordTag").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FirstWordTag").assertTextEquals(nextLetterDisplay)
 
