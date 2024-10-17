@@ -20,11 +20,11 @@ import com.github.se.signify.ui.navigation.Screen
 import com.github.se.signify.ui.screens.*
 import com.github.se.signify.ui.screens.Challenge.ChallengeHistoryScreen
 import com.github.se.signify.ui.screens.Challenge.ChallengeScreen
-import com.github.se.signify.ui.screens.Profile.MyStatsScreen
 import com.github.se.signify.ui.screens.Challenge.NewChallengeScreen
 import com.github.se.signify.ui.screens.Home.ASLRecognition
 import com.github.se.signify.ui.screens.Home.QuestScreen
 import com.github.se.signify.ui.screens.Profile.FriendsListScreen
+import com.github.se.signify.ui.screens.Profile.MyStatsScreen
 import com.github.se.signify.ui.screens.Profile.ProfileScreen
 import com.github.se.signify.ui.screens.Profile.SettingsScreen
 import com.github.se.signify.ui.theme.SignifyTheme
@@ -42,10 +42,10 @@ class MainActivity : ComponentActivity() {
 fun SignifyAppPreview() {
   val navController = rememberNavController()
   val navigationActions = NavigationActions(navController)
-    val context = LocalContext.current
-    val handLandMarkImplementation =
-        HandLandMarkImplementation("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
-    val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
+  val context = LocalContext.current
+  val handLandMarkImplementation =
+      HandLandMarkImplementation("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
+  val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
   NavHost(navController = navController, startDestination = Route.WELCOME) {
     navigation(
         startDestination = Screen.WELCOME,
@@ -114,8 +114,7 @@ fun SignifyAppPreview() {
         startDestination = Screen.MAIN_AIM,
         route = Route.MAIN_AIM,
     ) {
-      composable(
-          Screen.MAIN_AIM) { ASLRecognition(handLandMarkViewModel, navigationActions) }
+      composable(Screen.MAIN_AIM) { ASLRecognition(handLandMarkViewModel, navigationActions) }
     }
   }
 }

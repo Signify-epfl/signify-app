@@ -83,99 +83,90 @@ val gestureImageMap =
  * Composable that handles ASL recognition. It checks for camera permissions, launches the camera
  * preview, and displays recognized gestures and images.
  */
-
 @Composable
 fun ASLRecognition(
     handLandMarkViewModel: HandLandMarkViewModel,
     navigationActions: NavigationActions
 ) {
-    val context = LocalContext.current
-    var permissionGranted by remember { mutableStateOf(false) }
+  val context = LocalContext.current
+  var permissionGranted by remember { mutableStateOf(false) }
 
-    if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-        permissionGranted = true
-    } else {
-        val permissionLauncher =
-            rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-                permissionGranted = isGranted
-                if (!isGranted) {
-                    Toast.makeText(context, "Camera permission denied", Toast.LENGTH_SHORT).show()
+  if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) ==
+      PackageManager.PERMISSION_GRANTED) {
+    permissionGranted = true
+  } else {
+    val permissionLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted
+          ->
+          permissionGranted = isGranted
+          if (!isGranted) {
+            Toast.makeText(context, "Camera permission denied", Toast.LENGTH_SHORT).show()
+          }
+        }
+
+    LaunchedEffect(Unit) { permissionLauncher.launch(Manifest.permission.CAMERA) }
+  }
+
+  if (permissionGranted) {
+    Scaffold(
+        topBar = {
+          TopAppBar(
+              title = { Text("Practice ASL & Test it !") },
+              backgroundColor = Color.Transparent, // Transparent background
+              contentColor = MaterialTheme.colors.onSurface,
+              navigationIcon = {
+                IconButton(onClick = { navigationActions.goBack() }) {
+                  Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
                 }
-            }
-
-        LaunchedEffect(Unit) { permissionLauncher.launch(Manifest.permission.CAMERA) }
-    }
-
-    if (permissionGranted) {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text("Practice ASL & Test it !") },
-                    backgroundColor = Color.Transparent, // Transparent background
-                    contentColor = MaterialTheme.colors.onSurface,
-                    navigationIcon = {
-                        IconButton(onClick = { navigationActions.goBack()}) {
-                            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
-                        }
-                    }
-                )
-            },
-            content = { paddingValues ->
-                LazyColumn(
-                    modifier = Modifier
-                        .background(Color.White)
-                        .padding(paddingValues)
-                        .padding(start = 40.dp, end = 40.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .width(336.dp)
-                                .height(252.dp)
-                                .background(color = Color.White),
-                        ) {
-                            CameraPreviewWithAnalysisView(handLandMarkViewModel)
-                        }
-                    }
-
-                    item {
-                        Spacer(modifier = Modifier.height(30.dp))
-                    }
-
-                    item {
-                        GestureOverlayView(handLandMarkViewModel)
-                    }
-
-                    item {
-                        Spacer(modifier = Modifier.height(20.dp))
-                    }
-
-                    item {
-                        // Button: "More on American Sign Language"
-                        Button(
-                            onClick = { /* For now, do nothing */ },
-                            colors = androidx.compose.material.ButtonDefaults.buttonColors(backgroundColor = PrimaryColor), // Blue color
-                            modifier = Modifier
-                                .width(336.dp) // Match the width of the box above
-                                .height(50.dp)
-                        ) {
-                            Text(text = "More on ASL Alphabet", color = Color.White) // One-line text with white color
-                        }
-                    }
+              })
+        },
+        content = { paddingValues ->
+          LazyColumn(
+              modifier =
+                  Modifier.background(Color.White)
+                      .padding(paddingValues)
+                      .padding(start = 40.dp, end = 40.dp),
+              horizontalAlignment = Alignment.CenterHorizontally) {
+                item {
+                  Box(
+                      modifier =
+                          Modifier.width(336.dp).height(252.dp).background(color = Color.White),
+                  ) {
+                    CameraPreviewWithAnalysisView(handLandMarkViewModel)
+                  }
                 }
-            },
-            bottomBar = {
-                BottomNavigationMenu(
-                    onTabSelect = { route -> navigationActions.navigateTo(route) },
-                    tabList = LIST_TOP_LEVEL_DESTINATION,
-                    selectedItem = navigationActions.currentRoute()
-                )
-            }
-        )
-    }
+
+                item { Spacer(modifier = Modifier.height(30.dp)) }
+
+                item { GestureOverlayView(handLandMarkViewModel) }
+
+                item { Spacer(modifier = Modifier.height(20.dp)) }
+
+                item {
+                  // Button: "More on American Sign Language"
+                  Button(
+                      onClick = { /* For now, do nothing */},
+                      colors =
+                          androidx.compose.material.ButtonDefaults.buttonColors(
+                              backgroundColor = PrimaryColor), // Blue color
+                      modifier =
+                          Modifier.width(336.dp) // Match the width of the box above
+                              .height(50.dp)) {
+                        Text(
+                            text = "More on ASL Alphabet",
+                            color = Color.White) // One-line text with white color
+                  }
+                }
+              }
+        },
+        bottomBar = {
+          BottomNavigationMenu(
+              onTabSelect = { route -> navigationActions.navigateTo(route) },
+              tabList = LIST_TOP_LEVEL_DESTINATION,
+              selectedItem = navigationActions.currentRoute())
+        })
+  }
 }
-
 
 /**
  * Composable that overlays gesture detection on the UI. Displays landmarks and the recognized hand
@@ -183,65 +174,65 @@ fun ASLRecognition(
  */
 @Composable
 fun GestureOverlayView(handLandMarkViewModel: HandLandMarkViewModel) {
-    val landmarksState = handLandMarkViewModel.landMarks().collectAsState()
-    val detectedGesture = handLandMarkViewModel.getSolution()
+  val landmarksState = handLandMarkViewModel.landMarks().collectAsState()
+  val detectedGesture = handLandMarkViewModel.getSolution()
 
-    DrawnOutPut(landmarks = landmarksState.value, text = detectedGesture)
-    Spacer(modifier = Modifier.height(30.dp))
-    HandGestureImage(gesture = detectedGesture)
+  DrawnOutPut(landmarks = landmarksState.value, text = detectedGesture)
+  Spacer(modifier = Modifier.height(30.dp))
+  HandGestureImage(gesture = detectedGesture)
 }
 /** Displays the image associated with the detected ASL hand gesture. */
 @Composable
 fun HandGestureImage(gesture: String) {
-    val imageResource = gestureImageMap[gesture] ?: R.drawable.vector
-    Box(
-        modifier =
-        Modifier.border(
-            width = 3.dp, color = PrimaryColor, shape = RoundedCornerShape(size = 10.dp))
-            .width(332.dp)
-            .height(270.dp)
-            .background(PrimaryColor)
-            .padding(start = 116.dp, top = 85.dp, end = 116.dp, bottom = 85.dp)) {
+  val imageResource = gestureImageMap[gesture] ?: R.drawable.vector
+  Box(
+      modifier =
+          Modifier.border(
+                  width = 3.dp, color = PrimaryColor, shape = RoundedCornerShape(size = 10.dp))
+              .width(332.dp)
+              .height(270.dp)
+              .background(PrimaryColor)
+              .padding(start = 116.dp, top = 85.dp, end = 116.dp, bottom = 85.dp)) {
         Image(
             painter = painterResource(id = imageResource),
             contentDescription = "Detected Gesture $gesture",
             modifier = Modifier.size(120.dp).padding(16.dp))
-    }
+      }
 }
 /** Draws the output text or the prompt to "Make a sign" on the screen. */
 @Composable
 fun DrawnOutPut(landmarks: List<NormalizedLandmark>?, text: String) {
-    val displayText =
-        if (landmarks == null || landmarks.isEmpty()) {
-            "Make a sign"
-        } else {
-            text
-        }
+  val displayText =
+      if (landmarks == null || landmarks.isEmpty()) {
+        "Make a sign"
+      } else {
+        text
+      }
 
-    Box(
-        modifier =
-        Modifier.width(336.dp)
-            .height(70.dp)
-            .background(color = PrimaryColor)
-            .padding(vertical = 9.dp),
-        contentAlignment = Alignment.Center) {
+  Box(
+      modifier =
+          Modifier.width(336.dp)
+              .height(70.dp)
+              .background(color = PrimaryColor)
+              .padding(vertical = 9.dp),
+      contentAlignment = Alignment.Center) {
         Canvas(modifier = Modifier.fillMaxSize()) {
-            val fontSize = 80f
-            val textX = size.width * 0.5f
-            val textY = (size.height / 2) + (fontSize / 3)
+          val fontSize = 80f
+          val textX = size.width * 0.5f
+          val textY = (size.height / 2) + (fontSize / 3)
 
-            drawContext.canvas.nativeCanvas.apply {
-                val paint =
-                    android.graphics.Paint().apply {
-                        color = Color.White.toArgb()
-                        textSize = fontSize
-                        isAntiAlias = true
-                        textAlign = android.graphics.Paint.Align.CENTER
-                    }
-                drawText(displayText, textX, textY, paint)
-            }
+          drawContext.canvas.nativeCanvas.apply {
+            val paint =
+                android.graphics.Paint().apply {
+                  color = Color.White.toArgb()
+                  textSize = fontSize
+                  isAntiAlias = true
+                  textAlign = android.graphics.Paint.Align.CENTER
+                }
+            drawText(displayText, textX, textY, paint)
+          }
         }
-    }
+      }
 }
 
 /**
@@ -251,43 +242,41 @@ fun DrawnOutPut(landmarks: List<NormalizedLandmark>?, text: String) {
 @SuppressLint("RestrictedApi")
 @Composable
 fun CameraPreviewWithAnalysisView(handLandMarkViewModel: HandLandMarkViewModel) {
-    val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val previewView = remember {
-        PreviewView(context)
-    }
+  val context = LocalContext.current
+  val lifecycleOwner = LocalLifecycleOwner.current
+  val previewView = remember { PreviewView(context) }
 
-    AndroidView(factory = { previewView }, modifier = Modifier.fillMaxSize())
+  AndroidView(factory = { previewView }, modifier = Modifier.fillMaxSize())
 
-    LaunchedEffect(Unit) {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
-        cameraProviderFuture.addListener(
-            {
-                val cameraProvider = cameraProviderFuture.get()
-                val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+  LaunchedEffect(Unit) {
+    val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
+    cameraProviderFuture.addListener(
+        {
+          val cameraProvider = cameraProviderFuture.get()
+          val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
-                val preview =
-                    Preview.Builder().setTargetAspectRatio(AspectRatio.RATIO_4_3).build().also {
-                        it.setSurfaceProvider(previewView.surfaceProvider)
-                    }
+          val preview =
+              Preview.Builder().setTargetAspectRatio(AspectRatio.RATIO_4_3).build().also {
+                it.setSurfaceProvider(previewView.surfaceProvider)
+              }
 
-                val imageAnalysis =
-                    ImageAnalysis.Builder()
-                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                        .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
-                        .build()
+          val imageAnalysis =
+              ImageAnalysis.Builder()
+                  .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                  .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
+                  .build()
 
-                imageAnalysis.setAnalyzer(Executors.newSingleThreadExecutor()) { imageProxy ->
-                    handLandMarkViewModel.processImageProxyThrottled(imageProxy)
-                }
+          imageAnalysis.setAnalyzer(Executors.newSingleThreadExecutor()) { imageProxy ->
+            handLandMarkViewModel.processImageProxyThrottled(imageProxy)
+          }
 
-                try {
-                    cameraProvider.unbindAll()
-                    cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageAnalysis)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            },
-            ContextCompat.getMainExecutor(context))
-    }
+          try {
+            cameraProvider.unbindAll()
+            cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageAnalysis)
+          } catch (e: Exception) {
+            e.printStackTrace()
+          }
+        },
+        ContextCompat.getMainExecutor(context))
+  }
 }
