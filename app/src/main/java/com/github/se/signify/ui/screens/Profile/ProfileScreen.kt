@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.screens
+package com.github.se.signify.ui.screens.Profile
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
