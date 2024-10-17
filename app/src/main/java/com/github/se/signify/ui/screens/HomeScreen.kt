@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -20,8 +21,10 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
@@ -60,10 +63,12 @@ fun HomeScreen(navigationActions: NavigationActions) {
             selectedItem = navigationActions.currentRoute())
       },
       content = { padding ->
-        HelpButton()
-
         Column(
-            modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp),
+            modifier =
+                Modifier.fillMaxSize()
+                    .padding(padding)
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally) {
               Row(
                   modifier = Modifier.fillMaxWidth(),
@@ -89,6 +94,8 @@ fun HomeScreen(navigationActions: NavigationActions) {
 
               ExerciseList()
             }
+
+        HelpButton()
       })
 }
 
@@ -123,8 +130,7 @@ fun CameraFeedbackToggle() {
 fun CameraFeedback(onClick: () -> Unit = {}) {
   Box(
       modifier =
-          Modifier.fillMaxWidth()
-              .aspectRatio(4f / 3f)
+          Modifier.aspectRatio(4f / 3f)
               .border(2.dp, colorResource(R.color.blue), RoundedCornerShape(8.dp))
               .background(colorResource(R.color.black), RoundedCornerShape(8.dp))
               .clickable { onClick() }) {
@@ -174,7 +180,6 @@ fun LetterDictionary() {
 @Composable
 fun ExerciseList() {
   val exercises = listOf(Exercise("Easy"), Exercise("Medium"), Exercise("Hard"))
-
   LazyVerticalGrid(
       columns = GridCells.Fixed(2),
       modifier =
@@ -183,6 +188,7 @@ fun ExerciseList() {
               .border(2.dp, colorResource(R.color.black), RoundedCornerShape(8.dp))
               .clip(RoundedCornerShape(8.dp))
               .background(colorResource(R.color.dark_gray))
+              .heightIn(max = 128.dp)
               .padding(8.dp),
       horizontalArrangement = Arrangement.spacedBy(8.dp),
       verticalArrangement = Arrangement.spacedBy(8.dp)) {
