@@ -113,8 +113,8 @@ fun SquareButton(
       modifier =
           modifier
               .size(size) // Button size
-              .border(2.dp, Color.Black, RoundedCornerShape(12.dp)) // Black border
-              .background(Color(0xFF05A9FB), RoundedCornerShape(12.dp)) // Blue inside
+              .border(2.dp, colorResource(R.color.black), RoundedCornerShape(12.dp)) // Black border
+              .background(colorResource(R.color.blue), RoundedCornerShape(12.dp)) // Blue inside
               .padding(16.dp)
               .clickable { onClick() }) {
 
@@ -152,8 +152,8 @@ fun UtilButton(
   Box(
       modifier =
           Modifier.size(30.dp)
-              .background(Color.White, shape = RoundedCornerShape(30))
-              .border(2.dp, Color.White, shape = RoundedCornerShape(30))
+              .background(colorResource(R.color.white), shape = RoundedCornerShape(30))
+              .border(2.dp, colorResource(R.color.white), shape = RoundedCornerShape(30))
               .clickable { onClick() }
               .testTag(testTagButton),
       contentAlignment = Alignment.Center) {

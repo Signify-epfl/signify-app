@@ -37,7 +37,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -99,7 +98,7 @@ fun ProfileScreen(
                   Dialog(onDismissRequest = { isHelpBoxVisible = false }) {
                     Surface(
                         shape = RoundedCornerShape(8.dp),
-                        color = Color.LightGray,
+                        color = colorResource(R.color.white),
                         modifier =
                             Modifier.padding(16.dp)
                                 .clip(RoundedCornerShape(12.dp))
@@ -163,7 +162,7 @@ fun ProfileScreen(
                       painter =
                           painterResource(id = R.drawable.flame), // Replace with your icon resource
                       contentDescription = "Days Icon",
-                      tint = Color.Red,
+                      tint = colorResource(R.color.red),
                       modifier = Modifier.size(32.dp).testTag("flameIcon"))
                   Spacer(modifier = Modifier.width(4.dp))
                   Text(text = "$numberOfDays days", fontWeight = FontWeight.Bold)
@@ -197,10 +196,10 @@ fun ProfileScreen(
               "My FriendsButton",
               "My Friends",
               40.dp,
-              Color.DarkGray,
-              Color(0xFF05A9FB),
+              colorResource(R.color.dark_gray),
+              colorResource(R.color.blue),
               16.sp,
-              Color.DarkGray)
+              colorResource(R.color.dark_gray))
 
           Spacer(modifier = Modifier.height(32.dp))
 
@@ -210,10 +209,10 @@ fun ProfileScreen(
               "My StatsButton",
               "My Stats",
               40.dp,
-              Color.DarkGray,
-              Color(0xFF05A9FB),
+              colorResource(R.color.dark_gray),
+              colorResource(R.color.blue),
               16.sp,
-              Color.DarkGray)
+              colorResource(R.color.dark_gray))
 
           Spacer(modifier = Modifier.height(64.dp))
         }
@@ -232,7 +231,9 @@ fun HorizontalLetterList(lettersLearned: List<Char>) {
           text = letter.toString(),
           fontSize = 24.sp,
           fontWeight = FontWeight.Bold,
-          color = if (isLearned) colorResource(R.color.blue) else Color.Gray,
+          color =
+              if (isLearned) colorResource(R.color.blue)
+              else colorResource(R.color.dark_gray).copy(alpha = .5f),
           modifier = Modifier.padding(horizontal = 8.dp))
     }
   }
@@ -254,6 +255,8 @@ fun ProfilePicture(profilePictureUrl: String?) {
               modifier = Modifier.fillMaxSize())
         }
             ?: Text(
-                text = "Profile", modifier = Modifier.align(Alignment.Center), color = Color.White)
+                text = "Profile",
+                modifier = Modifier.align(Alignment.Center),
+                color = colorResource(R.color.white))
       }
 }

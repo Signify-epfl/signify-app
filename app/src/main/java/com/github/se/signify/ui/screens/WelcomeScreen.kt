@@ -16,7 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -64,7 +64,7 @@ fun WelcomeScreen(navigationActions: NavigationActions) {
     navigationActions.navigateTo("Auth")
   }
   Column(
-      modifier = Modifier.fillMaxSize().background(color = Color(0xFF05A9FB)),
+      modifier = Modifier.fillMaxSize().background(color = colorResource(R.color.blue)),
       horizontalAlignment = Alignment.CenterHorizontally,
       verticalArrangement = Arrangement.Center) {
         Image(
@@ -87,7 +87,9 @@ fun HighlightedText(text: String, highlightIndex: Int) {
               if (i == highlightIndex) {
                 withStyle(
                     style =
-                        SpanStyle(textDecoration = TextDecoration.Underline, color = Color.White)) {
+                        SpanStyle(
+                            textDecoration = TextDecoration.Underline,
+                            color = colorResource(R.color.white))) {
                       append(text[i])
                     }
               } else {
@@ -102,7 +104,7 @@ fun HighlightedText(text: String, highlightIndex: Int) {
               fontSize = 36.sp,
               lineHeight = 40.sp,
               fontWeight = FontWeight(500),
-              color = Color(0xFFFFFFFF),
+              color = colorResource(R.color.white),
               textAlign = TextAlign.Center,
               letterSpacing = 0.25.sp,
           ))

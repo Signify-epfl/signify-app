@@ -30,9 +30,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.se.signify.R
 import com.github.se.signify.ui.BackButton
 import com.github.se.signify.ui.navigation.NavigationActions
 
@@ -60,20 +62,20 @@ fun FriendsListScreen(
         onValueChange = { searchQuery = it },
         modifier =
             Modifier.fillMaxWidth()
-                .border(BorderStroke(2.dp, Color(0xFF05A9FB)), RoundedCornerShape(16.dp)),
+                .border(BorderStroke(2.dp, colorResource(R.color.blue)), RoundedCornerShape(16.dp)),
         placeholder = { Text("Search with user ID") },
         colors =
             TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent,
-                cursorColor = Color.Black,
-                textColor = Color.Black),
+                cursorColor = colorResource(R.color.black),
+                textColor = colorResource(R.color.black)),
         singleLine = true,
         trailingIcon = {
           IconButton(onClick = { onSearchUser(searchQuery) }) {
             Icon(
                 imageVector = Icons.Default.Search,
                 contentDescription = "Search",
-                tint = Color(0xFF05A9FB))
+                tint = colorResource(R.color.blue))
           }
         })
 
@@ -82,7 +84,7 @@ fun FriendsListScreen(
     // My Friends List
     Text(
         text = "My friends list",
-        color = Color.Black,
+        color = colorResource(R.color.black),
         fontWeight = FontWeight.Bold,
         fontSize = 20.sp,
         modifier = Modifier.padding(bottom = 8.dp))
@@ -90,8 +92,8 @@ fun FriendsListScreen(
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        border = BorderStroke(2.dp, Color(0xFF05A9FB)),
-        backgroundColor = Color(0xFFDCF1FA)) {
+        border = BorderStroke(2.dp, colorResource(R.color.blue)),
+        backgroundColor = colorResource(R.color.blue).copy(alpha = .5f)) {
           Column(modifier = Modifier.padding(16.dp)) {
             currentFriends.forEach { friend -> FriendItem(friend, onRemoveFriend) }
           }
@@ -102,7 +104,7 @@ fun FriendsListScreen(
     // New Friends Demands
     Text(
         text = "New friends demand",
-        color = Color.Black,
+        color = colorResource(R.color.black),
         fontWeight = FontWeight.Bold,
         fontSize = 20.sp,
         modifier = Modifier.padding(bottom = 8.dp))
@@ -110,8 +112,8 @@ fun FriendsListScreen(
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        border = BorderStroke(2.dp, Color(0xFF05A9FB)),
-        backgroundColor = Color(0xFFDCF1FA)) {
+        border = BorderStroke(2.dp, colorResource(R.color.blue)),
+        backgroundColor = colorResource(R.color.blue).copy(alpha = .5f)) {
           Column(modifier = Modifier.padding(16.dp)) {
             friendRequests.forEach { friendRequest ->
               FriendRequestItem(friendRequest, onAcceptFriendRequest, onRejectFriendRequest)
@@ -126,11 +128,12 @@ fun FriendItem(friendName: String, onRemoveFriend: (String) -> Unit) {
   Row(
       modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
       verticalAlignment = Alignment.CenterVertically) {
-        Text(text = friendName, color = Color.Black, modifier = Modifier.weight(1f))
+        Text(
+            text = friendName, color = colorResource(R.color.black), modifier = Modifier.weight(1f))
         Button(
             onClick = { onRemoveFriend(friendName) },
-            colors = ButtonDefaults.buttonColors(Color(0xFFD32F2F))) {
-              Text(text = "Remove", color = Color.White)
+            colors = ButtonDefaults.buttonColors(colorResource(R.color.red))) {
+              Text(text = "Remove", color = colorResource(R.color.white))
             }
       }
 }
@@ -144,18 +147,21 @@ fun FriendRequestItem(
   Row(
       modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
       verticalAlignment = Alignment.CenterVertically) {
-        Text(text = friendRequestName, color = Color.Black, modifier = Modifier.weight(1f))
+        Text(
+            text = friendRequestName,
+            color = colorResource(R.color.black),
+            modifier = Modifier.weight(1f))
         IconButton(onClick = { onAccept(friendRequestName) }) {
           Icon(
               imageVector = Icons.Default.AddCircle,
               contentDescription = "Accept",
-              tint = Color(0xFF2E7D32))
+              tint = colorResource(R.color.green))
         }
         IconButton(onClick = { onReject(friendRequestName) }) {
           Icon(
               imageVector = Icons.Default.Delete,
               contentDescription = "Reject",
-              tint = Color(0xFFD32F2F))
+              tint = colorResource(R.color.red))
         }
       }
 }
