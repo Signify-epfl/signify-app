@@ -59,6 +59,6 @@ class ChallengeHistoryScreenTest {
 
     composeTestRule.onNodeWithTag("BackButton").performClick()
 
-    verify(navigationActions).navigateTo("Challenge")
+    verify(navigationActions).goBack()
   }
 }

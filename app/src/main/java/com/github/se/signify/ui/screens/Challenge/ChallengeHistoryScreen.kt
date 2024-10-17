@@ -1,19 +1,11 @@
 package com.github.se.signify.ui.screens.Challenge
 
-//noinspection UsingMaterialAndMaterial3Libraries
-//noinspection UsingMaterialAndMaterial3Libraries
-//noinspection UsingMaterialAndMaterial3Libraries
-//noinspection UsingMaterialAndMaterial3Libraries
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,10 +16,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
+import com.github.se.signify.ui.BackButton
 import com.github.se.signify.ui.ReusableTextButton
 import com.github.se.signify.ui.navigation.NavigationActions
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnusedMaterialScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ChallengeHistoryScreen(
     navigationActions: NavigationActions,
@@ -45,91 +38,88 @@ fun ChallengeHistoryScreen(
                     .testTag("TopBlueBar"))
       },
       content = {
-        Column(
-            modifier = Modifier.fillMaxSize().padding(16.dp).testTag("ChallengeHistoryContent"),
-            horizontalAlignment = Alignment.CenterHorizontally) {
-              // Arrow back button
-              IconButton(
-                  onClick = { navigationActions.navigateTo("Challenge") },
-                  modifier =
-                      Modifier.align(Alignment.Start)
-                          .padding(bottom = 24.dp) // Added space below the arrow button
-                          .testTag("BackButton")) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = Color.Black)
-                  }
-              Spacer(modifier = Modifier.height(80.dp))
-              // Number of friends' challenges achieved
-              Row(
-                  modifier =
-                      Modifier.fillMaxWidth()
-                          .padding(vertical = 8.dp)
-                          .testTag("FriendsChallengesRow"),
-                  horizontalArrangement = Arrangement.SpaceBetween,
-                  verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = "Number of friends challenges achieved",
-                        fontSize = 16.sp,
-                        color = Color.Black,
-                        modifier = Modifier.testTag("FriendsChallengesText"))
-                    Box(
-                        modifier =
-                            Modifier.size(50.dp)
-                                .border(2.dp, colorResource(R.color.blue))
-                                .background(Color.White)
-                                .testTag("FriendsChallengesCountBox"),
-                        contentAlignment = Alignment.Center) {
-                          Text(
-                              text = "$friendsChallengesAchieved",
-                              fontSize = 20.sp,
-                              color = Color.Black,
-                              modifier = Modifier.testTag("FriendsChallengesCount"))
-                        }
-                  }
+        Box(modifier = Modifier.fillMaxSize()) {
+          // Back button aligned to the top-left corner
+          BackButton { navigationActions.goBack() }
 
-              // Number of challenges created
-              Row(
-                  modifier =
-                      Modifier.fillMaxWidth()
-                          .padding(vertical = 8.dp)
-                          .testTag("ChallengesCreatedRow"),
-                  horizontalArrangement = Arrangement.SpaceBetween,
-                  verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = "Number of challenges created",
-                        fontSize = 16.sp,
-                        color = Color.Black,
-                        modifier = Modifier.testTag("ChallengesCreatedText"))
-                    Box(
-                        modifier =
-                            Modifier.size(50.dp)
-                                .border(2.dp, colorResource(R.color.blue))
-                                .background(Color.White)
-                                .testTag("ChallengesCreatedCountBox"),
-                        contentAlignment = Alignment.Center) {
-                          Text(
-                              text = "$challengesCreated",
-                              fontSize = 20.sp,
-                              color = Color.Black,
-                              modifier = Modifier.testTag("ChallengesCreatedCount"))
-                        }
-                  }
+          Column(
+              modifier =
+                  Modifier.fillMaxSize()
+                      .padding(
+                          top = 80.dp,
+                          start = 16.dp,
+                          end = 16.dp) // Padding to avoid overlap with the back button
+                      .testTag("ChallengeHistoryContent"),
+              horizontalAlignment = Alignment.CenterHorizontally) {
+                // Number of friends' challenges achieved
+                Row(
+                    modifier =
+                        Modifier.fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                            .testTag("FriendsChallengesRow"),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically) {
+                      Text(
+                          text = "Number of friends challenges achieved",
+                          fontSize = 16.sp,
+                          color = Color.Black,
+                          modifier = Modifier.testTag("FriendsChallengesText"))
+                      Box(
+                          modifier =
+                              Modifier.size(50.dp)
+                                  .border(2.dp, colorResource(R.color.blue))
+                                  .background(Color.White)
+                                  .testTag("FriendsChallengesCountBox"),
+                          contentAlignment = Alignment.Center) {
+                            Text(
+                                text = "$friendsChallengesAchieved",
+                                fontSize = 20.sp,
+                                color = Color.Black,
+                                modifier = Modifier.testTag("FriendsChallengesCount"))
+                          }
+                    }
 
-              Spacer(modifier = Modifier.height(60.dp))
+                // Number of challenges created
+                Row(
+                    modifier =
+                        Modifier.fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                            .testTag("ChallengesCreatedRow"),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically) {
+                      Text(
+                          text = "Number of challenges created",
+                          fontSize = 16.sp,
+                          color = Color.Black,
+                          modifier = Modifier.testTag("ChallengesCreatedText"))
+                      Box(
+                          modifier =
+                              Modifier.size(50.dp)
+                                  .border(2.dp, colorResource(R.color.blue))
+                                  .background(Color.White)
+                                  .testTag("ChallengesCreatedCountBox"),
+                          contentAlignment = Alignment.Center) {
+                            Text(
+                                text = "$challengesCreated",
+                                fontSize = 20.sp,
+                                color = Color.Black,
+                                modifier = Modifier.testTag("ChallengesCreatedCount"))
+                          }
+                    }
 
-              // Graphs and statistics button
-              ReusableTextButton(
-                  onClickAction = { /* Do nothing for now */},
-                  textTag = "GraphsStatisticsButton",
-                  text = stringResource(R.string.graphs_history),
-                  height = 240.dp,
-                  borderColor = colorResource(R.color.blue),
-                  backgroundColor = Color.Black,
-                  textSize = 30.sp,
-                  textColor = Color.White,
-              )
-            }
+                Spacer(modifier = Modifier.height(60.dp))
+
+                // Graphs and statistics button
+                ReusableTextButton(
+                    onClickAction = { /* Do nothing for now */},
+                    textTag = "GraphsStatisticsButton",
+                    text = stringResource(R.string.graphs_history),
+                    height = 240.dp,
+                    borderColor = colorResource(R.color.blue),
+                    backgroundColor = Color.Black,
+                    textSize = 30.sp,
+                    textColor = Color.White)
+              }
+        }
       })
 }

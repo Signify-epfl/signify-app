@@ -45,7 +45,7 @@ class ProfileScreenTest {
     }
 
     composeTestRule.onNodeWithTag("settingsButton").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("helpButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("InfoButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("My FriendsButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("My FriendsButton").assertTextEquals("My Friends")
     composeTestRule.onNodeWithTag("My StatsButton").assertIsDisplayed()
@@ -66,7 +66,7 @@ class ProfileScreenTest {
     }
 
     composeTestRule.onNodeWithTag("settingsButton").assertHasClickAction()
-    composeTestRule.onNodeWithTag("helpButton").assertHasClickAction()
+    composeTestRule.onNodeWithTag("InfoButton").assertHasClickAction()
     composeTestRule.onNodeWithTag("My FriendsButton").assertHasClickAction()
     composeTestRule.onNodeWithTag("My StatsButton").assertHasClickAction()
   }
@@ -84,7 +84,7 @@ class ProfileScreenTest {
     }
 
     composeTestRule.onNodeWithTag("settingsButton").performClick()
-    composeTestRule.onNodeWithTag("helpButton").performClick()
+    composeTestRule.onNodeWithTag("InfoButton").performClick()
     composeTestRule.onNodeWithTag("My FriendsButton").performClick()
     composeTestRule.onNodeWithTag("My StatsButton").performClick()
   }
@@ -136,7 +136,7 @@ class ProfileScreenTest {
     }
 
     // Assert that the help dialog is displayed when the help button is clicked
-    composeTestRule.onNodeWithTag("helpButton").performClick()
+    composeTestRule.onNodeWithTag("InfoButton").performClick()
     composeTestRule.onNodeWithTag("helpProfileText").assertIsDisplayed()
   }
 
@@ -155,7 +155,7 @@ class ProfileScreenTest {
     }
 
     // Click the 'Close' button in the dialog
-    composeTestRule.onNodeWithTag("helpButton").performClick()
+    composeTestRule.onNodeWithTag("InfoButton").performClick()
     composeTestRule.onNodeWithTag("closeButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("closeButton").assertHasClickAction()
     composeTestRule.onNodeWithTag("closeButton").performClick()
