@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.screens
+package com.github.se.signify.ui.screens.Home
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -114,7 +114,7 @@ fun ASLRecognition(
                     backgroundColor = Color.Transparent, // Transparent background
                     contentColor = MaterialTheme.colors.onSurface,
                     navigationIcon = {
-                        IconButton(onClick = { /* Handle navigation back */ }) {
+                        IconButton(onClick = { navigationActions.goBack()}) {
                             Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
                         }
                     }

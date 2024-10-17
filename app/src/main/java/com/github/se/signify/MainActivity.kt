@@ -18,6 +18,15 @@ import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Route
 import com.github.se.signify.ui.navigation.Screen
 import com.github.se.signify.ui.screens.*
+import com.github.se.signify.ui.screens.Challenge.ChallengeHistoryScreen
+import com.github.se.signify.ui.screens.Challenge.ChallengeScreen
+import com.github.se.signify.ui.screens.Profile.MyStatsScreen
+import com.github.se.signify.ui.screens.Challenge.NewChallengeScreen
+import com.github.se.signify.ui.screens.Home.ASLRecognition
+import com.github.se.signify.ui.screens.Home.QuestScreen
+import com.github.se.signify.ui.screens.Profile.FriendsListScreen
+import com.github.se.signify.ui.screens.Profile.ProfileScreen
+import com.github.se.signify.ui.screens.Profile.SettingsScreen
 import com.github.se.signify.ui.theme.SignifyTheme
 
 class MainActivity : ComponentActivity() {
@@ -61,14 +70,6 @@ fun SignifyAppPreview() {
 
     composable(Route.NEW_CHALLENGE) { NewChallengeScreen(navigationActions) }
     composable(Route.CHALLENGE_HISTORY) { ChallengeHistoryScreen(navigationActions, 1, 1) }
-
-    navigation(
-        startDestination = Screen.PRACTICE,
-        route = Route.PRACTICE,
-    ) {
-      composable(Screen.PRACTICE) { PracticeScreen(navigationActions) }
-    }
-
     navigation(
         startDestination = Screen.QUEST,
         route = Route.QUEST,

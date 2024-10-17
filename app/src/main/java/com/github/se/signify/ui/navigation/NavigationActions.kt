@@ -32,11 +32,7 @@ open class NavigationActions(
    * @param route The route to navigate to.
    */
   open fun navigateTo(route: String) {
-    navController.navigate(route) {
-      popUpTo(navController.graph.findStartDestination().id) { saveState = true }
-      launchSingleTop = true
-      restoreState = true
-    }
+    navController.navigate(route)
   }
 
   open fun goBack() {

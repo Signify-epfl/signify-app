@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.screens
+package com.github.se.signify.ui.screens.Challenge
 
 //noinspection UsingMaterialAndMaterial3Libraries
 //noinspection UsingMaterialAndMaterial3Libraries
