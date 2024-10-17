@@ -30,108 +30,100 @@ import org.robolectric.Shadows.shadowOf
 @RunWith(RobolectricTestRunner::class)
 class UserRepositoryFireStoreTest {
 
-    @Mock
-    private lateinit var mockAuth: FirebaseAuth
-    @Mock
-    private lateinit var mockCurrentUser: FirebaseUser
-    @Mock
-    private lateinit var mockFirestore: FirebaseFirestore
-    @Mock
-    private lateinit var mockCollectionReference: CollectionReference
-    @Mock
-    private lateinit var mockDocumentReference: DocumentReference
-    @Mock
-    private lateinit var mockDocumentSnapshot: DocumentSnapshot
-    @Mock
-    private lateinit var mockSetTask: Task<Void>
-    @Mock
-    private lateinit var mockGetTask: Task<DocumentSnapshot>
+  @Mock private lateinit var mockAuth: FirebaseAuth
+  @Mock private lateinit var mockCurrentUser: FirebaseUser
+  @Mock private lateinit var mockFirestore: FirebaseFirestore
+  @Mock private lateinit var mockCollectionReference: CollectionReference
+  @Mock private lateinit var mockDocumentReference: DocumentReference
+  @Mock private lateinit var mockDocumentSnapshot: DocumentSnapshot
+  @Mock private lateinit var mockSetTask: Task<Void>
+  @Mock private lateinit var mockGetTask: Task<DocumentSnapshot>
 
-    @Before
-    fun setUp() {
-        MockitoAnnotations.openMocks(this)
+  @Before
+  fun setUp() {
+    MockitoAnnotations.openMocks(this)
 
-        if (FirebaseApp.getApps(ApplicationProvider.getApplicationContext()).isEmpty()) {
-            FirebaseApp.initializeApp(ApplicationProvider.getApplicationContext())
-        }
-
-        // Mock FirebaseAuth and FirebaseFirestore initialization
-        mockAuth = mock(FirebaseAuth::class.java)
-        mockFirestore = mock(FirebaseFirestore::class.java)
-
-        // Mock user's authentication
-        mockCurrentUser = mock(FirebaseUser::class.java)
-        `when`(mockAuth.currentUser).thenReturn(mockCurrentUser)
-
-        // Mock Firestore collection and document reference
-        mockCollectionReference = mock(CollectionReference::class.java)
-        mockDocumentReference = mock(DocumentReference::class.java)
-
-        `when`(mockFirestore.collection(anyString())).thenReturn(mockCollectionReference)
-        `when`(mockCollectionReference.document(anyString())).thenReturn(mockDocumentReference)
-
-        // Mock Firestore document get task
-        mockGetTask = mock(Task::class.java) as Task<DocumentSnapshot>
-        `when`(mockDocumentReference.get()).thenReturn(mockGetTask)
+    if (FirebaseApp.getApps(ApplicationProvider.getApplicationContext()).isEmpty()) {
+      FirebaseApp.initializeApp(ApplicationProvider.getApplicationContext())
     }
 
-    @Test
-    fun saveUserToFireStore_shouldAddUserWhenUserDoesNotExist() {
-        // Arrange
-        `when`(mockCurrentUser.email).thenReturn("testuser@gmail.com")
-        `when`(mockCurrentUser.displayName).thenReturn("Test User")
+    // Mock FirebaseAuth and FirebaseFirestore initialization
+    mockAuth = mock(FirebaseAuth::class.java)
+    mockFirestore = mock(FirebaseFirestore::class.java)
 
-        // Simulate that the user document does not exist
-        `when`(mockGetTask.isSuccessful).thenReturn(true)
-        `when`(mockGetTask.result).thenReturn(mockDocumentSnapshot)
-        `when`(mockDocumentSnapshot.exists()).thenReturn(false) // Document does not exist
+    // Mock user's authentication
+    mockCurrentUser = mock(FirebaseUser::class.java)
+    `when`(mockAuth.currentUser).thenReturn(mockCurrentUser)
 
-        // Simulate successful set task
-        val mockSetTask = Tasks.forResult<Void>(null) // Simulate successful Firestore set task
-        `when`(mockDocumentReference.set(any(), eq(SetOptions.merge()))).thenReturn(mockSetTask)
+    // Mock Firestore collection and document reference
+    mockCollectionReference = mock(CollectionReference::class.java)
+    mockDocumentReference = mock(DocumentReference::class.java)
 
-        // Act
-        saveUserToFireStore()
+    `when`(mockFirestore.collection(anyString())).thenReturn(mockCollectionReference)
+    `when`(mockCollectionReference.document(anyString())).thenReturn(mockDocumentReference)
 
-        // Idle the main looper to process tasks
-        shadowOf(Looper.getMainLooper()).idle()
+    // Mock Firestore document get task
+    mockGetTask = mock(Task::class.java) as Task<DocumentSnapshot>
+    `when`(mockDocumentReference.get()).thenReturn(mockGetTask)
+  }
 
-        // Assert
-        `when`(mockDocumentReference.set(any(), eq(SetOptions.merge())))
-            .thenReturn(Tasks.forResult(null))
-    }
+  @Test
+  fun saveUserToFireStore_shouldAddUserWhenUserDoesNotExist() {
+    // Arrange
+    `when`(mockCurrentUser.email).thenReturn("testuser@gmail.com")
+    `when`(mockCurrentUser.displayName).thenReturn("Test User")
 
-    @Test
-    fun saveUserToFireStore_shouldNotAddUserWhenUserAlreadyExists() {
-        // Arrange
-        `when`(mockCurrentUser.email).thenReturn("testuser@gmail.com")
-        `when`(mockCurrentUser.displayName).thenReturn("Test User")
+    // Simulate that the user document does not exist
+    `when`(mockGetTask.isSuccessful).thenReturn(true)
+    `when`(mockGetTask.result).thenReturn(mockDocumentSnapshot)
+    `when`(mockDocumentSnapshot.exists()).thenReturn(false) // Document does not exist
 
-        // Simulate that the user document already exists
-        `when`(mockDocumentSnapshot.exists()).thenReturn(true)
-        `when`(mockGetTask.isSuccessful).thenReturn(true)
-        `when`(mockGetTask.result).thenReturn(mockDocumentSnapshot)
+    // Simulate successful set task
+    val mockSetTask = Tasks.forResult<Void>(null) // Simulate successful Firestore set task
+    `when`(mockDocumentReference.set(any(), eq(SetOptions.merge()))).thenReturn(mockSetTask)
 
-        // Act
-        saveUserToFireStore()
+    // Act
+    saveUserToFireStore()
 
-        // Idle the main looper to process tasks
-        shadowOf(Looper.getMainLooper()).idle()
+    // Idle the main looper to process tasks
+    shadowOf(Looper.getMainLooper()).idle()
 
-        // Assert
-        verify(mockDocumentReference, never()).set(any(), any()) // Ensure set is never called
-    }
+    // Assert
+    `when`(mockDocumentReference.set(any(), eq(SetOptions.merge())))
+        .thenReturn(Tasks.forResult(null))
+  }
 
-    @Test
-    fun saveUserToFireStore_shouldLogErrorWhenUserNotLoggedIn() {
-        // Arrange
-        `when`(mockAuth.currentUser).thenReturn(null) // Simulate no user logged in
+  @Test
+  fun saveUserToFireStore_shouldNotAddUserWhenUserAlreadyExists() {
+    // Arrange
+    `when`(mockCurrentUser.email).thenReturn("testuser@gmail.com")
+    `when`(mockCurrentUser.displayName).thenReturn("Test User")
 
-        // Act
-        saveUserToFireStore()
+    // Simulate that the user document already exists
+    `when`(mockDocumentSnapshot.exists()).thenReturn(true)
+    `when`(mockGetTask.isSuccessful).thenReturn(true)
+    `when`(mockGetTask.result).thenReturn(mockDocumentSnapshot)
 
-        // Verify that the error is logged
-        // (Since we cannot easily verify logs, we focus on ensuring no Firestore interaction occurs)
-        verify(mockFirestore, never()).collection(any())
-    }
+    // Act
+    saveUserToFireStore()
+
+    // Idle the main looper to process tasks
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert
+    verify(mockDocumentReference, never()).set(any(), any()) // Ensure set is never called
+  }
+
+  @Test
+  fun saveUserToFireStore_shouldLogErrorWhenUserNotLoggedIn() {
+    // Arrange
+    `when`(mockAuth.currentUser).thenReturn(null) // Simulate no user logged in
+
+    // Act
+    saveUserToFireStore()
+
+    // Verify that the error is logged
+    // (Since we cannot easily verify logs, we focus on ensuring no Firestore interaction occurs)
+    verify(mockFirestore, never()).collection(any())
+  }
 }
