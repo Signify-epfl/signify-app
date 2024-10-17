@@ -78,6 +78,13 @@ fun SignifyAppPreview() {
     }
 
     navigation(
+        startDestination = Screen.HOME,
+        route = Route.HOME,
+    ) {
+      composable(Screen.HOME) { HomeScreen(navigationActions) }
+    }
+
+    navigation(
         startDestination = Screen.PROFILE,
         route = Route.PROFILE,
     ) {

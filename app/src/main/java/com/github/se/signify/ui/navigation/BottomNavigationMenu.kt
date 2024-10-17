@@ -24,7 +24,7 @@ import com.github.se.signify.R
 fun BottomNavigationMenu(
     onTabSelect: (TopLevelDestination) -> Unit,
     tabList: List<TopLevelDestination>,
-    selectedItem: String = Route.MAIN_AIM, // Provide a default value
+    selectedItem: String = Route.HOME, // Provide a default value
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
 ) {
   Box(

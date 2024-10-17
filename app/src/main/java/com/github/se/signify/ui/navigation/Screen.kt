@@ -2,6 +2,7 @@ package com.github.se.signify.ui.navigation
 
 object Screen {
   const val MAIN_AIM = "Main Aim Screen"
+  const val HOME = "Home Screen"
   const val PRACTICE = "Practice Screen"
   const val PROFILE = "Profile Screen"
   const val QUEST = "Quest Screen"

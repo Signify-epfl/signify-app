@@ -36,7 +36,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -152,21 +151,15 @@ fun LetterDictionary() {
                 Modifier.border(2.dp, colorResource(R.color.blue), RoundedCornerShape(8.dp))
                     .background(colorResource(R.color.dark_gray), RoundedCornerShape(8.dp))
                     .padding(8.dp)) {
-            Row {
-                Text(
-                    text = "S =",
-                    color = colorResource(R.color.blue),
-                    fontSize = 32.dp.value.sp
-                )
+              Row {
+                Text(text = "S =", color = colorResource(R.color.blue), fontSize = 32.dp.value.sp)
                 Icon(
                     painter = painterResource(id = R.drawable.letter_s),
                     contentDescription = "Letter gesture",
                     tint = colorResource(R.color.blue),
-                    modifier = Modifier.size(32.dp)
-                )
+                    modifier = Modifier.size(32.dp))
+              }
             }
-
-                }
         IconButton(onClick = {}) {
           Icon(
               Icons.AutoMirrored.Outlined.ArrowForward,
@@ -217,7 +210,8 @@ fun HelpButton() {
     IconButton(
         onClick = {},
         modifier = Modifier.clip(CircleShape).background(colorResource(R.color.blue))) {
-          Icon(Icons.Outlined.Info, tint = colorResource(R.color.white), contentDescription = "Help")
+          Icon(
+              Icons.Outlined.Info, tint = colorResource(R.color.white), contentDescription = "Help")
         }
   }
 }
@@ -237,6 +231,5 @@ fun StreakCounter() {
         fontWeight = FontWeight.Bold,
         color = colorResource(R.color.red),
         fontSize = 32.dp.value.sp)
-
   }
 }
