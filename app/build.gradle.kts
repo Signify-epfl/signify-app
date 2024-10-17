@@ -267,8 +267,7 @@ sonar {
         property ("sonar.projectName", "signify-app")
         property ("sonar.host.url", "https://sonarcloud.io")
         property ("sonar.androidLint.reportPaths", "${project.layout.buildDirectory.get()}/reports/lint-results-debug.xml")
-        property ("sonar.jacoco.reportPaths", "build/reports/jacoco/jacocoTestReport.xml")
-        property ("sonar.coverage.jacoco.xmlReportPaths", "${project.layout.buildDirectory.get()}/reports/lint-results-debug.xml$")
+        property ("sonar.coverage.jacoco.xmlReportPaths", "${project.layout.buildDirectory.get()}/reports/jacoco/jacocoTestReport.xml$")
         property ("sonar.junit.ReportPaths", "${project.layout.buildDirectory.get()}/test-results/testDebugUnitTest/")
     }
 }
