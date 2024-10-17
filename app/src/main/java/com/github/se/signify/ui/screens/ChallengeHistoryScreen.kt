@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.screens.Challenge
+package com.github.se.signify.ui.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background

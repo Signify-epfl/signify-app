@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.screens.Profile
+package com.github.se.signify.ui.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
