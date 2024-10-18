@@ -36,7 +36,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -155,7 +155,7 @@ fun CameraFeedback(onClick: () -> Unit = {}) {
 @Composable
 fun LetterDictionary() {
   // State to keep track of the current letter index
-  var currentLetterIndex by remember { mutableStateOf(0) }
+  var currentLetterIndex by remember { mutableIntStateOf(0) }
   val letters = ('a'..'z').toList() // List of letters from 'a' to 'z'
 
   Row(
