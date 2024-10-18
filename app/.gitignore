@@ -1,1 +1,4 @@
 /build
+
+google-services.json
+/src/main/assets/RFC_model_ir9_opset19.onnx
