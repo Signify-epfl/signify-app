@@ -41,8 +41,9 @@
 ## Design and Mockups
 
 The design and user interface mockups for **Signify** are available on Figma. This includes wireframes, high-fidelity screens, and prototypes that showcase the overall user experience and visual flow of the app.  
-You can view the Figma project here: [Signify Figma Project](https://www.figma.com/files/team/1415806088953386120/project/284550251/Signify-Team?fuid=1415806084792420415)
-For the first milestone we provide also the following file with the figma wireframe and mockup: [Signify Figma M1](https://www.figma.com/design/hJsdCTG31DOo51A86W5NNC/Signify-App-M1?node-id=0-1&t=l3DbUOdq31qw9t4P-1)
+You can view the Figma project here: [Signify Figma Project](https://www.figma.com/design/2kzILCdZRQU1I76wimIaJg/Signify-App?t=BKSwDNaqzPhiVu4y-1)
+
+For the first milestone we provide also the following file with the figma wireframe and mockup: [Signify Figma M1](https://www.figma.com/design/hJsdCTG31DOo51A86W5NNC/Signify-App-M1?t=BKSwDNaqzPhiVu4y-1)
 
 ## Contributing
 
