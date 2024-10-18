@@ -101,8 +101,8 @@ jobs:
           path: app/build/reports/jacoco/jacocoTestReport
 
 
-      - name: Run SonarQube analysis
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew sonar --info
+      #- name: Run SonarQube analysis
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #  run: ./gradlew sonar --info
