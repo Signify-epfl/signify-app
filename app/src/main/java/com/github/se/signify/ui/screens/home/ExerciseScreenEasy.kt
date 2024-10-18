@@ -29,9 +29,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -39,6 +39,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.se.signify.R
 import com.github.se.signify.ui.navigation.NavigationActions
 
 @Composable
@@ -61,7 +62,7 @@ fun ExerciseScreenEasy(navigationActions: NavigationActions) {
   val currentLetter = words[currentWordIndex][currentLetterIndex]
 
   Box(
-      modifier = Modifier.fillMaxSize().background(Color.White),
+      modifier = Modifier.fillMaxSize().background(colorResource(R.color.white)),
       contentAlignment = Alignment.Center) {
         IconButton(
             onClick = { navigationActions.goBack() },
@@ -69,7 +70,7 @@ fun ExerciseScreenEasy(navigationActions: NavigationActions) {
               Icon(
                   imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                   contentDescription = "Back",
-                  tint = Color.Black)
+                  tint = colorResource(R.color.black))
             }
 
         Column(
@@ -86,8 +87,12 @@ fun ExerciseScreenEasy(navigationActions: NavigationActions) {
                         Modifier.fillMaxWidth()
                             .padding(horizontal = 16.dp)
                             .height(150.dp)
-                            .background(Color(0xFF05A9FB), shape = RoundedCornerShape(16.dp))
-                            .border(2.dp, Color.Black, shape = RoundedCornerShape(16.dp)),
+                            .background(
+                                colorResource(R.color.blue), shape = RoundedCornerShape(16.dp))
+                            .border(
+                                2.dp,
+                                colorResource(R.color.black),
+                                shape = RoundedCornerShape(16.dp)),
                     contentAlignment = Alignment.Center) {
                       Image(
                           painter = painterResource(id = imageResId),
@@ -157,15 +162,15 @@ fun WordLayer(words: List<String>, currentWordIndex: Int, currentLetterIndex: In
           Modifier.fillMaxWidth()
               .height(150.dp)
               .padding(horizontal = 16.dp)
-              .background(Color(0xFF05A9FB), shape = RoundedCornerShape(16.dp))
-              .border(2.dp, Color.Black, shape = RoundedCornerShape(16.dp)),
+              .background(colorResource(R.color.blue), shape = RoundedCornerShape(16.dp))
+              .border(2.dp, colorResource(R.color.black), shape = RoundedCornerShape(16.dp)),
       contentAlignment = Alignment.Center) {
         // Next word (semi-transparent, slightly offset upwards)
         if (nextWord.isNotEmpty()) {
           Text(
               text = nextWord,
               modifier = Modifier.offset(y = (-40).dp).testTag("SecondWordTag"),
-              color = Color.Gray.copy(alpha = 0.6f),
+              color = colorResource(R.color.dark_gray).copy(alpha = 0.6f),
               style = TextStyle(fontSize = 30.sp))
         }
 
@@ -178,7 +183,7 @@ fun WordLayer(words: List<String>, currentWordIndex: Int, currentLetterIndex: In
                   style =
                       SpanStyle(
                           letterSpacing = 10.sp,
-                          color = Color.Red, // Highlight color
+                          color = colorResource(R.color.red), // Highlight color
                           fontSize = 50.sp // Larger size for the current letter
                           )) {
                     append(
@@ -189,7 +194,7 @@ fun WordLayer(words: List<String>, currentWordIndex: Int, currentLetterIndex: In
             },
             modifier = Modifier.testTag("FirstWordTag"),
             style = TextStyle(fontSize = 30.sp),
-            color = Color.White)
+            color = colorResource(R.color.white))
       }
 }
 
@@ -228,7 +233,7 @@ fun CameraPlaceholder(modifier: Modifier = Modifier) {
               .fillMaxWidth()
               .padding(16.dp)
               .height(350.dp)
-              .background(Color.Black, shape = RoundedCornerShape(16.dp))
-              .border(2.dp, Color.White, shape = RoundedCornerShape(16.dp)),
+              .background(colorResource(R.color.black), shape = RoundedCornerShape(16.dp))
+              .border(2.dp, colorResource(R.color.white), shape = RoundedCornerShape(16.dp)),
       contentAlignment = Alignment.Center) {}
 }

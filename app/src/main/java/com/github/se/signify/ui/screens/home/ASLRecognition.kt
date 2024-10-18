@@ -16,7 +16,13 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -28,7 +34,13 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,6 +48,7 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -48,8 +61,6 @@ import com.github.se.signify.ui.navigation.NavigationActions
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 import java.util.concurrent.Executors
 
-// Primary color used for the UI components
-val PrimaryColor = Color(0xFF05A9FB)
 // Map to associate each letter with its corresponding drawable resource for ASL gestures
 val gestureImageMap =
     mapOf(
@@ -123,14 +134,16 @@ fun ASLRecognition(
         content = { paddingValues ->
           LazyColumn(
               modifier =
-                  Modifier.background(Color.White)
+                  Modifier.background(colorResource(R.color.white))
                       .padding(paddingValues)
                       .padding(start = 40.dp, end = 40.dp),
               horizontalAlignment = Alignment.CenterHorizontally) {
                 item {
                   Box(
                       modifier =
-                          Modifier.width(336.dp).height(252.dp).background(color = Color.White),
+                          Modifier.width(336.dp)
+                              .height(252.dp)
+                              .background(color = colorResource(R.color.white)),
                   ) {
                     CameraPreviewWithAnalysisView(handLandMarkViewModel)
                   }
@@ -148,13 +161,13 @@ fun ASLRecognition(
                       onClick = { /* For now, do nothing */},
                       colors =
                           androidx.compose.material.ButtonDefaults.buttonColors(
-                              backgroundColor = PrimaryColor), // Blue color
+                              backgroundColor = colorResource(R.color.blue)), // Blue color
                       modifier =
                           Modifier.width(336.dp) // Match the width of the box above
                               .height(50.dp)) {
                         Text(
                             text = "More on ASL Alphabet",
-                            color = Color.White) // One-line text with white color
+                            color = colorResource(R.color.white)) // One-line text with white color
                   }
                 }
               }
@@ -188,10 +201,12 @@ fun HandGestureImage(gesture: String) {
   Box(
       modifier =
           Modifier.border(
-                  width = 3.dp, color = PrimaryColor, shape = RoundedCornerShape(size = 10.dp))
+                  width = 3.dp,
+                  color = colorResource(R.color.blue),
+                  shape = RoundedCornerShape(size = 10.dp))
               .width(332.dp)
               .height(270.dp)
-              .background(PrimaryColor)
+              .background(colorResource(R.color.blue))
               .padding(start = 116.dp, top = 85.dp, end = 116.dp, bottom = 85.dp)) {
         Image(
             painter = painterResource(id = imageResource),
@@ -209,11 +224,12 @@ fun DrawnOutPut(landmarks: List<NormalizedLandmark>?, text: String) {
         text
       }
 
+  val paintColor = colorResource(R.color.white)
   Box(
       modifier =
           Modifier.width(336.dp)
               .height(70.dp)
-              .background(color = PrimaryColor)
+              .background(color = colorResource(R.color.blue))
               .padding(vertical = 9.dp),
       contentAlignment = Alignment.Center) {
         Canvas(modifier = Modifier.fillMaxSize()) {
@@ -224,7 +240,7 @@ fun DrawnOutPut(landmarks: List<NormalizedLandmark>?, text: String) {
           drawContext.canvas.nativeCanvas.apply {
             val paint =
                 android.graphics.Paint().apply {
-                  color = Color.White.toArgb()
+                  color = paintColor.toArgb()
                   textSize = fontSize
                   isAntiAlias = true
                   textAlign = android.graphics.Paint.Align.CENTER

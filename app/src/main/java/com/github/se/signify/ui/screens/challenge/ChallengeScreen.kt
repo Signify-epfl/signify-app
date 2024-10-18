@@ -3,7 +3,14 @@ package com.github.se.signify.ui.screens.challenge
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Scaffold
@@ -11,10 +18,13 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -51,7 +61,9 @@ fun ChallengeScreen(navigationActions: NavigationActions) {
       content = {
         Column(
             modifier =
-                Modifier.fillMaxSize().background(Color.White).testTag("ChallengeScreenContent"),
+                Modifier.fillMaxSize()
+                    .background(colorResource(R.color.white))
+                    .testTag("ChallengeScreenContent"),
             horizontalAlignment = Alignment.CenterHorizontally) {
               // Top blue line
               Box(
@@ -86,8 +98,8 @@ fun ChallengeScreen(navigationActions: NavigationActions) {
                         size = 240.dp,
                         iconSize = 160.dp,
                         labelFontSize = 32.sp,
-                        iconTint = Color.DarkGray,
-                        textColor = Color.DarkGray,
+                        iconTint = colorResource(R.color.dark_gray),
+                        textColor = colorResource(R.color.dark_gray),
                         modifier = Modifier.testTag("ChallengeButton"))
 
                     // History square button
@@ -98,8 +110,8 @@ fun ChallengeScreen(navigationActions: NavigationActions) {
                         size = 240.dp,
                         iconSize = 160.dp,
                         labelFontSize = 32.sp,
-                        iconTint = Color.DarkGray,
-                        textColor = Color.DarkGray,
+                        iconTint = colorResource(R.color.dark_gray),
+                        textColor = colorResource(R.color.dark_gray),
                         5.dp,
                         modifier = Modifier.testTag("HistoryButton"))
                   }
@@ -121,7 +133,7 @@ fun InfoPopup(onDismiss: () -> Unit) {
         modifier =
             Modifier.border(
                     2.dp,
-                    Color.Black,
+                    colorResource(R.color.black),
                     RoundedCornerShape(12.dp)) // Ensure the black border wraps the popup
                 .padding(0.dp)
                 .testTag("InfoPopup") // Remove padding for the border
@@ -142,7 +154,7 @@ fun InfoPopup(onDismiss: () -> Unit) {
                               }
                         },
                     fontSize = 20.sp,
-                    color = Color.White,
+                    color = colorResource(R.color.white),
                     textAlign = TextAlign.Center,
                     modifier = Modifier.testTag("InfoPopupTitle"))
 
@@ -154,7 +166,7 @@ fun InfoPopup(onDismiss: () -> Unit) {
                         stringResource(
                             id = R.string.description_challenge), // Text from strings.xml
                     fontSize = 16.sp,
-                    color = Color.White,
+                    color = colorResource(R.color.white),
                     textAlign = TextAlign.Center,
                     modifier = Modifier.testTag("InfoPopupBody"))
 
@@ -164,7 +176,7 @@ fun InfoPopup(onDismiss: () -> Unit) {
                 Button(
                     onClick = { onDismiss() },
                     modifier = Modifier.testTag("InfoPopupCloseButton")) {
-                      Text(text = "Close", color = Color.White)
+                      Text(text = "Close", color = colorResource(R.color.white))
                     }
               }
         }

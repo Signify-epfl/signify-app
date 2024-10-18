@@ -13,7 +13,6 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -35,7 +34,7 @@ fun BottomNavigationMenu(
               .testTag("BottomNavigationBar")) {
         BottomNavigation(
             modifier = Modifier.fillMaxWidth().height(60.dp),
-            backgroundColor = Color.White // Set background to white
+            backgroundColor = colorResource(R.color.white) // Set background to white
             ) {
               tabList.forEach { tab ->
                 BottomNavigationItem(
