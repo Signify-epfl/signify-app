@@ -24,7 +24,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -55,8 +55,8 @@ fun ExerciseScreenEasy(navigationActions: NavigationActions) {
   val words = listOf(word1, word2, word3).map { it.lowercase() }
 
   // MutableState to keep track of the current letter
-  var currentLetterIndex by rememberSaveable { mutableStateOf(0) }
-  var currentWordIndex by rememberSaveable { mutableStateOf(0) }
+  var currentLetterIndex by rememberSaveable { mutableIntStateOf(0) }
+  var currentWordIndex by rememberSaveable { mutableIntStateOf(0) }
 
   // Get the current letter based on the index
   val currentLetter = words[currentWordIndex][currentLetterIndex]
