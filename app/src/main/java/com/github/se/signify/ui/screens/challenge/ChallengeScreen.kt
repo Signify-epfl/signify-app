@@ -5,12 +5,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,10 +48,13 @@ fun ChallengeScreen(navigationActions: NavigationActions) {
             selectedItem = navigationActions.currentRoute(),
             modifier = Modifier.testTag("BottomNavigationMenu"))
       },
-      content = {
+      content = { padding ->
         Column(
             modifier =
-                Modifier.fillMaxSize().background(Color.White).testTag("ChallengeScreenContent"),
+                Modifier.fillMaxSize()
+                    .background(Color.White)
+                    .padding(padding)
+                    .testTag("ChallengeScreenContent"),
             horizontalAlignment = Alignment.CenterHorizontally) {
               // Top blue line
               Box(
