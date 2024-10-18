@@ -25,15 +25,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -127,7 +128,9 @@ fun ASLRecognition(
               contentColor = MaterialTheme.colors.onSurface,
               navigationIcon = {
                 IconButton(onClick = { navigationActions.goBack() }) {
-                  Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                  Icon(
+                      imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                      contentDescription = "Back")
                 }
               })
         },
@@ -160,8 +163,7 @@ fun ASLRecognition(
                   Button(
                       onClick = { /* For now, do nothing */},
                       colors =
-                          androidx.compose.material.ButtonDefaults.buttonColors(
-                              backgroundColor = colorResource(R.color.blue)), // Blue color
+                          ButtonDefaults.buttonColors(colorResource(R.color.blue)), // Blue color
                       modifier =
                           Modifier.width(336.dp) // Match the width of the box above
                               .height(50.dp)) {
@@ -218,7 +220,7 @@ fun HandGestureImage(gesture: String) {
 @Composable
 fun DrawnOutPut(landmarks: List<NormalizedLandmark>?, text: String) {
   val displayText =
-      if (landmarks == null || landmarks.isEmpty()) {
+      if (landmarks.isNullOrEmpty()) {
         "Make a sign"
       } else {
         text
