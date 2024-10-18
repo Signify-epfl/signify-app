@@ -43,19 +43,30 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        //manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
+
 
         ndk {
             abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a"))
         }
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("keystore/signify.jks")
+            storePassword = "signinsignify"
+            keyAlias = "signifykey"
+            keyPassword = "signinsignifykey"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
+            isShrinkResources = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
         debug {
             enableUnitTestCoverage = true
@@ -72,6 +83,9 @@ android {
     buildFeatures {
         compose = true
     }
+
+
+
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
