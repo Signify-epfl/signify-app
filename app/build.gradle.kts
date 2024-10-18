@@ -265,7 +265,7 @@ sonar {
         property ("sonar.projectKey", "Signify-epfl_signify-app")
         property ("sonar.organization", "signify-epfl")
         property ("sonar.host.url", "https://sonarcloud.io")
-        property ("sonar.coverage.jacoco.xmlReportPaths", "${project.layout.buildDirectory.get()}/reports/jacoco/jacocoTestReport.xml")
+        property ("sonar.coverage.jacoco.xmlReportPaths", "${project.layout.buildDirectory.get()}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
         property ("sonar.junit.ReportPaths", "${project.layout.buildDirectory.get()}/test-results/testDebugUnitTest/")
         property ("sonar.androidLint.reportPaths", "${project.layout.buildDirectory.get()}/reports/lint-results-debug.xml")
     }
