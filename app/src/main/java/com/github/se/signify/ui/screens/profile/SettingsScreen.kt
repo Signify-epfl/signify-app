@@ -106,12 +106,14 @@ fun SettingsScreen(profilePictureUrl: String?, navigationActions: NavigationActi
         Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
           Button(
               onClick = { /* TODO: Implement cancel action */},
-              modifier = Modifier.weight(1f).background(colorResource(R.color.red))) {
+              colors = ButtonDefaults.buttonColors().copy(colorResource(R.color.red)),
+              modifier = Modifier.weight(1f)) {
                 Text(text = "Cancel", color = Color.White)
               }
           Button(
               onClick = { /* TODO: Implement save action */},
-              modifier = Modifier.weight(1f).background(colorResource(R.color.green))) {
+              colors = ButtonDefaults.buttonColors().copy(colorResource(R.color.green)),
+              modifier = Modifier.weight(1f)) {
                 Text(text = "Save", color = Color.White)
               }
         }
