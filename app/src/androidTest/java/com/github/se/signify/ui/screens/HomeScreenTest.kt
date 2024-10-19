@@ -11,6 +11,7 @@ import com.github.se.signify.ui.navigation.Screen
 import com.github.se.signify.ui.screens.home.Exercise
 import com.github.se.signify.ui.screens.home.ExerciseList
 import com.github.se.signify.ui.screens.home.HomeScreen
+import com.github.se.signify.ui.screens.home.LetterDictionary
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -87,9 +88,9 @@ class HomeScreenTest {
 
     exercises.forEach { exercise ->
       composeTestRule
-          .onNodeWithTag("${exercise.name}ExerciseButton")
-          .performScrollTo()
-          .assertIsDisplayed()
+        .onNodeWithTag("${exercise.name}ExerciseButton")
+        .performScrollTo()
+        .assertIsDisplayed()
     }
   }
 
@@ -106,5 +107,57 @@ class HomeScreenTest {
 
       verify(onClick).invoke(exercise) // Verify onClick was called with the exercise
     }
+  }
+
+  @Test
+  fun initialLetterIsDisplayedCorrectly() {
+    composeTestRule.setContent { LetterDictionary() }
+
+    // Assert that the initial letter 'A' and its corresponding icon are displayed
+    composeTestRule.onNodeWithTag("LetterText_A").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("LetterIcon_A").assertIsDisplayed()
+  }
+
+  @Test
+  fun forwardArrowNavigatesThroughAllLettersCorrectly() {
+    composeTestRule.setContent { LetterDictionary() }
+
+    val letters = ('A'..'Z').toList()
+
+    letters.forEach { letter ->
+      // Assert that the letter and corresponding icon are displayed
+      composeTestRule.onNodeWithTag("LetterText_$letter").assertIsDisplayed()
+      composeTestRule.onNodeWithTag("LetterIcon_$letter").assertIsDisplayed()
+
+      // Click on the forward arrow to go to the next letter
+      composeTestRule.onNodeWithTag("LetterDictionaryForward").performClick()
+    }
+
+    // After looping through all letters, it should go back to 'A'
+    composeTestRule.onNodeWithTag("LetterText_A").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("LetterIcon_A").assertIsDisplayed()
+  }
+
+  @Test
+  fun backArrowNavigatesThroughAllLettersCorrectly() {
+    composeTestRule.setContent { LetterDictionary() }
+
+    val letters = ('A'..'Z').reversed().toList()
+
+    // Click the back arrow initially to move to 'Z'
+    composeTestRule.onNodeWithTag("LetterDictionaryBack").performClick()
+
+    letters.forEach { letter ->
+      // Assert that the letter and corresponding icon are displayed
+      composeTestRule.onNodeWithTag("LetterText_$letter").assertIsDisplayed()
+      composeTestRule.onNodeWithTag("LetterIcon_$letter").assertIsDisplayed()
+
+      // Click on the back arrow to go to the previous letter
+      composeTestRule.onNodeWithTag("LetterDictionaryBack").performClick()
+    }
+
+    // After looping through all letters, it should go back to 'Z'
+    composeTestRule.onNodeWithTag("LetterText_Z").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("LetterIcon_Z").assertIsDisplayed()
   }
 }
