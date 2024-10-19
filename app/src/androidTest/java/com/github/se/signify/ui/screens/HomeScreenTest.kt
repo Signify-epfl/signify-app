@@ -88,9 +88,9 @@ class HomeScreenTest {
 
     exercises.forEach { exercise ->
       composeTestRule
-        .onNodeWithTag("${exercise.name}ExerciseButton")
-        .performScrollTo()
-        .assertIsDisplayed()
+          .onNodeWithTag("${exercise.name}ExerciseButton")
+          .performScrollTo()
+          .assertIsDisplayed()
     }
   }
 
