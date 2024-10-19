@@ -183,3 +183,35 @@ fun BackButton(onClick: () -> Unit) {
             }
       }
 }
+
+fun getLetterIconResId(letter: Char): Int {
+  return when (letter) {
+    'a' -> R.drawable.letter_a
+    'b' -> R.drawable.letter_b
+    'c' -> R.drawable.letter_c
+    'd' -> R.drawable.letter_d
+    'e' -> R.drawable.letter_e
+    'f' -> R.drawable.letter_f
+    'g' -> R.drawable.letter_g
+    'h' -> R.drawable.letter_h
+    'i' -> R.drawable.letter_i
+    'j' -> R.drawable.letter_j
+    'k' -> R.drawable.letter_k
+    'l' -> R.drawable.letter_l
+    'm' -> R.drawable.letter_m
+    'n' -> R.drawable.letter_n
+    'o' -> R.drawable.letter_o
+    'p' -> R.drawable.letter_p
+    'q' -> R.drawable.letter_q
+    'r' -> R.drawable.letter_r
+    's' -> R.drawable.letter_s
+    't' -> R.drawable.letter_t
+    'u' -> R.drawable.letter_u
+    'v' -> R.drawable.letter_v
+    'w' -> R.drawable.letter_w
+    'x' -> R.drawable.letter_x
+    'y' -> R.drawable.letter_y
+    'z' -> R.drawable.letter_z
+    else -> R.drawable.letter_a // Default case, just in case an unexpected value is passed
+  }
+}
