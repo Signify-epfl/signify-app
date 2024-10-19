@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - ziyadbaghouri/fix-ci-file
 
   pull_request:
     types:
