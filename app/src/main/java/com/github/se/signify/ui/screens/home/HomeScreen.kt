@@ -1,6 +1,5 @@
 package com.github.se.signify.ui.screens.home
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -22,7 +21,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -37,6 +35,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,6 +49,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
+import com.github.se.signify.ui.ReusableTextButton
+import com.github.se.signify.ui.UtilButton
+import com.github.se.signify.ui.getLetterIconResId
 import com.github.se.signify.ui.navigation.BottomNavigationMenu
 import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.ui.navigation.NavigationActions
@@ -93,12 +98,27 @@ fun HomeScreen(navigationActions: NavigationActions) {
                   horizontalArrangement = Arrangement.SpaceBetween,
               ) {
                 StreakCounter()
-                QuestsButton(onClick = { navigationActions.navigateTo("Quest") })
+                UtilButton({}, "HelpButton", "HelpIcon", Icons.Outlined.Info, "Help")
+
+                UtilButton(
+                    onClick = { navigationActions.navigateTo("Quest") },
+                    "QuestsButton",
+                    "QuestIcon",
+                    Icons.Outlined.DateRange,
+                    "Quests")
               }
 
               Spacer(modifier = Modifier.height(16.dp))
 
-              CameraFeedbackToggle()
+              ReusableTextButton(
+                  onClickAction = { /* Do nothing for now */},
+                  textTag = "CameraFeedbackToggle",
+                  text = "Toggle Camera",
+                  height = 30.dp,
+                  borderColor = colorResource(R.color.black),
+                  backgroundColor = colorResource(R.color.blue),
+                  textSize = 12.sp,
+                  textColor = colorResource(R.color.white))
 
               Spacer(modifier = Modifier.height(16.dp))
 
@@ -112,37 +132,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
 
               ExerciseList(defaultExercises, exerciseOnClick)
             }
-
-        HelpButton()
       })
-}
-
-@Composable
-fun QuestsButton(onClick: () -> Unit = {}) {
-  IconButton(
-      onClick = { onClick() },
-      modifier =
-          Modifier.clip(CircleShape)
-              .border(2.dp, colorResource(R.color.black), CircleShape)
-              .background(colorResource(R.color.blue))
-              .testTag("QuestsButton")) {
-        Icon(
-            Icons.Outlined.DateRange,
-            tint = colorResource(R.color.black),
-            contentDescription = "Quests")
-      }
-}
-
-@Composable
-fun CameraFeedbackToggle() {
-  Button(
-      onClick = {},
-      colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.blue)),
-      border = BorderStroke(2.dp, colorResource(R.color.black)),
-      modifier = Modifier.testTag("CameraFeedbackToggle"),
-  ) {
-    Text("Toggle Camera")
-  }
 }
 
 // This should be hooked to the camera feedback screen later on.
@@ -165,36 +155,62 @@ fun CameraFeedback(onClick: () -> Unit = {}) {
 
 @Composable
 fun LetterDictionary() {
+  // State to keep track of the current letter index
+  var currentLetterIndex by remember { mutableIntStateOf(0) }
+  val letters = ('a'..'z').toList() // List of letters from 'a' to 'z'
+
   Row(
       modifier = Modifier.fillMaxWidth().wrapContentHeight().testTag("LetterDictionary"),
       horizontalArrangement = Arrangement.SpaceBetween,
       verticalAlignment = Alignment.CenterVertically) {
-        IconButton(onClick = {}, modifier = Modifier.testTag("LetterDictionaryBack")) {
-          Icon(
-              Icons.AutoMirrored.Outlined.ArrowBack,
-              tint = colorResource(R.color.black),
-              contentDescription = "Back")
-        }
+        // Back Arrow Button
+        IconButton(
+            onClick = {
+              // Update letter index when back arrow is clicked
+              currentLetterIndex = (currentLetterIndex - 1 + letters.size) % letters.size
+            },
+            modifier = Modifier.testTag("LetterDictionaryBack")) {
+              Icon(
+                  Icons.AutoMirrored.Outlined.ArrowBack,
+                  tint = colorResource(R.color.black),
+                  contentDescription = "Back")
+            }
+
+        // Box to display letter and icon
+        val currentLetter = letters[currentLetterIndex]
         Box(
             modifier =
                 Modifier.border(2.dp, colorResource(R.color.blue), RoundedCornerShape(8.dp))
                     .background(colorResource(R.color.dark_gray), RoundedCornerShape(8.dp))
-                    .padding(8.dp)) {
+                    .padding(8.dp)
+                    .testTag("LetterDisplayBox")) {
               Row {
-                Text(text = "S =", color = colorResource(R.color.blue), fontSize = 32.dp.value.sp)
+                Text(
+                    text = "${currentLetter.uppercaseChar()} =",
+                    color = colorResource(R.color.blue),
+                    fontSize = 32.dp.value.sp,
+                    modifier = Modifier.testTag("LetterText_${currentLetter.uppercaseChar()}"))
                 Icon(
-                    painter = painterResource(id = R.drawable.letter_s),
+                    painter = painterResource(id = getLetterIconResId(currentLetter)),
                     contentDescription = "Letter gesture",
                     tint = colorResource(R.color.blue),
-                    modifier = Modifier.size(32.dp))
+                    modifier =
+                        Modifier.size(32.dp).testTag("LetterIcon_${currentLetter.uppercaseChar()}"))
               }
             }
-        IconButton(onClick = {}, modifier = Modifier.testTag("LetterDictionaryForward")) {
-          Icon(
-              Icons.AutoMirrored.Outlined.ArrowForward,
-              tint = colorResource(R.color.black),
-              contentDescription = "Forward")
-        }
+
+        // Forward Arrow Button
+        IconButton(
+            onClick = {
+              // Update letter index when forward arrow is clicked
+              currentLetterIndex = (currentLetterIndex + 1) % letters.size
+            },
+            modifier = Modifier.testTag("LetterDictionaryForward")) {
+              Icon(
+                  Icons.AutoMirrored.Outlined.ArrowForward,
+                  tint = colorResource(R.color.black),
+                  contentDescription = "Forward")
+            }
       }
 }
 
@@ -234,24 +250,6 @@ fun ExerciseButton(exercise: Exercise, onClick: (exercise: Exercise) -> Unit) {
 }
 
 // This button should be replaced by a shared Composable later on.
-@Composable
-fun HelpButton() {
-  Box(modifier = Modifier.fillMaxWidth().padding(8.dp), contentAlignment = Alignment.TopCenter) {
-    IconButton(
-        onClick = {},
-        modifier =
-            Modifier.clip(CircleShape)
-                .background(colorResource(R.color.blue))
-                .testTag("HelpButton"),
-    ) {
-      Icon(
-          Icons.Outlined.Info,
-          tint = colorResource(R.color.white),
-          contentDescription = "Help",
-          modifier = Modifier.testTag("HelpIcon"))
-    }
-  }
-}
 
 // This counter should be replaced by a shared Composable later on.
 @Composable
@@ -261,12 +259,12 @@ fun StreakCounter() {
         painter = painterResource(id = R.drawable.flame),
         contentDescription = "Streak Icon",
         tint = colorResource(R.color.red),
-        modifier = Modifier.size(32.dp).testTag("FlameIcon"))
+        modifier = Modifier.size(20.dp).testTag("FlameIcon"))
     Spacer(modifier = Modifier.width(8.dp))
     Text(
         text = "4",
         fontWeight = FontWeight.Bold,
         color = colorResource(R.color.red),
-        fontSize = 32.dp.value.sp)
+        fontSize = 20.dp.value.sp)
   }
 }
