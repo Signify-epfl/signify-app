@@ -1,9 +1,8 @@
-package com.github.se.signify.ui.screens
+package com.github.se.signify.ui.screens.profile
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.screens.profile.SettingsScreen
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.mock
