@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.screens
+package com.github.se.signify.ui.screens.home
 
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
@@ -10,7 +10,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.screens.home.ExerciseScreenHard
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -18,7 +17,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 
 @RunWith(AndroidJUnit4::class)
-class ExerciseScreenHardTest {
+class ExerciseScreenEasyTest {
 
   @get:Rule val composeTestRule = createComposeRule()
 
@@ -30,8 +29,8 @@ class ExerciseScreenHardTest {
   }
 
   @Test
-  fun exerciseScreenHard_displaysComponentsCorrectly() {
-    composeTestRule.setContent { ExerciseScreenHard(navigationActions = mockNavigationActions) }
+  fun exerciseScreenEasy_displaysComponentsCorrectly() {
+    composeTestRule.setContent { ExerciseScreenEasy(navigationActions = mockNavigationActions) }
 
     // Verify if the back button is displayed
     composeTestRule.onNodeWithContentDescription("Back").assertIsDisplayed()
@@ -39,11 +38,11 @@ class ExerciseScreenHardTest {
     // Check if the formatted word is displayed correctly
 
     var expectedWordDisplay =
-        "Fgyffg" // FGYFFG first word, F is the current letter, and the others are lowercased
+        "Fgyf" // FGYF first word, F is the current letter, and the others are lowercased
     composeTestRule.onNodeWithTag("FirstWordTag").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FirstWordTag").assertTextEquals(expectedWordDisplay)
 
-    expectedWordDisplay = "fgygfg" // FGYGFG first word, lowercased
+    expectedWordDisplay = "fgyg" // FGYG first word, lowercased
     composeTestRule.onNodeWithTag("SecondWordTag").assertIsDisplayed()
     composeTestRule.onNodeWithTag("SecondWordTag").assertTextEquals(expectedWordDisplay)
 
@@ -54,10 +53,10 @@ class ExerciseScreenHardTest {
   @Test
   fun successButton_incrementsLetterIndexOrShowsToast() {
     // Set the screen content for testing
-    composeTestRule.setContent { ExerciseScreenHard(navigationActions = mockNavigationActions) }
+    composeTestRule.setContent { ExerciseScreenEasy(navigationActions = mockNavigationActions) }
 
     // Check the initial word display (before clicking the success button)
-    val initialWordDisplay = "Fgyffg"
+    val initialWordDisplay = "Fgyf"
     composeTestRule.onNodeWithTag("FirstWordTag").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FirstWordTag").assertTextEquals(initialWordDisplay)
 
@@ -66,11 +65,19 @@ class ExerciseScreenHardTest {
 
     // After clicking, the word display should update to the next letter or show a toast
     // In this example, we assume it moves to the next letter; you can update this based on behavior
-    val nextLetterDisplay = "fGyffg" // Assuming it moves to the next letter
+    val nextLetterDisplay = "fGyf" // Assuming it moves to the next letter
     composeTestRule.onNodeWithTag("FirstWordTag").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FirstWordTag").assertTextEquals(nextLetterDisplay)
 
-    // Test moving from one word to the other aswell, test the second word when first changed,...
+    // Test moving from one word to the other aswell
 
+  }
+
+  @Test
+  fun imageIsDisplayed_ifImageExists() {
+
+    composeTestRule.setContent { ExerciseScreenEasy(navigationActions = mockNavigationActions) }
+
+    composeTestRule.onNodeWithContentDescription("Sign image").assertIsDisplayed()
   }
 }

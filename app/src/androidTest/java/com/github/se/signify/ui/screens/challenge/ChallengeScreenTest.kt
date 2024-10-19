@@ -1,9 +1,10 @@
+package com.github.se.signify.ui.screens.challenge
+
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.screens.challenge.ChallengeScreen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

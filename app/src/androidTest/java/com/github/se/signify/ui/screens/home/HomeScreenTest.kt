@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.screens
+package com.github.se.signify.ui.screens.home
 
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
@@ -8,10 +8,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
-import com.github.se.signify.ui.screens.home.Exercise
-import com.github.se.signify.ui.screens.home.ExerciseList
-import com.github.se.signify.ui.screens.home.HomeScreen
-import com.github.se.signify.ui.screens.home.LetterDictionary
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
