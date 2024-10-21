@@ -52,10 +52,20 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file("keystore/signify.jks")
-            storePassword = "signinsignify"
-            keyAlias = "signifykey"
-            keyPassword = "signinsignifykey"
+            // Use environment variables for CI/CD (GitHub Actions), otherwise use gradle.properties for local dev
+            // Resolve the keystore path safely
+            val keystorePath = System.getenv("KEYSTORE_PATH") ?: findProperty("KEYSTORE_PATH") as String?
+
+            // Check for null or blank and throw a meaningful error
+            if (keystorePath.isNullOrBlank()) {
+                throw IllegalArgumentException("Keystore path is missing. Please set the 'KEYSTORE_PATH' environment variable or add it to gradle.properties.")
+            }
+
+            // Use file() function with non-null keystorePath
+            storeFile = file(keystorePath)
+            storePassword = (System.getenv("KEYSTORE_PASSWORD") ?: properties["KEYSTORE_PASSWORD"]) as String?
+            keyAlias = (System.getenv("KEY_ALIAS") ?: properties["KEY_ALIAS"]) as String?
+            keyPassword = (System.getenv("KEY_PASSWORD") ?: properties["KEY_PASSWORD"]) as String?
         }
     }
 
