@@ -4,14 +4,14 @@ on:
   push:
     branches:
       - main
+      - 121-create-a-github-action-to-have-the-apk-as-an-artifact
 
   pull_request:
     types:
       - opened
       - synchronize
       - reopened
-      
-  workflow_dispatch:
+
 
 jobs:
   signify-ci:
