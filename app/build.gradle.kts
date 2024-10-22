@@ -82,6 +82,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
 
@@ -116,16 +117,6 @@ android {
         }
     }
 
-
-    buildFeatures {
-        compose = true
-        buildConfig = true
-    }
-
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-
     // Robolectric needs to be run only in debug. But its tests are placed in the shared source set (test)
     // The next lines transfers the src/test/* from shared to the testDebug one
     //
@@ -154,7 +145,6 @@ android {
             property ("sonar.androidLint.reportPaths", "${project.layout.buildDirectory.get()}/reports/lint-results-debug.xml")
         }
     }
-
 
 }
 
