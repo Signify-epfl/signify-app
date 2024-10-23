@@ -49,6 +49,7 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -123,7 +124,9 @@ fun ASLRecognition(
     Scaffold(
         topBar = {
           TopAppBar(
-              title = { Text("Practice ASL & Test it !") },
+              title = {
+                Text("Practice ASL & Test it !", modifier = Modifier.testTag("aslRecognitionTitle"))
+              },
               backgroundColor = Color.Transparent, // Transparent background
               contentColor = MaterialTheme.colors.onSurface,
               navigationIcon = {
@@ -166,7 +169,8 @@ fun ASLRecognition(
                           ButtonDefaults.buttonColors(colorResource(R.color.blue)), // Blue color
                       modifier =
                           Modifier.width(336.dp) // Match the width of the box above
-                              .height(50.dp)) {
+                              .height(50.dp)
+                              .testTag("practiceButton")) {
                         Text(
                             text = "More on ASL Alphabet",
                             color = colorResource(R.color.white)) // One-line text with white color
@@ -178,7 +182,8 @@ fun ASLRecognition(
           BottomNavigationMenu(
               onTabSelect = { route -> navigationActions.navigateTo(route) },
               tabList = LIST_TOP_LEVEL_DESTINATION,
-              selectedItem = navigationActions.currentRoute())
+              selectedItem = navigationActions.currentRoute(),
+              modifier = Modifier.testTag("bottomNavigationMenu"))
         })
   }
 }
@@ -232,7 +237,8 @@ fun DrawnOutPut(landmarks: List<NormalizedLandmark>?, text: String) {
           Modifier.width(336.dp)
               .height(70.dp)
               .background(color = colorResource(R.color.blue))
-              .padding(vertical = 9.dp),
+              .padding(vertical = 9.dp)
+              .testTag("gestureOverlayView"),
       contentAlignment = Alignment.Center) {
         Canvas(modifier = Modifier.fillMaxSize()) {
           val fontSize = 80f
@@ -264,7 +270,7 @@ fun CameraPreviewWithAnalysisView(handLandMarkViewModel: HandLandMarkViewModel) 
   val lifecycleOwner = LocalLifecycleOwner.current
   val previewView = remember { PreviewView(context) }
 
-  AndroidView(factory = { previewView }, modifier = Modifier.fillMaxSize())
+  AndroidView(factory = { previewView }, modifier = Modifier.fillMaxSize().testTag("cameraPreview"))
 
   LaunchedEffect(Unit) {
     val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
