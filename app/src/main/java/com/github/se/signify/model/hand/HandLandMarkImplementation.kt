@@ -89,7 +89,7 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
 
       onSuccess()
     } catch (e: Exception) {
-      onFailure(e)
+      e.printStackTrace()
     }
   }
 
