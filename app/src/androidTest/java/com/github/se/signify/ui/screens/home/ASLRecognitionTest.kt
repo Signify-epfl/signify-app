@@ -65,6 +65,7 @@ class ASLRecognitionTest : LifecycleOwner {
     composeTestRule.onNodeWithTag("aslRecognitionTitle").assertIsDisplayed()
     composeTestRule.onNodeWithTag("bottomNavigationMenu").assertIsDisplayed()
   }
+
   override val lifecycle: Lifecycle
     get() = lifecycleRegistry
 }
