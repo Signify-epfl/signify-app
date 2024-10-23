@@ -31,7 +31,7 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
     HandLandMarkRepository {
 
   // HandLandmarker instance for detecting hand landmarks
-  private lateinit var handLandmarker: HandLandmarker
+  private var handLandmarker: HandLandmarker? = null
 
   // Stores the latest result from the HandLandmarker
   private var handLandMarkerResult: HandLandmarkerResult? = null
@@ -89,7 +89,7 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
 
       onSuccess()
     } catch (e: Exception) {
-      onFailure(e)
+      e.printStackTrace()
     }
   }
 
@@ -123,7 +123,7 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
         val frameTime = SystemClock.uptimeMillis()
         val mpImage = BitmapImageBuilder(bitmap).build()
         Executors.newSingleThreadExecutor().execute {
-          handLandmarker.detectAsync(mpImage, frameTime)
+          handLandmarker?.detectAsync(mpImage, frameTime)
 
           if (handLandMarkerResult != null && handLandMarkerResult?.landmarks()?.size != 0) {
             onSuccess(handLandMarkerResult!!)
@@ -208,7 +208,7 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
    *
    * @return The HandLandmarker object used for hand detection.
    */
-  override fun getHandLandmarker(): HandLandmarker = handLandmarker
+  override fun getHandLandmarker(): HandLandmarker = handLandmarker!!
 
   /**
    * Processes the image proxy using a throttled mechanism, ensuring that frames are processed only
