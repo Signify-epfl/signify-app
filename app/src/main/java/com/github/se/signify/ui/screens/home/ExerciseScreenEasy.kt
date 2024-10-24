@@ -62,7 +62,10 @@ fun ExerciseScreenEasy(navigationActions: NavigationActions) {
   val currentLetter = words[currentWordIndex][currentLetterIndex]
 
   Box(
-      modifier = Modifier.fillMaxSize().background(colorResource(R.color.white)),
+      modifier =
+          Modifier.fillMaxSize()
+              .background(colorResource(R.color.white))
+              .testTag("ExerciseScreenEasy"),
       contentAlignment = Alignment.Center) {
         IconButton(
             onClick = { navigationActions.goBack() },

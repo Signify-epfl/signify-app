@@ -1,5 +1,7 @@
 package com.github.se.signify
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -31,21 +33,28 @@ import com.github.se.signify.ui.screens.profile.MyStatsScreen
 import com.github.se.signify.ui.screens.profile.ProfileScreen
 import com.github.se.signify.ui.screens.profile.SettingsScreen
 import com.github.se.signify.ui.theme.SignifyTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
-      SignifyTheme { Surface(modifier = Modifier.fillMaxSize()) { SignifyAppPreview() } }
+      SignifyTheme {
+        Surface(modifier = Modifier.fillMaxSize()) {
+          val context = LocalContext.current
+          val navigationState = MutableStateFlow<NavigationActions?>(null)
+          SignifyAppPreview(context, navigationState)
+        }
+      }
     }
   }
 }
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun SignifyAppPreview() {
+fun SignifyAppPreview(context: Context, navigationState: MutableStateFlow<NavigationActions?>) {
   val navController = rememberNavController()
   val navigationActions = NavigationActions(navController)
-  val context = LocalContext.current
   val handLandMarkImplementation =
       HandLandMarkImplementation("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
   val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
@@ -123,4 +132,5 @@ fun SignifyAppPreview() {
     composable(Screen.EXERCISE_EASY) { ExerciseScreenEasy(navigationActions) }
     composable(Screen.EXERCISE_HARD) { ExerciseScreenHard(navigationActions) }
   }
+  navigationState.value = navigationActions
 }
