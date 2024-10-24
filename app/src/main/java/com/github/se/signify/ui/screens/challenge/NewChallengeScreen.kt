@@ -38,7 +38,7 @@ fun NewChallengeScreen(navigationActions: NavigationActions) {
                     .testTag("TopBlueBar"))
       },
       content = { padding ->
-        Box(modifier = Modifier.fillMaxSize().padding(padding)) {
+        Box(modifier = Modifier.fillMaxSize().padding(padding).testTag("NewChallengeScreen")) {
           // Back button aligned to the top-left corner
           BackButton { navigationActions.goBack() }
 

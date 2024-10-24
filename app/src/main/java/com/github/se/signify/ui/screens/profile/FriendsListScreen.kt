@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -50,7 +51,7 @@ fun FriendsListScreen(
 ) {
   var searchQuery by remember { mutableStateOf("") }
 
-  Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+  Column(modifier = Modifier.fillMaxSize().padding(16.dp).testTag("FriendsListScreen")) {
     // Back Button
     BackButton { navigationActions.goBack() }
 
@@ -67,12 +68,14 @@ fun FriendsListScreen(
         colors = TextFieldDefaults.colors(),
         singleLine = true,
         trailingIcon = {
-          IconButton(onClick = { onSearchUser(searchQuery) }) {
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = "Search",
-                tint = colorResource(R.color.blue))
-          }
+          IconButton(
+              onClick = { onSearchUser(searchQuery) },
+              modifier = Modifier.testTag("OnSearchButton")) {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "Search",
+                    tint = colorResource(R.color.blue))
+              }
         })
 
     Spacer(modifier = Modifier.height(24.dp))

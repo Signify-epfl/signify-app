@@ -46,7 +46,10 @@ fun ExerciseScreenHard(navigationActions: NavigationActions) {
   var currentLetterIndex by rememberSaveable { mutableIntStateOf(0) }
 
   Box(
-      modifier = Modifier.fillMaxSize().background(colorResource(R.color.white)),
+      modifier =
+          Modifier.fillMaxSize()
+              .background(colorResource(R.color.white))
+              .testTag("ExerciseScreenHard"),
       contentAlignment = Alignment.Center // Center all content in the Box
       ) {
         IconButton(

@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -42,7 +43,7 @@ fun SettingsScreen(profilePictureUrl: String?, navigationActions: NavigationActi
   var showEditOptions by remember { mutableStateOf(false) }
 
   Column(
-      modifier = Modifier.fillMaxSize().padding(16.dp),
+      modifier = Modifier.fillMaxSize().padding(16.dp).testTag("SettingsScreen"),
       horizontalAlignment = Alignment.CenterHorizontally,
       verticalArrangement = Arrangement.spacedBy(64.dp)) {
 

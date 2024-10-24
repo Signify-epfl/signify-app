@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -64,7 +65,10 @@ fun WelcomeScreen(navigationActions: NavigationActions) {
     navigationActions.navigateTo("Auth")
   }
   Column(
-      modifier = Modifier.fillMaxSize().background(color = colorResource(R.color.blue)),
+      modifier =
+          Modifier.fillMaxSize()
+              .testTag("WelcomeScreen")
+              .background(color = colorResource(R.color.blue)),
       horizontalAlignment = Alignment.CenterHorizontally,
       verticalArrangement = Arrangement.Center) {
         Image(

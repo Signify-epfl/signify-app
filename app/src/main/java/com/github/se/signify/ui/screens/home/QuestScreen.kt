@@ -5,6 +5,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import com.github.se.signify.ui.navigation.BottomNavigationMenu
 import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.ui.navigation.NavigationActions
@@ -18,5 +19,7 @@ fun QuestScreen(navigationActions: NavigationActions) {
             tabList = LIST_TOP_LEVEL_DESTINATION,
             selectedItem = navigationActions.currentRoute())
       },
-      content = { pd -> Text(modifier = Modifier.padding(pd), text = "Quest Screen") })
+      content = { pd ->
+        Text(modifier = Modifier.padding(pd).testTag("QuestScreen"), text = "Quest Screen")
+      })
 }
