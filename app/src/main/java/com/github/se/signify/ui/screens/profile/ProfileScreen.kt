@@ -76,7 +76,8 @@ fun ProfileScreen(
                 Modifier.fillMaxSize()
                     .verticalScroll(rememberScrollState())
                     .padding(padding)
-                    .padding(16.dp),
+                    .padding(16.dp)
+                    .testTag("ProfileScreen"),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
           var isHelpBoxVisible by remember { mutableStateOf(false) }

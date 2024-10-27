@@ -91,7 +91,8 @@ fun HomeScreen(navigationActions: NavigationActions) {
                 Modifier.fillMaxSize()
                     .padding(padding)
                     .padding(16.dp)
-                    .verticalScroll(rememberScrollState()),
+                    .verticalScroll(rememberScrollState())
+                    .testTag("HomeScreen"),
             horizontalAlignment = Alignment.CenterHorizontally) {
               Row(
                   modifier = Modifier.fillMaxWidth(),

@@ -46,7 +46,7 @@ fun ChallengeHistoryScreen(
                     .testTag("TopBlueBar"))
       },
       content = { padding ->
-        Box(modifier = Modifier.fillMaxSize().padding(padding)) {
+        Box(modifier = Modifier.fillMaxSize().padding(padding).testTag("ChallengeHistoryScreen")) {
           // Back button aligned to the top-left corner
           BackButton { navigationActions.goBack() }
 

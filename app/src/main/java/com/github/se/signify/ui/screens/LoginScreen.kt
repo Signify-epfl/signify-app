@@ -84,7 +84,7 @@ fun LoginScreen(navigationActions: NavigationActions) {
       modifier = Modifier.fillMaxSize(),
       content = { padding ->
         Column(
-            modifier = Modifier.fillMaxSize().background(brush = gradient),
+            modifier = Modifier.fillMaxSize().background(brush = gradient).testTag("LoginScreen"),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
