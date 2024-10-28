@@ -167,22 +167,16 @@ fun ASLRecognition(
 
                 item {
                   // Button: "More on American Sign Language"
-                    Button(
-                        onClick = {
-                            val intent = Intent(Intent.ACTION_VIEW).apply {
-                                data = Uri.parse(buttonUriString)
-                            }
-                            context.startActivity(intent)
-                        },
-                        colors = ButtonDefaults.buttonColors(colorResource(R.color.blue)),
-                        modifier = Modifier.width(336.dp).height(50.dp).testTag("practiceButton")
-                    ) {
-                        Text(
-                            text = "More on ASL Alphabet",
-                            color = colorResource(R.color.white)
-                        )
-                    }
-
+                  Button(
+                      onClick = {
+                        val intent =
+                            Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(buttonUriString) }
+                        context.startActivity(intent)
+                      },
+                      colors = ButtonDefaults.buttonColors(colorResource(R.color.blue)),
+                      modifier = Modifier.width(336.dp).height(50.dp).testTag("practiceButton")) {
+                        Text(text = "More on ASL Alphabet", color = colorResource(R.color.white))
+                      }
                 }
               }
         },
