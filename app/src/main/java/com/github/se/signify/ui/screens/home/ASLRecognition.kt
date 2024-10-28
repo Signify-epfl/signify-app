@@ -54,6 +54,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
@@ -65,8 +66,6 @@ import com.github.se.signify.ui.navigation.NavigationActions
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 import java.util.concurrent.Executors
 
-const val buttonUriString =
-    "https://www.google.com/imgres?q=asl%20alphabet&imgurl=https%3A%2F%2Fwww.researchgate.net%2Fpublication%2F269306646%2Ffigure%2Ffig1%2FAS%3A295027705171970%401447351494295%2FThe-American-Manual-Alphabet-Signs-with-a-are-pictured-from-the-side-Reproduced-from.png&imgrefurl=https%3A%2F%2Fwww.researchgate.net%2Ffigure%2FThe-American-Manual-Alphabet-Signs-with-a-are-pictured-from-the-side-Reproduced-from_fig1_269306646&docid=8H-KdI-bjGB48M&tbnid=KndHLcvycA_XpM&vet=12ahUKEwjSipzz7LCJAxUyg_0HHblcB9gQM3oECBUQAA..i&w=514&h=668&hcb=2&itg=1&ved=2ahUKEwjSipzz7LCJAxUyg_0HHblcB9gQM3oECBUQAA"
 // Map to associate each letter with its corresponding drawable resource for ASL gestures
 val gestureImageMap =
     mapOf(
@@ -105,6 +104,7 @@ fun ASLRecognition(
     handLandMarkViewModel: HandLandMarkViewModel,
     navigationActions: NavigationActions
 ) {
+  val buttonUriString = stringResource(id = R.string.button_uri_string)
   val context = LocalContext.current
   var permissionGranted by remember { mutableStateOf(false) }
 
