@@ -40,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
+import com.github.se.signify.model.user.saveUserToFireStore
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -188,6 +189,7 @@ fun rememberFirebaseAuthLauncher(
       scope.launch {
         val authResult = Firebase.auth.signInWithCredential(credential).await()
         onAuthComplete(authResult)
+        saveUserToFireStore()
       }
     } catch (e: ApiException) {
       onAuthError(e)
