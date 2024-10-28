@@ -3,6 +3,7 @@ package com.github.se.signify.ui.screens
 import android.content.Context
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.github.se.signify.SignifyAppPreview
@@ -49,7 +50,7 @@ class MainActivityTest {
 
     composeTestRule.runOnIdle { navigationActions.navigateTo(Route.FRIENDS) }
     composeTestRule.onNodeWithTag("FriendsListScreen").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("OnSearchButton").performClick()
+    composeTestRule.onNodeWithContentDescription("Search").performClick()
 
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Screen.EXERCISE_EASY) }
     composeTestRule.onNodeWithTag("ExerciseScreenEasy").assertIsDisplayed()

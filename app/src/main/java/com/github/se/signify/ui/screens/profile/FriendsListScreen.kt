@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,6 +40,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -87,7 +90,7 @@ fun FriendsListScreen(
           shape = RoundedCornerShape(16.dp),
           modifier =
               Modifier.fillMaxWidth()
-                  .padding(start = 40.dp, end = 40.dp)
+                  .padding(start = 30.dp, end = 30.dp)
                   .border(
                       BorderStroke(2.dp, colorResource(R.color.dark_gray)),
                       RoundedCornerShape(16.dp))
@@ -100,8 +103,8 @@ fun FriendsListScreen(
                   cursorColor = colorResource(R.color.dark_gray)),
           singleLine = true,
           trailingIcon = {
-            IconButton(
-                onClick = {
+            ActionButton(
+                {
                   if (searchQuery.isNotEmpty()) {
                     try {
                       userViewModel.getUserById(searchQuery)
@@ -113,13 +116,9 @@ fun FriendsListScreen(
                     }
                   }
                 },
-                modifier = Modifier.testTag("OnSearchButton")) {
-                  Icon(
-                      imageVector = Icons.Default.Search,
-                      contentDescription = "Search",
-                      tint = colorResource(R.color.white),
-                  )
-                }
+                Icons.Default.Search,
+                colorResource(R.color.blue),
+                "Search")
           })
 
       errorMessage.let { message ->
@@ -194,8 +193,6 @@ fun FriendsListScreen(
         }
       }
 
-      Spacer(modifier = Modifier.height(32.dp))
-
       // My Friends List
       FriendListCard(
           title = "My friends list", items = friends.value, emptyMessage = "You have no friends") {
@@ -224,7 +221,7 @@ fun FriendListCard(
     content: @Composable (String) -> Unit
 ) {
   Card(
-      modifier = Modifier.fillMaxWidth().padding(start = 40.dp, end = 40.dp),
+      modifier = Modifier.fillMaxWidth().padding(start = 30.dp, end = 30.dp),
       colors = CardDefaults.cardColors(containerColor = colorResource(R.color.blue)),
       shape = RoundedCornerShape(16.dp),
       border = BorderStroke(2.dp, colorResource(R.color.dark_gray)),
@@ -255,10 +252,7 @@ fun FriendListCard(
 }
 
 @Composable
-fun FriendItem(
-    friendName: String,
-    userViewModel: UserViewModel = viewModel(factory = UserViewModel.Factory)
-) {
+fun FriendCard(name: String, actions: @Composable RowScope.() -> Unit) {
   Card(
       shape = RoundedCornerShape(50.dp),
       modifier =
@@ -271,23 +265,28 @@ fun FriendItem(
             modifier = Modifier.fillMaxWidth().padding(8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween) {
-              // Name of the friend
-              Text(
-                  text = friendName,
-                  color = colorResource(R.color.dark_gray),
-                  fontWeight = FontWeight.Bold,
-                  modifier = Modifier.padding(start = 16.dp))
-
-              // Button "Remove"
-              Button(
-                  onClick = { userViewModel.removeFriend(currentUserId, friendName) },
-                  colors = ButtonDefaults.buttonColors(colorResource(R.color.dark_gray)),
-                  shape = RoundedCornerShape(50.dp),
-              ) {
-                Text(text = "Remove", color = colorResource(R.color.white))
-              }
+              UserTextName(name) // Name of the friend
+              actions()
             }
       }
+}
+
+@Composable
+fun FriendItem(
+    friendName: String,
+    userViewModel: UserViewModel = viewModel(factory = UserViewModel.Factory)
+) {
+  FriendCard(friendName) {
+
+    // Button "Remove"
+    Button(
+        onClick = { userViewModel.removeFriend(currentUserId, friendName) },
+        colors = ButtonDefaults.buttonColors(colorResource(R.color.dark_gray)),
+        shape = RoundedCornerShape(50.dp),
+    ) {
+      Text(text = "Remove", color = colorResource(R.color.white))
+    }
+  }
 }
 
 @Composable
@@ -295,56 +294,52 @@ fun FriendRequestItem(
     friendRequestName: String,
     userViewModel: UserViewModel = viewModel(factory = UserViewModel.Factory)
 ) {
-  Card(
-      shape = RoundedCornerShape(50.dp),
-      modifier =
-          Modifier.fillMaxWidth()
-              .padding(8.dp)
-              .border(2.dp, colorResource(R.color.dark_gray), RoundedCornerShape(50.dp)),
-      colors = CardDefaults.cardColors(containerColor = colorResource(R.color.white)),
-      elevation = CardDefaults.cardElevation(8.dp)) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween) {
-              // Name of the friend
-              Text(
-                  text = friendRequestName,
-                  color = colorResource(R.color.dark_gray),
-                  fontWeight = FontWeight.Bold,
-                  modifier = Modifier.padding(start = 16.dp))
 
-              Row(
-                  horizontalArrangement = Arrangement.spacedBy(16.dp),
-                  verticalAlignment = Alignment.CenterVertically) {
+  FriendCard(friendRequestName) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically) {
 
-                    // Button "Accept"
-                    IconButton(
-                        onClick = {
-                          userViewModel.acceptFriendRequest(currentUserId, friendRequestName)
-                        },
-                        modifier = Modifier.background(colorResource(R.color.blue), CircleShape)) {
-                          Icon(
-                              imageVector = Icons.Default.AddCircle,
-                              contentDescription = "Accept",
-                              tint = colorResource(R.color.white),
-                          )
-                        }
+          // Button "Accept"
+          ActionButton(
+              { userViewModel.acceptFriendRequest(currentUserId, friendRequestName) },
+              Icons.Default.AddCircle,
+              colorResource(R.color.blue),
+              "Accept")
 
-                    // Button "Decline"
-                    IconButton(
-                        onClick = {
-                          userViewModel.declineFriendRequest(currentUserId, friendRequestName)
-                        },
-                        modifier =
-                            Modifier.background(colorResource(R.color.dark_gray), CircleShape)) {
-                          Icon(
-                              imageVector = Icons.Default.Delete,
-                              contentDescription = "Decline",
-                              tint = colorResource(R.color.white),
-                          )
-                        }
-                  }
-            }
+          // Button "Decline"
+          ActionButton(
+              { userViewModel.declineFriendRequest(currentUserId, friendRequestName) },
+              Icons.Default.Delete,
+              colorResource(R.color.dark_gray),
+              "Decline")
+        }
+  }
+}
+
+@Composable
+fun ActionButton(
+    onClickAction: () -> Unit,
+    icon: ImageVector,
+    backGroundColor: Color,
+    contentDescription: String
+) {
+  IconButton(
+      onClick = onClickAction,
+      modifier = Modifier.background(color = backGroundColor, CircleShape)) {
+        Icon(
+            imageVector = icon,
+            contentDescription = contentDescription,
+            tint = colorResource(R.color.white),
+        )
       }
+}
+
+@Composable
+fun UserTextName(name: String) {
+  Text(
+      text = name,
+      color = colorResource(R.color.dark_gray),
+      fontWeight = FontWeight.Bold,
+      modifier = Modifier.padding(start = 16.dp))
 }
