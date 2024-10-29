@@ -3,26 +3,43 @@ package com.github.se.signify.ui.screens
 import android.content.Context
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.github.se.signify.SignifyAppPreview
+import com.github.se.signify.model.user.UserRepository
+import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Route
 import com.github.se.signify.ui.navigation.Screen
+import com.github.se.signify.ui.screens.profile.FriendsListScreen
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.mock
 
 class MainActivityTest {
   @get:Rule val composeTestRule = createComposeRule()
-  val navigationState = MutableStateFlow<NavigationActions?>(null)
+  private val navigationState = MutableStateFlow<NavigationActions?>(null)
+  private val navigationActions = mock(NavigationActions::class.java)
+
+  @Before
+  fun setUp() {
+    val userRepository = mock(UserRepository::class.java)
+    val userViewModel = UserViewModel(userRepository)
+    val context = mock(Context::class.java)
+
+    composeTestRule.setContent {
+      FriendsListScreen(navigationActions, userViewModel)
+      // Set the content with the mocked context
+      SignifyAppPreview(context, navigationState)
+    }
+  }
 
   @Test
   fun testNavigationFromMainActivityAndEveryScreenIsDisplayed() {
-    val context = mock(Context::class.java)
-    // Set the content with the mocked context
-    composeTestRule.setContent { SignifyAppPreview(context, navigationState) }
+
     composeTestRule.onNodeWithTag("WelcomeScreen").assertIsDisplayed()
 
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Route.PROFILE) }
@@ -31,9 +48,9 @@ class MainActivityTest {
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Screen.AUTH) }
     composeTestRule.onNodeWithTag("LoginScreen").assertIsDisplayed()
 
-    composeTestRule.runOnIdle { navigationState.value?.navigateTo(Route.FRIENDS) }
+    composeTestRule.runOnIdle { navigationActions.navigateTo(Route.FRIENDS) }
     composeTestRule.onNodeWithTag("FriendsListScreen").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("OnSearchButton").performClick()
+    composeTestRule.onNodeWithContentDescription("Search").performClick()
 
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Screen.EXERCISE_EASY) }
     composeTestRule.onNodeWithTag("ExerciseScreenEasy").assertIsDisplayed()

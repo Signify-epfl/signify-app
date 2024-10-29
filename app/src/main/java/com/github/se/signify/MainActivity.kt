@@ -110,17 +110,8 @@ fun SignifyAppPreview(context: Context, navigationState: MutableStateFlow<Naviga
             navigationActions = navigationActions)
       }
 
-      composable(Route.FRIENDS) {
-        FriendsListScreen(
-            currentFriends = listOf("Friend 1", "Friend 2", "Friend 3"), // replace with actual data
-            friendRequests = listOf("Friend 4"), // replace with actual data
-            onRemoveFriend = { /* Handle remove friend */},
-            onAcceptFriendRequest = { /* Handle accept friend request */},
-            onRejectFriendRequest = { /* Handle reject friend request */},
-            onSearchUser = { /* Handle search user */},
-            navigationActions = navigationActions)
-      }
-      composable(Route.STATS) { MyStatsScreen(navigationActions = navigationActions) }
+      composable(Route.FRIENDS) { FriendsListScreen(navigationActions) }
+      composable(Route.STATS) { MyStatsScreen(navigationActions) }
 
       composable(Route.SETTINGS) {
         SettingsScreen(

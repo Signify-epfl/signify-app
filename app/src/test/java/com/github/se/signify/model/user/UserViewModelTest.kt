@@ -11,15 +11,6 @@ class UserViewModelTest {
   private lateinit var userRepository: UserRepository
   private lateinit var userViewModel: UserViewModel
 
-  private val testUser =
-      User(
-          name = "testUserName",
-          uid = "testUserId",
-          email = "testUser@gmail.com",
-          profileImageUrl = null,
-          friendRequests = listOf("fr1", "fr2", "fr3"),
-          friends = listOf("f1", "f2", "f3"))
-
   private val currentUserId = "currentUserId"
   private val friendUserId = "friendUserId"
 
@@ -43,6 +34,7 @@ class UserViewModelTest {
 
   @Test
   fun getUserByIdRequestCallsRepository() {
+    val currentUserId = "testUserId"
     userViewModel.getUserById(currentUserId)
     verify(userRepository).getUserById(eq(currentUserId), any(), any())
   }

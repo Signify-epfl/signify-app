@@ -16,6 +16,9 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
   private val _friendsRequests = MutableStateFlow<List<String>>(emptyList())
   val friendsRequests: StateFlow<List<String>> = _friendsRequests
 
+  private val _searchResult = MutableStateFlow<User?>(null)
+  val searchResult: StateFlow<User?> = _searchResult
+
   private val logTag = "UserViewModel"
 
   init {
@@ -51,8 +54,15 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
   fun getUserById(userId: String) {
     repository.getUserById(
         userId,
-        onSuccess = {},
-        onFailure = { e -> Log.e(logTag, "Failed to get userId: ${e.message}}") })
+        onSuccess = { user -> setSearchResult(user) },
+        onFailure = { e ->
+          setSearchResult(null)
+          Log.e(logTag, "Failed to get userId: ${e.message}}")
+        })
+  }
+
+  fun setSearchResult(user: User?) {
+    _searchResult.value = user
   }
 
   fun sendFriendRequest(currentUserId: String, targetUserId: String) {
@@ -63,26 +73,26 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
         onFailure = { e -> Log.e(logTag, "Failed to send request: ${e.message}") })
   }
 
-  fun acceptFriendRequest(currentUserId: String, targetUserId: String) {
+  fun acceptFriendRequest(currentUserId: String, friendUserId: String) {
     repository.acceptFriendRequest(
         currentUserId,
-        targetUserId,
+        friendUserId,
         onSuccess = { Log.d(logTag, "Friend request accepted successfully.") },
         onFailure = { e -> Log.e(logTag, "Failed to accept friend request: ${e.message}") })
   }
 
-  fun declineFriendRequest(currentUserId: String, targetUserId: String) {
+  fun declineFriendRequest(currentUserId: String, friendUserId: String) {
     repository.declineFriendRequest(
         currentUserId,
-        targetUserId,
+        friendUserId,
         onSuccess = { Log.d(logTag, "Friend request declined successfully.") },
         onFailure = { e -> Log.e(logTag, "Failed to decline friend request: ${e.message}") })
   }
 
-  fun removeFriend(currentUserId: String, targetUserId: String) {
+  fun removeFriend(currentUserId: String, friendUserId: String) {
     repository.removeFriend(
         currentUserId,
-        targetUserId,
+        friendUserId,
         onSuccess = { Log.d(logTag, "Friend removed successfully.") },
         onFailure = { e -> Log.e(logTag, "Failed to remove friend: ${e.message}") })
   }
