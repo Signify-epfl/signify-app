@@ -6,7 +6,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
 class QuestRepositoryFireStore(private val db: FirebaseFirestore) : QuestRepository {
-
+  
   private val collectionPath = "quests"
 
   override fun init(onSuccess: () -> Unit) {
@@ -29,7 +29,7 @@ class QuestRepositoryFireStore(private val db: FirebaseFirestore) : QuestReposit
     }
   }
 
-  private fun documentToQuest(document: DocumentSnapshot): Quest? {
+  internal fun documentToQuest(document: DocumentSnapshot): Quest? {
     return try {
       val title = document.getString("title") ?: return null
       val description = document.getString("description") ?: return null
