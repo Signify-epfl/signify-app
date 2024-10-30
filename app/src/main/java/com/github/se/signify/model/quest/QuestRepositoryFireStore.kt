@@ -6,7 +6,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
 class QuestRepositoryFireStore(private val db: FirebaseFirestore) : QuestRepository {
-  
+
   private val collectionPath = "quests"
 
   override fun init(onSuccess: () -> Unit) {
