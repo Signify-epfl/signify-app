@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -37,7 +38,7 @@ fun QuestScreen(
 ) {
   val quests = questViewModel.quest.collectAsState()
   Scaffold(
-      modifier = Modifier.fillMaxSize(),
+      modifier = Modifier.fillMaxSize().testTag("QuestScreen"),
   ) { padding ->
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
       BackButton { navigationActions.goBack() }
