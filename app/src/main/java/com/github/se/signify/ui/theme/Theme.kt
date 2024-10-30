@@ -1,6 +1,5 @@
 package com.github.se.signify.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
@@ -9,12 +8,14 @@ import com.github.se.signify.R
 
 @Composable
 fun SignifyTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    // For future use if we implement a dark theme
+    // darkTheme: Boolean = isSystemInDarkTheme()
+
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    // dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-  val LightColorScheme =
+  val lightColorScheme =
       lightColorScheme(
           primary = colorResource(id = R.color.blue), secondary = colorResource(id = R.color.white)
           /* Other default colors to override
@@ -43,5 +44,5 @@ fun SignifyTheme(
       }
      */
 
-  MaterialTheme(colorScheme = LightColorScheme, typography = Typography, content = content)
+  MaterialTheme(colorScheme = lightColorScheme, typography = Typography, content = content)
 }
