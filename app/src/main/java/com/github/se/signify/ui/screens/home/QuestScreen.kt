@@ -51,7 +51,8 @@ fun QuestScreen(
             }
       } else {
         Text(
-            modifier = Modifier.padding(padding), text = "You have done your daily quest for today")
+            modifier = Modifier.padding(padding).testTag("emptyQuest"),
+            text = "You have done your daily quest for today")
       }
     }
   }
@@ -60,7 +61,7 @@ fun QuestScreen(
 @Composable
 fun QuestBox(quest: Quest) {
   Card(
-      modifier = Modifier.fillMaxWidth().padding(16.dp),
+      modifier = Modifier.fillMaxWidth().padding(16.dp).testTag("QuestCard"),
       elevation = CardDefaults.elevatedCardElevation(4.dp),
       colors = CardDefaults.cardColors(colorResource(R.color.blue))) {
         Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
@@ -69,7 +70,7 @@ fun QuestBox(quest: Quest) {
               color = colorResource(R.color.white),
               fontWeight = FontWeight.Bold,
               fontSize = 20.sp,
-              modifier = Modifier.padding(bottom = 8.dp).fillMaxWidth(),
+              modifier = Modifier.padding(bottom = 8.dp).fillMaxWidth().testTag("QuestHeader"),
               textAlign = TextAlign.Center)
 
           Spacer(modifier = Modifier.height(20.dp))
@@ -78,16 +79,19 @@ fun QuestBox(quest: Quest) {
               text = quest.title,
               color = colorResource(R.color.white),
               fontWeight = FontWeight.Bold,
-          )
+              modifier = Modifier.testTag("QuestTitle"))
 
           Spacer(modifier = Modifier.height(8.dp))
 
-          Text(text = quest.description, color = colorResource(R.color.white))
+          Text(
+              text = quest.description,
+              color = colorResource(R.color.white),
+              modifier = Modifier.testTag("QuestDescription"))
 
           Spacer(modifier = Modifier.height(20.dp))
 
           Button(
-              modifier = Modifier.fillMaxWidth(),
+              modifier = Modifier.fillMaxWidth().testTag("QuestActionButton"),
               onClick = { /*Takes you to your daily quest*/},
               colors =
                   ButtonDefaults.buttonColors(
