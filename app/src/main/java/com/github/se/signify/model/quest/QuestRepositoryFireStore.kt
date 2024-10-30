@@ -1,6 +1,5 @@
 package com.github.se.signify.model.quest
 
-import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -25,9 +24,7 @@ class QuestRepositoryFireStore(private val db: FirebaseFirestore) : QuestReposit
             task.result?.mapNotNull { document -> documentToQuest(document) } ?: emptyList()
         onSuccess(quests)
       } else {
-        task.exception?.let { e ->
-          onFailure(e)
-        }
+        task.exception?.let { e -> onFailure(e) }
       }
     }
   }
