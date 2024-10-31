@@ -5,9 +5,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import com.github.se.signify.ui.BackButton
 import com.github.se.signify.ui.navigation.NavigationActions
 
 @Composable
 fun MyStatsScreen(navigationActions: NavigationActions) {
+  BackButton { navigationActions.goBack() }
   Column(modifier = Modifier.testTag("StatsScreen")) { Text(text = "My stats Screen") }
 }
