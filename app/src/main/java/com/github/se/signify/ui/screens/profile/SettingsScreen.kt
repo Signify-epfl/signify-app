@@ -114,11 +114,10 @@ fun SettingsScreen(
                                 .padding(vertical = 8.dp)
                                 .background(colorResource(R.color.white)),
                         colors =
-                            TextFieldDefaults.textFieldColors(
-                                containerColor = colorResource(R.color.white),
+                            TextFieldDefaults.colors(
+                                focusedContainerColor = colorResource(R.color.white),
                                 focusedTextColor = colorResource(R.color.dark_gray),
-                                cursorColor = colorResource(R.color.dark_gray)),
-                    )
+                                cursorColor = colorResource(R.color.dark_gray)))
                   }
             }
 

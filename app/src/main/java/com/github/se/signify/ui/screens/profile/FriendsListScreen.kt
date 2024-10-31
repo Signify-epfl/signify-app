@@ -97,8 +97,8 @@ fun FriendsListScreen(
                   .testTag("SearchBar"),
           placeholder = { Text("Search by user ID", color = colorResource(R.color.white)) },
           colors =
-              TextFieldDefaults.textFieldColors(
-                  containerColor = colorResource(R.color.blue),
+              TextFieldDefaults.colors(
+                  focusedContainerColor = colorResource(R.color.blue),
                   focusedTextColor = colorResource(R.color.white),
                   cursorColor = colorResource(R.color.dark_gray)),
           singleLine = true,

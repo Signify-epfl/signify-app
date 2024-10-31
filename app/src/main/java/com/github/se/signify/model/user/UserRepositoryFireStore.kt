@@ -34,7 +34,7 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
       }
 
       if (documentSnapshot != null && documentSnapshot.exists()) {
-        val friends = documentSnapshot.get(friendsListPath) as? List<String>
+        val friends = documentSnapshot[friendsListPath] as? List<String>
         onSuccess(friends ?: emptyList())
       } else {
         onSuccess(emptyList())
@@ -58,7 +58,7 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
       }
 
       if (documentSnapshot != null && documentSnapshot.exists()) {
-        val friendsRequests = documentSnapshot.get(friendRequestsListPath) as? List<String>
+        val friendsRequests = documentSnapshot[friendRequestsListPath] as? List<String>
         onSuccess(friendsRequests ?: emptyList())
       } else {
         onSuccess(emptyList())
@@ -111,7 +111,7 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
       }
 
       if (documentSnapshot != null && documentSnapshot.exists()) {
-        val userName = documentSnapshot.get("name") as? String
+        val userName = documentSnapshot["name"] as? String
         onSuccess(userName ?: "unknown")
       } else {
         onSuccess("unknown")
