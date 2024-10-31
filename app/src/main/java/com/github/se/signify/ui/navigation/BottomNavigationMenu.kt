@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,12 +32,12 @@ fun BottomNavigationMenu(
               .border(2.dp, colorResource(R.color.blue)) // Top blue line
               .padding(bottom = 2.dp)
               .testTag("BottomNavigationBar")) {
-        BottomNavigation(
+        NavigationBar(
             modifier = Modifier.fillMaxWidth().height(60.dp),
-            backgroundColor = colorResource(R.color.white) // Set background to white
+            containerColor = colorResource(R.color.white) // Set background to white
             ) {
               tabList.forEach { tab ->
-                BottomNavigationItem(
+                NavigationBarItem(
                     icon = {
                       Icon(
                           painterResource(id = tab.icon),
