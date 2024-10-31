@@ -34,223 +34,252 @@ import com.github.se.signify.ui.navigation.NavigationActions
 
 @Composable
 fun MyStatsScreen(
-  navigationActions: NavigationActions,
-  numberOfDays: Int,
-  lettersLearned: List<Char>,
-  exercisesAchieved: List<Int>,
-  questsAchieved: List<Int>
+    navigationActions: NavigationActions,
+    numberOfDays: Int,
+    lettersLearned: List<Char>,
+    exercisesAchieved: List<Int>,
+    questsAchieved: List<Int>
 ) {
-  Scaffold(
-    topBar = {
-      // Top blue bar
-      Box(
-        modifier = Modifier.fillMaxWidth()
-          .height(4.dp)
-          .background(MaterialTheme.colorScheme.primary)
-          .testTag("TopBlueBar")
-      )
-    },
-    content = { padding ->
-      Box(modifier = Modifier.fillMaxSize().padding(padding).testTag("MyStatsScreen")) {
-        // Back button aligned to the top-left corner
-        BackButton { navigationActions.goBack() }
-        Column(
-          modifier = Modifier.fillMaxSize()
-            .padding(
-              top = 80.dp,
-              start = 16.dp,
-              end = 16.dp) // Padding to avoid overlap with the back button
-            .testTag("MyStatsContent"),
-          horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-          // Number of days
-          Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-          ) {
-            Icon(
-              painter = painterResource(id = R.drawable.flame),
-              contentDescription = "Days Icon",
-              tint = colorResource(R.color.red),
-              modifier = Modifier.size(32.dp).testTag("flameIcon")
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(text = "$numberOfDays days", fontWeight = FontWeight.Bold)
-          }
-          Spacer(modifier = Modifier.height(32.dp))
-          // Letters learned
-          Text(
-            text = "All letters learned",
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-            color = colorResource(R.color.dark_gray)
-          )
-          Box(
-            modifier = Modifier.fillMaxWidth()
-              .border(2.dp, colorResource(R.color.dark_gray), RoundedCornerShape(12.dp))
-              .clip(RoundedCornerShape(8.dp))
-              .padding(12.dp)
-              .testTag("lettersBox")
-          ) {
-            HorizontalLetterList(lettersLearned)
-          }
-          Spacer(modifier = Modifier.height(64.dp))
-          // Number of exercises achieved
-          Row(
-            modifier = Modifier.fillMaxWidth()
-              .padding(vertical = 8.dp)
-              .testTag("ExercisesRow"),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-          ) {
-            Text(
-              text = "Number of exercises achieved",
-              fontSize = 16.sp,
-              color = colorResource(R.color.black),
-              modifier = Modifier.testTag("ExercisesText")
-            )
+    Scaffold(
+        topBar = {
+            // Top blue bar
             Box(
-              modifier = Modifier.size(50.dp)
-                .border(2.dp, colorResource(R.color.blue))
-                .clip(RoundedCornerShape(12.dp))
-                .background(colorResource(R.color.white))
-                .testTag("ExercisesEasyCountBox"),
-              contentAlignment = Alignment.Center
-            ) {
-              Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-              ) {
-                Text(
-                  text = "EASY",
-                  fontSize = 12.sp,
-                  color = colorResource(R.color.black),
-                  modifier = Modifier.testTag("Easy")
-                )
-                Text(
-                  text = "${exercisesAchieved[0]}",
-                  fontSize = 20.sp,
-                  color = colorResource(R.color.black),
-                  modifier = Modifier.testTag("ExercisesEasyCount")
-                )
-              }
-            }
-            Box(
-              modifier = Modifier.size(50.dp)
-                .border(2.dp, colorResource(R.color.blue))
-                .clip(RoundedCornerShape(12.dp))
-                .background(colorResource(R.color.white))
-                .testTag("ExercisesHardCountBox"),
-              contentAlignment = Alignment.Center
-            ) {
-              Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-              ) {
-                Text(
-                  text = "HARD",
-                  fontSize = 12.sp,
-                  color = colorResource(R.color.black),
-                  modifier = Modifier.testTag("Hard")
-                )
-                Text(
-                  text = "${exercisesAchieved[1]}",
-                  fontSize = 20.sp,
-                  color = colorResource(R.color.black),
-                  modifier = Modifier.testTag("ExercisesHardCount")
-                )
-              }
-            }
-          }
-          Spacer(modifier = Modifier.height(12.dp))
-          // Number of quests achieved
-          Row(
-            modifier = Modifier.fillMaxWidth()
-              .padding(vertical = 8.dp)
-              .testTag("QuestsRow"),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-          ) {
-            Text(
-              text = "Number of quests achieved",
-              fontSize = 16.sp,
-              color = colorResource(R.color.black),
-              modifier = Modifier.testTag("QuestsText")
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(4.dp)
+                    .background(MaterialTheme.colorScheme.primary)
+                    .testTag("TopBlueBar")
             )
+        },
+        content = { padding ->
             Box(
-              modifier = Modifier.size(50.dp)
-                .border(2.dp, colorResource(R.color.blue))
-                .clip(RoundedCornerShape(12.dp))
-                .background(colorResource(R.color.white))
-                .testTag("DailyQuestCountBox"),
-              contentAlignment = Alignment.Center
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .testTag("MyStatsScreen")
             ) {
-              Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-              ) {
-                Text(
-                  text = "DAILY",
-                  fontSize = 12.sp,
-                  color = colorResource(R.color.black),
-                  modifier = Modifier.testTag("Daily")
-                )
-                Text(
-                  text = "${questsAchieved[0]}",
-                  fontSize = 20.sp,
-                  color = colorResource(R.color.black),
-                  modifier = Modifier.testTag("DailyQuestCount")
-                )
-              }
-            }
-            Box(
-              modifier = Modifier.size(50.dp)
-                .border(2.dp, colorResource(R.color.blue))
-                .clip(RoundedCornerShape(12.dp))
-                .background(colorResource(R.color.white))
-                .testTag("WeeklyQuestsCountBox"),
-              contentAlignment = Alignment.Center
-            ) {
-              Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-              ) {
-                Text(
-                  text = "WEEKLY",
-                  fontSize = 12.sp,
-                  color = colorResource(R.color.black),
-                  modifier = Modifier.testTag("Weekly")
-                )
-                Text(
-                  text = "${questsAchieved[1]}",
-                  fontSize = 20.sp,
-                  color = colorResource(R.color.black),
-                  modifier = Modifier.testTag("WeeklyQuestsCount")
-                )
-              }
-            }
-          }
-          Spacer(modifier = Modifier.height(60.dp))
-          // Graphs and statistics
-          Box(
-            modifier = Modifier.fillMaxWidth()
-              .height(240.dp)
-              .clip(RoundedCornerShape(12.dp))
-              .background(colorResource(R.color.dark_gray))
-              .padding(16.dp),
-            contentAlignment = Alignment.Center
-          ) {
-            Text(
-              text = "Graphs and stats",
-              fontSize = 16.sp,
-              color = colorResource(R.color.black),
-              fontWeight = FontWeight.Normal
-            )
-          }
+                // Back button aligned to the top-left corner
+                BackButton { navigationActions.goBack() }
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(
+                            top = 80.dp,
+                            start = 16.dp,
+                            end = 16.dp
+                        ) // Padding to avoid overlap with the back button
+                        .testTag("MyStatsContent"),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    // Number of days
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.flame),
+                            contentDescription = "Days Icon",
+                            tint = colorResource(R.color.red),
+                            modifier = Modifier
+                                .size(32.dp)
+                                .testTag("flameIcon")
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(text = "$numberOfDays days", fontWeight = FontWeight.Bold)
+                    }
 
+                    Spacer(modifier = Modifier.height(32.dp))
+
+                    // Letters learned
+                    Text(
+                        text = "All letters learned",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        color = colorResource(R.color.dark_gray)
+                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(
+                                2.dp,
+                                colorResource(R.color.dark_gray),
+                                RoundedCornerShape(12.dp)
+                            )
+                            .clip(RoundedCornerShape(8.dp))
+                            .padding(12.dp)
+                            .testTag("lettersBox")
+                    ) {
+                        HorizontalLetterList(lettersLearned)
+                    }
+
+                    Spacer(modifier = Modifier.height(64.dp))
+
+                    // Number of exercises achieved
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                            .testTag("ExercisesRow"),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Number of exercises achieved",
+                            fontSize = 16.sp,
+                            color = colorResource(R.color.black),
+                            modifier = Modifier.testTag("ExercisesText")
+                        )
+                        Box(
+                            modifier = Modifier
+                                .size(50.dp)
+                                .border(2.dp, colorResource(R.color.blue))
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(colorResource(R.color.white))
+                                .testTag("ExercisesEasyCountBox"),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = "EASY",
+                                    fontSize = 12.sp,
+                                    color = colorResource(R.color.black),
+                                    modifier = Modifier.testTag("Easy")
+                                )
+                                Text(
+                                    text = "${exercisesAchieved[0]}",
+                                    fontSize = 20.sp,
+                                    color = colorResource(R.color.black),
+                                    modifier = Modifier.testTag("ExercisesEasyCount")
+                                )
+                            }
+                        }
+                        Box(
+                            modifier = Modifier
+                                .size(50.dp)
+                                .border(2.dp, colorResource(R.color.blue))
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(colorResource(R.color.white))
+                                .testTag("ExercisesHardCountBox"),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = "HARD",
+                                    fontSize = 12.sp,
+                                    color = colorResource(R.color.black),
+                                    modifier = Modifier.testTag("Hard")
+                                )
+                                Text(
+                                    text = "${exercisesAchieved[1]}",
+                                    fontSize = 20.sp,
+                                    color = colorResource(R.color.black),
+                                    modifier = Modifier.testTag("ExercisesHardCount")
+                                )
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    // Number of quests achieved
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                            .testTag("QuestsRow"),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Number of quests achieved",
+                            fontSize = 16.sp,
+                            color = colorResource(R.color.black),
+                            modifier = Modifier.testTag("QuestsText")
+                        )
+                        Box(
+                            modifier = Modifier
+                                .size(50.dp)
+                                .border(2.dp, colorResource(R.color.blue))
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(colorResource(R.color.white))
+                                .testTag("DailyQuestCountBox"),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = "DAILY",
+                                    fontSize = 12.sp,
+                                    color = colorResource(R.color.black),
+                                    modifier = Modifier.testTag("Daily")
+                                )
+                                Text(
+                                    text = "${questsAchieved[0]}",
+                                    fontSize = 20.sp,
+                                    color = colorResource(R.color.black),
+                                    modifier = Modifier.testTag("DailyQuestCount")
+                                )
+                            }
+                        }
+                        Box(
+                            modifier = Modifier
+                                .size(50.dp)
+                                .border(2.dp, colorResource(R.color.blue))
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(colorResource(R.color.white))
+                                .testTag("WeeklyQuestsCountBox"),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = "WEEKLY",
+                                    fontSize = 12.sp,
+                                    color = colorResource(R.color.black),
+                                    modifier = Modifier.testTag("Weekly")
+                                )
+                                Text(
+                                    text = "${questsAchieved[1]}",
+                                    fontSize = 20.sp,
+                                    color = colorResource(R.color.black),
+                                    modifier = Modifier.testTag("WeeklyQuestsCount")
+                                )
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(60.dp))
+
+                    // Graphs and statistics
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(240.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(colorResource(R.color.dark_gray))
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Graphs and stats",
+                            fontSize = 16.sp,
+                            color = colorResource(R.color.black),
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
+                }
+            }
         }
-      }
-    }
-  )
+    )
 }
