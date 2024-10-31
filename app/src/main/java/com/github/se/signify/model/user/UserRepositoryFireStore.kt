@@ -34,7 +34,7 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
       }
 
       if (documentSnapshot != null && documentSnapshot.exists()) {
-        val friends = documentSnapshot[friendsListPath] as? List<String>
+        val friends = (documentSnapshot[friendsListPath] as? List<*>)?.filterIsInstance<String>()
         onSuccess(friends ?: emptyList())
       } else {
         onSuccess(emptyList())
@@ -58,7 +58,8 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
       }
 
       if (documentSnapshot != null && documentSnapshot.exists()) {
-        val friendsRequests = documentSnapshot[friendRequestsListPath] as? List<String>
+        val friendsRequests =
+            (documentSnapshot[friendRequestsListPath] as? List<*>)?.filterIsInstance<String>()
         onSuccess(friendsRequests ?: emptyList())
       } else {
         onSuccess(emptyList())
