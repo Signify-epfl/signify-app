@@ -8,10 +8,11 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.AspectRatio
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
+import androidx.camera.core.resolutionselector.AspectRatioStrategy
+import androidx.camera.core.resolutionselector.ResolutionSelector
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.Canvas
@@ -27,16 +28,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -99,6 +100,7 @@ val gestureImageMap =
  * Composable that handles ASL recognition. It checks for camera permissions, launches the camera
  * preview, and displays recognized gestures and images.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ASLRecognition(
     handLandMarkViewModel: HandLandMarkViewModel,
@@ -128,11 +130,10 @@ fun ASLRecognition(
     Scaffold(
         topBar = {
           TopAppBar(
+              modifier = Modifier.background(color = Color.Transparent),
               title = {
                 Text("Practice ASL & Test it !", modifier = Modifier.testTag("aslRecognitionTitle"))
               },
-              backgroundColor = Color.Transparent, // Transparent background
-              contentColor = MaterialTheme.colors.onSurface,
               navigationIcon = {
                 IconButton(onClick = { navigationActions.goBack() }) {
                   Icon(
@@ -281,8 +282,12 @@ fun CameraPreviewWithAnalysisView(handLandMarkViewModel: HandLandMarkViewModel) 
           val cameraProvider = cameraProviderFuture.get()
           val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
+          val resolutionSelector =
+              ResolutionSelector.Builder()
+                  .setAspectRatioStrategy(AspectRatioStrategy.RATIO_4_3_FALLBACK_AUTO_STRATEGY)
+                  .build()
           val preview =
-              Preview.Builder().setTargetAspectRatio(AspectRatio.RATIO_4_3).build().also {
+              Preview.Builder().setResolutionSelector(resolutionSelector).build().also {
                 it.setSurfaceProvider(previewView.surfaceProvider)
               }
 
