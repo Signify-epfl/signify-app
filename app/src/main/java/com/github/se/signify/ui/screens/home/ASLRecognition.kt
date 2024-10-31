@@ -2,7 +2,9 @@ package com.github.se.signify.ui.screens.home
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,14 +19,16 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
@@ -52,6 +56,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
@@ -101,6 +106,7 @@ fun ASLRecognition(
     handLandMarkViewModel: HandLandMarkViewModel,
     navigationActions: NavigationActions
 ) {
+  val buttonUriString = stringResource(id = R.string.button_uri_string)
   val context = LocalContext.current
   var permissionGranted by remember { mutableStateOf(false) }
 
@@ -138,44 +144,39 @@ fun ASLRecognition(
               })
         },
         content = { paddingValues ->
-          LazyColumn(
+          Column(
               modifier =
-                  Modifier.background(colorResource(R.color.white))
+                  Modifier.verticalScroll(rememberScrollState())
+                      .background(colorResource(R.color.white))
                       .padding(paddingValues)
                       .padding(start = 40.dp, end = 40.dp),
               horizontalAlignment = Alignment.CenterHorizontally) {
-                item {
-                  Box(
-                      modifier =
-                          Modifier.width(336.dp)
-                              .height(252.dp)
-                              .background(color = colorResource(R.color.white)),
-                  ) {
-                    CameraPreviewWithAnalysisView(handLandMarkViewModel)
-                  }
+                Box(
+                    modifier =
+                        Modifier.width(336.dp)
+                            .height(252.dp)
+                            .background(color = colorResource(R.color.white)),
+                ) {
+                  CameraPreviewWithAnalysisView(handLandMarkViewModel)
                 }
 
-                item { Spacer(modifier = Modifier.height(30.dp)) }
+                Spacer(modifier = Modifier.height(30.dp))
 
-                item { GestureOverlayView(handLandMarkViewModel) }
+                GestureOverlayView(handLandMarkViewModel)
 
-                item { Spacer(modifier = Modifier.height(20.dp)) }
+                Spacer(modifier = Modifier.height(20.dp))
 
-                item {
-                  // Button: "More on American Sign Language"
-                  Button(
-                      onClick = { /* For now, do nothing */},
-                      colors =
-                          ButtonDefaults.buttonColors(colorResource(R.color.blue)), // Blue color
-                      modifier =
-                          Modifier.width(336.dp) // Match the width of the box above
-                              .height(50.dp)
-                              .testTag("practiceButton")) {
-                        Text(
-                            text = "More on ASL Alphabet",
-                            color = colorResource(R.color.white)) // One-line text with white color
-                  }
-                }
+                // Button: "More on American Sign Language"
+                Button(
+                    onClick = {
+                      val intent =
+                          Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(buttonUriString) }
+                      context.startActivity(intent)
+                    },
+                    colors = ButtonDefaults.buttonColors(colorResource(R.color.blue)),
+                    modifier = Modifier.width(336.dp).height(50.dp).testTag("practiceButton")) {
+                      Text(text = "More on ASL Alphabet", color = colorResource(R.color.white))
+                    }
               }
         },
         bottomBar = {

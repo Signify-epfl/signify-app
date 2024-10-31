@@ -128,7 +128,9 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
           if (handLandMarkerResult != null && handLandMarkerResult?.landmarks()?.size != 0) {
             onSuccess(handLandMarkerResult!!)
           } else {
-            solution = ""
+            if (handLandMarkerResult != null) {
+              onSuccess(handLandMarkerResult!!)
+            }
           }
         }
       } else {
