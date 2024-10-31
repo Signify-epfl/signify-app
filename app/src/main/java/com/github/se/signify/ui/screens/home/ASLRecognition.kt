@@ -2,7 +2,9 @@ package com.github.se.signify.ui.screens.home
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -52,6 +54,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
@@ -101,6 +104,7 @@ fun ASLRecognition(
     handLandMarkViewModel: HandLandMarkViewModel,
     navigationActions: NavigationActions
 ) {
+  val buttonUriString = stringResource(id = R.string.button_uri_string)
   val context = LocalContext.current
   var permissionGranted by remember { mutableStateOf(false) }
 
@@ -164,17 +168,15 @@ fun ASLRecognition(
                 item {
                   // Button: "More on American Sign Language"
                   Button(
-                      onClick = { /* For now, do nothing */},
-                      colors =
-                          ButtonDefaults.buttonColors(colorResource(R.color.blue)), // Blue color
-                      modifier =
-                          Modifier.width(336.dp) // Match the width of the box above
-                              .height(50.dp)
-                              .testTag("practiceButton")) {
-                        Text(
-                            text = "More on ASL Alphabet",
-                            color = colorResource(R.color.white)) // One-line text with white color
-                  }
+                      onClick = {
+                        val intent =
+                            Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(buttonUriString) }
+                        context.startActivity(intent)
+                      },
+                      colors = ButtonDefaults.buttonColors(colorResource(R.color.blue)),
+                      modifier = Modifier.width(336.dp).height(50.dp).testTag("practiceButton")) {
+                        Text(text = "More on ASL Alphabet", color = colorResource(R.color.white))
+                      }
                 }
               }
         },

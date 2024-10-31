@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
@@ -21,6 +22,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
+import org.mockito.kotlin.times
 
 @RunWith(AndroidJUnit4::class)
 class ASLRecognitionTest : LifecycleOwner {
@@ -64,6 +66,11 @@ class ASLRecognitionTest : LifecycleOwner {
     composeTestRule.onNodeWithTag("gestureOverlayView").assertIsDisplayed()
     composeTestRule.onNodeWithTag("aslRecognitionTitle").assertIsDisplayed()
     composeTestRule.onNodeWithTag("bottomNavigationMenu").assertIsDisplayed()
+  }
+
+  @Test
+  fun buttonIsWorkingAsIntended() {
+    composeTestRule.onNodeWithTag("practiceButton").performClick()
   }
 
   override val lifecycle: Lifecycle
