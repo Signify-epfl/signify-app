@@ -6,6 +6,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
@@ -22,12 +23,12 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
-import org.mockito.kotlin.times
 
 @RunWith(AndroidJUnit4::class)
 class ASLRecognitionTest : LifecycleOwner {
 
-  @get:Rule val cameraAccess = GrantPermissionRule.grant(Manifest.permission.CAMERA)
+  @get:Rule
+  val cameraAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
 
   @get:Rule val composeTestRule = createComposeRule()
 
@@ -61,16 +62,17 @@ class ASLRecognitionTest : LifecycleOwner {
 
   @Test
   fun allComponentsAreDisplayed() {
-    composeTestRule.onNodeWithTag("practiceButton").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("cameraPreview").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("gestureOverlayView").assertIsDisplayed()
+    // Modify this to scroll to each component
+    composeTestRule.onNodeWithTag("practiceButton").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("cameraPreview").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("gestureOverlayView").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("aslRecognitionTitle").assertIsDisplayed()
     composeTestRule.onNodeWithTag("bottomNavigationMenu").assertIsDisplayed()
   }
 
   @Test
   fun buttonIsWorkingAsIntended() {
-    composeTestRule.onNodeWithTag("practiceButton").performClick()
+    composeTestRule.onNodeWithTag("practiceButton").performScrollTo().performClick()
   }
 
   override val lifecycle: Lifecycle
