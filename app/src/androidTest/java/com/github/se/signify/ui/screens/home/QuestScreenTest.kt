@@ -14,7 +14,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
-import org.mockito.kotlin.any
 
 class QuestScreenTest {
 
@@ -34,20 +33,6 @@ class QuestScreenTest {
     questViewModel = QuestViewModel(questRepository)
 
     `when`(navigationActions.currentRoute()).thenReturn(Route.QUEST)
-  }
-
-  @Test
-  fun displayTextWhenEmpty() {
-    `when`(questRepository.getDailyQuest(any(), any())).then {
-      it.getArgument<(List<Quest>) -> Unit>(0)(listOf())
-    }
-
-    composeTestRule.setContent {
-      QuestScreen(navigationActions = navigationActions, questViewModel = questViewModel)
-    }
-
-    questViewModel.getDailyQuest()
-    composeTestRule.onNodeWithTag("emptyQuest").assertIsDisplayed()
   }
 
   @Test

@@ -43,17 +43,11 @@ fun QuestScreen(
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
       BackButton { navigationActions.goBack() }
 
-      if (quests.value.isNotEmpty()) {
-        LazyColumn(
-            contentPadding = PaddingValues(vertical = 8.dp),
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(padding)) {
-              items(quests.value.size) { n -> QuestBox(quest = quests.value[n]) }
-            }
-      } else {
-        Text(
-            modifier = Modifier.padding(padding).testTag("emptyQuest"),
-            text = "You have done your daily quest for today")
-      }
+      LazyColumn(
+          contentPadding = PaddingValues(vertical = 8.dp),
+          modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(padding)) {
+            items(quests.value.size) { n -> QuestBox(quest = quests.value[n]) }
+          }
     }
   }
 }
