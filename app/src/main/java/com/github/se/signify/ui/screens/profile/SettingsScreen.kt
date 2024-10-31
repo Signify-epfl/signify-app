@@ -116,6 +116,7 @@ fun SettingsScreen(
                         colors =
                             TextFieldDefaults.colors(
                                 focusedContainerColor = colorResource(R.color.white),
+                                unfocusedContainerColor = colorResource(R.color.white),
                                 focusedTextColor = colorResource(R.color.dark_gray),
                                 cursorColor = colorResource(R.color.dark_gray)))
                   }
