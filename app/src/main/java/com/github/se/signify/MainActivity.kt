@@ -82,7 +82,7 @@ fun SignifyAppPreview(context: Context, navigationState: MutableStateFlow<Naviga
     }
 
     composable(Route.NEW_CHALLENGE) { NewChallengeScreen(navigationActions) }
-      composable(Route.CREATE_CHALLENGE) { CreateAChallengeScreen(navigationActions) }
+    composable(Route.CREATE_CHALLENGE) { CreateAChallengeScreen(navigationActions) }
     composable(Route.CHALLENGE_HISTORY) { ChallengeHistoryScreen(navigationActions, 1, 1) }
     navigation(
         startDestination = Screen.QUEST,

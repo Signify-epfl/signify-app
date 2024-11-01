@@ -10,4 +10,3 @@ data class User(
     val ongoingChallenges: List<String> = emptyList(), // New field for ongoing challenges
     val pastChallenges: List<String> = emptyList() // New field for past challenges
 )
-

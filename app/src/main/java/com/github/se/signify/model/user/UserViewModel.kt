@@ -1,7 +1,6 @@
 package com.github.se.signify.model.user
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.Firebase
@@ -116,31 +115,27 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
         onFailure = { e -> Log.e(logTag, "Failed to remove friend: ${e.message}") })
   }
 
-    fun addOngoingChallenge(userId: String, challengeId: String) {
-        repository.addOngoingChallenge(
-            userId,
-            challengeId,
-            onSuccess = { Log.d(logTag, "Challenge added to ongoing successfully.") },
-            onFailure = { e -> Log.e(logTag, "Failed to add challenge to ongoing: ${e.message}") }
-        )
-    }
+  fun addOngoingChallenge(userId: String, challengeId: String) {
+    repository.addOngoingChallenge(
+        userId,
+        challengeId,
+        onSuccess = { Log.d(logTag, "Challenge added to ongoing successfully.") },
+        onFailure = { e -> Log.e(logTag, "Failed to add challenge to ongoing: ${e.message}") })
+  }
 
-    fun removeOngoingChallenge(userId: String, challengeId: String) {
-        repository.removeOngoingChallenge(
-            userId,
-            challengeId,
-            onSuccess = { Log.d(logTag, "Challenge removed from ongoing successfully.") },
-            onFailure = { e -> Log.e(logTag, "Failed to remove challenge from ongoing: ${e.message}") }
-        )
-    }
+  fun removeOngoingChallenge(userId: String, challengeId: String) {
+    repository.removeOngoingChallenge(
+        userId,
+        challengeId,
+        onSuccess = { Log.d(logTag, "Challenge removed from ongoing successfully.") },
+        onFailure = { e -> Log.e(logTag, "Failed to remove challenge from ongoing: ${e.message}") })
+  }
 
-    fun addPastChallenge(userId: String, challengeId: String) {
-        repository.addPastChallenge(
-            userId,
-            challengeId,
-            onSuccess = { Log.d(logTag, "Challenge added to past successfully.") },
-            onFailure = { e -> Log.e(logTag, "Failed to add challenge to past: ${e.message}") }
-        )
-    }
-
+  fun addPastChallenge(userId: String, challengeId: String) {
+    repository.addPastChallenge(
+        userId,
+        challengeId,
+        onSuccess = { Log.d(logTag, "Challenge added to past successfully.") },
+        onFailure = { e -> Log.e(logTag, "Failed to add challenge to past: ${e.message}") })
+  }
 }
