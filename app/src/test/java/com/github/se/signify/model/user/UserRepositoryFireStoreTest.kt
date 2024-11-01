@@ -2,7 +2,6 @@ package com.github.se.signify.model.user
 
 import android.os.Looper
 import androidx.test.core.app.ApplicationProvider
-import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
@@ -39,18 +38,8 @@ class ToDosRepositoryFireStoreTest {
   @Mock private lateinit var mockFriendUserDocRef: DocumentReference // Mock for friend user
   @Mock private lateinit var mockCollectionReference: CollectionReference
   @Mock private lateinit var mockToDoQuerySnapshot: QuerySnapshot
-  @Mock private lateinit var mockUpdateTask: Task<Void>
 
   private lateinit var userRepositoryFireStore: UserRepositoryFireStore
-
-  private val testUser =
-      User(
-          name = "testUserName",
-          uid = "testUserId",
-          email = "testUser@gmail.com",
-          profileImageUrl = null,
-          friendRequests = listOf("fr1", "fr2", "fr3"),
-          friends = listOf("f1", "f2", "f3"))
 
   // Arrange
   private val currentUserId = "currentUserId"
@@ -87,9 +76,8 @@ class ToDosRepositoryFireStoreTest {
 
     // Call the method under test
     userRepositoryFireStore.getFriendsList(
-        testUser.uid,
+        currentUserId,
         onSuccess = {
-
           // Do nothing; we just want to verify that the 'documents' field was accessed
         },
         onFailure = { fail("Failure callback should not be called") })
@@ -108,9 +96,28 @@ class ToDosRepositoryFireStoreTest {
 
     // Call the method under test
     userRepositoryFireStore.getRequestsFriendsList(
-        testUser.uid,
+        currentUserId,
         onSuccess = {
+          // Do nothing; we just want to verify that the 'documents' field was accessed
+        },
+        onFailure = { fail("Failure callback should not be called") })
 
+    // Verify that the 'documents' field was accessed
+    verify(timeout(100)) { (mockToDoQuerySnapshot).documents }
+  }
+
+  @Test
+  fun getUserName_callsDocuments() {
+    // Ensure that mockToDoQuerySnapshot is properly initialized and mocked
+    `when`(mockCollectionReference.get()).thenReturn(Tasks.forResult(mockToDoQuerySnapshot))
+
+    // Ensure the QuerySnapshot returns a list of mock DocumentSnapshots
+    `when`(mockToDoQuerySnapshot.documents).thenReturn(listOf())
+
+    // Call the method under test
+    userRepositoryFireStore.getUserName(
+        currentUserId,
+        onSuccess = {
           // Do nothing; we just want to verify that the 'documents' field was accessed
         },
         onFailure = { fail("Failure callback should not be called") })
@@ -138,7 +145,7 @@ class ToDosRepositoryFireStoreTest {
     // Simulate successful conversion of document to User object
     `when`(mockDocumentSnapshot.toObject(User::class.java)).thenReturn(mockUser)
 
-    // Simulate Firestore get() method returning the document snapshot
+    // Simulate FireStore get() method returning the document snapshot
     `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot))
 
     var successCallbackCalled = false
@@ -159,7 +166,7 @@ class ToDosRepositoryFireStoreTest {
     // Assert
     assertTrue(successCallbackCalled)
 
-    // Verify that the Firestore `get()` method was called
+    // Verify that the FireStore `get()` method was called
     verify(mockCurrentUserDocRef).get()
   }
 
@@ -171,7 +178,7 @@ class ToDosRepositoryFireStoreTest {
     // Simulate that the document does not exist
     `when`(mockDocumentSnapshot.exists()).thenReturn(false)
 
-    // Simulate Firestore get() method returning a successful result, but with a non-existent
+    // Simulate FireStore get() method returning a successful result, but with a non-existent
     // document
     `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot))
 
@@ -193,7 +200,7 @@ class ToDosRepositoryFireStoreTest {
     // Assert
     assertTrue(failureCallbackCalled)
 
-    // Verify that the Firestore `get()` method was called
+    // Verify that the FireStore `get()` method was called
     verify(mockCurrentUserDocRef).get()
   }
 
@@ -202,7 +209,7 @@ class ToDosRepositoryFireStoreTest {
     // Arrange
     val testException = Exception("Test FireStore failure") // Simulate FireStore failure
 
-    // Simulate Firestore failing to retrieve the document
+    // Simulate FireStore failing to retrieve the document
     `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forException(testException))
 
     var failureCallbackCalled = false
@@ -251,7 +258,7 @@ class ToDosRepositoryFireStoreTest {
     // Arrange
     val testException = Exception("Test Firestore failure") // Simulate Firestore failure
 
-    // Mock Firestore document reference to fail the update
+    // Mock FireStore document reference to fail the update
     `when`(mockFriendUserDocRef.update(anyString(), any()))
         .thenReturn(Tasks.forException(testException)) // Simulate failure for update
 
@@ -274,7 +281,7 @@ class ToDosRepositoryFireStoreTest {
     // Assert that the failure callback was triggered
     assertTrue(failureCallbackCalled)
 
-    // Verify that Firestore update was attempted
+    // Verify that FireStore update was attempted
     verify(mockFriendUserDocRef)
         .update(eq("friendRequests"), ArgumentMatchers.any(FieldValue::class.java))
   }
@@ -310,7 +317,7 @@ class ToDosRepositoryFireStoreTest {
     // Arrange
     val testException = Exception("Test Firestore failure") // Simulate Firestore failure
 
-    // Mock Firestore document references with one of the updates failing
+    // Mock FireStore document references with one of the updates failing
     `when`(mockFriendUserDocRef.update(anyString(), any()))
         .thenReturn(Tasks.forResult(null)) // Simulate success for the first update
 
@@ -374,7 +381,7 @@ class ToDosRepositoryFireStoreTest {
     // Arrange
     val testException = Exception("Test Firestore failure") // Simulate Firestore failure
 
-    // Mock Firestore document reference with failure for the update call
+    // Mock FireStore document reference with failure for the update call
     `when`(mockCurrentUserDocRef.update(anyString(), any()))
         .thenReturn(Tasks.forException(testException)) // Simulate failure for update
 
@@ -397,7 +404,7 @@ class ToDosRepositoryFireStoreTest {
     // Assert that the failure callback was triggered
     assertTrue(failureCallbackCalled)
 
-    // Verify that Firestore `update()` was attempted and failed
+    // Verify that FireStore `update()` was attempted and failed
     verify(mockCurrentUserDocRef)
         .update(eq("friendRequests"), ArgumentMatchers.any(FieldValue::class.java))
   }
@@ -430,7 +437,7 @@ class ToDosRepositoryFireStoreTest {
     // Arrange
     val testException = Exception("Test Firestore failure") // Simulate Firestore failure
 
-    // Mock Firestore document references with one of the updates failing
+    // Mock FireStore document references with one of the updates failing
     `when`(mockFriendUserDocRef.update(anyString(), any()))
         .thenReturn(Tasks.forException(testException)) // Simulate failure for friendUser update
 

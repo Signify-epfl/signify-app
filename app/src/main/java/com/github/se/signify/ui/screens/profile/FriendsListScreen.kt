@@ -23,7 +23,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
@@ -58,7 +57,6 @@ import kotlinx.coroutines.delay
 
 val currentUserId = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0) ?: "unknown"
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FriendsListScreen(
     navigationActions: NavigationActions,
@@ -97,8 +95,9 @@ fun FriendsListScreen(
                   .testTag("SearchBar"),
           placeholder = { Text("Search by user ID", color = colorResource(R.color.white)) },
           colors =
-              TextFieldDefaults.textFieldColors(
-                  containerColor = colorResource(R.color.blue),
+              TextFieldDefaults.colors(
+                  focusedContainerColor = colorResource(R.color.blue),
+                  unfocusedContainerColor = colorResource(R.color.blue),
                   focusedTextColor = colorResource(R.color.white),
                   cursorColor = colorResource(R.color.dark_gray)),
           singleLine = true,
@@ -149,7 +148,9 @@ fun FriendsListScreen(
 
                       // Display the user's name
                       Text(
-                          text = searchResult.value!!.name.toString(), fontWeight = FontWeight.Bold)
+                          text = searchResult.value!!.name.toString(),
+                          fontWeight = FontWeight.Bold,
+                          color = colorResource(R.color.dark_gray))
                       Spacer(modifier = Modifier.height(8.dp))
 
                       // Check if the users are friends

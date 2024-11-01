@@ -18,6 +18,15 @@ interface UserRepository {
 
   fun getUserById(userId: String, onSuccess: (User) -> Unit, onFailure: (Exception) -> Unit)
 
+  fun getUserName(userId: String, onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit)
+
+  fun updateUserName(
+      userId: String,
+      newName: String,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  )
+
   fun sendFriendRequest(
       currentUserId: String,
       targetUserId: String,

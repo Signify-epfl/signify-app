@@ -34,9 +34,14 @@ class UserViewModelTest {
 
   @Test
   fun getUserByIdRequestCallsRepository() {
-    val currentUserId = "testUserId"
     userViewModel.getUserById(currentUserId)
     verify(userRepository).getUserById(eq(currentUserId), any(), any())
+  }
+
+  @Test
+  fun getUserNameRequestCallsRepository() {
+    userViewModel.getUserName(currentUserId)
+    verify(userRepository).getUserName(eq(currentUserId), any(), any())
   }
 
   @Test
