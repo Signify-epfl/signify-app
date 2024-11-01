@@ -95,11 +95,11 @@ fun FriendsListScreen(
                   .testTag("SearchBar"),
           placeholder = { Text("Search by user ID", color = colorResource(R.color.white)) },
           colors =
-              TextFieldDefaults.colors()
-                  .copy(
-                      unfocusedContainerColor = colorResource(R.color.blue),
-                      focusedTextColor = colorResource(R.color.white),
-                      cursorColor = colorResource(R.color.dark_gray)),
+              TextFieldDefaults.colors(
+                  focusedContainerColor = colorResource(R.color.blue),
+                  unfocusedContainerColor = colorResource(R.color.blue),
+                  focusedTextColor = colorResource(R.color.white),
+                  cursorColor = colorResource(R.color.dark_gray)),
           singleLine = true,
           trailingIcon = {
             ActionButton(
@@ -148,7 +148,9 @@ fun FriendsListScreen(
 
                       // Display the user's name
                       Text(
-                          text = searchResult.value!!.name.toString(), fontWeight = FontWeight.Bold)
+                          text = searchResult.value!!.name.toString(),
+                          fontWeight = FontWeight.Bold,
+                          color = colorResource(R.color.dark_gray))
                       Spacer(modifier = Modifier.height(8.dp))
 
                       // Check if the users are friends
