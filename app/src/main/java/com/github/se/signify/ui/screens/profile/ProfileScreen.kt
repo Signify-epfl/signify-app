@@ -239,7 +239,7 @@ fun HorizontalLetterList(lettersLearned: List<Char>) {
           color =
               if (isLearned) colorResource(R.color.blue)
               else colorResource(R.color.dark_gray).copy(alpha = .5f),
-          modifier = Modifier.padding(horizontal = 8.dp))
+          modifier = Modifier.padding(horizontal = 8.dp).testTag(letter.toString()))
     }
   }
 }
