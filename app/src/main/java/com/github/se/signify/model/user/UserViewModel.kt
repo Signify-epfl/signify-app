@@ -16,6 +16,9 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
   private val _friendsRequests = MutableStateFlow<List<String>>(emptyList())
   val friendsRequests: StateFlow<List<String>> = _friendsRequests
 
+  private val _userName = MutableStateFlow<String>("unknown")
+  val userName: StateFlow<String> = _userName
+
   private val _searchResult = MutableStateFlow<User?>(null)
   val searchResult: StateFlow<User?> = _searchResult
 
@@ -63,6 +66,21 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
 
   fun setSearchResult(user: User?) {
     _searchResult.value = user
+  }
+
+  fun getUserName(currentUserId: String) {
+    repository.getUserName(
+        currentUserId,
+        onSuccess = { userName -> _userName.value = userName },
+        onFailure = { e -> Log.e(logTag, "Failed to get user name: ${e.message}}") })
+  }
+
+  fun updateUserName(currentUserId: String, newName: String) {
+    repository.updateUserName(
+        currentUserId,
+        newName,
+        onSuccess = { Log.d(logTag, "User name updated successfully.") },
+        onFailure = { e -> Log.e(logTag, "Failed to update user name: ${e.message}") })
   }
 
   fun sendFriendRequest(currentUserId: String, targetUserId: String) {

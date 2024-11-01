@@ -7,7 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepository {
 
-  val collectionPath = "users"
+  private val collectionPath = "users"
   private val friendsListPath = "friends"
   private val friendRequestsListPath = "friendRequests"
 
@@ -24,7 +24,6 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
       onSuccess: (List<String>) -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    val db = FirebaseFirestore.getInstance()
     val userRef = db.collection(collectionPath).document(userId)
 
     // Use of addSnapshotListener for instant updates
@@ -35,7 +34,7 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
       }
 
       if (documentSnapshot != null && documentSnapshot.exists()) {
-        val friends = documentSnapshot.get(friendsListPath) as? List<String>
+        val friends = (documentSnapshot[friendsListPath] as? List<*>)?.filterIsInstance<String>()
         onSuccess(friends ?: emptyList())
       } else {
         onSuccess(emptyList())
@@ -48,7 +47,7 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
       onSuccess: (List<String>) -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    val db = FirebaseFirestore.getInstance()
+
     val userRef = db.collection(collectionPath).document(userId)
 
     // Use of addSnapshotListener for instant updates
@@ -59,7 +58,8 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
       }
 
       if (documentSnapshot != null && documentSnapshot.exists()) {
-        val friendsRequests = documentSnapshot.get(friendRequestsListPath) as? List<String>
+        val friendsRequests =
+            (documentSnapshot[friendRequestsListPath] as? List<*>)?.filterIsInstance<String>()
         onSuccess(friendsRequests ?: emptyList())
       } else {
         onSuccess(emptyList())
@@ -95,6 +95,51 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
           }
         }
         .addOnFailureListener { e -> onFailure(e) }
+  }
+
+  override fun getUserName(
+      userId: String,
+      onSuccess: (String) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    val userRef = db.collection(collectionPath).document(userId)
+
+    // Use of addSnapshotListener for instant updates
+    userRef.addSnapshotListener { documentSnapshot, e ->
+      if (e != null) {
+        onFailure(e)
+        return@addSnapshotListener
+      }
+
+      if (documentSnapshot != null && documentSnapshot.exists()) {
+        val userName = documentSnapshot["name"] as? String
+        onSuccess(userName ?: "unknown")
+      } else {
+        onSuccess("unknown")
+      }
+    }
+  }
+
+  override fun updateUserName(
+      userId: String,
+      newName: String,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+
+    val userRef = db.collection(collectionPath).document(userId)
+    try {
+      userRef
+          .update("name", newName)
+          .addOnSuccessListener {
+            onSuccess() // Invoke the onSuccess callback
+          }
+          .addOnFailureListener { e ->
+            onFailure(e) // Trigger onFailure callback
+          }
+    } catch (e: Exception) {
+      onFailure(e) // Trigger onFailure callback
+    }
   }
 
   override fun sendFriendRequest(
