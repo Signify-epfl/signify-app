@@ -7,6 +7,7 @@ object Route {
   const val QUEST = "Quest"
   const val CHALLENGE = "Challenge"
   const val NEW_CHALLENGE = "NewChallenge"
+  const val CREATE_CHALLENGE = "CreateChallenge"
   const val CHALLENGE_HISTORY = "ChallengeHistory"
   const val AUTH = "Auth"
   const val WELCOME = "Welcome"

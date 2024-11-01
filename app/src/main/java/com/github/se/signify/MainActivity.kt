@@ -22,6 +22,7 @@ import com.github.se.signify.ui.navigation.Screen
 import com.github.se.signify.ui.screens.*
 import com.github.se.signify.ui.screens.challenge.ChallengeHistoryScreen
 import com.github.se.signify.ui.screens.challenge.ChallengeScreen
+import com.github.se.signify.ui.screens.challenge.CreateAChallengeScreen
 import com.github.se.signify.ui.screens.challenge.NewChallengeScreen
 import com.github.se.signify.ui.screens.home.ASLRecognition
 import com.github.se.signify.ui.screens.home.ExerciseScreenEasy
@@ -81,6 +82,7 @@ fun SignifyAppPreview(context: Context, navigationState: MutableStateFlow<Naviga
     }
 
     composable(Route.NEW_CHALLENGE) { NewChallengeScreen(navigationActions) }
+    composable(Route.CREATE_CHALLENGE) { CreateAChallengeScreen(navigationActions) }
     composable(Route.CHALLENGE_HISTORY) { ChallengeHistoryScreen(navigationActions, 1, 1) }
     navigation(
         startDestination = Screen.QUEST,

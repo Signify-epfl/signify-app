@@ -54,4 +54,25 @@ interface UserRepository {
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   )
+
+  fun addOngoingChallenge(
+      userId: String,
+      challengeId: String,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  )
+
+  fun removeOngoingChallenge(
+      userId: String,
+      challengeId: String,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  )
+
+  fun addPastChallenge(
+      userId: String,
+      challengeId: String,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  )
 }

@@ -25,7 +25,9 @@ fun saveUserToFireStore() {
             "email" to email,
             "name" to name,
             "friends" to emptyList<String>(), // Initialize the friends list
-            "friendRequests" to emptyList<String>() // Initialize the friend requests list
+            "friendRequests" to emptyList<String>(), // Initialize the friend requests list
+            "ongoingChallenges" to emptyList<String>(), // Initialize the ongoing challenges list
+            "pastChallenges" to emptyList<String>() // Initialize the past challenges list
             )
 
     // Check if the user already exists in FireStore
