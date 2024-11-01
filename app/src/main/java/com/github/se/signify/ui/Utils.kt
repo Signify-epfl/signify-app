@@ -4,8 +4,10 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -167,20 +169,15 @@ fun UtilButton(
 
 @Composable
 fun BackButton(onClick: () -> Unit) {
-  Box(
-      modifier = Modifier.padding(16.dp) // Optional padding to adjust positioning
-      ) {
-        IconButton(
-            onClick = { onClick() },
-            modifier =
-                Modifier.align(Alignment.TopStart)
-                    .testTag("BackButton") // Align to the top left corner
-            ) {
-              Icon(
-                  imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                  contentDescription = "BackButton",
-                  tint = colorResource(R.color.blue))
-            }
+  Row(
+      modifier = Modifier.fillMaxWidth().padding(16.dp),
+      horizontalArrangement = Arrangement.Start) {
+        IconButton(onClick = { onClick() }, modifier = Modifier.testTag("BackButton")) {
+          Icon(
+              imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+              contentDescription = "BackButton",
+              tint = colorResource(R.color.blue))
+        }
       }
 }
 
