@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.Button
@@ -54,7 +56,11 @@ fun SettingsScreen(
   val userName = userViewModel.userName.collectAsState()
 
   Column(
-      modifier = Modifier.fillMaxSize().padding(16.dp).testTag("SettingsScreen"),
+      modifier =
+          Modifier.fillMaxSize()
+              .padding(16.dp)
+              .verticalScroll(rememberScrollState())
+              .testTag("SettingsScreen"),
       verticalArrangement = Arrangement.spacedBy(64.dp)) {
 
         // Back Button
