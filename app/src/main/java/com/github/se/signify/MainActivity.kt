@@ -111,6 +111,7 @@ fun SignifyAppPreview(context: Context, navigationState: MutableStateFlow<Naviga
       }
 
       composable(Route.FRIENDS) { FriendsListScreen(navigationActions) }
+      
       composable(Route.STATS) {
         MyStatsScreen(
             navigationActions = navigationActions,
@@ -119,12 +120,8 @@ fun SignifyAppPreview(context: Context, navigationState: MutableStateFlow<Naviga
             exercisesAchieved = listOf(10, 3),
             questsAchieved = listOf(3, 0))
       }
-
-      composable(Route.SETTINGS) {
-        SettingsScreen(
-            profilePictureUrl = null, // Replace with actual URL or null
-            navigationActions = navigationActions)
-      }
+      
+      composable(Route.SETTINGS) { SettingsScreen(navigationActions) }
     }
     composable(Screen.PRACTICE) { ASLRecognition(handLandMarkViewModel, navigationActions) }
     composable(Screen.EXERCISE_EASY) { ExerciseScreenEasy(navigationActions) }
