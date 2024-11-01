@@ -70,7 +70,7 @@ class MainActivityTest {
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
 
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Route.STATS) }
-    composeTestRule.onNodeWithTag("StatsScreen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("MyStatsScreen").assertIsDisplayed()
 
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Route.QUEST) }
     composeTestRule.onNodeWithTag("QuestScreen").assertIsDisplayed()
