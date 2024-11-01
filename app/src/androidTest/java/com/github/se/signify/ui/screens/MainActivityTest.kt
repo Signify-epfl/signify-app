@@ -13,6 +13,7 @@ import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Route
 import com.github.se.signify.ui.navigation.Screen
 import com.github.se.signify.ui.screens.profile.FriendsListScreen
+import com.github.se.signify.ui.screens.profile.SettingsScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Before
 import org.junit.Rule
@@ -32,6 +33,7 @@ class MainActivityTest {
 
     composeTestRule.setContent {
       FriendsListScreen(navigationActions, userViewModel)
+      SettingsScreen(navigationActions, userViewModel)
       // Set the content with the mocked context
       SignifyAppPreview(context, navigationState)
     }
@@ -60,7 +62,7 @@ class MainActivityTest {
     composeTestRule.onNodeWithTag("ExerciseScreenHard").assertIsDisplayed()
     composeTestRule.onNodeWithTag("Success").performClick()
 
-    composeTestRule.runOnIdle { navigationState.value?.navigateTo(Route.SETTINGS) }
+    composeTestRule.runOnIdle { navigationActions.navigateTo(Route.SETTINGS) }
     composeTestRule.onNodeWithTag("SettingsScreen").assertIsDisplayed()
 
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Route.HOME) }

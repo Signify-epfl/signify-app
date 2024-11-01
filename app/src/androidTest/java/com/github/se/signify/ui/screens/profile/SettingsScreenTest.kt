@@ -2,31 +2,41 @@ package com.github.se.signify.ui.screens.profile
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import com.github.se.signify.model.user.UserRepository
+import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mockito
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.never
 import org.mockito.Mockito.verify
+import org.mockito.kotlin.anyOrNull
+import org.mockito.kotlin.eq
 
 class SettingsScreenTest {
 
   @get:Rule val composeTestRule = createComposeRule()
 
   private lateinit var navigationActions: NavigationActions
+  private lateinit var userRepository: UserRepository
+  private lateinit var userViewModel: UserViewModel
 
-  private fun setContent(profilePictureUrl: String? = null) {
+  @Before
+  fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
-    composeTestRule.setContent {
-      SettingsScreen(profilePictureUrl = profilePictureUrl, navigationActions = navigationActions)
-    }
+    userRepository = mock(UserRepository::class.java)
+    userViewModel = UserViewModel(userRepository)
+
+    composeTestRule.setContent { SettingsScreen(navigationActions, userViewModel) }
   }
 
   @Test
   fun testSettingsScreenDisplaysCorrectInformation() {
-    setContent("https://example.com/profile.jpg")
 
     // Check if the username is displayed
-    composeTestRule.onNodeWithText("Test Name 1").assertIsDisplayed()
+    composeTestRule.onNodeWithText(userViewModel.userName.value).assertIsDisplayed()
 
     // Check if the edit username icon is displayed
     composeTestRule.onNodeWithContentDescription("Edit Username").assertIsDisplayed()
@@ -36,53 +46,84 @@ class SettingsScreenTest {
 
     // Check if the "Other settings" section is displayed
     composeTestRule.onNodeWithText("Other settings:\nLanguage,\n theme, ...").assertIsDisplayed()
+
+    // Check if the Cancel button is displayed
+    composeTestRule.onNodeWithText("Cancel").assertIsDisplayed()
+
+    // Check if the Save button is displayed
+    composeTestRule.onNodeWithText("Save").assertIsDisplayed()
+
+    // Check if the back button is displayed
+    composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
   }
 
   @Test
   fun testBackButtonNavigatesBack() {
-    setContent("https://example.com/profile.jpg")
-
     // Click the back button
-    composeTestRule.onNodeWithContentDescription("Back").performClick()
+    composeTestRule.onNodeWithTag("BackButton").performClick()
 
     // Check if back navigation was triggered
     verify(navigationActions).goBack()
   }
 
   @Test
-  fun testEditUsernameClickable() {
-    setContent()
+  fun testUsernameTextFieldInputUpdates() {
+    // Define a new name for testing
+    val newName = "Updated Username"
 
-    // Click on the editable username
-    composeTestRule.onNodeWithText("Test Name 1").performClick()
+    // Enter the new name into the TextField
+    composeTestRule.onNodeWithText(userViewModel.userName.value).performTextInput(newName)
 
-    // Verify that edit options should show (you may need to add state verification)
-    // This requires modifying your `SettingsScreen` to handle edit actions appropriately
-    // For demonstration, we assert that the click event was recognized
-    assert(true)
+    // Verify that the TextField now contains the new name
+    composeTestRule.onNodeWithText(newName).assertIsDisplayed()
   }
 
   @Test
-  fun testCancelButton() {
-    setContent()
+  fun testSaveButtonUpdatesUserName() {
+    // Simulate entering a new name
+    val newName = "New Username"
+    composeTestRule.onNodeWithText(userViewModel.userName.value).performTextInput(newName)
 
-    // Click the cancel button
-    composeTestRule.onNodeWithText("Cancel").performClick()
-
-    // Check for any expected behavior on cancel (to be implemented)
-    // For example, you may want to check if a dialog appears or navigation occurs
-    assert(true) // Replace with actual assertion
-  }
-
-  @Test
-  fun testSaveButton() {
-    setContent()
-
-    // Click the save button
+    // Click the Save button
     composeTestRule.onNodeWithText("Save").performClick()
 
-    // Check for any expected behavior on save (to be implemented)
-    // This could involve asserting that a state has changed or a navigation has occurred
-    assert(true) // Replace with actual assertion
+    // Verify that the updateUserName function in the ViewModel is called with the correct name
+    verify(userRepository)
+        .updateUserName(Mockito.anyString(), eq(newName), anyOrNull(), anyOrNull())
+  }
+
+  @Test
+  fun testSaveButtonDisabledWhenTextFieldIsEmpty() {
+    // Ensure the TextField is empty
+    composeTestRule.onNodeWithText(userViewModel.userName.value).performTextClearance()
+
+    // Click the Save button
+    composeTestRule.onNodeWithText("Save").performClick()
+
+    // Verify that updateUserName is not called since the input was empty
+    verify(userRepository, never())
+        .updateUserName(Mockito.anyString(), Mockito.anyString(), anyOrNull(), anyOrNull())
+  }
+
+  @Test
+  fun testCancelButtonClearsInput() {
+    // Simulate entering a new name
+    val newName = "Temporary Name"
+    composeTestRule.onNodeWithText(userViewModel.userName.value).performTextInput(newName)
+
+    // Click the Cancel button
+    composeTestRule.onNodeWithText("Cancel").performClick()
+
+    // Verify that the TextField is cleared
+    composeTestRule.onNodeWithText("Temporary Name").assertDoesNotExist()
+  }
+
+  @Test
+  fun testEditProfilePictureIconClick() {
+    // Click the Edit Profile Picture icon
+    composeTestRule.onNodeWithContentDescription("Edit Profile Picture").performClick()
+
+    // Add assertions or verifications based on what should happen after the icon is clicked
+    // when it will be implemented
   }
 }
