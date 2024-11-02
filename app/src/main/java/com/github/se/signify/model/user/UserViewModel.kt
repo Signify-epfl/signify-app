@@ -114,4 +114,28 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
         onSuccess = { Log.d(logTag, "Friend removed successfully.") },
         onFailure = { e -> Log.e(logTag, "Failed to remove friend: ${e.message}") })
   }
+
+  fun addOngoingChallenge(userId: String, challengeId: String) {
+    repository.addOngoingChallenge(
+        userId,
+        challengeId,
+        onSuccess = { Log.d(logTag, "Challenge added to ongoing successfully.") },
+        onFailure = { e -> Log.e(logTag, "Failed to add challenge to ongoing: ${e.message}") })
+  }
+
+  fun removeOngoingChallenge(userId: String, challengeId: String) {
+    repository.removeOngoingChallenge(
+        userId,
+        challengeId,
+        onSuccess = { Log.d(logTag, "Challenge removed from ongoing successfully.") },
+        onFailure = { e -> Log.e(logTag, "Failed to remove challenge from ongoing: ${e.message}") })
+  }
+
+  fun addPastChallenge(userId: String, challengeId: String) {
+    repository.addPastChallenge(
+        userId,
+        challengeId,
+        onSuccess = { Log.d(logTag, "Challenge added to past successfully.") },
+        onFailure = { e -> Log.e(logTag, "Failed to add challenge to past: ${e.message}") })
+  }
 }

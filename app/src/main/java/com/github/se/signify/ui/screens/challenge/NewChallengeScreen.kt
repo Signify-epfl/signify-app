@@ -68,7 +68,7 @@ fun NewChallengeScreen(navigationActions: NavigationActions) {
 
                 // Create a challenge button
                 ReusableTextButton(
-                    onClickAction = { /* Do nothing for now */},
+                    onClickAction = { navigationActions.navigateTo("CreateChallenge") },
                     textTag = "CreateChallengeButton",
                     text = "Create a Challenge",
                     height = 60.dp,

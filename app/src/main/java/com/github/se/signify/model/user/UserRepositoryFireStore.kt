@@ -236,4 +236,43 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
           onFailure(e) // Trigger onFailure callback
         }
   }
+
+  override fun addOngoingChallenge(
+      userId: String,
+      challengeId: String,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    val userRef = db.collection(collectionPath).document(userId)
+    userRef
+        .update("ongoingChallenges", FieldValue.arrayUnion(challengeId))
+        .addOnSuccessListener { onSuccess() }
+        .addOnFailureListener { onFailure(it) }
+  }
+
+  override fun removeOngoingChallenge(
+      userId: String,
+      challengeId: String,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    val userRef = db.collection(collectionPath).document(userId)
+    userRef
+        .update("ongoingChallenges", FieldValue.arrayRemove(challengeId))
+        .addOnSuccessListener { onSuccess() }
+        .addOnFailureListener { onFailure(it) }
+  }
+
+  override fun addPastChallenge(
+      userId: String,
+      challengeId: String,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    val userRef = db.collection(collectionPath).document(userId)
+    userRef
+        .update("pastChallenges", FieldValue.arrayUnion(challengeId))
+        .addOnSuccessListener { onSuccess() }
+        .addOnFailureListener { onFailure(it) }
+  }
 }
