@@ -45,7 +45,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.github.se.signify.R
 import com.github.se.signify.ui.ReusableTextButton
 import com.github.se.signify.ui.UtilButton
@@ -255,7 +255,7 @@ fun ProfilePicture(profilePictureUrl: String?) {
         profilePictureUrl?.let {
           // Load image with Coil or any other image loading library
           Image(
-              painter = rememberImagePainter(data = it),
+              painter = rememberAsyncImagePainter(model = it),
               contentDescription = "Profile picture",
               modifier = Modifier.fillMaxSize())
         }
