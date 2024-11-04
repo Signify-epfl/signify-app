@@ -10,7 +10,6 @@ ktfmt = "0.17.0"
 
 # UI Compose
 mockitoAndroid = "5.13.0"
-taskVision = "0.20230731"
 ui = "1.6.8"
 uiTestJunit4 = "1.6.8"
 uiTestManifest = "1.6.8"
