@@ -66,11 +66,7 @@ fun ReusableButtonWithIcon(onClickAction: () -> Unit, icon: ImageVector, iconDes
  * @param onClickAction A lambda function to execute when the button is clicked.
  * @param testTag A string used for testing, which serves as the tag for the button.
  * @param text The text to be displayed inside the button.
- * @param height The height of the button.
- * @param borderColor The color of the button's border.
  * @param backgroundColor The background color of the button.
- * @param textSize The size of the text displayed inside the button.
- * @param textColor The color of the text inside the button.
  */
 @Composable
 fun ReusableTextButton(
