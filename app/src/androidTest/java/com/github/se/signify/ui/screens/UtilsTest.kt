@@ -63,7 +63,7 @@ class UtilsTest {
     composeTestRule.setContent {
       ReusableTextButton(
           onClickAction = {},
-          textTag = textTag,
+          testTag = textTag,
           text = buttonText,
           height = 48.dp,
           borderColor = Color.Black,
@@ -89,7 +89,7 @@ class UtilsTest {
     composeTestRule.setContent {
       ReusableTextButton(
           onClickAction = { clickCounter++ },
-          textTag = textTag,
+          testTag = textTag,
           text = buttonText,
           height = 48.dp,
           borderColor = Color.Black,

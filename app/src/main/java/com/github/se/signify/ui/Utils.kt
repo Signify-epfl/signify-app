@@ -36,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 
 /**
@@ -63,7 +64,7 @@ fun ReusableButtonWithIcon(onClickAction: () -> Unit, icon: ImageVector, iconDes
  * A reusable composable function that creates an outlined button with customizable text.
  *
  * @param onClickAction A lambda function to execute when the button is clicked.
- * @param textTag A string used for testing, which serves as the tag for the button.
+ * @param testTag A string used for testing, which serves as the tag for the button.
  * @param text The text to be displayed inside the button.
  * @param height The height of the button.
  * @param borderColor The color of the button's border.
@@ -74,25 +75,22 @@ fun ReusableButtonWithIcon(onClickAction: () -> Unit, icon: ImageVector, iconDes
 @Composable
 fun ReusableTextButton(
     onClickAction: () -> Unit,
-    textTag: String,
+    testTag: String,
     text: String,
-    height: Dp,
-    borderColor: Color,
     backgroundColor: Color,
-    textSize: TextUnit,
-    textColor: Color,
 ) {
   OutlinedButton(
       onClick = onClickAction,
       border =
-          ButtonDefaults.outlinedButtonBorder.copy(width = 2.dp, brush = SolidColor(borderColor)),
+          ButtonDefaults.outlinedButtonBorder.copy(
+              width = 2.dp, brush = SolidColor(colorResource(R.color.black))),
       colors = ButtonDefaults.buttonColors(backgroundColor),
-      modifier = Modifier.fillMaxWidth().height(height).testTag(textTag)) {
+      modifier = Modifier.fillMaxWidth().height(40.dp).testTag(testTag)) {
         Text(
             text,
             fontWeight = FontWeight.Bold,
-            color = textColor,
-            fontSize = textSize,
+            color = colorResource(R.color.black),
+            fontSize = 20.sp,
             textAlign = TextAlign.Center)
       }
 }

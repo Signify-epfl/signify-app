@@ -120,13 +120,10 @@ fun ChallengeHistoryScreen(
                 // Graphs and statistics button
                 ReusableTextButton(
                     onClickAction = { /* Do nothing for now */},
-                    textTag = "GraphsStatisticsButton",
+                    testTag = "GraphsStatisticsButton",
                     text = stringResource(R.string.graphs_history),
-                    height = 240.dp,
-                    borderColor = colorResource(R.color.blue),
-                    backgroundColor = colorResource(R.color.black),
-                    textSize = 30.sp,
-                    textColor = colorResource(R.color.white))
+                    backgroundColor = colorResource(R.color.blue),
+                )
               }
         }
       })

@@ -200,11 +200,8 @@ fun ProfileScreen(
               { navigationActions.navigateTo("Friends") },
               "My FriendsButton",
               "My Friends",
-              40.dp,
-              colorResource(R.color.dark_gray),
               colorResource(R.color.blue),
-              16.sp,
-              colorResource(R.color.dark_gray))
+          )
 
           Spacer(modifier = Modifier.height(32.dp))
 
@@ -213,11 +210,8 @@ fun ProfileScreen(
               { navigationActions.navigateTo("Stats") },
               "My StatsButton",
               "My Stats",
-              40.dp,
-              colorResource(R.color.dark_gray),
               colorResource(R.color.blue),
-              16.sp,
-              colorResource(R.color.dark_gray))
+          )
 
           Spacer(modifier = Modifier.height(64.dp))
         }

@@ -113,13 +113,10 @@ fun HomeScreen(navigationActions: NavigationActions) {
 
               ReusableTextButton(
                   onClickAction = { /* Do nothing for now */},
-                  textTag = "CameraFeedbackToggle",
+                  testTag = "CameraFeedbackToggle",
                   text = "Toggle Camera",
-                  height = 30.dp,
-                  borderColor = colorResource(R.color.black),
                   backgroundColor = colorResource(R.color.blue),
-                  textSize = 12.sp,
-                  textColor = colorResource(R.color.white))
+              )
 
               Spacer(modifier = Modifier.height(16.dp))
 
