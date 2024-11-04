@@ -1,4 +1,4 @@
-package com.github.se.signify.ui
+package com.github.se.signify.ui.screens
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
@@ -10,6 +10,11 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
+import com.github.se.signify.ui.BackButton
+import com.github.se.signify.ui.ReusableButtonWithIcon
+import com.github.se.signify.ui.ReusableTextButton
+import com.github.se.signify.ui.SquareButton
+import com.github.se.signify.ui.UtilButton
 import org.junit.Rule
 import org.junit.Test
 
@@ -65,11 +70,8 @@ class UtilsTest {
           onClickAction = {},
           testTag = textTag,
           text = buttonText,
-          height = 48.dp,
-          borderColor = Color.Black,
           backgroundColor = Color.Blue,
-          textSize = 16.sp,
-          textColor = Color.White)
+      )
     }
 
     // Assert the button is displayed
@@ -91,11 +93,8 @@ class UtilsTest {
           onClickAction = { clickCounter++ },
           testTag = textTag,
           text = buttonText,
-          height = 48.dp,
-          borderColor = Color.Black,
           backgroundColor = Color.Blue,
-          textSize = 16.sp,
-          textColor = Color.White)
+          )
     }
 
     // Perform a click action on the button
