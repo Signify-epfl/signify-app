@@ -2,7 +2,6 @@ package com.github.se.signify.ui.screens.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -111,16 +110,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
 
               Spacer(modifier = Modifier.height(16.dp))
 
-              ReusableTextButton(
-                  onClickAction = { /* Do nothing for now */},
-                  testTag = "CameraFeedbackToggle",
-                  text = "Toggle Camera",
-                  backgroundColor = colorResource(R.color.blue),
-              )
-
-              Spacer(modifier = Modifier.height(16.dp))
-
-              CameraFeedback(onClick = { navigationActions.navigateTo(Screen.PRACTICE) })
+              CameraFeedbackButton(onClick = { navigationActions.navigateTo(Screen.PRACTICE) })
 
               Spacer(modifier = Modifier.height(16.dp))
 
@@ -133,22 +123,14 @@ fun HomeScreen(navigationActions: NavigationActions) {
       })
 }
 
-// This should be hooked to the camera feedback screen later on.
 @Composable
-fun CameraFeedback(onClick: () -> Unit = {}) {
-  Box(
-      modifier =
-          Modifier.aspectRatio(4f / 3f)
-              .border(2.dp, colorResource(R.color.blue), RoundedCornerShape(8.dp))
-              .background(colorResource(R.color.black), RoundedCornerShape(8.dp))
-              .clickable { onClick() }
-              .testTag("CameraFeedback")) {
-        Text(
-            text = "Camera\nFeedback",
-            modifier = Modifier.align(Alignment.Center),
-            color = colorResource(R.color.white),
-            fontSize = 32.dp.value.sp)
-      }
+fun CameraFeedbackButton(onClick: () -> Unit = {}) {
+  ReusableTextButton(
+      onClickAction = onClick,
+      testTag = "CameraFeedbackButton",
+      text = "Try it out",
+      backgroundColor = colorResource(R.color.blue),
+  )
 }
 
 @Composable
@@ -214,11 +196,10 @@ fun LetterDictionary() {
 
 @Composable
 fun ExerciseList(exercises: List<Exercise>, onExerciseClick: (exercise: Exercise) -> Unit) {
-  LazyVerticalGrid(
-      columns = GridCells.Fixed(2),
+  LazyHorizontalGrid(
+      rows = GridCells.Adaptive(128.dp),
       modifier =
-          Modifier.fillMaxSize()
-              .wrapContentHeight()
+          Modifier.fillMaxWidth()
               .border(2.dp, colorResource(R.color.black), RoundedCornerShape(8.dp))
               .clip(RoundedCornerShape(8.dp))
               .background(colorResource(R.color.dark_gray))
