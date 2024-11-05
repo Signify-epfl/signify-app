@@ -37,7 +37,7 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
   private var handLandMarkerResult: HandLandmarkerResult? = null
 
   // Path to the ONNX model used for gesture classification
-  private lateinit var RFC_model: String
+  private lateinit var rfcModel: String
 
   // ONNX session used for running the classification model
   private lateinit var session: OrtSession
@@ -68,7 +68,7 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
               .setRunningMode(RunningMode.LIVE_STREAM)
               .setResultListener { result, _ ->
                 handLandMarkerResult = result
-                returnLivestreamResult(result, context)
+                returnLivestreamResult(result)
               }
               .setErrorListener { returnLivestreamError(it) }
               .build()
@@ -76,7 +76,7 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
       handLandmarker = HandLandmarker.createFromOptions(context, options)
 
       // Load the ONNX model from assets to a temporary file
-      RFC_model =
+      rfcModel =
           context.assets.open(pathToModel).use { inputStream ->
             val tempFile = File(context.cacheDir, pathToModel)
             inputStream.copyTo(tempFile.outputStream())
@@ -85,7 +85,7 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
 
       // Initialize the ONNX runtime environment and session
       val env = OrtEnvironment.getEnvironment()
-      session = env.createSession(RFC_model)
+      session = env.createSession(rfcModel)
 
       onSuccess()
     } catch (e: Exception) {
@@ -119,23 +119,22 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
     try {
       val bitmap = imageProxy.toBitmap()
 
-      if (bitmap != null) {
-        val frameTime = SystemClock.uptimeMillis()
-        val mpImage = BitmapImageBuilder(bitmap).build()
-        Executors.newSingleThreadExecutor().execute {
-          handLandmarker?.detectAsync(mpImage, frameTime)
+      val frameTime = SystemClock.uptimeMillis()
+      val mpImage = BitmapImageBuilder(bitmap).build()
+      Executors.newSingleThreadExecutor().execute {
+        handLandmarker?.detectAsync(mpImage, frameTime)
 
-          if (handLandMarkerResult != null && handLandMarkerResult?.landmarks()?.size != 0) {
+        if (handLandMarkerResult != null && handLandMarkerResult?.landmarks()?.size != 0) {
+          onSuccess(handLandMarkerResult!!)
+        } else {
+          if (handLandMarkerResult != null) {
             onSuccess(handLandMarkerResult!!)
-          } else {
-            if (handLandMarkerResult != null) {
-              onSuccess(handLandMarkerResult!!)
-            }
           }
         }
-      } else {
-        Log.e("HandLandmarker", "Bitmap conversion failed")
       }
+    } catch (e: UnsupportedOperationException) {
+      onFailure(e)
+      Log.e("HandLandmarker", "Bitmap conversion failed")
     } catch (e: Exception) {
       onFailure(e)
       Log.e("HandLandmarker", "Error processing image proxy", e)
@@ -158,11 +157,9 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
    * Converts the landmarks to the expected format for the ONNX model and retrieves the gesture.
    *
    * @param handLandmarkerResult The result from the HandLandmarker containing hand landmarks.
-   * @param context The application context, used for logging.
    */
   private fun returnLivestreamResult(
       handLandmarkerResult: HandLandmarkerResult?,
-      context: Context
   ) {
     if (handLandmarkerResult == null || handLandmarkerResult.landmarks().isEmpty()) {
       return

@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION") // We were told to use deprecated Google Authentication API
+
 package com.github.se.signify.ui.screens
 
 import android.content.Intent
@@ -85,7 +87,11 @@ fun LoginScreen(navigationActions: NavigationActions) {
       modifier = Modifier.fillMaxSize(),
       content = { padding ->
         Column(
-            modifier = Modifier.fillMaxSize().background(brush = gradient).testTag("LoginScreen"),
+            modifier =
+                Modifier.fillMaxSize()
+                    .padding(padding)
+                    .background(brush = gradient)
+                    .testTag("LoginScreen"),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
