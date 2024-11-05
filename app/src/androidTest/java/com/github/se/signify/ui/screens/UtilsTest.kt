@@ -94,7 +94,7 @@ class UtilsTest {
           testTag = textTag,
           text = buttonText,
           backgroundColor = Color.Blue,
-          )
+      )
     }
 
     // Perform a click action on the button
