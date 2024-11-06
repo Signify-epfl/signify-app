@@ -335,6 +335,7 @@ fun ScaffoldMainScreen(
 ) {
     var isHelpBoxVisible by remember { mutableStateOf(false) }
     Scaffold(
+        topBar = { TopBar() },
         bottomBar = {
             BottomBar(navigationActions)
         },
@@ -478,8 +479,8 @@ fun InfoPopup(
  * @param rowTestTag The principal tag for the row.
  * @param lineText The text description for the statistic to show.
  * @param columnTextList A list of list of strings for the information to show.
- * @param columnTextSPList A list of list of int that correspond to
- *                         the size of each string of columnTextList.
+ * @param columnTextSPList A list of list of int that correspond to the size of each string of
+ *                         columnTextList, (recommend 12.sp for text and 20.sp for number).
  * @param columnTextTagList A list of textTag corresponding to the column.
  */
 @Composable
@@ -531,7 +532,8 @@ fun StatisticsRow(
                     Text(
                         text = columnTextList[index][subIndex],
                         fontSize = columnTextSPList[index][subIndex].sp,
-                        color = colorResource(R.color.black)
+                        color = colorResource(R.color.black),
+                        modifier = Modifier.testTag(columnTextList[index][subIndex])
                     )
                 }
             }
@@ -556,7 +558,7 @@ fun HorizontalLetterList(lettersLearned: List<Char>) {
         modifier = Modifier
             .fillMaxWidth()
             .horizontalScroll(scrollState)
-            .testTag("lettersList")
+            .testTag("LettersList")
     ) {
         allLetters.forEach { letter ->
             val isLearned = letter in lettersLearned
@@ -634,7 +636,8 @@ fun StreakCounter(
             text = "$days$text",
             fontWeight = FontWeight.Bold,
             color = colorResource(R.color.red),
-            fontSize = 20.sp
+            fontSize = 20.sp,
+            modifier = Modifier.testTag("NumberOfDays")
         )
     }
 }
@@ -700,12 +703,14 @@ fun AccountInformation(
             Text(
                 text = userId,
                 fontWeight = FontWeight.Bold,
-                color = colorResource(R.color.dark_gray)
+                color = colorResource(R.color.dark_gray),
+                modifier = Modifier.testTag("UserId")
             )
             Text(
                 text = userName,
                 fontWeight = FontWeight.Bold,
-                color = colorResource(R.color.dark_gray)
+                color = colorResource(R.color.dark_gray),
+                modifier = Modifier.testTag("UserName")
             )
         }
         Spacer(modifier = Modifier.width(24.dp))
