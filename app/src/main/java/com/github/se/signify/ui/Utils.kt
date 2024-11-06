@@ -75,24 +75,17 @@ import com.github.se.signify.ui.navigation.NavigationActions
  * @param iconDescription A string description of the icon, used for accessibility and testing.
  */
 @Composable
-fun ReusableButtonWithIcon(
-    onClickAction: () -> Unit,
-    icon: ImageVector,
-    iconDescription: String
-) {
-    OutlinedButton(
-        onClick = onClickAction,
-        modifier = Modifier
-            .padding(8.dp)
-            .testTag(iconDescription + "Button"),
-        border =
-        ButtonDefaults.outlinedButtonBorder.copy(
-            width = 2.dp, brush = SolidColor(colorResource(R.color.dark_gray))
-        ),
-        colors = ButtonDefaults.outlinedButtonColors(colorResource(R.color.blue)),
-    ) {
-        Icon(icon, tint = colorResource(R.color.dark_gray), contentDescription = iconDescription)
-    }
+fun ReusableButtonWithIcon(onClickAction: () -> Unit, icon: ImageVector, iconDescription: String) {
+  OutlinedButton(
+      onClick = onClickAction,
+      modifier = Modifier.padding(8.dp).testTag(iconDescription + "Button"),
+      border =
+          ButtonDefaults.outlinedButtonBorder.copy(
+              width = 2.dp, brush = SolidColor(colorResource(R.color.dark_gray))),
+      colors = ButtonDefaults.outlinedButtonColors(colorResource(R.color.blue)),
+  ) {
+    Icon(icon, tint = colorResource(R.color.dark_gray), contentDescription = iconDescription)
+  }
 }
 
 /**
@@ -118,29 +111,24 @@ fun ReusableTextButton(
     textSize: TextUnit,
     textColor: Color,
 ) {
-    OutlinedButton(
-        onClick = onClickAction,
-        border =
-        ButtonDefaults.outlinedButtonBorder.copy(width = 2.dp, brush = SolidColor(borderColor)),
-        colors = ButtonDefaults.buttonColors(backgroundColor),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(height)
-            .testTag(textTag)
-    ) {
+  OutlinedButton(
+      onClick = onClickAction,
+      border =
+          ButtonDefaults.outlinedButtonBorder.copy(width = 2.dp, brush = SolidColor(borderColor)),
+      colors = ButtonDefaults.buttonColors(backgroundColor),
+      modifier = Modifier.fillMaxWidth().height(height).testTag(textTag)) {
         Text(
             text,
             fontWeight = FontWeight.Bold,
             color = textColor,
             fontSize = textSize,
-            textAlign = TextAlign.Center
-        )
-    }
+            textAlign = TextAlign.Center)
+      }
 }
 
 /**
- * A reusable composable function that creates a square
- * button with customizable text above the icon.
+ * A reusable composable function that creates a square button with customizable text above the
+ * icon.
  *
  * @param iconRes The icon for the button.
  * @param label The text for the button.
@@ -165,16 +153,15 @@ fun SquareButton(
     iconOffset: Dp = 0.dp,
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier =
-        modifier
-            .size(size)
-            .border(2.dp, colorResource(R.color.black), RoundedCornerShape(12.dp))
-            .background(colorResource(R.color.blue), RoundedCornerShape(12.dp))
-            .padding(16.dp)
-            .clickable { onClick() }
-    ) {
+  Column(
+      horizontalAlignment = Alignment.CenterHorizontally,
+      modifier =
+          modifier
+              .size(size)
+              .border(2.dp, colorResource(R.color.black), RoundedCornerShape(12.dp))
+              .background(colorResource(R.color.blue), RoundedCornerShape(12.dp))
+              .padding(16.dp)
+              .clickable { onClick() }) {
         Text(
             text = label,
             fontSize = labelFontSize,
@@ -182,16 +169,13 @@ fun SquareButton(
         )
         Spacer(modifier = Modifier.height(8.dp))
         Box(contentAlignment = Alignment.Center) {
-            Icon(
-                painter = painterResource(id = iconRes),
-                contentDescription = label,
-                tint = iconTint,
-                modifier = Modifier
-                    .size(iconSize)
-                    .offset(x = iconOffset)
-            )
+          Icon(
+              painter = painterResource(id = iconRes),
+              contentDescription = label,
+              tint = iconTint,
+              modifier = Modifier.size(iconSize).offset(x = iconOffset))
         }
-    }
+      }
 }
 
 /**
@@ -211,38 +195,31 @@ fun UtilButton(
     icon: ImageVector,
     contentDescription: String
 ) {
-    Box(
-        modifier =
-        Modifier
-            .size(30.dp)
-            .background(colorResource(R.color.white), shape = RoundedCornerShape(30))
-            .border(2.dp, colorResource(R.color.white), shape = RoundedCornerShape(30))
-            .clickable { onClick() }
-            .testTag(testTagButton),
-        contentAlignment = Alignment.Center) {
+  Box(
+      modifier =
+          Modifier.size(30.dp)
+              .background(colorResource(R.color.white), shape = RoundedCornerShape(30))
+              .border(2.dp, colorResource(R.color.white), shape = RoundedCornerShape(30))
+              .clickable { onClick() }
+              .testTag(testTagButton),
+      contentAlignment = Alignment.Center) {
         Icon(
             icon,
             contentDescription = contentDescription,
             tint = colorResource(R.color.blue),
-            modifier = Modifier
-                .size(30.dp)
-                .testTag(testTagIcon)
-        )
-    }
+            modifier = Modifier.size(30.dp).testTag(testTagIcon))
+      }
 }
 
-/**
- * A reusable composable function that creates the blue top bar.
- */
+/** A reusable composable function that creates the blue top bar. */
 @Composable
 fun TopBar() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(5.dp)
-            .background(MaterialTheme.colorScheme.primary)
-            .testTag("TopBlueBar")
-    )
+  Box(
+      modifier =
+          Modifier.fillMaxWidth()
+              .height(5.dp)
+              .background(MaterialTheme.colorScheme.primary)
+              .testTag("TopBlueBar"))
 }
 
 /**
@@ -251,15 +228,12 @@ fun TopBar() {
  * @param navigationActions The navigationActions of the bottom navigation menu.
  */
 @Composable
-fun BottomBar(
-    navigationActions: NavigationActions
-) {
-    BottomNavigationMenu(
-        onTabSelect = { route -> navigationActions.navigateTo(route) },
-        tabList = LIST_TOP_LEVEL_DESTINATION,
-        selectedItem = navigationActions.currentRoute(),
-        modifier = Modifier.testTag("BottomNavigationMenu")
-    )
+fun BottomBar(navigationActions: NavigationActions) {
+  BottomNavigationMenu(
+      onTabSelect = { route -> navigationActions.navigateTo(route) },
+      tabList = LIST_TOP_LEVEL_DESTINATION,
+      selectedItem = navigationActions.currentRoute(),
+      modifier = Modifier.testTag("BottomNavigationMenu"))
 }
 
 /**
@@ -269,25 +243,21 @@ fun BottomBar(
  */
 @Composable
 fun BackButton(onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.Start
-    ) {
+  Row(
+      modifier = Modifier.fillMaxWidth().padding(16.dp),
+      horizontalArrangement = Arrangement.Start) {
         IconButton(onClick = { onClick() }, modifier = Modifier.testTag("BackButton")) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "BackButton",
-                tint = colorResource(R.color.blue)
-            )
+          Icon(
+              imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+              contentDescription = "BackButton",
+              tint = colorResource(R.color.blue))
         }
-    }
+      }
 }
 
 /**
- * A reusable composable function that creates a basic column for all screens.
- * It is a helper function for ScaffoldMainScreen() and ScaffoldAnnexeScreen().
+ * A reusable composable function that creates a basic column for all screens. It is a helper
+ * function for ScaffoldMainScreen() and ScaffoldAnnexeScreen().
  *
  * @param padding The default padding value of the column.
  * @param testTag The test tag of the column (test tag of the screen).
@@ -301,19 +271,17 @@ fun ColumnScreen(
     backgroundColor: Color = colorResource(R.color.white),
     content: @Composable ColumnScope.() -> Unit
 ) {
-    Column(
-        modifier =
-        Modifier
-            .fillMaxSize()
-            .padding(padding)
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
-            .background(backgroundColor)
-            .testTag(testTag),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+  Column(
+      modifier =
+          Modifier.fillMaxSize()
+              .padding(padding)
+              .padding(16.dp)
+              .verticalScroll(rememberScrollState())
+              .background(backgroundColor)
+              .testTag(testTag),
+      horizontalAlignment = Alignment.CenterHorizontally) {
         content()
-    }
+      }
 }
 
 /**
@@ -333,36 +301,32 @@ fun ScaffoldMainScreen(
     helpText: String,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    var isHelpBoxVisible by remember { mutableStateOf(false) }
-    Scaffold(
-        topBar = { TopBar() },
-        bottomBar = {
-            BottomBar(navigationActions)
-        },
-        content = { padding ->
-            ColumnScreen(
-                padding,
-                testTagColumn,
-                colorResource(R.color.white) // to replace with the background color theme
+  var isHelpBoxVisible by remember { mutableStateOf(false) }
+  Scaffold(
+      topBar = { TopBar() },
+      bottomBar = { BottomBar(navigationActions) },
+      content = { padding ->
+        ColumnScreen(
+            padding,
+            testTagColumn,
+            colorResource(R.color.white) // to replace with the background color theme
             ) {
-                UtilButton(
-                    { isHelpBoxVisible = !isHelpBoxVisible },
-                    "InfoButton",
-                    "InfoIcon",
-                    Icons.Outlined.Info,
-                    "Help"
-                )
-                content()
-                // Show popup when the info button is clicked
-                if (isHelpBoxVisible) {
-                    InfoPopup(
-                        onDismiss = { isHelpBoxVisible = false },
-                        helpTitle = helpTitle,
-                        helpText = helpText
-                    )
-                }
+              UtilButton(
+                  { isHelpBoxVisible = !isHelpBoxVisible },
+                  "InfoButton",
+                  "InfoIcon",
+                  Icons.Outlined.Info,
+                  "Help")
+              content()
+              // Show popup when the info button is clicked
+              if (isHelpBoxVisible) {
+                InfoPopup(
+                    onDismiss = { isHelpBoxVisible = false },
+                    helpTitle = helpTitle,
+                    helpText = helpText)
+              }
             }
-        })
+      })
 }
 
 /**
@@ -378,18 +342,18 @@ fun ScaffoldAnnexeScreen(
     testTagColumn: String,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    Scaffold(
-        topBar = { TopBar() },
-        content = { padding ->
-            ColumnScreen(
-                padding,
-                testTagColumn,
-                colorResource(R.color.white) // to replace with the background color theme
+  Scaffold(
+      topBar = { TopBar() },
+      content = { padding ->
+        ColumnScreen(
+            padding,
+            testTagColumn,
+            colorResource(R.color.white) // to replace with the background color theme
             ) {
-                BackButton { navigationActions.goBack() }
-                content()
+              BackButton { navigationActions.goBack() }
+              content()
             }
-        })
+      })
 }
 
 /**
@@ -400,50 +364,38 @@ fun ScaffoldAnnexeScreen(
  * @param helpText The text of the info popup.
  */
 @Composable
-fun InfoPopup(
-    onDismiss: () -> Unit,
-    helpTitle: String,
-    helpText: String
-) {
-    Dialog(onDismissRequest = { onDismiss() }) {
-        Surface(
-            shape = RoundedCornerShape(12.dp),
-            color = colorResource(R.color.blue), // Blue background for the popup
-            modifier = Modifier
-                .border(
+fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
+  Dialog(onDismissRequest = { onDismiss() }) {
+    Surface(
+        shape = RoundedCornerShape(12.dp),
+        color = colorResource(R.color.blue), // Blue background for the popup
+        modifier =
+            Modifier.border(
                     3.dp,
                     colorResource(R.color.dark_gray),
-                    RoundedCornerShape(12.dp)
-                ) // Ensure the black border wraps the popup
+                    RoundedCornerShape(12.dp)) // Ensure the black border wraps the popup
                 .padding(16.dp)
                 .testTag("InfoPopup") // Remove padding for the border
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .testTag("InfoPopupContent"),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+          Column(
+              modifier = Modifier.padding(16.dp).fillMaxWidth().testTag("InfoPopupContent"),
+              horizontalAlignment = Alignment.CenterHorizontally) {
                 // Title centered and underlined
                 Text(
                     text =
-                    buildAnnotatedString {
-                        withStyle(
-                            style =
-                            SpanStyle(
-                                fontWeight = FontWeight.Bold,
-                                textDecoration = TextDecoration.Underline
-                            )
-                        ) {
-                            append(helpTitle)
-                        }
-                    },
+                        buildAnnotatedString {
+                          withStyle(
+                              style =
+                                  SpanStyle(
+                                      fontWeight = FontWeight.Bold,
+                                      textDecoration = TextDecoration.Underline)) {
+                                append(helpTitle)
+                              }
+                        },
                     fontSize = 20.sp,
                     color = colorResource(R.color.white),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.testTag("InfoPopupTitle")
-                )
+                    modifier = Modifier.testTag("InfoPopupTitle"))
                 Spacer(modifier = Modifier.height(8.dp))
 
                 // Body text centered under the title
@@ -452,35 +404,33 @@ fun InfoPopup(
                     fontSize = 16.sp,
                     color = colorResource(R.color.white),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.testTag("InfoPopupBody")
-                )
+                    modifier = Modifier.testTag("InfoPopupBody"))
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Close button for the popup
                 Button(
                     onClick = { onDismiss() },
                     colors = ButtonDefaults.buttonColors(colorResource(R.color.dark_gray)),
-                    modifier = Modifier.testTag("InfoPopupCloseButton")
-                ) {
-                    Text(text = "Close", color = colorResource(R.color.white))
-                }
-            }
+                    modifier = Modifier.testTag("InfoPopupCloseButton")) {
+                      Text(text = "Close", color = colorResource(R.color.white))
+                    }
+              }
         }
-    }
+  }
 }
 
 /**
  * A reusable composable function that creates a row for statistics.
  *
  * Important to note that the list have the same size and the inner list should match their sizes.
- * Example (the number are the size):
- *      list1 = ((2), (1), (2)) => list2 = ((2), (1), (2)) and list3 = (3)
+ * Example (the number are the size): list1 = ((2), (1), (2)) => list2 = ((2), (1), (2)) and list3 =
+ * (3)
  *
  * @param rowTestTag The principal tag for the row.
  * @param lineText The text description for the statistic to show.
  * @param columnTextList A list of list of strings for the information to show.
  * @param columnTextSPList A list of list of int that correspond to the size of each string of
- *                         columnTextList, (recommend 12.sp for text and 20.sp for number).
+ *   columnTextList, (recommend 12.sp for text and 20.sp for number).
  * @param columnTextTagList A list of textTag corresponding to the column.
  */
 @Composable
@@ -492,58 +442,49 @@ fun StatisticsRow(
     columnTextSPList: List<List<Int>>,
     columnTextTagList: List<String>
 ) {
-    // Ensure that the list have the same size
-    require(
-        columnTextList.size == columnTextSPList.size
-                && columnTextList.size == columnTextTagList.size
-    ) { "All lists must have the same size." }
-    columnTextList.zip(columnTextSPList).forEachIndexed { index, (textList, spList) ->
-        require(textList.size == spList.size) {
-            "Sub lists at index $index must have the same size."
-        }
-    }
-    // Construction of the statistic row
-    Row(
-        modifier =
-        Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .testTag(rowTestTag),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+  // Ensure that the list have the same size
+  require(
+      columnTextList.size == columnTextSPList.size &&
+          columnTextList.size == columnTextTagList.size) {
+        "All lists must have the same size."
+      }
+  columnTextList.zip(columnTextSPList).forEachIndexed { index, (textList, spList) ->
+    require(textList.size == spList.size) { "Sub lists at index $index must have the same size." }
+  }
+  // Construction of the statistic row
+  Row(
+      modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).testTag(rowTestTag),
+      horizontalArrangement = Arrangement.SpaceBetween,
+      verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = lineText,
             fontSize = 16.sp,
             color = colorResource(R.color.black),
-            modifier = Modifier.testTag(lineTextTag)
-        )
+            modifier = Modifier.testTag(lineTextTag))
         for (index in columnTextList.indices) {
-            Column(
-                modifier = Modifier
-                    .size(50.dp)
-                    .border(2.dp, colorResource(R.color.blue), RoundedCornerShape(12.dp))
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(colorResource(R.color.white))
-                    .testTag(columnTextTagList[index]),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+          Column(
+              modifier =
+                  Modifier.size(50.dp)
+                      .border(2.dp, colorResource(R.color.blue), RoundedCornerShape(12.dp))
+                      .clip(RoundedCornerShape(12.dp))
+                      .background(colorResource(R.color.white))
+                      .testTag(columnTextTagList[index]),
+              horizontalAlignment = Alignment.CenterHorizontally) {
                 for (subIndex in columnTextList[index].indices) {
-                    Text(
-                        text = columnTextList[index][subIndex],
-                        fontSize = columnTextSPList[index][subIndex].sp,
-                        color = colorResource(R.color.black),
-                        modifier = Modifier.testTag(columnTextList[index][subIndex])
-                    )
+                  Text(
+                      text = columnTextList[index][subIndex],
+                      fontSize = columnTextSPList[index][subIndex].sp,
+                      color = colorResource(R.color.black),
+                      modifier = Modifier.testTag(columnTextList[index][subIndex]))
                 }
-            }
+              }
         }
-    }
+      }
 }
 
 /**
- * A reusable composable function that creates the scrollable letter list.
- * The letter already learned are in blue and the others are in gray.
+ * A reusable composable function that creates the scrollable letter list. The letter already
+ * learned are in blue and the others are in gray.
  *
  * Important to note that it is helper function to AllLetterLearned()
  *
@@ -551,30 +492,22 @@ fun StatisticsRow(
  */
 @Composable
 fun HorizontalLetterList(lettersLearned: List<Char>) {
-    val allLetters = ('A'..'Z').toList() // All capital letters from A to Z
-    val scrollState = rememberScrollState()
+  val allLetters = ('A'..'Z').toList() // All capital letters from A to Z
+  val scrollState = rememberScrollState()
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .horizontalScroll(scrollState)
-            .testTag("LettersList")
-    ) {
-        allLetters.forEach { letter ->
-            val isLearned = letter in lettersLearned
-            Text(
-                text = letter.toString(),
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color =
-                if (isLearned) colorResource(R.color.blue)
-                else colorResource(R.color.dark_gray).copy(alpha = .5f),
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .testTag(letter.toString())
-            )
-        }
+  Row(modifier = Modifier.fillMaxWidth().horizontalScroll(scrollState).testTag("LettersList")) {
+    allLetters.forEach { letter ->
+      val isLearned = letter in lettersLearned
+      Text(
+          text = letter.toString(),
+          fontSize = 24.sp,
+          fontWeight = FontWeight.Bold,
+          color =
+              if (isLearned) colorResource(R.color.blue)
+              else colorResource(R.color.dark_gray).copy(alpha = .5f),
+          modifier = Modifier.padding(horizontal = 8.dp).testTag(letter.toString()))
     }
+  }
 }
 
 /**
@@ -584,24 +517,21 @@ fun HorizontalLetterList(lettersLearned: List<Char>) {
  */
 @Composable
 fun AllLetterLearned(lettersLearned: List<Char>) {
-    Text(
-        text = "All letters learned",
-        fontWeight = FontWeight.Bold,
-        fontSize = 16.sp,
-        color = colorResource(R.color.dark_gray),
-        modifier = Modifier.testTag("AllLetterLearned")
-    )
-    Box(
-        modifier =
-        Modifier
-            .fillMaxWidth()
-            .border(2.dp, colorResource(R.color.dark_gray), RoundedCornerShape(12.dp))
-            .clip(RoundedCornerShape(8.dp))
-            .padding(12.dp)
-            .testTag("LettersBox")
-    ) {
+  Text(
+      text = "All letters learned",
+      fontWeight = FontWeight.Bold,
+      fontSize = 16.sp,
+      color = colorResource(R.color.dark_gray),
+      modifier = Modifier.testTag("AllLetterLearned"))
+  Box(
+      modifier =
+          Modifier.fillMaxWidth()
+              .border(2.dp, colorResource(R.color.dark_gray), RoundedCornerShape(12.dp))
+              .clip(RoundedCornerShape(8.dp))
+              .padding(12.dp)
+              .testTag("LettersBox")) {
         HorizontalLetterList(lettersLearned)
-    }
+      }
 }
 
 /**
@@ -611,35 +541,25 @@ fun AllLetterLearned(lettersLearned: List<Char>) {
  * @param daysText A boolean value => true will display the string " days" after the number.
  */
 @Composable
-fun StreakCounter(
-    days: Int,
-    daysText: Boolean
-) {
-    val text = if (daysText) " days" else ""
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .testTag("StreakCounter"),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+fun StreakCounter(days: Int, daysText: Boolean) {
+  val text = if (daysText) " days" else ""
+  Row(
+      modifier = Modifier.fillMaxWidth().testTag("StreakCounter"),
+      horizontalArrangement = Arrangement.Center,
+      verticalAlignment = Alignment.CenterVertically) {
         Icon(
             painter = painterResource(id = R.drawable.flame),
             contentDescription = "Streak Icon",
             tint = colorResource(R.color.red),
-            modifier = Modifier
-                .size(32.dp)
-                .testTag("FlameIcon")
-        )
+            modifier = Modifier.size(32.dp).testTag("FlameIcon"))
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = "$days$text",
             fontWeight = FontWeight.Bold,
             color = colorResource(R.color.red),
             fontSize = 20.sp,
-            modifier = Modifier.testTag("NumberOfDays")
-        )
-    }
+            modifier = Modifier.testTag("NumberOfDays"))
+      }
 }
 
 /**
@@ -649,28 +569,24 @@ fun StreakCounter(
  */
 @Composable
 fun ProfilePicture(profilePictureUrl: String?) {
-    Box(
-        modifier =
-        Modifier
-            .size(80.dp)
-            .clip(CircleShape)
-            .background(colorResource(R.color.dark_gray))
-            .testTag("ProfilePicture")
-    ) {
+  Box(
+      modifier =
+          Modifier.size(80.dp)
+              .clip(CircleShape)
+              .background(colorResource(R.color.dark_gray))
+              .testTag("ProfilePicture")) {
         profilePictureUrl?.let {
-            // Load image with Coil or any other image loading library
-            Image(
-                painter = rememberAsyncImagePainter(model = it),
-                contentDescription = "Profile picture",
-                modifier = Modifier.fillMaxSize()
-            )
+          // Load image with Coil or any other image loading library
+          Image(
+              painter = rememberAsyncImagePainter(model = it),
+              contentDescription = "Profile picture",
+              modifier = Modifier.fillMaxSize())
         }
             ?: Text(
                 text = "Profile",
                 modifier = Modifier.align(Alignment.Center),
-                color = colorResource(R.color.white)
-            )
-    }
+                color = colorResource(R.color.white))
+      }
 }
 
 /**
@@ -682,36 +598,26 @@ fun ProfilePicture(profilePictureUrl: String?) {
  * @param days An int value for the number of days (streak).
  */
 @Composable
-fun AccountInformation(
-    userId: String,
-    userName: String,
-    profilePictureUrl: String?,
-    days: Int
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .testTag("UserInfo"),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+fun AccountInformation(userId: String, userName: String, profilePictureUrl: String?, days: Int) {
+  Row(
+      modifier = Modifier.fillMaxWidth().testTag("UserInfo"),
+      horizontalArrangement = Arrangement.Center,
+      verticalAlignment = Alignment.CenterVertically) {
 
         // User Info : user id and user name
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(
-                text = userId,
-                fontWeight = FontWeight.Bold,
-                color = colorResource(R.color.dark_gray),
-                modifier = Modifier.testTag("UserId")
-            )
-            Text(
-                text = userName,
-                fontWeight = FontWeight.Bold,
-                color = colorResource(R.color.dark_gray),
-                modifier = Modifier.testTag("UserName")
-            )
+          Text(
+              text = userId,
+              fontWeight = FontWeight.Bold,
+              color = colorResource(R.color.dark_gray),
+              modifier = Modifier.testTag("UserId"))
+          Text(
+              text = userName,
+              fontWeight = FontWeight.Bold,
+              color = colorResource(R.color.dark_gray),
+              modifier = Modifier.testTag("UserName"))
         }
         Spacer(modifier = Modifier.width(24.dp))
 
@@ -721,7 +627,7 @@ fun AccountInformation(
 
         // Number of days
         StreakCounter(days, true)
-    }
+      }
 }
 
 /**
@@ -731,27 +637,22 @@ fun AccountInformation(
  * @param text The text to be displayed inside the box.
  */
 @Composable
-fun NotImplementedYet(
-    testTag: String,
-    text: String
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(240.dp)
-            .border(3.dp, colorResource(R.color.blue), RoundedCornerShape(12.dp))
-            .background(colorResource(R.color.black), RoundedCornerShape(12.dp))
-            .padding(16.dp)
-            .testTag(testTag),
-        contentAlignment = Alignment.Center
-    ) {
+fun NotImplementedYet(testTag: String, text: String) {
+  Box(
+      modifier =
+          Modifier.fillMaxWidth()
+              .height(240.dp)
+              .border(3.dp, colorResource(R.color.blue), RoundedCornerShape(12.dp))
+              .background(colorResource(R.color.black), RoundedCornerShape(12.dp))
+              .padding(16.dp)
+              .testTag(testTag),
+      contentAlignment = Alignment.Center) {
         Text(
             text = text,
             fontSize = 16.sp,
             color = colorResource(R.color.white),
-            fontWeight = FontWeight.Normal
-        )
-    }
+            fontWeight = FontWeight.Normal)
+      }
 }
 
 /**
@@ -760,33 +661,33 @@ fun NotImplementedYet(
  * @param letter The character from which we want the icon.
  */
 fun getLetterIconResId(letter: Char): Int {
-    return when (letter) {
-        'a' -> R.drawable.letter_a
-        'b' -> R.drawable.letter_b
-        'c' -> R.drawable.letter_c
-        'd' -> R.drawable.letter_d
-        'e' -> R.drawable.letter_e
-        'f' -> R.drawable.letter_f
-        'g' -> R.drawable.letter_g
-        'h' -> R.drawable.letter_h
-        'i' -> R.drawable.letter_i
-        'j' -> R.drawable.letter_j
-        'k' -> R.drawable.letter_k
-        'l' -> R.drawable.letter_l
-        'm' -> R.drawable.letter_m
-        'n' -> R.drawable.letter_n
-        'o' -> R.drawable.letter_o
-        'p' -> R.drawable.letter_p
-        'q' -> R.drawable.letter_q
-        'r' -> R.drawable.letter_r
-        's' -> R.drawable.letter_s
-        't' -> R.drawable.letter_t
-        'u' -> R.drawable.letter_u
-        'v' -> R.drawable.letter_v
-        'w' -> R.drawable.letter_w
-        'x' -> R.drawable.letter_x
-        'y' -> R.drawable.letter_y
-        'z' -> R.drawable.letter_z
-        else -> R.drawable.letter_a // Default case, just in case an unexpected value is passed
-    }
+  return when (letter) {
+    'a' -> R.drawable.letter_a
+    'b' -> R.drawable.letter_b
+    'c' -> R.drawable.letter_c
+    'd' -> R.drawable.letter_d
+    'e' -> R.drawable.letter_e
+    'f' -> R.drawable.letter_f
+    'g' -> R.drawable.letter_g
+    'h' -> R.drawable.letter_h
+    'i' -> R.drawable.letter_i
+    'j' -> R.drawable.letter_j
+    'k' -> R.drawable.letter_k
+    'l' -> R.drawable.letter_l
+    'm' -> R.drawable.letter_m
+    'n' -> R.drawable.letter_n
+    'o' -> R.drawable.letter_o
+    'p' -> R.drawable.letter_p
+    'q' -> R.drawable.letter_q
+    'r' -> R.drawable.letter_r
+    's' -> R.drawable.letter_s
+    't' -> R.drawable.letter_t
+    'u' -> R.drawable.letter_u
+    'v' -> R.drawable.letter_v
+    'w' -> R.drawable.letter_w
+    'x' -> R.drawable.letter_x
+    'y' -> R.drawable.letter_y
+    'z' -> R.drawable.letter_z
+    else -> R.drawable.letter_a // Default case, just in case an unexpected value is passed
+  }
 }

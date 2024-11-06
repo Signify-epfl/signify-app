@@ -37,7 +37,7 @@ import org.mockito.Mockito.mock
 class UtilsTest {
 
   @get:Rule val composeTestRule = createComposeRule()
-    private lateinit var navigationActions: NavigationActions
+  private lateinit var navigationActions: NavigationActions
 
   @Test
   fun reusableButtonWithIconIsDisplayedAndClickable() {
@@ -235,207 +235,191 @@ class UtilsTest {
     // Assert that the click action was triggered
     assert(clicked)
   }
-    @Test
-    fun topBarIsDisplayed() {
-        composeTestRule.setContent { TopBar() }
 
-        // Assert that the top bar is displayed
-        composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
+  @Test
+  fun topBarIsDisplayed() {
+    composeTestRule.setContent { TopBar() }
+
+    // Assert that the top bar is displayed
+    composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
+  }
+
+  // TODO: test the bottom bar after the refactor of the BottomNavigationMenu()
+  @Test fun bottomBarIsDisplayed() {}
+
+  @Test
+  fun columnScreenDisplaysCorrectInformation() {
+    composeTestRule.setContent {
+      ColumnScreen(
+          padding = PaddingValues(16.dp),
+          testTag = "ColumnScreen",
+      ) {
+        Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
+      }
     }
 
+    composeTestRule.onNodeWithTag("ColumnScreen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Text").assertIsDisplayed()
+  }
+
+  @Test
+  fun scaffoldMainScreenDisplaysCorrectInformation() {
+    navigationActions = mock(NavigationActions::class.java)
+    composeTestRule.setContent {
+      ScaffoldMainScreen(
+          navigationActions = navigationActions,
+          testTagColumn = "ScaffoldMainScreen",
+          helpTitle = "Help",
+          helpText = "This is the help text") {
+            Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
+          }
+    }
+
+    composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
     // TODO: test the bottom bar after the refactor of the BottomNavigationMenu()
-    @Test
-    fun bottomBarIsDisplayed() {}
+    composeTestRule.onNodeWithTag("ScaffoldMainScreen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("InfoButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Text").assertIsDisplayed()
+  }
 
-    @Test
-    fun columnScreenDisplaysCorrectInformation() {
-        composeTestRule.setContent {
-            ColumnScreen(
-                padding = PaddingValues(16.dp),
-                testTag = "ColumnScreen",
-            ) {
-                Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
-            }
-        }
-
-        composeTestRule.onNodeWithTag("ColumnScreen").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("Text").assertIsDisplayed()
+  @Test
+  fun scaffoldAnnexeScreenDisplaysCorrectInformation() {
+    navigationActions = mock(NavigationActions::class.java)
+    composeTestRule.setContent {
+      ScaffoldAnnexeScreen(
+          navigationActions = navigationActions, testTagColumn = "ScaffoldAnnexeScreen") {
+            Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
+          }
     }
 
-    @Test
-    fun scaffoldMainScreenDisplaysCorrectInformation() {
-        navigationActions = mock(NavigationActions::class.java)
-        composeTestRule.setContent {
-            ScaffoldMainScreen(
-                navigationActions = navigationActions,
-                testTagColumn = "ScaffoldMainScreen",
-                helpTitle = "Help",
-                helpText = "This is the help text"
-            ) {
-                Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
-            }
-        }
+    composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("ScaffoldAnnexeScreen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Text").assertIsDisplayed()
+  }
 
-        composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
-        // TODO: test the bottom bar after the refactor of the BottomNavigationMenu()
-        composeTestRule.onNodeWithTag("ScaffoldMainScreen").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("InfoButton").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("Text").assertIsDisplayed()
+  @Test
+  fun infoPopupIsDisplayed() {
+    val helpTitle = "Help"
+    val helpText = "Little text for the help"
+    composeTestRule.setContent {
+      InfoPopup(onDismiss = {}, helpTitle = helpTitle, helpText = helpText)
     }
 
-    @Test
-    fun scaffoldAnnexeScreenDisplaysCorrectInformation() {
-        navigationActions = mock(NavigationActions::class.java)
-        composeTestRule.setContent {
-            ScaffoldAnnexeScreen(
-                navigationActions = navigationActions,
-                testTagColumn = "ScaffoldAnnexeScreen"
-            ) {
-                Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
-            }
-        }
+    composeTestRule.onNodeWithTag("InfoPopup").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("InfoPopupContent").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("InfoPopupTitle").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("InfoPopupTitle").assertTextEquals(helpTitle)
+    composeTestRule.onNodeWithTag("InfoPopupBody").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("InfoPopupBody").assertTextEquals(helpText)
+    composeTestRule.onNodeWithTag("InfoPopupCloseButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("InfoPopupCloseButton").assertHasClickAction()
+  }
 
-        composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("ScaffoldAnnexeScreen").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("Text").assertIsDisplayed()
+  @Test
+  fun infoPopupPerformClickOnButton() {
+    var clicked = false
+    val helpTitle = "Help"
+    val helpText = "Little text for the help"
+    composeTestRule.setContent {
+      InfoPopup(onDismiss = { clicked = true }, helpTitle = helpTitle, helpText = helpText)
     }
 
-    @Test
-    fun infoPopupIsDisplayed() {
-        val helpTitle = "Help"
-        val helpText = "Little text for the help"
-        composeTestRule.setContent {
-            InfoPopup(onDismiss = {}, helpTitle = helpTitle, helpText = helpText)
-        }
+    composeTestRule.onNodeWithTag("InfoPopupCloseButton").performClick()
+    assert(clicked)
+  }
 
-        composeTestRule.onNodeWithTag("InfoPopup").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("InfoPopupContent").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("InfoPopupTitle").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("InfoPopupTitle").assertTextEquals(helpTitle)
-        composeTestRule.onNodeWithTag("InfoPopupBody").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("InfoPopupBody").assertTextEquals(helpText)
-        composeTestRule.onNodeWithTag("InfoPopupCloseButton").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("InfoPopupCloseButton").assertHasClickAction()
+  @Test
+  fun statisticsRowIsDisplayed() {
+    val rowTestTag = "Stats"
+    val lineText = "Line stats text"
+    val lineTextTag = "LineTag"
+    val columnTextList = listOf(listOf("test", "10"))
+    val columnTextSPList = listOf(listOf(12, 20))
+    val columnTextTagList = listOf("BoxTag")
+    composeTestRule.setContent {
+      StatisticsRow(
+          rowTestTag = rowTestTag,
+          lineText = lineText,
+          lineTextTag = lineTextTag,
+          columnTextList = columnTextList,
+          columnTextSPList = columnTextSPList,
+          columnTextTagList = columnTextTagList)
     }
 
-    @Test
-    fun infoPopupPerformClickOnButton() {
-        var clicked = false
-        val helpTitle = "Help"
-        val helpText = "Little text for the help"
-        composeTestRule.setContent {
-            InfoPopup(onDismiss = { clicked = true }, helpTitle = helpTitle, helpText = helpText)
-        }
+    composeTestRule.onNodeWithTag(rowTestTag).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(lineTextTag).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(lineTextTag).assertTextEquals(lineText)
+    composeTestRule.onNodeWithTag("BoxTag").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("test").assertTextEquals("test")
+    composeTestRule.onNodeWithTag("10").assertTextEquals("10")
+  }
 
-        composeTestRule.onNodeWithTag("InfoPopupCloseButton").performClick()
-        assert(clicked)
+  @Test
+  fun horizontalLetterListIsDisplayedAndScrollable() {
+    val lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F')
+    composeTestRule.setContent { HorizontalLetterList(lettersLearned) }
+
+    composeTestRule.onNodeWithTag("LettersList").assertIsDisplayed()
+    val scrollableList = composeTestRule.onNodeWithTag("LettersList")
+    for (letter in 'A'..'Z') {
+      scrollableList.performScrollToNode(hasTestTag(letter.toString()))
+      composeTestRule.onNodeWithTag(letter.toString()).assertIsDisplayed()
     }
+    scrollableList.performScrollToNode(hasTestTag("A"))
+    composeTestRule.onNodeWithTag("A").assertIsDisplayed()
+  }
 
-    @Test
-    fun statisticsRowIsDisplayed() {
-        val rowTestTag = "Stats"
-        val lineText = "Line stats text"
-        val lineTextTag = "LineTag"
-        val columnTextList = listOf(listOf("test", "10"))
-        val columnTextSPList = listOf(listOf(12, 20))
-        val columnTextTagList = listOf("BoxTag")
-        composeTestRule.setContent {
-            StatisticsRow(
-                rowTestTag = rowTestTag,
-                lineText = lineText,
-                lineTextTag = lineTextTag,
-                columnTextList = columnTextList,
-                columnTextSPList = columnTextSPList,
-                columnTextTagList = columnTextTagList
-            )
-        }
+  @Test
+  fun allLetterLearnedIsDisplayed() {
+    val lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F')
+    composeTestRule.setContent { AllLetterLearned(lettersLearned) }
 
-        composeTestRule.onNodeWithTag(rowTestTag).assertIsDisplayed()
-        composeTestRule.onNodeWithTag(lineTextTag).assertIsDisplayed()
-        composeTestRule.onNodeWithTag(lineTextTag).assertTextEquals(lineText)
-        composeTestRule.onNodeWithTag("BoxTag").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("test").assertTextEquals("test")
-        composeTestRule.onNodeWithTag("10").assertTextEquals("10")
-    }
+    composeTestRule.onNodeWithTag("AllLetterLearned").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("LettersBox").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("LettersList").assertIsDisplayed()
+  }
 
-    @Test
-    fun horizontalLetterListIsDisplayedAndScrollable() {
-        val lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F')
-        composeTestRule.setContent {
-            HorizontalLetterList(lettersLearned)
-        }
+  @Test
+  fun streakCounterIsDisplayed() {
+    composeTestRule.setContent { StreakCounter(10, false) }
 
-        composeTestRule.onNodeWithTag("LettersList").assertIsDisplayed()
-        val scrollableList = composeTestRule.onNodeWithTag("LettersList")
-        for (letter in 'A'..'Z') {
-            scrollableList.performScrollToNode(hasTestTag(letter.toString()))
-            composeTestRule.onNodeWithTag(letter.toString()).assertIsDisplayed()
-        }
-        scrollableList.performScrollToNode(hasTestTag("A"))
-        composeTestRule.onNodeWithTag("A").assertIsDisplayed()
-    }
+    composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("NumberOfDays").assertTextEquals("10")
+  }
 
-    @Test
-    fun allLetterLearnedIsDisplayed() {
-        val lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F')
-        composeTestRule.setContent {
-            AllLetterLearned(lettersLearned)
-        }
+  @Test
+  fun profilePictureIsDisplayed() {
+    composeTestRule.setContent { ProfilePicture(null) }
 
-        composeTestRule.onNodeWithTag("AllLetterLearned").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("LettersBox").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("LettersList").assertIsDisplayed()
-    }
+    composeTestRule.onNodeWithTag("ProfilePicture").assertIsDisplayed()
+  }
 
-    @Test
-    fun streakCounterIsDisplayed() {
-        composeTestRule.setContent {
-            StreakCounter(10, false)
-        }
+  @Test
+  fun accountInformationIsDisplayed() {
+    val userId = "userId"
+    val userName = "userName"
+    composeTestRule.setContent { AccountInformation(userId, userName, null, 10) }
 
-        composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("NumberOfDays").assertTextEquals("10")
-    }
+    composeTestRule.onNodeWithTag("UserInfo").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("UserId").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("UserId").assertTextEquals(userId)
+    composeTestRule.onNodeWithTag("UserName").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("UserName").assertTextEquals(userName)
+    composeTestRule.onNodeWithTag("ProfilePicture").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("NumberOfDays").assertTextEquals("10 days")
+  }
 
-    @Test
-    fun profilePictureIsDisplayed() {
-        composeTestRule.setContent {
-            ProfilePicture(null)
-        }
+  @Test
+  fun notImplementedYetIsDisplayed() {
+    val testTag = "Tag"
+    val text = "Nothing for now"
+    composeTestRule.setContent { NotImplementedYet(testTag, text) }
 
-        composeTestRule.onNodeWithTag("ProfilePicture").assertIsDisplayed()
-    }
-
-    @Test
-    fun accountInformationIsDisplayed() {
-        val userId = "userId"
-        val userName = "userName"
-        composeTestRule.setContent {
-            AccountInformation(userId, userName, null, 10)
-        }
-
-        composeTestRule.onNodeWithTag("UserInfo").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("UserId").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("UserId").assertTextEquals(userId)
-        composeTestRule.onNodeWithTag("UserName").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("UserName").assertTextEquals(userName)
-        composeTestRule.onNodeWithTag("ProfilePicture").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("NumberOfDays").assertTextEquals("10 days")
-    }
-
-    @Test
-    fun notImplementedYetIsDisplayed() {
-        val testTag = "Tag"
-        val text = "Nothing for now"
-        composeTestRule.setContent {
-            NotImplementedYet(testTag, text)
-        }
-
-        composeTestRule.onNodeWithTag(testTag).onChild().assertIsDisplayed()
-        composeTestRule.onNodeWithTag(testTag).onChild().assertTextEquals(text)
-    }
+    composeTestRule.onNodeWithTag(testTag).onChild().assertIsDisplayed()
+    composeTestRule.onNodeWithTag(testTag).onChild().assertTextEquals(text)
+  }
 }
