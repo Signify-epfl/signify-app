@@ -56,26 +56,20 @@ fun NewChallengeScreen(navigationActions: NavigationActions) {
                 // My Friends button
                 ReusableTextButton(
                     onClickAction = { navigationActions.navigateTo("Friends") },
-                    textTag = "MyFriendsButton",
+                    testTag = "MyFriendsButton",
                     text = "My Friends",
-                    height = 60.dp,
-                    borderColor = colorResource(R.color.dark_gray),
                     backgroundColor = colorResource(R.color.blue),
-                    textSize = 26.sp,
-                    textColor = colorResource(R.color.dark_gray))
+                )
 
                 Spacer(modifier = Modifier.height(40.dp)) // Increased space between buttons
 
                 // Create a challenge button
                 ReusableTextButton(
                     onClickAction = { navigationActions.navigateTo("CreateChallenge") },
-                    textTag = "CreateChallengeButton",
+                    testTag = "CreateChallengeButton",
                     text = "Create a Challenge",
-                    height = 60.dp,
-                    borderColor = colorResource(R.color.dark_gray),
                     backgroundColor = colorResource(R.color.blue),
-                    textSize = 26.sp,
-                    textColor = colorResource(R.color.dark_gray))
+                )
 
                 Spacer(
                     modifier =
@@ -107,13 +101,10 @@ fun NewChallengeScreen(navigationActions: NavigationActions) {
                             for (i in 1..3) {
                               ReusableTextButton(
                                   onClickAction = { /* Do nothing for now */},
-                                  textTag = "ChallengeButton$i",
+                                  testTag = "ChallengeButton$i",
                                   text = "Challenge $i",
-                                  height = 40.dp,
-                                  borderColor = colorResource(R.color.dark_gray),
                                   backgroundColor = colorResource(R.color.white),
-                                  textSize = 20.sp,
-                                  textColor = colorResource(R.color.dark_gray))
+                              )
                               Spacer(modifier = Modifier.height(16.dp))
                             }
                           }

@@ -62,7 +62,6 @@ fun FriendsListScreen(
     navigationActions: NavigationActions,
     userViewModel: UserViewModel = viewModel(factory = UserViewModel.Factory)
 ) {
-  var searchQuery by remember { mutableStateOf("") }
   var errorMessage by remember { mutableStateOf("") }
 
   Column(modifier = Modifier.fillMaxSize().padding(16.dp).testTag("FriendsListScreen")) {
@@ -81,51 +80,21 @@ fun FriendsListScreen(
 
       Spacer(modifier = Modifier.height(16.dp))
 
-      // Search Bar
-      TextField(
-          value = searchQuery,
-          onValueChange = { searchQuery = it },
-          shape = RoundedCornerShape(16.dp),
-          modifier =
-              Modifier.fillMaxWidth()
-                  .padding(start = 30.dp, end = 30.dp)
-                  .border(
-                      BorderStroke(2.dp, colorResource(R.color.dark_gray)),
-                      RoundedCornerShape(16.dp))
-                  .testTag("SearchBar"),
-          placeholder = { Text("Search by user ID", color = colorResource(R.color.white)) },
-          colors =
-              TextFieldDefaults.colors(
-                  focusedContainerColor = colorResource(R.color.blue),
-                  unfocusedContainerColor = colorResource(R.color.blue),
-                  focusedTextColor = colorResource(R.color.white),
-                  cursorColor = colorResource(R.color.dark_gray)),
-          singleLine = true,
-          trailingIcon = {
-            ActionButton(
-                {
-                  if (searchQuery.isNotEmpty()) {
-                    try {
-                      userViewModel.getUserById(searchQuery)
-                      if (searchResult.value == null) {
-                        errorMessage = "User not found"
-                      }
-                    } catch (e: Exception) {
-                      errorMessage = "Error : ${e.message}"
-                    }
-                  }
-                },
-                Icons.Default.Search,
-                colorResource(R.color.blue),
-                "Search")
-          })
+      SearchBar { searchQuery ->
+        if (searchQuery.isNotEmpty()) {
+          try {
+            userViewModel.getUserById(searchQuery)
+            if (searchResult.value == null) {
+              errorMessage = "User not found"
+            }
+          } catch (e: Exception) {
+            errorMessage = "Error : ${e.message}"
+          }
+        }
+      }
 
       errorMessage.let { message ->
-        Text(
-            text = message,
-            color = colorResource(R.color.red),
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
-            fontWeight = FontWeight.Bold)
+        ErrorMessage(message)
         // Dismiss the message
         LaunchedEffect(message) {
           delay(3000)
@@ -155,34 +124,9 @@ fun FriendsListScreen(
 
                       // Check if the users are friends
                       if (friends.value.contains(searchResult.value!!.uid)) {
-                        // Remove Friend button
-                        Button(
-                            onClick = {
-                              userViewModel.removeFriend(currentUserId, searchResult.value!!.uid)
-                              userViewModel.setSearchResult(null)
-                            },
-                            colors =
-                                ButtonDefaults.buttonColors(
-                                    containerColor = colorResource(R.color.blue),
-                                    contentColor = colorResource(R.color.dark_gray)),
-                            modifier = Modifier.fillMaxWidth()) {
-                              Text("Remove Friend")
-                            }
+                        RemoveFriendButton(userViewModel)
                       } else {
-                        // Add Friend button
-                        Button(
-                            onClick = {
-                              userViewModel.sendFriendRequest(
-                                  currentUserId, searchResult.value!!.uid)
-                              userViewModel.setSearchResult(null)
-                            },
-                            colors =
-                                ButtonDefaults.buttonColors(
-                                    containerColor = colorResource(R.color.blue),
-                                    contentColor = colorResource(R.color.dark_gray)),
-                            modifier = Modifier.fillMaxWidth()) {
-                              Text("Add Friend")
-                            }
+                        AddFriendButton(userViewModel)
                       }
 
                       // Close button
@@ -212,6 +156,77 @@ fun FriendsListScreen(
           }
     }
   }
+}
+
+@Composable
+fun AddFriendButton(userViewModel: UserViewModel) {
+  Button(
+      onClick = {
+        userViewModel.sendFriendRequest(currentUserId, userViewModel.searchResult.value!!.uid)
+        userViewModel.setSearchResult(null)
+      },
+      colors =
+          ButtonDefaults.buttonColors(
+              containerColor = colorResource(R.color.blue),
+              contentColor = colorResource(R.color.dark_gray)),
+      modifier = Modifier.fillMaxWidth()) {
+        Text("Add Friend")
+      }
+}
+
+@Composable
+fun RemoveFriendButton(userViewModel: UserViewModel) {
+  Button(
+      onClick = {
+        userViewModel.removeFriend(currentUserId, userViewModel.searchResult.value!!.uid)
+        userViewModel.setSearchResult(null)
+      },
+      colors =
+          ButtonDefaults.buttonColors(
+              containerColor = colorResource(R.color.blue),
+              contentColor = colorResource(R.color.dark_gray)),
+      modifier = Modifier.fillMaxWidth()) {
+        Text("Remove Friend")
+      }
+}
+
+@Composable
+fun ErrorMessage(message: String) {
+  Text(
+      text = message,
+      color = colorResource(R.color.red),
+      modifier = Modifier.fillMaxWidth().padding(16.dp),
+      fontWeight = FontWeight.Bold)
+}
+
+@Composable
+fun SearchBar(
+    onSearch: (String) -> Unit,
+) {
+  var searchQuery by remember { mutableStateOf("") }
+
+  TextField(
+      value = searchQuery,
+      onValueChange = { searchQuery = it },
+      shape = RoundedCornerShape(16.dp),
+      modifier =
+          Modifier.fillMaxWidth()
+              .padding(start = 30.dp, end = 30.dp)
+              .border(
+                  BorderStroke(2.dp, colorResource(R.color.dark_gray)), RoundedCornerShape(16.dp))
+              .testTag("SearchBar"),
+      placeholder = { Text("Search by user ID", color = colorResource(R.color.white)) },
+      colors =
+          TextFieldDefaults.colors(
+              focusedContainerColor = colorResource(R.color.blue),
+              unfocusedContainerColor = colorResource(R.color.blue),
+              focusedTextColor = colorResource(R.color.white),
+              cursorColor = colorResource(R.color.dark_gray)),
+      singleLine = true,
+      trailingIcon = {
+        ActionButton(
+            { onSearch(searchQuery) }, Icons.Default.Search, colorResource(R.color.blue), "Search")
+      })
 }
 
 @Composable

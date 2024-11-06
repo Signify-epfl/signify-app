@@ -40,6 +40,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
+import com.github.se.signify.ui.getLetterIconResId
 import com.github.se.signify.ui.navigation.NavigationActions
 
 @Composable
@@ -79,9 +80,7 @@ fun ExerciseScreenEasy(navigationActions: NavigationActions) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center) {
-              val imageName = "letter_${currentLetter}"
-              val imageResId =
-                  context.resources.getIdentifier(imageName, "drawable", context.packageName)
+              val imageResId = getLetterIconResId(currentLetter)
 
               // Display the image if the resource exists
               if (imageResId != 0) {

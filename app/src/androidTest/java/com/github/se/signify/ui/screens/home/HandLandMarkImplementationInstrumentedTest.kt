@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.camera.core.ImageProxy
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.se.signify.model.hand.HandLandMarkImplementation
-import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarkerResult
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -47,9 +46,7 @@ class HandLandMarkImplementationInstrumentedTest {
         context,
         onSuccess = {
           handLandMarkImplementation.processImageProxy(
-              imageProxy,
-              onSuccess = { result -> assert(result is HandLandmarkerResult) },
-              onFailure = { assert(false) })
+              imageProxy, onSuccess = {}, onFailure = { assert(false) })
         },
         onFailure = { assert(false) })
   }
@@ -63,7 +60,7 @@ class HandLandMarkImplementationInstrumentedTest {
         onSuccess = {
           handLandMarkImplementation.processImageProxy(
               imageProxy,
-              onSuccess = { result ->
+              onSuccess = {
                 val gesture = handLandMarkImplementation.gestureOutput()
                 assert(gesture.isNotEmpty())
               },

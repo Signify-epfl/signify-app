@@ -85,13 +85,10 @@ class UtilsTest {
     composeTestRule.setContent {
       ReusableTextButton(
           onClickAction = {},
-          textTag = textTag,
+          testTag = textTag,
           text = buttonText,
-          height = 48.dp,
-          borderColor = Color.Black,
           backgroundColor = Color.Blue,
-          textSize = 16.sp,
-          textColor = Color.White)
+      )
     }
 
     // Assert the button is displayed
@@ -111,13 +108,10 @@ class UtilsTest {
     composeTestRule.setContent {
       ReusableTextButton(
           onClickAction = { clickCounter++ },
-          textTag = textTag,
+          testTag = textTag,
           text = buttonText,
-          height = 48.dp,
-          borderColor = Color.Black,
           backgroundColor = Color.Blue,
-          textSize = 16.sp,
-          textColor = Color.White)
+      )
     }
 
     // Perform a click action on the button
