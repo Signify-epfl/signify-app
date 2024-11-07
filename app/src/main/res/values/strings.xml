@@ -7,4 +7,35 @@
     <string name="button_uri_string">
         https://www.google.com/imgres?q=asl%20alphabet&amp;imgurl=https%3A%2F%2Fwww.researchgate.net%2Fpublication%2F269306646%2Ffigure%2Ffig1%2FAS%3A295027705171970%401447351494295%2FThe-American-Manual-Alphabet-Signs-with-a-are-pictured-from-the-side-Reproduced-from.png&amp;imgrefurl=https%3A%2F%2Fwww.researchgate.net%2Ffigure%2FThe-American-Manual-Alphabet-Signs-with-a-are-pictured-from-the-side-Reproduced-from_fig1_269306646&amp;docid=8H-KdI-bjGB48M&amp;tbnid=KndHLcvycA_XpM&amp;vet=12ahUKEwjSipzz7LCJAxUyg_0HHblcB9gQM3oECBUQAA..i&amp;w=514&amp;h=668&amp;hcb=2&amp;itg=1&amp;ved=2ahUKEwjSipzz7LCJAxUyg_0HHblcB9gQM3oECBUQAA
     </string>
+    <string-array name="real_words">
+        <item>cat</item>
+        <item>dog</item>
+        <item>bat</item>
+        <item>hat</item>
+        <item>rat</item>
+        <item>sun</item>
+        <item>fan</item>
+        <item>run</item>
+        <item>cup</item>
+        <item>pen</item>
+    </string-array>
+    <string-array name="real_words_hard">
+        <item>apple</item>
+        <item>grapes</item>
+        <item>banana</item>
+        <item>orange</item>
+        <item>pencil</item>
+        <item>guitar</item>
+        <item>flower</item>
+        <item>window</item>
+        <item>horse</item>
+        <item>planet</item>
+        <item>bridge</item>
+        <item>ladder</item>
+        <item>rabbit</item>
+        <item>garden</item>
+        <item>button</item>
+        <item>silver</item>
+        <item>pillow</item>
+    </string-array>
 </resources>

@@ -1,5 +1,7 @@
 package com.github.se.signify.ui.screens
 
+import android.Manifest
+import android.content.Context
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
@@ -11,10 +13,14 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.R
+import com.github.se.signify.model.hand.HandLandMarkImplementation
+import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.AccountInformation
 import com.github.se.signify.ui.AllLetterLearned
 import com.github.se.signify.ui.BackButton
+import com.github.se.signify.ui.CameraPlaceholder
 import com.github.se.signify.ui.ColumnScreen
 import com.github.se.signify.ui.HorizontalLetterList
 import com.github.se.signify.ui.InfoPopup
@@ -37,6 +43,10 @@ import org.mockito.Mockito.mock
 class UtilsTest {
 
   @get:Rule val composeTestRule = createComposeRule()
+  
+  @get:Rule
+  val cameraAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
+  
   private lateinit var navigationActions: NavigationActions
 
   @Test
@@ -415,5 +425,15 @@ class UtilsTest {
 
     composeTestRule.onNodeWithTag(testTag).onChild().assertIsDisplayed()
     composeTestRule.onNodeWithTag(testTag).onChild().assertTextEquals(text)
+
+  @Test
+  fun cameraPreview_isDisplayed() {
+    val context = mock(Context::class.java)
+    val handLandMarkImplementation =
+        HandLandMarkImplementation("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
+    val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
+
+    composeTestRule.setContent { CameraPlaceholder(handLandMarkViewModel) }
+    composeTestRule.onNodeWithTag("cameraPreview").assertIsDisplayed()
   }
 }

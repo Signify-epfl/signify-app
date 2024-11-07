@@ -34,49 +34,15 @@ class ChallengeRepositoryFireStore(private val db: FirebaseFirestore) : Challeng
         .addOnFailureListener { onFailure(it) }
   }
 
-  override fun acceptChallenge(
+  override fun deleteChallenge(
       challengeId: String,
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   ) {
     db.collection(collectionPath)
         .document(challengeId)
-        .update("status", "active")
+        .delete()
         .addOnSuccessListener { onSuccess() }
         .addOnFailureListener { onFailure(it) }
-  }
-
-  override fun submitGesture(
-      challengeId: String,
-      userId: String,
-      gesture: String,
-      onSuccess: () -> Unit,
-      onFailure: (Exception) -> Unit
-  ) {
-    db.collection(collectionPath)
-        .document(challengeId)
-        .update("responses.$userId", gesture)
-        .addOnSuccessListener { onSuccess() }
-        .addOnFailureListener { onFailure(it) }
-  }
-
-  override fun getChallengeUpdates(
-      challengeId: String,
-      onUpdate: (Challenge) -> Unit,
-      onFailure: (Exception) -> Unit
-  ) {
-    db.collection(collectionPath).document(challengeId).addSnapshotListener { documentSnapshot, e ->
-      if (e != null) {
-        onFailure(e)
-        return@addSnapshotListener
-      }
-
-      if (documentSnapshot != null && documentSnapshot.exists()) {
-        val challenge = documentSnapshot.toObject(Challenge::class.java)
-        if (challenge != null) {
-          onUpdate(challenge)
-        }
-      }
-    }
   }
 }

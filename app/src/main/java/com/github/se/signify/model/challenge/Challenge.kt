@@ -4,6 +4,7 @@ data class Challenge(
     val challengeId: String = "",
     val player1: String = "",
     val player2: String = "",
+    val mode: String = "",
     val status: String = "pending",
     val round: Int = 1,
     val player1Score: Int = 0,

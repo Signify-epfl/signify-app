@@ -1,11 +1,13 @@
 package com.github.se.signify.ui.screens
 
+import android.Manifest
 import android.content.Context
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.SignifyAppPreview
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
@@ -24,6 +26,8 @@ class MainActivityTest {
   @get:Rule val composeTestRule = createComposeRule()
   private val navigationState = MutableStateFlow<NavigationActions?>(null)
   private val navigationActions = mock(NavigationActions::class.java)
+  @get:Rule
+  val cameraAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
 
   @Before
   fun setUp() {
@@ -56,17 +60,12 @@ class MainActivityTest {
 
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Screen.EXERCISE_EASY) }
     composeTestRule.onNodeWithTag("ExerciseScreenEasy").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("Success").performClick()
 
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Screen.EXERCISE_HARD) }
     composeTestRule.onNodeWithTag("ExerciseScreenHard").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("Success").performClick()
 
     composeTestRule.runOnIdle { navigationActions.navigateTo(Route.SETTINGS) }
     composeTestRule.onNodeWithTag("SettingsScreen").assertIsDisplayed()
-
-    composeTestRule.runOnIdle { navigationState.value?.navigateTo(Route.HOME) }
-    composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
 
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Route.HOME) }
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
