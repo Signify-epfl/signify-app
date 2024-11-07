@@ -1,5 +1,6 @@
 package com.github.se.signify.model.user
 
+import com.github.se.signify.model.challenge.Challenge
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FieldValue
@@ -10,8 +11,10 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
   private val collectionPath = "users"
   private val friendsListPath = "friends"
   private val friendRequestsListPath = "friendRequests"
+    private val challengesCollectionPath = "challenges"
 
-  override fun init(onSuccess: () -> Unit) {
+
+    override fun init(onSuccess: () -> Unit) {
     Firebase.auth.addAuthStateListener {
       if (it.currentUser != null) {
         onSuccess()
@@ -250,6 +253,51 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
         .addOnFailureListener { onFailure(it) }
   }
 
+    override fun getOngoingChallenges(
+        userId: String,
+        onSuccess: (List<Challenge>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val userDocRef = db.collection(collectionPath).document(userId)
+
+        userDocRef.get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val challengeIds = document.get("ongoingChallenges") as? List<String>
+                    if (challengeIds != null) {
+                        // Fetch each challenge document by its ID
+                        val challenges = mutableListOf<Challenge>()
+                        for (challengeId in challengeIds) {
+                            db.collection(challengesCollectionPath).document(challengeId)
+                                .get()
+                                .addOnSuccessListener { challengeDoc ->
+                                    if (challengeDoc.exists()) {
+                                        val challenge = challengeDoc.toObject(Challenge::class.java)
+                                        if (challenge != null) {
+                                            challenges.add(challenge)
+                                        }
+                                    }
+                                    // Check if we have fetched all challenges
+                                    if (challenges.size == challengeIds.size) {
+                                        onSuccess(challenges)
+                                    }
+                                }
+                                .addOnFailureListener { e ->
+                                    onFailure(e)
+                                }
+                        }
+                    } else {
+                        onSuccess(emptyList())
+                    }
+                } else {
+                    onSuccess(emptyList())
+                }
+            }
+            .addOnFailureListener { e ->
+                onFailure(e)
+            }
+    }
+
   override fun removeOngoingChallenge(
       userId: String,
       challengeId: String,
@@ -263,16 +311,4 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
         .addOnFailureListener { onFailure(it) }
   }
 
-  override fun addPastChallenge(
-      userId: String,
-      challengeId: String,
-      onSuccess: () -> Unit,
-      onFailure: (Exception) -> Unit
-  ) {
-    val userRef = db.collection(collectionPath).document(userId)
-    userRef
-        .update("pastChallenges", FieldValue.arrayUnion(challengeId))
-        .addOnSuccessListener { onSuccess() }
-        .addOnFailureListener { onFailure(it) }
-  }
 }
