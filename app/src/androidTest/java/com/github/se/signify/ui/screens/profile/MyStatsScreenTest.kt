@@ -74,12 +74,16 @@ class MyStatsScreenTest {
     composeTestRule.onNodeWithTag("EASY").assertIsDisplayed()
     composeTestRule.onNodeWithTag("EASY").assertTextEquals("EASY")
     composeTestRule.onNodeWithTag("${exercisesAchieved[0]}").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("${exercisesAchieved[0]}").assertTextEquals("${exercisesAchieved[0]}")
+    composeTestRule
+        .onNodeWithTag("${exercisesAchieved[0]}")
+        .assertTextEquals("${exercisesAchieved[0]}")
     composeTestRule.onNodeWithTag("ExercisesHardCountBox").assertIsDisplayed()
     composeTestRule.onNodeWithTag("HARD").assertIsDisplayed()
     composeTestRule.onNodeWithTag("HARD").assertTextEquals("HARD")
     composeTestRule.onNodeWithTag("${exercisesAchieved[1]}").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("${exercisesAchieved[1]}").assertTextEquals("${exercisesAchieved[1]}")
+    composeTestRule
+        .onNodeWithTag("${exercisesAchieved[1]}")
+        .assertTextEquals("${exercisesAchieved[1]}")
 
     // Verify quests achieved section is displayed with counts
     composeTestRule.onNodeWithTag("QuestsText").assertIsDisplayed()

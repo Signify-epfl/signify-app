@@ -594,8 +594,7 @@ fun AccountInformation(userId: String, userName: String, profilePictureUrl: Stri
   Row(
       modifier = Modifier.fillMaxWidth().testTag("UserInfo"),
       horizontalArrangement = Arrangement.Center,
-      verticalAlignment = Alignment.CenterVertically
-  ) {
+      verticalAlignment = Alignment.CenterVertically) {
         // User Info : user id and user name
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

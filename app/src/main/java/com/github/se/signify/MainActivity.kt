@@ -59,7 +59,7 @@ fun SignifyAppPreview(context: Context, navigationState: MutableStateFlow<Naviga
   val handLandMarkImplementation =
       HandLandMarkImplementation("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
   val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
-  NavHost(navController = navController, startDestination = Route.PROFILE) {
+  NavHost(navController = navController, startDestination = Route.WELCOME) {
     navigation(
         startDestination = Screen.WELCOME,
         route = Route.WELCOME,
