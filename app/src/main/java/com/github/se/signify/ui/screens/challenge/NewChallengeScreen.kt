@@ -125,10 +125,8 @@ fun NewChallengeScreen(
                             Box(
                                 modifier =
                                     Modifier.fillMaxWidth()
-                                        .height(
-                                            250
-                                                .dp) // Set a maximum height to make the box
-                                                     // scrollable
+                                        .height(250.dp) // Set a maximum height to make the box
+                                        // scrollable
                                         .testTag("OngoingChallengesListBox")) {
                                   LazyColumn(
                                       verticalArrangement = Arrangement.spacedBy(16.dp),
