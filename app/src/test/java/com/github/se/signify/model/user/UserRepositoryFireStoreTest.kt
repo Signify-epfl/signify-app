@@ -127,6 +127,142 @@ class ToDosRepositoryFireStoreTest {
   }
 
   @Test
+  fun getProfilePictureUrl_callsDocuments() {
+    // Ensure that mockToDoQuerySnapshot is properly initialized and mocked
+    `when`(mockCollectionReference.get()).thenReturn(Tasks.forResult(mockToDoQuerySnapshot))
+
+    // Ensure the QuerySnapshot returns a list of mock DocumentSnapshots
+    `when`(mockToDoQuerySnapshot.documents).thenReturn(listOf())
+
+    // Call the method under test
+    userRepositoryFireStore.getProfilePictureUrl(
+        currentUserId,
+        onSuccess = {
+          // Do nothing; we just want to verify that the 'documents' field was accessed
+        },
+        onFailure = { fail("Failure callback should not be called") })
+
+    // Verify that the 'documents' field was accessed
+    verify(timeout(100)) { (mockToDoQuerySnapshot).documents }
+  }
+
+  @Test
+  fun updateUserName_shouldUpdateFireStoreDocument() {
+    // Mock the FireStore document reference and its update method
+    `when`(mockCurrentUserDocRef.update(eq("name"), eq("NewName")))
+        .thenReturn(Tasks.forResult(null)) // Simulate success
+
+    var successCallbackCalled = false
+    val onSuccess: () -> Unit = { successCallbackCalled = true }
+
+    // Act
+    userRepositoryFireStore.updateUserName(
+        currentUserId,
+        "NewName",
+        onSuccess,
+        onFailure = { fail("Failure callback should not be called") })
+
+    // Idle the main looper to process the tasks
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert
+    assertTrue(successCallbackCalled)
+
+    // Verify that FireStore's update method was called with the correct arguments
+    verify(mockCurrentUserDocRef).update(eq("name"), eq("NewName"))
+  }
+
+  @Test
+  fun updateUserName_shouldCallOnFailureWhenUpdateFails() {
+    // Arrange
+    val testException = Exception("Test Firestore failure") // Simulate Firestore failure
+
+    // Mock FireStore document reference to fail the update
+    `when`(mockCurrentUserDocRef.update(eq("name"), eq("NewName")))
+        .thenReturn(Tasks.forException(testException)) // Simulate failure
+
+    var failureCallbackCalled = false
+    val onFailure: (Exception) -> Unit = { exception ->
+      failureCallbackCalled = true
+      assertEquals(testException, exception) // Ensure the correct exception is passed
+    }
+
+    // Act
+    userRepositoryFireStore.updateUserName(
+        currentUserId,
+        "NewName",
+        onSuccess = { fail("Success callback should not be called") },
+        onFailure = onFailure)
+
+    // Idle the main looper to process the tasks
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert
+    assertTrue(failureCallbackCalled)
+
+    // Verify that FireStore's update method was called with the correct arguments
+    verify(mockCurrentUserDocRef).update(eq("name"), eq("NewName"))
+  }
+
+  @Test
+  fun updateProfilePictureUrl_shouldUpdateFireStoreDocument() {
+    // Mock the FireStore document reference and its update method
+    `when`(mockCurrentUserDocRef.update(eq("profileImageUrl"), eq("NewProfilePictureUrl")))
+        .thenReturn(Tasks.forResult(null)) // Simulate success
+
+    var successCallbackCalled = false
+    val onSuccess: () -> Unit = { successCallbackCalled = true }
+
+    // Act
+    userRepositoryFireStore.updateProfilePictureUrl(
+        currentUserId,
+        "NewProfilePictureUrl",
+        onSuccess,
+        onFailure = { fail("Failure callback should not be called") })
+
+    // Idle the main looper to process the tasks
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert
+    assertTrue(successCallbackCalled)
+
+    // Verify that FireStore's update method was called with the correct arguments
+    verify(mockCurrentUserDocRef).update(eq("profileImageUrl"), eq("NewProfilePictureUrl"))
+  }
+
+  @Test
+  fun updateProfilePictureUrl_shouldCallOnFailureWhenUpdateFails() {
+    // Arrange
+    val testException = Exception("Test Firestore failure") // Simulate Firestore failure
+
+    // Mock Firestore document reference to fail the update
+    `when`(mockCurrentUserDocRef.update(eq("profileImageUrl"), eq("NewProfilePictureUrl")))
+        .thenReturn(Tasks.forException(testException)) // Simulate failure
+
+    var failureCallbackCalled = false
+    val onFailure: (Exception) -> Unit = { exception ->
+      failureCallbackCalled = true
+      assertEquals(testException, exception) // Ensure the correct exception is passed
+    }
+
+    // Act
+    userRepositoryFireStore.updateProfilePictureUrl(
+        currentUserId,
+        "NewProfilePictureUrl",
+        onSuccess = { fail("Success callback should not be called") },
+        onFailure = onFailure)
+
+    // Idle the main looper to process the tasks
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert
+    assertTrue(failureCallbackCalled)
+
+    // Verify that Firestore's update method was called with the correct arguments
+    verify(mockCurrentUserDocRef).update(eq("profileImageUrl"), eq("NewProfilePictureUrl"))
+  }
+
+  @Test
   fun getUserById_shouldCallOnSuccessWhenUserExists() {
     // Arrange
     val mockUser =
