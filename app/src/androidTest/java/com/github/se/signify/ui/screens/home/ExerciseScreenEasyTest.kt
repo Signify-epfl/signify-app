@@ -17,6 +17,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 
 @RunWith(AndroidJUnit4::class)
 class ExerciseScreenEasyTest {
@@ -27,6 +29,9 @@ class ExerciseScreenEasyTest {
 
   private lateinit var mockNavigationActions: NavigationActions
   private lateinit var handLandMarkViewModel: HandLandMarkViewModel
+  private lateinit var mockOnNextLetter: (Int) -> Unit
+  private lateinit var mockOnNextWord: (Int) -> Unit
+  private lateinit var mockOnAllWordsComplete: () -> Unit
 
   @Before
   fun setup() {
@@ -60,25 +65,28 @@ class ExerciseScreenEasyTest {
   }
 
   @Test
-  fun changeLetterSucces() {
+  fun handleGestureMatchingTest() {
+    mockOnNextLetter = mock<(Int) -> Unit>()
+    mockOnNextWord = mock<(Int) -> Unit>()
+    mockOnAllWordsComplete = mock<() -> Unit>()
+    val detectedGesture = "A"
+    val currentLetter = 'A'
+    val currentLetterIndex = 0
+    val currentWordIndex = 0
+    val wordsList = listOf("apple")
 
-    // Set the content with the ExerciseScreenEasy
-    composeTestRule.setContent {
-      ExerciseScreenEasy(
-          navigationActions = mockNavigationActions, handLandMarkViewModel = handLandMarkViewModel)
-    }
-    val word = getFirstWord()
-    val expectedLetter = word[0].toString()
+    handleGestureMatching(
+        detectedGesture = detectedGesture,
+        currentLetter = currentLetter,
+        currentLetterIndex = currentLetterIndex,
+        currentWordIndex = currentWordIndex,
+        wordsList = wordsList,
+        onNextLetter = mockOnNextLetter,
+        onNextWord = mockOnNextWord,
+        onAllWordsComplete = mockOnAllWordsComplete)
 
-    // Set the solution in the ViewModel
-    handLandMarkViewModel.setSolution(expectedLetter)
-    // Reset landmarks to default to trigger the event
-    handLandMarkViewModel.resetLandmarksToDefault()
-
-    // Assert that the current solution matches the expected letter
-    val actualSolution = handLandMarkViewModel.getSolution()
-    assert(expectedLetter == actualSolution) {
-      "Expected solution ($expectedLetter) did not match actual solution ($actualSolution)"
-    }
+    verify(mockOnNextLetter).invoke(currentLetterIndex + 1)
+    verifyNoInteractions(mockOnNextWord)
+    verifyNoInteractions(mockOnAllWordsComplete)
   }
 }

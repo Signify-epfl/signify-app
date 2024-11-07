@@ -55,7 +55,7 @@ import com.github.se.signify.ui.navigation.NavigationActions
  *   screen.
  * @param handLandMarkViewModel The ViewModel responsible for managing hand landmark detection.
  */
-private lateinit var testFirstWord: String
+private lateinit var testWords: List<String>
 
 @Composable
 fun ExerciseScreenEasy(
@@ -66,10 +66,9 @@ fun ExerciseScreenEasy(
   val realWords = stringArrayResource(R.array.real_words).toList()
   var words by rememberSaveable { mutableStateOf(List(3) { realWords.random() }) }
   val context = LocalContext.current
-
+  testWords = words
   // Placeholders, eventually have a viewmodel to pass arguments for the list of words.
   val word1 = words[0]
-  testFirstWord = word1
   val word2 = words[1]
   val word3 = words[2]
 
@@ -81,27 +80,23 @@ fun ExerciseScreenEasy(
   val landmarksState = handLandMarkViewModel.landMarks().collectAsState()
   val detectedGesture = handLandMarkViewModel.getSolution()
   if (!landmarksState.value.isNullOrEmpty()) {
-    if (detectedGesture.equals(currentLetter.uppercase())) {
-      onSuccess(
-          currentLetterIndex = currentLetterIndex,
-          currentWordIndex = currentWordIndex,
-          words = wordsList,
-          onNextLetter = { nextIndex -> currentLetterIndex = nextIndex },
-          onNextWord = { nextWordIndex ->
-            currentWordIndex = nextWordIndex
-            currentLetterIndex = 0
-          },
-          onAllWordsComplete = {
-            Toast.makeText(context, "Words Completed!", Toast.LENGTH_SHORT).show()
-            words = List(3) { realWords.random() } // Reset with new random words
-            currentWordIndex = 0
-            currentLetterIndex = 0
-          })
-    } else {
-      Log.d(
-          "ExerciseScreenEasy",
-          "Detected gesture ($detectedGesture) does not match the current letter ($currentLetter)")
-    }
+    handleGestureMatching(
+        detectedGesture = detectedGesture,
+        currentLetter = currentLetter,
+        currentLetterIndex = currentLetterIndex,
+        currentWordIndex = currentWordIndex,
+        wordsList = wordsList,
+        onNextLetter = { nextIndex -> currentLetterIndex = nextIndex },
+        onNextWord = { nextWordIndex ->
+          currentWordIndex = nextWordIndex
+          currentLetterIndex = 0
+        },
+        onAllWordsComplete = {
+          Toast.makeText(context, "Words Completed!", Toast.LENGTH_SHORT).show()
+          words = List(3) { realWords.random() } // Reset with new random words
+          currentWordIndex = 0
+          currentLetterIndex = 0
+        })
   }
   LazyColumn(
       modifier =
@@ -251,4 +246,41 @@ fun WordLayer(words: List<String>, currentWordIndex: Int, currentLetterIndex: In
       }
 }
 
-fun getFirstWord(): String = testFirstWord
+fun getWordList(): List<String> = testWords
+
+/**
+ * Function to handle the gesture matching logic.
+ *
+ * @param detectedGesture The gesture detected by the hand landmark model.
+ * @param currentLetter The current letter to be matched.
+ * @param currentLetterIndex The index of the current letter in the current word.
+ * @param currentWordIndex The index of the current word in the list.
+ * @param wordsList The list of words used in the exercise.
+ * @param onNextLetter Callback to move to the next letter in the current word.
+ * @param onNextWord Callback to move to the next word in the list.
+ * @param onAllWordsComplete Callback to handle when all words are completed.
+ */
+fun handleGestureMatching(
+    detectedGesture: String,
+    currentLetter: Char,
+    currentLetterIndex: Int,
+    currentWordIndex: Int,
+    wordsList: List<String>,
+    onNextLetter: (Int) -> Unit,
+    onNextWord: (Int) -> Unit,
+    onAllWordsComplete: () -> Unit
+) {
+  if (detectedGesture.equals(currentLetter.uppercase())) {
+    onSuccess(
+        currentLetterIndex = currentLetterIndex,
+        currentWordIndex = currentWordIndex,
+        words = wordsList,
+        onNextLetter = onNextLetter,
+        onNextWord = onNextWord,
+        onAllWordsComplete = onAllWordsComplete)
+  } else {
+    Log.d(
+        "ExerciseScreenEasy",
+        "Detected gesture ($detectedGesture) does not match the current letter ($currentLetter)")
+  }
+}
