@@ -55,102 +55,16 @@ import com.github.se.signify.ui.navigation.NavigationActions
  *   screen.
  * @param handLandMarkViewModel The ViewModel responsible for managing hand landmark detection.
  */
-private lateinit var testWords: List<String>
-
 @Composable
 fun ExerciseScreenEasy(
     navigationActions: NavigationActions,
     handLandMarkViewModel: HandLandMarkViewModel
 ) {
-
-  val realWords = stringArrayResource(R.array.real_words).toList()
-  var words by rememberSaveable { mutableStateOf(List(3) { realWords.random() }) }
-  val context = LocalContext.current
-  testWords = words
-  // Placeholders, eventually have a viewmodel to pass arguments for the list of words.
-  val word1 = words[0]
-  val word2 = words[1]
-  val word3 = words[2]
-
-  val wordsList = listOf(word1, word2, word3).map { it.lowercase() }
-  var currentLetterIndex by rememberSaveable { mutableIntStateOf(0) }
-  var currentWordIndex by rememberSaveable { mutableIntStateOf(0) }
-  val currentLetter = wordsList[currentWordIndex][currentLetterIndex]
-
-  val landmarksState = handLandMarkViewModel.landMarks().collectAsState()
-  val detectedGesture = handLandMarkViewModel.getSolution()
-  if (!landmarksState.value.isNullOrEmpty()) {
-    handleGestureMatching(
-        detectedGesture = detectedGesture,
-        currentLetter = currentLetter,
-        currentLetterIndex = currentLetterIndex,
-        currentWordIndex = currentWordIndex,
-        wordsList = wordsList,
-        onNextLetter = { nextIndex -> currentLetterIndex = nextIndex },
-        onNextWord = { nextWordIndex ->
-          currentWordIndex = nextWordIndex
-          currentLetterIndex = 0
-        },
-        onAllWordsComplete = {
-          Toast.makeText(context, "Words Completed!", Toast.LENGTH_SHORT).show()
-          words = List(3) { realWords.random() } // Reset with new random words
-          currentWordIndex = 0
-          currentLetterIndex = 0
-        })
-  }
-  LazyColumn(
-      modifier =
-          Modifier.fillMaxSize()
-              .background(colorResource(R.color.white))
-              .testTag("ExerciseScreenEasy"),
-      horizontalAlignment = Alignment.CenterHorizontally,
-      verticalArrangement = Arrangement.Center) {
-        // Back button
-        item {
-          IconButton(
-              onClick = { navigationActions.goBack() },
-              modifier = Modifier.padding(16.dp).testTag("Back")) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = colorResource(R.color.black))
-              }
-        }
-
-        // Display sign image for current letter
-        item {
-          val imageName = "letter_${currentLetter}"
-          val imageResId =
-              context.resources.getIdentifier(imageName, "drawable", context.packageName)
-
-          if (imageResId != 0) {
-            Box(
-                modifier =
-                    Modifier.fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .height(150.dp)
-                        .background(colorResource(R.color.blue), shape = RoundedCornerShape(16.dp))
-                        .border(
-                            2.dp, colorResource(R.color.black), shape = RoundedCornerShape(16.dp)),
-                contentAlignment = Alignment.Center) {
-                  Image(
-                      painter = painterResource(id = imageResId),
-                      contentDescription = "Sign image",
-                      modifier = Modifier.size(120.dp))
-                }
-
-            Spacer(modifier = Modifier.height(16.dp))
-          } else {
-            Text("Image for letter $currentLetter not found.")
-          }
-        }
-
-        // Word layer display
-        item { WordLayer(wordsList, currentWordIndex, currentLetterIndex) }
-
-        // Camera placeholder/composable
-        item { CameraPlaceholder(handLandMarkViewModel) }
-      }
+  ExerciseScreenCommon(
+      navigationActions = navigationActions,
+      handLandMarkViewModel = handLandMarkViewModel,
+      wordsResourceId = R.array.real_words,
+      screenTag = "ExerciseScreenEasy")
 }
 
 /**
@@ -246,8 +160,6 @@ fun WordLayer(words: List<String>, currentWordIndex: Int, currentLetterIndex: In
       }
 }
 
-fun getWordList(): List<String> = testWords
-
 /**
  * Function to handle the gesture matching logic.
  *
@@ -283,4 +195,96 @@ fun handleGestureMatching(
         "ExerciseScreenEasy",
         "Detected gesture ($detectedGesture) does not match the current letter ($currentLetter)")
   }
+}
+
+@Composable
+fun ExerciseScreenCommon(
+    navigationActions: NavigationActions,
+    handLandMarkViewModel: HandLandMarkViewModel,
+    wordsResourceId: Int,
+    screenTag: String,
+    wordFilter: ((String) -> Boolean)? = null
+) {
+  val context = LocalContext.current
+  val realWords = stringArrayResource(wordsResourceId).toList()
+  var words by rememberSaveable {
+    mutableStateOf(List(3) { realWords.filter { wordFilter?.invoke(it) ?: true }.random() })
+  }
+  val wordsList = words.map { it.lowercase() }
+
+  var currentLetterIndex by rememberSaveable { mutableIntStateOf(0) }
+  var currentWordIndex by rememberSaveable { mutableIntStateOf(0) }
+  val currentLetter = wordsList[currentWordIndex][currentLetterIndex]
+
+  val landmarksState = handLandMarkViewModel.landMarks().collectAsState()
+  val detectedGesture = handLandMarkViewModel.getSolution()
+
+  if (!landmarksState.value.isNullOrEmpty()) {
+    handleGestureMatching(
+        detectedGesture = detectedGesture,
+        currentLetter = currentLetter,
+        currentLetterIndex = currentLetterIndex,
+        currentWordIndex = currentWordIndex,
+        wordsList = wordsList,
+        onNextLetter = { nextIndex -> currentLetterIndex = nextIndex },
+        onNextWord = { nextWordIndex ->
+          currentWordIndex = nextWordIndex
+          currentLetterIndex = 0
+        },
+        onAllWordsComplete = {
+          Toast.makeText(context, "Words Completed!", Toast.LENGTH_SHORT).show()
+          words = List(3) { realWords.filter { wordFilter?.invoke(it) ?: true }.random() }
+          currentWordIndex = 0
+          currentLetterIndex = 0
+        })
+  }
+
+  LazyColumn(
+      modifier = Modifier.fillMaxSize().background(colorResource(R.color.white)).testTag(screenTag),
+      horizontalAlignment = Alignment.CenterHorizontally,
+      verticalArrangement = Arrangement.Center) {
+        // Back button
+        item {
+          IconButton(
+              onClick = { navigationActions.goBack() },
+              modifier = Modifier.padding(16.dp).testTag("Back")) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    tint = colorResource(R.color.black))
+              }
+        }
+
+        // Display sign image for current letter
+        item {
+          val imageName = "letter_${currentLetter}"
+          val imageResId =
+              context.resources.getIdentifier(imageName, "drawable", context.packageName)
+
+          if (imageResId != 0) {
+            Box(
+                modifier =
+                    Modifier.fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .height(150.dp)
+                        .background(colorResource(R.color.blue), shape = RoundedCornerShape(16.dp))
+                        .border(
+                            2.dp, colorResource(R.color.black), shape = RoundedCornerShape(16.dp)),
+                contentAlignment = Alignment.Center) {
+                  Image(
+                      painter = painterResource(id = imageResId),
+                      contentDescription = "Sign image",
+                      modifier = Modifier.size(120.dp))
+                }
+
+            Spacer(modifier = Modifier.height(16.dp))
+          }
+        }
+
+        // Word layer display
+        item { WordLayer(wordsList, currentWordIndex, currentLetterIndex) }
+
+        // Camera placeholder/composable
+        item { CameraPlaceholder(handLandMarkViewModel) }
+      }
 }
