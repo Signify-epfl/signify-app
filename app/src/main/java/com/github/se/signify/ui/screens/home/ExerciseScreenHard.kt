@@ -1,6 +1,5 @@
 package com.github.se.signify.ui.screens.home
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -70,32 +69,30 @@ fun ExerciseScreenHard(
 
   val landmarksState = handLandMarkViewModel.landMarks().collectAsState()
   val detectedGesture = handLandMarkViewModel.getSolution()
+
   if (!landmarksState.value.isNullOrEmpty()) {
-    if (detectedGesture.equals(currentLetter.uppercase())) {
-      onSuccess(
-          currentLetterIndex = currentLetterIndex,
-          currentWordIndex = currentWordIndex,
-          words = wordsList,
-          onNextLetter = { nextIndex -> currentLetterIndex = nextIndex },
-          onNextWord = { nextWordIndex ->
-            currentWordIndex = nextWordIndex
-            currentLetterIndex = 0
-          },
-          onAllWordsComplete = {
-            Toast.makeText(context, "Words Completed!", Toast.LENGTH_SHORT).show()
-            words =
-                List(3) {
-                  realWords.filter { it.length in 5..7 }.random()
-                } // Reset with new random words
-            currentWordIndex = 0
-            currentLetterIndex = 0
-          })
-    } else {
-      Log.d(
-          "ExerciseScreenHard",
-          "Detected gesture ($detectedGesture) does not match the current letter ($currentLetter)")
-    }
+    handleGestureMatching(
+        detectedGesture = detectedGesture,
+        currentLetter = currentLetter,
+        currentLetterIndex = currentLetterIndex,
+        currentWordIndex = currentWordIndex,
+        wordsList = wordsList,
+        onNextLetter = { nextIndex -> currentLetterIndex = nextIndex },
+        onNextWord = { nextWordIndex ->
+          currentWordIndex = nextWordIndex
+          currentLetterIndex = 0
+        },
+        onAllWordsComplete = {
+          Toast.makeText(context, "Words Completed!", Toast.LENGTH_SHORT).show()
+          words =
+              List(3) {
+                realWords.filter { it.length in 5..7 }.random()
+              } // Reset with new random words
+          currentWordIndex = 0
+          currentLetterIndex = 0
+        })
   }
+
   LazyColumn(
       modifier =
           Modifier.fillMaxSize()

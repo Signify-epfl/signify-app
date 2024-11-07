@@ -75,16 +75,4 @@ class HandLandMarkViewModel(
    * @return A StateFlow containing a list of normalized landmarks or null if no landmarks detected.
    */
   fun landMarks(): StateFlow<List<NormalizedLandmark>?> = handLandmarks
-
-  fun setSolution(solution: String) {
-    handLandMarkRepository.setSolution(solution)
-  }
-  /** Sets all hand landmarks to (0.5, 0.5, 0.5). */
-  fun resetLandmarksToDefault() {
-    viewModelScope.launch {
-      val dummyLandmarks =
-          List(_handLandmarks.value?.size ?: 0) { NormalizedLandmark.create(0.5f, 0.5f, 0.5f) }
-      _handLandmarks.value = dummyLandmarks
-    }
-  }
 }
