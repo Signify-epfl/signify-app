@@ -17,8 +17,11 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
   private val _friendsRequests = MutableStateFlow<List<String>>(emptyList())
   val friendsRequests: StateFlow<List<String>> = _friendsRequests
 
-  private val _userName = MutableStateFlow<String>("unknown")
+  private val _userName = MutableStateFlow("unknown")
   val userName: StateFlow<String> = _userName
+
+  private val _profilePictureUrl = MutableStateFlow<String?>(null)
+  val profilePictureUrl: StateFlow<String?> = _profilePictureUrl
 
   private val _searchResult = MutableStateFlow<User?>(null)
   val searchResult: StateFlow<User?> = _searchResult
@@ -85,6 +88,21 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
         newName,
         onSuccess = { Log.d(logTag, "User name updated successfully.") },
         onFailure = { e -> Log.e(logTag, "Failed to update user name: ${e.message}") })
+  }
+
+  fun getProfilePictureUrl(currentUserId: String) {
+    repository.getProfilePictureUrl(
+        currentUserId,
+        onSuccess = { profilePictureUrl -> _profilePictureUrl.value = profilePictureUrl },
+        onFailure = { e -> Log.e(logTag, "Failed to get profile picture: ${e.message}}") })
+  }
+
+  fun updateProfilePictureUrl(currentUserId: String, newProfilePictureUrl: String?) {
+    repository.updateProfilePictureUrl(
+        currentUserId,
+        newProfilePictureUrl,
+        onSuccess = { Log.d(logTag, "Profile picture updated successfully.") },
+        onFailure = { e -> Log.e(logTag, "Failed to update profile picture: ${e.message}") })
   }
 
   fun sendFriendRequest(currentUserId: String, targetUserId: String) {
