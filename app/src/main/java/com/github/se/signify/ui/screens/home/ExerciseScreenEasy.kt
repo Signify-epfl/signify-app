@@ -182,7 +182,7 @@ fun handleGestureMatching(
     onNextWord: (Int) -> Unit,
     onAllWordsComplete: () -> Unit
 ) {
-  if (detectedGesture.equals(currentLetter.uppercase())) {
+  if (detectedGesture == currentLetter.uppercase()) {
     onSuccess(
         currentLetterIndex = currentLetterIndex,
         currentWordIndex = currentWordIndex,
