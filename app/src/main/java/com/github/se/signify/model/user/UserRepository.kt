@@ -27,6 +27,19 @@ interface UserRepository {
       onFailure: (Exception) -> Unit
   )
 
+  fun getProfilePictureUrl(
+      userId: String,
+      onSuccess: (String) -> Unit,
+      onFailure: (Exception) -> Unit
+  )
+
+  fun updateProfilePictureUrl(
+      userId: String,
+      newProfilePictureUrl: String,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  )
+
   fun sendFriendRequest(
       currentUserId: String,
       targetUserId: String,
