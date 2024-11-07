@@ -262,37 +262,56 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
     userDocRef
         .get()
         .addOnSuccessListener { document ->
-          if (document.exists()) {
-            val challengeIds = document.get("ongoingChallenges") as? List<String>
-            if (challengeIds != null) {
-              // Fetch each challenge document by its ID
-              val challenges = mutableListOf<Challenge>()
-              for (challengeId in challengeIds) {
-                db.collection(challengesCollectionPath)
-                    .document(challengeId)
-                    .get()
-                    .addOnSuccessListener { challengeDoc ->
-                      if (challengeDoc.exists()) {
-                        val challenge = challengeDoc.toObject(Challenge::class.java)
-                        if (challenge != null) {
-                          challenges.add(challenge)
-                        }
-                      }
-                      // Check if we have fetched all challenges
-                      if (challenges.size == challengeIds.size) {
-                        onSuccess(challenges)
-                      }
-                    }
-                    .addOnFailureListener { e -> onFailure(e) }
-              }
-            } else {
-              onSuccess(emptyList())
-            }
-          } else {
+          if (!document.exists()) {
             onSuccess(emptyList())
+            return@addOnSuccessListener
           }
+
+          val challengeIds =
+              document.get("ongoingChallenges") as? List<*>
+                  ?: run {
+                    onSuccess(emptyList())
+                    return@addOnSuccessListener
+                  }
+
+          fetchChallengesByIds(challengeIds, onSuccess, onFailure)
         }
         .addOnFailureListener { e -> onFailure(e) }
+  }
+
+  private fun fetchChallengesByIds(
+      challengeIds: List<*>,
+      onSuccess: (List<Challenge>) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    val challenges = mutableListOf<Challenge>()
+    val totalChallenges = challengeIds.size
+
+    for (challengeId in challengeIds) {
+      db.collection(challengesCollectionPath)
+          .document(challengeId.toString())
+          .get()
+          .addOnSuccessListener { challengeDoc ->
+            if (challengeDoc.exists()) {
+              val challenge = challengeDoc.toObject(Challenge::class.java)
+              if (challenge != null) {
+                challenges.add(challenge)
+              }
+            }
+            checkAllChallengesFetched(challenges, totalChallenges, onSuccess)
+          }
+          .addOnFailureListener { e -> onFailure(e) }
+    }
+  }
+
+  private fun checkAllChallengesFetched(
+      challenges: List<Challenge>,
+      totalChallenges: Int,
+      onSuccess: (List<Challenge>) -> Unit
+  ) {
+    if (challenges.size == totalChallenges) {
+      onSuccess(challenges)
+    }
   }
 
   override fun removeOngoingChallenge(
