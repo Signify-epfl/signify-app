@@ -23,8 +23,8 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
   private val _searchResult = MutableStateFlow<User?>(null)
   val searchResult: StateFlow<User?> = _searchResult
 
-    private val _ongoingChallenges = MutableStateFlow<List<Challenge>>(emptyList())
-    val ongoingChallenges: StateFlow<List<Challenge>> = _ongoingChallenges
+  private val _ongoingChallenges = MutableStateFlow<List<Challenge>>(emptyList())
+  val ongoingChallenges: StateFlow<List<Challenge>> = _ongoingChallenges
 
   private val logTag = "UserViewModel"
 
@@ -127,28 +127,26 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
         onFailure = { e -> Log.e(logTag, "Failed to add challenge to ongoing: ${e.message}") })
   }
 
-    fun getOngoingChallenges(userId: String) {
-        repository.getOngoingChallenges(userId,
-            onSuccess = { challenges ->
-                _ongoingChallenges.value = challenges
-            },
-            onFailure = { e ->
-                Log.e("UserViewModel", "Failed to fetch ongoing challenges: ${e.message}")
-            })
-    }
+  fun getOngoingChallenges(userId: String) {
+    repository.getOngoingChallenges(
+        userId,
+        onSuccess = { challenges -> _ongoingChallenges.value = challenges },
+        onFailure = { e ->
+          Log.e("UserViewModel", "Failed to fetch ongoing challenges: ${e.message}")
+        })
+  }
 
-    fun removeOngoingChallenge(userId: String, challengeId: String) {
-        repository.removeOngoingChallenge(
-            userId,
-            challengeId,
-            onSuccess = {
-                // Update ongoingChallenges after removal
-                _ongoingChallenges.value = _ongoingChallenges.value.filter { it.challengeId != challengeId }
-            },
-            onFailure = { e ->
-                Log.e("UserViewModel", "Failed to remove challenge from ongoing: ${e.message}")
-            }
-        )
-    }
-
+  fun removeOngoingChallenge(userId: String, challengeId: String) {
+    repository.removeOngoingChallenge(
+        userId,
+        challengeId,
+        onSuccess = {
+          // Update ongoingChallenges after removal
+          _ongoingChallenges.value =
+              _ongoingChallenges.value.filter { it.challengeId != challengeId }
+        },
+        onFailure = { e ->
+          Log.e("UserViewModel", "Failed to remove challenge from ongoing: ${e.message}")
+        })
+  }
 }

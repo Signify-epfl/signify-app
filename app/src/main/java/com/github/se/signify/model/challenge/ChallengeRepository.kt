@@ -10,10 +10,5 @@ interface ChallengeRepository {
       onFailure: (Exception) -> Unit
   )
 
-    fun deleteChallenge(
-        challengeId: String,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    )
-
+  fun deleteChallenge(challengeId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit)
 }

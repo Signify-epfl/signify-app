@@ -34,20 +34,15 @@ class ChallengeRepositoryFireStore(private val db: FirebaseFirestore) : Challeng
         .addOnFailureListener { onFailure(it) }
   }
 
-
-
-    override fun deleteChallenge(
-        challengeId: String,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        db.collection(collectionPath).document(challengeId)
-            .delete()
-            .addOnSuccessListener {
-                onSuccess()
-            }
-            .addOnFailureListener {
-                onFailure(it)
-            }
-    }
+  override fun deleteChallenge(
+      challengeId: String,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    db.collection(collectionPath)
+        .document(challengeId)
+        .delete()
+        .addOnSuccessListener { onSuccess() }
+        .addOnFailureListener { onFailure(it) }
+  }
 }

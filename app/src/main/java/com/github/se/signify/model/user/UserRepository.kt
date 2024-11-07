@@ -64,11 +64,11 @@ interface UserRepository {
       onFailure: (Exception) -> Unit
   )
 
-    fun getOngoingChallenges(
-        userId: String,
-        onSuccess: (List<Challenge>) -> Unit,
-        onFailure: (Exception) -> Unit
-    )
+  fun getOngoingChallenges(
+      userId: String,
+      onSuccess: (List<Challenge>) -> Unit,
+      onFailure: (Exception) -> Unit
+  )
 
   fun removeOngoingChallenge(
       userId: String,
@@ -76,5 +76,4 @@ interface UserRepository {
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   )
-
 }

@@ -28,13 +28,12 @@ open class ChallengeViewModel(private val repository: ChallengeRepository) : Vie
         onFailure = { e -> Log.e(logTag, "Failed to send challenge request: ${e.message}") })
   }
 
-    fun deleteChallenge(challengeId: String) {
-        repository.deleteChallenge(
-            challengeId,
-            onSuccess = { Log.d(logTag, "Challenge deleted successfully.") },
-            onFailure = { e -> Log.e(logTag, "Failed to delete challenge: ${e.message}") }
-        )
-    }
+  fun deleteChallenge(challengeId: String) {
+    repository.deleteChallenge(
+        challengeId,
+        onSuccess = { Log.d(logTag, "Challenge deleted successfully.") },
+        onFailure = { e -> Log.e(logTag, "Failed to delete challenge: ${e.message}") })
+  }
 
   // create factory
   companion object {
