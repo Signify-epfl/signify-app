@@ -34,8 +34,7 @@ class HomeScreenTest {
 
     // Assert that all elements are displayed in ChallengeScreen
     composeTestRule.onNodeWithTag("QuestsButton").performScrollTo().assertIsDisplayed()
-    composeTestRule.onNodeWithTag("CameraFeedbackToggle").performScrollTo().assertIsDisplayed()
-    composeTestRule.onNodeWithTag("CameraFeedback").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("CameraFeedbackButton").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("LetterDictionary").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("LetterDictionaryBack").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("LetterDictionaryForward").performScrollTo().assertIsDisplayed()
@@ -51,8 +50,7 @@ class HomeScreenTest {
 
     composeTestRule.onNodeWithTag("HelpButton").assertHasClickAction()
     composeTestRule.onNodeWithTag("QuestsButton").assertHasClickAction()
-    composeTestRule.onNodeWithTag("CameraFeedbackToggle").assertHasClickAction()
-    composeTestRule.onNodeWithTag("CameraFeedback").assertHasClickAction()
+    composeTestRule.onNodeWithTag("CameraFeedbackButton").assertHasClickAction()
     composeTestRule.onNodeWithTag("LetterDictionaryBack").assertHasClickAction()
     composeTestRule.onNodeWithTag("LetterDictionaryForward").assertHasClickAction()
   }
@@ -67,10 +65,10 @@ class HomeScreenTest {
   }
 
   @Test
-  fun cameraFeedbackWindowNavigatesToMainAimScreen() {
+  fun cameraFeedbackButtonNavigatesToPracticeScreen() {
     composeTestRule.setContent { HomeScreen(navigationActions = navigationActions) }
 
-    composeTestRule.onNodeWithTag("CameraFeedback").performClick()
+    composeTestRule.onNodeWithTag("CameraFeedbackButton").performClick()
 
     verify(navigationActions).navigateTo(Screen.PRACTICE)
   }
