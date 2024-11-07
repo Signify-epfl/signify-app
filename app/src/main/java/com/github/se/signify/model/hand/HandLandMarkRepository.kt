@@ -75,4 +75,6 @@ interface HandLandMarkRepository {
       onSuccess: (result: HandLandmarkerResult) -> Unit,
       onFailure: (e: Exception) -> Unit
   )
+
+  fun setSolution(solution: String)
 }

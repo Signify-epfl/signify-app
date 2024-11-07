@@ -58,4 +58,27 @@ class ExerciseScreenEasyTest {
 
     composeTestRule.onNodeWithContentDescription("Sign image").assertIsDisplayed()
   }
+
+  @Test
+  fun changeLetterSucces() {
+
+    // Set the content with the ExerciseScreenEasy
+    composeTestRule.setContent {
+      ExerciseScreenEasy(
+          navigationActions = mockNavigationActions, handLandMarkViewModel = handLandMarkViewModel)
+    }
+    val word = getFirstWord()
+    val expectedLetter = word[0].toString()
+
+    // Set the solution in the ViewModel
+    handLandMarkViewModel.setSolution(expectedLetter)
+    // Reset landmarks to default to trigger the event
+    handLandMarkViewModel.resetLandmarksToDefault()
+
+    // Assert that the current solution matches the expected letter
+    val actualSolution = handLandMarkViewModel.getSolution()
+    assert(expectedLetter == actualSolution) {
+      "Expected solution ($expectedLetter) did not match actual solution ($actualSolution)"
+    }
+  }
 }

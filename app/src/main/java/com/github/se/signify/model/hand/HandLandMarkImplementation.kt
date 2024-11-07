@@ -237,4 +237,8 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
    * @return A string representing the recognized gesture.
    */
   override fun gestureOutput(): String = solution
+
+  override fun setSolution(solution: String) {
+    this.solution = solution
+  }
 }

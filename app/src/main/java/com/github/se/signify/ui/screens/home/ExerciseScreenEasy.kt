@@ -55,17 +55,21 @@ import com.github.se.signify.ui.navigation.NavigationActions
  *   screen.
  * @param handLandMarkViewModel The ViewModel responsible for managing hand landmark detection.
  */
+private lateinit var testFirstWord: String
+
 @Composable
 fun ExerciseScreenEasy(
     navigationActions: NavigationActions,
     handLandMarkViewModel: HandLandMarkViewModel
 ) {
+
   val realWords = stringArrayResource(R.array.real_words).toList()
   var words by rememberSaveable { mutableStateOf(List(3) { realWords.random() }) }
   val context = LocalContext.current
 
   // Placeholders, eventually have a viewmodel to pass arguments for the list of words.
   val word1 = words[0]
+  testFirstWord = word1
   val word2 = words[1]
   val word3 = words[2]
 
@@ -246,3 +250,5 @@ fun WordLayer(words: List<String>, currentWordIndex: Int, currentLetterIndex: In
             color = colorResource(R.color.white))
       }
 }
+
+fun getFirstWord(): String = testFirstWord
