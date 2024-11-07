@@ -425,6 +425,7 @@ class UtilsTest {
 
     composeTestRule.onNodeWithTag(testTag).onChild().assertIsDisplayed()
     composeTestRule.onNodeWithTag(testTag).onChild().assertTextEquals(text)
+  }
 
   @Test
   fun cameraPreview_isDisplayed() {
