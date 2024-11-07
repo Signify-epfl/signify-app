@@ -126,8 +126,12 @@ fun SignifyAppPreview(context: Context, navigationState: MutableStateFlow<Naviga
       composable(Route.SETTINGS) { SettingsScreen(navigationActions) }
     }
     composable(Screen.PRACTICE) { ASLRecognition(handLandMarkViewModel, navigationActions) }
-    composable(Screen.EXERCISE_EASY) { ExerciseScreenEasy(navigationActions) }
-    composable(Screen.EXERCISE_HARD) { ExerciseScreenHard(navigationActions) }
+    composable(Screen.EXERCISE_EASY) {
+      ExerciseScreenEasy(navigationActions, handLandMarkViewModel)
+    }
+    composable(Screen.EXERCISE_HARD) {
+      ExerciseScreenHard(navigationActions, handLandMarkViewModel)
+    }
   }
   navigationState.value = navigationActions
 }
