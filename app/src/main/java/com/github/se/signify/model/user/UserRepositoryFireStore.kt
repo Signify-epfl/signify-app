@@ -10,6 +10,8 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
   private val collectionPath = "users"
   private val friendsListPath = "friends"
   private val friendRequestsListPath = "friendRequests"
+  private val usernamePath = "name"
+  private val profilePicturePath = "profileImageUrl"
 
   override fun init(onSuccess: () -> Unit) {
     Firebase.auth.addAuthStateListener {
@@ -112,7 +114,7 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
       }
 
       if (documentSnapshot != null && documentSnapshot.exists()) {
-        val userName = documentSnapshot["name"] as? String
+        val userName = documentSnapshot[usernamePath] as? String
         onSuccess(userName ?: "unknown")
       } else {
         onSuccess("unknown")
@@ -130,7 +132,52 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
     val userRef = db.collection(collectionPath).document(userId)
     try {
       userRef
-          .update("name", newName)
+          .update(usernamePath, newName)
+          .addOnSuccessListener {
+            onSuccess() // Invoke the onSuccess callback
+          }
+          .addOnFailureListener { e ->
+            onFailure(e) // Trigger onFailure callback
+          }
+    } catch (e: Exception) {
+      onFailure(e) // Trigger onFailure callback
+    }
+  }
+
+  override fun getProfilePictureUrl(
+      userId: String,
+      onSuccess: (String?) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    val userRef = db.collection(collectionPath).document(userId)
+
+    // Use of addSnapshotListener for instant updates
+    userRef.addSnapshotListener { documentSnapshot, e ->
+      if (e != null) {
+        onFailure(e)
+        return@addSnapshotListener
+      }
+
+      if (documentSnapshot != null && documentSnapshot.exists()) {
+        val profilePictureUrl = documentSnapshot[profilePicturePath] as? String
+        onSuccess(profilePictureUrl)
+      } else {
+        onSuccess(null)
+      }
+    }
+  }
+
+  override fun updateProfilePictureUrl(
+      userId: String,
+      newProfilePictureUrl: String?,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+
+    val userRef = db.collection(collectionPath).document(userId)
+    try {
+      userRef
+          .update(profilePicturePath, newProfilePictureUrl)
           .addOnSuccessListener {
             onSuccess() // Invoke the onSuccess callback
           }

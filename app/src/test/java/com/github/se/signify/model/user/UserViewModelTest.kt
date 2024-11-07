@@ -45,6 +45,26 @@ class UserViewModelTest {
   }
 
   @Test
+  fun updateUserNameRequestCallsRepository() {
+    val newName = "newNameTest"
+    userViewModel.updateUserName(currentUserId, newName)
+    verify(userRepository).updateUserName(eq(currentUserId), eq(newName), any(), any())
+  }
+
+  @Test
+  fun getProfilePictureUrlRequestCallsRepository() {
+    userViewModel.getProfilePictureUrl(currentUserId)
+    verify(userRepository).getProfilePictureUrl(eq(currentUserId), any(), any())
+  }
+
+  @Test
+  fun updateProfilePictureUrlRequestCallsRepository() {
+    val newUrl = "testUrl"
+    userViewModel.updateProfilePictureUrl(currentUserId, newUrl)
+    verify(userRepository).updateProfilePictureUrl(eq(currentUserId), eq(newUrl), any(), any())
+  }
+
+  @Test
   fun sendFriendRequestCallsRepository() {
     userViewModel.sendFriendRequest(currentUserId, friendUserId)
     verify(userRepository).sendFriendRequest(eq(currentUserId), eq(friendUserId), any(), any())
