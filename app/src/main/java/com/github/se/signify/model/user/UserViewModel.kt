@@ -19,8 +19,8 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
   private val _userName = MutableStateFlow("unknown")
   val userName: StateFlow<String> = _userName
 
-  private val _profilePictureUrl = MutableStateFlow("unknown")
-  val profilePictureUrl: StateFlow<String> = _profilePictureUrl
+  private val _profilePictureUrl = MutableStateFlow<String?>(null)
+  val profilePictureUrl: StateFlow<String?> = _profilePictureUrl
 
   private val _searchResult = MutableStateFlow<User?>(null)
   val searchResult: StateFlow<User?> = _searchResult
@@ -93,7 +93,7 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
         onFailure = { e -> Log.e(logTag, "Failed to get profile picture: ${e.message}}") })
   }
 
-  fun updateProfilePictureUrl(currentUserId: String, newProfilePictureUrl: String) {
+  fun updateProfilePictureUrl(currentUserId: String, newProfilePictureUrl: String?) {
     repository.updateProfilePictureUrl(
         currentUserId,
         newProfilePictureUrl,

@@ -146,7 +146,7 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
 
   override fun getProfilePictureUrl(
       userId: String,
-      onSuccess: (String) -> Unit,
+      onSuccess: (String?) -> Unit,
       onFailure: (Exception) -> Unit
   ) {
     val userRef = db.collection(collectionPath).document(userId)
@@ -160,16 +160,16 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
 
       if (documentSnapshot != null && documentSnapshot.exists()) {
         val profilePictureUrl = documentSnapshot[profilePicturePath] as? String
-        onSuccess(profilePictureUrl ?: "unknown")
+        onSuccess(profilePictureUrl)
       } else {
-        onSuccess("unknown")
+        onSuccess(null)
       }
     }
   }
 
   override fun updateProfilePictureUrl(
       userId: String,
-      newProfilePictureUrl: String,
+      newProfilePictureUrl: String?,
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   ) {
