@@ -1,6 +1,17 @@
 package com.github.se.signify.ui
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -9,6 +20,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -23,11 +35,19 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -37,7 +57,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import com.github.se.signify.R
+import com.github.se.signify.model.hand.HandLandMarkViewModel
 
 /**
  * A reusable composable function that creates an outlined button with an icon.
@@ -204,5 +227,104 @@ fun getLetterIconResId(letter: Char): Int {
     'y' -> R.drawable.letter_y
     'z' -> R.drawable.letter_z
     else -> R.drawable.letter_a // Default case, just in case an unexpected value is passed
+  }
+}
+/**
+ * Composable function that serves as a placeholder for the camera preview. This function requests
+ * camera permission and displays the camera preview if permission is granted.
+ *
+ * @param handLandMarkViewModel The ViewModel responsible for managing hand landmark detection.
+ * @param modifier Modifier to be applied to the camera placeholder.
+ */
+@Composable
+fun CameraPlaceholder(handLandMarkViewModel: HandLandMarkViewModel, modifier: Modifier = Modifier) {
+  val context = LocalContext.current
+  val lifecycleOwner = LocalLifecycleOwner.current
+  val previewView = remember { PreviewView(context) }
+  var permissionGranted by remember { mutableStateOf(false) }
+
+  // Permission launcher to request camera permission
+  val permissionLauncher =
+      rememberLauncherForActivityResult(
+          contract = ActivityResultContracts.RequestPermission(),
+          onResult = { isGranted ->
+            permissionGranted = isGranted
+            if (!isGranted) {
+              Toast.makeText(context, "Camera permission denied", Toast.LENGTH_SHORT).show()
+            }
+          })
+
+  // Check for permission on load
+  LaunchedEffect(Unit) {
+    permissionGranted =
+        ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) ==
+            PackageManager.PERMISSION_GRANTED
+    if (!permissionGranted) {
+      permissionLauncher.launch(Manifest.permission.CAMERA)
+    }
+  }
+
+  if (permissionGranted) {
+    Box(
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .height(350.dp)
+                .background(colorResource(R.color.blue), shape = RoundedCornerShape(16.dp))
+                .border(2.dp, colorResource(R.color.white), shape = RoundedCornerShape(16.dp)),
+        contentAlignment = Alignment.Center) {
+          AndroidView(
+              factory = { previewView },
+              modifier =
+                  Modifier.fillMaxWidth()
+                      .fillMaxHeight()
+                      .clip(RoundedCornerShape(16.dp))
+                      .testTag("cameraPreview"))
+
+          // Set up the camera preview
+          LaunchedEffect(Unit) {
+            val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
+            cameraProviderFuture.addListener(
+                {
+                  val cameraProvider = cameraProviderFuture.get()
+                  val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+
+                  val preview =
+                      Preview.Builder().build().also {
+                        it.setSurfaceProvider(previewView.surfaceProvider)
+                      }
+                  val imageAnalysis =
+                      ImageAnalysis.Builder()
+                          .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                          .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
+                          .build()
+                  imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(context)) { imageProxy ->
+                    handLandMarkViewModel.processImageProxyThrottled(imageProxy)
+                  }
+
+                  try {
+                    cameraProvider.unbindAll()
+                    cameraProvider.bindToLifecycle(
+                        lifecycleOwner, cameraSelector, preview, imageAnalysis)
+                  } catch (e: Exception) {
+                    Log.e("CameraPlaceholder", "Camera binding failed", e)
+                  }
+                },
+                ContextCompat.getMainExecutor(context))
+          }
+        }
+  } else {
+    Box(
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .height(350.dp)
+                .background(colorResource(R.color.black), shape = RoundedCornerShape(16.dp))
+                .border(2.dp, colorResource(R.color.white), shape = RoundedCornerShape(16.dp)),
+        contentAlignment = Alignment.Center) {
+          Text("Camera permission required", color = colorResource(R.color.white))
+        }
   }
 }
