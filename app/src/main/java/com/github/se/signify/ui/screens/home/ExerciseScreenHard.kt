@@ -18,7 +18,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -135,8 +134,6 @@ fun ExerciseScreenHard(
                 }
 
             Spacer(modifier = Modifier.height(16.dp))
-          } else {
-            Text("Image for letter $currentLetter not found.")
           }
         }
 
