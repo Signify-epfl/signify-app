@@ -10,19 +10,5 @@ interface ChallengeRepository {
       onFailure: (Exception) -> Unit
   )
 
-  fun acceptChallenge(challengeId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit)
-
-  fun submitGesture(
-      challengeId: String,
-      userId: String,
-      gesture: String,
-      onSuccess: () -> Unit,
-      onFailure: (Exception) -> Unit
-  )
-
-  fun getChallengeUpdates(
-      challengeId: String,
-      onUpdate: (Challenge) -> Unit,
-      onFailure: (Exception) -> Unit
-  )
+  fun deleteChallenge(challengeId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit)
 }

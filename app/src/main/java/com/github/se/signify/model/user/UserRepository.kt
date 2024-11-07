@@ -1,5 +1,7 @@
 package com.github.se.signify.model.user
 
+import com.github.se.signify.model.challenge.Challenge
+
 interface UserRepository {
 
   fun init(onSuccess: () -> Unit)
@@ -75,14 +77,13 @@ interface UserRepository {
       onFailure: (Exception) -> Unit
   )
 
-  fun removeOngoingChallenge(
+  fun getOngoingChallenges(
       userId: String,
-      challengeId: String,
-      onSuccess: () -> Unit,
+      onSuccess: (List<Challenge>) -> Unit,
       onFailure: (Exception) -> Unit
   )
 
-  fun addPastChallenge(
+  fun removeOngoingChallenge(
       userId: String,
       challengeId: String,
       onSuccess: () -> Unit,

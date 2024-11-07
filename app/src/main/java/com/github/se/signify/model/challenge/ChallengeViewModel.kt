@@ -7,7 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class ChallengeViewModel(private val repository: ChallengeRepository) : ViewModel() {
+open class ChallengeViewModel(private val repository: ChallengeRepository) : ViewModel() {
   private val _challenge = MutableStateFlow<Challenge?>(null)
   val challenge: StateFlow<Challenge?> = _challenge
 
@@ -28,27 +28,11 @@ class ChallengeViewModel(private val repository: ChallengeRepository) : ViewMode
         onFailure = { e -> Log.e(logTag, "Failed to send challenge request: ${e.message}") })
   }
 
-  fun acceptChallenge(challengeId: String) {
-    repository.acceptChallenge(
+  fun deleteChallenge(challengeId: String) {
+    repository.deleteChallenge(
         challengeId,
-        onSuccess = { Log.d(logTag, "Challenge accepted successfully.") },
-        onFailure = { e -> Log.e(logTag, "Failed to accept challenge: ${e.message}") })
-  }
-
-  fun submitGesture(challengeId: String, userId: String, gesture: String) {
-    repository.submitGesture(
-        challengeId,
-        userId,
-        gesture,
-        onSuccess = { Log.d(logTag, "Gesture submitted successfully.") },
-        onFailure = { e -> Log.e(logTag, "Failed to submit gesture: ${e.message}") })
-  }
-
-  fun getChallengeUpdates(challengeId: String) {
-    repository.getChallengeUpdates(
-        challengeId,
-        onUpdate = { challenge -> _challenge.value = challenge },
-        onFailure = { e -> Log.e(logTag, "Failed to get challenge updates: ${e.message}") })
+        onSuccess = { Log.d(logTag, "Challenge deleted successfully.") },
+        onFailure = { e -> Log.e(logTag, "Failed to delete challenge: ${e.message}") })
   }
 
   // create factory
