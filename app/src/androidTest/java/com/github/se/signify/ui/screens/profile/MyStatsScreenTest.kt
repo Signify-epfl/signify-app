@@ -15,7 +15,10 @@ class MyStatsScreenTest {
 
   private lateinit var navigationActions: NavigationActions
 
-  // User statistics test to be displayed
+  // User information test to be displayed
+  private val userId = "userIdTest"
+  private val userName = "userNameTest"
+  private val profilePictureUrl = null
   private val numberOfDays = 10
   private val lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F')
   private val exercisesAchieved = listOf(10, 3)
@@ -27,6 +30,9 @@ class MyStatsScreenTest {
 
     composeTestRule.setContent {
       MyStatsScreen(
+          userId = userId,
+          userName = userName,
+          profilePictureUrl = profilePictureUrl,
           navigationActions = navigationActions,
           numberOfDays = numberOfDays,
           lettersLearned = lettersLearned,
@@ -40,16 +46,24 @@ class MyStatsScreenTest {
     // Verify top blue bar is displayed
     composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
 
-    // Verify days count is displayed with correct text
-    composeTestRule.onNodeWithTag("flameIcon").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("numberOfDays").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("numberOfDays").assertTextEquals("10 days")
+    // Verify top information are displayed correctly
+    composeTestRule.onNodeWithTag("UserInfo").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("UserId").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("UserId").assertTextEquals(userId)
+    composeTestRule.onNodeWithTag("UserName").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("UserName").assertTextEquals(userName)
+    composeTestRule.onNodeWithTag("ProfilePicture").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("NumberOfDays").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("NumberOfDays").assertTextEquals("$numberOfDays days")
 
     // Verify letters learned section displays correctly
-    composeTestRule.onNodeWithTag("allLetterLearned").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("allLetterLearned").assertTextEquals("All letters learned")
-    composeTestRule.onNodeWithTag("lettersBox").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("AllLetterLearned").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("AllLetterLearned").assertTextEquals("All letters learned")
+    composeTestRule.onNodeWithTag("LettersBox").assertIsDisplayed()
     lettersLearned.forEach { letter ->
+      composeTestRule.onNodeWithTag(letter.toString()).performScrollTo()
       composeTestRule.onNodeWithText(letter.toString()).assertIsDisplayed()
     }
 
@@ -57,29 +71,29 @@ class MyStatsScreenTest {
     composeTestRule.onNodeWithTag("ExercisesText").assertIsDisplayed()
     composeTestRule.onNodeWithTag("ExercisesText").assertTextEquals("Number of exercises achieved")
     composeTestRule.onNodeWithTag("ExercisesEasyCountBox").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("Easy").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("Easy").assertTextEquals("EASY")
-    composeTestRule.onNodeWithTag("ExercisesEasyCount").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("ExercisesEasyCount").assertTextEquals("10")
+    composeTestRule.onNodeWithTag("EASY").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("EASY").assertTextEquals("EASY")
+    composeTestRule.onNodeWithTag("${exercisesAchieved[0]}").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("${exercisesAchieved[0]}").assertTextEquals("${exercisesAchieved[0]}")
     composeTestRule.onNodeWithTag("ExercisesHardCountBox").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("Hard").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("Hard").assertTextEquals("HARD")
-    composeTestRule.onNodeWithTag("ExercisesHardCount").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("ExercisesHardCount").assertTextEquals("3")
+    composeTestRule.onNodeWithTag("HARD").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HARD").assertTextEquals("HARD")
+    composeTestRule.onNodeWithTag("${exercisesAchieved[1]}").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("${exercisesAchieved[1]}").assertTextEquals("${exercisesAchieved[1]}")
 
     // Verify quests achieved section is displayed with counts
     composeTestRule.onNodeWithTag("QuestsText").assertIsDisplayed()
     composeTestRule.onNodeWithTag("QuestsText").assertTextEquals("Number of quests achieved")
     composeTestRule.onNodeWithTag("DailyQuestCountBox").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("Daily").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("Daily").assertTextEquals("DAILY")
-    composeTestRule.onNodeWithTag("DailyQuestCount").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("DailyQuestCount").assertTextEquals("4")
+    composeTestRule.onNodeWithTag("DAILY").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("DAILY").assertTextEquals("DAILY")
+    composeTestRule.onNodeWithTag("${questsAchieved[0]}").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("${questsAchieved[0]}").assertTextEquals("${questsAchieved[0]}")
     composeTestRule.onNodeWithTag("WeeklyQuestsCountBox").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("Weekly").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("Weekly").assertTextEquals("WEEKLY")
-    composeTestRule.onNodeWithTag("WeeklyQuestsCount").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("WeeklyQuestsCount").assertTextEquals("0")
+    composeTestRule.onNodeWithTag("WEEKLY").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("WEEKLY").assertTextEquals("WEEKLY")
+    composeTestRule.onNodeWithTag("${questsAchieved[1]}").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("${questsAchieved[1]}").assertTextEquals("${questsAchieved[1]}")
 
     // Verify graph placeholder is displayed
     composeTestRule.onNodeWithTag("GraphsAndStats").assertIsDisplayed()
@@ -88,7 +102,7 @@ class MyStatsScreenTest {
   @Test
   fun testLettersBoxIsHorizontallyScrollable() {
     // Perform a horizontal scroll action on the letters list
-    val scrollableList = composeTestRule.onNodeWithTag("lettersList")
+    val scrollableList = composeTestRule.onNodeWithTag("LettersList")
 
     // Test scroll from left to right by passing by each letter
     for (letter in 'A'..'Z') {

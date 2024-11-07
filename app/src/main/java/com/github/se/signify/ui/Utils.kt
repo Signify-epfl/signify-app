@@ -537,8 +537,7 @@ fun AllLetterLearned(lettersLearned: List<Char>) {
 fun StreakCounter(days: Int, daysText: Boolean) {
   val text = if (daysText) " days" else ""
   Row(
-      modifier = Modifier.fillMaxWidth().testTag("StreakCounter"),
-      horizontalArrangement = Arrangement.Center,
+      modifier = Modifier.testTag("StreakCounter"),
       verticalAlignment = Alignment.CenterVertically) {
         Icon(
             painter = painterResource(id = R.drawable.flame),
@@ -595,8 +594,8 @@ fun AccountInformation(userId: String, userName: String, profilePictureUrl: Stri
   Row(
       modifier = Modifier.fillMaxWidth().testTag("UserInfo"),
       horizontalArrangement = Arrangement.Center,
-      verticalAlignment = Alignment.CenterVertically) {
-
+      verticalAlignment = Alignment.CenterVertically
+  ) {
         // User Info : user id and user name
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
