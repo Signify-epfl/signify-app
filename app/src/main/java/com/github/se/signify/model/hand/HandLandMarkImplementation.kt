@@ -119,23 +119,22 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
     try {
       val bitmap = imageProxy.toBitmap()
 
-      if (bitmap != null) {
-        val frameTime = SystemClock.uptimeMillis()
-        val mpImage = BitmapImageBuilder(bitmap).build()
-        Executors.newSingleThreadExecutor().execute {
-          handLandmarker?.detectAsync(mpImage, frameTime)
+      val frameTime = SystemClock.uptimeMillis()
+      val mpImage = BitmapImageBuilder(bitmap).build()
+      Executors.newSingleThreadExecutor().execute {
+        handLandmarker?.detectAsync(mpImage, frameTime)
 
-          if (handLandMarkerResult != null && handLandMarkerResult?.landmarks()?.size != 0) {
+        if (handLandMarkerResult != null && handLandMarkerResult?.landmarks()?.size != 0) {
+          onSuccess(handLandMarkerResult!!)
+        } else {
+          if (handLandMarkerResult != null) {
             onSuccess(handLandMarkerResult!!)
-          } else {
-            if (handLandMarkerResult != null) {
-              onSuccess(handLandMarkerResult!!)
-            }
           }
         }
-      } else {
-        Log.e("HandLandmarker", "Bitmap conversion failed")
       }
+    } catch (e: UnsupportedOperationException) {
+      onFailure(e)
+      Log.e("HandLandmarker", "Bitmap conversion failed")
     } catch (e: Exception) {
       onFailure(e)
       Log.e("HandLandmarker", "Error processing image proxy", e)
@@ -224,9 +223,9 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
       onFailure: (e: Exception) -> Unit
   ) {
     val currentTime = SystemClock.uptimeMillis()
-    if (currentTime - lastProcessedTime >= 300) {
-      processImageProxy(imageProxy, onSuccess, onFailure)
+    if (currentTime - lastProcessedTime >= 250) {
       lastProcessedTime = currentTime
+      processImageProxy(imageProxy, onSuccess, onFailure)
     } else {
       imageProxy.close()
     }
