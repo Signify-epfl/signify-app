@@ -68,7 +68,7 @@ class HandLandMarkViewModelTest {
           null
         }
         .`when`(mockRepository)
-        .processImageProxyThrottled(anyOrNull(), any(), any())
+        .processImageProxy(anyOrNull(), any(), any())
 
     viewModel.processImageProxyThrottled(mockImageProxy)
 
