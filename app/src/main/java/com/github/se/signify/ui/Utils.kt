@@ -202,12 +202,12 @@ fun BackButton(onClick: () -> Unit) {
 /** A reusable composable function that creates the blue top bar. */
 @Composable
 fun TopBar() {
-    Box(
-        modifier =
-        Modifier.fillMaxWidth()
-            .height(5.dp)
-            .background(MaterialTheme.colorScheme.primary)
-            .testTag("TopBlueBar"))
+  Box(
+      modifier =
+          Modifier.fillMaxWidth()
+              .height(5.dp)
+              .background(MaterialTheme.colorScheme.primary)
+              .testTag("TopBlueBar"))
 }
 
 fun getLetterIconResId(letter: Char): Int {

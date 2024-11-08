@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.ktfmt)
     alias(libs.plugins.gms)
-    id("org.sonarqube") version "4.4.1.3373"
+    id("org.sonarqube") version "5.1.0.4882"
 }
 
 
@@ -266,14 +266,14 @@ tasks.register("jacocoTestReport", JacocoReport::class) {
         "android/**/*.*",
         "**/sigchecks/**",
     )
-    val debugTree = fileTree("${project.layout.buildDirectory}/tmp/kotlin-classes/debug") {
+    val debugTree = fileTree("${project.buildDir}/tmp/kotlin-classes/debug") {
         exclude(fileFilter)
     }
     val mainSrc = "${project.projectDir}/src/main/java"
 
     sourceDirectories.setFrom(files(mainSrc))
     classDirectories.setFrom(files(debugTree))
-    executionData.setFrom(fileTree(project.layout.buildDirectory) {
+    executionData.setFrom(fileTree(project.buildDir) {
         include("outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec")
         include("outputs/code_coverage/debugAndroidTest/connected/*/coverage.ec")
     })
