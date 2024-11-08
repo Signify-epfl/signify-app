@@ -30,7 +30,7 @@ import com.github.se.signify.model.challenge.Challenge
 import com.github.se.signify.model.challenge.ChallengeViewModel
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.BackButton
-import com.github.se.signify.ui.ReusableTextButton
+import com.github.se.signify.ui.UtilTextButton
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.screens.profile.currentUserId
 
@@ -78,7 +78,7 @@ fun NewChallengeScreen(
                 Spacer(modifier = Modifier.height(70.dp))
 
                 // My Friends button
-                ReusableTextButton(
+                UtilTextButton(
                     onClickAction = { navigationActions.navigateTo("Friends") },
                     testTag = "MyFriendsButton",
                     text = "My Friends",
@@ -88,7 +88,7 @@ fun NewChallengeScreen(
                 Spacer(modifier = Modifier.height(40.dp)) // Increased space between buttons
 
                 // Create a challenge button
-                ReusableTextButton(
+                UtilTextButton(
                     onClickAction = { navigationActions.navigateTo("CreateChallenge") },
                     testTag = "CreateChallengeButton",
                     text = "Create a Challenge",

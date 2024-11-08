@@ -48,8 +48,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
-import com.github.se.signify.ui.ReusableTextButton
 import com.github.se.signify.ui.UtilButton
+import com.github.se.signify.ui.UtilTextButton
 import com.github.se.signify.ui.getLetterIconResId
 import com.github.se.signify.ui.navigation.BottomNavigationMenu
 import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
@@ -125,7 +125,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
 
 @Composable
 fun CameraFeedbackButton(onClick: () -> Unit = {}) {
-  ReusableTextButton(
+  UtilTextButton(
       onClickAction = onClick,
       testTag = "CameraFeedbackButton",
       text = "Try it out",

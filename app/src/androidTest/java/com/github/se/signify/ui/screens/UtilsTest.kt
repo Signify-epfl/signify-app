@@ -2,8 +2,10 @@ package com.github.se.signify.ui.screens
 
 import android.Manifest
 import android.content.Context
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
@@ -15,12 +17,25 @@ import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.R
 import com.github.se.signify.model.hand.HandLandMarkImplementation
 import com.github.se.signify.model.hand.HandLandMarkViewModel
+import com.github.se.signify.ui.AccountInformation
+import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.BackButton
 import com.github.se.signify.ui.CameraPlaceholder
-import com.github.se.signify.ui.ReusableButtonWithIcon
-import com.github.se.signify.ui.ReusableTextButton
+import com.github.se.signify.ui.HorizontalLetterList
+import com.github.se.signify.ui.InfoPopup
+import com.github.se.signify.ui.LearnedLetterList
+import com.github.se.signify.ui.MainScreenScaffold
+import com.github.se.signify.ui.NotImplementedYet
+import com.github.se.signify.ui.ProfilePicture
+import com.github.se.signify.ui.ScreenColumn
 import com.github.se.signify.ui.SquareButton
+import com.github.se.signify.ui.StatisticsRow
+import com.github.se.signify.ui.StreakCounter
+import com.github.se.signify.ui.TopBar
 import com.github.se.signify.ui.UtilButton
+import com.github.se.signify.ui.UtilIconButton
+import com.github.se.signify.ui.UtilTextButton
+import com.github.se.signify.ui.navigation.NavigationActions
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.mock
@@ -28,16 +43,19 @@ import org.mockito.Mockito.mock
 class UtilsTest {
 
   @get:Rule val composeTestRule = createComposeRule()
+
   @get:Rule
   val cameraAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
 
+  private lateinit var navigationActions: NavigationActions
+
   @Test
-  fun reusableButtonWithIcon_isDisplayed_andClickable() {
+  fun utilIconButtonIsDisplayedAndClickable() {
     val iconDescription = "Info"
 
     // Set the content for the test
     composeTestRule.setContent {
-      ReusableButtonWithIcon(
+      UtilIconButton(
           onClickAction = {}, icon = Icons.Outlined.Info, iconDescription = iconDescription)
     }
 
@@ -49,13 +67,13 @@ class UtilsTest {
   }
 
   @Test
-  fun reusableButtonWithIcon_performsClick() {
+  fun utilIconButtonPerformsClick() {
     var clickCounter = 0
     val iconDescription = "Info"
 
     // Set the content for the test with a click listener that increments the counter
     composeTestRule.setContent {
-      ReusableButtonWithIcon(
+      UtilIconButton(
           onClickAction = { clickCounter++ },
           icon = Icons.Outlined.Info,
           iconDescription = iconDescription)
@@ -69,13 +87,13 @@ class UtilsTest {
   }
 
   @Test
-  fun reusableTextButton_isDisplayed_withCorrectText() {
+  fun utilTextButtonIsDisplayedWithCorrectText() {
     val textTag = "TestButton"
     val buttonText = "Click Me"
 
     // Set the content for the test
     composeTestRule.setContent {
-      ReusableTextButton(
+      UtilTextButton(
           onClickAction = {},
           testTag = textTag,
           text = buttonText,
@@ -91,14 +109,14 @@ class UtilsTest {
   }
 
   @Test
-  fun reusableTextButton_performsClick() {
+  fun utilTextButtonPerformsClick() {
     var clickCounter = 0
     val textTag = "TestButton"
     val buttonText = "Click Me"
 
     // Set the content for the test with a click listener that increments the counter
     composeTestRule.setContent {
-      ReusableTextButton(
+      UtilTextButton(
           onClickAction = { clickCounter++ },
           testTag = textTag,
           text = buttonText,
@@ -114,7 +132,7 @@ class UtilsTest {
   }
 
   @Test
-  fun squareButton_isDisplayed_andClickable() {
+  fun squareButtonIsDisplayedAndClickable() {
     val label = "Test Button"
     composeTestRule.setContent {
       SquareButton(
@@ -137,7 +155,7 @@ class UtilsTest {
   }
 
   @Test
-  fun squareButton_performsClick() {
+  fun squareButtonPerformsClick() {
     var clicked = false
     val label = "Test Button"
     composeTestRule.setContent {
@@ -162,12 +180,12 @@ class UtilsTest {
 
   // Test for UtilButton
   @Test
-  fun utilButton_isDisplayed_andClickable() {
+  fun utilButtonIsDisplayedAndClickable() {
     composeTestRule.setContent {
       UtilButton(
           onClick = {},
-          testTagButton = "UtilButton",
-          testTagIcon = "UtilIcon",
+          buttonTestTag = "UtilButton",
+          iconTestTag = "UtilIcon",
           icon = Icons.Outlined.Info,
           contentDescription = "Info")
     }
@@ -180,13 +198,13 @@ class UtilsTest {
   }
 
   @Test
-  fun utilButton_performsClick() {
+  fun utilButtonPerformsClick() {
     var clicked = false
     composeTestRule.setContent {
       UtilButton(
           onClick = { clicked = true },
-          testTagButton = "UtilButton",
-          testTagIcon = "UtilIcon",
+          buttonTestTag = "UtilButton",
+          iconTestTag = "UtilIcon",
           icon = Icons.Outlined.Info,
           contentDescription = "Info")
     }
@@ -200,7 +218,7 @@ class UtilsTest {
 
   // Test for BackButton
   @Test
-  fun backButton_isDisplayed_andClickable() {
+  fun backButtonIsDisplayedAndClickable() {
     composeTestRule.setContent { BackButton(onClick = {}) }
 
     // Assert that the back button is displayed
@@ -211,7 +229,7 @@ class UtilsTest {
   }
 
   @Test
-  fun backButton_performsClick() {
+  fun backButtonPerformsClick() {
     var clicked = false
     composeTestRule.setContent { BackButton(onClick = { clicked = true }) }
 
@@ -220,6 +238,193 @@ class UtilsTest {
 
     // Assert that the click action was triggered
     assert(clicked)
+  }
+
+  @Test
+  fun topBarIsDisplayed() {
+    composeTestRule.setContent { TopBar() }
+
+    // Assert that the top bar is displayed
+    composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
+  }
+
+  // TODO: test the bottom bar after the refactor of the BottomNavigationMenu()
+  @Test fun bottomBarIsDisplayed() {}
+
+  @Test
+  fun screenColumnDisplaysCorrectInformation() {
+    composeTestRule.setContent {
+      ScreenColumn(
+          padding = PaddingValues(16.dp),
+          testTag = "ColumnScreen",
+      ) {
+        Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
+      }
+    }
+
+    composeTestRule.onNodeWithTag("ColumnScreen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Text").assertIsDisplayed()
+  }
+
+  @Test
+  fun mainScreenScaffoldDisplaysCorrectInformation() {
+    navigationActions = mock(NavigationActions::class.java)
+    composeTestRule.setContent {
+      MainScreenScaffold(
+          navigationActions = navigationActions,
+          testTagColumn = "ScaffoldMainScreen",
+          helpTitle = "Help",
+          helpText = "This is the help text") {
+            Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
+          }
+    }
+
+    composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
+    // TODO: test the bottom bar after the refactor of the BottomNavigationMenu()
+    composeTestRule.onNodeWithTag("ScaffoldMainScreen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("InfoButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Text").assertIsDisplayed()
+  }
+
+  @Test
+  fun annexScreenScaffoldDisplaysCorrectInformation() {
+    navigationActions = mock(NavigationActions::class.java)
+    composeTestRule.setContent {
+      AnnexScreenScaffold(
+          navigationActions = navigationActions, testTagColumn = "ScaffoldAnnexeScreen") {
+            Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
+          }
+    }
+
+    composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("ScaffoldAnnexeScreen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Text").assertIsDisplayed()
+  }
+
+  @Test
+  fun infoPopupIsDisplayed() {
+    val helpTitle = "Help"
+    val helpText = "Little text for the help"
+    composeTestRule.setContent {
+      InfoPopup(onDismiss = {}, helpTitle = helpTitle, helpText = helpText)
+    }
+
+    composeTestRule.onNodeWithTag("InfoPopup").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("InfoPopupContent").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("InfoPopupTitle").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("InfoPopupTitle").assertTextEquals(helpTitle)
+    composeTestRule.onNodeWithTag("InfoPopupBody").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("InfoPopupBody").assertTextEquals(helpText)
+    composeTestRule.onNodeWithTag("InfoPopupCloseButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("InfoPopupCloseButton").assertHasClickAction()
+  }
+
+  @Test
+  fun infoPopupPerformClickOnButton() {
+    var clicked = false
+    val helpTitle = "Help"
+    val helpText = "Little text for the help"
+    composeTestRule.setContent {
+      InfoPopup(onDismiss = { clicked = true }, helpTitle = helpTitle, helpText = helpText)
+    }
+
+    composeTestRule.onNodeWithTag("InfoPopupCloseButton").performClick()
+    assert(clicked)
+  }
+
+  @Test
+  fun statisticsRowIsDisplayed() {
+    val rowTestTag = "Stats"
+    val lineText = "Line stats text"
+    val lineTextTag = "LineTag"
+    val columnTextList = listOf(listOf("test", "10"))
+    val columnTextSPList = listOf(listOf(12, 20))
+    val columnTextTagList = listOf("BoxTag")
+    composeTestRule.setContent {
+      StatisticsRow(
+          rowTestTag = rowTestTag,
+          lineText = lineText,
+          lineTextTag = lineTextTag,
+          columnTextList = columnTextList,
+          columnTextSPList = columnTextSPList,
+          columnTextTagList = columnTextTagList)
+    }
+
+    composeTestRule.onNodeWithTag(rowTestTag).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(lineTextTag).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(lineTextTag).assertTextEquals(lineText)
+    composeTestRule.onNodeWithTag("BoxTag").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("test").assertTextEquals("test")
+    composeTestRule.onNodeWithTag("10").assertTextEquals("10")
+  }
+
+  @Test
+  fun horizontalLetterListIsDisplayedAndScrollable() {
+    val lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F')
+    composeTestRule.setContent { HorizontalLetterList(lettersLearned) }
+
+    composeTestRule.onNodeWithTag("LettersList").assertIsDisplayed()
+    val scrollableList = composeTestRule.onNodeWithTag("LettersList")
+    for (letter in 'A'..'Z') {
+      scrollableList.performScrollToNode(hasTestTag(letter.toString()))
+      composeTestRule.onNodeWithTag(letter.toString()).assertIsDisplayed()
+    }
+    scrollableList.performScrollToNode(hasTestTag("A"))
+    composeTestRule.onNodeWithTag("A").assertIsDisplayed()
+  }
+
+  @Test
+  fun learnedLetterListIsDisplayed() {
+    val lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F')
+    composeTestRule.setContent { LearnedLetterList(lettersLearned) }
+
+    composeTestRule.onNodeWithTag("AllLetterLearned").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("LettersBox").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("LettersList").assertIsDisplayed()
+  }
+
+  @Test
+  fun streakCounterIsDisplayed() {
+    composeTestRule.setContent { StreakCounter(10, false) }
+
+    composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("NumberOfDays").assertTextEquals("10")
+  }
+
+  @Test
+  fun profilePictureIsDisplayed() {
+    composeTestRule.setContent { ProfilePicture(null) }
+
+    composeTestRule.onNodeWithTag("ProfilePicture").assertIsDisplayed()
+  }
+
+  @Test
+  fun accountInformationIsDisplayed() {
+    val userId = "userId"
+    val userName = "userName"
+    composeTestRule.setContent { AccountInformation(userId, userName, null, 10) }
+
+    composeTestRule.onNodeWithTag("UserInfo").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("UserId").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("UserId").assertTextEquals(userId)
+    composeTestRule.onNodeWithTag("UserName").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("UserName").assertTextEquals(userName)
+    composeTestRule.onNodeWithTag("ProfilePicture").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("NumberOfDays").assertTextEquals("10 days")
+  }
+
+  @Test
+  fun notImplementedYetIsDisplayed() {
+    val testTag = "Tag"
+    val text = "Nothing for now"
+    composeTestRule.setContent { NotImplementedYet(testTag, text) }
+
+    composeTestRule.onNodeWithTag(testTag).onChild().assertIsDisplayed()
+    composeTestRule.onNodeWithTag(testTag).onChild().assertTextEquals(text)
   }
 
   @Test
