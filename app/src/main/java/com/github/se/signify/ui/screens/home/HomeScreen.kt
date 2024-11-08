@@ -4,34 +4,27 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.outlined.DateRange
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,15 +37,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
+import com.github.se.signify.ui.MainScreenScaffold
+import com.github.se.signify.ui.StreakCounter
 import com.github.se.signify.ui.UtilButton
 import com.github.se.signify.ui.UtilTextButton
 import com.github.se.signify.ui.getLetterIconResId
-import com.github.se.signify.ui.navigation.BottomNavigationMenu
-import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 
@@ -77,50 +69,39 @@ fun HomeScreen(navigationActions: NavigationActions) {
           Exercise("Hard"),
       )
 
-  Scaffold(
-      bottomBar = {
-        BottomNavigationMenu(
-            onTabSelect = { route -> navigationActions.navigateTo(route) },
-            tabList = LIST_TOP_LEVEL_DESTINATION,
-            selectedItem = navigationActions.currentRoute())
-      },
-      content = { padding ->
-        Column(
-            modifier =
-                Modifier.fillMaxSize()
-                    .padding(padding)
-                    .padding(16.dp)
-                    .verticalScroll(rememberScrollState())
-                    .testTag("HomeScreen"),
-            horizontalAlignment = Alignment.CenterHorizontally) {
-              Row(
-                  modifier = Modifier.fillMaxWidth(),
-                  horizontalArrangement = Arrangement.SpaceBetween,
-              ) {
-                StreakCounter()
-                UtilButton({}, "HelpButton", "HelpIcon", Icons.Outlined.Info, "Help")
+  MainScreenScaffold(
+      navigationActions = navigationActions,
+      testTagColumn = "HomeScreen",
+      helpTitle = "Home",
+      helpText = "",
+  ) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+      // This will be updated to show the streak count
+      StreakCounter(0, false)
 
-                UtilButton(
-                    onClick = { navigationActions.navigateTo("Quest") },
-                    "QuestsButton",
-                    "QuestIcon",
-                    Icons.Outlined.DateRange,
-                    "Quests")
-              }
+      UtilButton(
+          onClick = { navigationActions.navigateTo("Quest") },
+          "QuestsButton",
+          "QuestIcon",
+          Icons.Outlined.DateRange,
+          "Quests")
+    }
 
-              Spacer(modifier = Modifier.height(16.dp))
+    Spacer(modifier = Modifier.height(16.dp))
 
-              CameraFeedbackButton(onClick = { navigationActions.navigateTo(Screen.PRACTICE) })
+    CameraFeedbackButton(onClick = { navigationActions.navigateTo(Screen.PRACTICE) })
 
-              Spacer(modifier = Modifier.height(16.dp))
+    Spacer(modifier = Modifier.height(32.dp))
 
-              LetterDictionary()
+    LetterDictionary()
 
-              Spacer(modifier = Modifier.height(16.dp))
+    Spacer(modifier = Modifier.height(32.dp))
 
-              ExerciseList(defaultExercises, exerciseOnClick)
-            }
-      })
+    ExerciseList(defaultExercises, exerciseOnClick)
+  }
 }
 
 @Composable
@@ -226,24 +207,4 @@ fun ExerciseButton(exercise: Exercise, onClick: (exercise: Exercise) -> Unit) {
           ButtonDefaults.buttonColors(colorResource(R.color.blue), colorResource(R.color.black))) {
         Text(exercise.name)
       }
-}
-
-// This button should be replaced by a shared Composable later on.
-
-// This counter should be replaced by a shared Composable later on.
-@Composable
-fun StreakCounter() {
-  Row(modifier = Modifier.testTag("StreakCounter")) {
-    Icon(
-        painter = painterResource(id = R.drawable.flame),
-        contentDescription = "Streak Icon",
-        tint = colorResource(R.color.red),
-        modifier = Modifier.size(20.dp).testTag("FlameIcon"))
-    Spacer(modifier = Modifier.width(8.dp))
-    Text(
-        text = "4",
-        fontWeight = FontWeight.Bold,
-        color = colorResource(R.color.red),
-        fontSize = 20.dp.value.sp)
-  }
 }
