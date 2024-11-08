@@ -132,4 +132,5 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ktfmt = { id = "com.ncorti.ktfmt.gradle", version.ref = "ktfmt" }
 gms = { id = "com.google.gms.google-services", version.ref = "gms" }
+# Do not remove this line, as it is used by SonarCloud in the CI on Github.
 sonar = { id = "org.sonarqube", version.ref = "sonar" }
