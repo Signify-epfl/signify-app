@@ -18,23 +18,23 @@ import com.github.se.signify.R
 import com.github.se.signify.model.hand.HandLandMarkImplementation
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.AccountInformation
-import com.github.se.signify.ui.AllLetterLearned
+import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.BackButton
 import com.github.se.signify.ui.CameraPlaceholder
-import com.github.se.signify.ui.ColumnScreen
 import com.github.se.signify.ui.HorizontalLetterList
 import com.github.se.signify.ui.InfoPopup
+import com.github.se.signify.ui.LearnedLetterList
+import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.NotImplementedYet
 import com.github.se.signify.ui.ProfilePicture
-import com.github.se.signify.ui.ReusableButtonWithIcon
-import com.github.se.signify.ui.ReusableTextButton
-import com.github.se.signify.ui.ScaffoldAnnexeScreen
-import com.github.se.signify.ui.ScaffoldMainScreen
+import com.github.se.signify.ui.ScreenColumn
 import com.github.se.signify.ui.SquareButton
 import com.github.se.signify.ui.StatisticsRow
 import com.github.se.signify.ui.StreakCounter
 import com.github.se.signify.ui.TopBar
 import com.github.se.signify.ui.UtilButton
+import com.github.se.signify.ui.UtilIconButton
+import com.github.se.signify.ui.UtilTextButton
 import com.github.se.signify.ui.navigation.NavigationActions
 import org.junit.Rule
 import org.junit.Test
@@ -50,12 +50,12 @@ class UtilsTest {
   private lateinit var navigationActions: NavigationActions
 
   @Test
-  fun reusableButtonWithIconIsDisplayedAndClickable() {
+  fun utilIconButtonIsDisplayedAndClickable() {
     val iconDescription = "Info"
 
     // Set the content for the test
     composeTestRule.setContent {
-      ReusableButtonWithIcon(
+      UtilIconButton(
           onClickAction = {}, icon = Icons.Outlined.Info, iconDescription = iconDescription)
     }
 
@@ -67,13 +67,13 @@ class UtilsTest {
   }
 
   @Test
-  fun reusableButtonWithIconPerformsClick() {
+  fun utilIconButtonPerformsClick() {
     var clickCounter = 0
     val iconDescription = "Info"
 
     // Set the content for the test with a click listener that increments the counter
     composeTestRule.setContent {
-      ReusableButtonWithIcon(
+      UtilIconButton(
           onClickAction = { clickCounter++ },
           icon = Icons.Outlined.Info,
           iconDescription = iconDescription)
@@ -87,13 +87,13 @@ class UtilsTest {
   }
 
   @Test
-  fun reusableTextButtonIsDisplayedWithCorrectText() {
+  fun utilTextButtonIsDisplayedWithCorrectText() {
     val textTag = "TestButton"
     val buttonText = "Click Me"
 
     // Set the content for the test
     composeTestRule.setContent {
-      ReusableTextButton(
+      UtilTextButton(
           onClickAction = {},
           testTag = textTag,
           text = buttonText,
@@ -109,14 +109,14 @@ class UtilsTest {
   }
 
   @Test
-  fun reusableTextButtonPerformsClick() {
+  fun utilTextButtonPerformsClick() {
     var clickCounter = 0
     val textTag = "TestButton"
     val buttonText = "Click Me"
 
     // Set the content for the test with a click listener that increments the counter
     composeTestRule.setContent {
-      ReusableTextButton(
+      UtilTextButton(
           onClickAction = { clickCounter++ },
           testTag = textTag,
           text = buttonText,
@@ -184,8 +184,8 @@ class UtilsTest {
     composeTestRule.setContent {
       UtilButton(
           onClick = {},
-          testTagButton = "UtilButton",
-          testTagIcon = "UtilIcon",
+          buttonTestTag = "UtilButton",
+          iconTestTag = "UtilIcon",
           icon = Icons.Outlined.Info,
           contentDescription = "Info")
     }
@@ -203,8 +203,8 @@ class UtilsTest {
     composeTestRule.setContent {
       UtilButton(
           onClick = { clicked = true },
-          testTagButton = "UtilButton",
-          testTagIcon = "UtilIcon",
+          buttonTestTag = "UtilButton",
+          iconTestTag = "UtilIcon",
           icon = Icons.Outlined.Info,
           contentDescription = "Info")
     }
@@ -252,9 +252,9 @@ class UtilsTest {
   @Test fun bottomBarIsDisplayed() {}
 
   @Test
-  fun columnScreenDisplaysCorrectInformation() {
+  fun screenColumnDisplaysCorrectInformation() {
     composeTestRule.setContent {
-      ColumnScreen(
+      ScreenColumn(
           padding = PaddingValues(16.dp),
           testTag = "ColumnScreen",
       ) {
@@ -267,10 +267,10 @@ class UtilsTest {
   }
 
   @Test
-  fun scaffoldMainScreenDisplaysCorrectInformation() {
+  fun mainScreenScaffoldDisplaysCorrectInformation() {
     navigationActions = mock(NavigationActions::class.java)
     composeTestRule.setContent {
-      ScaffoldMainScreen(
+      MainScreenScaffold(
           navigationActions = navigationActions,
           testTagColumn = "ScaffoldMainScreen",
           helpTitle = "Help",
@@ -287,10 +287,10 @@ class UtilsTest {
   }
 
   @Test
-  fun scaffoldAnnexeScreenDisplaysCorrectInformation() {
+  fun annexScreenScaffoldDisplaysCorrectInformation() {
     navigationActions = mock(NavigationActions::class.java)
     composeTestRule.setContent {
-      ScaffoldAnnexeScreen(
+      AnnexScreenScaffold(
           navigationActions = navigationActions, testTagColumn = "ScaffoldAnnexeScreen") {
             Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
           }
@@ -375,9 +375,9 @@ class UtilsTest {
   }
 
   @Test
-  fun allLetterLearnedIsDisplayed() {
+  fun learnedLetterListIsDisplayed() {
     val lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F')
-    composeTestRule.setContent { AllLetterLearned(lettersLearned) }
+    composeTestRule.setContent { LearnedLetterList(lettersLearned) }
 
     composeTestRule.onNodeWithTag("AllLetterLearned").assertIsDisplayed()
     composeTestRule.onNodeWithTag("LettersBox").assertIsDisplayed()

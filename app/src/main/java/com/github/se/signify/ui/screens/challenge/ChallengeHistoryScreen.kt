@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.ui.BackButton
-import com.github.se.signify.ui.ReusableTextButton
+import com.github.se.signify.ui.UtilTextButton
 import com.github.se.signify.ui.navigation.NavigationActions
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -118,7 +118,7 @@ fun ChallengeHistoryScreen(
                 Spacer(modifier = Modifier.height(60.dp))
 
                 // Graphs and statistics button
-                ReusableTextButton(
+                UtilTextButton(
                     onClickAction = { /* Do nothing for now */},
                     testTag = "GraphsStatisticsButton",
                     text = stringResource(R.string.graphs_history),

@@ -93,7 +93,7 @@ import com.github.se.signify.ui.navigation.NavigationActions
  * @param iconDescription A string description of the icon, used for accessibility and testing.
  */
 @Composable
-fun ReusableButtonWithIcon(onClickAction: () -> Unit, icon: ImageVector, iconDescription: String) {
+fun UtilIconButton(onClickAction: () -> Unit, icon: ImageVector, iconDescription: String) {
   OutlinedButton(
       onClick = onClickAction,
       modifier = Modifier.padding(8.dp).testTag(iconDescription + "Button"),
@@ -115,7 +115,7 @@ fun ReusableButtonWithIcon(onClickAction: () -> Unit, icon: ImageVector, iconDes
  * @param backgroundColor The background color of the button.
  */
 @Composable
-fun ReusableTextButton(
+fun UtilTextButton(
     onClickAction: () -> Unit,
     testTag: String,
     text: String,
@@ -193,16 +193,16 @@ fun SquareButton(
  * A reusable composable function that creates an icon button.
  *
  * @param onClick A lambda function to execute when the button is clicked.
- * @param testTagButton The testTag of the button.
- * @param testTagIcon The testTag of the icon.
+ * @param buttonTestTag The testTag of the button.
+ * @param iconTestTag The testTag of the icon.
  * @param icon The icon to display.
  * @param contentDescription The description text of the icon.
  */
 @Composable
 fun UtilButton(
     onClick: () -> Unit,
-    testTagButton: String,
-    testTagIcon: String,
+    buttonTestTag: String,
+    iconTestTag: String,
     icon: ImageVector,
     contentDescription: String
 ) {
@@ -212,13 +212,13 @@ fun UtilButton(
               .background(colorResource(R.color.white), shape = RoundedCornerShape(30))
               .border(2.dp, colorResource(R.color.white), shape = RoundedCornerShape(30))
               .clickable { onClick() }
-              .testTag(testTagButton),
+              .testTag(buttonTestTag),
       contentAlignment = Alignment.Center) {
         Icon(
             icon,
             contentDescription = contentDescription,
             tint = colorResource(R.color.blue),
-            modifier = Modifier.size(30.dp).testTag(testTagIcon))
+            modifier = Modifier.size(30.dp).testTag(iconTestTag))
       }
 }
 
@@ -276,7 +276,7 @@ fun BackButton(onClick: () -> Unit) {
  * @param content A lambda function for the content of the column.
  */
 @Composable
-fun ColumnScreen(
+fun ScreenColumn(
     padding: PaddingValues,
     testTag: String,
     backgroundColor: Color = colorResource(R.color.white),
@@ -305,7 +305,7 @@ fun ColumnScreen(
  * @param content A lambda function for the content of the column.
  */
 @Composable
-fun ScaffoldMainScreen(
+fun MainScreenScaffold(
     navigationActions: NavigationActions,
     testTagColumn: String,
     helpTitle: String,
@@ -317,7 +317,7 @@ fun ScaffoldMainScreen(
       topBar = { TopBar() },
       bottomBar = { BottomBar(navigationActions) },
       content = { padding ->
-        ColumnScreen(
+        ScreenColumn(
             padding,
             testTagColumn,
             colorResource(R.color.white) // to replace with the background color theme
@@ -348,7 +348,7 @@ fun ScaffoldMainScreen(
  * @param content A lambda function for the content of the column.
  */
 @Composable
-fun ScaffoldAnnexeScreen(
+fun AnnexScreenScaffold(
     navigationActions: NavigationActions,
     testTagColumn: String,
     content: @Composable ColumnScope.() -> Unit
@@ -356,7 +356,7 @@ fun ScaffoldAnnexeScreen(
   Scaffold(
       topBar = { TopBar() },
       content = { padding ->
-        ColumnScreen(
+        ScreenColumn(
             padding,
             testTagColumn,
             colorResource(R.color.white) // to replace with the background color theme
@@ -527,7 +527,7 @@ fun HorizontalLetterList(lettersLearned: List<Char>) {
  * @param lettersLearned The list of character already learned.
  */
 @Composable
-fun AllLetterLearned(lettersLearned: List<Char>) {
+fun LearnedLetterList(lettersLearned: List<Char>) {
   Text(
       text = "All letters learned",
       fontWeight = FontWeight.Bold,

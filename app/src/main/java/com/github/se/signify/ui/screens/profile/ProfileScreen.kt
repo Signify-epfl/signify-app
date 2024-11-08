@@ -14,8 +14,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.ui.AccountInformation
-import com.github.se.signify.ui.AllLetterLearned
-import com.github.se.signify.ui.ScaffoldMainScreen
+import com.github.se.signify.ui.LearnedLetterList
+import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.SquareButton
 import com.github.se.signify.ui.UtilButton
 import com.github.se.signify.ui.navigation.NavigationActions
@@ -31,7 +31,7 @@ fun ProfileScreen(
     lettersLearned: List<Char>,
     navigationActions: NavigationActions
 ) {
-  ScaffoldMainScreen(
+  MainScreenScaffold(
       navigationActions = navigationActions,
       testTagColumn = "ProfileScreen",
       helpTitle = "Profile",
@@ -40,8 +40,8 @@ fun ProfileScreen(
     // Settings button
     UtilButton(
         onClick = { navigationActions.navigateTo(Route.SETTINGS) },
-        testTagButton = "SettingsButton",
-        testTagIcon = "SettingsIcon",
+        buttonTestTag = "SettingsButton",
+        iconTestTag = "SettingsIcon",
         icon = Icons.Outlined.Settings,
         contentDescription = "Settings")
     Spacer(modifier = Modifier.height(24.dp))
@@ -55,7 +55,7 @@ fun ProfileScreen(
     Spacer(modifier = Modifier.height(32.dp))
 
     // Letters learned
-    AllLetterLearned(lettersLearned = lettersLearned)
+    LearnedLetterList(lettersLearned = lettersLearned)
     Spacer(modifier = Modifier.height(64.dp))
 
     // Friends List button

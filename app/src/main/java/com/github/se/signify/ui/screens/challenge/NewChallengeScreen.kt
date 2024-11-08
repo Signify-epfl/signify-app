@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.ui.BackButton
-import com.github.se.signify.ui.ReusableTextButton
+import com.github.se.signify.ui.UtilTextButton
 import com.github.se.signify.ui.navigation.NavigationActions
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -54,7 +54,7 @@ fun NewChallengeScreen(navigationActions: NavigationActions) {
                 Spacer(modifier = Modifier.height(70.dp))
 
                 // My Friends button
-                ReusableTextButton(
+                UtilTextButton(
                     onClickAction = { navigationActions.navigateTo("Friends") },
                     testTag = "MyFriendsButton",
                     text = "My Friends",
@@ -64,7 +64,7 @@ fun NewChallengeScreen(navigationActions: NavigationActions) {
                 Spacer(modifier = Modifier.height(40.dp)) // Increased space between buttons
 
                 // Create a challenge button
-                ReusableTextButton(
+                UtilTextButton(
                     onClickAction = { navigationActions.navigateTo("CreateChallenge") },
                     testTag = "CreateChallengeButton",
                     text = "Create a Challenge",
@@ -99,7 +99,7 @@ fun NewChallengeScreen(navigationActions: NavigationActions) {
 
                             // Challenge buttons (only esthetic, not implemented the logic yet)
                             for (i in 1..3) {
-                              ReusableTextButton(
+                              UtilTextButton(
                                   onClickAction = { /* Do nothing for now */},
                                   testTag = "ChallengeButton$i",
                                   text = "Challenge $i",

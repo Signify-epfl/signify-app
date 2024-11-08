@@ -6,9 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.github.se.signify.ui.AccountInformation
-import com.github.se.signify.ui.AllLetterLearned
+import com.github.se.signify.ui.AnnexScreenScaffold
+import com.github.se.signify.ui.LearnedLetterList
 import com.github.se.signify.ui.NotImplementedYet
-import com.github.se.signify.ui.ScaffoldAnnexeScreen
 import com.github.se.signify.ui.StatisticsRow
 import com.github.se.signify.ui.navigation.NavigationActions
 
@@ -23,7 +23,7 @@ fun MyStatsScreen(
     exercisesAchieved: List<Int>,
     questsAchieved: List<Int>
 ) {
-  ScaffoldAnnexeScreen(
+  AnnexScreenScaffold(
       navigationActions = navigationActions,
       testTagColumn = "MyStatsScreen",
   ) {
@@ -36,7 +36,7 @@ fun MyStatsScreen(
     Spacer(modifier = Modifier.height(32.dp))
 
     // Letters learned
-    AllLetterLearned(lettersLearned = lettersLearned)
+    LearnedLetterList(lettersLearned = lettersLearned)
     Spacer(modifier = Modifier.height(64.dp))
 
     // Number of exercises achieved
