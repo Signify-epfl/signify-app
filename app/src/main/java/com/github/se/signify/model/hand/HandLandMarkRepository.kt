@@ -75,10 +75,4 @@ interface HandLandMarkRepository {
       onSuccess: (result: HandLandmarkerResult) -> Unit,
       onFailure: (e: Exception) -> Unit
   )
-  /**
-   * Sets the solution (recognized gesture) output.
-   *
-   * @param solution The intended solution to be set.
-   */
-  fun setSolution(solution: String)
 }

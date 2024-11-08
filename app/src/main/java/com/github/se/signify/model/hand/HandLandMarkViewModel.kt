@@ -53,9 +53,7 @@ class HandLandMarkViewModel(
         imageProxy = imageProxy,
         onSuccess = { result ->
           viewModelScope.launch {
-            _handLandmarks.value =
-                result.landmarks().firstOrNull()
-                    ?: emptyList() // Process the first hand's landmarks
+            _handLandmarks.value = result.landmarks()[0] // Process the first hand's landmarks
           }
         },
         onFailure = { exception ->
