@@ -43,10 +43,10 @@ import org.mockito.Mockito.mock
 class UtilsTest {
 
   @get:Rule val composeTestRule = createComposeRule()
-  
+
   @get:Rule
   val cameraAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
-  
+
   private lateinit var navigationActions: NavigationActions
 
   @Test
