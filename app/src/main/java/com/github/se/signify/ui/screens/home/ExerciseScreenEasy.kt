@@ -43,7 +43,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.model.hand.HandLandMarkViewModel
-import com.github.se.signify.ui.CameraPlaceholder
 import com.github.se.signify.ui.navigation.NavigationActions
 
 /**
@@ -285,6 +284,6 @@ fun ExerciseScreenCommon(
         item { WordLayer(wordsList, currentWordIndex, currentLetterIndex) }
 
         // Camera placeholder/composable
-        item { CameraPlaceholder(handLandMarkViewModel) }
+        // item { CameraPlaceholder(handLandMarkViewModel) }
       }
 }

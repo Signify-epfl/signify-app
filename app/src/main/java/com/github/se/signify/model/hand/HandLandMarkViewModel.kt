@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.camera.core.ImageProxy
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -75,4 +76,20 @@ class HandLandMarkViewModel(
    * @return A StateFlow containing a list of normalized landmarks or null if no landmarks detected.
    */
   fun landMarks(): StateFlow<List<NormalizedLandmark>?> = handLandmarks
+
+  companion object {
+    fun provideFactory(
+        context: Context,
+        handLandMarkRepository: HandLandMarkRepository
+    ): ViewModelProvider.Factory =
+        object : ViewModelProvider.Factory {
+          @Suppress("UNCHECKED_CAST")
+          override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(HandLandMarkViewModel::class.java)) {
+              return HandLandMarkViewModel(handLandMarkRepository, context) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
+          }
+        }
+  }
 }

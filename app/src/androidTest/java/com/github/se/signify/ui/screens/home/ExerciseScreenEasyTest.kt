@@ -51,7 +51,7 @@ class ExerciseScreenEasyTest {
     // Verify if the back button is displayed
     composeTestRule.onNodeWithContentDescription("Back").assertIsDisplayed()
     composeTestRule.onNodeWithTag("wordLayer").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("cameraPreview").assertIsDisplayed()
+    // composeTestRule.onNodeWithTag("cameraPreview").assertIsDisplayed()
   }
 
   @Test

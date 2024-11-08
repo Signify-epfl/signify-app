@@ -41,7 +41,7 @@ class ExerciseScreenHardTest {
 
     composeTestRule.onNodeWithContentDescription("Back").assertIsDisplayed()
     composeTestRule.onNodeWithTag("wordLayer").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("cameraPreview").assertIsDisplayed()
+    // composeTestRule.onNodeWithTag("cameraPreview").assertIsDisplayed()
   }
 
   @Test
