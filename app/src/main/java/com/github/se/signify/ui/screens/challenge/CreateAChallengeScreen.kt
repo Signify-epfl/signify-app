@@ -56,25 +56,34 @@ fun CreateAChallengeScreen(
 
               Spacer(modifier = Modifier.height(16.dp))
 
-              // List of Friends
-              LazyColumn(
-                  modifier = Modifier.fillMaxSize().testTag("FriendsList"),
-                  verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(friends.size) { index ->
-                      val friendId = friends[index]
-                      FriendCard(friendId = friendId) {
-                        Button(
-                            onClick = {
-                              selectedFriendId = friendId
-                              showDialog = true
-                            },
-                            modifier =
-                                Modifier.padding(8.dp).testTag("ChallengeButton_$friendId")) {
-                              Text("Challenge")
-                            }
+              // Conditional display for friends list
+              if (friends.isEmpty()) {
+                Text(
+                    text = "No friends available",
+                    fontSize = 18.sp,
+                    color = Color.Gray,
+                    modifier = Modifier.testTag("NoFriendsText"))
+              } else {
+                // List of Friends
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize().testTag("FriendsList"),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                      items(friends.size) { index ->
+                        val friendId = friends[index]
+                        FriendCard(friendId = friendId) {
+                          Button(
+                              onClick = {
+                                selectedFriendId = friendId
+                                showDialog = true
+                              },
+                              modifier =
+                                  Modifier.padding(8.dp).testTag("ChallengeButton_$friendId")) {
+                                Text("Challenge")
+                              }
+                        }
                       }
                     }
-                  }
+              }
 
               // Show Challenge Dialog if showDialog is true
               if (showDialog && selectedFriendId != null) {

@@ -204,7 +204,7 @@ fun OngoingChallengeCard(
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "Delete Challenge",
-                    tint = Color.Red)
+                    tint = colorResource(R.color.dark_gray))
               }
         }
   }
