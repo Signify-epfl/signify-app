@@ -37,9 +37,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
+import com.github.se.signify.model.hand.HandLandMarkViewModel
+import com.github.se.signify.ui.CameraPlaceholder
 import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.StreakCounter
 import com.github.se.signify.ui.UtilButton
@@ -73,7 +76,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
       navigationActions = navigationActions,
       testTagColumn = "HomeScreen",
       helpTitle = "Home",
-      helpText = "",
+      helpText = stringResource(R.string.help_home_screen),
   ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
