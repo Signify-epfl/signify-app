@@ -32,6 +32,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -196,6 +197,17 @@ fun BackButton(onClick: () -> Unit) {
               tint = colorResource(R.color.blue))
         }
       }
+}
+
+/** A reusable composable function that creates the blue top bar. */
+@Composable
+fun TopBar() {
+    Box(
+        modifier =
+        Modifier.fillMaxWidth()
+            .height(5.dp)
+            .background(MaterialTheme.colorScheme.primary)
+            .testTag("TopBlueBar"))
 }
 
 fun getLetterIconResId(letter: Char): Int {
