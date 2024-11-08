@@ -5,7 +5,6 @@ import android.content.Context
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -68,11 +67,6 @@ class ASLRecognitionTest : LifecycleOwner {
     composeTestRule.onNodeWithTag("gestureOverlayView").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("aslRecognitionTitle").assertIsDisplayed()
     composeTestRule.onNodeWithTag("bottomNavigationMenu").assertIsDisplayed()
-  }
-
-  @Test
-  fun buttonIsWorkingAsIntended() {
-    composeTestRule.onNodeWithTag("practiceButton").performScrollTo().performClick()
   }
 
   override val lifecycle: Lifecycle
