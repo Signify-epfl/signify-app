@@ -124,11 +124,7 @@ fun SettingsScreen(
                   Spacer(modifier = Modifier.height(16.dp))
 
                   Icon(
-                      modifier =
-                          Modifier.clickable {
-                            userViewModel.updateProfilePictureUrl(currentUserId, null)
-                            selectedImageUrl = null
-                          },
+                      modifier = Modifier.clickable { selectedImageUrl = null },
                       imageVector = Icons.Outlined.Delete,
                       contentDescription = "Delete Profile Picture",
                       tint = colorResource(R.color.black),
