@@ -20,6 +20,7 @@ import com.github.se.signify.ui.CameraPlaceholder
 import com.github.se.signify.ui.ReusableButtonWithIcon
 import com.github.se.signify.ui.ReusableTextButton
 import com.github.se.signify.ui.SquareButton
+import com.github.se.signify.ui.TopBar
 import com.github.se.signify.ui.UtilButton
 import org.junit.Rule
 import org.junit.Test
@@ -158,6 +159,14 @@ class UtilsTest {
 
     // Assert that the click action was triggered
     assert(clicked)
+  }
+
+  @Test
+  fun topBarIsDisplayed() {
+    composeTestRule.setContent { TopBar() }
+
+    // Assert that the top bar is displayed
+    composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
   }
 
   // Test for UtilButton
