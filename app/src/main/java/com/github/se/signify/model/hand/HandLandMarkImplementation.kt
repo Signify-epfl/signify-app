@@ -223,7 +223,7 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
       onFailure: (e: Exception) -> Unit
   ) {
     val currentTime = SystemClock.uptimeMillis()
-    if (currentTime - lastProcessedTime >= 250) {
+    if (currentTime - lastProcessedTime >= 500) {
       processImageProxy(imageProxy, onSuccess, onFailure)
       lastProcessedTime = currentTime
     } else {
