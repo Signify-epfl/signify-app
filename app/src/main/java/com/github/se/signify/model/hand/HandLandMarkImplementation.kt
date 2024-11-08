@@ -4,6 +4,8 @@ import ai.onnxruntime.OnnxTensor
 import ai.onnxruntime.OrtEnvironment
 import ai.onnxruntime.OrtSession
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.os.SystemClock
 import android.util.Log
 import androidx.camera.core.ImageProxy
@@ -16,7 +18,6 @@ import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarkerResult
 import java.io.File
 import java.nio.FloatBuffer
 import java.util.Collections
-import java.util.concurrent.Executors
 
 /**
  * Implementation of the HandLandMarkRepository interface using MediaPipe's HandLandmarker and ONNX
@@ -116,31 +117,24 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
       onSuccess: (result: HandLandmarkerResult) -> Unit,
       onFailure: (e: Exception) -> Unit
   ) {
-    try {
-      val bitmap = imageProxy.toBitmap()
+    val frameTime = SystemClock.uptimeMillis()
 
-      val frameTime = SystemClock.uptimeMillis()
-      val mpImage = BitmapImageBuilder(bitmap).build()
-      Executors.newSingleThreadExecutor().execute {
-        handLandmarker?.detectAsync(mpImage, frameTime)
-
-        if (handLandMarkerResult != null && handLandMarkerResult?.landmarks()?.size != 0) {
-          onSuccess(handLandMarkerResult!!)
-        } else {
-          if (handLandMarkerResult != null) {
-            onSuccess(handLandMarkerResult!!)
-          }
+    // Copy out RGB bits from the frame to a bitmap buffer
+    val bitmapBuffer =
+        Bitmap.createBitmap(imageProxy.width, imageProxy.height, Bitmap.Config.ARGB_8888)
+    imageProxy.use { bitmapBuffer.copyPixelsFromBuffer(imageProxy.planes[0].buffer) }
+    imageProxy.close()
+    val matrix =
+        Matrix().apply {
+          // Rotate the frame received from the camera to be in the same direction as it'll be shown
+          postRotate(imageProxy.imageInfo.rotationDegrees.toFloat())
         }
-      }
-    } catch (e: UnsupportedOperationException) {
-      onFailure(e)
-      Log.e("HandLandmarker", "Bitmap conversion failed")
-    } catch (e: Exception) {
-      onFailure(e)
-      Log.e("HandLandmarker", "Error processing image proxy", e)
-    } finally {
-      imageProxy.close()
-    }
+    val rotatedBitmap =
+        Bitmap.createBitmap(
+            bitmapBuffer, 0, 0, bitmapBuffer.width, bitmapBuffer.height, matrix, true)
+
+    val mpImage = BitmapImageBuilder(rotatedBitmap).build()
+    handLandmarker?.detectAsync(mpImage, frameTime)
   }
 
   /**

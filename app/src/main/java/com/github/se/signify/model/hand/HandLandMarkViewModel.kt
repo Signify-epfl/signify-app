@@ -49,7 +49,7 @@ class HandLandMarkViewModel(
    * @param imageProxy The camera frame to be processed for hand landmarks.
    */
   fun processImageProxyThrottled(imageProxy: ImageProxy) {
-    handLandMarkRepository.processImageProxyThrottled(
+    handLandMarkRepository.processImageProxy(
         imageProxy = imageProxy,
         onSuccess = { result ->
           viewModelScope.launch {
