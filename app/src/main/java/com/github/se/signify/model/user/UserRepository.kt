@@ -89,4 +89,13 @@ interface UserRepository {
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   )
+
+  fun getUnlockedQuests(userId: String, onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit)
+
+  fun incrementUnlockedQuests(
+      userId: String,
+      new: String,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  )
 }
