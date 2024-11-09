@@ -2,6 +2,7 @@ package com.github.se.signify.ui.screens.home
 
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -54,6 +55,17 @@ class HomeScreenTest {
   }
 
   @Test
+  fun allClickableElementsPerformClick() {
+
+    composeTestRule.setContent { HomeScreen(navigationActions = navigationActions) }
+
+    composeTestRule.onNodeWithTag("QuestsButton").performClick()
+    composeTestRule.onNodeWithTag("CameraFeedbackButton").performClick()
+    composeTestRule.onNodeWithTag("LetterDictionaryBack").performClick()
+    composeTestRule.onNodeWithTag("LetterDictionaryForward").performClick()
+  }
+
+  @Test
   fun questsButtonNavigatesToQuestScreen() {
     composeTestRule.setContent { HomeScreen(navigationActions = navigationActions) }
 
@@ -83,6 +95,21 @@ class HomeScreenTest {
           .onNodeWithTag("${exercise.name}ExerciseButton")
           .performScrollTo()
           .assertIsDisplayed()
+    }
+  }
+
+  @Test
+  fun exerciseButtonTextDisplaysCorrectly() {
+    val exercises = listOf(Exercise("Easy"), Exercise("Medium"), Exercise("Hard"))
+
+    composeTestRule.setContent { ExerciseList(exercises, navigationActions) }
+
+    exercises.forEach { exercise ->
+      composeTestRule
+          .onNodeWithTag("${exercise.name}ExerciseButtonText", useUnmergedTree = true)
+          .performScrollTo()
+          .assertIsDisplayed()
+          .assertTextEquals(exercise.name)
     }
   }
 

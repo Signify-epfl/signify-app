@@ -196,6 +196,6 @@ fun ExerciseButton(exercise: Exercise, navigationActions: NavigationActions) {
       shape = RoundedCornerShape(8.dp),
       colors =
           ButtonDefaults.buttonColors(colorResource(R.color.blue), colorResource(R.color.black))) {
-        Text(exercise.name)
+        Text(exercise.name, modifier = Modifier.testTag("${exercise.name}ExerciseButtonText"))
       }
 }
