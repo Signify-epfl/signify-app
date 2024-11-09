@@ -73,7 +73,7 @@ fun QuestBox(quest: Quest) {
       colors = CardDefaults.cardColors(colorResource(R.color.blue))) {
         Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
           Text(
-              text = "Learn about letter" + " " + quest.title,
+              text = "Learn letter" + " " + quest.title,
               color = colorResource(R.color.white),
               fontWeight = FontWeight.Bold,
               fontSize = 20.sp,
