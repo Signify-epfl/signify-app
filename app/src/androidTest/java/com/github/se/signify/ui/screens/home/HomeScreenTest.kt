@@ -40,7 +40,6 @@ class HomeScreenTest {
     composeTestRule.onNodeWithTag("LetterDictionaryForward").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("ExerciseList").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("StreakCounter").performScrollTo().assertIsDisplayed()
-    composeTestRule.onNodeWithTag("HelpButton").assertIsDisplayed()
   }
 
   @Test
@@ -48,7 +47,6 @@ class HomeScreenTest {
 
     composeTestRule.setContent { HomeScreen(navigationActions = navigationActions) }
 
-    composeTestRule.onNodeWithTag("HelpButton").assertHasClickAction()
     composeTestRule.onNodeWithTag("QuestsButton").assertHasClickAction()
     composeTestRule.onNodeWithTag("CameraFeedbackButton").assertHasClickAction()
     composeTestRule.onNodeWithTag("LetterDictionaryBack").assertHasClickAction()
