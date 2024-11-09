@@ -20,6 +20,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,16 +39,24 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
 import com.github.se.signify.model.quest.Quest
 import com.github.se.signify.model.quest.QuestViewModel
+import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.BackButton
 import com.github.se.signify.ui.getLetterIconResId
 import com.github.se.signify.ui.navigation.NavigationActions
+import com.github.se.signify.ui.screens.profile.currentUserId
 
 @Composable
 fun QuestScreen(
     navigationActions: NavigationActions,
-    questViewModel: QuestViewModel = viewModel(factory = QuestViewModel.Factory)
+    questViewModel: QuestViewModel = viewModel(factory = QuestViewModel.Factory),
+    userViewModel: UserViewModel = viewModel(factory = UserViewModel.Factory)
 ) {
   val quests = questViewModel.quest.collectAsState()
+
+  LaunchedEffect(Unit) { userViewModel.getUnlockedQuests(currentUserId) }
+
+  val unlockedQuests by userViewModel.unlockedQuests.collectAsState()
+
   Scaffold(
       modifier = Modifier.fillMaxSize().testTag("QuestScreen"),
   ) { padding ->
@@ -57,14 +66,25 @@ fun QuestScreen(
       LazyColumn(
           contentPadding = PaddingValues(vertical = 8.dp),
           modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(padding)) {
-            items(quests.value.size) { n -> QuestBox(quest = quests.value[n]) }
+            items(quests.value.size) { index ->
+              val isUnlocked = index < unlockedQuests.toInt()
+              QuestBox(
+                  quest = quests.value[index],
+                  isUnlocked,
+                  onComplete = {
+                    if (isUnlocked && index + 1 == unlockedQuests.toInt()) {
+                      userViewModel.incrementUnlockedQuests(
+                          currentUserId, (unlockedQuests.toInt() + 1).toString())
+                    }
+                  })
+            }
           }
     }
   }
 }
 
 @Composable
-fun QuestBox(quest: Quest) {
+fun QuestBox(quest: Quest, isUnlocked: Boolean, onComplete: () -> Unit) {
   // State to manage dialog visibility
   var isDialogVisible by remember { mutableStateOf(false) }
   Card(
@@ -83,20 +103,25 @@ fun QuestBox(quest: Quest) {
           Spacer(modifier = Modifier.height(20.dp))
           Button(
               modifier = Modifier.fillMaxWidth().testTag("QuestActionButton"),
-              onClick = { isDialogVisible = true },
+              onClick = { if (isUnlocked) isDialogVisible = true },
               colors =
                   ButtonDefaults.buttonColors(
                       containerColor = colorResource(R.color.white),
                       contentColor = colorResource(R.color.blue)), // Button color
               shape = RoundedCornerShape(50),
-          ) {
-            Text(text = "Let’s Go!")
-          }
+              enabled = isUnlocked) {
+                Text(if (isUnlocked) "Let’s Go!" else "Locked")
+              }
         }
       }
   // Display the dialog if the state is true
   if (isDialogVisible) {
-    QuestDescriptionDialog(quest = quest, onDismiss = { isDialogVisible = false })
+    QuestDescriptionDialog(
+        quest = quest,
+        onDismiss = {
+          isDialogVisible = false
+          onComplete()
+        })
   }
 }
 
