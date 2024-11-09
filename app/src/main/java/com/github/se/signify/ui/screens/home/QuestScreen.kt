@@ -1,5 +1,6 @@
 package com.github.se.signify.ui.screens.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,9 +25,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -35,6 +39,7 @@ import com.github.se.signify.R
 import com.github.se.signify.model.quest.Quest
 import com.github.se.signify.model.quest.QuestViewModel
 import com.github.se.signify.ui.BackButton
+import com.github.se.signify.ui.getLetterIconResId
 import com.github.se.signify.ui.navigation.NavigationActions
 
 @Composable
@@ -109,10 +114,23 @@ fun QuestDescriptionDialog(quest: Quest, onDismiss: () -> Unit) {
       },
       text = {
         Column(modifier = Modifier.wrapContentSize().padding(8.dp)) {
-          Text(
-              text = quest.description, // Assuming quest has a 'description' field
-              fontSize = 16.sp,
-              color = colorResource(R.color.white))
+
+          // Retrieve and display the image for the corresponding letter
+          val letter =
+              'a' +
+                  (quest.index.toInt() -
+                      1) // Convert index to letter, e.g., 1 -> 'a', 2 -> 'b', etc.
+          val imageResId = getLetterIconResId(letter)
+
+          Image(
+              painter = painterResource(id = imageResId),
+              contentDescription = "Image for letter ${quest.title}",
+              modifier =
+                  Modifier.size(150.dp).padding(bottom = 8.dp).align(Alignment.CenterHorizontally))
+
+          Spacer(modifier = Modifier.height(20.dp))
+
+          Text(text = quest.description, fontSize = 16.sp, color = colorResource(R.color.white))
         }
       },
       confirmButton = {
