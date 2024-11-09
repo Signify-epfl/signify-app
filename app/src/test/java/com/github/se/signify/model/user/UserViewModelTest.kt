@@ -13,6 +13,7 @@ class UserViewModelTest {
 
   private val currentUserId = "currentUserId"
   private val friendUserId = "friendUserId"
+  private val challengeId = "challengeId"
 
   @Before
   fun setUp() {
@@ -86,5 +87,17 @@ class UserViewModelTest {
   fun removeFriendCallsRepository() {
     userViewModel.removeFriend(currentUserId, friendUserId)
     verify(userRepository).removeFriend(eq(currentUserId), eq(friendUserId), any(), any())
+  }
+
+  @Test
+  fun removeOngoingChallenge_callsRepository() {
+    userViewModel.removeOngoingChallenge(currentUserId, challengeId)
+    verify(userRepository).removeOngoingChallenge(eq(currentUserId), eq(challengeId), any(), any())
+  }
+
+  @Test
+  fun addOngoingChallenge_callsRepository() {
+    userViewModel.addOngoingChallenge(currentUserId, challengeId)
+    verify(userRepository).addOngoingChallenge(eq(currentUserId), eq(challengeId), any(), any())
   }
 }
