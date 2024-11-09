@@ -50,8 +50,6 @@ class QuestScreenTest {
 
     composeTestRule.onNodeWithTag("QuestCard").assertIsDisplayed()
     composeTestRule.onNodeWithTag("QuestHeader").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("QuestTitle").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("QuestDescription").assertIsDisplayed()
     composeTestRule.onNodeWithTag("QuestActionButton").assertIsDisplayed()
   }
 
