@@ -373,4 +373,48 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
         .addOnSuccessListener { onSuccess() }
         .addOnFailureListener { onFailure(it) }
   }
+
+  override fun getUnlockedQuests(
+      userId: String,
+      onSuccess: (String) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    val userRef = db.collection(collectionPath).document(userId)
+
+    // Use of addSnapshotListener for instant updates
+    userRef.addSnapshotListener { documentSnapshot, e ->
+      if (e != null) {
+        onFailure(e)
+        return@addSnapshotListener
+      }
+      if (documentSnapshot != null && documentSnapshot.exists()) {
+        val numQuest = documentSnapshot["unlockedQuests"] as? String
+        onSuccess(numQuest ?: "1")
+      } else {
+        onSuccess("1")
+      }
+    }
+  }
+
+  override fun incrementUnlockedQuests(
+      userId: String,
+      new: String,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+
+    val userRef = db.collection(collectionPath).document(userId)
+    try {
+      userRef
+          .update("unlockedQuests", new)
+          .addOnSuccessListener {
+            onSuccess() // Invoke the onSuccess callback
+          }
+          .addOnFailureListener { e ->
+            onFailure(e) // Trigger onFailure callback
+          }
+    } catch (e: Exception) {
+      onFailure(e) // Trigger onFailure callback
+    }
+  }
 }
