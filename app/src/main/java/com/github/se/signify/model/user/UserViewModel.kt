@@ -29,6 +29,9 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
   private val _ongoingChallenges = MutableStateFlow<List<Challenge>>(emptyList())
   val ongoingChallenges: StateFlow<List<Challenge>> = _ongoingChallenges
 
+  private val _unlockedQuests = MutableStateFlow("1")
+  val unlockedQuests: StateFlow<String> = _unlockedQuests
+
   private val logTag = "UserViewModel"
 
   init {
@@ -166,5 +169,20 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
         onFailure = { e ->
           Log.e("UserViewModel", "Failed to remove challenge from ongoing: ${e.message}")
         })
+  }
+
+  fun getUnlockedQuests(currentUserId: String) {
+    repository.getUnlockedQuests(
+        currentUserId,
+        onSuccess = { unlockedQuests -> _unlockedQuests.value = unlockedQuests },
+        onFailure = { e -> Log.e(logTag, "Failed to get user name: ${e.message}}") })
+  }
+
+  fun incrementUnlockedQuests(currentUserId: String, new: String) {
+    repository.incrementUnlockedQuests(
+        currentUserId,
+        new,
+        onSuccess = { Log.d(logTag, "User name updated successfully.") },
+        onFailure = { e -> Log.e(logTag, "Failed to update user name: ${e.message}") })
   }
 }
