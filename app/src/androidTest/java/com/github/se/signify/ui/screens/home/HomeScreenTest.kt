@@ -76,7 +76,7 @@ class HomeScreenTest {
   fun exerciseListDisplaysExerciseButtons() {
     val exercises = listOf(Exercise("Easy"), Exercise("Medium"))
 
-    composeTestRule.setContent { ExerciseList(exercises) {} }
+    composeTestRule.setContent { ExerciseList(exercises, navigationActions) }
 
     exercises.forEach { exercise ->
       composeTestRule
@@ -88,16 +88,19 @@ class HomeScreenTest {
 
   @Test
   fun clickingExerciseButtonsCallsOnClick() {
-    val exercises = listOf(Exercise("Easy"), Exercise("Medium"))
+    val exercises =
+        listOf(
+            Exercise("Easy", "EasyRoute"),
+            Exercise("Medium", "MediumRoute"),
+        )
 
-    val onClick: (Exercise) -> Unit = mock() // Mock the lambda
-
-    composeTestRule.setContent { ExerciseList(exercises, onClick) }
+    composeTestRule.setContent { ExerciseList(exercises, navigationActions) }
 
     exercises.forEach { exercise ->
       composeTestRule.onNodeWithTag("${exercise.name}ExerciseButton").performClick()
 
-      verify(onClick).invoke(exercise) // Verify onClick was called with the exercise
+      verify(navigationActions)
+          .navigateTo(exercise.route) // Verify onClick was called with the exercise
     }
   }
 

@@ -41,8 +41,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
-import com.github.se.signify.model.hand.HandLandMarkViewModel
-import com.github.se.signify.ui.CameraPlaceholder
 import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.StreakCounter
 import com.github.se.signify.ui.UtilButton
@@ -51,25 +49,15 @@ import com.github.se.signify.ui.getLetterIconResId
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 
-data class Exercise(val name: String)
+data class Exercise(val name: String, val route: String = "UNKNOWN_EXERCISE")
 
 @Composable
 fun HomeScreen(navigationActions: NavigationActions) {
-  // Define navigation based on exercise name
-  val exerciseOnClick: (Exercise) -> Unit = { exercise ->
-    when (exercise.name) {
-      "Easy" -> navigationActions.navigateTo(Screen.EXERCISE_EASY)
-      "Medium" -> navigationActions.navigateTo(Screen.EXERCISE_HARD)
-      "Hard" -> navigationActions.navigateTo(Screen.EXERCISE_HARD)
-      else -> navigationActions.navigateTo("EXERCISE_UNKNOWN")
-    }
-  }
-
   val defaultExercises =
       listOf(
-          Exercise("Easy"),
-          Exercise("Medium"),
-          Exercise("Hard"),
+          Exercise("Easy", Screen.EXERCISE_EASY),
+          Exercise("Medium", Screen.EXERCISE_HARD),
+          Exercise("Hard", Screen.EXERCISE_HARD),
       )
 
   MainScreenScaffold(
@@ -93,7 +81,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
           "Quests")
     }
 
-    Spacer(modifier = Modifier.height(16.dp))
+    Spacer(modifier = Modifier.height(32.dp))
 
     CameraFeedbackButton(onClick = { navigationActions.navigateTo(Screen.PRACTICE) })
 
@@ -103,7 +91,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
 
     Spacer(modifier = Modifier.height(32.dp))
 
-    ExerciseList(defaultExercises, exerciseOnClick)
+    ExerciseList(defaultExercises, navigationActions)
   }
 }
 
@@ -179,7 +167,7 @@ fun LetterDictionary() {
 }
 
 @Composable
-fun ExerciseList(exercises: List<Exercise>, onExerciseClick: (exercise: Exercise) -> Unit) {
+fun ExerciseList(exercises: List<Exercise>, navigationActions: NavigationActions) {
   LazyHorizontalGrid(
       rows = GridCells.Adaptive(128.dp),
       modifier =
@@ -192,14 +180,14 @@ fun ExerciseList(exercises: List<Exercise>, onExerciseClick: (exercise: Exercise
               .testTag("ExerciseList"),
       horizontalArrangement = Arrangement.spacedBy(8.dp),
       verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        items(exercises) { exercise -> ExerciseButton(exercise, onExerciseClick) }
+        items(exercises) { exercise -> ExerciseButton(exercise, navigationActions) }
       }
 }
 
 @Composable
-fun ExerciseButton(exercise: Exercise, onClick: (exercise: Exercise) -> Unit) {
+fun ExerciseButton(exercise: Exercise, navigationActions: NavigationActions) {
   Button(
-      onClick = { onClick(exercise) },
+      onClick = { navigationActions.navigateTo(exercise.route) },
       modifier =
           Modifier.aspectRatio(2f)
               .fillMaxWidth()
