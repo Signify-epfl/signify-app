@@ -176,8 +176,8 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
 
     // Convert landmarks to the expected input format for ONNX model
     for (landmark in landmarks) {
-      val rotatedX = if (isRightHand) 1.0f - landmark.y() else landmark.y()
-      val rotatedY = landmark.x()
+      val rotatedY = if (isRightHand) 1.0f - landmark.x() else landmark.x()
+      val rotatedX = landmark.y()
       dataFrame.add(rotatedX)
       dataFrame.add(rotatedY)
     }
