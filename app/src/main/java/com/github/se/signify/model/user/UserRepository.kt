@@ -90,11 +90,15 @@ interface UserRepository {
       onFailure: (Exception) -> Unit
   )
 
-  fun getUnlockedQuests(userId: String, onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit)
-
-  fun incrementUnlockedQuests(
+  fun getInitialQuestAccessDate(
       userId: String,
-      new: String,
+      onSuccess: (String?) -> Unit, // Date as "YYYY-MM-DD"
+      onFailure: (Exception) -> Unit
+  )
+
+  fun setInitialQuestAccessDate(
+      userId: String,
+      date: String, // Date as "YYYY-MM-DD"
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   )
