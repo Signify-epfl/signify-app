@@ -627,7 +627,8 @@ fun AccountInformation(userId: String, userName: String, profilePictureUrl: Stri
 }
 
 /**
- * A reusable composable function that creates an outlined button with customizable text.
+ * A reusable composable function that creates an outlined box with customizable text. It takes
+ * place where we don't have an implementation yet for elements.
  *
  * @param testTag A string for the test tag.
  * @param text The text to be displayed inside the box.
