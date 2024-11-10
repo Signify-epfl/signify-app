@@ -5,6 +5,8 @@ import androidx.compose.ui.test.onNodeWithTag
 import com.github.se.signify.model.quest.Quest
 import com.github.se.signify.model.quest.QuestRepository
 import com.github.se.signify.model.quest.QuestViewModel
+import com.github.se.signify.model.user.UserRepository
+import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Route
 import com.github.se.signify.ui.screens.home.QuestBox
@@ -18,8 +20,10 @@ import org.mockito.Mockito.`when`
 class QuestScreenTest {
 
   private lateinit var questRepository: QuestRepository
+  private lateinit var userRepository: UserRepository
   private lateinit var navigationActions: NavigationActions
   private lateinit var questViewModel: QuestViewModel
+  private lateinit var userViewModel: UserViewModel
 
   val sampleQuest =
       Quest(index = "1", title = "Sample Quest", description = "This is a sample quest description")
@@ -29,8 +33,10 @@ class QuestScreenTest {
   @Before
   fun setUp() {
     questRepository = mock(QuestRepository::class.java)
+    userRepository = mock(UserRepository::class.java)
     navigationActions = mock(NavigationActions::class.java)
     questViewModel = QuestViewModel(questRepository)
+    userViewModel = UserViewModel(userRepository)
 
     `when`(navigationActions.currentRoute()).thenReturn(Route.QUEST)
   }
@@ -38,7 +44,10 @@ class QuestScreenTest {
   @Test
   fun hasRequiredComponent() {
     composeTestRule.setContent {
-      QuestScreen(navigationActions = navigationActions, questViewModel = questViewModel)
+      QuestScreen(
+          navigationActions = navigationActions,
+          questViewModel = questViewModel,
+          userViewModel = userViewModel)
     }
 
     composeTestRule.onNodeWithTag("QuestScreen").assertIsDisplayed()
