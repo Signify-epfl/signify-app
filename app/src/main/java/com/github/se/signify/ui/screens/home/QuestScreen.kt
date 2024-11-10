@@ -52,8 +52,7 @@ fun QuestScreen(
     userViewModel: UserViewModel = viewModel(factory = UserViewModel.Factory)
 ) {
   val quests = questViewModel.quest.collectAsState()
-
-  LaunchedEffect(Unit) { userViewModel.getUnlockedQuests(currentUserId) }
+  LaunchedEffect(currentUserId) { userViewModel.checkAndUnlockNextQuest(currentUserId) }
 
   val unlockedQuests by userViewModel.unlockedQuests.collectAsState()
 
@@ -68,15 +67,7 @@ fun QuestScreen(
           modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(padding)) {
             items(quests.value.size) { index ->
               val isUnlocked = index < unlockedQuests.toInt()
-              QuestBox(
-                  quest = quests.value[index],
-                  isUnlocked,
-                  onComplete = {
-                    if (isUnlocked && index + 1 == unlockedQuests.toInt()) {
-                      userViewModel.incrementUnlockedQuests(
-                          currentUserId, (unlockedQuests.toInt() + 1).toString())
-                    }
-                  })
+              QuestBox(quest = quests.value[index], isUnlocked)
             }
           }
     }
@@ -84,7 +75,7 @@ fun QuestScreen(
 }
 
 @Composable
-fun QuestBox(quest: Quest, isUnlocked: Boolean, onComplete: () -> Unit) {
+fun QuestBox(quest: Quest, isUnlocked: Boolean) {
   // State to manage dialog visibility
   var isDialogVisible by remember { mutableStateOf(false) }
   Card(
@@ -120,7 +111,6 @@ fun QuestBox(quest: Quest, isUnlocked: Boolean, onComplete: () -> Unit) {
         quest = quest,
         onDismiss = {
           isDialogVisible = false
-          onComplete()
         })
   }
 }
