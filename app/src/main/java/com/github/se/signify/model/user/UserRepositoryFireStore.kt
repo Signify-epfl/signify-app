@@ -374,47 +374,47 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
         .addOnFailureListener { onFailure(it) }
   }
 
-  override fun getUnlockedQuests(
+  override fun getInitialQuestAccessDate(
       userId: String,
-      onSuccess: (String) -> Unit,
+      onSuccess: (String?) -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    val userRef = db.collection(collectionPath).document(userId)
+    val userDocRef = db.collection("users").document(userId)
 
-    // Use of addSnapshotListener for instant updates
-    userRef.addSnapshotListener { documentSnapshot, e ->
-      if (e != null) {
-        onFailure(e)
-        return@addSnapshotListener
-      }
-      if (documentSnapshot != null && documentSnapshot.exists()) {
-        val numQuest = documentSnapshot["unlockedQuests"] as? String
-        onSuccess(numQuest ?: "1")
-      } else {
-        onSuccess("1")
-      }
-    }
+    userDocRef
+        .get()
+        .addOnSuccessListener { document ->
+          if (document != null && document.exists()) {
+            val initialDate = document.getString("initialQuestAccessDate")
+            onSuccess(initialDate) // Pass the date to the success callback
+          } else {
+            onSuccess(null) // No date set yet
+          }
+        }
+        .addOnFailureListener { exception ->
+          onFailure(exception) // Pass the exception to the failure callback
+        }
   }
 
-  override fun incrementUnlockedQuests(
+  // Function to set initial quest access date
+  override fun setInitialQuestAccessDate(
       userId: String,
-      new: String,
+      date: String,
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   ) {
+    val userDocRef = db.collection("users").document(userId)
 
-    val userRef = db.collection(collectionPath).document(userId)
-    try {
-      userRef
-          .update("unlockedQuests", new)
-          .addOnSuccessListener {
-            onSuccess() // Invoke the onSuccess callback
-          }
-          .addOnFailureListener { e ->
-            onFailure(e) // Trigger onFailure callback
-          }
-    } catch (e: Exception) {
-      onFailure(e) // Trigger onFailure callback
-    }
+    userDocRef
+        .update("initialQuestAccessDate", date)
+        .addOnSuccessListener {
+          onSuccess() // Success callback after updating the date
+        }
+        .addOnFailureListener { exception ->
+          userDocRef
+              .set(mapOf("initialQuestAccessDate" to date))
+              .addOnSuccessListener { onSuccess() }
+              .addOnFailureListener { onFailure(it) }
+        }
   }
 }
