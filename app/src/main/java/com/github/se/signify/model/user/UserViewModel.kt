@@ -175,14 +175,14 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
     repository.getUnlockedQuests(
         currentUserId,
         onSuccess = { unlockedQuests -> _unlockedQuests.value = unlockedQuests },
-        onFailure = { e -> Log.e(logTag, "Failed to get user name: ${e.message}}") })
+        onFailure = { e -> Log.e(logTag, "Failed to get unlocked quests: ${e.message}}") })
   }
 
   fun incrementUnlockedQuests(currentUserId: String, new: String) {
     repository.incrementUnlockedQuests(
         currentUserId,
         new,
-        onSuccess = { Log.d(logTag, "User name updated successfully.") },
-        onFailure = { e -> Log.e(logTag, "Failed to update user name: ${e.message}") })
+        onSuccess = { Log.d(logTag, "Quests number updated successfully.") },
+        onFailure = { e -> Log.e(logTag, "Failed to update the unlocked quests number: ${e.message}") })
   }
 }
