@@ -107,11 +107,7 @@ fun QuestBox(quest: Quest, isUnlocked: Boolean) {
       }
   // Display the dialog if the state is true
   if (isDialogVisible) {
-    QuestDescriptionDialog(
-        quest = quest,
-        onDismiss = {
-          isDialogVisible = false
-        })
+    QuestDescriptionDialog(quest = quest, onDismiss = { isDialogVisible = false })
   }
 }
 
