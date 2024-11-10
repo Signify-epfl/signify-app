@@ -98,12 +98,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew sonar --info
       # New Steps: Building the Signed APK
-      - name: Verify APK Contents
-        run: |
-          unzip -l app/build/outputs/apk/release/app-release.apk | grep -E "RFC_model_ir9_opset19.onnx|hand_landmarker.task"
-      - name: List Assets Directory Contents
-        run: ls -la app/src/main/assets
-
       - name: Decode the base64-encoded keystore
         run: echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > ./keystore.jks
 
@@ -124,3 +118,8 @@ jobs:
         with:
           name: release apk
           path: app/build/outputs/apk/release/app-release.apk
+      - name: Verify APK Contents
+        run: |
+          unzip -l app/build/outputs/apk/release/app-release.apk | grep -E "RFC_model_ir9_opset19.onnx|hand_landmarker.task"
+      - name: List Assets Directory Contents
+        run: ls -la app/src/main/assets
