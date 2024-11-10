@@ -78,8 +78,7 @@ fun QuestScreen(
               Icon(
                   imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                   contentDescription = "Back",
-                  tint = colorResource(R.color.blue) // Ensure this color is visible
-                  )
+                  tint = colorResource(R.color.blue))
             }
             Spacer(modifier = Modifier.width(20.dp))
             Text(
