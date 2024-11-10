@@ -66,7 +66,7 @@ class FriendsListScreenTest {
     composeTestRule.onNodeWithText("My friends list").assertIsDisplayed()
 
     // Check if all friends are displayed
-    currentFriends.forEachIndexed() { index, friend ->
+    currentFriends.forEachIndexed { index, friend ->
       composeTestRule.onNodeWithTag("My friends list").performScrollToIndex(index)
       composeTestRule.waitForIdle()
       composeTestRule.onNodeWithText(friend).assertIsDisplayed()
@@ -76,7 +76,7 @@ class FriendsListScreenTest {
     composeTestRule.onNodeWithText("New friends demands").assertIsDisplayed()
 
     // Check if all friend requests are displayed
-    friendRequests.forEachIndexed() { index, request ->
+    friendRequests.forEachIndexed { index, request ->
       composeTestRule.onNodeWithTag("New friends demands").performScrollToIndex(index)
       composeTestRule.waitForIdle()
       composeTestRule.onNodeWithText(request).assertIsDisplayed()
