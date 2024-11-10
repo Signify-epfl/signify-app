@@ -28,7 +28,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 
 @RunWith(RobolectricTestRunner::class)
-class UserRepositoryFireStoreTest {
+class SaveUserToFireStoreTest {
 
   @Mock private lateinit var mockAuth: FirebaseAuth
   @Mock private lateinit var mockCurrentUser: FirebaseUser

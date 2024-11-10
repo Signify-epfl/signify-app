@@ -2,6 +2,7 @@ package com.github.se.signify.model.user
 
 import android.os.Looper
 import androidx.test.core.app.ApplicationProvider
+import com.github.se.signify.model.challenge.Challenge
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
@@ -31,12 +32,14 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 
 @RunWith(RobolectricTestRunner::class)
-class ToDosRepositoryFireStoreTest {
+class UserRepositoryFireStoreTest {
 
   @Mock private lateinit var mockFireStore: FirebaseFirestore
+  @Mock private lateinit var mockChallengeDocRef: DocumentReference // Mock for challenge
   @Mock private lateinit var mockCurrentUserDocRef: DocumentReference // Mock for current user
   @Mock private lateinit var mockFriendUserDocRef: DocumentReference // Mock for friend user
   @Mock private lateinit var mockCollectionReference: CollectionReference
+  @Mock private lateinit var mockUserDocumentSnapshot: DocumentSnapshot
   @Mock private lateinit var mockToDoQuerySnapshot: QuerySnapshot
 
   private lateinit var userRepositoryFireStore: UserRepositoryFireStore
@@ -44,6 +47,8 @@ class ToDosRepositoryFireStoreTest {
   // Arrange
   private val currentUserId = "currentUserId"
   private val friendUserId = "friendUserId"
+  private val challengeId1 = "challengeId"
+  private val challengeId2 = "challengeId2"
 
   @Before
   fun setUp() {
@@ -60,6 +65,10 @@ class ToDosRepositoryFireStoreTest {
 
     `when`(mockCollectionReference.document(currentUserId)).thenReturn(mockCurrentUserDocRef)
     `when`(mockCollectionReference.document(friendUserId)).thenReturn(mockFriendUserDocRef)
+    `when`(mockFireStore.collection("challenges").document(challengeId1))
+        .thenReturn(mockChallengeDocRef)
+    `when`(mockFireStore.collection("challenges").document(challengeId2))
+        .thenReturn(mockChallengeDocRef)
 
     // Mock the update method to simulate success
     `when`(mockCurrentUserDocRef.update(anyString(), any())).thenReturn(Tasks.forResult(null))
@@ -606,5 +615,151 @@ class ToDosRepositoryFireStoreTest {
 
     // Verify that the friendUser update was attempted and failed
     verify(mockFriendUserDocRef).update(eq("friends"), ArgumentMatchers.any(FieldValue::class.java))
+  }
+
+  @Test
+  fun addOngoingChallenge_shouldUpdateFireStoreDocuments() {
+    // Act
+    userRepositoryFireStore.addOngoingChallenge(
+        currentUserId,
+        challengeId1,
+        onSuccess = {},
+        onFailure = { fail("Failure callback should not be called") })
+
+    // Idle the main looper to process the tasks
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Verify that FireStore update methods were called with the correct arguments
+    verify(mockCurrentUserDocRef)
+        .update(eq("ongoingChallenges"), ArgumentMatchers.any(FieldValue::class.java))
+  }
+
+  @Test
+  fun addOngoingChallenge_shouldCallOnFailureWhenUpdateFails() {
+    // Arrange
+    val testException = Exception("Test Firestore failure")
+
+    // Mock FireStore document reference to fail the update
+    `when`(mockCurrentUserDocRef.update(anyString(), any()))
+        .thenReturn(Tasks.forException(testException))
+
+    var failureCallbackCalled = false
+    val onFailure: (Exception) -> Unit = { exception ->
+      failureCallbackCalled = true
+      assertEquals(testException, exception)
+    }
+
+    // Act
+    userRepositoryFireStore.addOngoingChallenge(
+        currentUserId,
+        challengeId1,
+        onSuccess = { fail("Success callback should not be called") },
+        onFailure = onFailure)
+
+    // Idle the main looper to process the tasks
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert that the failure callback was triggered
+    assertTrue(failureCallbackCalled)
+  }
+
+  @Test
+  fun removeOngoingChallenge_shouldUpdateFireStoreDocuments() {
+    // Act
+    userRepositoryFireStore.removeOngoingChallenge(
+        currentUserId,
+        challengeId1,
+        onSuccess = {},
+        onFailure = { fail("Failure callback should not be called") })
+
+    // Idle the main looper to process the tasks
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Verify that FireStore update methods were called with the correct arguments
+    verify(mockCurrentUserDocRef)
+        .update(eq("ongoingChallenges"), ArgumentMatchers.any(FieldValue::class.java))
+  }
+
+  @Test
+  fun removeOngoingChallenge_shouldCallOnFailureWhenUpdateFails() {
+    // Arrange
+    val testException = Exception("Test Firestore failure")
+
+    // Mock FireStore document reference to fail the update
+    `when`(mockCurrentUserDocRef.update(anyString(), any()))
+        .thenReturn(Tasks.forException(testException))
+
+    var failureCallbackCalled = false
+    val onFailure: (Exception) -> Unit = { exception ->
+      failureCallbackCalled = true
+      assertEquals(testException, exception)
+    }
+
+    // Act
+    userRepositoryFireStore.removeOngoingChallenge(
+        currentUserId,
+        challengeId1,
+        onSuccess = { fail("Success callback should not be called") },
+        onFailure = onFailure)
+
+    // Idle the main looper to process the tasks
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert that the failure callback was triggered
+    assertTrue(failureCallbackCalled)
+  }
+
+  @Test
+  fun getOngoingChallenges_shouldReturnEmptyListWhenNoChallenges() {
+    // Arrange
+    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
+    `when`(mockUserDocumentSnapshot.exists()).thenReturn(true)
+    `when`(mockUserDocumentSnapshot.get("ongoingChallenges")).thenReturn(null)
+
+    var successCallbackCalled = false
+    val onSuccess: (List<Challenge>) -> Unit = { challenges ->
+      successCallbackCalled = true
+      assertTrue(challenges.isEmpty()) // Ensure the challenges list is empty
+    }
+
+    // Act
+    userRepositoryFireStore.getOngoingChallenges(
+        currentUserId, onSuccess, onFailure = { fail("Failure callback should not be called") })
+
+    // Idle the main looper to process the tasks
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert
+    assertTrue(successCallbackCalled)
+  }
+
+  @Test
+  fun getOngoingChallenges_shouldCallOnFailureWhenChallengeFetchFails() {
+    // Arrange
+    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
+    `when`(mockUserDocumentSnapshot.exists()).thenReturn(true)
+    `when`(mockUserDocumentSnapshot.get("ongoingChallenges")).thenReturn(listOf(challengeId1))
+
+    // Mock challenge document to simulate failure
+    val testException = Exception("Test Firestore failure")
+    `when`(mockChallengeDocRef.get()).thenReturn(Tasks.forException(testException))
+
+    var failureCallbackCalled = false
+    val onFailure: (Exception) -> Unit = { exception ->
+      failureCallbackCalled = true
+      assertEquals(testException, exception) // Ensure the correct exception is passed
+    }
+
+    // Act
+    userRepositoryFireStore.getOngoingChallenges(
+        currentUserId,
+        onSuccess = { fail("Success callback should not be called") },
+        onFailure = onFailure)
+
+    // Idle the main looper to process the tasks
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert
+    assertTrue(failureCallbackCalled)
   }
 }
