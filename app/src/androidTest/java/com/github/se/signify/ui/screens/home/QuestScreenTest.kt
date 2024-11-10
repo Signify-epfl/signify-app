@@ -46,7 +46,7 @@ class QuestScreenTest {
 
   @Test
   fun questBoxDisplaysCorrectInformation() {
-    composeTestRule.setContent { QuestBox(quest = sampleQuest) }
+    composeTestRule.setContent { QuestBox(quest = sampleQuest, isUnlocked = true) }
 
     composeTestRule.onNodeWithTag("QuestCard").assertIsDisplayed()
     composeTestRule.onNodeWithTag("QuestHeader").assertIsDisplayed()
@@ -55,7 +55,7 @@ class QuestScreenTest {
 
   @Test
   fun questActionButtonHasClickAction() {
-    composeTestRule.setContent { QuestBox(quest = sampleQuest) }
+    composeTestRule.setContent { QuestBox(quest = sampleQuest, isUnlocked = true) }
 
     composeTestRule.onNodeWithTag("QuestActionButton").assertHasClickAction()
   }
