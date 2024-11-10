@@ -42,7 +42,7 @@ fun ProfileScreen(
         iconTestTag = "SettingsIcon",
         icon = Icons.Outlined.Settings,
         contentDescription = "Settings")
-    Spacer(modifier = Modifier.height(24.dp))
+    Spacer(modifier = Modifier.height(32.dp))
 
     // Top information
     AccountInformation(
@@ -54,14 +54,14 @@ fun ProfileScreen(
 
     // Letters learned
     LearnedLetterList(lettersLearned = lettersLearned)
-    Spacer(modifier = Modifier.height(64.dp))
+    Spacer(modifier = Modifier.height(32.dp))
 
     // Friends List button
     SquareButton(
         iconRes = R.drawable.friendsicon,
         label = "My Friends",
         onClick = { navigationActions.navigateTo(Route.FRIENDS) },
-        size = 240,
+        size = 200,
         modifier = Modifier.testTag("MyFriendsButton"))
     Spacer(modifier = Modifier.height(32.dp))
 
@@ -70,7 +70,7 @@ fun ProfileScreen(
         iconRes = R.drawable.statisticsicon,
         label = "My Stats",
         onClick = { navigationActions.navigateTo(Route.STATS) },
-        size = 240,
+        size = 200,
         modifier = Modifier.testTag("MyStatsButton"))
   }
 }
