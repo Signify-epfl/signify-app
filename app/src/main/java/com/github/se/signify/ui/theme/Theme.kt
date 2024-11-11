@@ -61,7 +61,6 @@ fun SignifyTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composabl
       } else {
         darkColorScheme
       }
-  MaterialTheme(colorScheme = colorScheme, content = content)
 
   MaterialTheme(colorScheme = colorScheme, content = content)
 }
