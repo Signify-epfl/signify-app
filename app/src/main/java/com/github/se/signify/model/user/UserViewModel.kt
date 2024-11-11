@@ -6,6 +6,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.github.se.signify.model.challenge.Challenge
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -28,6 +32,9 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
 
   private val _ongoingChallenges = MutableStateFlow<List<Challenge>>(emptyList())
   val ongoingChallenges: StateFlow<List<Challenge>> = _ongoingChallenges
+
+  private val _unlockedQuests = MutableStateFlow("1")
+  val unlockedQuests: StateFlow<String> = _unlockedQuests
 
   private val logTag = "UserViewModel"
 
@@ -165,6 +172,55 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
         },
         onFailure = { e ->
           Log.e("UserViewModel", "Failed to remove challenge from ongoing: ${e.message}")
+        })
+  }
+
+  private fun getCurrentDate(): String {
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    return dateFormat.format(Date()) // Returns current date as "YYYY-MM-DD"
+  }
+
+  // Calculate the number of days between two dates
+  private fun calculateDaysBetween(startDate: String, endDate: String): Long {
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val start = dateFormat.parse(startDate)
+    val end = dateFormat.parse(endDate)
+    val diff = end.time - start.time
+    return TimeUnit.MILLISECONDS.toDays(diff)
+  }
+
+  // Check if a new quest should be unlocked based on the initial access date
+  fun checkAndUnlockNextQuest(currentUserId: String) {
+    repository.getInitialQuestAccessDate(
+        currentUserId,
+        onSuccess = { initialAccessDate ->
+          val currentDate = getCurrentDate()
+
+          if (initialAccessDate == null) {
+            // First time access, so set the initial access date
+            repository.setInitialQuestAccessDate(
+                currentUserId,
+                date = currentDate,
+                onSuccess = { Log.d("UserViewModel", "Initial access date set.") },
+                onFailure = { e ->
+                  Log.e("UserViewModel", "Failed to set initial access date: ${e.message}")
+                })
+            _unlockedQuests.value = "1" // Only the first quest is unlocked initially
+          } else {
+            // Calculate the number of days passed since the initial access date
+            val daysSinceInitialAccess = calculateDaysBetween(initialAccessDate, currentDate)
+
+            // Update the unlocked quests count based on days passed
+            val newUnlockedQuests =
+                (daysSinceInitialAccess + 1).toInt() // +1 to count the first day
+            if (newUnlockedQuests > _unlockedQuests.value.toInt()) {
+              _unlockedQuests.value = newUnlockedQuests.toString()
+              Log.d("UserViewModel", "Unlocked quests updated to $newUnlockedQuests")
+            }
+          }
+        },
+        onFailure = { e ->
+          Log.e("UserViewModel", "Failed to get initial quest access date: ${e.message}")
         })
   }
 }

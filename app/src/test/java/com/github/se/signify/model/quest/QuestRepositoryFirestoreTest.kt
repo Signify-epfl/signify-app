@@ -269,4 +269,39 @@ class QuestRepositoryFirestoreTest {
         onSuccess = { fail("Success callback should not be called") },
         onFailure = { error -> assertEquals("Firestore error", error.message) })
   }
+
+  @Test
+  fun getDailyQuest_sortsQuestsByIndex() {
+    // Arrange: Create mock DocumentSnapshots with out-of-order indices
+    val mockDocument1 = mock(DocumentSnapshot::class.java)
+    `when`(mockDocument1.getString("title")).thenReturn("Quest Title 3")
+    `when`(mockDocument1.getString("description")).thenReturn("Quest Description 3")
+    `when`(mockDocument1.getString("index")).thenReturn("3")
+
+    val mockDocument2 = mock(DocumentSnapshot::class.java)
+    `when`(mockDocument2.getString("title")).thenReturn("Quest Title 1")
+    `when`(mockDocument2.getString("description")).thenReturn("Quest Description 1")
+    `when`(mockDocument2.getString("index")).thenReturn("1")
+
+    val mockDocument3 = mock(DocumentSnapshot::class.java)
+    `when`(mockDocument3.getString("title")).thenReturn("Quest Title 2")
+    `when`(mockDocument3.getString("description")).thenReturn("Quest Description 2")
+    `when`(mockDocument3.getString("index")).thenReturn("2")
+
+    // Mock the QuerySnapshot to return these documents
+    `when`(mockQuestQuerySnapshot.documents)
+        .thenReturn(listOf(mockDocument1, mockDocument2, mockDocument3))
+    `when`(mockCollectionReference.get()).thenReturn(Tasks.forResult(mockQuestQuerySnapshot))
+
+    // Act
+    questRepositoryFirestore.getDailyQuest(
+        onSuccess = { quests ->
+          // Assert: Verify that quests are sorted by the index field
+          assertEquals(3, quests.size)
+          assertEquals("Quest Title 1", quests[0].title)
+          assertEquals("Quest Title 2", quests[1].title)
+          assertEquals("Quest Title 3", quests[2].title)
+        },
+        onFailure = { fail("Failure callback should not be called") })
+  }
 }

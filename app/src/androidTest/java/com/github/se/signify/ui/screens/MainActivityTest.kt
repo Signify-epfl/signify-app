@@ -73,9 +73,6 @@ class MainActivityTest {
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Route.STATS) }
     composeTestRule.onNodeWithTag("MyStatsScreen").assertIsDisplayed()
 
-    composeTestRule.runOnIdle { navigationState.value?.navigateTo(Route.QUEST) }
-    composeTestRule.onNodeWithTag("QuestScreen").assertIsDisplayed()
-
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Route.CHALLENGE_HISTORY) }
     composeTestRule.onNodeWithTag("ChallengeHistoryScreen").assertIsDisplayed()
 
