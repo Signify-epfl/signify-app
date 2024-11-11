@@ -13,13 +13,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,7 +42,7 @@ fun ChallengeHistoryScreen(
             modifier =
                 Modifier.fillMaxWidth()
                     .height(4.dp)
-                    .background(colorResource(R.color.blue))
+                    .background(MaterialTheme.colorScheme.primary)
                     .testTag("TopBlueBar"))
       },
       content = { padding ->
@@ -70,19 +70,19 @@ fun ChallengeHistoryScreen(
                       Text(
                           text = "Number of friends challenges achieved",
                           fontSize = 16.sp,
-                          color = colorResource(R.color.black),
+                          color = MaterialTheme.colorScheme.onBackground,
                           modifier = Modifier.testTag("FriendsChallengesText"))
                       Box(
                           modifier =
                               Modifier.size(50.dp)
-                                  .border(2.dp, colorResource(R.color.blue))
-                                  .background(colorResource(R.color.white))
+                                  .border(2.dp, MaterialTheme.colorScheme.primary)
+                                  .background(MaterialTheme.colorScheme.background)
                                   .testTag("FriendsChallengesCountBox"),
                           contentAlignment = Alignment.Center) {
                             Text(
                                 text = "$friendsChallengesAchieved",
                                 fontSize = 20.sp,
-                                color = colorResource(R.color.black),
+                                color = MaterialTheme.colorScheme.onBackground,
                                 modifier = Modifier.testTag("FriendsChallengesCount"))
                           }
                     }
@@ -98,19 +98,19 @@ fun ChallengeHistoryScreen(
                       Text(
                           text = "Number of challenges created",
                           fontSize = 16.sp,
-                          color = colorResource(R.color.black),
+                          color = MaterialTheme.colorScheme.onBackground,
                           modifier = Modifier.testTag("ChallengesCreatedText"))
                       Box(
                           modifier =
                               Modifier.size(50.dp)
-                                  .border(2.dp, colorResource(R.color.blue))
-                                  .background(colorResource(R.color.white))
+                                  .border(2.dp, MaterialTheme.colorScheme.primary)
+                                  .background(MaterialTheme.colorScheme.background)
                                   .testTag("ChallengesCreatedCountBox"),
                           contentAlignment = Alignment.Center) {
                             Text(
                                 text = "$challengesCreated",
                                 fontSize = 20.sp,
-                                color = colorResource(R.color.black),
+                                color = MaterialTheme.colorScheme.onBackground,
                                 modifier = Modifier.testTag("ChallengesCreatedCount"))
                           }
                     }
@@ -122,7 +122,7 @@ fun ChallengeHistoryScreen(
                     onClickAction = { /* Do nothing for now */},
                     testTag = "GraphsStatisticsButton",
                     text = stringResource(R.string.graphs_history),
-                    backgroundColor = colorResource(R.color.blue),
+                    backgroundColor = MaterialTheme.colorScheme.primary,
                 )
               }
         }

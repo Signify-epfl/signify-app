@@ -13,19 +13,19 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.github.se.signify.R
 import com.github.se.signify.model.quest.Quest
 import com.github.se.signify.model.quest.QuestViewModel
 import com.github.se.signify.ui.BackButton
@@ -57,11 +57,11 @@ fun QuestBox(quest: Quest) {
   Card(
       modifier = Modifier.fillMaxWidth().padding(16.dp).testTag("QuestCard"),
       elevation = CardDefaults.elevatedCardElevation(4.dp),
-      colors = CardDefaults.cardColors(colorResource(R.color.blue))) {
+      colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primary)) {
         Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
           Text(
               text = "Your Daily Quest",
-              color = colorResource(R.color.white),
+              color = MaterialTheme.colorScheme.onPrimary,
               fontWeight = FontWeight.Bold,
               fontSize = 20.sp,
               modifier = Modifier.padding(bottom = 8.dp).fillMaxWidth().testTag("QuestHeader"),
@@ -71,7 +71,7 @@ fun QuestBox(quest: Quest) {
 
           Text(
               text = quest.title,
-              color = colorResource(R.color.white),
+              color = MaterialTheme.colorScheme.onPrimary,
               fontWeight = FontWeight.Bold,
               modifier = Modifier.testTag("QuestTitle"))
 
@@ -79,7 +79,7 @@ fun QuestBox(quest: Quest) {
 
           Text(
               text = quest.description,
-              color = colorResource(R.color.white),
+              color = MaterialTheme.colorScheme.onPrimary,
               modifier = Modifier.testTag("QuestDescription"))
 
           Spacer(modifier = Modifier.height(20.dp))
@@ -89,8 +89,8 @@ fun QuestBox(quest: Quest) {
               onClick = { /*Takes you to your daily quest*/},
               colors =
                   ButtonDefaults.buttonColors(
-                      containerColor = colorResource(R.color.white),
-                      contentColor = colorResource(R.color.blue)), // Button color
+                      containerColor = Color.Transparent,
+                      contentColor = MaterialTheme.colorScheme.primary), // Button color
               shape = RoundedCornerShape(50),
           ) {
             Text(text = "I am ready")

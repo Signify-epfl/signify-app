@@ -5,10 +5,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -66,8 +66,8 @@ fun ProfileScreen(
         size = 240.dp,
         iconSize = 160.dp,
         labelFontSize = 32.sp,
-        iconTint = colorResource(R.color.dark_gray),
-        textColor = colorResource(R.color.dark_gray),
+        iconTint = MaterialTheme.colorScheme.surface,
+        textColor = MaterialTheme.colorScheme.surface,
         // 5.dp, // Not necessary
         modifier = Modifier.testTag("MyFriendsButton"))
     Spacer(modifier = Modifier.height(32.dp))
@@ -80,8 +80,8 @@ fun ProfileScreen(
         size = 240.dp,
         iconSize = 160.dp,
         labelFontSize = 32.sp,
-        iconTint = colorResource(R.color.dark_gray),
-        textColor = colorResource(R.color.dark_gray),
+        iconTint = MaterialTheme.colorScheme.surface,
+        textColor = MaterialTheme.colorScheme.surface,
         // 5.dp, // Not necessary
         modifier = Modifier.testTag("MyStatsButton"))
   }

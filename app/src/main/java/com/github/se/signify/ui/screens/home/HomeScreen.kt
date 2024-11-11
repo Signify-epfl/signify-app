@@ -25,6 +25,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,7 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -101,7 +101,7 @@ fun CameraFeedbackButton(onClick: () -> Unit = {}) {
       onClickAction = onClick,
       testTag = "CameraFeedbackButton",
       text = "Try it out",
-      backgroundColor = colorResource(R.color.blue),
+      backgroundColor = MaterialTheme.colorScheme.primary,
   )
 }
 
@@ -124,7 +124,7 @@ fun LetterDictionary() {
             modifier = Modifier.testTag("LetterDictionaryBack")) {
               Icon(
                   Icons.AutoMirrored.Outlined.ArrowBack,
-                  tint = colorResource(R.color.black),
+                  tint = MaterialTheme.colorScheme.onBackground,
                   contentDescription = "Back")
             }
 
@@ -132,20 +132,21 @@ fun LetterDictionary() {
         val currentLetter = letters[currentLetterIndex]
         Box(
             modifier =
-                Modifier.border(2.dp, colorResource(R.color.blue), RoundedCornerShape(8.dp))
-                    .background(colorResource(R.color.dark_gray), RoundedCornerShape(8.dp))
+                Modifier.border(
+                        2.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(8.dp))
                     .padding(8.dp)
                     .testTag("LetterDisplayBox")) {
               Row {
                 Text(
                     text = "${currentLetter.uppercaseChar()} =",
-                    color = colorResource(R.color.blue),
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontSize = 32.dp.value.sp,
                     modifier = Modifier.testTag("LetterText_${currentLetter.uppercaseChar()}"))
                 Icon(
                     painter = painterResource(id = getLetterIconResId(currentLetter)),
                     contentDescription = "Letter gesture",
-                    tint = colorResource(R.color.blue),
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier =
                         Modifier.size(32.dp).testTag("LetterIcon_${currentLetter.uppercaseChar()}"))
               }
@@ -160,7 +161,7 @@ fun LetterDictionary() {
             modifier = Modifier.testTag("LetterDictionaryForward")) {
               Icon(
                   Icons.AutoMirrored.Outlined.ArrowForward,
-                  tint = colorResource(R.color.black),
+                  tint = MaterialTheme.colorScheme.onBackground,
                   contentDescription = "Forward")
             }
       }
@@ -172,9 +173,9 @@ fun ExerciseList(exercises: List<Exercise>, navigationActions: NavigationActions
       rows = GridCells.Adaptive(128.dp),
       modifier =
           Modifier.fillMaxWidth()
-              .border(2.dp, colorResource(R.color.black), RoundedCornerShape(8.dp))
+              .border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
               .clip(RoundedCornerShape(8.dp))
-              .background(colorResource(R.color.dark_gray))
+              .background(MaterialTheme.colorScheme.surface)
               .heightIn(max = 128.dp)
               .padding(8.dp)
               .testTag("ExerciseList"),
@@ -191,11 +192,12 @@ fun ExerciseButton(exercise: Exercise, navigationActions: NavigationActions) {
       modifier =
           Modifier.aspectRatio(2f)
               .fillMaxWidth()
-              .border(2.dp, colorResource(R.color.black), RoundedCornerShape(8.dp))
+              .border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
               .testTag("${exercise.name}ExerciseButton"),
       shape = RoundedCornerShape(8.dp),
       colors =
-          ButtonDefaults.buttonColors(colorResource(R.color.blue), colorResource(R.color.black))) {
+          ButtonDefaults.buttonColors(
+              MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.onPrimary)) {
         Text(exercise.name, modifier = Modifier.testTag("${exercise.name}ExerciseButtonText"))
       }
 }

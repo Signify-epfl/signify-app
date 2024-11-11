@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -77,10 +77,10 @@ fun LoginScreen(navigationActions: NavigationActions) {
       Brush.verticalGradient(
           colors =
               listOf(
-                  colorResource(R.color.white),
-                  colorResource(R.color.white), // White at the top
-                  colorResource(R.color.white),
-                  colorResource(R.color.blue)) // Light blue at the bottom
+                  MaterialTheme.colorScheme.background,
+                  MaterialTheme.colorScheme.background, // White at the top
+                  MaterialTheme.colorScheme.background,
+                  MaterialTheme.colorScheme.primary) // Light blue at the bottom
           )
   // The main container for the screen
   Scaffold(
@@ -104,7 +104,7 @@ fun LoginScreen(navigationActions: NavigationActions) {
                   Modifier.padding(3.dp)
                       .width(139.dp)
                       .height(81.dp)
-                      .background(color = colorResource(R.color.white)))
+                      .background(color = MaterialTheme.colorScheme.background))
 
           Spacer(modifier = Modifier.height(70.dp))
 
@@ -119,7 +119,7 @@ fun LoginScreen(navigationActions: NavigationActions) {
                       lineHeight = 30.sp,
                       // fontFamily = FontFamily(Font(R.font.roboto)),
                       fontWeight = FontWeight(400),
-                      color = colorResource(R.color.blue),
+                      color = MaterialTheme.colorScheme.primary,
                       textAlign = TextAlign.Center,
                       letterSpacing = 0.25.sp,
                   ))
@@ -148,9 +148,9 @@ fun GoogleSignInButton(onSignInClick: () -> Unit) {
       onClick = onSignInClick,
       colors =
           ButtonDefaults.buttonColors(
-              containerColor = colorResource(R.color.white)), // Button color
+              containerColor = MaterialTheme.colorScheme.background), // Button color
       shape = RoundedCornerShape(50), // Circular edges for the button
-      border = BorderStroke(1.dp, colorResource(R.color.white)),
+      border = BorderStroke(1.dp, MaterialTheme.colorScheme.background),
   ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -172,7 +172,7 @@ fun GoogleSignInButton(onSignInClick: () -> Unit) {
                       fontSize = 14.sp,
                       lineHeight = 17.sp,
                       fontWeight = FontWeight(500),
-                      color = colorResource(R.color.dark_gray),
+                      color = MaterialTheme.colorScheme.onBackground,
                       textAlign = TextAlign.Center,
                       letterSpacing = 0.25.sp,
                   ))
