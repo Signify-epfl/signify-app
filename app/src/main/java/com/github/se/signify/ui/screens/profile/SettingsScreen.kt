@@ -91,8 +91,8 @@ fun SettingsScreen(
   Column(
       modifier =
           Modifier.fillMaxSize()
-              .padding(16.dp)
               .verticalScroll(rememberScrollState())
+              .background(MaterialTheme.colorScheme.background)
               .testTag("SettingsScreen"),
       verticalArrangement = Arrangement.spacedBy(64.dp)) {
 
