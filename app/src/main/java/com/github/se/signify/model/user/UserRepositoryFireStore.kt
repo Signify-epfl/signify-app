@@ -410,7 +410,7 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
         .addOnSuccessListener {
           onSuccess() // Success callback after updating the date
         }
-        .addOnFailureListener { exception ->
+        .addOnFailureListener { _ ->
           userDocRef
               .set(mapOf("initialQuestAccessDate" to date))
               .addOnSuccessListener { onSuccess() }
