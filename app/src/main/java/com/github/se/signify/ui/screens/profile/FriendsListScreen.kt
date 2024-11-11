@@ -49,6 +49,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
 import com.github.se.signify.model.user.UserViewModel
+import com.github.se.signify.ui.AccountInformation
 import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.google.firebase.auth.FirebaseAuth
@@ -75,6 +76,15 @@ fun FriendsListScreen(
         val friendsRequests = userViewModel.friendsRequests.collectAsState()
         val searchResult = userViewModel.searchResult.collectAsState()
 
+        // Top information
+        AccountInformation(
+            userId = currentUserId,
+            userName = userViewModel.getUserName(currentUserId).toString(),
+            profilePictureUrl = userViewModel.getProfilePictureUrl(currentUserId).toString(),
+            days = 10 // TODO change with days (when the user model will be updated)
+        )
+        Spacer(modifier = Modifier.height(32.dp))
+
         SearchBar { searchQuery ->
             if (searchQuery.isNotEmpty()) {
                 try {
@@ -87,7 +97,6 @@ fun FriendsListScreen(
                 }
             }
         }
-        Spacer(modifier = Modifier.height(32.dp))
 
         errorMessage.let { message ->
             ErrorMessage(message)
