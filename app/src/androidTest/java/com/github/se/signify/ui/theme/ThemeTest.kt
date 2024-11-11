@@ -12,26 +12,26 @@ import org.junit.Rule
 import org.junit.Test
 
 class ThemeTest {
-    @get:Rule val composeTestRule = createComposeRule()
+  @get:Rule val composeTestRule = createComposeRule()
 
-    @Test
-    fun verifyLightTheme() {
-        composeTestRule.setContent { SignifyTheme(darkTheme = false) { TestContent("lightThemeContent") } }
-        composeTestRule.onNodeWithTag("lightThemeContent").assertIsDisplayed()
+  @Test
+  fun verifyLightTheme() {
+    composeTestRule.setContent {
+      SignifyTheme(darkTheme = false) { TestContent("lightThemeContent") }
     }
+    composeTestRule.onNodeWithTag("lightThemeContent").assertIsDisplayed()
+  }
 
-    @Test
-    fun verifyDarkTheme() {
-        composeTestRule.setContent { SignifyTheme(darkTheme = true) { TestContent("darkThemeContent") } }
-        composeTestRule.onNodeWithTag("darkThemeContent").assertIsDisplayed()
+  @Test
+  fun verifyDarkTheme() {
+    composeTestRule.setContent {
+      SignifyTheme(darkTheme = true) { TestContent("darkThemeContent") }
     }
+    composeTestRule.onNodeWithTag("darkThemeContent").assertIsDisplayed()
+  }
 }
 
 @Composable
 fun TestContent(tag: String) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .testTag(tag)
-    )
+  Box(modifier = Modifier.fillMaxSize().testTag(tag))
 }
