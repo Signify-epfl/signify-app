@@ -372,8 +372,7 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
                     3.dp,
                     colorResource(R.color.dark_gray),
                     RoundedCornerShape(12.dp)) // Ensure the black border wraps the popup
-                .padding(16.dp)
-                .testTag("InfoPopup") // Remove padding for the border
+                .testTag("InfoPopup")
         ) {
           Column(
               modifier = Modifier.padding(16.dp).fillMaxWidth().testTag("InfoPopupContent"),
@@ -467,7 +466,8 @@ fun StatisticsRow(
                       .clip(RoundedCornerShape(12.dp))
                       .background(colorResource(R.color.white))
                       .testTag(columnTextTagList[index]),
-              horizontalAlignment = Alignment.CenterHorizontally) {
+              horizontalAlignment = Alignment.CenterHorizontally,
+              verticalArrangement = Arrangement.Center) {
                 for (subIndex in columnTextList[index].indices) {
                   Text(
                       text = columnTextList[index][subIndex],
