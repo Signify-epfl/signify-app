@@ -2,6 +2,7 @@ package com.github.se.signify.ui.screens.home
 
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -40,7 +41,6 @@ class HomeScreenTest {
     composeTestRule.onNodeWithTag("LetterDictionaryForward").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("ExerciseList").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("StreakCounter").performScrollTo().assertIsDisplayed()
-    composeTestRule.onNodeWithTag("HelpButton").assertIsDisplayed()
   }
 
   @Test
@@ -48,11 +48,21 @@ class HomeScreenTest {
 
     composeTestRule.setContent { HomeScreen(navigationActions = navigationActions) }
 
-    composeTestRule.onNodeWithTag("HelpButton").assertHasClickAction()
     composeTestRule.onNodeWithTag("QuestsButton").assertHasClickAction()
     composeTestRule.onNodeWithTag("CameraFeedbackButton").assertHasClickAction()
     composeTestRule.onNodeWithTag("LetterDictionaryBack").assertHasClickAction()
     composeTestRule.onNodeWithTag("LetterDictionaryForward").assertHasClickAction()
+  }
+
+  @Test
+  fun allClickableElementsPerformClick() {
+
+    composeTestRule.setContent { HomeScreen(navigationActions = navigationActions) }
+
+    composeTestRule.onNodeWithTag("QuestsButton").performClick()
+    composeTestRule.onNodeWithTag("CameraFeedbackButton").performClick()
+    composeTestRule.onNodeWithTag("LetterDictionaryBack").performClick()
+    composeTestRule.onNodeWithTag("LetterDictionaryForward").performClick()
   }
 
   @Test
@@ -78,7 +88,7 @@ class HomeScreenTest {
   fun exerciseListDisplaysExerciseButtons() {
     val exercises = listOf(Exercise("Easy"), Exercise("Medium"))
 
-    composeTestRule.setContent { ExerciseList(exercises) {} }
+    composeTestRule.setContent { ExerciseList(exercises, navigationActions) }
 
     exercises.forEach { exercise ->
       composeTestRule
@@ -89,17 +99,35 @@ class HomeScreenTest {
   }
 
   @Test
+  fun exerciseButtonTextDisplaysCorrectly() {
+    val exercises = listOf(Exercise("Easy"), Exercise("Medium"), Exercise("Hard"))
+
+    composeTestRule.setContent { ExerciseList(exercises, navigationActions) }
+
+    exercises.forEach { exercise ->
+      composeTestRule
+          .onNodeWithTag("${exercise.name}ExerciseButtonText", useUnmergedTree = true)
+          .performScrollTo()
+          .assertIsDisplayed()
+          .assertTextEquals(exercise.name)
+    }
+  }
+
+  @Test
   fun clickingExerciseButtonsCallsOnClick() {
-    val exercises = listOf(Exercise("Easy"), Exercise("Medium"))
+    val exercises =
+        listOf(
+            Exercise("Easy", "EasyRoute"),
+            Exercise("Medium", "MediumRoute"),
+        )
 
-    val onClick: (Exercise) -> Unit = mock() // Mock the lambda
-
-    composeTestRule.setContent { ExerciseList(exercises, onClick) }
+    composeTestRule.setContent { ExerciseList(exercises, navigationActions) }
 
     exercises.forEach { exercise ->
       composeTestRule.onNodeWithTag("${exercise.name}ExerciseButton").performClick()
 
-      verify(onClick).invoke(exercise) // Verify onClick was called with the exercise
+      verify(navigationActions)
+          .navigateTo(exercise.route) // Verify onClick was called with the exercise
     }
   }
 
