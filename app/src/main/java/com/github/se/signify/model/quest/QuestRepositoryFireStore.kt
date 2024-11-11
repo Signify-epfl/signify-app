@@ -21,7 +21,9 @@ class QuestRepositoryFireStore(private val db: FirebaseFirestore) : QuestReposit
     db.collection(collectionPath).get().addOnCompleteListener { task ->
       if (task.isSuccessful) {
         val quests =
-            task.result?.mapNotNull { document -> documentToQuest(document) } ?: emptyList()
+            task.result
+                ?.mapNotNull { document -> documentToQuest(document) }
+                ?.sortedBy { it.index.toInt() } ?: emptyList() // Sort by index field
         onSuccess(quests)
       } else {
         task.exception?.let { e -> onFailure(e) }
