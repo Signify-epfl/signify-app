@@ -25,7 +25,7 @@ fun ChallengeScreen(
         helpTitle = "Challenge",
         helpText = stringResource(R.string.description_challenge)
     ) {
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(64.dp))
 
         // Challenge square button
         SquareButton(
