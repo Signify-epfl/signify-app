@@ -41,4 +41,31 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
         <item>silver</item>
         <item>pillow</item>
     </string-array>
+    <string name="tip_a">Tips: Close your hand, put your thumb to the left, and direct it to the left.</string>
+    <string name="tip_b">Tips: Extend all fingers straight up. Place your thumb across your palm. Fingers are straight and close together.</string>
+    <string name="tip_c">Tips: Fingers and thumb are curved to form a C shape.</string>
+    <string name="tip_d">Tips: Extend your index finger up while touching your thumb to the tip of your middle finger. Other fingers are slightly curved.</string>
+    <string name="tip_e">Tips: Curl your fingers down over your thumb, forming an E shape with the fingertips near the thumb.</string>
+    <string name="tip_f">Tips: Touch the tip of your thumb to the tip of your index finger to form an O shape. The other fingers are extended and spread out.</string>
+    <string name="tip_g">Tips: Hold your thumb and index finger parallel and close to each other, while the other fingers are folded down.</string>
+    <string name="tip_h">Tips: Extend your index and middle fingers, holding them together. Other fingers are curled down.</string>
+    <string name="tip_i">Tips: Raise your pinky finger up, keeping all other fingers down, including the thumb.</string>
+    <string name="tip_j">Tips: Move your pinky finger downwards in a slight curve, as if drawing the letter J in the air.</string>
+    <string name="tip_k">Tips: Extend your index and middle fingers apart, with your thumb touching the middle finger. The other fingers are curled down.</string>
+    <string name="tip_l">Tips: Form an L shape by extending your index finger up and your thumb out to the side, keeping the other fingers curled down.</string>
+    <string name="tip_m">Tips: Tuck your thumb under your index, middle, and ring fingers, with only the pinky finger showing outside.</string>
+    <string name="tip_n">Tips: Tuck your thumb under your index and middle fingers, with the other fingers resting down.</string>
+    <string name="tip_o">Tips: Curve all fingers and the thumb to form an O shape.</string>
+    <string name="tip_p">Tips: Point your index and middle fingers down, keeping them apart, with the thumb supporting them. The other fingers are curled down.</string>
+    <string name="tip_q">Tips: Point your thumb and index finger down in an L shape. The rest of the fingers are curled down.</string>
+    <string name="tip_r">Tips: Cross your index and middle fingers, holding them together, while the other fingers are curled down.</string>
+    <string name="tip_s">Tips: Make a fist with your thumb resting over the other fingers.</string>
+    <string name="tip_t">Tips: Make a fist with your thumb tucked between your index and middle fingers.</string>
+    <string name="tip_u">Tips: Hold your index and middle fingers up and close together, with the other fingers curled down.</string>
+    <string name="tip_v">Tips: Hold your index and middle fingers up and apart in a V shape, with the other fingers curled down.</string>
+    <string name="tip_w">Tips: Hold your index, middle, and ring fingers up, spreading them out, with the other fingers curled down.</string>
+    <string name="tip_x">Tips: Curl your index finger, pointing it up, while the other fingers are folded down. Your thumb rests near the index finger.</string>
+    <string name="tip_y">Tips: Extend your pinky and thumb out to the sides, with the other fingers folded down.</string>
+    <string name="tip_z">Tips: Move your index finger to trace a Z shape in the air.</string>
+
 </resources>

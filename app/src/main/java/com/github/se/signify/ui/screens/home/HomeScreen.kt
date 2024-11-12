@@ -1,9 +1,11 @@
 package com.github.se.signify.ui.screens.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
@@ -45,7 +48,10 @@ import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.StreakCounter
 import com.github.se.signify.ui.UtilButton
 import com.github.se.signify.ui.UtilTextButton
+import com.github.se.signify.ui.getIconResId
+import com.github.se.signify.ui.getImageResId
 import com.github.se.signify.ui.getLetterIconResId
+import com.github.se.signify.ui.getTipResId
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 
@@ -92,6 +98,12 @@ fun HomeScreen(navigationActions: NavigationActions) {
     Spacer(modifier = Modifier.height(32.dp))
 
     ExerciseList(defaultExercises, navigationActions)
+
+    Spacer(modifier = Modifier.height(32.dp))
+    // New Box with the image, icon, and description
+    CreateDictionaryWithImages()
+
+    Spacer(modifier = Modifier.height(32.dp))
   }
 }
 
@@ -198,4 +210,62 @@ fun ExerciseButton(exercise: Exercise, navigationActions: NavigationActions) {
           ButtonDefaults.buttonColors(colorResource(R.color.blue), colorResource(R.color.black))) {
         Text(exercise.name, modifier = Modifier.testTag("${exercise.name}ExerciseButtonText"))
       }
+}
+
+@Composable
+fun SignTipBox(letter: Char, modifier: Modifier = Modifier) {
+  // Dynamically get the drawable resource IDs based on the letter
+  val imageResId = getImageResId(letter)
+  val iconResId = getIconResId(letter)
+  val tipText = stringResource(id = getTipResId(letter))
+
+  Box(
+      modifier =
+          modifier
+              .padding(16.dp)
+              .background(colorResource(R.color.white), RoundedCornerShape(8.dp))
+              .padding(8.dp)
+              .testTag("SignTipBox_$letter")) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(8.dp)) {
+              // Displaying the main image, e.g., `pic_a.jpg`
+              Image(
+                  painter = painterResource(id = imageResId),
+                  contentDescription = "Image for letter $letter",
+                  modifier = Modifier.size(200.dp))
+
+              Spacer(modifier = Modifier.height(16.dp))
+
+              // Displaying the description text with the icon, e.g., `letter_a.png`
+              Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    painter = painterResource(id = iconResId),
+                    contentDescription = "Icon for letter $letter",
+                    modifier = Modifier.size(24.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = tipText,
+                    fontSize = 16.sp,
+                    color = colorResource(R.color.black),
+                    modifier = Modifier.padding(8.dp))
+              }
+            }
+      }
+}
+
+@Composable
+fun CreateDictionaryWithImages() {
+  Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(8.dp)) {
+
+    // Loop through each letter from A to Z
+    ('A'..'Z').forEach { letter ->
+      Text(
+          text = "Letter $letter",
+          fontSize = 20.sp,
+          color = colorResource(R.color.black),
+          modifier = Modifier.padding(vertical = 8.dp).testTag("LetterTextDict_$letter"))
+      SignTipBox(letter = letter)
+      Spacer(modifier = Modifier.height(16.dp)) // Add space between each box
+    }
+  }
 }
