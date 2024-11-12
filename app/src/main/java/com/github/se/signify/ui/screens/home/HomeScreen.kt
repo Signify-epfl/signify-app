@@ -361,7 +361,7 @@ fun SignTipBox(letter: Char, modifier: Modifier = Modifier) {
               .testTag("SignTipBox_$letter")) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(8.dp)) {
-          // Displaying the main image, e.g., `pic_a.jpg`
+              // Displaying the main image, e.g., `pic_a.jpg`
               Image(
                   painter = painterResource(id = imageResId),
                   contentDescription = "Image for letter $letter",
