@@ -22,15 +22,22 @@ jobs:
     defaults:
       run:
         working-directory: ./${{ env.base_folder }}
-
     steps:
+      # Install Git LFS in CI
+      - name: Install Git LFS
+        run: git lfs install
+
       - name: Checkout
         uses: actions/checkout@v3
         with:
+          lfs: true  # Enables LFS file download
           submodules: recursive
           fetch-depth: 0
-
-
+      # Check if the File is in the build with correct size
+      - name: Verify LFS Download
+        run: |
+          ls -lh app/src/main/assets/RFC_model_ir9_opset19.onnx
+          du -sh app/src/main/assets/RFC_model_ir9_opset19.onnx
 
       - name: Enable KVM group perms
         run: |
@@ -120,3 +127,8 @@ jobs:
         with:
           name: release apk
           path: app/build/outputs/apk/release/app-release.apk
+      - name: Verify APK Contents
+        run: |
+          unzip -l app/build/outputs/apk/release/app-release.apk | grep -E "RFC_model_ir9_opset19.onnx|hand_landmarker.task"
+      - name: List Assets Directory Contents
+        run: ls -la app/src/main/assets

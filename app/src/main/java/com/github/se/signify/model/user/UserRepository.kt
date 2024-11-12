@@ -89,4 +89,17 @@ interface UserRepository {
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   )
+
+  fun getInitialQuestAccessDate(
+      userId: String,
+      onSuccess: (String?) -> Unit, // Date as "YYYY-MM-DD"
+      onFailure: (Exception) -> Unit
+  )
+
+  fun setInitialQuestAccessDate(
+      userId: String,
+      date: String, // Date as "YYYY-MM-DD"
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  )
 }
