@@ -219,4 +219,13 @@ class HomeScreenTest {
       composeTestRule.onNodeWithTag("ScrollToTopButton").performClick()
     }
   }
+
+  @Test
+  fun dictionnaryIsDisplayed() {
+    composeTestRule.setContent { HomeScreen(navigationActions) }
+    ('A'..'Z').forEach { letter ->
+      composeTestRule.onNodeWithTag("LetterTextDict_$letter")
+      composeTestRule.onNodeWithTag("SignTipBox_$letter")
+    }
+  }
 }

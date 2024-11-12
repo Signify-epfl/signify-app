@@ -2,7 +2,6 @@ package com.github.se.signify.ui.screens.home
 
 //noinspection UsingMaterialAndMaterial3Libraries
 //noinspection UsingMaterialAndMaterial3Libraries
-
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -153,7 +152,6 @@ fun HomeScreen(navigationActions: NavigationActions) {
               item { Spacer(modifier = Modifier.height(32.dp)) }
               item { ExerciseList(defaultExercises, navigationActions) }
               item { Spacer(modifier = Modifier.height(32.dp)) }
-
               // Display letters with SignTipBox in a LazyColumn
               // Putting this in CreateDictionaryWithImages
               // would lead to undesirable behavior i.e the scroll will not work as intended
@@ -363,15 +361,14 @@ fun SignTipBox(letter: Char, modifier: Modifier = Modifier) {
               .testTag("SignTipBox_$letter")) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(8.dp)) {
-              // Displaying the main image, e.g., pic_a.jpg
+          // Displaying the main image, e.g., `pic_a.jpg`
               Image(
                   painter = painterResource(id = imageResId),
                   contentDescription = "Image for letter $letter",
                   modifier = Modifier.size(200.dp))
 
               Spacer(modifier = Modifier.height(16.dp))
-
-              // Displaying the description text with the icon, e.g., letter_a.png
+              // Displaying the description text with the icon, e.g., `letter_a.png`
               Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     painter = painterResource(id = iconResId),

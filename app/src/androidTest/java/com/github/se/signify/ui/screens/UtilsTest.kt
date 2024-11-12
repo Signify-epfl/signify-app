@@ -12,7 +12,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.R
 import com.github.se.signify.model.hand.HandLandMarkImplementation
@@ -143,11 +142,7 @@ class UtilsTest {
           iconRes = R.drawable.battleicon,
           label = label,
           onClick = {},
-          size = 100.dp,
-          iconSize = 50.dp,
-          labelFontSize = 16.sp,
-          iconTint = Color.Gray,
-          textColor = Color.White,
+          size = 100,
           modifier = Modifier.testTag(label))
     }
 
@@ -167,11 +162,7 @@ class UtilsTest {
           iconRes = R.drawable.battleicon,
           label = label,
           onClick = { clicked = true },
-          size = 100.dp,
-          iconSize = 50.dp,
-          labelFontSize = 16.sp,
-          iconTint = Color.Gray,
-          textColor = Color.White,
+          size = 100,
           modifier = Modifier.testTag(label))
     }
 
