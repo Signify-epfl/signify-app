@@ -35,6 +35,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,7 +48,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -113,7 +113,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
       floatingActionButton = {
         FloatingActionButton(
             onClick = { coroutineScope.launch { scrollState.animateScrollToItem(0) } },
-            containerColor = colorResource(R.color.blue),
+            containerColor = MaterialTheme.colorScheme.primary,
             modifier = Modifier.testTag("ScrollToTopButton")) {
               Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Scroll to Top")
             }
@@ -159,7 +159,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
                 Text(
                     text = "Letter $letter",
                     fontSize = 20.sp,
-                    color = colorResource(R.color.black),
+                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(vertical = 8.dp).testTag("LetterTextDict_$letter"))
                 SignTipBox(letter = letter)
                 Spacer(modifier = Modifier.height(16.dp))
@@ -179,7 +179,7 @@ fun CameraFeedbackButton(onClick: () -> Unit = {}) {
       onClickAction = onClick,
       testTag = "CameraFeedbackButton",
       text = "Try it out",
-      backgroundColor = colorResource(R.color.blue),
+      backgroundColor = MaterialTheme.colorScheme.primary,
   )
 }
 /**
@@ -213,15 +213,16 @@ fun LetterDictionary(
             modifier = Modifier.testTag("LetterDictionaryBack")) {
               Icon(
                   Icons.AutoMirrored.Outlined.ArrowBack,
-                  tint = colorResource(R.color.black),
+                  tint = MaterialTheme.colorScheme.onBackground,
                   contentDescription = "Back")
             }
 
         val currentLetter = letters[currentLetterIndex]
         Box(
             modifier =
-                Modifier.border(2.dp, colorResource(R.color.black), RoundedCornerShape(8.dp))
-                    .background(colorResource(R.color.blue), RoundedCornerShape(8.dp))
+                Modifier.border(
+                        2.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(8.dp))
                     .padding(8.dp)
                     .clickable {
                       coroutineScope.launch {
@@ -232,24 +233,25 @@ fun LetterDictionary(
               Row {
                 Text(
                     text = "${currentLetter.uppercaseChar()} =",
-                    color = colorResource(R.color.black),
                     fontSize = 32.sp,
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.testTag("LetterText_${currentLetter.uppercaseChar()}"))
                 Icon(
                     painter = painterResource(id = getLetterIconResId(currentLetter)),
                     contentDescription = "Letter gesture",
-                    tint = colorResource(R.color.black),
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier =
                         Modifier.size(32.dp).testTag("LetterIcon_${currentLetter.uppercaseChar()}"))
               }
             }
 
+        // Forward Arrow Button
         IconButton(
             onClick = { currentLetterIndex = (currentLetterIndex + 1) % letters.size },
             modifier = Modifier.testTag("LetterDictionaryForward")) {
               Icon(
                   Icons.AutoMirrored.Outlined.ArrowForward,
-                  tint = colorResource(R.color.black),
+                  tint = MaterialTheme.colorScheme.onBackground,
                   contentDescription = "Forward")
             }
       }
@@ -282,8 +284,9 @@ fun ExerciseList(exercises: List<Exercise>, navigationActions: NavigationActions
                     modifier =
                         Modifier.size(200.dp, 100.dp)
                             .clip(RoundedCornerShape(8.dp))
-                            .background(colorResource(R.color.blue))
-                            .border(1.dp, colorResource(R.color.black), RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colorScheme.primary)
+                            .border(
+                                1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
                             .testTag("${exercises[page].name}ExerciseBox")) {
                       Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                         ExerciseButton(
@@ -304,8 +307,9 @@ fun ExerciseList(exercises: List<Exercise>, navigationActions: NavigationActions
                         .padding(4.dp)
                         .background(
                             color =
-                                if (pagerState.currentPage == index) colorResource(R.color.blue)
-                                else colorResource(R.color.dark_gray),
+                                if (pagerState.currentPage == index)
+                                    MaterialTheme.colorScheme.primary
+                                else MaterialTheme.colorScheme.surface,
                             shape = RoundedCornerShape(50)))
           }
         }
@@ -327,11 +331,12 @@ fun ExerciseButton(exercise: Exercise, navigationActions: NavigationActions) {
       modifier =
           Modifier.aspectRatio(2f)
               .fillMaxWidth()
-              .border(2.dp, colorResource(R.color.black), RoundedCornerShape(8.dp))
+              .border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
               .testTag("${exercise.name}ExerciseButton"),
       shape = RoundedCornerShape(8.dp),
       colors =
-          ButtonDefaults.buttonColors(colorResource(R.color.blue), colorResource(R.color.black))) {
+          ButtonDefaults.buttonColors(
+              MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.onPrimary)) {
         Text(exercise.name, modifier = Modifier.testTag("${exercise.name}ExerciseButtonText"))
       }
 }
@@ -355,7 +360,7 @@ fun SignTipBox(letter: Char, modifier: Modifier = Modifier) {
       modifier =
           modifier
               .padding(16.dp)
-              .background(colorResource(R.color.white), RoundedCornerShape(8.dp))
+              .background(MaterialTheme.colorScheme.background, RoundedCornerShape(8.dp))
               .padding(8.dp)
               .testTag("SignTipBox_$letter")) {
         Column(
@@ -377,7 +382,7 @@ fun SignTipBox(letter: Char, modifier: Modifier = Modifier) {
                 Text(
                     text = tipText,
                     fontSize = 16.sp,
-                    color = colorResource(R.color.black),
+                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(8.dp))
               }
             }

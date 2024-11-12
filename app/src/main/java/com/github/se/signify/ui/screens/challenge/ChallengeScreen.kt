@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -26,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -62,7 +62,7 @@ fun ChallengeScreen(navigationActions: NavigationActions) {
         Column(
             modifier =
                 Modifier.fillMaxSize()
-                    .background(colorResource(R.color.white))
+                    .background(MaterialTheme.colorScheme.background)
                     .padding(padding)
                     .testTag("ChallengeScreenContent"),
             horizontalAlignment = Alignment.CenterHorizontally) {
@@ -71,7 +71,7 @@ fun ChallengeScreen(navigationActions: NavigationActions) {
                   modifier =
                       Modifier.fillMaxWidth()
                           .height(4.dp)
-                          .background(colorResource(R.color.blue))
+                          .background(MaterialTheme.colorScheme.primary)
                           .testTag("TopBlueLine"))
 
               // Info button centered 24dp (1cm) below the blue line
@@ -121,11 +121,11 @@ fun InfoPopup(onDismiss: () -> Unit) {
   Dialog(onDismissRequest = { onDismiss() }) {
     Surface(
         shape = RoundedCornerShape(12.dp),
-        color = colorResource(R.color.blue), // Blue background for the popup
+        color = MaterialTheme.colorScheme.primary, // Blue background for the popup
         modifier =
             Modifier.border(
                     2.dp,
-                    colorResource(R.color.black),
+                    MaterialTheme.colorScheme.outline,
                     RoundedCornerShape(12.dp)) // Ensure the black border wraps the popup
                 .padding(0.dp)
                 .testTag("InfoPopup") // Remove padding for the border
@@ -146,7 +146,7 @@ fun InfoPopup(onDismiss: () -> Unit) {
                               }
                         },
                     fontSize = 20.sp,
-                    color = colorResource(R.color.white),
+                    color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.testTag("InfoPopupTitle"))
 
@@ -158,7 +158,7 @@ fun InfoPopup(onDismiss: () -> Unit) {
                         stringResource(
                             id = R.string.description_challenge), // Text from strings.xml
                     fontSize = 16.sp,
-                    color = colorResource(R.color.white),
+                    color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.testTag("InfoPopupBody"))
 
@@ -168,7 +168,7 @@ fun InfoPopup(onDismiss: () -> Unit) {
                 Button(
                     onClick = { onDismiss() },
                     modifier = Modifier.testTag("InfoPopupCloseButton")) {
-                      Text(text = "Close", color = colorResource(R.color.white))
+                      Text(text = "Close", color = MaterialTheme.colorScheme.onSurface)
                     }
               }
         }
