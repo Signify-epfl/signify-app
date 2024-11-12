@@ -48,8 +48,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.github.se.signify.R
-import coil.compose.AsyncImage
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.BackButton
 import com.github.se.signify.ui.ProfilePicture
