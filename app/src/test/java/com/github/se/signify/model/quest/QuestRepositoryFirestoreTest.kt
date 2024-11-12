@@ -82,6 +82,33 @@ class QuestRepositoryFirestoreTest {
     }
   }
 
+  @Test
+  fun init_doesNotTriggerOnSuccessWhenUserIsNotLoggedIn() {
+    // Mock the static Firebase.auth to return our mockAuth instance
+    mockStatic(FirebaseAuth::class.java).use { firebaseAuthMock ->
+      firebaseAuthMock.`when`<FirebaseAuth> { FirebaseAuth.getInstance() }.thenReturn(mockAuth)
+      `when`(mockAuth.currentUser).thenReturn(null) // Simulate user not logged in
+
+      // Capture the AuthStateListener
+      val authStateListenerCaptor = argumentCaptor<FirebaseAuth.AuthStateListener>()
+      doNothing().`when`(mockAuth).addAuthStateListener(authStateListenerCaptor.capture())
+
+      // Act & Assert
+      var callbackTriggered = false
+      questRepositoryFirestore.init {
+        callbackTriggered = true // Set flag if onSuccess is triggered
+      }
+
+      // Simulate Firebase invoking the auth state listener
+      authStateListenerCaptor.firstValue.onAuthStateChanged(mockAuth)
+
+      // Assert
+      assert(!callbackTriggered) {
+        "The onSuccess callback should not be triggered when user is not logged in."
+      }
+    }
+  }
+
   // Test for successful conversion with valid data
   @Test
   fun documentToQuest_withValidData_returnsQuest() {
