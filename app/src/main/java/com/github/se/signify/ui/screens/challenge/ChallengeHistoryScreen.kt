@@ -18,33 +18,31 @@ fun ChallengeHistoryScreen(
     friendsChallengesAchieved: Int,
     challengesCreated: Int
 ) {
-    AnnexScreenScaffold(
-        navigationActions = navigationActions,
-        testTagColumn = "ChallengeHistoryScreen",
-    ) {
-        // Number of friends' challenges achieved
-        StatisticsRow(
-            rowTestTag = "FriendsChallengesRow",
-            lineText = "Number of friends challenges achieved",
-            lineTextTag = "FriendsChallengesText",
-            columnTextList = listOf(listOf("$friendsChallengesAchieved")),
-            columnTextSPList = listOf(listOf(20)),
-            columnTextTagList = listOf("FriendsChallengesCountBox")
-        )
-        Spacer(modifier = Modifier.height(32.dp))
+  AnnexScreenScaffold(
+      navigationActions = navigationActions,
+      testTagColumn = "ChallengeHistoryScreen",
+  ) {
+    // Number of friends' challenges achieved
+    StatisticsRow(
+        rowTestTag = "FriendsChallengesRow",
+        lineText = "Number of friends challenges achieved",
+        lineTextTag = "FriendsChallengesText",
+        columnTextList = listOf(listOf("$friendsChallengesAchieved")),
+        columnTextSPList = listOf(listOf(20)),
+        columnTextTagList = listOf("FriendsChallengesCountBox"))
+    Spacer(modifier = Modifier.height(32.dp))
 
-        // Number of challenges created
-        StatisticsRow(
-            rowTestTag = "ChallengesCreatedRow",
-            lineText = "Number of challenges created",
-            lineTextTag = "ChallengesCreatedText",
-            columnTextList = listOf(listOf("$challengesCreated")),
-            columnTextSPList = listOf(listOf(20)),
-            columnTextTagList = listOf("ChallengesCreatedCountBox")
-        )
-        Spacer(modifier = Modifier.height(32.dp))
+    // Number of challenges created
+    StatisticsRow(
+        rowTestTag = "ChallengesCreatedRow",
+        lineText = "Number of challenges created",
+        lineTextTag = "ChallengesCreatedText",
+        columnTextList = listOf(listOf("$challengesCreated")),
+        columnTextSPList = listOf(listOf(20)),
+        columnTextTagList = listOf("ChallengesCreatedCountBox"))
+    Spacer(modifier = Modifier.height(32.dp))
 
-        // Graphs and Stats
-        NotImplementedYet(testTag = "GraphsAndStats", text = "Graphs and Stats")
-    }
+    // Graphs and Stats
+    NotImplementedYet(testTag = "GraphsAndStats", text = "Graphs and Stats")
+  }
 }

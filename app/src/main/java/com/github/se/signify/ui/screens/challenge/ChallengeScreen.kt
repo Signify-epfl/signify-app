@@ -16,15 +16,12 @@ import com.github.se.signify.ui.navigation.Route
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun ChallengeScreen(
-    navigationActions: NavigationActions
-) {
-    MainScreenScaffold(
-        navigationActions = navigationActions,
-        testTagColumn = "ChallengeScreen",
-        helpTitle = "Challenge",
-        helpText = stringResource(R.string.description_challenge)
-    ) {
+fun ChallengeScreen(navigationActions: NavigationActions) {
+  MainScreenScaffold(
+      navigationActions = navigationActions,
+      testTagColumn = "ChallengeScreen",
+      helpTitle = "Challenge",
+      helpText = stringResource(R.string.description_challenge)) {
         Spacer(modifier = Modifier.height(64.dp))
 
         // Challenge square button
@@ -33,8 +30,7 @@ fun ChallengeScreen(
             label = "Challenge",
             onClick = { navigationActions.navigateTo(Route.NEW_CHALLENGE) },
             size = 240,
-            modifier = Modifier.testTag("ChallengeButton")
-        )
+            modifier = Modifier.testTag("ChallengeButton"))
         Spacer(modifier = Modifier.height(32.dp))
 
         // History square button
@@ -43,7 +39,6 @@ fun ChallengeScreen(
             label = "History",
             onClick = { navigationActions.navigateTo(Route.CHALLENGE_HISTORY) },
             size = 240,
-            modifier = Modifier.testTag("HistoryButton")
-        )
-    }
+            modifier = Modifier.testTag("HistoryButton"))
+      }
 }

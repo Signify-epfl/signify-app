@@ -61,17 +61,17 @@ class FriendsListScreenTest {
 
   @Test
   fun testFriendsListScreenDisplaysCorrectInformation() {
-      // Verify top blue bar is displayed
-      composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
+    // Verify top blue bar is displayed
+    composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
 
-      // Verify top information are displayed
-      composeTestRule.onNodeWithTag("UserInfo").assertIsDisplayed()
-      composeTestRule.onNodeWithTag("UserId").assertIsDisplayed()
-      composeTestRule.onNodeWithTag("UserName").assertIsDisplayed()
-      composeTestRule.onNodeWithTag("ProfilePicture").assertIsDisplayed()
-      composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
-      composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
-      composeTestRule.onNodeWithTag("NumberOfDays").assertIsDisplayed()
+    // Verify top information are displayed
+    composeTestRule.onNodeWithTag("UserInfo").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("UserId").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("UserName").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("ProfilePicture").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("NumberOfDays").assertIsDisplayed()
 
     // Check if the Friends List title is displayed
     composeTestRule.onNodeWithText("My friends list").assertIsDisplayed()

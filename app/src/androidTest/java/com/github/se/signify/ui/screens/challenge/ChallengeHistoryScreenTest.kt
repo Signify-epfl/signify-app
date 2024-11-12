@@ -41,16 +41,21 @@ class ChallengeHistoryScreenTest {
     // Verify friends challenges achieved section is displayed with counts
     composeTestRule.onNodeWithTag("FriendsChallengesRow").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FriendsChallengesText").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("FriendsChallengesText").assertTextEquals("Number of friends challenges achieved")
+    composeTestRule
+        .onNodeWithTag("FriendsChallengesText")
+        .assertTextEquals("Number of friends challenges achieved")
     composeTestRule.onNodeWithTag("FriendsChallengesCountBox").assertIsDisplayed()
     composeTestRule.onNodeWithTag("$friendChallengesAchieved").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("$friendChallengesAchieved").assertTextEquals("$friendChallengesAchieved")
-
+    composeTestRule
+        .onNodeWithTag("$friendChallengesAchieved")
+        .assertTextEquals("$friendChallengesAchieved")
 
     // Verify challenges created section is displayed with counts
     composeTestRule.onNodeWithTag("ChallengesCreatedRow").assertIsDisplayed()
     composeTestRule.onNodeWithTag("ChallengesCreatedText").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("ChallengesCreatedText").assertTextEquals("Number of challenges created")
+    composeTestRule
+        .onNodeWithTag("ChallengesCreatedText")
+        .assertTextEquals("Number of challenges created")
     composeTestRule.onNodeWithTag("ChallengesCreatedCountBox").assertIsDisplayed()
     composeTestRule.onNodeWithTag("$challengesCreated").assertIsDisplayed()
     composeTestRule.onNodeWithTag("$challengesCreated").assertTextEquals("$challengesCreated")

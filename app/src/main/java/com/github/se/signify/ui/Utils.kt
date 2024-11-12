@@ -372,8 +372,7 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
                     3.dp,
                     colorResource(R.color.dark_gray),
                     RoundedCornerShape(12.dp)) // Ensure the black border wraps the popup
-                .testTag("InfoPopup")
-        ) {
+                .testTag("InfoPopup")) {
           Column(
               modifier = Modifier.padding(16.dp).fillMaxWidth().testTag("InfoPopupContent"),
               horizontalAlignment = Alignment.CenterHorizontally) {

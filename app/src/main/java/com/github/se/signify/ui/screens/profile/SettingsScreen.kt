@@ -85,116 +85,104 @@ fun SettingsScreen(
         }
       }
 
-    AnnexScreenScaffold(
-        navigationActions = navigationActions,
-        testTagColumn = "SettingsScreen"
-    ) {
-        // Editable Profile Picture
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally) {
-            Row(
-                modifier =
-                Modifier.border(2.dp, colorResource(R.color.blue), RoundedCornerShape(8.dp))
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(colorResource(R.color.white))
-                    .padding(horizontal = 24.dp, vertical = 16.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Column {
-                    Icon(
-                        modifier = Modifier.clickable { galleryLauncher.launch("image/*") },
-                        imageVector = Icons.Outlined.Edit,
-                        contentDescription = "Edit Profile Picture",
-                        tint = colorResource(R.color.black),
-                    )
+  AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = "SettingsScreen") {
+    // Editable Profile Picture
+    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+      Row(
+          modifier =
+              Modifier.border(2.dp, colorResource(R.color.blue), RoundedCornerShape(8.dp))
+                  .clip(RoundedCornerShape(8.dp))
+                  .background(colorResource(R.color.white))
+                  .padding(horizontal = 24.dp, vertical = 16.dp),
+          horizontalArrangement = Arrangement.Center,
+          verticalAlignment = Alignment.CenterVertically,
+      ) {
+        Column {
+          Icon(
+              modifier = Modifier.clickable { galleryLauncher.launch("image/*") },
+              imageVector = Icons.Outlined.Edit,
+              contentDescription = "Edit Profile Picture",
+              tint = colorResource(R.color.black),
+          )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+          Spacer(modifier = Modifier.height(16.dp))
 
-                    Icon(
-                        modifier = Modifier.clickable { selectedImageUrl = null },
-                        imageVector = Icons.Outlined.Delete,
-                        contentDescription = "Delete Profile Picture",
-                        tint = colorResource(R.color.black),
-                    )
-                }
-
-                Spacer(modifier = Modifier.width(8.dp))
-                UserProfilePicture(selectedImageUrl)
-            }
+          Icon(
+              modifier = Modifier.clickable { selectedImageUrl = null },
+              imageVector = Icons.Outlined.Delete,
+              contentDescription = "Delete Profile Picture",
+              tint = colorResource(R.color.black),
+          )
         }
-        Spacer(modifier = Modifier.height(32.dp))
 
-        // Editable Username
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally) {
-            Row(
+        Spacer(modifier = Modifier.width(8.dp))
+        UserProfilePicture(selectedImageUrl)
+      }
+    }
+    Spacer(modifier = Modifier.height(32.dp))
+
+    // Editable Username
+    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+      Row(
+          modifier =
+              Modifier.border(2.dp, colorResource(R.color.blue), RoundedCornerShape(8.dp))
+                  .clip(RoundedCornerShape(8.dp))
+                  .background(colorResource(R.color.white))
+                  .padding(horizontal = 24.dp, vertical = 8.dp),
+          verticalAlignment = Alignment.CenterVertically,
+          horizontalArrangement = Arrangement.Center) {
+            Icon(
+                imageVector = Icons.Outlined.Edit,
+                contentDescription = "Edit Username",
+                tint = colorResource(R.color.black))
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            TextField(
+                value = newName,
+                onValueChange = { newName = it },
+                placeholder = { Text(userName.value, color = colorResource(R.color.dark_gray)) },
                 modifier =
-                Modifier.border(2.dp, colorResource(R.color.blue), RoundedCornerShape(8.dp))
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(colorResource(R.color.white))
-                    .padding(horizontal = 24.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center) {
-                Icon(
-                    imageVector = Icons.Outlined.Edit,
-                    contentDescription = "Edit Username",
-                    tint = colorResource(R.color.black))
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                TextField(
-                    value = newName,
-                    onValueChange = { newName = it },
-                    placeholder = {
-                        Text(userName.value, color = colorResource(R.color.dark_gray))
-                    },
-                    modifier =
                     Modifier.widthIn(max = 200.dp)
                         .padding(vertical = 8.dp)
                         .background(colorResource(R.color.white)),
-                    colors =
+                colors =
                     TextFieldDefaults.colors(
                         focusedContainerColor = colorResource(R.color.white),
                         unfocusedContainerColor = colorResource(R.color.white),
                         focusedTextColor = colorResource(R.color.dark_gray),
                         cursorColor = colorResource(R.color.dark_gray)))
-            }
-        }
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // Other Settings Section
-        NotImplementedYet(
-            testTag = "OtherSettings",
-            text = "Other settings:\nLanguage,\nTheme,\n..."
-        )
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // Cancel and Save Buttons
-        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            ActionButtons(
-                {
-                    newName = ""
-                    selectedImageUrl = profilePictureUrl.value
-                },
-                colorResource(R.color.dark_gray),
-                "Cancel",
-                Modifier.weight(1f))
-
-            ActionButtons(
-                {
-                    if (newName.isNotBlank()) {
-                        userViewModel.updateUserName(currentUserId, newName)
-                    }
-                    userViewModel.updateProfilePictureUrl(currentUserId, selectedImageUrl)
-                },
-                colorResource(R.color.blue),
-                "Save",
-                Modifier.weight(1f))
-        }
+          }
     }
+    Spacer(modifier = Modifier.height(32.dp))
+
+    // Other Settings Section
+    NotImplementedYet(testTag = "OtherSettings", text = "Other settings:\nLanguage,\nTheme,\n...")
+    Spacer(modifier = Modifier.height(32.dp))
+
+    // Cancel and Save Buttons
+    Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+      ActionButtons(
+          {
+            newName = ""
+            selectedImageUrl = profilePictureUrl.value
+          },
+          colorResource(R.color.dark_gray),
+          "Cancel",
+          Modifier.weight(1f))
+
+      ActionButtons(
+          {
+            if (newName.isNotBlank()) {
+              userViewModel.updateUserName(currentUserId, newName)
+            }
+            userViewModel.updateProfilePictureUrl(currentUserId, selectedImageUrl)
+          },
+          colorResource(R.color.blue),
+          "Save",
+          Modifier.weight(1f))
+    }
+  }
 }
 
 @Composable
