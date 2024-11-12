@@ -1,7 +1,5 @@
 package com.github.se.signify.ui.screens.home
 
-//noinspection UsingMaterialAndMaterial3Libraries
-//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,8 +25,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
@@ -36,8 +32,10 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -115,7 +113,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
       floatingActionButton = {
         FloatingActionButton(
             onClick = { coroutineScope.launch { scrollState.animateScrollToItem(0) } },
-            backgroundColor = colorResource(R.color.blue),
+            containerColor = colorResource(R.color.blue),
             modifier = Modifier.testTag("ScrollToTopButton")) {
               Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Scroll to Top")
             }
