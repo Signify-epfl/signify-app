@@ -1,6 +1,5 @@
 package com.github.se.signify.ui.screens.home
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -49,7 +48,10 @@ import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.StreakCounter
 import com.github.se.signify.ui.UtilButton
 import com.github.se.signify.ui.UtilTextButton
+import com.github.se.signify.ui.getIconResId
+import com.github.se.signify.ui.getImageResId
 import com.github.se.signify.ui.getLetterIconResId
+import com.github.se.signify.ui.getTipResId
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 
@@ -99,19 +101,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
 
     Spacer(modifier = Modifier.height(32.dp))
     // New Box with the image, icon, and description
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(8.dp)) {
-
-      // Loop through each letter from A to Z
-      ('A'..'Z').forEach { letter ->
-        Text(
-            text = "Letter $letter",
-            fontSize = 20.sp,
-            color = colorResource(R.color.black),
-            modifier = Modifier.padding(vertical = 8.dp).testTag("LetterTextDict_$letter"))
-        SignTipBox(letter = letter)
-        Spacer(modifier = Modifier.height(16.dp)) // Add space between each box
-      }
-    }
+    CreateDictionaryWithImages()
 
     Spacer(modifier = Modifier.height(32.dp))
   }
@@ -222,7 +212,6 @@ fun ExerciseButton(exercise: Exercise, navigationActions: NavigationActions) {
       }
 }
 
-@SuppressLint("RememberReturnType")
 @Composable
 fun SignTipBox(letter: Char, modifier: Modifier = Modifier) {
   // Dynamically get the drawable resource IDs based on the letter
@@ -264,44 +253,19 @@ fun SignTipBox(letter: Char, modifier: Modifier = Modifier) {
       }
 }
 
-private fun getImageResId(letter: Char): Int {
-  val resName = "pic_${letter.lowercaseChar()}"
-  return R.drawable::class.java.getDeclaredField(resName).getInt(null)
-}
+@Composable
+fun CreateDictionaryWithImages() {
+  Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(8.dp)) {
 
-private fun getIconResId(letter: Char): Int {
-  val resName = "letter_${letter.lowercaseChar()}"
-  return R.drawable::class.java.getDeclaredField(resName).getInt(null)
-}
-
-private fun getTipResId(letter: Char): Int {
-  return when (letter) {
-    'A' -> R.string.tip_a
-    'B' -> R.string.tip_b
-    'C' -> R.string.tip_c
-    'D' -> R.string.tip_d
-    'E' -> R.string.tip_e
-    'F' -> R.string.tip_f
-    'G' -> R.string.tip_g
-    'H' -> R.string.tip_h
-    'I' -> R.string.tip_i
-    'J' -> R.string.tip_j
-    'K' -> R.string.tip_k
-    'L' -> R.string.tip_l
-    'M' -> R.string.tip_m
-    'N' -> R.string.tip_n
-    'O' -> R.string.tip_o
-    'P' -> R.string.tip_p
-    'Q' -> R.string.tip_q
-    'R' -> R.string.tip_r
-    'S' -> R.string.tip_s
-    'T' -> R.string.tip_t
-    'U' -> R.string.tip_u
-    'V' -> R.string.tip_v
-    'W' -> R.string.tip_w
-    'X' -> R.string.tip_x
-    'Y' -> R.string.tip_y
-    'Z' -> R.string.tip_z
-    else -> R.string.tip_a
+    // Loop through each letter from A to Z
+    ('A'..'Z').forEach { letter ->
+      Text(
+          text = "Letter $letter",
+          fontSize = 20.sp,
+          color = colorResource(R.color.black),
+          modifier = Modifier.padding(vertical = 8.dp).testTag("LetterTextDict_$letter"))
+      SignTipBox(letter = letter)
+      Spacer(modifier = Modifier.height(16.dp)) // Add space between each box
+    }
   }
 }
