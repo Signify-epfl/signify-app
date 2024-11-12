@@ -27,6 +27,7 @@ import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -43,12 +44,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
+import coil.compose.AsyncImage
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.BackButton
 import com.github.se.signify.ui.ProfilePicture
@@ -88,8 +89,8 @@ fun SettingsScreen(
   Column(
       modifier =
           Modifier.fillMaxSize()
-              .padding(16.dp)
               .verticalScroll(rememberScrollState())
+              .background(MaterialTheme.colorScheme.background)
               .testTag("SettingsScreen"),
       verticalArrangement = Arrangement.spacedBy(64.dp)) {
 
@@ -102,9 +103,12 @@ fun SettingsScreen(
             horizontalAlignment = Alignment.CenterHorizontally) {
               Row(
                   modifier =
-                      Modifier.border(2.dp, colorResource(R.color.blue), RoundedCornerShape(8.dp))
+                      Modifier.border(
+                              2.dp,
+                              MaterialTheme.colorScheme.outlineVariant,
+                              RoundedCornerShape(8.dp))
                           .clip(RoundedCornerShape(8.dp))
-                          .background(colorResource(R.color.white))
+                          .background(MaterialTheme.colorScheme.background)
                           .padding(horizontal = 24.dp, vertical = 16.dp),
                   horizontalArrangement = Arrangement.Center,
                   verticalAlignment = Alignment.CenterVertically,
@@ -114,7 +118,7 @@ fun SettingsScreen(
                       modifier = Modifier.clickable { galleryLauncher.launch("image/*") },
                       imageVector = Icons.Outlined.Edit,
                       contentDescription = "Edit Profile Picture",
-                      tint = colorResource(R.color.black),
+                      tint = MaterialTheme.colorScheme.onBackground,
                   )
 
                   Spacer(modifier = Modifier.height(16.dp))
@@ -123,7 +127,7 @@ fun SettingsScreen(
                       modifier = Modifier.clickable { selectedImageUrl = null },
                       imageVector = Icons.Outlined.Delete,
                       contentDescription = "Delete Profile Picture",
-                      tint = colorResource(R.color.black),
+                      tint = MaterialTheme.colorScheme.onBackground,
                   )
                 }
 
@@ -138,16 +142,19 @@ fun SettingsScreen(
             horizontalAlignment = Alignment.CenterHorizontally) {
               Row(
                   modifier =
-                      Modifier.border(2.dp, colorResource(R.color.blue), RoundedCornerShape(8.dp))
+                      Modifier.border(
+                              2.dp,
+                              MaterialTheme.colorScheme.outlineVariant,
+                              RoundedCornerShape(8.dp))
                           .clip(RoundedCornerShape(8.dp))
-                          .background(colorResource(R.color.white))
+                          .background(MaterialTheme.colorScheme.background)
                           .padding(horizontal = 24.dp, vertical = 8.dp),
                   verticalAlignment = Alignment.CenterVertically,
                   horizontalArrangement = Arrangement.Center) {
                     Icon(
                         imageVector = Icons.Outlined.Edit,
                         contentDescription = "Edit Username",
-                        tint = colorResource(R.color.black))
+                        tint = MaterialTheme.colorScheme.onBackground)
 
                     Spacer(modifier = Modifier.width(8.dp))
 
@@ -155,18 +162,18 @@ fun SettingsScreen(
                         value = newName,
                         onValueChange = { newName = it },
                         placeholder = {
-                          Text(userName.value, color = colorResource(R.color.dark_gray))
+                          Text(userName.value, color = MaterialTheme.colorScheme.onBackground)
                         },
                         modifier =
                             Modifier.widthIn(max = 200.dp)
                                 .padding(vertical = 8.dp)
-                                .background(colorResource(R.color.white)),
+                                .background(MaterialTheme.colorScheme.background),
                         colors =
                             TextFieldDefaults.colors(
-                                focusedContainerColor = colorResource(R.color.white),
-                                unfocusedContainerColor = colorResource(R.color.white),
-                                focusedTextColor = colorResource(R.color.dark_gray),
-                                cursorColor = colorResource(R.color.dark_gray)))
+                                focusedContainerColor = MaterialTheme.colorScheme.background,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                                focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                                cursorColor = MaterialTheme.colorScheme.onBackground))
                   }
             }
 
@@ -175,13 +182,13 @@ fun SettingsScreen(
             modifier =
                 Modifier.fillMaxWidth()
                     .clip(RoundedCornerShape(12.dp))
-                    .background(colorResource(R.color.dark_gray))
+                    .background(MaterialTheme.colorScheme.surface)
                     .padding(16.dp),
             contentAlignment = Alignment.Center) {
               Text(
                   text = "Other settings:\nLanguage,\n theme, ...",
                   fontSize = 16.sp,
-                  color = colorResource(R.color.white),
+                  color = MaterialTheme.colorScheme.onSurface,
                   fontWeight = FontWeight.Normal)
             }
 
@@ -192,7 +199,7 @@ fun SettingsScreen(
                 newName = ""
                 selectedImageUrl = profilePictureUrl.value
               },
-              colorResource(R.color.dark_gray),
+              MaterialTheme.colorScheme.error,
               "Cancel",
               Modifier.weight(1f))
 
@@ -203,7 +210,7 @@ fun SettingsScreen(
                 }
                 userViewModel.updateProfilePictureUrl(currentUserId, selectedImageUrl)
               },
-              colorResource(R.color.blue),
+              MaterialTheme.colorScheme.primary,
               "Save",
               Modifier.weight(1f))
         }
@@ -216,7 +223,8 @@ fun ActionButtons(onClickAction: () -> Unit, color: Color, text: String, modifie
       onClick = onClickAction,
       colors = ButtonDefaults.buttonColors().copy(color),
       modifier = modifier) {
-        Text(text = text, color = colorResource(R.color.white), fontWeight = FontWeight.Bold)
+        Text(
+            text = text, color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Bold)
       }
 }
 

@@ -64,7 +64,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -98,10 +97,10 @@ fun UtilIconButton(onClickAction: () -> Unit, icon: ImageVector, iconDescription
       modifier = Modifier.padding(8.dp).testTag(iconDescription + "Button"),
       border =
           ButtonDefaults.outlinedButtonBorder.copy(
-              width = 2.dp, brush = SolidColor(colorResource(R.color.dark_gray))),
-      colors = ButtonDefaults.outlinedButtonColors(colorResource(R.color.blue)),
+              width = 2.dp, brush = SolidColor(MaterialTheme.colorScheme.surface)),
+      colors = ButtonDefaults.outlinedButtonColors(MaterialTheme.colorScheme.primary),
   ) {
-    Icon(icon, tint = colorResource(R.color.dark_gray), contentDescription = iconDescription)
+    Icon(icon, tint = MaterialTheme.colorScheme.surface, contentDescription = iconDescription)
   }
 }
 
@@ -124,13 +123,13 @@ fun UtilTextButton(
       onClick = onClickAction,
       border =
           ButtonDefaults.outlinedButtonBorder.copy(
-              width = 2.dp, brush = SolidColor(colorResource(R.color.black))),
+              width = 2.dp, brush = SolidColor(MaterialTheme.colorScheme.outline)),
       colors = ButtonDefaults.buttonColors(backgroundColor),
       modifier = Modifier.fillMaxWidth().height(40.dp).testTag(testTag)) {
         Text(
             text,
             fontWeight = FontWeight.Bold,
-            color = colorResource(R.color.black),
+            color = MaterialTheme.colorScheme.onSurface,
             fontSize = 20.sp,
             textAlign = TextAlign.Center)
       }
@@ -158,21 +157,21 @@ fun SquareButton(
       modifier =
           modifier
               .size(size.dp)
-              .border(2.dp, colorResource(R.color.black), RoundedCornerShape(12.dp))
-              .background(colorResource(R.color.blue), RoundedCornerShape(12.dp))
+              .border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
+              .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(12.dp))
               .padding(16.dp)
               .clickable { onClick() }) {
         Text(
             text = label,
             fontSize = (size * 0.15).sp,
-            color = colorResource(R.color.dark_gray),
+            color = MaterialTheme.colorScheme.onPrimary,
         )
         Spacer(modifier = Modifier.height(8.dp))
         Box(contentAlignment = Alignment.Center) {
           Icon(
               painter = painterResource(id = iconRes),
               contentDescription = label,
-              tint = colorResource(R.color.dark_gray),
+              tint = MaterialTheme.colorScheme.onPrimary,
               modifier = Modifier.size((size * 0.7).dp))
         }
       }
@@ -198,20 +197,20 @@ fun UtilButton(
   Box(
       modifier =
           Modifier.size(30.dp)
-              .background(colorResource(R.color.white), shape = RoundedCornerShape(30))
-              .border(2.dp, colorResource(R.color.white), shape = RoundedCornerShape(30))
+              .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(30))
+              .border(2.dp, MaterialTheme.colorScheme.background, shape = RoundedCornerShape(30))
               .clickable { onClick() }
               .testTag(buttonTestTag),
       contentAlignment = Alignment.Center) {
         Icon(
             icon,
             contentDescription = contentDescription,
-            tint = colorResource(R.color.blue),
+            tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier.size(30.dp).testTag(iconTestTag))
       }
 }
 
-/** A reusable composable function that creates the blue top bar. */
+/** A reusable composable function that creates the top bar. */
 @Composable
 fun TopBar() {
   Box(
@@ -219,7 +218,7 @@ fun TopBar() {
           Modifier.fillMaxWidth()
               .height(5.dp)
               .background(MaterialTheme.colorScheme.primary)
-              .testTag("TopBlueBar"))
+              .testTag("TopBar"))
 }
 
 /**
@@ -250,7 +249,7 @@ fun BackButton(onClick: () -> Unit) {
           Icon(
               imageVector = Icons.AutoMirrored.Filled.ArrowBack,
               contentDescription = "BackButton",
-              tint = colorResource(R.color.blue))
+              tint = MaterialTheme.colorScheme.primary)
         }
       }
 }
@@ -268,7 +267,7 @@ fun BackButton(onClick: () -> Unit) {
 fun ScreenColumn(
     padding: PaddingValues,
     testTag: String,
-    backgroundColor: Color = colorResource(R.color.white),
+    backgroundColor: Color = MaterialTheme.colorScheme.background,
     content: @Composable ColumnScope.() -> Unit
 ) {
   Column(
@@ -309,7 +308,7 @@ fun MainScreenScaffold(
         ScreenColumn(
             padding,
             testTagColumn,
-            colorResource(R.color.white) // to replace with the background color theme
+            MaterialTheme.colorScheme.background // to replace with the background color theme
             ) {
               UtilButton(
                   { isHelpBoxVisible = !isHelpBoxVisible },
@@ -348,7 +347,7 @@ fun AnnexScreenScaffold(
         ScreenColumn(
             padding,
             testTagColumn,
-            colorResource(R.color.white) // to replace with the background color theme
+            MaterialTheme.colorScheme.background // to replace with the background color theme
             ) {
               BackButton { navigationActions.goBack() }
               content()
@@ -368,12 +367,12 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
   Dialog(onDismissRequest = { onDismiss() }) {
     Surface(
         shape = RoundedCornerShape(12.dp),
-        color = colorResource(R.color.blue), // Blue background for the popup
+        color = MaterialTheme.colorScheme.primary, // Background for the popup
         modifier =
             Modifier.border(
                     3.dp,
-                    colorResource(R.color.dark_gray),
-                    RoundedCornerShape(12.dp)) // Ensure the black border wraps the popup
+                    MaterialTheme.colorScheme.outline,
+                    RoundedCornerShape(12.dp)) // Ensure the border wraps the popup
                 .padding(16.dp)
                 .testTag("InfoPopup") // Remove padding for the border
         ) {
@@ -393,7 +392,7 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
                               }
                         },
                     fontSize = 20.sp,
-                    color = colorResource(R.color.white),
+                    color = MaterialTheme.colorScheme.onPrimary,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.testTag("InfoPopupTitle"))
                 Spacer(modifier = Modifier.height(8.dp))
@@ -402,7 +401,7 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
                 Text(
                     text = helpText,
                     fontSize = 16.sp,
-                    color = colorResource(R.color.white),
+                    color = MaterialTheme.colorScheme.onPrimary,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.testTag("InfoPopupBody"))
                 Spacer(modifier = Modifier.height(16.dp))
@@ -410,9 +409,9 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
                 // Close button for the popup
                 Button(
                     onClick = { onDismiss() },
-                    colors = ButtonDefaults.buttonColors(colorResource(R.color.dark_gray)),
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.surface),
                     modifier = Modifier.testTag("InfoPopupCloseButton")) {
-                      Text(text = "Close", color = colorResource(R.color.white))
+                      Text(text = "Close", color = MaterialTheme.colorScheme.onSurface)
                     }
               }
         }
@@ -459,22 +458,23 @@ fun StatisticsRow(
         Text(
             text = lineText,
             fontSize = 16.sp,
-            color = colorResource(R.color.black),
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.testTag(lineTextTag))
         for (index in columnTextList.indices) {
           Column(
               modifier =
                   Modifier.size(50.dp)
-                      .border(2.dp, colorResource(R.color.blue), RoundedCornerShape(12.dp))
+                      .border(
+                          2.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(12.dp))
                       .clip(RoundedCornerShape(12.dp))
-                      .background(colorResource(R.color.white))
+                      .background(MaterialTheme.colorScheme.background)
                       .testTag(columnTextTagList[index]),
               horizontalAlignment = Alignment.CenterHorizontally) {
                 for (subIndex in columnTextList[index].indices) {
                   Text(
                       text = columnTextList[index][subIndex],
                       fontSize = columnTextSPList[index][subIndex].sp,
-                      color = colorResource(R.color.black),
+                      color = MaterialTheme.colorScheme.onBackground,
                       modifier = Modifier.testTag(columnTextList[index][subIndex]))
                 }
               }
@@ -484,7 +484,7 @@ fun StatisticsRow(
 
 /**
  * A reusable composable function that creates the scrollable letter list. The letter already
- * learned are in blue and the others are in gray.
+ * learned are highlighted and the others are in a secondary color.
  *
  * Important to note that it is helper function to AllLetterLearned()
  *
@@ -503,8 +503,8 @@ fun HorizontalLetterList(lettersLearned: List<Char>) {
           fontSize = 24.sp,
           fontWeight = FontWeight.Bold,
           color =
-              if (isLearned) colorResource(R.color.blue)
-              else colorResource(R.color.dark_gray).copy(alpha = .5f),
+              if (isLearned) MaterialTheme.colorScheme.primary
+              else MaterialTheme.colorScheme.onBackground.copy(alpha = .5f),
           modifier = Modifier.padding(horizontal = 8.dp).testTag(letter.toString()))
     }
   }
@@ -521,12 +521,12 @@ fun LearnedLetterList(lettersLearned: List<Char>) {
       text = "All letters learned",
       fontWeight = FontWeight.Bold,
       fontSize = 16.sp,
-      color = colorResource(R.color.dark_gray),
+      color = MaterialTheme.colorScheme.surface,
       modifier = Modifier.testTag("AllLetterLearned"))
   Box(
       modifier =
           Modifier.fillMaxWidth()
-              .border(2.dp, colorResource(R.color.dark_gray), RoundedCornerShape(12.dp))
+              .border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
               .clip(RoundedCornerShape(8.dp))
               .padding(12.dp)
               .testTag("LettersBox")) {
@@ -549,13 +549,13 @@ fun StreakCounter(days: Int, daysText: Boolean) {
         Icon(
             painter = painterResource(id = R.drawable.flame),
             contentDescription = "Streak Icon",
-            tint = colorResource(R.color.red),
+            tint = MaterialTheme.colorScheme.secondary,
             modifier = Modifier.size(32.dp).testTag("FlameIcon"))
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = "$days$text",
             fontWeight = FontWeight.Bold,
-            color = colorResource(R.color.red),
+            color = MaterialTheme.colorScheme.secondary,
             fontSize = 20.sp,
             modifier = Modifier.testTag("NumberOfDays"))
       }
@@ -608,12 +608,12 @@ fun AccountInformation(userId: String, userName: String, profilePictureUrl: Stri
           Text(
               text = userId,
               fontWeight = FontWeight.Bold,
-              color = colorResource(R.color.dark_gray),
+              color = MaterialTheme.colorScheme.onBackground,
               modifier = Modifier.testTag("UserId"))
           Text(
               text = userName,
               fontWeight = FontWeight.Bold,
-              color = colorResource(R.color.dark_gray),
+              color = MaterialTheme.colorScheme.onBackground,
               modifier = Modifier.testTag("UserName"))
         }
         Spacer(modifier = Modifier.width(24.dp))
@@ -639,15 +639,15 @@ fun NotImplementedYet(testTag: String, text: String) {
       modifier =
           Modifier.fillMaxWidth()
               .height(240.dp)
-              .border(3.dp, colorResource(R.color.blue), RoundedCornerShape(12.dp))
-              .background(colorResource(R.color.black), RoundedCornerShape(12.dp))
+              .border(3.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
+              .background(MaterialTheme.colorScheme.errorContainer, RoundedCornerShape(12.dp))
               .padding(16.dp)
               .testTag(testTag),
       contentAlignment = Alignment.Center) {
         Text(
             text = text,
             fontSize = 16.sp,
-            color = colorResource(R.color.white),
+            color = MaterialTheme.colorScheme.onErrorContainer,
             fontWeight = FontWeight.Normal)
       }
 }
@@ -730,8 +730,8 @@ fun CameraPlaceholder(handLandMarkViewModel: HandLandMarkViewModel, modifier: Mo
                 .fillMaxWidth()
                 .padding(16.dp)
                 .height(350.dp)
-                .background(colorResource(R.color.blue), shape = RoundedCornerShape(16.dp))
-                .border(2.dp, colorResource(R.color.white), shape = RoundedCornerShape(16.dp)),
+                .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
+                .border(2.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(16.dp)),
         contentAlignment = Alignment.Center) {
           AndroidView(
               factory = { previewView },
@@ -780,10 +780,11 @@ fun CameraPlaceholder(handLandMarkViewModel: HandLandMarkViewModel, modifier: Mo
                 .fillMaxWidth()
                 .padding(16.dp)
                 .height(350.dp)
-                .background(colorResource(R.color.black), shape = RoundedCornerShape(16.dp))
-                .border(2.dp, colorResource(R.color.white), shape = RoundedCornerShape(16.dp)),
+                .background(
+                    MaterialTheme.colorScheme.errorContainer, shape = RoundedCornerShape(16.dp))
+                .border(2.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(16.dp)),
         contentAlignment = Alignment.Center) {
-          Text("Camera permission required", color = colorResource(R.color.white))
+          Text("Camera permission required", color = MaterialTheme.colorScheme.errorContainer)
         }
   }
 }
