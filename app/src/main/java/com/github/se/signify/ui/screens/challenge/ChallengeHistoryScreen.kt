@@ -37,13 +37,12 @@ fun ChallengeHistoryScreen(
 ) {
   Scaffold(
       topBar = {
-        // Top blue bar
         Box(
             modifier =
                 Modifier.fillMaxWidth()
                     .height(4.dp)
                     .background(MaterialTheme.colorScheme.primary)
-                    .testTag("TopBlueBar"))
+                    .testTag("TopBar"))
       },
       content = { padding ->
         Box(modifier = Modifier.fillMaxSize().padding(padding).testTag("ChallengeHistoryScreen")) {

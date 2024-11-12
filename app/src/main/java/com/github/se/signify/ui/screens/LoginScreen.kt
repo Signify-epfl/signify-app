@@ -75,13 +75,12 @@ fun LoginScreen(navigationActions: NavigationActions) {
   // Gradient brush for background (to be updated with startY and endY)
   val gradient =
       Brush.verticalGradient(
-          colors =
-              listOf(
+          colors = // Gradient colors
+          listOf(
                   MaterialTheme.colorScheme.background,
-                  MaterialTheme.colorScheme.background, // White at the top
                   MaterialTheme.colorScheme.background,
-                  MaterialTheme.colorScheme.primary) // Light blue at the bottom
-          )
+                  MaterialTheme.colorScheme.background,
+                  MaterialTheme.colorScheme.primary))
   // The main container for the screen
   Scaffold(
       modifier = Modifier.fillMaxSize(),

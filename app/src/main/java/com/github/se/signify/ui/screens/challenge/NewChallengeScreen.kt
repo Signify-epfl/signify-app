@@ -28,7 +28,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,13 +57,12 @@ fun NewChallengeScreen(
 
   Scaffold(
       topBar = {
-        // Top blue bar
         Box(
             modifier =
                 Modifier.fillMaxWidth()
                     .height(4.dp)
                     .background(MaterialTheme.colorScheme.primary)
-                    .testTag("TopBlueBar"))
+                    .testTag("TopBar"))
       },
       content = { padding ->
         Box(modifier = Modifier.fillMaxSize().padding(padding).testTag("NewChallengeScreen")) {
@@ -178,7 +176,7 @@ fun OngoingChallengeCard(
                   horizontal = 8.dp, vertical = 4.dp) // Padding for better separation between cards
               .border(
                   1.dp,
-                  Color.Gray,
+                  MaterialTheme.colorScheme.outline,
                   RoundedCornerShape(16.dp)), // Adding border for better visual separation
       shape = RoundedCornerShape(16.dp), // Rounded corners
   ) {
