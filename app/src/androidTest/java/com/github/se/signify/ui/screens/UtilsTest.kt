@@ -240,7 +240,7 @@ class UtilsTest {
     composeTestRule.setContent { TopBar() }
 
     // Assert that the top bar is displayed
-    composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
   }
 
   // TODO: test the bottom bar after the refactor of the BottomNavigationMenu()
@@ -274,7 +274,7 @@ class UtilsTest {
           }
     }
 
-    composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
     // TODO: test the bottom bar after the refactor of the BottomNavigationMenu()
     composeTestRule.onNodeWithTag("ScaffoldMainScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("InfoButton").assertIsDisplayed()
@@ -291,7 +291,7 @@ class UtilsTest {
           }
     }
 
-    composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
     composeTestRule.onNodeWithTag("ScaffoldAnnexeScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("Text").assertIsDisplayed()

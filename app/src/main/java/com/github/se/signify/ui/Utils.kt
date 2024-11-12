@@ -208,7 +208,7 @@ fun UtilButton(
       }
 }
 
-/** A reusable composable function that creates the blue top bar. */
+/** A reusable composable function that creates the top bar. */
 @Composable
 fun TopBar() {
   Box(
@@ -216,7 +216,7 @@ fun TopBar() {
           Modifier.fillMaxWidth()
               .height(5.dp)
               .background(MaterialTheme.colorScheme.primary)
-              .testTag("TopBlueBar"))
+              .testTag("TopBar"))
 }
 
 /**
@@ -365,12 +365,12 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
   Dialog(onDismissRequest = { onDismiss() }) {
     Surface(
         shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.primary, // Blue background for the popup
+        color = MaterialTheme.colorScheme.primary, // Background for the popup
         modifier =
             Modifier.border(
                     3.dp,
                     MaterialTheme.colorScheme.outline,
-                    RoundedCornerShape(12.dp)) // Ensure the black border wraps the popup
+                    RoundedCornerShape(12.dp)) // Ensure the border wraps the popup
                 .padding(16.dp)
                 .testTag("InfoPopup") // Remove padding for the border
         ) {
@@ -482,7 +482,7 @@ fun StatisticsRow(
 
 /**
  * A reusable composable function that creates the scrollable letter list. The letter already
- * learned are in blue and the others are in gray.
+ * learned are highlighted and the others are in a secondary color.
  *
  * Important to note that it is helper function to AllLetterLearned()
  *
