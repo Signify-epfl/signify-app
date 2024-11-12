@@ -225,7 +225,7 @@ fun SignTipBox(letter: Char, modifier: Modifier = Modifier) {
       modifier =
           modifier
               .padding(16.dp)
-              .background(colorResource(R.color.white), RoundedCornerShape(8.dp))
+              .background(MaterialTheme.colorScheme.background, RoundedCornerShape(8.dp))
               .padding(8.dp)
               .testTag("SignTipBox_$letter")) {
         Column(
@@ -248,7 +248,7 @@ fun SignTipBox(letter: Char, modifier: Modifier = Modifier) {
                 Text(
                     text = tipText,
                     fontSize = 16.sp,
-                    color = colorResource(R.color.black),
+                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(8.dp))
               }
             }
@@ -264,7 +264,7 @@ fun CreateDictionaryWithImages() {
       Text(
           text = "Letter $letter",
           fontSize = 20.sp,
-          color = colorResource(R.color.black),
+          color = MaterialTheme.colorScheme.onBackground,
           modifier = Modifier.padding(vertical = 8.dp).testTag("LetterTextDict_$letter"))
       SignTipBox(letter = letter)
       Spacer(modifier = Modifier.height(16.dp)) // Add space between each box
