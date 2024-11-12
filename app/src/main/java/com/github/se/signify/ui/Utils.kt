@@ -28,7 +28,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -71,8 +70,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -144,47 +141,37 @@ fun UtilTextButton(
  * @param iconRes The icon for the button.
  * @param label The text for the button.
  * @param onClick A lambda function to execute when the button is clicked.
- * @param size The size of the button.
- * @param iconSize The size of the icon.
- * @param labelFontSize The size of the font for the label.
- * @param iconTint The color of the icon.
- * @param textColor The color of the label.
- * @param iconOffset The offset of the icon, by default it is 0.dp.
+ * @param size The size of the button. It will be used to scale the other elements of the button.
  */
 @Composable
 fun SquareButton(
     iconRes: Int,
     label: String,
     onClick: () -> Unit,
-    size: Dp,
-    iconSize: Dp,
-    labelFontSize: TextUnit,
-    iconTint: Color,
-    textColor: Color,
-    iconOffset: Dp = 0.dp,
+    size: Int,
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
 ) {
   Column(
       horizontalAlignment = Alignment.CenterHorizontally,
       modifier =
           modifier
-              .size(size)
+              .size(size.dp)
               .border(2.dp, colorResource(R.color.black), RoundedCornerShape(12.dp))
               .background(colorResource(R.color.blue), RoundedCornerShape(12.dp))
               .padding(16.dp)
               .clickable { onClick() }) {
         Text(
             text = label,
-            fontSize = labelFontSize,
-            color = textColor,
+            fontSize = (size * 0.15).sp,
+            color = colorResource(R.color.dark_gray),
         )
         Spacer(modifier = Modifier.height(8.dp))
         Box(contentAlignment = Alignment.Center) {
           Icon(
               painter = painterResource(id = iconRes),
               contentDescription = label,
-              tint = iconTint,
-              modifier = Modifier.size(iconSize).offset(x = iconOffset))
+              tint = colorResource(R.color.dark_gray),
+              modifier = Modifier.size((size * 0.7).dp))
         }
       }
 }
