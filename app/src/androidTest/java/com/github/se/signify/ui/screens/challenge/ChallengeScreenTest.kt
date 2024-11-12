@@ -29,7 +29,7 @@ class ChallengeScreenTest {
     // Assert that all elements are displayed in ChallengeScreen
     composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
     composeTestRule.onNodeWithTag("ChallengeScreenContent").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("TopBlueLine").assertIsDisplayed()
     composeTestRule.onNodeWithTag("InfoButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("ButtonsColumn").assertIsDisplayed()
     composeTestRule.onNodeWithTag("ChallengeButton").assertIsDisplayed()
