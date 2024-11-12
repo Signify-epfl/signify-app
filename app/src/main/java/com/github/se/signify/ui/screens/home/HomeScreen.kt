@@ -98,74 +98,74 @@ data class Exercise(val name: String, val route: String = "UNKNOWN_EXERCISE")
  */
 @Composable
 fun HomeScreen(navigationActions: NavigationActions) {
-    val defaultExercises =
-        listOf(
-            Exercise("Easy", Screen.EXERCISE_EASY),
-            Exercise("Medium", Screen.EXERCISE_HARD), // To change to Medium
-            Exercise("Hard", Screen.EXERCISE_HARD),
-        )
+  val defaultExercises =
+      listOf(
+          Exercise("Easy", Screen.EXERCISE_EASY),
+          Exercise("Medium", Screen.EXERCISE_HARD), // To change to Medium
+          Exercise("Hard", Screen.EXERCISE_HARD),
+      )
 
-    val scrollState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
-    Scaffold(
-        modifier = Modifier.testTag("HomeScreen"),
-        bottomBar = { BottomBar(navigationActions) },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { coroutineScope.launch { scrollState.animateScrollToItem(0) } },
-                containerColor = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.testTag("ScrollToTopButton")) {
-                Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Scroll to Top")
+  val scrollState = rememberLazyListState()
+  val coroutineScope = rememberCoroutineScope()
+  Scaffold(
+      modifier = Modifier.testTag("HomeScreen"),
+      bottomBar = { BottomBar(navigationActions) },
+      floatingActionButton = {
+        FloatingActionButton(
+            onClick = { coroutineScope.launch { scrollState.animateScrollToItem(0) } },
+            containerColor = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.testTag("ScrollToTopButton")) {
+              Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Scroll to Top")
             }
-        },
-        content = { padding ->
-            LazyColumn(
-                state = scrollState, // Attach scroll state to LazyColumn
-                modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 16.dp)) {
-                item {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                    ) {
-                        StreakCounter(0, false)
-                        UtilButton(
-                            onClick = { navigationActions.navigateTo("Quest") },
-                            buttonTestTag = "QuestsButton",
-                            iconTestTag = "QuestIcon",
-                            icon = Icons.Outlined.DateRange,
-                            contentDescription = "Quests")
-                    }
+      },
+      content = { padding ->
+        LazyColumn(
+            state = scrollState, // Attach scroll state to LazyColumn
+            modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 16.dp)) {
+              item {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                  StreakCounter(0, false)
+                  UtilButton(
+                      onClick = { navigationActions.navigateTo("Quest") },
+                      buttonTestTag = "QuestsButton",
+                      iconTestTag = "QuestIcon",
+                      icon = Icons.Outlined.DateRange,
+                      contentDescription = "Quests")
                 }
+              }
 
-                item { Spacer(modifier = Modifier.height(32.dp)) }
-                item {
-                    CameraFeedbackButton(onClick = { navigationActions.navigateTo(Screen.PRACTICE) })
-                }
-                item { Spacer(modifier = Modifier.height(32.dp)) }
-                item {
-                    LetterDictionary(
-                        scrollState = scrollState,
-                        coroutineScope = coroutineScope,
-                        numbOfHeaders = integerResource(R.integer.scroll_offset))
-                }
-                item { Spacer(modifier = Modifier.height(32.dp)) }
-                item { ExerciseList(defaultExercises, navigationActions) }
-                item { Spacer(modifier = Modifier.height(32.dp)) }
-                // Display letters with SignTipBox in a LazyColumn
-                // Putting this in CreateDictionaryWithImages
-                // would lead to undesirable behavior i.e the scroll will not work as intended
-                // as each item should be displayed in an item block
-                items(('A'..'Z').toList()) { letter ->
-                    Text(
-                        text = "Letter $letter",
-                        fontSize = 20.sp,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.padding(vertical = 8.dp).testTag("LetterTextDict_$letter"))
-                    SignTipBox(letter = letter)
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
+              item { Spacer(modifier = Modifier.height(32.dp)) }
+              item {
+                CameraFeedbackButton(onClick = { navigationActions.navigateTo(Screen.PRACTICE) })
+              }
+              item { Spacer(modifier = Modifier.height(32.dp)) }
+              item {
+                LetterDictionary(
+                    scrollState = scrollState,
+                    coroutineScope = coroutineScope,
+                    numbOfHeaders = integerResource(R.integer.scroll_offset))
+              }
+              item { Spacer(modifier = Modifier.height(32.dp)) }
+              item { ExerciseList(defaultExercises, navigationActions) }
+              item { Spacer(modifier = Modifier.height(32.dp)) }
+              // Display letters with SignTipBox in a LazyColumn
+              // Putting this in CreateDictionaryWithImages
+              // would lead to undesirable behavior i.e the scroll will not work as intended
+              // as each item should be displayed in an item block
+              items(('A'..'Z').toList()) { letter ->
+                Text(
+                    text = "Letter $letter",
+                    fontSize = 20.sp,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.padding(vertical = 8.dp).testTag("LetterTextDict_$letter"))
+                SignTipBox(letter = letter)
+                Spacer(modifier = Modifier.height(16.dp))
+              }
             }
-        })
+      })
 }
 /**
  * Composable function that displays a button for initiating camera feedback functionality. The
@@ -175,12 +175,12 @@ fun HomeScreen(navigationActions: NavigationActions) {
  */
 @Composable
 fun CameraFeedbackButton(onClick: () -> Unit = {}) {
-    UtilTextButton(
-        onClickAction = onClick,
-        testTag = "CameraFeedbackButton",
-        text = "Try it out",
-        backgroundColor = MaterialTheme.colorScheme.primary,
-    )
+  UtilTextButton(
+      onClickAction = onClick,
+      testTag = "CameraFeedbackButton",
+      text = "Try it out",
+      backgroundColor = MaterialTheme.colorScheme.primary,
+  )
 }
 /**
  * Composable function that displays a horizontally arranged letter navigator. Users can scroll
@@ -199,38 +199,38 @@ fun LetterDictionary(
     coroutineScope: CoroutineScope,
     numbOfHeaders: Int
 ) {
-    var currentLetterIndex by remember { mutableIntStateOf(0) }
-    val letters = ('a'..'z').toList()
+  var currentLetterIndex by remember { mutableIntStateOf(0) }
+  val letters = ('a'..'z').toList()
 
-    Row(
-        modifier = Modifier.fillMaxWidth().wrapContentHeight().testTag("LetterDictionary"),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically) {
+  Row(
+      modifier = Modifier.fillMaxWidth().wrapContentHeight().testTag("LetterDictionary"),
+      horizontalArrangement = Arrangement.SpaceBetween,
+      verticalAlignment = Alignment.CenterVertically) {
         IconButton(
             onClick = {
-                currentLetterIndex = (currentLetterIndex - 1 + letters.size) % letters.size
+              currentLetterIndex = (currentLetterIndex - 1 + letters.size) % letters.size
             },
             modifier = Modifier.testTag("LetterDictionaryBack")) {
-            Icon(
-                Icons.AutoMirrored.Outlined.ArrowBack,
-                tint = MaterialTheme.colorScheme.onBackground,
-                contentDescription = "Back")
-        }
+              Icon(
+                  Icons.AutoMirrored.Outlined.ArrowBack,
+                  tint = MaterialTheme.colorScheme.onBackground,
+                  contentDescription = "Back")
+            }
 
         val currentLetter = letters[currentLetterIndex]
         Box(
             modifier =
-            Modifier.border(
-                2.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp))
-                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(8.dp))
-                .padding(8.dp)
-                .clickable {
-                    coroutineScope.launch {
+                Modifier.border(
+                        2.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(8.dp))
+                    .padding(8.dp)
+                    .clickable {
+                      coroutineScope.launch {
                         scrollState.animateScrollToItem(currentLetterIndex + numbOfHeaders)
+                      }
                     }
-                }
-                .testTag("LetterBox_${currentLetter.uppercaseChar()}")) {
-            Row {
+                    .testTag("LetterBox_${currentLetter.uppercaseChar()}")) {
+              Row {
                 Text(
                     text = "${currentLetter.uppercaseChar()} =",
                     fontSize = 32.sp,
@@ -241,20 +241,20 @@ fun LetterDictionary(
                     contentDescription = "Letter gesture",
                     tint = MaterialTheme.colorScheme.onSurface,
                     modifier =
-                    Modifier.size(32.dp).testTag("LetterIcon_${currentLetter.uppercaseChar()}"))
+                        Modifier.size(32.dp).testTag("LetterIcon_${currentLetter.uppercaseChar()}"))
+              }
             }
-        }
 
         // Forward Arrow Button
         IconButton(
             onClick = { currentLetterIndex = (currentLetterIndex + 1) % letters.size },
             modifier = Modifier.testTag("LetterDictionaryForward")) {
-            Icon(
-                Icons.AutoMirrored.Outlined.ArrowForward,
-                tint = MaterialTheme.colorScheme.onBackground,
-                contentDescription = "Forward")
-        }
-    }
+              Icon(
+                  Icons.AutoMirrored.Outlined.ArrowForward,
+                  tint = MaterialTheme.colorScheme.onBackground,
+                  contentDescription = "Forward")
+            }
+      }
 }
 /**
  * Composable function that displays a horizontally scrollable list of exercises using a pager. Each
@@ -269,51 +269,51 @@ fun LetterDictionary(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ExerciseList(exercises: List<Exercise>, navigationActions: NavigationActions) {
-    val pagerState = rememberPagerState(initialPage = 0, pageCount = { exercises.size })
+  val pagerState = rememberPagerState(initialPage = 0, pageCount = { exercises.size })
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
-        HorizontalPager(
-            beyondBoundsPageCount = exercises.size,
-            state = pagerState,
-            modifier = Modifier.height(160.dp).padding(8.dp).testTag("ExerciseListPager"),
-            verticalAlignment = Alignment.CenterVertically) { page ->
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize().padding(16.dp)) {
+  Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+    HorizontalPager(
+        beyondBoundsPageCount = exercises.size,
+        state = pagerState,
+        modifier = Modifier.height(160.dp).padding(8.dp).testTag("ExerciseListPager"),
+        verticalAlignment = Alignment.CenterVertically) { page ->
+          Box(
+              contentAlignment = Alignment.Center,
+              modifier = Modifier.fillMaxSize().padding(16.dp)) {
                 Box(
                     modifier =
-                    Modifier.size(200.dp, 100.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.primary)
-                        .border(
-                            1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
-                        .testTag("${exercises[page].name}ExerciseBox")) {
-                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                        Modifier.size(200.dp, 100.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colorScheme.primary)
+                            .border(
+                                1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
+                            .testTag("${exercises[page].name}ExerciseBox")) {
+                      Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                         ExerciseButton(
                             exercise = exercises[page], navigationActions = navigationActions)
+                      }
                     }
-                }
-            }
+              }
         }
 
-        // Dots Indicator below the exercise box
-        Row(
-            modifier = Modifier.padding(top = 16.dp, bottom = 16.dp).fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center) {
-            exercises.forEachIndexed { index, _ ->
-                Box(
-                    modifier =
+    // Dots Indicator below the exercise box
+    Row(
+        modifier = Modifier.padding(top = 16.dp, bottom = 16.dp).fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center) {
+          exercises.forEachIndexed { index, _ ->
+            Box(
+                modifier =
                     Modifier.size(17.dp)
                         .padding(4.dp)
                         .background(
                             color =
-                            if (pagerState.currentPage == index)
-                                MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.surface,
+                                if (pagerState.currentPage == index)
+                                    MaterialTheme.colorScheme.primary
+                                else MaterialTheme.colorScheme.surface,
                             shape = RoundedCornerShape(50)))
-            }
+          }
         }
-    }
+  }
 }
 
 /**
@@ -326,19 +326,19 @@ fun ExerciseList(exercises: List<Exercise>, navigationActions: NavigationActions
  */
 @Composable
 fun ExerciseButton(exercise: Exercise, navigationActions: NavigationActions) {
-    Button(
-        onClick = { navigationActions.navigateTo(exercise.route) },
-        modifier =
-        Modifier.aspectRatio(2f)
-            .fillMaxWidth()
-            .border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
-            .testTag("${exercise.name}ExerciseButton"),
-        shape = RoundedCornerShape(8.dp),
-        colors =
-        ButtonDefaults.buttonColors(
-            MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.onPrimary)) {
+  Button(
+      onClick = { navigationActions.navigateTo(exercise.route) },
+      modifier =
+          Modifier.aspectRatio(2f)
+              .fillMaxWidth()
+              .border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
+              .testTag("${exercise.name}ExerciseButton"),
+      shape = RoundedCornerShape(8.dp),
+      colors =
+          ButtonDefaults.buttonColors(
+              MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.onPrimary)) {
         Text(exercise.name, modifier = Modifier.testTag("${exercise.name}ExerciseButtonText"))
-    }
+      }
 }
 /**
  * Composable function that displays information about a letter in a structured box. This includes
@@ -352,28 +352,28 @@ fun ExerciseButton(exercise: Exercise, navigationActions: NavigationActions) {
  */
 @Composable
 fun SignTipBox(letter: Char, modifier: Modifier = Modifier) {
-    val imageResId = getImageResId(letter)
-    val iconResId = getIconResId(letter)
-    val tipText = stringResource(id = getTipResId(letter))
+  val imageResId = getImageResId(letter)
+  val iconResId = getIconResId(letter)
+  val tipText = stringResource(id = getTipResId(letter))
 
-    Box(
-        modifier =
-        modifier
-            .padding(16.dp)
-            .background(MaterialTheme.colorScheme.background, RoundedCornerShape(8.dp))
-            .padding(8.dp)
-            .testTag("SignTipBox_$letter")) {
+  Box(
+      modifier =
+          modifier
+              .padding(16.dp)
+              .background(MaterialTheme.colorScheme.background, RoundedCornerShape(8.dp))
+              .padding(8.dp)
+              .testTag("SignTipBox_$letter")) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(8.dp)) {
-            // Displaying the main image, e.g., `pic_a.jpg`
-            Image(
-                painter = painterResource(id = imageResId),
-                contentDescription = "Image for letter $letter",
-                modifier = Modifier.size(200.dp))
+              // Displaying the main image, e.g., `pic_a.jpg`
+              Image(
+                  painter = painterResource(id = imageResId),
+                  contentDescription = "Image for letter $letter",
+                  modifier = Modifier.size(200.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
-            // Displaying the description text with the icon, e.g., `letter_a.png`
-            Row(verticalAlignment = Alignment.CenterVertically) {
+              Spacer(modifier = Modifier.height(16.dp))
+              // Displaying the description text with the icon, e.g., `letter_a.png`
+              Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     painter = painterResource(id = iconResId),
                     contentDescription = "Icon for letter $letter",
@@ -384,7 +384,7 @@ fun SignTipBox(letter: Char, modifier: Modifier = Modifier) {
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(8.dp))
+              }
             }
-        }
-    }
+      }
 }
