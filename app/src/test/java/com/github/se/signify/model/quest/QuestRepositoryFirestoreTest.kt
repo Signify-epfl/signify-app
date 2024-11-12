@@ -153,7 +153,31 @@ class QuestRepositoryFirestoreTest {
   }
 
   @Test
-  fun documentToQuest_withMissingFields_returnsNull() {
+  fun documentToQuest_withMissingTitle_returnsNull() {
+    val mockDocument = mock(DocumentSnapshot::class.java)
+    `when`(mockDocument.getString("title")).thenReturn(null) // Missing title
+    `when`(mockDocument.getString("description")).thenReturn("Quest Description")
+    `when`(mockDocument.getString("index")).thenReturn("1")
+
+    val quest = questRepositoryFirestore.documentToQuest(mockDocument)
+
+    assertNull(quest)
+  }
+
+  @Test
+  fun documentToQuest_withMissingIndex_returnsNull() {
+    val mockDocument = mock(DocumentSnapshot::class.java)
+    `when`(mockDocument.getString("title")).thenReturn("Quest Title")
+    `when`(mockDocument.getString("description")).thenReturn("Quest Description")
+    `when`(mockDocument.getString("index")).thenReturn(null) // Missing index
+
+    val quest = questRepositoryFirestore.documentToQuest(mockDocument)
+
+    assertNull(quest)
+  }
+
+  @Test
+  fun documentToQuest_withMissingDescription_returnsNull() {
     val mockDocument = mock(DocumentSnapshot::class.java)
     `when`(mockDocument.getString("title")).thenReturn("Quest Title")
     `when`(mockDocument.getString("description")).thenReturn(null) // Missing description
@@ -161,6 +185,19 @@ class QuestRepositoryFirestoreTest {
 
     val quest = questRepositoryFirestore.documentToQuest(mockDocument)
 
+    assertNull(quest)
+  }
+
+  @Test
+  fun documentToQuest_throwsException_returnsNull() {
+    // Arrange: Create a mock DocumentSnapshot that throws an exception when getting a field
+    val mockDocument = mock(DocumentSnapshot::class.java)
+    `when`(mockDocument.getString(any())).thenThrow(RuntimeException("Test Exception"))
+
+    // Act
+    val quest = questRepositoryFirestore.documentToQuest(mockDocument)
+
+    // Assert
     assertNull(quest)
   }
 
