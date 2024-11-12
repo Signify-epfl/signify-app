@@ -96,11 +96,7 @@ fun ChallengeScreen(navigationActions: NavigationActions) {
                         iconRes = R.drawable.battleicon,
                         label = "Challenge",
                         onClick = { navigationActions.navigateTo(Route.NEW_CHALLENGE) },
-                        size = 240.dp,
-                        iconSize = 160.dp,
-                        labelFontSize = 32.sp,
-                        iconTint = MaterialTheme.colorScheme.surface,
-                        textColor = MaterialTheme.colorScheme.surface,
+                        size = 240,
                         modifier = Modifier.testTag("ChallengeButton"))
 
                     // History square button
@@ -108,12 +104,7 @@ fun ChallengeScreen(navigationActions: NavigationActions) {
                         iconRes = R.drawable.historyicon,
                         label = "History",
                         onClick = { navigationActions.navigateTo(Route.CHALLENGE_HISTORY) },
-                        size = 240.dp,
-                        iconSize = 160.dp,
-                        labelFontSize = 32.sp,
-                        iconTint = MaterialTheme.colorScheme.surface,
-                        textColor = MaterialTheme.colorScheme.surface,
-                        5.dp,
+                        size = 240,
                         modifier = Modifier.testTag("HistoryButton"))
                   }
 

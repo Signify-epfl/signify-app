@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.ui.AccountInformation
 import com.github.se.signify.ui.LearnedLetterList
@@ -63,12 +62,7 @@ fun ProfileScreen(
         iconRes = R.drawable.friendsicon,
         label = "My Friends",
         onClick = { navigationActions.navigateTo(Route.FRIENDS) },
-        size = 240.dp,
-        iconSize = 160.dp,
-        labelFontSize = 32.sp,
-        iconTint = MaterialTheme.colorScheme.surface,
-        textColor = MaterialTheme.colorScheme.surface,
-        // 5.dp, // Not necessary
+        size = 240,
         modifier = Modifier.testTag("MyFriendsButton"))
     Spacer(modifier = Modifier.height(32.dp))
 
@@ -77,12 +71,7 @@ fun ProfileScreen(
         iconRes = R.drawable.statisticsicon,
         label = "My Stats",
         onClick = { navigationActions.navigateTo(Route.STATS) },
-        size = 240.dp,
-        iconSize = 160.dp,
-        labelFontSize = 32.sp,
-        iconTint = MaterialTheme.colorScheme.surface,
-        textColor = MaterialTheme.colorScheme.surface,
-        // 5.dp, // Not necessary
+        size = 240,
         modifier = Modifier.testTag("MyStatsButton"))
   }
 }
