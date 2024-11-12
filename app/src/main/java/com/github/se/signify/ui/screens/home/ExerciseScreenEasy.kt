@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -32,7 +33,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.SpanStyle
@@ -123,8 +123,8 @@ fun WordLayer(words: List<String>, currentWordIndex: Int, currentLetterIndex: In
           Modifier.fillMaxWidth()
               .height(150.dp)
               .padding(horizontal = 16.dp)
-              .background(colorResource(R.color.blue), shape = RoundedCornerShape(16.dp))
-              .border(2.dp, colorResource(R.color.black), shape = RoundedCornerShape(16.dp))
+              .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
+              .border(2.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(16.dp))
               .testTag("wordLayer"),
       contentAlignment = Alignment.Center) {
         // Next word (semi-transparent, slightly offset upwards)
@@ -132,7 +132,7 @@ fun WordLayer(words: List<String>, currentWordIndex: Int, currentLetterIndex: In
           Text(
               text = nextWord,
               modifier = Modifier.offset(y = (-40).dp).testTag("SecondWordTag"),
-              color = colorResource(R.color.dark_gray).copy(alpha = 0.6f),
+              color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.4f),
               style = TextStyle(fontSize = 30.sp))
         }
 
@@ -145,7 +145,7 @@ fun WordLayer(words: List<String>, currentWordIndex: Int, currentLetterIndex: In
                   style =
                       SpanStyle(
                           letterSpacing = 10.sp,
-                          color = colorResource(R.color.red), // Highlight color
+                          color = MaterialTheme.colorScheme.secondary, // Highlight color
                           fontSize = 50.sp // Larger size for the current letter
                           )) {
                     append(
@@ -156,7 +156,7 @@ fun WordLayer(words: List<String>, currentWordIndex: Int, currentLetterIndex: In
             },
             modifier = Modifier.testTag("FirstWordTag"),
             style = TextStyle(fontSize = 30.sp),
-            color = colorResource(R.color.white))
+            color = MaterialTheme.colorScheme.onSecondary)
       }
 }
 
@@ -240,7 +240,10 @@ fun ExerciseScreenCommon(
   }
 
   LazyColumn(
-      modifier = Modifier.fillMaxSize().background(colorResource(R.color.white)).testTag(screenTag),
+      modifier =
+          Modifier.fillMaxSize()
+              .background(MaterialTheme.colorScheme.background)
+              .testTag(screenTag),
       horizontalAlignment = Alignment.CenterHorizontally,
       verticalArrangement = Arrangement.Center) {
         // Back button
@@ -251,7 +254,7 @@ fun ExerciseScreenCommon(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back",
-                    tint = colorResource(R.color.black))
+                    tint = MaterialTheme.colorScheme.onBackground)
               }
         }
 
@@ -267,9 +270,12 @@ fun ExerciseScreenCommon(
                     Modifier.fillMaxWidth()
                         .padding(horizontal = 16.dp)
                         .height(150.dp)
-                        .background(colorResource(R.color.blue), shape = RoundedCornerShape(16.dp))
+                        .background(
+                            MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
                         .border(
-                            2.dp, colorResource(R.color.black), shape = RoundedCornerShape(16.dp)),
+                            2.dp,
+                            MaterialTheme.colorScheme.outline,
+                            shape = RoundedCornerShape(16.dp)),
                 contentAlignment = Alignment.Center) {
                   Image(
                       painter = painterResource(id = imageResId),

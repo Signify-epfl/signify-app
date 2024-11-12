@@ -43,8 +43,7 @@ class MyStatsScreenTest {
 
   @Test
   fun testMyStatsScreenDisplaysCorrectInformation() {
-    // Verify top blue bar is displayed
-    composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
 
     // Verify top information are displayed correctly
     composeTestRule.onNodeWithTag("UserInfo").assertIsDisplayed()
