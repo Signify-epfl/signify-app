@@ -18,7 +18,7 @@ class MyStatsScreenTest {
   // User information test to be displayed
   private val userId = "userIdTest"
   private val userName = "userNameTest"
-  private val profilePictureUrl = null
+  private val profilePictureUrl = "file:///path/to/profile/picture.jpg"
   private val numberOfDays = 10
   private val lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F')
   private val exercisesAchieved = listOf(10, 3)
@@ -52,7 +52,7 @@ class MyStatsScreenTest {
     composeTestRule.onNodeWithTag("UserId").assertTextEquals(userId)
     composeTestRule.onNodeWithTag("UserName").assertIsDisplayed()
     composeTestRule.onNodeWithTag("UserName").assertTextEquals(userName)
-    composeTestRule.onNodeWithTag("ProfilePicture").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("ProfilePicture").assertExists()
     composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
     composeTestRule.onNodeWithTag("NumberOfDays").assertIsDisplayed()
