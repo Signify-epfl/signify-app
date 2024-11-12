@@ -575,7 +575,7 @@ fun ProfilePicture(profilePictureUrl: String?) {
         modifier =
             Modifier.size(120.dp)
                 .clip(CircleShape)
-                .background(colorResource(R.color.dark_gray))
+                .background(SolidColor(MaterialTheme.colorScheme.surface))
                 .testTag("ProfilePicture"),
         contentScale = ContentScale.Crop) // Crop the image to fit within the bounds
   } else {
