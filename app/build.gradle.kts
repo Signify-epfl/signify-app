@@ -205,6 +205,8 @@ dependencies {
     implementation(libs.onnxruntime.android)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+    // Pagers
+    implementation(platform(libs.androidx.compose.bom.v20240100))
 
     // Testing Unit
     testImplementation(libs.junit)
