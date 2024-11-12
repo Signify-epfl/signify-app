@@ -110,6 +110,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
   val scrollState = rememberLazyListState()
   val coroutineScope = rememberCoroutineScope()
   Scaffold(
+      modifier = Modifier.testTag("HomeScreen"),
       bottomBar = { BottomBar(navigationActions) },
       floatingActionButton = {
         FloatingActionButton(
