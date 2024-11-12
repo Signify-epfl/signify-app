@@ -1,6 +1,9 @@
 package com.github.se.signify.model.quest
 
 import androidx.test.core.app.ApplicationProvider
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -11,13 +14,17 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNull
+import junit.framework.TestCase.fail
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentCaptor
+import org.mockito.Captor
 import org.mockito.Mock
 import org.mockito.Mockito.doNothing
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.mockStatic
+import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.any
@@ -31,11 +38,13 @@ class QuestRepositoryFirestoreTest {
   @Mock private lateinit var mockCollectionReference: CollectionReference
   @Mock private lateinit var mockDocumentSnapshot: DocumentSnapshot
   @Mock private lateinit var mockQuestQuerySnapshot: QuerySnapshot
+  @Mock private lateinit var mockTask: Task<QuerySnapshot>
 
   private lateinit var mockAuth: FirebaseAuth
   private lateinit var mockUser: FirebaseUser
 
   private lateinit var questRepositoryFirestore: QuestRepositoryFireStore
+  @Captor private lateinit var captor: ArgumentCaptor<OnCompleteListener<QuerySnapshot>>
 
   @Before
   fun setUp() {
@@ -51,6 +60,9 @@ class QuestRepositoryFirestoreTest {
     `when`(mockFirestore.collection(any())).thenReturn(mockCollectionReference)
     `when`(mockCollectionReference.document(any())).thenReturn(mockDocumentReference)
     `when`(mockCollectionReference.document()).thenReturn(mockDocumentReference)
+
+    mockDocumentSnapshot = mock(DocumentSnapshot::class.java)
+    mockQuestQuerySnapshot = mock(QuerySnapshot::class.java)
 
     // Mock Firebase Auth instance
     mockAuth = mock(FirebaseAuth::class.java)
@@ -171,5 +183,106 @@ class QuestRepositoryFirestoreTest {
 
     // Assert
     assertNull(quest)
+  }
+
+  @Test
+  fun getDailyQuest_successfulFetch_returnsSortedQuests() {
+    // Arrange: Create mock DocumentSnapshots with valid data and out-of-order indices
+    val mockDocument1 = mock(DocumentSnapshot::class.java)
+    `when`(mockDocument1.getString("title")).thenReturn("Quest Title 3")
+    `when`(mockDocument1.getString("description")).thenReturn("Quest Description 3")
+    `when`(mockDocument1.getString("index")).thenReturn("3")
+
+    val mockDocument2 = mock(DocumentSnapshot::class.java)
+    `when`(mockDocument2.getString("title")).thenReturn("Quest Title 1")
+    `when`(mockDocument2.getString("description")).thenReturn("Quest Description 1")
+    `when`(mockDocument2.getString("index")).thenReturn("1")
+
+    val mockDocument3 = mock(DocumentSnapshot::class.java)
+    `when`(mockDocument3.getString("title")).thenReturn("Quest Title 2")
+    `when`(mockDocument3.getString("description")).thenReturn("Quest Description 2")
+    `when`(mockDocument3.getString("index")).thenReturn("2")
+
+    `when`(mockQuestQuerySnapshot.documents)
+        .thenReturn(listOf(mockDocument1, mockDocument2, mockDocument3))
+    `when`(mockCollectionReference.get()).thenReturn(Tasks.forResult(mockQuestQuerySnapshot))
+
+    // Act & Assert
+    questRepositoryFirestore.getDailyQuest(
+        onSuccess = { quests ->
+          // Assert: Verify that quests are sorted by index
+          assertEquals(3, quests.size)
+          assertEquals("Quest Title 1", quests[0].title)
+          assertEquals("Quest Title 2", quests[1].title)
+          assertEquals("Quest Title 3", quests[2].title)
+        },
+        onFailure = { fail("Failure callback should not be called") })
+  }
+
+  @Test
+  fun getDailyQuest_emptyDocumentList_returnsEmptyList() {
+    // Arrange: Simulate an empty QuerySnapshot
+    `when`(mockQuestQuerySnapshot.documents).thenReturn(emptyList())
+    `when`(mockCollectionReference.get()).thenReturn(Tasks.forResult(mockQuestQuerySnapshot))
+
+    // Act & Assert
+    questRepositoryFirestore.getDailyQuest(
+        onSuccess = { quests ->
+          // Assert: Verify that an empty list is returned
+          assertEquals(0, quests.size)
+        },
+        onFailure = { fail("Failure callback should not be called") })
+  }
+
+  @Test
+  fun getDailyQuest_nullTaskResult_returnsEmptyList() {
+    // Arrange: Simulate a null task result
+    `when`(mockCollectionReference.get()).thenReturn(Tasks.forResult(null))
+
+    // Act & Assert
+    questRepositoryFirestore.getDailyQuest(
+        onSuccess = { quests ->
+          // Assert: Verify that an empty list is returned when task result is null
+          assertEquals(0, quests.size)
+        },
+        onFailure = { fail("Failure callback should not be called") })
+  }
+
+  @Test
+  fun getDailyQuest_taskSuccessful() {
+    // Arrange: Mock task completion to simulate a successful task
+    `when`(mockCollectionReference.get()).thenReturn(mockTask)
+    `when`(mockTask.isSuccessful).thenReturn(true)
+
+    // Mock QuerySnapshot to return a list containing distinct DocumentSnapshots
+    `when`(mockQuestQuerySnapshot.documents).thenReturn(listOf())
+
+    // Act
+    questRepositoryFirestore.getDailyQuest(
+        onSuccess = { quests ->
+          // Assert: Verify quests are sorted by index
+          assertEquals(0, quests.size)
+        },
+        onFailure = { fail("Expected success but got failure") })
+
+    // Capture and invoke the OnCompleteListener to simulate task completion
+    verify(mockTask).addOnCompleteListener(captor.capture())
+    captor.value.onComplete(mockTask)
+  }
+
+  @Test
+  fun getDailyQuest_taskUnsuccessful_callsOnFailure() {
+    // Arrange
+    `when`(mockCollectionReference.get()).thenReturn(mockTask)
+    `when`(mockTask.isSuccessful).thenReturn(false)
+    `when`(mockTask.exception).thenReturn(Exception("Firestore error"))
+
+    questRepositoryFirestore.getDailyQuest(
+        onSuccess = { fail("Expected failure but got success.") },
+        onFailure = { error -> assertEquals("Firestore error", error.message) })
+
+    // Capture and invoke the OnCompleteListener
+    verify(mockTask).addOnCompleteListener(captor.capture())
+    captor.value.onComplete(mockTask)
   }
 }
