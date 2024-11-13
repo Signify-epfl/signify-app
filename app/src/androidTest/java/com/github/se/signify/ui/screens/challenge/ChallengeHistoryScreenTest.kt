@@ -33,7 +33,7 @@ class ChallengeHistoryScreenTest {
   fun challengeHistoryScreenDisplaysCorrectElements(): Unit = runBlocking {
 
     // Assert that the key elements are displayed
-    composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
     composeTestRule.onNodeWithTag("ChallengeHistoryContent").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FriendsChallengesRow").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FriendsChallengesText").assertIsDisplayed()
