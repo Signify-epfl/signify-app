@@ -62,7 +62,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -91,16 +90,16 @@ import com.github.se.signify.ui.navigation.NavigationActions
  */
 @Composable
 fun UtilIconButton(onClickAction: () -> Unit, icon: ImageVector, iconDescription: String) {
-  OutlinedButton(
-      onClick = onClickAction,
-      modifier = Modifier.padding(8.dp).testTag(iconDescription + "Button"),
-      border =
-          ButtonDefaults.outlinedButtonBorder.copy(
-              width = 2.dp, brush = SolidColor(colorResource(R.color.dark_gray))),
-      colors = ButtonDefaults.outlinedButtonColors(colorResource(R.color.blue)),
-  ) {
-    Icon(icon, tint = colorResource(R.color.dark_gray), contentDescription = iconDescription)
-  }
+    OutlinedButton(
+        onClick = onClickAction,
+        modifier = Modifier.padding(8.dp).testTag(iconDescription + "Button"),
+        border =
+        ButtonDefaults.outlinedButtonBorder.copy(
+            width = 2.dp, brush = SolidColor(MaterialTheme.colorScheme.surface)),
+        colors = ButtonDefaults.outlinedButtonColors(MaterialTheme.colorScheme.primary),
+    ) {
+        Icon(icon, tint = MaterialTheme.colorScheme.surface, contentDescription = iconDescription)
+    }
 }
 
 /**
@@ -118,20 +117,20 @@ fun UtilTextButton(
     text: String,
     backgroundColor: Color,
 ) {
-  OutlinedButton(
-      onClick = onClickAction,
-      border =
-          ButtonDefaults.outlinedButtonBorder.copy(
-              width = 2.dp, brush = SolidColor(colorResource(R.color.black))),
-      colors = ButtonDefaults.buttonColors(backgroundColor),
-      modifier = Modifier.fillMaxWidth().height(40.dp).testTag(testTag)) {
+    OutlinedButton(
+        onClick = onClickAction,
+        border =
+        ButtonDefaults.outlinedButtonBorder.copy(
+            width = 2.dp, brush = SolidColor(MaterialTheme.colorScheme.outline)),
+        colors = ButtonDefaults.buttonColors(backgroundColor),
+        modifier = Modifier.fillMaxWidth().height(40.dp).testTag(testTag)) {
         Text(
             text,
             fontWeight = FontWeight.Bold,
-            color = colorResource(R.color.black),
+            color = MaterialTheme.colorScheme.onSurface,
             fontSize = 20.sp,
             textAlign = TextAlign.Center)
-      }
+    }
 }
 
 /**
@@ -151,29 +150,29 @@ fun SquareButton(
     size: Int,
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
 ) {
-  Column(
-      horizontalAlignment = Alignment.CenterHorizontally,
-      modifier =
-          modifier
-              .size(size.dp)
-              .border(2.dp, colorResource(R.color.black), RoundedCornerShape(12.dp))
-              .background(colorResource(R.color.blue), RoundedCornerShape(12.dp))
-              .padding(16.dp)
-              .clickable { onClick() }) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier =
+        modifier
+            .size(size.dp)
+            .border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
+            .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(12.dp))
+            .padding(16.dp)
+            .clickable { onClick() }) {
         Text(
             text = label,
             fontSize = (size * 0.15).sp,
-            color = colorResource(R.color.dark_gray),
+            color = MaterialTheme.colorScheme.onPrimary,
         )
         Spacer(modifier = Modifier.height(8.dp))
         Box(contentAlignment = Alignment.Center) {
-          Icon(
-              painter = painterResource(id = iconRes),
-              contentDescription = label,
-              tint = colorResource(R.color.dark_gray),
-              modifier = Modifier.size((size * 0.7).dp))
+            Icon(
+                painter = painterResource(id = iconRes),
+                contentDescription = label,
+                tint = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.size((size * 0.7).dp))
         }
-      }
+    }
 }
 
 /**
@@ -193,31 +192,31 @@ fun UtilButton(
     icon: ImageVector,
     contentDescription: String
 ) {
-  Box(
-      modifier =
-          Modifier.size(30.dp)
-              .background(colorResource(R.color.white), shape = RoundedCornerShape(30))
-              .border(2.dp, colorResource(R.color.white), shape = RoundedCornerShape(30))
-              .clickable { onClick() }
-              .testTag(buttonTestTag),
-      contentAlignment = Alignment.Center) {
+    Box(
+        modifier =
+        Modifier.size(30.dp)
+            .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(30))
+            .border(2.dp, MaterialTheme.colorScheme.background, shape = RoundedCornerShape(30))
+            .clickable { onClick() }
+            .testTag(buttonTestTag),
+        contentAlignment = Alignment.Center) {
         Icon(
             icon,
             contentDescription = contentDescription,
-            tint = colorResource(R.color.blue),
+            tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier.size(30.dp).testTag(iconTestTag))
-      }
+    }
 }
 
-/** A reusable composable function that creates the blue top bar. */
+/** A reusable composable function that creates the top bar. */
 @Composable
 fun TopBar() {
-  Box(
-      modifier =
-          Modifier.fillMaxWidth()
-              .height(5.dp)
-              .background(MaterialTheme.colorScheme.primary)
-              .testTag("TopBlueBar"))
+    Box(
+        modifier =
+        Modifier.fillMaxWidth()
+            .height(5.dp)
+            .background(MaterialTheme.colorScheme.primary)
+            .testTag("TopBar"))
 }
 
 /**
@@ -227,11 +226,11 @@ fun TopBar() {
  */
 @Composable
 fun BottomBar(navigationActions: NavigationActions) {
-  BottomNavigationMenu(
-      onTabSelect = { route -> navigationActions.navigateTo(route) },
-      tabList = LIST_TOP_LEVEL_DESTINATION,
-      selectedItem = navigationActions.currentRoute(),
-      modifier = Modifier.testTag("BottomNavigationMenu"))
+    BottomNavigationMenu(
+        onTabSelect = { route -> navigationActions.navigateTo(route) },
+        tabList = LIST_TOP_LEVEL_DESTINATION,
+        selectedItem = navigationActions.currentRoute(),
+        modifier = Modifier.testTag("BottomNavigationMenu"))
 }
 
 /**
@@ -241,16 +240,16 @@ fun BottomBar(navigationActions: NavigationActions) {
  */
 @Composable
 fun BackButton(onClick: () -> Unit) {
-  Row(
-      modifier = Modifier.fillMaxWidth().padding(16.dp),
-      horizontalArrangement = Arrangement.Start) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        horizontalArrangement = Arrangement.Start) {
         IconButton(onClick = { onClick() }, modifier = Modifier.testTag("BackButton")) {
-          Icon(
-              imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-              contentDescription = "BackButton",
-              tint = colorResource(R.color.blue))
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "BackButton",
+                tint = MaterialTheme.colorScheme.primary)
         }
-      }
+    }
 }
 
 /**
@@ -266,20 +265,20 @@ fun BackButton(onClick: () -> Unit) {
 fun ScreenColumn(
     padding: PaddingValues,
     testTag: String,
-    backgroundColor: Color = colorResource(R.color.white),
+    backgroundColor: Color = MaterialTheme.colorScheme.background,
     content: @Composable ColumnScope.() -> Unit
 ) {
-  Column(
-      modifier =
-          Modifier.fillMaxSize()
-              .padding(padding)
-              .padding(16.dp)
-              .verticalScroll(rememberScrollState())
-              .background(backgroundColor)
-              .testTag(testTag),
-      horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier =
+        Modifier.fillMaxSize()
+            .padding(padding)
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState())
+            .background(backgroundColor)
+            .testTag(testTag),
+        horizontalAlignment = Alignment.CenterHorizontally) {
         content()
-      }
+    }
 }
 
 /**
@@ -300,33 +299,33 @@ fun MainScreenScaffold(
     floatingActionButton: @Composable () -> Unit = {},
     content: @Composable ColumnScope.() -> Unit
 ) {
-  var isHelpBoxVisible by remember { mutableStateOf(false) }
-  Scaffold(
-      floatingActionButton = { floatingActionButton() },
-      topBar = { TopBar() },
-      bottomBar = { BottomBar(navigationActions) },
-      content = { padding ->
-        ScreenColumn(
-            padding,
-            testTagColumn,
-            colorResource(R.color.white) // to replace with the background color theme
+    var isHelpBoxVisible by remember { mutableStateOf(false) }
+    Scaffold(
+        floatingActionButton = { floatingActionButton() },
+        topBar = { TopBar() },
+        bottomBar = { BottomBar(navigationActions) },
+        content = { padding ->
+            ScreenColumn(
+                padding,
+                testTagColumn,
+                MaterialTheme.colorScheme.background // to replace with the background color theme
             ) {
-              UtilButton(
-                  { isHelpBoxVisible = !isHelpBoxVisible },
-                  "InfoButton",
-                  "InfoIcon",
-                  Icons.Outlined.Info,
-                  "Help")
-              content()
-              // Show popup when the info button is clicked
-              if (isHelpBoxVisible) {
-                InfoPopup(
-                    onDismiss = { isHelpBoxVisible = false },
-                    helpTitle = helpTitle,
-                    helpText = helpText)
-              }
+                UtilButton(
+                    { isHelpBoxVisible = !isHelpBoxVisible },
+                    "InfoButton",
+                    "InfoIcon",
+                    Icons.Outlined.Info,
+                    "Help")
+                content()
+                // Show popup when the info button is clicked
+                if (isHelpBoxVisible) {
+                    InfoPopup(
+                        onDismiss = { isHelpBoxVisible = false },
+                        helpTitle = helpTitle,
+                        helpText = helpText)
+                }
             }
-      })
+        })
 }
 
 /**
@@ -342,18 +341,18 @@ fun AnnexScreenScaffold(
     testTagColumn: String,
     content: @Composable ColumnScope.() -> Unit
 ) {
-  Scaffold(
-      topBar = { TopBar() },
-      content = { padding ->
-        ScreenColumn(
-            padding,
-            testTagColumn,
-            colorResource(R.color.white) // to replace with the background color theme
+    Scaffold(
+        topBar = { TopBar() },
+        content = { padding ->
+            ScreenColumn(
+                padding,
+                testTagColumn,
+                MaterialTheme.colorScheme.background // to replace with the background color theme
             ) {
-              BackButton { navigationActions.goBack() }
-              content()
+                BackButton { navigationActions.goBack() }
+                content()
             }
-      })
+        })
 }
 
 /**
@@ -365,35 +364,35 @@ fun AnnexScreenScaffold(
  */
 @Composable
 fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
-  Dialog(onDismissRequest = { onDismiss() }) {
-    Surface(
-        shape = RoundedCornerShape(12.dp),
-        color = colorResource(R.color.blue), // Blue background for the popup
-        modifier =
+    Dialog(onDismissRequest = { onDismiss() }) {
+        Surface(
+            shape = RoundedCornerShape(12.dp),
+            color = MaterialTheme.colorScheme.primary, // Background for the popup
+            modifier =
             Modifier.border(
-                    3.dp,
-                    colorResource(R.color.dark_gray),
-                    RoundedCornerShape(12.dp)) // Ensure the black border wraps the popup
+                3.dp,
+                MaterialTheme.colorScheme.outline,
+                RoundedCornerShape(12.dp)) // Ensure the border wraps the popup
                 .padding(16.dp)
                 .testTag("InfoPopup") // Remove padding for the border
         ) {
-          Column(
-              modifier = Modifier.padding(16.dp).fillMaxWidth().testTag("InfoPopupContent"),
-              horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier = Modifier.padding(16.dp).fillMaxWidth().testTag("InfoPopupContent"),
+                horizontalAlignment = Alignment.CenterHorizontally) {
                 // Title centered and underlined
                 Text(
                     text =
-                        buildAnnotatedString {
-                          withStyle(
-                              style =
-                                  SpanStyle(
-                                      fontWeight = FontWeight.Bold,
-                                      textDecoration = TextDecoration.Underline)) {
-                                append(helpTitle)
-                              }
-                        },
+                    buildAnnotatedString {
+                        withStyle(
+                            style =
+                            SpanStyle(
+                                fontWeight = FontWeight.Bold,
+                                textDecoration = TextDecoration.Underline)) {
+                            append(helpTitle)
+                        }
+                    },
                     fontSize = 20.sp,
-                    color = colorResource(R.color.white),
+                    color = MaterialTheme.colorScheme.onPrimary,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.testTag("InfoPopupTitle"))
                 Spacer(modifier = Modifier.height(8.dp))
@@ -402,7 +401,7 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
                 Text(
                     text = helpText,
                     fontSize = 16.sp,
-                    color = colorResource(R.color.white),
+                    color = MaterialTheme.colorScheme.onPrimary,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.testTag("InfoPopupBody"))
                 Spacer(modifier = Modifier.height(16.dp))
@@ -410,13 +409,13 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
                 // Close button for the popup
                 Button(
                     onClick = { onDismiss() },
-                    colors = ButtonDefaults.buttonColors(colorResource(R.color.dark_gray)),
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.surface),
                     modifier = Modifier.testTag("InfoPopupCloseButton")) {
-                      Text(text = "Close", color = colorResource(R.color.white))
-                    }
-              }
+                    Text(text = "Close", color = MaterialTheme.colorScheme.onSurface)
+                }
+            }
         }
-  }
+    }
 }
 
 /**
@@ -442,49 +441,50 @@ fun StatisticsRow(
     columnTextSPList: List<List<Int>>,
     columnTextTagList: List<String>
 ) {
-  // Ensure that the list have the same size
-  require(
-      columnTextList.size == columnTextSPList.size &&
-          columnTextList.size == columnTextTagList.size) {
+    // Ensure that the list have the same size
+    require(
+        columnTextList.size == columnTextSPList.size &&
+                columnTextList.size == columnTextTagList.size) {
         "All lists must have the same size."
-      }
-  columnTextList.zip(columnTextSPList).forEachIndexed { index, (textList, spList) ->
-    require(textList.size == spList.size) { "Sub lists at index $index must have the same size." }
-  }
-  // Construction of the statistic row
-  Row(
-      modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).testTag(rowTestTag),
-      horizontalArrangement = Arrangement.SpaceBetween,
-      verticalAlignment = Alignment.CenterVertically) {
+    }
+    columnTextList.zip(columnTextSPList).forEachIndexed { index, (textList, spList) ->
+        require(textList.size == spList.size) { "Sub lists at index $index must have the same size." }
+    }
+    // Construction of the statistic row
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).testTag(rowTestTag),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = lineText,
             fontSize = 16.sp,
-            color = colorResource(R.color.black),
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.testTag(lineTextTag))
         for (index in columnTextList.indices) {
-          Column(
-              modifier =
-                  Modifier.size(50.dp)
-                      .border(2.dp, colorResource(R.color.blue), RoundedCornerShape(12.dp))
-                      .clip(RoundedCornerShape(12.dp))
-                      .background(colorResource(R.color.white))
-                      .testTag(columnTextTagList[index]),
-              horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier =
+                Modifier.size(50.dp)
+                    .border(
+                        2.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(12.dp))
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(MaterialTheme.colorScheme.background)
+                    .testTag(columnTextTagList[index]),
+                horizontalAlignment = Alignment.CenterHorizontally) {
                 for (subIndex in columnTextList[index].indices) {
-                  Text(
-                      text = columnTextList[index][subIndex],
-                      fontSize = columnTextSPList[index][subIndex].sp,
-                      color = colorResource(R.color.black),
-                      modifier = Modifier.testTag(columnTextList[index][subIndex]))
+                    Text(
+                        text = columnTextList[index][subIndex],
+                        fontSize = columnTextSPList[index][subIndex].sp,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.testTag(columnTextList[index][subIndex]))
                 }
-              }
+            }
         }
-      }
+    }
 }
 
 /**
  * A reusable composable function that creates the scrollable letter list. The letter already
- * learned are in blue and the others are in gray.
+ * learned are highlighted and the others are in a secondary color.
  *
  * Important to note that it is helper function to AllLetterLearned()
  *
@@ -492,22 +492,22 @@ fun StatisticsRow(
  */
 @Composable
 fun HorizontalLetterList(lettersLearned: List<Char>) {
-  val allLetters = ('A'..'Z').toList() // All capital letters from A to Z
-  val scrollState = rememberScrollState()
+    val allLetters = ('A'..'Z').toList() // All capital letters from A to Z
+    val scrollState = rememberScrollState()
 
-  Row(modifier = Modifier.fillMaxWidth().horizontalScroll(scrollState).testTag("LettersList")) {
-    allLetters.forEach { letter ->
-      val isLearned = letter in lettersLearned
-      Text(
-          text = letter.toString(),
-          fontSize = 24.sp,
-          fontWeight = FontWeight.Bold,
-          color =
-              if (isLearned) colorResource(R.color.blue)
-              else colorResource(R.color.dark_gray).copy(alpha = .5f),
-          modifier = Modifier.padding(horizontal = 8.dp).testTag(letter.toString()))
+    Row(modifier = Modifier.fillMaxWidth().horizontalScroll(scrollState).testTag("LettersList")) {
+        allLetters.forEach { letter ->
+            val isLearned = letter in lettersLearned
+            Text(
+                text = letter.toString(),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color =
+                if (isLearned) MaterialTheme.colorScheme.primary
+                else MaterialTheme.colorScheme.onBackground.copy(alpha = .5f),
+                modifier = Modifier.padding(horizontal = 8.dp).testTag(letter.toString()))
+        }
     }
-  }
 }
 
 /**
@@ -517,21 +517,21 @@ fun HorizontalLetterList(lettersLearned: List<Char>) {
  */
 @Composable
 fun LearnedLetterList(lettersLearned: List<Char>) {
-  Text(
-      text = "All letters learned",
-      fontWeight = FontWeight.Bold,
-      fontSize = 16.sp,
-      color = colorResource(R.color.dark_gray),
-      modifier = Modifier.testTag("AllLetterLearned"))
-  Box(
-      modifier =
-          Modifier.fillMaxWidth()
-              .border(2.dp, colorResource(R.color.dark_gray), RoundedCornerShape(12.dp))
-              .clip(RoundedCornerShape(8.dp))
-              .padding(12.dp)
-              .testTag("LettersBox")) {
+    Text(
+        text = "All letters learned",
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp,
+        color = MaterialTheme.colorScheme.surface,
+        modifier = Modifier.testTag("AllLetterLearned"))
+    Box(
+        modifier =
+        Modifier.fillMaxWidth()
+            .border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(8.dp))
+            .padding(12.dp)
+            .testTag("LettersBox")) {
         HorizontalLetterList(lettersLearned)
-      }
+    }
 }
 
 /**
@@ -542,23 +542,23 @@ fun LearnedLetterList(lettersLearned: List<Char>) {
  */
 @Composable
 fun StreakCounter(days: Int, daysText: Boolean) {
-  val text = if (daysText) " days" else ""
-  Row(
-      modifier = Modifier.testTag("StreakCounter"),
-      verticalAlignment = Alignment.CenterVertically) {
+    val text = if (daysText) " days" else ""
+    Row(
+        modifier = Modifier.testTag("StreakCounter"),
+        verticalAlignment = Alignment.CenterVertically) {
         Icon(
             painter = painterResource(id = R.drawable.flame),
             contentDescription = "Streak Icon",
-            tint = colorResource(R.color.red),
+            tint = MaterialTheme.colorScheme.secondary,
             modifier = Modifier.size(32.dp).testTag("FlameIcon"))
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = "$days$text",
             fontWeight = FontWeight.Bold,
-            color = colorResource(R.color.red),
+            color = MaterialTheme.colorScheme.secondary,
             fontSize = 20.sp,
             modifier = Modifier.testTag("NumberOfDays"))
-      }
+    }
 }
 
 /**
@@ -568,24 +568,24 @@ fun StreakCounter(days: Int, daysText: Boolean) {
  */
 @Composable
 fun ProfilePicture(profilePictureUrl: String?) {
-  Box(
-      modifier =
-          Modifier.size(80.dp)
-              .clip(CircleShape)
-              .background(colorResource(R.color.dark_gray))
-              .testTag("ProfilePicture")) {
+    Box(
+        modifier =
+        Modifier.size(80.dp)
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.surface)
+            .testTag("ProfilePicture")) {
         profilePictureUrl?.let {
-          // Load image with Coil or any other image loading library
-          Image(
-              painter = rememberAsyncImagePainter(model = it),
-              contentDescription = "Profile picture",
-              modifier = Modifier.fillMaxSize())
+            // Load image with Coil or any other image loading library
+            Image(
+                painter = rememberAsyncImagePainter(model = it),
+                contentDescription = "Profile picture",
+                modifier = Modifier.fillMaxSize())
         }
             ?: Text(
                 text = "Profile",
                 modifier = Modifier.align(Alignment.Center),
-                color = colorResource(R.color.white))
-      }
+                color = MaterialTheme.colorScheme.onSurface)
+    }
 }
 
 /**
@@ -598,24 +598,24 @@ fun ProfilePicture(profilePictureUrl: String?) {
  */
 @Composable
 fun AccountInformation(userId: String, userName: String, profilePictureUrl: String?, days: Int) {
-  Row(
-      modifier = Modifier.fillMaxWidth().testTag("UserInfo"),
-      horizontalArrangement = Arrangement.Center,
-      verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier = Modifier.fillMaxWidth().testTag("UserInfo"),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically) {
         // User Info : user id and user name
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-          Text(
-              text = userId,
-              fontWeight = FontWeight.Bold,
-              color = colorResource(R.color.dark_gray),
-              modifier = Modifier.testTag("UserId"))
-          Text(
-              text = userName,
-              fontWeight = FontWeight.Bold,
-              color = colorResource(R.color.dark_gray),
-              modifier = Modifier.testTag("UserName"))
+            Text(
+                text = userId,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.testTag("UserId"))
+            Text(
+                text = userName,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.testTag("UserName"))
         }
         Spacer(modifier = Modifier.width(24.dp))
 
@@ -625,7 +625,7 @@ fun AccountInformation(userId: String, userName: String, profilePictureUrl: Stri
 
         // Number of days
         StreakCounter(days, true)
-      }
+    }
 }
 
 /**
@@ -636,21 +636,21 @@ fun AccountInformation(userId: String, userName: String, profilePictureUrl: Stri
  */
 @Composable
 fun NotImplementedYet(testTag: String, text: String) {
-  Box(
-      modifier =
-          Modifier.fillMaxWidth()
-              .height(240.dp)
-              .border(3.dp, colorResource(R.color.blue), RoundedCornerShape(12.dp))
-              .background(colorResource(R.color.black), RoundedCornerShape(12.dp))
-              .padding(16.dp)
-              .testTag(testTag),
-      contentAlignment = Alignment.Center) {
+    Box(
+        modifier =
+        Modifier.fillMaxWidth()
+            .height(240.dp)
+            .border(3.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
+            .background(MaterialTheme.colorScheme.errorContainer, RoundedCornerShape(12.dp))
+            .padding(16.dp)
+            .testTag(testTag),
+        contentAlignment = Alignment.Center) {
         Text(
             text = text,
             fontSize = 16.sp,
-            color = colorResource(R.color.white),
+            color = MaterialTheme.colorScheme.onErrorContainer,
             fontWeight = FontWeight.Normal)
-      }
+    }
 }
 
 /**
@@ -659,35 +659,35 @@ fun NotImplementedYet(testTag: String, text: String) {
  * @param letter The character from which we want the icon.
  */
 fun getLetterIconResId(letter: Char): Int {
-  return when (letter) {
-    'a' -> R.drawable.letter_a
-    'b' -> R.drawable.letter_b
-    'c' -> R.drawable.letter_c
-    'd' -> R.drawable.letter_d
-    'e' -> R.drawable.letter_e
-    'f' -> R.drawable.letter_f
-    'g' -> R.drawable.letter_g
-    'h' -> R.drawable.letter_h
-    'i' -> R.drawable.letter_i
-    'j' -> R.drawable.letter_j
-    'k' -> R.drawable.letter_k
-    'l' -> R.drawable.letter_l
-    'm' -> R.drawable.letter_m
-    'n' -> R.drawable.letter_n
-    'o' -> R.drawable.letter_o
-    'p' -> R.drawable.letter_p
-    'q' -> R.drawable.letter_q
-    'r' -> R.drawable.letter_r
-    's' -> R.drawable.letter_s
-    't' -> R.drawable.letter_t
-    'u' -> R.drawable.letter_u
-    'v' -> R.drawable.letter_v
-    'w' -> R.drawable.letter_w
-    'x' -> R.drawable.letter_x
-    'y' -> R.drawable.letter_y
-    'z' -> R.drawable.letter_z
-    else -> R.drawable.letter_a // Default case, just in case an unexpected value is passed
-  }
+    return when (letter) {
+        'a' -> R.drawable.letter_a
+        'b' -> R.drawable.letter_b
+        'c' -> R.drawable.letter_c
+        'd' -> R.drawable.letter_d
+        'e' -> R.drawable.letter_e
+        'f' -> R.drawable.letter_f
+        'g' -> R.drawable.letter_g
+        'h' -> R.drawable.letter_h
+        'i' -> R.drawable.letter_i
+        'j' -> R.drawable.letter_j
+        'k' -> R.drawable.letter_k
+        'l' -> R.drawable.letter_l
+        'm' -> R.drawable.letter_m
+        'n' -> R.drawable.letter_n
+        'o' -> R.drawable.letter_o
+        'p' -> R.drawable.letter_p
+        'q' -> R.drawable.letter_q
+        'r' -> R.drawable.letter_r
+        's' -> R.drawable.letter_s
+        't' -> R.drawable.letter_t
+        'u' -> R.drawable.letter_u
+        'v' -> R.drawable.letter_v
+        'w' -> R.drawable.letter_w
+        'x' -> R.drawable.letter_x
+        'y' -> R.drawable.letter_y
+        'z' -> R.drawable.letter_z
+        else -> R.drawable.letter_a // Default case, just in case an unexpected value is passed
+    }
 }
 /**
  * Composable function that serves as a placeholder for the camera preview. This function requests
@@ -698,95 +698,96 @@ fun getLetterIconResId(letter: Char): Int {
  */
 @Composable
 fun CameraPlaceholder(handLandMarkViewModel: HandLandMarkViewModel, modifier: Modifier = Modifier) {
-  val context = LocalContext.current
-  val lifecycleOwner = LocalLifecycleOwner.current
-  val previewView = remember { PreviewView(context) }
-  var permissionGranted by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val previewView = remember { PreviewView(context) }
+    var permissionGranted by remember { mutableStateOf(false) }
 
-  // Permission launcher to request camera permission
-  val permissionLauncher =
-      rememberLauncherForActivityResult(
-          contract = ActivityResultContracts.RequestPermission(),
-          onResult = { isGranted ->
-            permissionGranted = isGranted
-            if (!isGranted) {
-              Toast.makeText(context, "Camera permission denied", Toast.LENGTH_SHORT).show()
-            }
-          })
+    // Permission launcher to request camera permission
+    val permissionLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission(),
+            onResult = { isGranted ->
+                permissionGranted = isGranted
+                if (!isGranted) {
+                    Toast.makeText(context, "Camera permission denied", Toast.LENGTH_SHORT).show()
+                }
+            })
 
-  // Check for permission on load
-  LaunchedEffect(Unit) {
-    permissionGranted =
-        ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) ==
-            PackageManager.PERMISSION_GRANTED
-    if (!permissionGranted) {
-      permissionLauncher.launch(Manifest.permission.CAMERA)
+    // Check for permission on load
+    LaunchedEffect(Unit) {
+        permissionGranted =
+            ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) ==
+                    PackageManager.PERMISSION_GRANTED
+        if (!permissionGranted) {
+            permissionLauncher.launch(Manifest.permission.CAMERA)
+        }
     }
-  }
 
-  if (permissionGranted) {
-    Box(
-        modifier =
+    if (permissionGranted) {
+        Box(
+            modifier =
             modifier
                 .fillMaxWidth()
                 .padding(16.dp)
                 .height(350.dp)
-                .background(colorResource(R.color.blue), shape = RoundedCornerShape(16.dp))
-                .border(2.dp, colorResource(R.color.white), shape = RoundedCornerShape(16.dp)),
-        contentAlignment = Alignment.Center) {
-          AndroidView(
-              factory = { previewView },
-              modifier =
-                  Modifier.fillMaxWidth()
-                      .fillMaxHeight()
-                      .clip(RoundedCornerShape(16.dp))
-                      .testTag("cameraPreview"))
+                .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
+                .border(2.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(16.dp)),
+            contentAlignment = Alignment.Center) {
+            AndroidView(
+                factory = { previewView },
+                modifier =
+                Modifier.fillMaxWidth()
+                    .fillMaxHeight()
+                    .clip(RoundedCornerShape(16.dp))
+                    .testTag("cameraPreview"))
 
-          // Set up the camera preview
-          LaunchedEffect(Unit) {
-            val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
-            cameraProviderFuture.addListener(
-                {
-                  val cameraProvider = cameraProviderFuture.get()
-                  val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+            // Set up the camera preview
+            LaunchedEffect(Unit) {
+                val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
+                cameraProviderFuture.addListener(
+                    {
+                        val cameraProvider = cameraProviderFuture.get()
+                        val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
-                  val preview =
-                      Preview.Builder().build().also {
-                        it.setSurfaceProvider(previewView.surfaceProvider)
-                      }
-                  val imageAnalysis =
-                      ImageAnalysis.Builder()
-                          .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                          .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
-                          .build()
-                  imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(context)) { imageProxy ->
-                    handLandMarkViewModel.processImageProxyThrottled(imageProxy)
-                  }
+                        val preview =
+                            Preview.Builder().build().also {
+                                it.setSurfaceProvider(previewView.surfaceProvider)
+                            }
+                        val imageAnalysis =
+                            ImageAnalysis.Builder()
+                                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                                .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
+                                .build()
+                        imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(context)) { imageProxy ->
+                            handLandMarkViewModel.processImageProxyThrottled(imageProxy)
+                        }
 
-                  try {
-                    cameraProvider.unbindAll()
-                    cameraProvider.bindToLifecycle(
-                        lifecycleOwner, cameraSelector, preview, imageAnalysis)
-                  } catch (e: Exception) {
-                    Log.e("CameraPlaceholder", "Camera binding failed", e)
-                  }
-                },
-                ContextCompat.getMainExecutor(context))
-          }
+                        try {
+                            cameraProvider.unbindAll()
+                            cameraProvider.bindToLifecycle(
+                                lifecycleOwner, cameraSelector, preview, imageAnalysis)
+                        } catch (e: Exception) {
+                            Log.e("CameraPlaceholder", "Camera binding failed", e)
+                        }
+                    },
+                    ContextCompat.getMainExecutor(context))
+            }
         }
-  } else {
-    Box(
-        modifier =
+    } else {
+        Box(
+            modifier =
             modifier
                 .fillMaxWidth()
                 .padding(16.dp)
                 .height(350.dp)
-                .background(colorResource(R.color.black), shape = RoundedCornerShape(16.dp))
-                .border(2.dp, colorResource(R.color.white), shape = RoundedCornerShape(16.dp)),
-        contentAlignment = Alignment.Center) {
-          Text("Camera permission required", color = colorResource(R.color.white))
+                .background(
+                    MaterialTheme.colorScheme.errorContainer, shape = RoundedCornerShape(16.dp))
+                .border(2.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(16.dp)),
+            contentAlignment = Alignment.Center) {
+            Text("Camera permission required", color = MaterialTheme.colorScheme.errorContainer)
         }
-  }
+    }
 }
 /**
  * Retrieves the drawable resource ID for an image based on a provided letter. This function
@@ -798,8 +799,8 @@ fun CameraPlaceholder(handLandMarkViewModel: HandLandMarkViewModel, modifier: Mo
  * @throws NoSuchFieldException if the resource name does not match any drawable in `R.drawable`.
  */
 fun getImageResId(letter: Char): Int {
-  val resName = "pic_${letter.lowercaseChar()}"
-  return R.drawable::class.java.getDeclaredField(resName).getInt(null)
+    val resName = "pic_${letter.lowercaseChar()}"
+    return R.drawable::class.java.getDeclaredField(resName).getInt(null)
 }
 /**
  * Retrieves the drawable resource ID for an icon based on a provided letter. Constructs the
@@ -812,8 +813,8 @@ fun getImageResId(letter: Char): Int {
  * @throws NoSuchFieldException if the resource name does not match any drawable in `R.drawable`.
  */
 fun getIconResId(letter: Char): Int {
-  val resName = "letter_${letter.lowercaseChar()}"
-  return R.drawable::class.java.getDeclaredField(resName).getInt(null)
+    val resName = "letter_${letter.lowercaseChar()}"
+    return R.drawable::class.java.getDeclaredField(resName).getInt(null)
 }
 /**
  * Retrieves the string resource ID for a tip based on the provided letter. Maps each letter from
@@ -825,33 +826,33 @@ fun getIconResId(letter: Char): Int {
  * @return The integer ID of the string resource for the corresponding tip.
  */
 fun getTipResId(letter: Char): Int {
-  return when (letter) {
-    'A' -> R.string.tip_a
-    'B' -> R.string.tip_b
-    'C' -> R.string.tip_c
-    'D' -> R.string.tip_d
-    'E' -> R.string.tip_e
-    'F' -> R.string.tip_f
-    'G' -> R.string.tip_g
-    'H' -> R.string.tip_h
-    'I' -> R.string.tip_i
-    'J' -> R.string.tip_j
-    'K' -> R.string.tip_k
-    'L' -> R.string.tip_l
-    'M' -> R.string.tip_m
-    'N' -> R.string.tip_n
-    'O' -> R.string.tip_o
-    'P' -> R.string.tip_p
-    'Q' -> R.string.tip_q
-    'R' -> R.string.tip_r
-    'S' -> R.string.tip_s
-    'T' -> R.string.tip_t
-    'U' -> R.string.tip_u
-    'V' -> R.string.tip_v
-    'W' -> R.string.tip_w
-    'X' -> R.string.tip_x
-    'Y' -> R.string.tip_y
-    'Z' -> R.string.tip_z
-    else -> R.string.tip_a
-  }
+    return when (letter) {
+        'A' -> R.string.tip_a
+        'B' -> R.string.tip_b
+        'C' -> R.string.tip_c
+        'D' -> R.string.tip_d
+        'E' -> R.string.tip_e
+        'F' -> R.string.tip_f
+        'G' -> R.string.tip_g
+        'H' -> R.string.tip_h
+        'I' -> R.string.tip_i
+        'J' -> R.string.tip_j
+        'K' -> R.string.tip_k
+        'L' -> R.string.tip_l
+        'M' -> R.string.tip_m
+        'N' -> R.string.tip_n
+        'O' -> R.string.tip_o
+        'P' -> R.string.tip_p
+        'Q' -> R.string.tip_q
+        'R' -> R.string.tip_r
+        'S' -> R.string.tip_s
+        'T' -> R.string.tip_t
+        'U' -> R.string.tip_u
+        'V' -> R.string.tip_v
+        'W' -> R.string.tip_w
+        'X' -> R.string.tip_x
+        'Y' -> R.string.tip_y
+        'Z' -> R.string.tip_z
+        else -> R.string.tip_a
+    }
 }
