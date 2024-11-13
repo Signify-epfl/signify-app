@@ -14,13 +14,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.Button
@@ -41,16 +38,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.NotImplementedYet
+import com.github.se.signify.ui.ProfilePicture
 import com.github.se.signify.ui.navigation.NavigationActions
 import java.io.File
 import java.io.FileOutputStream
@@ -116,7 +111,7 @@ fun SettingsScreen(
         }
 
         Spacer(modifier = Modifier.width(8.dp))
-        UserProfilePicture(selectedImageUrl)
+        ProfilePicture(selectedImageUrl)
       }
     }
     Spacer(modifier = Modifier.height(32.dp))
@@ -197,27 +192,6 @@ fun ActionButtons(onClickAction: () -> Unit, color: Color, text: String, modifie
         Text(
             text = text, color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Bold)
       }
-}
-
-@Composable
-fun UserProfilePicture(profilePictureUri: String?) {
-  if (profilePictureUri != null) {
-    AsyncImage(
-        model = Uri.parse(profilePictureUri),
-        contentDescription = "Profile Picture",
-        modifier =
-            Modifier.size(120.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surface)
-                .testTag("profilePictureTag"),
-        contentScale = ContentScale.Crop) // Crop the image to fit within the bounds
-  } else {
-    // Default placeholder for no image
-    Icon(
-        imageVector = Icons.Default.Person,
-        contentDescription = "Default Profile Picture",
-        modifier = Modifier.size(120.dp).testTag("default_profile_picture"))
-  }
 }
 
 fun uriToFile(context: Context, uri: Uri): File? {

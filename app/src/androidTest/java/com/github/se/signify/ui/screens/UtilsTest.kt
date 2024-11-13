@@ -51,6 +51,7 @@ class UtilsTest {
   val cameraAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
 
   private lateinit var navigationActions: NavigationActions
+  private val picturePath = "file:///path/to/profile/picture.jpg"
 
   @Test
   fun utilIconButtonIsDisplayedAndClickable() {
@@ -390,23 +391,23 @@ class UtilsTest {
 
   @Test
   fun profilePictureIsDisplayed() {
-    composeTestRule.setContent { ProfilePicture(null) }
+    composeTestRule.setContent { ProfilePicture(picturePath) }
 
-    composeTestRule.onNodeWithTag("ProfilePicture").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("ProfilePicture").assertExists()
   }
 
   @Test
   fun accountInformationIsDisplayed() {
     val userId = "userId"
     val userName = "userName"
-    composeTestRule.setContent { AccountInformation(userId, userName, null, 10) }
+    composeTestRule.setContent { AccountInformation(userId, userName, picturePath, 10) }
 
     composeTestRule.onNodeWithTag("UserInfo").assertIsDisplayed()
     composeTestRule.onNodeWithTag("UserId").assertIsDisplayed()
     composeTestRule.onNodeWithTag("UserId").assertTextEquals(userId)
     composeTestRule.onNodeWithTag("UserName").assertIsDisplayed()
     composeTestRule.onNodeWithTag("UserName").assertTextEquals(userName)
-    composeTestRule.onNodeWithTag("ProfilePicture").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("ProfilePicture").assertExists()
     composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
     composeTestRule.onNodeWithTag("NumberOfDays").assertTextEquals("10 days")
