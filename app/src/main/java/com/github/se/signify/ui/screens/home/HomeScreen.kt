@@ -80,20 +80,6 @@ data class Exercise(val name: String, val route: String = "UNKNOWN_EXERCISE")
  * vertical scrolling and incorporates a floating action button to quickly scroll back to the top.
  *
  * @param navigationActions The `NavigationActions` object that handles navigation between screens.
- *
- * UI Elements:
- * - **Streak Counter and Quests Button**: A row at the top displaying the user's streak counter and
- *   a button for quests.
- * - **Camera Feedback Button**: Initiates the camera feedback screen.
- * - **Letter Dictionary**: Allows users to navigate through letters, clicking on each one to scroll
- *   to the related content.
- * - **Exercise List**: Displays a horizontal pager of exercises with navigational actions for each
- *   exercise.
- * - **Alphabet Content**: A series of items for each letter ('A' to 'Z') including a title and a
- *   `SignTipBox` with letter details.
- * - **Bottom Navigation**: A bottom bar for primary navigation across screens.
- * - **Scroll-to-Top FAB**: A floating action button that scrolls to the top of the list when
- *   pressed.
  */
 @Composable
 fun HomeScreen(navigationActions: NavigationActions) {
@@ -120,11 +106,8 @@ fun HomeScreen(navigationActions: NavigationActions) {
             }
       }) {
         LazyColumn(
-            state = scrollState,
-            modifier =
-                Modifier.weight(
-                    1f) // Ensures LazyColumn takes up the remaining space without infinite height
-            // constraints
+            state = scrollState, modifier = Modifier.weight(1f)
+            // Ensures LazyColumn takes up the remaining space without infinite height constraints
             ) {
               item {
                 Row(

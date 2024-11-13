@@ -288,6 +288,7 @@ fun ScreenColumn(
  * @param testTagColumn The test tag of the column (test tag of the screen).
  * @param helpTitle The title of the info popup.
  * @param helpText The text of the info popup.
+ * @param floatingActionButton A lambda function for the floating action button.
  * @param content A lambda function for the content of the column.
  */
 @Composable
