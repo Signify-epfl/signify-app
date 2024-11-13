@@ -8,6 +8,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
+import com.github.se.signify.ui.ProfilePicture
 import com.github.se.signify.ui.navigation.NavigationActions
 import java.io.File
 import java.io.FileNotFoundException
@@ -47,7 +48,7 @@ class SettingsScreenTest {
 
     composeTestRule.setContent {
       SettingsScreen(navigationActions, userViewModel)
-      UserProfilePicture(picturePath)
+      ProfilePicture(picturePath)
     }
 
     // Mock context and contentResolver
@@ -183,7 +184,7 @@ class SettingsScreenTest {
   fun testUserProfilePictureDisplaysImageWhenUriIsNotNull() {
 
     // Verify that the AsyncImage is displayed with the mock profile picture
-    composeTestRule.onNodeWithTag("profilePictureTag").assertExists()
+    composeTestRule.onNodeWithTag("ProfilePicture").assertExists()
   }
 
   @Test

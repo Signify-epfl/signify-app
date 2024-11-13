@@ -6,11 +6,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
+import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.AccountInformation
 import com.github.se.signify.ui.LearnedLetterList
 import com.github.se.signify.ui.MainScreenScaffold
@@ -18,16 +22,13 @@ import com.github.se.signify.ui.SquareButton
 import com.github.se.signify.ui.UtilButton
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Route
+import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ProfileScreen(
-    userId: String,
-    userName: String,
-    profilePictureUrl: String?,
-    numberOfDays: Int,
-    lettersLearned: List<Char>,
-    navigationActions: NavigationActions
+    navigationActions: NavigationActions,
+    userViewModel: UserViewModel = viewModel(factory = UserViewModel.Factory)
 ) {
   MainScreenScaffold(
       navigationActions = navigationActions,
@@ -35,6 +36,14 @@ fun ProfileScreen(
       helpTitle = "Profile",
       helpText = stringResource(R.string.help_profile_screen),
   ) {
+    LaunchedEffect(Unit) {
+      userViewModel.getUserName(currentUserId)
+      userViewModel.getProfilePictureUrl(currentUserId)
+    }
+
+    val userName = userViewModel.userName.collectAsState()
+    val profilePictureUrl = userViewModel.profilePictureUrl.collectAsState()
+
     // Settings button
     UtilButton(
         onClick = { navigationActions.navigateTo(Route.SETTINGS) },
@@ -46,14 +55,14 @@ fun ProfileScreen(
 
     // Top information
     AccountInformation(
-        userId = userId,
-        userName = userName,
-        profilePictureUrl = profilePictureUrl,
-        days = numberOfDays)
+        userId = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0) ?: "unknown",
+        userName = userName.value,
+        profilePictureUrl = profilePictureUrl.value,
+        days = 30)
     Spacer(modifier = Modifier.height(32.dp))
 
     // Letters learned
-    LearnedLetterList(lettersLearned = lettersLearned)
+    LearnedLetterList(lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F'))
     Spacer(modifier = Modifier.height(64.dp))
 
     // Friends List button

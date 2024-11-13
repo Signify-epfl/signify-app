@@ -3,6 +3,7 @@ package com.github.se.signify.ui
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -12,7 +13,6 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -37,6 +37,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -59,6 +60,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
@@ -74,7 +76,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
 import com.github.se.signify.R
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.navigation.BottomNavigationMenu
@@ -566,24 +568,23 @@ fun StreakCounter(days: Int, daysText: Boolean) {
  */
 @Composable
 fun ProfilePicture(profilePictureUrl: String?) {
-  Box(
-      modifier =
-          Modifier.size(80.dp)
-              .clip(CircleShape)
-              .background(MaterialTheme.colorScheme.surface)
-              .testTag("ProfilePicture")) {
-        profilePictureUrl?.let {
-          // Load image with Coil or any other image loading library
-          Image(
-              painter = rememberAsyncImagePainter(model = it),
-              contentDescription = "Profile picture",
-              modifier = Modifier.fillMaxSize())
-        }
-            ?: Text(
-                text = "Profile",
-                modifier = Modifier.align(Alignment.Center),
-                color = MaterialTheme.colorScheme.onSurface)
-      }
+  if (profilePictureUrl != null) {
+    AsyncImage(
+        model = Uri.parse(profilePictureUrl),
+        contentDescription = "Profile Picture",
+        modifier =
+            Modifier.size(120.dp)
+                .clip(CircleShape)
+                .background(SolidColor(MaterialTheme.colorScheme.surface))
+                .testTag("ProfilePicture"),
+        contentScale = ContentScale.Crop) // Crop the image to fit within the bounds
+  } else {
+    // Default placeholder for no image
+    Icon(
+        imageVector = Icons.Default.Person,
+        contentDescription = "Default Profile Picture",
+        modifier = Modifier.size(120.dp).testTag("default_profile_picture"))
+  }
 }
 
 /**

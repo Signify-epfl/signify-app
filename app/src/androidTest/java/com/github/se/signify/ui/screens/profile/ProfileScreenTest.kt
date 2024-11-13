@@ -8,8 +8,12 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
+import com.github.se.signify.model.user.UserRepository
+import com.github.se.signify.model.user.UserViewModel
+import com.github.se.signify.ui.ProfilePicture
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
+import com.google.firebase.auth.FirebaseAuth
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -21,28 +25,26 @@ class ProfileScreenTest {
   @get:Rule val composeTestRule = createComposeRule()
 
   private lateinit var navigationActions: NavigationActions
+  private lateinit var userRepository: UserRepository
+  private lateinit var userViewModel: UserViewModel
 
   // User information test to be displayed
-  private val userId = "userIdTest"
-  private val userName = "userNameTest"
-  private val profilePictureUrl = null
+  private val userId =
+      FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0) ?: "unknown"
   private val numberOfDays = 30
-  private val lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F')
 
   @Before
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
+    userRepository = mock(UserRepository::class.java)
+    userViewModel = UserViewModel(userRepository)
+    val picturePath = "file:///path/to/profile/picture.jpg"
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.PROFILE)
     // Initialize the state of isHelpBoxVisible to true
     composeTestRule.setContent {
-      ProfileScreen(
-          userId = userId,
-          userName = userName,
-          profilePictureUrl = profilePictureUrl,
-          numberOfDays = numberOfDays,
-          lettersLearned = lettersLearned,
-          navigationActions = navigationActions)
+      ProfileScreen(navigationActions, userViewModel)
+      ProfilePicture(picturePath)
     }
   }
 
@@ -83,8 +85,8 @@ class ProfileScreenTest {
     composeTestRule.onNodeWithTag("UserId").assertIsDisplayed()
     composeTestRule.onNodeWithTag("UserId").assertTextEquals(userId)
     composeTestRule.onNodeWithTag("UserName").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("UserName").assertTextEquals(userName)
-    composeTestRule.onNodeWithTag("ProfilePicture").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("UserId").assertTextEquals(userViewModel.userName.value)
+    composeTestRule.onNodeWithTag("ProfilePicture").assertExists()
     composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
     composeTestRule.onNodeWithTag("NumberOfDays").assertIsDisplayed()

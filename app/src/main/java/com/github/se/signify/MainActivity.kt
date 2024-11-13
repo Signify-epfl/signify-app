@@ -102,15 +102,7 @@ fun SignifyAppPreview(context: Context, navigationState: MutableStateFlow<Naviga
         startDestination = Screen.PROFILE,
         route = Route.PROFILE,
     ) {
-      composable(Screen.PROFILE) {
-        ProfileScreen(
-            userId = "Test ID 1",
-            userName = "Test Name 1",
-            profilePictureUrl = null, // Replace with actual URL or null
-            numberOfDays = 30,
-            lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F'),
-            navigationActions = navigationActions)
-      }
+      composable(Screen.PROFILE) { ProfileScreen(navigationActions = navigationActions) }
 
       composable(Route.FRIENDS) { FriendsListScreen(navigationActions) }
 

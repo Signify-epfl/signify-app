@@ -15,6 +15,7 @@ import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Route
 import com.github.se.signify.ui.navigation.Screen
 import com.github.se.signify.ui.screens.profile.FriendsListScreen
+import com.github.se.signify.ui.screens.profile.ProfileScreen
 import com.github.se.signify.ui.screens.profile.SettingsScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Before
@@ -38,6 +39,7 @@ class MainActivityTest {
     composeTestRule.setContent {
       FriendsListScreen(navigationActions, userViewModel)
       SettingsScreen(navigationActions, userViewModel)
+      ProfileScreen(navigationActions, userViewModel)
       // Set the content with the mocked context
       SignifyAppPreview(context, navigationState)
     }
@@ -48,7 +50,7 @@ class MainActivityTest {
 
     composeTestRule.onNodeWithTag("WelcomeScreen").assertIsDisplayed()
 
-    composeTestRule.runOnIdle { navigationState.value?.navigateTo(Route.PROFILE) }
+    composeTestRule.runOnIdle { navigationActions.navigateTo(Route.PROFILE) }
     composeTestRule.onNodeWithTag("ProfileScreen").assertIsDisplayed()
 
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Screen.AUTH) }
