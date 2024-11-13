@@ -47,7 +47,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -125,7 +124,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
             modifier =
                 Modifier.weight(
                     1f) // Ensures LazyColumn takes up the remaining space without infinite height
-                        // constraints
+            // constraints
             ) {
               item {
                 Row(
@@ -228,9 +227,9 @@ fun LetterDictionary(
         val currentLetter = letters[currentLetterIndex]
         Box(
             modifier =
-            Modifier.border(
-                2.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp))
-                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(8.dp))
+                Modifier.border(
+                        2.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(8.dp))
                     .padding(8.dp)
                     .clickable {
                       coroutineScope.launch {
@@ -314,9 +313,9 @@ fun ExerciseList(exercises: List<Exercise>, navigationActions: NavigationActions
                         .padding(4.dp)
                         .background(
                             color =
-                            if (pagerState.currentPage == index)
-                                MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.surface,
+                                if (pagerState.currentPage == index)
+                                    MaterialTheme.colorScheme.primary
+                                else MaterialTheme.colorScheme.surface,
                             shape = RoundedCornerShape(50)))
           }
         }
@@ -342,8 +341,8 @@ fun ExerciseButton(exercise: Exercise, navigationActions: NavigationActions) {
               .testTag("${exercise.name}ExerciseButton"),
       shape = RoundedCornerShape(8.dp),
       colors =
-      ButtonDefaults.buttonColors(
-          MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.onPrimary)) {
+          ButtonDefaults.buttonColors(
+              MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.onPrimary)) {
         Text(exercise.name, modifier = Modifier.testTag("${exercise.name}ExerciseButtonText"))
       }
 }
