@@ -31,7 +31,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -64,7 +63,7 @@ fun ASLRecognition(
   Scaffold(
       topBar = {
         TopAppBar(
-            modifier = Modifier.background(color = Color.Blue),
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
             title = {
               Text("Practice your signs", modifier = Modifier.testTag("aslRecognitionTitle"))
             },
