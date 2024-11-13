@@ -78,25 +78,28 @@ class HandLandMarkViewModel(
    */
   fun landMarks(): StateFlow<List<NormalizedLandmark>?> = handLandmarks
 
-    /**
-     * Provides a factory for creating instances of [HandLandMarkViewModel].
-     *
-     * This function returns a [ViewModelProvider.Factory] object which is used to create
-     * instances of the [HandLandMarkViewModel] class, injecting the required dependencies.
-     *
-     * @param context The [Context] required by the ViewModel, used for accessing resources and other application-specific functionality.
-     * @param handLandMarkRepository The repository for accessing hand landmark data, used by the ViewModel to interact with data sources.
-     * @return A [ViewModelProvider.Factory] object to create the [HandLandMarkViewModel] instances.
-     */
-    companion object {
-        fun provideFactory(
-            context: Context,
-            handLandMarkRepository: HandLandMarkRepository
-        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return HandLandMarkViewModel(handLandMarkRepository, context) as T
-            }
+  /**
+   * Provides a factory for creating instances of [HandLandMarkViewModel].
+   *
+   * This function returns a [ViewModelProvider.Factory] object which is used to create instances of
+   * the [HandLandMarkViewModel] class, injecting the required dependencies.
+   *
+   * @param context The [Context] required by the ViewModel, used for accessing resources and other
+   *   application-specific functionality.
+   * @param handLandMarkRepository The repository for accessing hand landmark data, used by the
+   *   ViewModel to interact with data sources.
+   * @return A [ViewModelProvider.Factory] object to create the [HandLandMarkViewModel] instances.
+   */
+  companion object {
+    fun provideFactory(
+        context: Context,
+        handLandMarkRepository: HandLandMarkRepository
+    ): ViewModelProvider.Factory =
+        object : ViewModelProvider.Factory {
+          @Suppress("UNCHECKED_CAST")
+          override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return HandLandMarkViewModel(handLandMarkRepository, context) as T
+          }
         }
-    }
+  }
 }
