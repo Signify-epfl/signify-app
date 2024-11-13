@@ -64,7 +64,7 @@ fun ASLRecognition(
   Scaffold(
       topBar = {
         TopAppBar(
-            modifier = Modifier.background(color = Color.Transparent),
+            modifier = Modifier.background(color = Color.Blue),
             title = {
               Text("Practice your signs", modifier = Modifier.testTag("aslRecognitionTitle"))
             },
