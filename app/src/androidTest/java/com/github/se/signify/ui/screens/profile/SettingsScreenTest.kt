@@ -75,7 +75,7 @@ class SettingsScreenTest {
     composeTestRule.onNodeWithContentDescription("Delete Profile Picture").assertIsDisplayed()
 
     // Check if the "Other settings" section is displayed
-    composeTestRule.onNodeWithText("Other settings:\nLanguage,\n theme, ...").assertIsDisplayed()
+    composeTestRule.onNodeWithText("Other settings:\nLanguage,\nTheme,\n...").assertIsDisplayed()
 
     // Check if the Cancel button is displayed
     composeTestRule.onNodeWithText("Cancel").assertIsDisplayed()

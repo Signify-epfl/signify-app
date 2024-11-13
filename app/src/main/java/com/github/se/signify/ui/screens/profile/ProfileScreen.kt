@@ -51,26 +51,26 @@ fun ProfileScreen(
         iconTestTag = "SettingsIcon",
         icon = Icons.Outlined.Settings,
         contentDescription = "Settings")
-    Spacer(modifier = Modifier.height(24.dp))
+    Spacer(modifier = Modifier.height(32.dp))
 
     // Top information
     AccountInformation(
         userId = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0) ?: "unknown",
         userName = userName.value,
         profilePictureUrl = profilePictureUrl.value,
-        days = 30)
+        days = 30) // TODO stats
     Spacer(modifier = Modifier.height(32.dp))
 
     // Letters learned
-    LearnedLetterList(lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F'))
-    Spacer(modifier = Modifier.height(64.dp))
+    LearnedLetterList(lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F')) // TODO stats
+    Spacer(modifier = Modifier.height(32.dp))
 
     // Friends List button
     SquareButton(
         iconRes = R.drawable.friendsicon,
         label = "My Friends",
         onClick = { navigationActions.navigateTo(Route.FRIENDS) },
-        size = 240,
+        size = 200,
         modifier = Modifier.testTag("MyFriendsButton"))
     Spacer(modifier = Modifier.height(32.dp))
 
@@ -79,7 +79,7 @@ fun ProfileScreen(
         iconRes = R.drawable.statisticsicon,
         label = "My Stats",
         onClick = { navigationActions.navigateTo(Route.STATS) },
-        size = 240,
+        size = 200,
         modifier = Modifier.testTag("MyStatsButton"))
   }
 }

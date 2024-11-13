@@ -79,7 +79,7 @@ class MainActivityTest {
     composeTestRule.onNodeWithTag("ChallengeHistoryScreen").assertIsDisplayed()
 
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Screen.CHALLENGE) }
-    composeTestRule.onNodeWithTag("ChallengeScreenContent").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("ChallengeScreen").assertIsDisplayed()
 
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Screen.PRACTICE) }
   }
