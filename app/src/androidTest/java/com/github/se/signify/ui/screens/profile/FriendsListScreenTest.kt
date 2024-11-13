@@ -62,7 +62,7 @@ class FriendsListScreenTest {
   @Test
   fun testFriendsListScreenDisplaysCorrectInformation() {
     // Verify top blue bar is displayed
-    composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
 
     // Verify top information are displayed
     composeTestRule.onNodeWithTag("UserInfo").assertIsDisplayed()

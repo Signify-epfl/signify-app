@@ -182,4 +182,13 @@ class HomeScreenTest {
     composeTestRule.onNodeWithTag("LetterText_Z").assertIsDisplayed()
     composeTestRule.onNodeWithTag("LetterIcon_Z").assertIsDisplayed()
   }
+
+  @Test
+  fun dictionnaryIsDisplayed() {
+    composeTestRule.setContent { HomeScreen(navigationActions) }
+    ('A'..'Z').forEach { letter ->
+      composeTestRule.onNodeWithTag("LetterTextDict_$letter")
+      composeTestRule.onNodeWithTag("SignTipBox_$letter")
+    }
+  }
 }

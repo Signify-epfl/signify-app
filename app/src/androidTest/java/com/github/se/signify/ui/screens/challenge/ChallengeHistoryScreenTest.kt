@@ -35,7 +35,7 @@ class ChallengeHistoryScreenTest {
   fun challengeHistoryScreenDisplaysCorrectElements() {
 
     // Verify top blue bar and back button is displayed
-    composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
     composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
 
     // Verify friends challenges achieved section is displayed with counts

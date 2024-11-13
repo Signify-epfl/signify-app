@@ -37,6 +37,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -55,7 +56,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -148,7 +148,7 @@ fun ASLRecognition(
           Column(
               modifier =
                   Modifier.verticalScroll(rememberScrollState())
-                      .background(colorResource(R.color.white))
+                      .background(MaterialTheme.colorScheme.background)
                       .padding(paddingValues)
                       .padding(start = 40.dp, end = 40.dp),
               horizontalAlignment = Alignment.CenterHorizontally) {
@@ -156,7 +156,7 @@ fun ASLRecognition(
                     modifier =
                         Modifier.width(336.dp)
                             .height(252.dp)
-                            .background(color = colorResource(R.color.white)),
+                            .background(color = MaterialTheme.colorScheme.background),
                 ) {
                   CameraPreviewWithAnalysisView(handLandMarkViewModel)
                 }
@@ -174,9 +174,11 @@ fun ASLRecognition(
                           Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(buttonUriString) }
                       context.startActivity(intent)
                     },
-                    colors = ButtonDefaults.buttonColors(colorResource(R.color.blue)),
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
                     modifier = Modifier.width(336.dp).height(50.dp).testTag("practiceButton")) {
-                      Text(text = "More on ASL Alphabet", color = colorResource(R.color.white))
+                      Text(
+                          text = "More on ASL Alphabet",
+                          color = MaterialTheme.colorScheme.onPrimary)
                     }
               }
         },
@@ -211,11 +213,11 @@ fun HandGestureImage(gesture: String) {
       modifier =
           Modifier.border(
                   width = 3.dp,
-                  color = colorResource(R.color.blue),
+                  color = MaterialTheme.colorScheme.outline,
                   shape = RoundedCornerShape(size = 10.dp))
               .width(332.dp)
               .height(270.dp)
-              .background(colorResource(R.color.blue))
+              .background(MaterialTheme.colorScheme.primary)
               .padding(start = 116.dp, top = 85.dp, end = 116.dp, bottom = 85.dp)) {
         Image(
             painter = painterResource(id = imageResource),
@@ -233,12 +235,12 @@ fun DrawnOutPut(landmarks: List<NormalizedLandmark>?, text: String) {
         text
       }
 
-  val paintColor = colorResource(R.color.white)
+  val paintColor = MaterialTheme.colorScheme.background
   Box(
       modifier =
           Modifier.width(336.dp)
               .height(70.dp)
-              .background(color = colorResource(R.color.blue))
+              .background(color = MaterialTheme.colorScheme.primary)
               .padding(vertical = 9.dp)
               .testTag("gestureOverlayView"),
       contentAlignment = Alignment.Center) {

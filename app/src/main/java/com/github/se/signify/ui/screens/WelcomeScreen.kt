@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,7 +18,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -68,7 +68,7 @@ fun WelcomeScreen(navigationActions: NavigationActions) {
       modifier =
           Modifier.fillMaxSize()
               .testTag("WelcomeScreen")
-              .background(color = colorResource(R.color.blue)),
+              .background(color = MaterialTheme.colorScheme.primary),
       horizontalAlignment = Alignment.CenterHorizontally,
       verticalArrangement = Arrangement.Center) {
         Image(
@@ -93,7 +93,7 @@ fun HighlightedText(text: String, highlightIndex: Int) {
                     style =
                         SpanStyle(
                             textDecoration = TextDecoration.Underline,
-                            color = colorResource(R.color.white))) {
+                            color = MaterialTheme.colorScheme.onPrimary)) {
                       append(text[i])
                     }
               } else {
@@ -108,7 +108,7 @@ fun HighlightedText(text: String, highlightIndex: Int) {
               fontSize = 36.sp,
               lineHeight = 40.sp,
               fontWeight = FontWeight(500),
-              color = colorResource(R.color.white),
+              color = MaterialTheme.colorScheme.onPrimary,
               textAlign = TextAlign.Center,
               letterSpacing = 0.25.sp,
           ))

@@ -24,6 +24,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -41,13 +42,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.github.se.signify.R
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.AccountInformation
 import com.github.se.signify.ui.AnnexScreenScaffold
@@ -108,7 +107,7 @@ fun FriendsListScreen(
       Dialog(onDismissRequest = { userViewModel.setSearchResult(null) }) {
         Surface(
             shape = RoundedCornerShape(16.dp),
-            color = colorResource(R.color.white),
+            color = MaterialTheme.colorScheme.surface,
             modifier = Modifier.fillMaxWidth().padding(16.dp)) {
               Column(
                   horizontalAlignment = Alignment.CenterHorizontally,
@@ -121,7 +120,7 @@ fun FriendsListScreen(
                     Text(
                         text = searchResult.value!!.name.toString(),
                         fontWeight = FontWeight.Bold,
-                        color = colorResource(R.color.dark_gray))
+                        color = MaterialTheme.colorScheme.onSurface)
                     Spacer(modifier = Modifier.height(8.dp))
 
                     // Check if the users are friends
@@ -133,7 +132,7 @@ fun FriendsListScreen(
 
                     // Close button
                     TextButton(onClick = { userViewModel.setSearchResult(null) }) {
-                      Text("Close", color = colorResource(R.color.dark_gray))
+                      Text("Close", color = MaterialTheme.colorScheme.onSurface)
                     }
                   }
             }
@@ -167,8 +166,8 @@ fun AddFriendButton(userViewModel: UserViewModel) {
       },
       colors =
           ButtonDefaults.buttonColors(
-              containerColor = colorResource(R.color.blue),
-              contentColor = colorResource(R.color.dark_gray)),
+              containerColor = MaterialTheme.colorScheme.primary,
+              contentColor = MaterialTheme.colorScheme.onPrimary),
       modifier = Modifier.fillMaxWidth()) {
         Text("Add Friend")
       }
@@ -183,8 +182,8 @@ fun RemoveFriendButton(userViewModel: UserViewModel) {
       },
       colors =
           ButtonDefaults.buttonColors(
-              containerColor = colorResource(R.color.blue),
-              contentColor = colorResource(R.color.dark_gray)),
+              containerColor = MaterialTheme.colorScheme.error,
+              contentColor = MaterialTheme.colorScheme.onError),
       modifier = Modifier.fillMaxWidth()) {
         Text("Remove Friend")
       }
@@ -194,7 +193,7 @@ fun RemoveFriendButton(userViewModel: UserViewModel) {
 fun ErrorMessage(message: String) {
   Text(
       text = message,
-      color = colorResource(R.color.red),
+      color = MaterialTheme.colorScheme.error,
       modifier = Modifier.fillMaxWidth().padding(16.dp),
       fontWeight = FontWeight.Bold)
 }
@@ -213,19 +212,24 @@ fun SearchBar(
           Modifier.fillMaxWidth()
               .padding(start = 30.dp, end = 30.dp)
               .border(
-                  BorderStroke(2.dp, colorResource(R.color.dark_gray)), RoundedCornerShape(16.dp))
+                  BorderStroke(2.dp, MaterialTheme.colorScheme.outline), RoundedCornerShape(16.dp))
               .testTag("SearchBar"),
-      placeholder = { Text("Search by user ID", color = colorResource(R.color.white)) },
+      placeholder = {
+        Text("Search by user ID", color = MaterialTheme.colorScheme.inverseOnSurface)
+      },
       colors =
           TextFieldDefaults.colors(
-              focusedContainerColor = colorResource(R.color.blue),
-              unfocusedContainerColor = colorResource(R.color.blue),
-              focusedTextColor = colorResource(R.color.white),
-              cursorColor = colorResource(R.color.dark_gray)),
+              focusedContainerColor = MaterialTheme.colorScheme.inverseSurface,
+              unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+              focusedTextColor = MaterialTheme.colorScheme.inverseOnSurface,
+              cursorColor = MaterialTheme.colorScheme.inverseOnSurface),
       singleLine = true,
       trailingIcon = {
         ActionButton(
-            { onSearch(searchQuery) }, Icons.Default.Search, colorResource(R.color.blue), "Search")
+            { onSearch(searchQuery) },
+            Icons.Default.Search,
+            MaterialTheme.colorScheme.primary,
+            "Search")
       })
 }
 
@@ -238,16 +242,16 @@ fun FriendListCard(
 ) {
   Card(
       modifier = Modifier.fillMaxWidth().padding(start = 30.dp, end = 30.dp),
-      colors = CardDefaults.cardColors(containerColor = colorResource(R.color.blue)),
+      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
       shape = RoundedCornerShape(16.dp),
-      border = BorderStroke(2.dp, colorResource(R.color.dark_gray)),
+      border = BorderStroke(2.dp, MaterialTheme.colorScheme.outline),
   ) {
     Column(
         modifier = Modifier.fillMaxWidth().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
           Text(
               text = title,
-              color = colorResource(R.color.dark_gray),
+              color = MaterialTheme.colorScheme.onPrimary,
               fontWeight = FontWeight.Bold,
               fontSize = 20.sp,
               modifier = Modifier.padding(bottom = 4.dp).align(Alignment.CenterHorizontally))
@@ -255,7 +259,7 @@ fun FriendListCard(
           if (items.isEmpty()) {
             Text(
                 text = emptyMessage,
-                color = colorResource(R.color.white),
+                color = MaterialTheme.colorScheme.error,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(top = 32.dp).align(Alignment.CenterHorizontally))
           } else {
@@ -274,8 +278,8 @@ fun FriendCard(name: String, actions: @Composable RowScope.() -> Unit) {
       modifier =
           Modifier.fillMaxWidth()
               .padding(8.dp)
-              .border(2.dp, colorResource(R.color.dark_gray), RoundedCornerShape(50.dp)),
-      colors = CardDefaults.cardColors(containerColor = colorResource(R.color.white)),
+              .border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(50.dp)),
+      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
       elevation = CardDefaults.cardElevation(8.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(8.dp),
@@ -297,10 +301,10 @@ fun FriendItem(
     // Button "Remove"
     Button(
         onClick = { userViewModel.removeFriend(currentUserId, friendName) },
-        colors = ButtonDefaults.buttonColors(colorResource(R.color.dark_gray)),
+        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.error),
         shape = RoundedCornerShape(50.dp),
     ) {
-      Text(text = "Remove", color = colorResource(R.color.white))
+      Text(text = "Remove", color = MaterialTheme.colorScheme.onError)
     }
   }
 }
@@ -320,14 +324,14 @@ fun FriendRequestItem(
           ActionButton(
               { userViewModel.acceptFriendRequest(currentUserId, friendRequestName) },
               Icons.Default.AddCircle,
-              colorResource(R.color.blue),
+              MaterialTheme.colorScheme.primary,
               "Accept")
 
           // Button "Decline"
           ActionButton(
               { userViewModel.declineFriendRequest(currentUserId, friendRequestName) },
               Icons.Default.Delete,
-              colorResource(R.color.dark_gray),
+              MaterialTheme.colorScheme.error,
               "Decline")
         }
   }
@@ -346,7 +350,7 @@ fun ActionButton(
         Icon(
             imageVector = icon,
             contentDescription = contentDescription,
-            tint = colorResource(R.color.white),
+            tint = MaterialTheme.colorScheme.background,
         )
       }
 }
@@ -355,7 +359,7 @@ fun ActionButton(
 fun UserTextName(name: String) {
   Text(
       text = name,
-      color = colorResource(R.color.dark_gray),
+      color = MaterialTheme.colorScheme.onBackground,
       fontWeight = FontWeight.Bold,
       modifier = Modifier.padding(start = 16.dp))
 }
