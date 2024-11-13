@@ -33,6 +33,7 @@ jobs:
           lfs: true  # Enables LFS file download
           submodules: recursive
           fetch-depth: 0
+          
       # Check if the File is in the build with correct size
       - name: Verify LFS Download
         run: |
@@ -68,6 +69,10 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
+      # Run ktfmt format before checking
+      - name: Run KTFmt Format
+        run: ./gradlew ktfmtFormat
+
       - name: KTFmt Check
         run: ./gradlew ktfmtCheck
 
@@ -98,7 +103,6 @@ jobs:
           name: Coverage report
           path: app/build/reports/jacoco/jacocoTestReport
 
-
       - name: Run SonarQube analysis
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -106,7 +110,6 @@ jobs:
         run: ./gradlew sonar --info
 
       # New Steps: Building the Signed APK
-
       - name: Decode the base64-encoded keystore
         run: echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > ./keystore.jks
 
@@ -122,13 +125,16 @@ jobs:
           -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD \
           -Pandroid.injected.signing.key.alias=$KEY_ALIAS \
           -Pandroid.injected.signing.key.password=$KEY_PASSWORD
+
       - name: Upload Signed APK
         uses: actions/upload-artifact@v4
         with:
           name: release apk
           path: app/build/outputs/apk/release/app-release.apk
+
       - name: Verify APK Contents
         run: |
           unzip -l app/build/outputs/apk/release/app-release.apk | grep -E "RFC_model_ir9_opset19.onnx|hand_landmarker.task"
+
       - name: List Assets Directory Contents
         run: ls -la app/src/main/assets
