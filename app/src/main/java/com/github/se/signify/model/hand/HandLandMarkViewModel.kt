@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.camera.core.ImageProxy
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +20,7 @@ import kotlinx.coroutines.launch
  *   hand landmark data.
  * @property context The application context used to initialize the repository.
  */
+@Suppress("KDocUnresolvedReference")
 class HandLandMarkViewModel(
     private val handLandMarkRepository: HandLandMarkRepository,
     context: Context
@@ -75,4 +77,26 @@ class HandLandMarkViewModel(
    * @return A StateFlow containing a list of normalized landmarks or null if no landmarks detected.
    */
   fun landMarks(): StateFlow<List<NormalizedLandmark>?> = handLandmarks
+
+    /**
+     * Provides a factory for creating instances of [HandLandMarkViewModel].
+     *
+     * This function returns a [ViewModelProvider.Factory] object which is used to create
+     * instances of the [HandLandMarkViewModel] class, injecting the required dependencies.
+     *
+     * @param context The [Context] required by the ViewModel, used for accessing resources and other application-specific functionality.
+     * @param handLandMarkRepository The repository for accessing hand landmark data, used by the ViewModel to interact with data sources.
+     * @return A [ViewModelProvider.Factory] object to create the [HandLandMarkViewModel] instances.
+     */
+    companion object {
+        fun provideFactory(
+            context: Context,
+            handLandMarkRepository: HandLandMarkRepository
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return HandLandMarkViewModel(handLandMarkRepository, context) as T
+            }
+        }
+    }
 }
