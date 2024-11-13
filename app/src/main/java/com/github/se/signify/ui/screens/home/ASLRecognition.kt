@@ -14,9 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,6 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -63,7 +62,7 @@ fun ASLRecognition(
   Scaffold(
       topBar = {
         TopAppBar(
-            modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
+            modifier = Modifier.background(color = Color.Transparent),
             title = {
               Text("Practice your signs", modifier = Modifier.testTag("aslRecognitionTitle"))
             },
@@ -78,8 +77,7 @@ fun ASLRecognition(
       content = { paddingValues ->
         Column(
             modifier =
-                Modifier.verticalScroll(rememberScrollState())
-                    .background(MaterialTheme.colorScheme.background)
+                Modifier.background(MaterialTheme.colorScheme.background)
                     .padding(paddingValues)
                     .padding(start = 40.dp, end = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally) {
@@ -139,7 +137,7 @@ fun HandGestureImage(gesture: String) {
   Box(
       modifier =
           Modifier.width(336.dp)
-              .height(270.dp)
+              .height(200.dp)
               .clip(RoundedCornerShape(size = 10.dp))
               .background(MaterialTheme.colorScheme.primary)
               .border(
