@@ -1,5 +1,8 @@
 package com.github.se.signify.ui.screens.home
 
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
@@ -9,6 +12,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
+import kotlinx.coroutines.CoroutineScope
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -39,7 +43,7 @@ class HomeScreenTest {
     composeTestRule.onNodeWithTag("LetterDictionary").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("LetterDictionaryBack").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("LetterDictionaryForward").performScrollTo().assertIsDisplayed()
-    composeTestRule.onNodeWithTag("ExerciseList").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("ExerciseListPager").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("StreakCounter").performScrollTo().assertIsDisplayed()
   }
 
@@ -86,7 +90,7 @@ class HomeScreenTest {
   // The following 2 tests should be moved to their own file.
   @Test
   fun exerciseListDisplaysExerciseButtons() {
-    val exercises = listOf(Exercise("Easy"), Exercise("Medium"))
+    val exercises = listOf(Exercise("Easy"), Exercise("Medium"), Exercise("Hard"))
 
     composeTestRule.setContent { ExerciseList(exercises, navigationActions) }
 
@@ -117,14 +121,17 @@ class HomeScreenTest {
   fun clickingExerciseButtonsCallsOnClick() {
     val exercises =
         listOf(
-            Exercise("Easy", "EasyRoute"),
-            Exercise("Medium", "MediumRoute"),
-        )
+            Exercise("Easy", "Exercise Screen Easy"), Exercise("Hard", "Exercise Screen Hard")
+            // Need to modify hard to medium and hard should be as another exercise
+            )
 
     composeTestRule.setContent { ExerciseList(exercises, navigationActions) }
 
     exercises.forEach { exercise ->
-      composeTestRule.onNodeWithTag("${exercise.name}ExerciseButton").performClick()
+      composeTestRule
+          .onNodeWithTag("${exercise.name}ExerciseButton")
+          .performScrollTo()
+          .performClick()
 
       verify(navigationActions)
           .navigateTo(exercise.route) // Verify onClick was called with the exercise
@@ -133,36 +140,48 @@ class HomeScreenTest {
 
   @Test
   fun initialLetterIsDisplayedCorrectly() {
-    composeTestRule.setContent { LetterDictionary() }
-
-    // Assert that the initial letter 'A' and its corresponding icon are displayed
-    composeTestRule.onNodeWithTag("LetterText_A").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("LetterIcon_A").assertIsDisplayed()
+    lateinit var scrollState: LazyListState
+    lateinit var coroutineScope: CoroutineScope
+    composeTestRule.setContent {
+      scrollState = rememberLazyListState()
+      coroutineScope = rememberCoroutineScope()
+      LetterDictionary(
+          scrollState = scrollState, coroutineScope = coroutineScope, numbOfHeaders = 0)
+    }
+    composeTestRule.onNodeWithTag("LetterBox_A").assertIsDisplayed()
   }
 
   @Test
   fun forwardArrowNavigatesThroughAllLettersCorrectly() {
-    composeTestRule.setContent { LetterDictionary() }
+    composeTestRule.setContent {
+      val scrollState = rememberLazyListState()
+      val coroutineScope = rememberCoroutineScope()
+      LetterDictionary(
+          scrollState = scrollState, coroutineScope = coroutineScope, numbOfHeaders = 1)
+    }
 
     val letters = ('A'..'Z').toList()
 
     letters.forEach { letter ->
       // Assert that the letter and corresponding icon are displayed
-      composeTestRule.onNodeWithTag("LetterText_$letter").assertIsDisplayed()
-      composeTestRule.onNodeWithTag("LetterIcon_$letter").assertIsDisplayed()
+      composeTestRule.onNodeWithTag("LetterBox_$letter").assertIsDisplayed()
 
       // Click on the forward arrow to go to the next letter
       composeTestRule.onNodeWithTag("LetterDictionaryForward").performClick()
     }
 
     // After looping through all letters, it should go back to 'A'
-    composeTestRule.onNodeWithTag("LetterText_A").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("LetterIcon_A").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("LetterBox_A").assertIsDisplayed()
   }
 
   @Test
   fun backArrowNavigatesThroughAllLettersCorrectly() {
-    composeTestRule.setContent { LetterDictionary() }
+    composeTestRule.setContent {
+      val scrollState = rememberLazyListState()
+      val coroutineScope = rememberCoroutineScope()
+      LetterDictionary(
+          scrollState = scrollState, coroutineScope = coroutineScope, numbOfHeaders = 1)
+    }
 
     val letters = ('A'..'Z').reversed().toList()
 
@@ -171,24 +190,33 @@ class HomeScreenTest {
 
     letters.forEach { letter ->
       // Assert that the letter and corresponding icon are displayed
-      composeTestRule.onNodeWithTag("LetterText_$letter").assertIsDisplayed()
-      composeTestRule.onNodeWithTag("LetterIcon_$letter").assertIsDisplayed()
+      composeTestRule.onNodeWithTag("LetterBox_$letter").assertIsDisplayed()
 
       // Click on the back arrow to go to the previous letter
       composeTestRule.onNodeWithTag("LetterDictionaryBack").performClick()
     }
 
     // After looping through all letters, it should go back to 'Z'
-    composeTestRule.onNodeWithTag("LetterText_Z").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("LetterIcon_Z").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("LetterBox_Z").assertIsDisplayed()
   }
 
   @Test
-  fun dictionnaryIsDisplayed() {
+  fun dictionaryIsDisplayed() {
     composeTestRule.setContent { HomeScreen(navigationActions) }
-    ('A'..'Z').forEach { letter ->
-      composeTestRule.onNodeWithTag("LetterTextDict_$letter")
-      composeTestRule.onNodeWithTag("SignTipBox_$letter")
+
+    ('A'..'Z').forEachIndexed { index, letter ->
+      // Click on "LetterDictionaryForward" to navigate to the desired letter
+      repeat(index) { composeTestRule.onNodeWithTag("LetterDictionaryForward").performClick() }
+
+      // Click on the specific letter box
+      composeTestRule.onNodeWithTag("LetterBox_$letter").performClick()
+
+      // Assert that the text and corresponding sign tip are displayed
+      composeTestRule.onNodeWithTag("LetterTextDict_$letter").assertIsDisplayed()
+      composeTestRule.onNodeWithTag("SignTipBox_$letter").assertIsDisplayed()
+
+      // Scroll to top button is clicked
+      composeTestRule.onNodeWithTag("ScrollToTopButton").performClick()
     }
   }
 }

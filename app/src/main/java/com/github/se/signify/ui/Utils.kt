@@ -290,6 +290,7 @@ fun ScreenColumn(
  * @param testTagColumn The test tag of the column (test tag of the screen).
  * @param helpTitle The title of the info popup.
  * @param helpText The text of the info popup.
+ * @param floatingActionButton A lambda function for the floating action button.
  * @param content A lambda function for the content of the column.
  */
 @Composable
@@ -298,10 +299,12 @@ fun MainScreenScaffold(
     testTagColumn: String,
     helpTitle: String,
     helpText: String,
+    floatingActionButton: @Composable () -> Unit = {},
     content: @Composable ColumnScope.() -> Unit
 ) {
   var isHelpBoxVisible by remember { mutableStateOf(false) }
   Scaffold(
+      floatingActionButton = { floatingActionButton() },
       topBar = { TopBar() },
       bottomBar = { BottomBar(navigationActions) },
       content = { padding ->
