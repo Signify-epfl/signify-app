@@ -35,7 +35,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -54,7 +54,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
-import com.github.se.signify.ui.BottomBar
+import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.StreakCounter
 import com.github.se.signify.ui.UtilButton
 import com.github.se.signify.ui.UtilTextButton
@@ -101,60 +101,67 @@ fun HomeScreen(navigationActions: NavigationActions) {
   val defaultExercises =
       listOf(
           Exercise("Easy", Screen.EXERCISE_EASY),
-          Exercise("Medium", Screen.EXERCISE_HARD), // To change to Medium
-          Exercise("Hard", Screen.EXERCISE_HARD),
-      )
+          Exercise("Medium", Screen.EXERCISE_HARD), // Update this screen as needed
+          Exercise("Hard", Screen.EXERCISE_HARD))
 
   val scrollState = rememberLazyListState()
   val coroutineScope = rememberCoroutineScope()
-  Scaffold(
-      modifier = Modifier.testTag("HomeScreen"),
-      bottomBar = { BottomBar(navigationActions) },
+
+  MainScreenScaffold(
+      navigationActions = navigationActions,
+      testTagColumn = "HomeScreen",
+      helpTitle = "Home",
+      helpText = stringResource(R.string.help_home_screen),
       floatingActionButton = {
         FloatingActionButton(
             onClick = { coroutineScope.launch { scrollState.animateScrollToItem(0) } },
-            containerColor = colorResource(R.color.blue),
+            containerColor = MaterialTheme.colorScheme.primary,
             modifier = Modifier.testTag("ScrollToTopButton")) {
               Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Scroll to Top")
             }
-      },
-      content = { padding ->
+      }) {
         LazyColumn(
-            state = scrollState, // Attach scroll state to LazyColumn
-            modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 16.dp)) {
+            state = scrollState,
+            modifier =
+                Modifier.weight(
+                    1f) // Ensures LazyColumn takes up the remaining space without infinite height
+                        // constraints
+            ) {
               item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                  StreakCounter(0, false)
-                  UtilButton(
-                      onClick = { navigationActions.navigateTo("Quest") },
-                      buttonTestTag = "QuestsButton",
-                      iconTestTag = "QuestIcon",
-                      icon = Icons.Outlined.DateRange,
-                      contentDescription = "Quests")
-                }
+                    horizontalArrangement = Arrangement.SpaceBetween) {
+                      StreakCounter(0, false)
+                      UtilButton(
+                          onClick = { navigationActions.navigateTo("Quest") },
+                          buttonTestTag = "QuestsButton",
+                          iconTestTag = "QuestIcon",
+                          icon = Icons.Outlined.DateRange,
+                          contentDescription = "Quests")
+                    }
               }
 
               item { Spacer(modifier = Modifier.height(32.dp)) }
+
               item {
                 CameraFeedbackButton(onClick = { navigationActions.navigateTo(Screen.PRACTICE) })
               }
+
               item { Spacer(modifier = Modifier.height(32.dp)) }
+
               item {
                 LetterDictionary(
                     scrollState = scrollState,
                     coroutineScope = coroutineScope,
                     numbOfHeaders = integerResource(R.integer.scroll_offset))
               }
+
               item { Spacer(modifier = Modifier.height(32.dp)) }
+
               item { ExerciseList(defaultExercises, navigationActions) }
+
               item { Spacer(modifier = Modifier.height(32.dp)) }
-              // Display letters with SignTipBox in a LazyColumn
-              // Putting this in CreateDictionaryWithImages
-              // would lead to undesirable behavior i.e the scroll will not work as intended
-              // as each item should be displayed in an item block
+
               items(('A'..'Z').toList()) { letter ->
                 Text(
                     text = "Letter $letter",
@@ -165,8 +172,9 @@ fun HomeScreen(navigationActions: NavigationActions) {
                 Spacer(modifier = Modifier.height(16.dp))
               }
             }
-      })
+      }
 }
+
 /**
  * Composable function that displays a button for initiating camera feedback functionality. The
  * button uses a default background color and a customizable click action.

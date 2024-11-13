@@ -297,10 +297,12 @@ fun MainScreenScaffold(
     testTagColumn: String,
     helpTitle: String,
     helpText: String,
+    floatingActionButton: @Composable () -> Unit = {},
     content: @Composable ColumnScope.() -> Unit
 ) {
   var isHelpBoxVisible by remember { mutableStateOf(false) }
   Scaffold(
+      floatingActionButton = { floatingActionButton() },
       topBar = { TopBar() },
       bottomBar = { BottomBar(navigationActions) },
       content = { padding ->
