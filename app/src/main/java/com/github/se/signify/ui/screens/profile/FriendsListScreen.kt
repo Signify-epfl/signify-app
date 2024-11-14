@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -48,8 +47,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
-import com.github.se.signify.ui.BackButton
+import com.github.se.signify.ui.AccountInformation
+import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
@@ -59,109 +60,103 @@ val currentUserId = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.g
 @Composable
 fun FriendsListScreen(
     navigationActions: NavigationActions,
-    userViewModel: UserViewModel = viewModel(factory = UserViewModel.Factory)
+    userRepository: UserRepository,
+    userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository))
 ) {
   var errorMessage by remember { mutableStateOf("") }
 
-  Column(
-      modifier =
-          Modifier.fillMaxSize()
-              .padding(16.dp)
-              .testTag("FriendsListScreen")
-              .background(MaterialTheme.colorScheme.background)) {
-        LaunchedEffect(Unit) {
-          userViewModel.getFriendsList(currentUserId)
-          userViewModel.getRequestsFriendsList(currentUserId)
-        }
+  AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = "FriendsListScreen") {
+    LaunchedEffect(Unit) {
+      userViewModel.getFriendsList(currentUserId)
+      userViewModel.getRequestsFriendsList(currentUserId)
+    }
+    val friends = userViewModel.friends.collectAsState()
+    val friendsRequests = userViewModel.friendsRequests.collectAsState()
+    val searchResult = userViewModel.searchResult.collectAsState()
 
-        val friends = userViewModel.friends.collectAsState()
-        val friendsRequests = userViewModel.friendsRequests.collectAsState()
-        val searchResult = userViewModel.searchResult.collectAsState()
+    // Top information
+    AccountInformation(
+        userId = currentUserId,
+        userName = userViewModel.getUserName(currentUserId).toString(),
+        profilePictureUrl = userViewModel.getProfilePictureUrl(currentUserId).toString(),
+        days = 10 // TODO change with days (when the user model will be updated)
+        )
+    Spacer(modifier = Modifier.height(32.dp))
 
-        Column(modifier = Modifier.fillMaxSize()) {
-          // Back Button
-          BackButton { navigationActions.goBack() }
-
-          Spacer(modifier = Modifier.height(16.dp))
-
-          SearchBar { searchQuery ->
-            if (searchQuery.isNotEmpty()) {
-              try {
-                userViewModel.getUserById(searchQuery)
-                if (searchResult.value == null) {
-                  errorMessage = "User not found"
-                }
-              } catch (e: Exception) {
-                errorMessage = "Error : ${e.message}"
-              }
-            }
+    SearchBar { searchQuery ->
+      if (searchQuery.isNotEmpty()) {
+        try {
+          userViewModel.getUserById(searchQuery)
+          if (searchResult.value == null) {
+            errorMessage = "User not found"
           }
-
-          errorMessage.let { message ->
-            ErrorMessage(message)
-            // Dismiss the message
-            LaunchedEffect(message) {
-              delay(3000)
-              errorMessage = ""
-            }
-          }
-
-          if (searchResult.value != null && searchResult.value!!.uid != currentUserId) {
-            Dialog(onDismissRequest = { userViewModel.setSearchResult(null) }) {
-              Surface(
-                  shape = RoundedCornerShape(16.dp),
-                  color = MaterialTheme.colorScheme.surface,
-                  modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-
-                          // TODO: add the profile picture
-
-                          // Display the user's name
-                          Text(
-                              text = searchResult.value!!.name.toString(),
-                              fontWeight = FontWeight.Bold,
-                              color = MaterialTheme.colorScheme.onSurface)
-                          Spacer(modifier = Modifier.height(8.dp))
-
-                          // Check if the users are friends
-                          if (friends.value.contains(searchResult.value!!.uid)) {
-                            RemoveFriendButton(userViewModel)
-                          } else {
-                            AddFriendButton(userViewModel)
-                          }
-
-                          // Close button
-                          TextButton(onClick = { userViewModel.setSearchResult(null) }) {
-                            Text("Close", color = MaterialTheme.colorScheme.onSurface)
-                          }
-                        }
-                  }
-            }
-          }
-
-          // My Friends List
-          FriendListCard(
-              title = "My friends list",
-              items = friends.value,
-              emptyMessage = "You have no friends") { friendName ->
-                FriendItem(friendName = friendName, userViewModel = userViewModel)
-              }
-
-          Spacer(modifier = Modifier.height(32.dp))
-
-          // New Friends Demands
-          FriendListCard(
-              title = "New friends demands",
-              items = friendsRequests.value,
-              emptyMessage = "No new friend requests") { friendRequestName ->
-                FriendRequestItem(
-                    friendRequestName = friendRequestName, userViewModel = userViewModel)
-              }
+        } catch (e: Exception) {
+          errorMessage = "Error : ${e.message}"
         }
       }
+    }
+
+    errorMessage.let { message ->
+      ErrorMessage(message)
+      // Dismiss the message
+      LaunchedEffect(message) {
+        delay(3000)
+        errorMessage = ""
+      }
+    }
+
+    if (searchResult.value != null && searchResult.value!!.uid != currentUserId) {
+      Dialog(onDismissRequest = { userViewModel.setSearchResult(null) }) {
+        Surface(
+            shape = RoundedCornerShape(16.dp),
+            color = MaterialTheme.colorScheme.surface,
+            modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+              Column(
+                  horizontalAlignment = Alignment.CenterHorizontally,
+                  verticalArrangement = Arrangement.Center,
+                  modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+
+                    // TODO: add the profile picture
+
+                    // Display the user's name
+                    Text(
+                        text = searchResult.value!!.name.toString(),
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface)
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // Check if the users are friends
+                    if (friends.value.contains(searchResult.value!!.uid)) {
+                      RemoveFriendButton(userViewModel)
+                    } else {
+                      AddFriendButton(userViewModel)
+                    }
+
+                    // Close button
+                    TextButton(onClick = { userViewModel.setSearchResult(null) }) {
+                      Text("Close", color = MaterialTheme.colorScheme.onSurface)
+                    }
+                  }
+            }
+      }
+    }
+
+    // My Friends List
+    FriendListCard(
+        title = "My friends list", items = friends.value, emptyMessage = "You have no friends") {
+            friendName ->
+          FriendItem(friendName = friendName, userViewModel = userViewModel)
+        }
+    Spacer(modifier = Modifier.height(32.dp))
+
+    // New Friends Demands
+    FriendListCard(
+        title = "New friends demands",
+        items = friendsRequests.value,
+        emptyMessage = "No new friend requests") { friendRequestName ->
+          FriendRequestItem(friendRequestName = friendRequestName, userViewModel = userViewModel)
+        }
+  }
 }
 
 @Composable
@@ -299,10 +294,7 @@ fun FriendCard(name: String, actions: @Composable RowScope.() -> Unit) {
 }
 
 @Composable
-fun FriendItem(
-    friendName: String,
-    userViewModel: UserViewModel = viewModel(factory = UserViewModel.Factory)
-) {
+fun FriendItem(friendName: String, userViewModel: UserViewModel) {
   FriendCard(friendName) {
 
     // Button "Remove"
@@ -317,10 +309,7 @@ fun FriendItem(
 }
 
 @Composable
-fun FriendRequestItem(
-    friendRequestName: String,
-    userViewModel: UserViewModel = viewModel(factory = UserViewModel.Factory)
-) {
+fun FriendRequestItem(friendRequestName: String, userViewModel: UserViewModel) {
 
   FriendCard(friendRequestName) {
     Row(

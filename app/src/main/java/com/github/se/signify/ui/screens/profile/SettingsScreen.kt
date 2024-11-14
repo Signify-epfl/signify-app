@@ -9,19 +9,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
@@ -44,13 +40,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
-import com.github.se.signify.ui.BackButton
+import com.github.se.signify.ui.AnnexScreenScaffold
+import com.github.se.signify.ui.NotImplementedYet
 import com.github.se.signify.ui.ProfilePicture
 import com.github.se.signify.ui.navigation.NavigationActions
 import java.io.File
@@ -59,8 +55,10 @@ import java.io.FileOutputStream
 @Composable
 fun SettingsScreen(
     navigationActions: NavigationActions,
-    userViewModel: UserViewModel = viewModel(factory = UserViewModel.Factory)
+    userRepository: UserRepository,
 ) {
+  val userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository))
+
   val context = LocalContext.current
 
   LaunchedEffect(Unit) {
@@ -85,137 +83,109 @@ fun SettingsScreen(
         }
       }
 
-  Column(
-      modifier =
-          Modifier.fillMaxSize()
-              .verticalScroll(rememberScrollState())
-              .background(MaterialTheme.colorScheme.background)
-              .testTag("SettingsScreen"),
-      verticalArrangement = Arrangement.spacedBy(64.dp)) {
 
-        // Back Button
-        BackButton { navigationActions.goBack() }
+  AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = "SettingsScreen") {
+    // Editable Profile Picture
+    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+      Row(
+          modifier =
+              Modifier.border(
+                      2.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp))
+                  .clip(RoundedCornerShape(8.dp))
+                  .background(MaterialTheme.colorScheme.background)
+                  .padding(horizontal = 24.dp, vertical = 16.dp),
+          horizontalArrangement = Arrangement.Center,
+          verticalAlignment = Alignment.CenterVertically,
+      ) {
+        Column {
+          Icon(
+              modifier = Modifier.clickable { galleryLauncher.launch("image/*") },
+              imageVector = Icons.Outlined.Edit,
+              contentDescription = "Edit Profile Picture",
+              tint = MaterialTheme.colorScheme.onBackground,
+          )
 
-        // Editable Profile Picture
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally) {
-              Row(
-                  modifier =
-                      Modifier.border(
-                              2.dp,
-                              MaterialTheme.colorScheme.outlineVariant,
-                              RoundedCornerShape(8.dp))
-                          .clip(RoundedCornerShape(8.dp))
-                          .background(MaterialTheme.colorScheme.background)
-                          .padding(horizontal = 24.dp, vertical = 16.dp),
-                  horizontalArrangement = Arrangement.Center,
-                  verticalAlignment = Alignment.CenterVertically,
-              ) {
-                Column {
-                  Icon(
-                      modifier = Modifier.clickable { galleryLauncher.launch("image/*") },
-                      imageVector = Icons.Outlined.Edit,
-                      contentDescription = "Edit Profile Picture",
-                      tint = MaterialTheme.colorScheme.onBackground,
-                  )
+          Spacer(modifier = Modifier.height(16.dp))
 
-                  Spacer(modifier = Modifier.height(16.dp))
-
-                  Icon(
-                      modifier = Modifier.clickable { selectedImageUrl = null },
-                      imageVector = Icons.Outlined.Delete,
-                      contentDescription = "Delete Profile Picture",
-                      tint = MaterialTheme.colorScheme.onBackground,
-                  )
-                }
-
-                Spacer(modifier = Modifier.width(8.dp))
-                ProfilePicture(selectedImageUrl)
-              }
-            }
-
-        // Editable Username
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally) {
-              Row(
-                  modifier =
-                      Modifier.border(
-                              2.dp,
-                              MaterialTheme.colorScheme.outlineVariant,
-                              RoundedCornerShape(8.dp))
-                          .clip(RoundedCornerShape(8.dp))
-                          .background(MaterialTheme.colorScheme.background)
-                          .padding(horizontal = 24.dp, vertical = 8.dp),
-                  verticalAlignment = Alignment.CenterVertically,
-                  horizontalArrangement = Arrangement.Center) {
-                    Icon(
-                        imageVector = Icons.Outlined.Edit,
-                        contentDescription = "Edit Username",
-                        tint = MaterialTheme.colorScheme.onBackground)
-
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    TextField(
-                        value = newName,
-                        onValueChange = { newName = it },
-                        placeholder = {
-                          Text(userName.value, color = MaterialTheme.colorScheme.onBackground)
-                        },
-                        modifier =
-                            Modifier.widthIn(max = 200.dp)
-                                .padding(vertical = 8.dp)
-                                .background(MaterialTheme.colorScheme.background),
-                        colors =
-                            TextFieldDefaults.colors(
-                                focusedContainerColor = MaterialTheme.colorScheme.background,
-                                unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                                focusedTextColor = MaterialTheme.colorScheme.onBackground,
-                                cursorColor = MaterialTheme.colorScheme.onBackground))
-                  }
-            }
-
-        // Other Settings Section
-        Box(
-            modifier =
-                Modifier.fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(MaterialTheme.colorScheme.surface)
-                    .padding(16.dp),
-            contentAlignment = Alignment.Center) {
-              Text(
-                  text = "Other settings:\nLanguage,\n theme, ...",
-                  fontSize = 16.sp,
-                  color = MaterialTheme.colorScheme.onSurface,
-                  fontWeight = FontWeight.Normal)
-            }
-
-        // Cancel and Save Buttons
-        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-          ActionButtons(
-              {
-                Toast.makeText(context, "Changes canceled.", Toast.LENGTH_SHORT).show()
-                newName = ""
-                selectedImageUrl = profilePictureUrl.value
-              },
-              MaterialTheme.colorScheme.error,
-              "Cancel",
-              Modifier.weight(1f))
-
-          ActionButtons(
-              {
-                if (newName.isNotBlank()) {
-                  userViewModel.updateUserName(currentUserId, newName)
-                }
-                userViewModel.updateProfilePictureUrl(currentUserId, selectedImageUrl)
-                Toast.makeText(context, "Changes saved.", Toast.LENGTH_SHORT).show()
-              },
-              MaterialTheme.colorScheme.primary,
-              "Save",
-              Modifier.weight(1f))
+          Icon(
+              modifier = Modifier.clickable { selectedImageUrl = null },
+              imageVector = Icons.Outlined.Delete,
+              contentDescription = "Delete Profile Picture",
+              tint = MaterialTheme.colorScheme.onBackground,
+          )
         }
+
+        Spacer(modifier = Modifier.width(8.dp))
+        ProfilePicture(selectedImageUrl)
       }
+    }
+    Spacer(modifier = Modifier.height(32.dp))
+
+    // Editable Username
+    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+      Row(
+          modifier =
+              Modifier.border(
+                      2.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp))
+                  .clip(RoundedCornerShape(8.dp))
+                  .background(MaterialTheme.colorScheme.background)
+                  .padding(horizontal = 24.dp, vertical = 8.dp),
+          verticalAlignment = Alignment.CenterVertically,
+          horizontalArrangement = Arrangement.Center) {
+            Icon(
+                imageVector = Icons.Outlined.Edit,
+                contentDescription = "Edit Username",
+                tint = MaterialTheme.colorScheme.onBackground)
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            TextField(
+                value = newName,
+                onValueChange = { newName = it },
+                placeholder = {
+                  Text(userName.value, color = MaterialTheme.colorScheme.onBackground)
+                },
+                modifier =
+                    Modifier.widthIn(max = 200.dp)
+                        .padding(vertical = 8.dp)
+                        .background(MaterialTheme.colorScheme.background),
+                colors =
+                    TextFieldDefaults.colors(
+                        focusedContainerColor = MaterialTheme.colorScheme.background,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                        focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                        cursorColor = MaterialTheme.colorScheme.onBackground))
+          }
+    }
+    Spacer(modifier = Modifier.height(32.dp))
+
+    // Other Settings Section
+    NotImplementedYet(testTag = "OtherSettings", text = "Other settings:\nLanguage,\nTheme,\n...")
+    Spacer(modifier = Modifier.height(32.dp))
+
+    // Cancel and Save Buttons
+    Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+      ActionButtons(
+          {
+            newName = ""
+            selectedImageUrl = profilePictureUrl.value
+          },
+          MaterialTheme.colorScheme.error,
+          "Cancel",
+          Modifier.weight(1f))
+
+      ActionButtons(
+          {
+            if (newName.isNotBlank()) {
+              userViewModel.updateUserName(currentUserId, newName)
+            }
+            userViewModel.updateProfilePictureUrl(currentUserId, selectedImageUrl)
+          },
+          MaterialTheme.colorScheme.primary,
+          "Save",
+          Modifier.weight(1f))
+    }
+  }
 }
 
 @Composable

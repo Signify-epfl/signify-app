@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
+import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.AccountInformation
 import com.github.se.signify.ui.LearnedLetterList
@@ -28,8 +29,10 @@ import com.google.firebase.auth.FirebaseAuth
 @Composable
 fun ProfileScreen(
     navigationActions: NavigationActions,
-    userViewModel: UserViewModel = viewModel(factory = UserViewModel.Factory)
+    userRepository: UserRepository,
 ) {
+  val userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository))
+
   MainScreenScaffold(
       navigationActions = navigationActions,
       testTagColumn = "ProfileScreen",
@@ -54,7 +57,7 @@ fun ProfileScreen(
         iconTestTag = "SettingsIcon",
         icon = Icons.Outlined.Settings,
         contentDescription = "Settings")
-    Spacer(modifier = Modifier.height(24.dp))
+    Spacer(modifier = Modifier.height(32.dp))
 
     // Top information
     AccountInformation(
@@ -62,18 +65,19 @@ fun ProfileScreen(
         userName = userName.value,
         profilePictureUrl = profilePictureUrl.value,
         days = streak.value)
+
     Spacer(modifier = Modifier.height(32.dp))
 
     // Letters learned
-    LearnedLetterList(lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F'))
-    Spacer(modifier = Modifier.height(64.dp))
+    LearnedLetterList(lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F')) // TODO stats
+    Spacer(modifier = Modifier.height(32.dp))
 
     // Friends List button
     SquareButton(
         iconRes = R.drawable.friendsicon,
         label = "My Friends",
         onClick = { navigationActions.navigateTo(Route.FRIENDS) },
-        size = 240,
+        size = 200,
         modifier = Modifier.testTag("MyFriendsButton"))
     Spacer(modifier = Modifier.height(32.dp))
 
@@ -82,7 +86,7 @@ fun ProfileScreen(
         iconRes = R.drawable.statisticsicon,
         label = "My Stats",
         onClick = { navigationActions.navigateTo(Route.STATS) },
-        size = 240,
+        size = 200,
         modifier = Modifier.testTag("MyStatsButton"))
   }
 }
