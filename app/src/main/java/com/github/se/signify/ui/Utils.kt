@@ -540,11 +540,9 @@ fun LearnedLetterList(lettersLearned: List<Char>) {
  * A reusable composable function that creates the streak counter.
  *
  * @param days A long value for the number of days (streak).
- * @param daysText A boolean value => true will display the string " days" after the number.
  */
 @Composable
-fun StreakCounter(days: Long, daysText: Boolean) {
-  val text = if (!daysText) "" else if (days == 1L) " day" else " days"
+fun StreakCounter(days: Long) {
   Row(
       modifier = Modifier.testTag("StreakCounter"),
       verticalAlignment = Alignment.CenterVertically) {
@@ -555,7 +553,7 @@ fun StreakCounter(days: Long, daysText: Boolean) {
             modifier = Modifier.size(32.dp).testTag("FlameIcon"))
         Spacer(modifier = Modifier.width(4.dp))
         Text(
-            text = "$days$text",
+            text = "$days",
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.secondary,
             fontSize = 20.sp,
@@ -601,7 +599,7 @@ fun ProfilePicture(profilePictureUrl: String?) {
 fun AccountInformation(userId: String, userName: String, profilePictureUrl: String?, days: Long) {
   Row(
       modifier = Modifier.fillMaxWidth().testTag("UserInfo"),
-      horizontalArrangement = Arrangement.Center,
+      horizontalArrangement = Arrangement.SpaceBetween,
       verticalAlignment = Alignment.CenterVertically) {
         // User Info : user id and user name
         Column(
@@ -618,14 +616,12 @@ fun AccountInformation(userId: String, userName: String, profilePictureUrl: Stri
               color = MaterialTheme.colorScheme.onBackground,
               modifier = Modifier.testTag("UserName"))
         }
-        Spacer(modifier = Modifier.width(24.dp))
 
         // Profile Picture
         ProfilePicture(profilePictureUrl)
-        Spacer(modifier = Modifier.width(24.dp))
 
         // Number of days
-        StreakCounter(days, true)
+        StreakCounter(days)
       }
 }
 

@@ -382,7 +382,7 @@ class UtilsTest {
 
   @Test
   fun streakCounterIsDisplayed() {
-    composeTestRule.setContent { StreakCounter(10, false) }
+    composeTestRule.setContent { StreakCounter(10) }
 
     composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
