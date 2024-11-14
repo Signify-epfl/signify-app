@@ -61,14 +61,11 @@ class ExerciseScreenEasyTest {
   @Test
   fun handleGestureMatchingTest() {
     // Mocks for callback functions
-    val mockOnNextLetter = mock<(Int) -> Unit>()
-    val mockOnNextWord = mock<(Int) -> Unit>()
-    val mockOnNextSentence = mock<(Int) -> Unit>()
+    val mockOnProgressUpdate = mock<(Int, Int, Int) -> Unit>()
     val mockOnAllSentencesComplete = mock<() -> Unit>()
 
     // Test inputs
     val detectedGesture = "A"
-    val currentLetter = 'A'
     val currentLetterIndex = 0
     val currentWordIndex = 0
     val currentSentenceIndex = 0
@@ -76,22 +73,18 @@ class ExerciseScreenEasyTest {
 
     handleGestureMatching(
         detectedGesture = detectedGesture,
-        currentLetter = currentLetter,
         currentLetterIndex = currentLetterIndex,
         currentWordIndex = currentWordIndex,
         currentSentenceIndex = currentSentenceIndex,
         sentencesList = sentencesList,
-        onNextLetter = mockOnNextLetter,
-        onNextWord = mockOnNextWord,
-        onNextSentence = mockOnNextSentence,
+        onProgressUpdate = mockOnProgressUpdate,
         onAllSentencesComplete = mockOnAllSentencesComplete)
 
-    // Verify that the next letter is triggered since `detectedGesture` matches `currentLetter`
-    verify(mockOnNextLetter).invoke(currentLetterIndex + 1)
+    // Verify that onProgressUpdate is called with the next letter index
+    verify(mockOnProgressUpdate)
+        .invoke(currentLetterIndex + 1, currentWordIndex, currentSentenceIndex)
 
-    // Ensure no other callbacks are invoked since we're only moving to the next letter in the word
-    verifyNoInteractions(mockOnNextWord)
-    verifyNoInteractions(mockOnNextSentence)
+    // Ensure onAllSentencesComplete is not invoked, as we're only moving to the next letter
     verifyNoInteractions(mockOnAllSentencesComplete)
   }
 }

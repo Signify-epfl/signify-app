@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -65,28 +67,25 @@ fun ExerciseScreenEasy(
 /**
  * Manages progression through letters, words, and sentences in a text-based exercise.
  *
- * This function is called when a "success" action occurs, such as a correctly detected gesture or
- * input matching the current letter. It updates the indices for the current letter, word, or
- * sentence and triggers the appropriate callback based on the progression.
+ * This function is called when a successful action occurs, such as a correctly detected gesture. It
+ * updates the indices for the current letter, word, or sentence, and triggers the appropriate
+ * callback based on the progression level.
  *
  * @param currentLetterIndex The index of the current letter within the current word.
  * @param currentWordIndex The index of the current word within the current sentence.
- * @param currentSentenceIndex The index of the current sentence within the list of sentences.
+ * @param currentSentenceIndex The index of the current sentence in the list of sentences.
  * @param sentences The list of sentences used in the exercise.
- * @param onNextLetter Callback to trigger the next letter progression.
- * @param onNextWord Callback to trigger the next word progression, resetting the letter index.
- * @param onNextSentence Callback to trigger the next sentence progression, resetting the word and
- *   letter indices.
- * @param onAllSentencesComplete Callback to be called when all sentences are completed.
+ * @param onProgressUpdate Callback to trigger progression to the next letter, word, or sentence.
+ *   Takes new indices (newLetterIndex, newWordIndex, newSentenceIndex) as parameters to update the
+ *   progression state.
+ * @param onAllSentencesComplete Callback to be called when all sentences have been completed.
  */
 fun onSuccess(
     currentLetterIndex: Int,
     currentWordIndex: Int,
     currentSentenceIndex: Int,
     sentences: List<String>,
-    onNextLetter: (Int) -> Unit,
-    onNextWord: (Int) -> Unit,
-    onNextSentence: (Int) -> Unit,
+    onProgressUpdate: (newLetterIndex: Int, newWordIndex: Int, newSentenceIndex: Int) -> Unit,
     onAllSentencesComplete: () -> Unit
 ) {
   // Retrieve the current sentence and split it into words
@@ -94,68 +93,57 @@ fun onSuccess(
   val words = currentSentence.split(" ")
   val currentWord = words[currentWordIndex]
 
-  if (currentLetterIndex < currentWord.length - 1) {
+  when {
     // Move to the next letter within the current word
-    onNextLetter(currentLetterIndex + 1)
-  } else {
-    // If at the end of the current word, reset letter index and move to the next word
-    if (currentWordIndex < words.size - 1) {
-      // Move to the next word in the sentence
-      onNextWord(currentWordIndex + 1)
-      onNextLetter(0) // Reset to the first letter of the new word
-    } else {
-      // If at the end of the sentence, reset indices and move to the next sentence
-      if (currentSentenceIndex < sentences.size - 1) {
-        onNextSentence(currentSentenceIndex + 1)
-        onNextWord(0) // Start at the first word of the new sentence
-        onNextLetter(0) // Start at the first letter of the first word
-      } else {
-        // If all sentences are completed, invoke the completion callback
-        onAllSentencesComplete()
-      }
+    currentLetterIndex < currentWord.length - 1 -> {
+      onProgressUpdate(currentLetterIndex + 1, currentWordIndex, currentSentenceIndex)
+    }
+
+    // Move to the next word in the sentence
+    currentWordIndex < words.size - 1 -> {
+      onProgressUpdate(0, currentWordIndex + 1, currentSentenceIndex) // Reset letter index
+    }
+
+    // Move to the next sentence
+    currentSentenceIndex < sentences.size - 1 -> {
+      onProgressUpdate(0, 0, currentSentenceIndex + 1) // Reset both letter and word indices
+    }
+
+    // All sentences are completed
+    else -> {
+      onAllSentencesComplete()
     }
   }
 }
 
 /**
- * Composable function to display the current sentence in a semi-transparent back layer and the
- * current word in a highlighted front layer with letter emphasis.
+ * Composable function to display a layered view of sentences and words in an exercise.
  *
- * The back layer displays the entire current sentence, with the current word visually highlighted.
- * If the current sentence contains only one word, the next sentence is displayed instead, without
- * any highlights, to maintain visual continuity. The front layer displays the current word
- * prominently, with emphasis on the current letter.
+ * The back layer shows the current sentence with a semi-transparent style, highlighting the current
+ * word. If the sentence contains only a single word, the next sentence is shown instead in
+ * semi-transparent text. The front layer prominently displays the current word, with emphasis on
+ * the current letter.
  *
- * @param sentences The list of sentences for the exercise.
- * @param currentSentenceIndex The index of the current sentence in the list.
- * @param currentWordIndex The index of the current word within the current sentence.
+ * @param sentences The list of sentences used in the exercise.
  * @param currentLetterIndex The index of the current letter within the current word.
+ * @param currentWordIndex The index of the current word within the current sentence.
+ * @param currentSentenceIndex The index of the current sentence in the list of sentences.
  */
 @Composable
 fun SentenceLayer(
     sentences: List<String>,
-    currentSentenceIndex: Int,
+    currentLetterIndex: Int,
     currentWordIndex: Int,
-    currentLetterIndex: Int
+    currentSentenceIndex: Int
 ) {
-  // Ensure the current sentence index is within bounds
-  if (currentSentenceIndex >= sentences.size) return
+  if (isIndexOutOfBounds(currentSentenceIndex, sentences.size)) return
 
-  // Get the current sentence and split it into words
-  val currentSentence = sentences[currentSentenceIndex]
-  val wordsInSentence = currentSentence.split(" ")
+  val wordsInSentence = getWordsInSentence(sentences, currentSentenceIndex) ?: return
+  if (isIndexOutOfBounds(currentWordIndex, wordsInSentence.size)) return
 
-  // Ensure the current word index is within bounds of the words in the sentence
-  if (currentWordIndex >= wordsInSentence.size) return
-
-  // Get the current word for the primary layer
   val currentWord = wordsInSentence[currentWordIndex]
-
-  // Determine if this sentence has only one word
+  val nextSentence = getNextSentence(sentences, currentSentenceIndex)
   val isSingleWordSentence = wordsInSentence.size == 1
-  // Get the next sentence if available
-  val nextSentence =
-      if (currentSentenceIndex + 1 < sentences.size) sentences[currentSentenceIndex + 1] else ""
 
   Box(
       modifier =
@@ -168,52 +156,14 @@ fun SentenceLayer(
       contentAlignment = Alignment.Center) {
         Text(
             text =
-                buildAnnotatedString {
-                  if (isSingleWordSentence && nextSentence.isNotEmpty()) {
-                    append(nextSentence.lowercase()) // Display the next sentence without highlights
-                  } else {
-                    wordsInSentence.forEachIndexed { index, word ->
-                      if (index == currentWordIndex) {
-                        // Apply highlighting to the current word
-                        withStyle(
-                            style =
-                                SpanStyle(
-                                    color = MaterialTheme.colorScheme.secondary, // Highlight color
-                                    fontWeight = FontWeight.Bold)) {
-                              append(word)
-                            }
-                      } else {
-                        append(word)
-                      }
-                      if (index < wordsInSentence.size - 1) {
-                        append(" ") // Add space between words
-                      }
-                    }
-                  }
-                },
+                buildBackgroundText(
+                    wordsInSentence, nextSentence, currentWordIndex, isSingleWordSentence),
             modifier = Modifier.offset(y = (-40).dp).testTag("FullSentenceTag"),
             color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.4f),
             style = TextStyle(fontSize = 24.sp))
 
-        // Front layer: Current word with highlighted letter
         Text(
-            buildAnnotatedString {
-              append(currentWord.substring(0, currentLetterIndex)) // Before the current letter
-
-              // Highlight the current letter
-              withStyle(
-                  style =
-                      SpanStyle(
-                          letterSpacing = 10.sp,
-                          color = MaterialTheme.colorScheme.secondary, // Highlight color
-                          fontSize = 50.sp // Larger size for the current letter
-                          )) {
-                    append(
-                        currentWord[currentLetterIndex].uppercase()) // Current letter in uppercase
-              }
-
-              append(currentWord.substring(currentLetterIndex + 1)) // After the current letter
-            },
+            text = buildForegroundText(currentWord, currentLetterIndex),
             modifier = Modifier.testTag("CurrentWordTag"),
             style = TextStyle(fontSize = 30.sp),
             color = MaterialTheme.colorScheme.onSecondary)
@@ -221,44 +171,158 @@ fun SentenceLayer(
 }
 
 /**
- * Function to handle the gesture matching logic.
+ * Checks if the given index is out of bounds for a list of a specific size.
  *
- * This function compares the detected gesture with the current letter and, if they match, calls the
+ * @param index The index to check.
+ * @param size The size of the list or array.
+ * @return True if the index is out of bounds, false otherwise.
+ */
+fun isIndexOutOfBounds(index: Int, size: Int) = index >= size
+
+/**
+ * Retrieves and splits the specified sentence into words.
+ *
+ * @param sentences The list of sentences.
+ * @param index The index of the sentence to retrieve.
+ * @return A list of words from the sentence, or null if the index is out of bounds.
+ */
+fun getWordsInSentence(sentences: List<String>, index: Int): List<String>? {
+  return sentences.getOrNull(index)?.split(" ")
+}
+
+/**
+ * Retrieves the next sentence in the list, if available.
+ *
+ * @param sentences The list of sentences.
+ * @param currentSentenceIndex The index of the current sentence.
+ * @return The next sentence as a String, or an empty String if it is out of bounds.
+ */
+fun getNextSentence(sentences: List<String>, currentSentenceIndex: Int): String {
+  return sentences.getOrNull(currentSentenceIndex + 1) ?: ""
+}
+
+/**
+ * Retrieves the current letter based on the indices of the current sentence, word, and letter. This
+ * function accesses the sentence, word, and letter specified by the provided indices and returns
+ * the current letter in lowercase.
+ *
+ * @param sentencesList The list of sentences used in the exercise.
+ * @param currentLetterIndex The index of the current letter within the current word.
+ * @param currentWordIndex The index of the current word within the current sentence.
+ * @param currentSentenceIndex The index of the current sentence in the list of sentences.
+ * @return The current letter as a lowercase character.
+ */
+fun getCurrentLetter(
+    sentencesList: List<String>,
+    currentLetterIndex: Int,
+    currentWordIndex: Int,
+    currentSentenceIndex: Int
+): Char {
+  val currentSentence = sentencesList[currentSentenceIndex]
+  val wordsInCurrentSentence = currentSentence.split(" ")
+  val currentWord = wordsInCurrentSentence[currentWordIndex]
+  return currentWord[currentLetterIndex].lowercaseChar()
+}
+
+/**
+ * Builds the background text for the back layer, which displays the entire sentence. Highlights the
+ * current word in bold or displays the next sentence if it's a single-word sentence.
+ *
+ * @param wordsInSentence The list of words in the current sentence.
+ * @param nextSentence The next sentence to display if needed.
+ * @param currentWordIndex The index of the current word within the sentence.
+ * @param isSingleWordSentence True if the sentence contains only one word.
+ * @return An AnnotatedString for displaying the sentence.
+ */
+@Composable
+fun buildBackgroundText(
+    wordsInSentence: List<String>,
+    nextSentence: String,
+    currentWordIndex: Int,
+    isSingleWordSentence: Boolean
+): AnnotatedString {
+  return buildAnnotatedString {
+    if (isSingleWordSentence && nextSentence.isNotEmpty()) {
+      append(nextSentence.lowercase())
+    } else {
+      wordsInSentence.forEachIndexed { index, word ->
+        if (index == currentWordIndex) {
+          withStyle(
+              style =
+                  SpanStyle(
+                      color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold)) {
+                append(word)
+              }
+        } else {
+          append(word)
+        }
+        if (index < wordsInSentence.size - 1) {
+          append(" ")
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Builds the foreground text for the front layer, which displays only the current word. Highlights
+ * the current letter within the word.
+ *
+ * @param currentWord The current word being displayed in the front layer.
+ * @param currentLetterIndex The index of the current letter within the word.
+ * @return An AnnotatedString for displaying the word with letter emphasis.
+ */
+@Composable
+fun buildForegroundText(currentWord: String, currentLetterIndex: Int): AnnotatedString {
+  return buildAnnotatedString {
+    append(currentWord.substring(0, currentLetterIndex)) // Before the current letter
+    withStyle(
+        style =
+            SpanStyle(
+                letterSpacing = 10.sp,
+                color = MaterialTheme.colorScheme.secondary,
+                fontSize = 50.sp)) {
+          append(currentWord[currentLetterIndex].uppercase()) // Current letter in uppercase
+    }
+    append(currentWord.substring(currentLetterIndex + 1)) // After the current letter
+  }
+}
+
+/**
+ * Function to handle gesture matching logic in the exercise.
+ *
+ * This function compares the detected gesture with the current letter. If they match, it calls the
  * `onSuccess` function to handle progression through letters, words, and sentences. If they do not
- * match, a log message is printed.
+ * match, a log message is printed indicating the mismatch.
  *
  * @param detectedGesture The gesture detected by the hand landmark model as a string.
- * @param currentLetter The current letter to be matched.
  * @param currentLetterIndex The index of the current letter within the current word.
  * @param currentWordIndex The index of the current word within the current sentence.
  * @param currentSentenceIndex The index of the current sentence in the list of sentences.
  * @param sentencesList The list of sentences used in the exercise.
- * @param onNextLetter Callback to move to the next letter in the current word.
- * @param onNextWord Callback to move to the next word in the current sentence.
- * @param onNextSentence Callback to move to the next sentence in the list.
- * @param onAllSentencesComplete Callback to handle when all sentences are completed.
+ * @param onProgressUpdate Callback to handle the update of indices for progression. Takes
+ *   parameters (newLetterIndex, newWordIndex, newSentenceIndex) to update the current position
+ *   within the exercise.
+ * @param onAllSentencesComplete Callback to handle completion of all sentences in the exercise.
  */
 fun handleGestureMatching(
     detectedGesture: String,
-    currentLetter: Char,
     currentLetterIndex: Int,
     currentWordIndex: Int,
     currentSentenceIndex: Int,
     sentencesList: List<String>,
-    onNextLetter: (Int) -> Unit,
-    onNextWord: (Int) -> Unit,
-    onNextSentence: (Int) -> Unit,
+    onProgressUpdate: (newLetterIndex: Int, newWordIndex: Int, newSentenceIndex: Int) -> Unit,
     onAllSentencesComplete: () -> Unit
 ) {
+  val currentLetter =
+      getCurrentLetter(sentencesList, currentLetterIndex, currentWordIndex, currentSentenceIndex)
   if (detectedGesture == currentLetter.uppercase()) {
     onSuccess(
         currentLetterIndex = currentLetterIndex,
         currentWordIndex = currentWordIndex,
         currentSentenceIndex = currentSentenceIndex,
         sentences = sentencesList,
-        onNextLetter = onNextLetter,
-        onNextWord = onNextWord,
-        onNextSentence = onNextSentence,
+        onProgressUpdate = onProgressUpdate,
         onAllSentencesComplete = onAllSentencesComplete)
   } else {
     Log.d(
@@ -267,6 +331,22 @@ fun handleGestureMatching(
   }
 }
 
+/**
+ * Composable function for a common exercise screen layout, handling gesture detection, sentence
+ * progression, and displaying the current sign image based on letter recognition.
+ *
+ * This function displays the current letter from a list of sentences, updates the current word and
+ * letter when gestures are correctly matched.When all sentences are completed, it resets and
+ * displays a completion message.
+ *
+ * @param navigationActions Provides navigation actions for the screen.
+ * @param handLandMarkViewModel ViewModel responsible for managing hand landmark detection and
+ *   gesture matching.
+ * @param wordsResourceId Resource ID for the list of words or sentences to be used in the exercise.
+ * @param screenTag Tag used for identifying the screen in tests.
+ * @param wordFilter Optional filter function to specify criteria for selecting words from the
+ *   resource.
+ */
 @Composable
 fun ExerciseScreenCommon(
     navigationActions: NavigationActions,
@@ -276,20 +356,17 @@ fun ExerciseScreenCommon(
     wordFilter: ((String) -> Boolean)? = null
 ) {
   val context = LocalContext.current
-  val realWords = stringArrayResource(wordsResourceId).toList()
+  val realSentences = stringArrayResource(wordsResourceId).toList()
   val sentencesList by rememberSaveable {
-    mutableStateOf(List(3) { realWords.filter { wordFilter?.invoke(it) ?: true }.random() })
+    mutableStateOf(List(3) { realSentences.filter { wordFilter?.invoke(it) ?: true }.random() })
   }
 
   var currentSentenceIndex by rememberSaveable { mutableIntStateOf(0) }
   var currentWordIndex by rememberSaveable { mutableIntStateOf(0) }
   var currentLetterIndex by rememberSaveable { mutableIntStateOf(0) }
 
-  // Retrieve the current sentence, word, and letter
-  val currentSentence = sentencesList[currentSentenceIndex]
-  val wordsInCurrentSentence = currentSentence.split(" ")
-  val currentWord = wordsInCurrentSentence[currentWordIndex]
-  val currentLetter = currentWord[currentLetterIndex].lowercaseChar()
+  val currentLetter =
+      getCurrentLetter(sentencesList, currentLetterIndex, currentWordIndex, currentSentenceIndex)
 
   val landmarksState = handLandMarkViewModel.landMarks().collectAsState()
   val detectedGesture = handLandMarkViewModel.getSolution()
@@ -297,20 +374,14 @@ fun ExerciseScreenCommon(
   if (!landmarksState.value.isNullOrEmpty()) {
     handleGestureMatching(
         detectedGesture = detectedGesture,
-        currentLetter = currentLetter,
         currentLetterIndex = currentLetterIndex,
         currentWordIndex = currentWordIndex,
         currentSentenceIndex = currentSentenceIndex,
         sentencesList = sentencesList,
-        onNextLetter = { nextIndex -> currentLetterIndex = nextIndex },
-        onNextWord = { nextWordIndex ->
-          currentWordIndex = nextWordIndex
-          currentLetterIndex = 0
-        },
-        onNextSentence = { nextSentenceIndex ->
-          currentSentenceIndex = nextSentenceIndex
-          currentWordIndex = 0
-          currentLetterIndex = 0
+        onProgressUpdate = { newLetterIndex, newWordIndex, newSentenceIndex ->
+          currentLetterIndex = newLetterIndex
+          currentWordIndex = newWordIndex
+          currentSentenceIndex = newSentenceIndex
         },
         onAllSentencesComplete = {
           Toast.makeText(context, "Exercise completed!", Toast.LENGTH_SHORT).show()
@@ -347,9 +418,38 @@ fun ExerciseScreenCommon(
     }
 
     // Sentence layer display
-    SentenceLayer(sentencesList, currentSentenceIndex, currentWordIndex, currentLetterIndex)
+    SentenceLayer(
+        sentencesList,
+        currentLetterIndex,
+        currentWordIndex,
+        currentSentenceIndex,
+    )
 
     // Camera placeholder/composable
     CameraPlaceholder(handLandMarkViewModel)
+
+    Button(
+        onClick = {
+          onSuccess(
+              sentences = sentencesList,
+              currentLetterIndex = currentLetterIndex,
+              currentWordIndex = currentWordIndex,
+              currentSentenceIndex = currentSentenceIndex,
+              onProgressUpdate = { newLetterIndex, newWordIndex, newSentenceIndex ->
+                currentLetterIndex = newLetterIndex
+                currentWordIndex = newWordIndex
+                currentSentenceIndex = newSentenceIndex
+              },
+              onAllSentencesComplete = {
+                Toast.makeText(context, "Exercise completed!", Toast.LENGTH_SHORT).show()
+                // Reload or reset sentencesList, or handle end of exercise as needed
+                currentSentenceIndex = 0
+                currentWordIndex = 0
+                currentLetterIndex = 0
+              })
+        },
+        modifier = Modifier.padding(16.dp)) {
+          Text("Success")
+        }
   }
 }
