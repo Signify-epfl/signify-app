@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.github.se.signify.model.hand.HandLandMarkConfig
 import com.github.se.signify.model.hand.HandLandMarkImplementation
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
@@ -57,7 +58,7 @@ fun SignifyAppPreview(context: Context, navigationState: MutableStateFlow<Naviga
   val navController = rememberNavController()
   val navigationActions = NavigationActions(navController)
   val handLandMarkImplementation =
-      HandLandMarkImplementation("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
+      HandLandMarkImplementation(HandLandMarkConfig("hand_landmarker.task", "RFC_model_ir9_opset19.onnx"))
   val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
   NavHost(navController = navController, startDestination = Route.WELCOME) {
     navigation(

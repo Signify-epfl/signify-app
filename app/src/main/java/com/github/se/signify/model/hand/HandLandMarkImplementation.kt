@@ -18,16 +18,17 @@ import java.nio.FloatBuffer
 import java.util.Collections
 import java.util.concurrent.Executors
 
+data class HandLandMarkConfig(val taskFile: String, val modelFile: String)
+
 /**
  * Implementation of the HandLandMarkRepository interface using MediaPipe's HandLandmarker and ONNX
  * runtime for hand landmark detection and gesture recognition. This class handles the
  * initialization of the hand landmark detection model and the gesture classification using an ONNX
  * model for American Sign Language (ASL) recognition.
  *
- * @property pathToTask The file path to the MediaPipe hand detection model.
- * @property pathToModel The file path to the ONNX model used for gesture classification.
+ * @param config Configuration object containing the file paths to the hand detection model and the ONNX model.
  */
-class HandLandMarkImplementation(private val pathToTask: String, private val pathToModel: String) :
+class HandLandMarkImplementation(private val config: HandLandMarkConfig) :
     HandLandMarkRepository {
 
   // HandLandmarker instance for detecting hand landmarks
@@ -58,7 +59,7 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
    */
   override fun init(context: Context, onSuccess: () -> Unit, onFailure: (e: Exception) -> Unit) {
     try {
-      val baseOptions = BaseOptions.builder().setModelAssetPath(pathToTask).build()
+      val baseOptions = BaseOptions.builder().setModelAssetPath(config.taskFile).build()
 
       val options =
           HandLandmarkerOptions.builder()
@@ -77,8 +78,8 @@ class HandLandMarkImplementation(private val pathToTask: String, private val pat
 
       // Load the ONNX model from assets to a temporary file
       rfcModel =
-          context.assets.open(pathToModel).use { inputStream ->
-            val tempFile = File(context.cacheDir, pathToModel)
+          context.assets.open(config.modelFile).use { inputStream ->
+            val tempFile = File(context.cacheDir, config.modelFile)
             inputStream.copyTo(tempFile.outputStream())
             tempFile.absolutePath
           }
