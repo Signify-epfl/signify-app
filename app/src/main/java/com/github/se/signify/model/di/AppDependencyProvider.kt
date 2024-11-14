@@ -1,6 +1,5 @@
 package com.github.se.signify.model.di
 
-import android.content.Context
 import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.challenge.ChallengeRepositoryFireStore
 import com.github.se.signify.model.hand.HandLandMarkConfig
@@ -16,7 +15,7 @@ import com.google.firebase.firestore.firestore
 
 private val appHandLandMarkConfig = HandLandMarkConfig("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
 
-class AppDependencyProvider : DependencyProvider {
+object AppDependencyProvider : DependencyProvider {
     override fun challengeRepository(): ChallengeRepository {
         return ChallengeRepositoryFireStore(FirebaseFirestore.getInstance())
     }

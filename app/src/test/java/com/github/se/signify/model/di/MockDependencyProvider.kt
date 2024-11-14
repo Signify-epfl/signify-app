@@ -7,7 +7,7 @@ import com.github.se.signify.model.quest.QuestRepository
 import com.github.se.signify.model.user.UserRepository
 import org.mockito.Mockito.mock
 
-class MockDependencyProvider : DependencyProvider {
+object MockDependencyProvider : DependencyProvider {
     override fun challengeRepository(): ChallengeRepository {
         return mock(ChallengeRepository::class.java)
     }
