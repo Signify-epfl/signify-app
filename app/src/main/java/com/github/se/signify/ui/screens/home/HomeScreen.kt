@@ -30,6 +30,7 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
@@ -61,6 +62,7 @@ import com.github.se.signify.ui.getImageResId
 import com.github.se.signify.ui.getLetterIconResId
 import com.github.se.signify.ui.getTipResId
 import com.github.se.signify.ui.navigation.NavigationActions
+import com.github.se.signify.ui.navigation.Route
 import com.github.se.signify.ui.navigation.Screen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -112,6 +114,12 @@ fun HomeScreen(navigationActions: NavigationActions) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween) {
+                      UtilButton(
+                          onClick = { navigationActions.navigateTo(Route.FEEDBACK) },
+                          buttonTestTag = "FeedbackButton",
+                          iconTestTag = "FeedbackIcon",
+                          icon = Icons.Outlined.Email,
+                          contentDescription = "Feedback")
                       UtilButton(
                           onClick = { navigationActions.navigateTo("Quest") },
                           buttonTestTag = "QuestsButton",

@@ -29,6 +29,7 @@ import com.github.se.signify.ui.screens.challenge.NewChallengeScreen
 import com.github.se.signify.ui.screens.home.ASLRecognition
 import com.github.se.signify.ui.screens.home.ExerciseScreenEasy
 import com.github.se.signify.ui.screens.home.ExerciseScreenHard
+import com.github.se.signify.ui.screens.home.FeedbackScreen
 import com.github.se.signify.ui.screens.home.HomeScreen
 import com.github.se.signify.ui.screens.home.QuestScreen
 import com.github.se.signify.ui.screens.profile.FriendsListScreen
@@ -130,6 +131,7 @@ fun SignifyAppPreview(
       composable(Route.FRIENDS) {
         FriendsListScreen(navigationActions, dependencyProvider.userRepository())
       }
+      composable(Route.FEEDBACK) { FeedbackScreen(navigationActions) }
 
       composable(Route.STATS) {
         MyStatsScreen(
