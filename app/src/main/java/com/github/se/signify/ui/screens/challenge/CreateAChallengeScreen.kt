@@ -15,6 +15,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +36,10 @@ import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.challenge.ChallengeViewModel
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
+import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.BackButton
+import com.github.se.signify.ui.UtilButton
+import com.github.se.signify.ui.UtilTextButton
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.screens.profile.currentUserId
 
@@ -56,64 +60,56 @@ fun CreateAChallengeScreen(
   var selectedFriendId by remember { mutableStateOf<String?>(null) }
   var showDialog by remember { mutableStateOf(false) }
 
-  Scaffold(
-      topBar = { BackButton { navigationActions.goBack() } },
-      content = { padding ->
-        Column(
-            modifier =
-                Modifier.fillMaxSize()
-                    .padding(padding)
-                    .padding(16.dp)
-                    .testTag("CreateAChallengeContent"),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top) {
-              // Title
-              Text(
-                  text = "Select a Friend to Challenge",
-                  fontSize = 24.sp,
-                  modifier = Modifier.testTag("ChallengeTitle"))
+    AnnexScreenScaffold(
+        navigationActions = navigationActions,
+        testTagColumn = "CreateAChallengeContent",
+    ) {
+        // Title
+        Text(
+            text = "Select a Friend to Challenge",
+            fontSize = 24.sp,
+            modifier = Modifier.testTag("ChallengeTitle"))
 
-              Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-              // Conditional display for friends list
-              if (friends.isEmpty()) {
-                Text(
-                    text = "No friends available",
-                    fontSize = 18.sp,
-                    color = Color.Gray,
-                    modifier = Modifier.testTag("NoFriendsText"))
-              } else {
-                // List of Friends
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize().testTag("FriendsList"),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                      items(friends.size) { index ->
-                        val friendId = friends[index]
-                        FriendCard(friendId = friendId) {
-                          Button(
-                              onClick = {
+        // Conditional display for friends list
+        if (friends.isEmpty()) {
+            Text(
+                text = "No friends available",
+                fontSize = 18.sp,
+                color = Color.Gray,
+                modifier = Modifier.testTag("NoFriendsText"))
+        } else {
+            // List of Friends
+            LazyColumn(
+                modifier = Modifier.fillMaxSize().weight(1f).testTag("FriendsList"),
+                verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                items(friends.size) { index ->
+                    val friendId = friends[index]
+                    FriendCard(friendId = friendId) {
+                        Button(
+                            onClick = {
                                 selectedFriendId = friendId
                                 showDialog = true
-                              },
-                              modifier =
-                                  Modifier.padding(8.dp).testTag("ChallengeButton_$friendId")) {
-                                Text("Challenge")
-                              }
+                            },
+                            modifier =
+                            Modifier.padding(8.dp).testTag("ChallengeButton_$friendId")) {
+                            Text("Challenge")
                         }
-                      }
                     }
-              }
-
-              // Show Challenge Dialog if showDialog is true
-              if (showDialog && selectedFriendId != null) {
-                ChallengeModeAlertDialog(
-                    friendId = selectedFriendId!!,
-                    onDismiss = { showDialog = false },
-                    userViewModel = userViewModel,
-                    challengeViewModel = challengeViewModel)
-              }
+                }
             }
-      })
+        }
+
+        // Show Challenge Dialog if showDialog is true
+        if (showDialog && selectedFriendId != null) {
+            ChallengeModeAlertDialog(
+                friendId = selectedFriendId!!,
+                onDismiss = { showDialog = false },
+                userViewModel = userViewModel,
+                challengeViewModel = challengeViewModel)
+        }
+    }
 }
 
 @Composable
@@ -155,50 +151,51 @@ fun ChallengeModeAlertDialog(
   AlertDialog(
       onDismissRequest = onDismiss,
       confirmButton = {
-        Button(
-            onClick = {
-              if (selectedMode != null) {
-                // Create the challenge in the challenges collection
-                challengeViewModel.sendChallengeRequest(
-                    currentUserId, friendId, selectedMode!!, challengeId)
+          UtilTextButton(
+              onClickAction = {
+                  if (selectedMode != null) {
+                      // Create the challenge in the challenges collection
+                      challengeViewModel.sendChallengeRequest(
+                          currentUserId, friendId, selectedMode!!, challengeId)
 
-                // Add the challenge to the users' ongoing challenges
-                userViewModel.addOngoingChallenge(currentUserId, challengeId)
-                userViewModel.addOngoingChallenge(friendId, challengeId)
+                      // Add the challenge to the users' ongoing challenges
+                      userViewModel.addOngoingChallenge(currentUserId, challengeId)
+                      userViewModel.addOngoingChallenge(friendId, challengeId)
 
-                onDismiss() // Close the dialog after creating the challenge
-              }
-            },
-            enabled = selectedMode != null,
-            modifier = Modifier.testTag("SendChallengeButton")) {
-              Text("Send Challenge")
-            }
+                      onDismiss() // Close the dialog after creating the challenge
+                  }
+              },
+              testTag = "SendChallengeButton",
+              text = "Send Challenge",
+              backgroundColor = MaterialTheme.colorScheme.primary,
+              enabled = selectedMode != null,
+          )
       },
       dismissButton = {
-        Button(onClick = onDismiss, modifier = Modifier.testTag("CancelButton")) { Text("Cancel") }
+          UtilTextButton(
+              onClickAction = onDismiss,
+              testTag = "CancelButton",
+              text = "Cancel",
+              backgroundColor = MaterialTheme.colorScheme.surface,
+          )
       },
-      title = { Text(text = "Choose Challenge Mode", modifier = Modifier.testTag("DialogTitle")) },
+      title = { Text(text = "Pick a Mode", modifier = Modifier.testTag("DialogTitle")) },
       text = {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
           // Mode Selection Buttons
           Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            Button(
-                onClick = { selectedMode = "sprint" },
-                colors =
-                    buttonColors(
-                        containerColor = if (selectedMode == "sprint") Color.Blue else Color.Gray),
-                modifier = Modifier.padding(8.dp).testTag("SprintModeButton")) {
-                  Text("Sprint")
-                }
-
-            Button(
-                onClick = { selectedMode = "chrono" },
-                colors =
-                    buttonColors(
-                        containerColor = if (selectedMode == "chrono") Color.Blue else Color.Gray),
-                modifier = Modifier.padding(8.dp).testTag("ChronoModeButton")) {
-                  Text("Chrono")
-                }
+              UtilTextButton(
+                    onClickAction = { selectedMode = "sprint" },
+                    testTag = "SprintModeButton",
+                    text = "Sprint",
+                    backgroundColor = if (selectedMode == "sprint") MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
+              )
+                UtilTextButton(
+                        onClickAction = { selectedMode = "chrono" },
+                        testTag = "ChronoModeButton",
+                        text = "Chrono",
+                        backgroundColor = if (selectedMode == "chrono") MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
+                )
           }
         }
       })
