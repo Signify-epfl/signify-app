@@ -86,7 +86,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
   val defaultExercises =
       listOf(
           Exercise("Easy", Screen.EXERCISE_EASY),
-          Exercise("Medium", Screen.EXERCISE_HARD), // Update this screen as needed
+          Exercise("Medium", Screen.EXERCISE_MEDIUM),
           Exercise("Hard", Screen.EXERCISE_HARD))
 
   val scrollState = rememberLazyListState()

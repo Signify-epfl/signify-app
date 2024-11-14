@@ -16,12 +16,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyNoInteractions
 
 @RunWith(AndroidJUnit4::class)
-class ExerciseScreenEasyTest {
+class ExerciseScreenMediumTest {
 
   @get:Rule val composeTestRule = createComposeRule()
   @get:Rule
@@ -37,62 +34,22 @@ class ExerciseScreenEasyTest {
         HandLandMarkImplementation("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
     handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
     mockNavigationActions = mock(NavigationActions::class.java)
+    composeTestRule.setContent {
+      ExerciseScreenMedium(
+          navigationActions = mockNavigationActions, handLandMarkViewModel = handLandMarkViewModel)
+    }
   }
 
   @Test
-  fun exerciseScreenEasy_displaysComponentsCorrectly() {
-    composeTestRule.setContent {
-      ExerciseScreenEasy(
-          navigationActions = mockNavigationActions, handLandMarkViewModel = handLandMarkViewModel)
-    }
+  fun exerciseScreenMedium_displaysComponentsCorrectly() {
+
     composeTestRule.onNodeWithTag("sentenceLayer").assertIsDisplayed()
     composeTestRule.onNodeWithTag("cameraPreview").assertIsDisplayed()
   }
 
   @Test
   fun imageIsDisplayed_ifImageExists() {
-    composeTestRule.setContent {
-      ExerciseScreenEasy(
-          navigationActions = mockNavigationActions, handLandMarkViewModel = handLandMarkViewModel)
-    }
 
     composeTestRule.onNodeWithContentDescription("Sign image").assertIsDisplayed()
-  }
-
-  @Test
-  fun handleGestureMatchingTest() {
-    // Mocks for callback functions
-    val mockOnNextLetter = mock<(Int) -> Unit>()
-    val mockOnNextWord = mock<(Int) -> Unit>()
-    val mockOnNextSentence = mock<(Int) -> Unit>()
-    val mockOnAllSentencesComplete = mock<() -> Unit>()
-
-    // Test inputs
-    val detectedGesture = "A"
-    val currentLetter = 'A'
-    val currentLetterIndex = 0
-    val currentWordIndex = 0
-    val currentSentenceIndex = 0
-    val sentencesList = listOf("apple is good", "banana is better")
-
-    handleGestureMatching(
-        detectedGesture = detectedGesture,
-        currentLetter = currentLetter,
-        currentLetterIndex = currentLetterIndex,
-        currentWordIndex = currentWordIndex,
-        currentSentenceIndex = currentSentenceIndex,
-        sentencesList = sentencesList,
-        onNextLetter = mockOnNextLetter,
-        onNextWord = mockOnNextWord,
-        onNextSentence = mockOnNextSentence,
-        onAllSentencesComplete = mockOnAllSentencesComplete)
-
-    // Verify that the next letter is triggered since `detectedGesture` matches `currentLetter`
-    verify(mockOnNextLetter).invoke(currentLetterIndex + 1)
-
-    // Ensure no other callbacks are invoked since we're only moving to the next letter in the word
-    verifyNoInteractions(mockOnNextWord)
-    verifyNoInteractions(mockOnNextSentence)
-    verifyNoInteractions(mockOnAllSentencesComplete)
   }
 }

@@ -1,11 +1,13 @@
 package com.github.se.signify.ui.screens.home
 
+import android.Manifest
 import android.content.Context
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.model.hand.HandLandMarkImplementation
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
@@ -19,6 +21,8 @@ import org.mockito.Mockito.mock
 class ExerciseScreenHardTest {
 
   @get:Rule val composeTestRule = createComposeRule()
+  @get:Rule
+  val cameraAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
 
   private lateinit var mockNavigationActions: NavigationActions
   private lateinit var handLandMarkViewModel: HandLandMarkViewModel
@@ -39,8 +43,7 @@ class ExerciseScreenHardTest {
   @Test
   fun exerciseScreenHard_displaysComponentsCorrectly() {
 
-    composeTestRule.onNodeWithContentDescription("Back").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("wordLayer").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("sentenceLayer").assertIsDisplayed()
     composeTestRule.onNodeWithTag("cameraPreview").assertIsDisplayed()
   }
 

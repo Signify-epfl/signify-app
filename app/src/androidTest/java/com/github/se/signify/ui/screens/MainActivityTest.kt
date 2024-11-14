@@ -63,6 +63,9 @@ class MainActivityTest {
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Screen.EXERCISE_EASY) }
     composeTestRule.onNodeWithTag("ExerciseScreenEasy").assertIsDisplayed()
 
+    composeTestRule.runOnIdle { navigationState.value?.navigateTo(Screen.EXERCISE_MEDIUM) }
+    composeTestRule.onNodeWithTag("ExerciseScreenMedium").assertIsDisplayed()
+
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Screen.EXERCISE_HARD) }
     composeTestRule.onNodeWithTag("ExerciseScreenHard").assertIsDisplayed()
 

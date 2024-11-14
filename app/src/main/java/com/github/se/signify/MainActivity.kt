@@ -27,6 +27,7 @@ import com.github.se.signify.ui.screens.challenge.NewChallengeScreen
 import com.github.se.signify.ui.screens.home.ASLRecognition
 import com.github.se.signify.ui.screens.home.ExerciseScreenEasy
 import com.github.se.signify.ui.screens.home.ExerciseScreenHard
+import com.github.se.signify.ui.screens.home.ExerciseScreenMedium
 import com.github.se.signify.ui.screens.home.HomeScreen
 import com.github.se.signify.ui.screens.home.QuestScreen
 import com.github.se.signify.ui.screens.profile.FriendsListScreen
@@ -124,6 +125,10 @@ fun SignifyAppPreview(context: Context, navigationState: MutableStateFlow<Naviga
     composable(Screen.EXERCISE_EASY) {
       ExerciseScreenEasy(navigationActions, handLandMarkViewModel)
     }
+    composable(Screen.EXERCISE_MEDIUM) {
+      ExerciseScreenMedium(navigationActions, handLandMarkViewModel)
+    }
+
     composable(Screen.EXERCISE_HARD) {
       ExerciseScreenHard(navigationActions, handLandMarkViewModel)
     }

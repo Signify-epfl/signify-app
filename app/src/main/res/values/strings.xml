@@ -41,6 +41,16 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
         <item>silver</item>
         <item>pillow</item>
     </string-array>
+    <string-array name="real_sentences">
+        <item>The cat sits on the mat</item>
+        <item>Birds fly across the sky</item>
+        <item>She walks to the park</item>
+        <item>It rains on summer days</item>
+        <item>The stars shine at night</item>
+        <item>Dogs bark in the yard</item>
+        <item>The sun rises every day</item>
+        <item>A child plays with toys</item>
+    </string-array>
     <string name="tip_a">Tips: Close your hand, put your thumb to the left, and direct it to the left.</string>
     <string name="tip_b">Tips: Extend all fingers straight up. Place your thumb across your palm. Fingers are straight and close together.</string>
     <string name="tip_c">Tips: Fingers and thumb are curved to form a C shape.</string>
