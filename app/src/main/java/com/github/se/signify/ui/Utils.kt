@@ -405,9 +405,7 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
                     3.dp,
                     MaterialTheme.colorScheme.outline,
                     RoundedCornerShape(12.dp)) // Ensure the border wraps the popup
-                .padding(16.dp)
-                .testTag("InfoPopup") // Remove padding for the border
-        ) {
+                .testTag("InfoPopup")) {
           Column(
               modifier = Modifier.padding(16.dp).fillMaxWidth().testTag("InfoPopupContent"),
               horizontalAlignment = Alignment.CenterHorizontally) {
@@ -501,7 +499,8 @@ fun StatisticsRow(
                       .clip(RoundedCornerShape(12.dp))
                       .background(MaterialTheme.colorScheme.background)
                       .testTag(columnTextTagList[index]),
-              horizontalAlignment = Alignment.CenterHorizontally) {
+              horizontalAlignment = Alignment.CenterHorizontally,
+              verticalArrangement = Arrangement.Center) {
                 for (subIndex in columnTextList[index].indices) {
                   Text(
                       text = columnTextList[index][subIndex],
@@ -660,7 +659,8 @@ fun AccountInformation(userId: String, userName: String, profilePictureUrl: Stri
 }
 
 /**
- * A reusable composable function that creates an outlined button with customizable text.
+ * A reusable composable function that creates an outlined box with customizable text. It takes
+ * place where we don't have an implementation yet for elements.
  *
  * @param testTag A string for the test tag.
  * @param text The text to be displayed inside the box.
@@ -720,6 +720,7 @@ fun getLetterIconResId(letter: Char): Int {
     else -> R.drawable.letter_a // Default case, just in case an unexpected value is passed
   }
 }
+
 /**
  * Composable function that serves as a placeholder for the camera preview. This function requests
  * camera permission and displays the camera preview if permission is granted.
@@ -820,6 +821,7 @@ fun CameraPlaceholder(handLandMarkViewModel: HandLandMarkViewModel, modifier: Mo
         }
   }
 }
+
 /**
  * Retrieves the drawable resource ID for an image based on a provided letter. This function
  * constructs the resource name using the letter (e.g., "pic_a" for 'A') and uses reflection to
@@ -833,6 +835,7 @@ fun getImageResId(letter: Char): Int {
   val resName = "pic_${letter.lowercaseChar()}"
   return R.drawable::class.java.getDeclaredField(resName).getInt(null)
 }
+
 /**
  * Retrieves the drawable resource ID for an icon based on a provided letter. Constructs the
  * resource name using the letter (e.g., "letter_a" for 'A') and uses reflection to find the
@@ -847,6 +850,7 @@ fun getIconResId(letter: Char): Int {
   val resName = "letter_${letter.lowercaseChar()}"
   return R.drawable::class.java.getDeclaredField(resName).getInt(null)
 }
+
 /**
  * Retrieves the string resource ID for a tip based on the provided letter. Maps each letter from
  * 'A' to 'Z' to a specific string resource in `R.string` (e.g., 'A' maps to `R.string.tip_a`). If
