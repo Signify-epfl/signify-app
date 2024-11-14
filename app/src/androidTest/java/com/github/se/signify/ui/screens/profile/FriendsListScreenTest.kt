@@ -24,7 +24,12 @@ class FriendsListScreenTest {
 
   private val currentFriends = mutableStateListOf("Alice", "Bob", "Charlie", "Sam")
   private val friendRequests = mutableStateListOf("Dave", "Eve", "Daniel", "Leo")
-  private val testUser = User(uid = "testUserId", name = "Test User") // Test user data
+  private val testUser =
+      User(
+          uid = "testUserId",
+          name = "Test User",
+          currentStreak = 0L,
+          highestStreak = 0L) // Test user data
 
   private lateinit var navigationActions: NavigationActions
   private lateinit var userRepository: UserRepository
@@ -192,7 +197,12 @@ class FriendsListScreenTest {
   @Test
   fun removeFriendAfterSearch() {
     // Arrange
-    val friendUser = User(uid = "Alice", name = "Friend User") // Simulated friend user data
+    val friendUser =
+        User(
+            uid = "Alice",
+            name = "Friend User",
+            currentStreak = 0L,
+            highestStreak = 0L) // Simulated friend user data
     userViewModel.setSearchResult(friendUser) // Simulate search result with existing friend
 
     // Act
