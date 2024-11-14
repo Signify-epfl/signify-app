@@ -46,6 +46,8 @@ class QuestScreenTest {
     composeTestRule.setContent {
       QuestScreen(
           navigationActions = navigationActions,
+          userRepository = userRepository,
+          questRepository = questRepository,
           questViewModel = questViewModel,
           userViewModel = userViewModel)
     }
@@ -74,6 +76,8 @@ class QuestScreenTest {
     composeTestRule.setContent {
       QuestScreen(
           navigationActions = navigationActions,
+          questRepository = questRepository,
+          userRepository = userRepository,
           questViewModel = questViewModel,
           userViewModel = userViewModel)
     }
@@ -137,6 +141,8 @@ class QuestScreenTest {
     composeTestRule.setContent {
       QuestScreen(
           navigationActions = navigationActions,
+          questRepository = questRepository,
+          userRepository = userRepository,
           questViewModel = questViewModel,
           userViewModel = userViewModel)
     }

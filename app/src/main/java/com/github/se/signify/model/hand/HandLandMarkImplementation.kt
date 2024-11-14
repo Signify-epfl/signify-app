@@ -26,10 +26,10 @@ data class HandLandMarkConfig(val taskFile: String, val modelFile: String)
  * initialization of the hand landmark detection model and the gesture classification using an ONNX
  * model for American Sign Language (ASL) recognition.
  *
- * @param config Configuration object containing the file paths to the hand detection model and the ONNX model.
+ * @param config Configuration object containing the file paths to the hand detection model and the
+ *   ONNX model.
  */
-class HandLandMarkImplementation(private val config: HandLandMarkConfig) :
-    HandLandMarkRepository {
+class HandLandMarkImplementation(private val config: HandLandMarkConfig) : HandLandMarkRepository {
 
   // HandLandmarker instance for detecting hand landmarks
   private var handLandmarker: HandLandmarker? = null

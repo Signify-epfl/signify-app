@@ -47,7 +47,7 @@ class SettingsScreenTest {
     val picturePath = "file:///path/to/profile/picture.jpg"
 
     composeTestRule.setContent {
-      SettingsScreen(navigationActions, userViewModel)
+      SettingsScreen(navigationActions, userRepository, userViewModel)
       ProfilePicture(picturePath)
     }
 

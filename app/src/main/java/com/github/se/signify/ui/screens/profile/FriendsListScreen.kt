@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.BackButton
 import com.github.se.signify.ui.navigation.NavigationActions
@@ -59,7 +60,8 @@ val currentUserId = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.g
 @Composable
 fun FriendsListScreen(
     navigationActions: NavigationActions,
-    userViewModel: UserViewModel = viewModel(factory = UserViewModel.Factory)
+    userRepository: UserRepository,
+    userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository))
 ) {
   var errorMessage by remember { mutableStateOf("") }
 
@@ -299,10 +301,7 @@ fun FriendCard(name: String, actions: @Composable RowScope.() -> Unit) {
 }
 
 @Composable
-fun FriendItem(
-    friendName: String,
-    userViewModel: UserViewModel = viewModel(factory = UserViewModel.Factory)
-) {
+fun FriendItem(friendName: String, userViewModel: UserViewModel) {
   FriendCard(friendName) {
 
     // Button "Remove"
@@ -317,10 +316,7 @@ fun FriendItem(
 }
 
 @Composable
-fun FriendRequestItem(
-    friendRequestName: String,
-    userViewModel: UserViewModel = viewModel(factory = UserViewModel.Factory)
-) {
+fun FriendRequestItem(friendRequestName: String, userViewModel: UserViewModel) {
 
   FriendCard(friendRequestName) {
     Row(

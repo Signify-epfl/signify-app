@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
+import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.AccountInformation
 import com.github.se.signify.ui.LearnedLetterList
@@ -28,7 +29,8 @@ import com.google.firebase.auth.FirebaseAuth
 @Composable
 fun ProfileScreen(
     navigationActions: NavigationActions,
-    userViewModel: UserViewModel = viewModel(factory = UserViewModel.Factory)
+    userRepository: UserRepository,
+    userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository))
 ) {
   MainScreenScaffold(
       navigationActions = navigationActions,

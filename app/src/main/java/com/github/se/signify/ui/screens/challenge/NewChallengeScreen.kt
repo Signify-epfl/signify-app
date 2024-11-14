@@ -33,7 +33,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.model.challenge.Challenge
+import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.challenge.ChallengeViewModel
+import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.BackButton
 import com.github.se.signify.ui.UtilTextButton
@@ -44,8 +46,11 @@ import com.github.se.signify.ui.screens.profile.currentUserId
 @Composable
 fun NewChallengeScreen(
     navigationActions: NavigationActions,
-    userViewModel: UserViewModel = viewModel(factory = UserViewModel.Factory),
-    challengeViewModel: ChallengeViewModel = viewModel(factory = ChallengeViewModel.Factory)
+    userRepository: UserRepository,
+    challengeRepository: ChallengeRepository,
+    userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository)),
+    challengeViewModel: ChallengeViewModel =
+        viewModel(factory = ChallengeViewModel.factory(challengeRepository))
 ) {
   // Fetch friends list and ongoing challenges when this screen is first displayed
   LaunchedEffect(Unit) {

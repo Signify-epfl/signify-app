@@ -48,6 +48,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.BackButton
 import com.github.se.signify.ui.ProfilePicture
@@ -58,7 +59,8 @@ import java.io.FileOutputStream
 @Composable
 fun SettingsScreen(
     navigationActions: NavigationActions,
-    userViewModel: UserViewModel = viewModel(factory = UserViewModel.Factory)
+    userRepository: UserRepository,
+    userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository)),
 ) {
   val context = LocalContext.current
 
