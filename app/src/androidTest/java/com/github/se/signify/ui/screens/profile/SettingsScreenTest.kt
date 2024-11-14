@@ -43,6 +43,7 @@ class SettingsScreenTest {
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
     userRepository = mock(UserRepository::class.java)
+    userViewModel = UserViewModel(userRepository)
     val picturePath = "file:///path/to/profile/picture.jpg"
 
     composeTestRule.setContent {

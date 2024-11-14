@@ -35,6 +35,7 @@ class FriendsListScreenTest {
 
     navigationActions = mock(NavigationActions::class.java)
     userRepository = mock(UserRepository::class.java)
+    userViewModel = UserViewModel(userRepository)
 
     // Mock getFriendsList method to return currentFriends
     doAnswer { invocation ->
