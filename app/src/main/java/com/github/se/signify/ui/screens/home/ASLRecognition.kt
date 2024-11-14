@@ -3,7 +3,6 @@ package com.github.se.signify.ui.screens.home
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -145,13 +144,12 @@ fun HandGestureImage(gesture: String) {
                   color = MaterialTheme.colorScheme.outline,
                   shape = RoundedCornerShape(size = 10.dp))
               .testTag("handGestureImage")) {
-        Image(
-            painter = painterResource(id = imageResource),
-            contentDescription = "Detected Gesture $gesture",
-            modifier =
-                Modifier.align(Alignment.Center)
-                    .size(100.dp) // Adjust size to better fit the Box
-                    .padding(16.dp))
+      Icon(
+          painter = painterResource(id = imageResource),
+          contentDescription = "Letter gesture",
+          tint = MaterialTheme.colorScheme.onSurface,
+          modifier =
+          Modifier.size(200.dp).padding(16.dp).align(Alignment.Center))
       }
 }
 
