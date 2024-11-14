@@ -36,6 +36,9 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
   private val _unlockedQuests = MutableStateFlow("1")
   val unlockedQuests: StateFlow<String> = _unlockedQuests
 
+  private val _streak = MutableStateFlow(0L)
+  val streak: StateFlow<Long> = _streak
+
   private val logTag = "UserViewModel"
 
   init {
@@ -185,7 +188,7 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
     val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     val start = dateFormat.parse(startDate)
     val end = dateFormat.parse(endDate)
-    val diff = end.time - start.time
+    val diff = end!!.time - start!!.time
     return TimeUnit.MILLISECONDS.toDays(diff)
   }
 
@@ -222,5 +225,19 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
         onFailure = { e ->
           Log.e("UserViewModel", "Failed to get initial quest access date: ${e.message}")
         })
+  }
+
+  fun updateStreak(currentUserId: String) {
+    repository.updateStreak(
+        currentUserId,
+        onSuccess = { Log.d(logTag, "Streak update successful!") },
+        onFailure = { e -> Log.e(logTag, "Error updating streak: ${e.message}") })
+  }
+
+  fun getStreak(currentUserId: String) {
+    repository.getStreak(
+        currentUserId,
+        onSuccess = { s -> _streak.value = s },
+        onFailure = { e -> Log.e(logTag, "Failed to get user's streak: ${e.message}}") })
   }
 }
