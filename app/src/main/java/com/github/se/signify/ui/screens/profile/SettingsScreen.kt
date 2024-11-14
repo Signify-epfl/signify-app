@@ -83,7 +83,6 @@ fun SettingsScreen(
         }
       }
 
-
   AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = "SettingsScreen") {
     // Editable Profile Picture
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -167,6 +166,7 @@ fun SettingsScreen(
     Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
       ActionButtons(
           {
+            Toast.makeText(context, "Changes canceled.", Toast.LENGTH_SHORT).show()
             newName = ""
             selectedImageUrl = profilePictureUrl.value
           },
@@ -180,6 +180,7 @@ fun SettingsScreen(
               userViewModel.updateUserName(currentUserId, newName)
             }
             userViewModel.updateProfilePictureUrl(currentUserId, selectedImageUrl)
+            Toast.makeText(context, "Changes saved.", Toast.LENGTH_SHORT).show()
           },
           MaterialTheme.colorScheme.primary,
           "Save",
