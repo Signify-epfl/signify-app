@@ -55,7 +55,7 @@ class MyStatsScreenTest {
     composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
     composeTestRule.onNodeWithTag("NumberOfDays").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("NumberOfDays").assertTextEquals("$numberOfDays days")
+    composeTestRule.onNodeWithTag("NumberOfDays").assertTextEquals("$numberOfDays")
 
     // Verify letters learned section displays correctly
     composeTestRule.onNodeWithTag("AllLetterLearned").assertIsDisplayed()
