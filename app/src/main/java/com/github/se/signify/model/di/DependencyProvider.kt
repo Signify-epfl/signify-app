@@ -7,8 +7,8 @@ import com.github.se.signify.model.quest.QuestRepository
 import com.github.se.signify.model.user.UserRepository
 
 interface DependencyProvider {
-    fun provideChallengeRepository(context: Context): ChallengeRepository
-    fun provideHandLandMarkRepository(context: Context): HandLandMarkRepository
-    fun provideQuestRepository(context: Context): QuestRepository
-    fun provideUserRepository(context: Context): UserRepository
+    fun challengeRepository(context: Context): ChallengeRepository
+    fun handLandMarkRepository(context: Context): HandLandMarkRepository
+    fun questRepository(context: Context): QuestRepository
+    fun userRepository(context: Context): UserRepository
 }

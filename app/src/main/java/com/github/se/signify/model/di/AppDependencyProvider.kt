@@ -17,19 +17,19 @@ import com.google.firebase.firestore.firestore
 private val appHandLandMarkConfig = HandLandMarkConfig("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
 
 class AppDependencyProvider : DependencyProvider {
-    override fun provideChallengeRepository(context: Context): ChallengeRepository {
+    override fun challengeRepository(context: Context): ChallengeRepository {
         return ChallengeRepositoryFireStore(FirebaseFirestore.getInstance())
     }
 
-    override fun provideHandLandMarkRepository(context: Context): HandLandMarkRepository {
+    override fun handLandMarkRepository(context: Context): HandLandMarkRepository {
         return HandLandMarkImplementation(appHandLandMarkConfig)
     }
 
-    override fun provideQuestRepository(context: Context): QuestRepository {
+    override fun questRepository(context: Context): QuestRepository {
         return QuestRepositoryFireStore(Firebase.firestore)
     }
 
-    override fun provideUserRepository(context: Context): UserRepository {
+    override fun userRepository(context: Context): UserRepository {
         return UserRepositoryFireStore(Firebase.firestore)
     }
 }

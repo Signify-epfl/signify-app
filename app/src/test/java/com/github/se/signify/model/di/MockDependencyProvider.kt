@@ -8,19 +8,19 @@ import com.github.se.signify.model.user.UserRepository
 import org.mockito.Mockito.mock
 
 class MockDependencyProvider : DependencyProvider {
-    override fun provideChallengeRepository(context: Context): ChallengeRepository {
+    override fun challengeRepository(context: Context): ChallengeRepository {
         return mock(ChallengeRepository::class.java)
     }
 
-    override fun provideHandLandMarkRepository(context: Context): HandLandMarkRepository {
+    override fun handLandMarkRepository(context: Context): HandLandMarkRepository {
         return mock(HandLandMarkRepository::class.java)
     }
 
-    override fun provideQuestRepository(context: Context): QuestRepository {
+    override fun questRepository(context: Context): QuestRepository {
         return mock(QuestRepository::class.java)
     }
 
-    override fun provideUserRepository(context: Context): UserRepository {
+    override fun userRepository(context: Context): UserRepository {
         return mock(UserRepository::class.java)
     }
 }
