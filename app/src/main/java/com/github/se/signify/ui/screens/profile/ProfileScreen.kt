@@ -39,10 +39,13 @@ fun ProfileScreen(
     LaunchedEffect(Unit) {
       userViewModel.getUserName(currentUserId)
       userViewModel.getProfilePictureUrl(currentUserId)
+      userViewModel.updateStreak(currentUserId)
+      userViewModel.getStreak(currentUserId)
     }
 
     val userName = userViewModel.userName.collectAsState()
     val profilePictureUrl = userViewModel.profilePictureUrl.collectAsState()
+    val streak = userViewModel.streak.collectAsState()
 
     // Settings button
     UtilButton(
@@ -58,7 +61,7 @@ fun ProfileScreen(
         userId = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0) ?: "unknown",
         userName = userName.value,
         profilePictureUrl = profilePictureUrl.value,
-        days = 30)
+        days = streak.value)
     Spacer(modifier = Modifier.height(32.dp))
 
     // Letters learned
