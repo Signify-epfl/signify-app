@@ -19,7 +19,7 @@ class StatsRepositoryFirestore(private val db: FirebaseFirestore): StatsReposito
         }
     }
 
-    override fun getDays(
+    override fun getDaysStreak(
         userId: String,
         onSuccess: (Int) -> Unit,
         onFailure: (Exception) -> Unit
@@ -48,7 +48,7 @@ class StatsRepositoryFirestore(private val db: FirebaseFirestore): StatsReposito
             .addOnFailureListener(onFailure)
     }
 
-    override fun getExerciseStatsEasy(
+    override fun getEasyExerciseStats(
         userId: String,
         onSuccess: (Int) -> Unit,
         onFailure: (Exception) -> Unit
@@ -56,13 +56,13 @@ class StatsRepositoryFirestore(private val db: FirebaseFirestore): StatsReposito
         getDocument(userId)
             .get()
             .addOnSuccessListener { document ->
-                val easy = document.getLong("exerciseStats.easy")?.toInt() ?: 0
+                val easy = document.getLong("easyExercise")?.toInt() ?: 0
                 onSuccess(easy)
             }
             .addOnFailureListener(onFailure)
     }
 
-    override fun getExerciseStatsMedium(
+    override fun getMediumExerciseStats(
         userId: String,
         onSuccess: (Int) -> Unit,
         onFailure: (Exception) -> Unit
@@ -70,13 +70,13 @@ class StatsRepositoryFirestore(private val db: FirebaseFirestore): StatsReposito
         getDocument(userId)
             .get()
             .addOnSuccessListener { document ->
-                val medium = document.getLong("exerciseStats.medium")?.toInt() ?: 0
+                val medium = document.getLong("mediumExercise")?.toInt() ?: 0
                 onSuccess(medium)
             }
             .addOnFailureListener(onFailure)
     }
 
-    override fun getExerciseStatsHard(
+    override fun getHardExerciseStats(
         userId: String,
         onSuccess: (Int) -> Unit,
         onFailure: (Exception) -> Unit
@@ -84,13 +84,13 @@ class StatsRepositoryFirestore(private val db: FirebaseFirestore): StatsReposito
         getDocument(userId)
             .get()
             .addOnSuccessListener { document ->
-                val hard = document.getLong("exerciseStats.hard")?.toInt() ?: 0
+                val hard = document.getLong("hardExercise")?.toInt() ?: 0
                 onSuccess(hard)
             }
             .addOnFailureListener(onFailure)
     }
 
-    override fun getQuestStatsDaily(
+    override fun getDailyQuestStats(
         userId: String,
         onSuccess: (Int) -> Unit,
         onFailure: (Exception) -> Unit
@@ -98,13 +98,13 @@ class StatsRepositoryFirestore(private val db: FirebaseFirestore): StatsReposito
         getDocument(userId)
             .get()
             .addOnSuccessListener { document ->
-                val daily = document.getLong("questStats.daily")?.toInt() ?: 0
+                val daily = document.getLong("dailyQuest")?.toInt() ?: 0
                 onSuccess(daily)
             }
             .addOnFailureListener(onFailure)
     }
 
-    override fun getQuestStatsWeekly(
+    override fun getWeeklyQuestStats(
         userId: String,
         onSuccess: (Int) -> Unit,
         onFailure: (Exception) -> Unit
@@ -112,13 +112,13 @@ class StatsRepositoryFirestore(private val db: FirebaseFirestore): StatsReposito
         getDocument(userId)
             .get()
             .addOnSuccessListener { document ->
-                val weekly = document.getLong("questStats.weekly")?.toInt() ?: 0
+                val weekly = document.getLong("weeklyQuest")?.toInt() ?: 0
                 onSuccess(weekly)
             }
             .addOnFailureListener(onFailure)
     }
 
-    override fun getChallengeStatsCompleted(
+    override fun getCompletedChallengeStats(
         userId: String,
         onSuccess: (Int) -> Unit,
         onFailure: (Exception) -> Unit
@@ -126,13 +126,13 @@ class StatsRepositoryFirestore(private val db: FirebaseFirestore): StatsReposito
         getDocument(userId)
             .get()
             .addOnSuccessListener { document ->
-                val completed = document.getLong("challengeStats.completed")?.toInt() ?: 0
+                val completed = document.getLong("completedChallenge")?.toInt() ?: 0
                 onSuccess(completed)
             }
             .addOnFailureListener(onFailure)
     }
 
-    override fun getChallengeStatsCreated(
+    override fun getCreatedChallengeStats(
         userId: String,
         onSuccess: (Int) -> Unit,
         onFailure: (Exception) -> Unit
@@ -140,13 +140,13 @@ class StatsRepositoryFirestore(private val db: FirebaseFirestore): StatsReposito
         getDocument(userId)
             .get()
             .addOnSuccessListener { document ->
-                val created = document.getLong("challengeStats.created")?.toInt() ?: 0
+                val created = document.getLong("createdChallenge")?.toInt() ?: 0
                 onSuccess(created)
             }
             .addOnFailureListener(onFailure)
     }
 
-    override fun updateDays(
+    override fun updateDaysStreak(
         userId: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
@@ -157,7 +157,7 @@ class StatsRepositoryFirestore(private val db: FirebaseFirestore): StatsReposito
             .addOnFailureListener(onFailure)
     }
 
-    override fun resetDays(
+    override fun resetDaysStreak(
         userId: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
@@ -180,79 +180,79 @@ class StatsRepositoryFirestore(private val db: FirebaseFirestore): StatsReposito
             .addOnFailureListener(onFailure)
     }
 
-    override fun updateExerciseStatsEasy(
+    override fun updateEasyExerciseStats(
         userId: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         getDocument(userId)
-            .update("exerciseStats.easy", FieldValue.increment(1))
+            .update("easyExercise", FieldValue.increment(1))
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener(onFailure)
     }
 
-    override fun updateExerciseStatsMedium(
+    override fun updateMediumExerciseStats(
         userId: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         getDocument(userId)
-            .update("exerciseStats.medium", FieldValue.increment(1))
+            .update("mediumExercise", FieldValue.increment(1))
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener(onFailure)
     }
 
-    override fun updateExerciseStatsHard(
+    override fun updateHardExerciseStats(
         userId: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         getDocument(userId)
-            .update("exerciseStats.hard", FieldValue.increment(1))
+            .update("hardExercise", FieldValue.increment(1))
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener(onFailure)
     }
 
-    override fun updateQuestStatsDaily(
+    override fun updateDailyQuestStats(
         userId: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         getDocument(userId)
-            .update("questStats.daily", FieldValue.increment(1))
+            .update("dailyQuest", FieldValue.increment(1))
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener(onFailure)
     }
 
-    override fun updateQuestStatsWeekly(
+    override fun updateWeeklyQuestStats(
         userId: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         getDocument(userId)
-            .update("questStats.weekly", FieldValue.increment(1))
+            .update("weeklyQuest", FieldValue.increment(1))
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener(onFailure)
     }
 
-    override fun updateChallengeStatsCompleted(
+    override fun updateCompletedChallengeStats(
         userId: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         getDocument(userId)
-            .update("challengeStats.completed", FieldValue.increment(1))
+            .update("completedChallenge", FieldValue.increment(1))
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener(onFailure)
     }
 
-    override fun updateChallengeStatsCreated(
+    override fun updateCreatedChallengeStats(
         userId: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         getDocument(userId)
-            .update("challengeStats.created", FieldValue.increment(1))
+            .update("createdChallenge", FieldValue.increment(1))
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener(onFailure)
     }

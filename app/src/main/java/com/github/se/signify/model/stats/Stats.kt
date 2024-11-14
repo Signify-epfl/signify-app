@@ -3,7 +3,11 @@ package com.github.se.signify.model.stats
 data class Stats(
     val days: Int = 0,
     val lettersLearned: List<Char> = emptyList(),
-    val exerciseStats: ExerciseStats = ExerciseStats(),
-    val questStats: QuestStats = QuestStats(),
-    val challengeStats: ChallengeStats = ChallengeStats()
+    val easyExercise: Int = 0,
+    val mediumExercise: Int = 0,
+    val hardExercise: Int = 0,
+    val dailyQuest: Int = 0,
+    val weeklyQuest: Int = 0,
+    val completedChallenge: Int = 0,
+    val createdChallenge: Int = 0
 )

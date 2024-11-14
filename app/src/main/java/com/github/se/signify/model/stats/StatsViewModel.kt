@@ -57,10 +57,10 @@ class StatsViewModel(private val repository: StatsRepository) : ViewModel() {
 
     private fun logError(m: String, e: Exception) = Log.e(logTag, "$m: ${e.message}")
 
-    fun getDays(userId: String) {
-        repository.getDays(
+    fun getDaysStreak(userId: String) {
+        repository.getDaysStreak(
             userId,
-            onSuccess = { daysValue -> _days.value = daysValue },
+            onSuccess = { daysStreak -> _days.value = daysStreak },
             onFailure = { e -> logError("Error fetching days streak:", e) }
         )
     }
@@ -73,72 +73,72 @@ class StatsViewModel(private val repository: StatsRepository) : ViewModel() {
         )
     }
 
-    fun getExerciseStatsEasy(userId: String) {
-        repository.getExerciseStatsEasy(
+    fun getEasyExerciseStats(userId: String) {
+        repository.getEasyExerciseStats(
             userId,
             onSuccess = { easyStats -> _easy.value = easyStats},
             onFailure = { e -> logError("Error fetching easy exercise stats:", e) }
         )
     }
 
-    fun getExerciseStatsMedium(userId: String) {
-        repository.getExerciseStatsMedium(
+    fun getMediumExerciseStats(userId: String) {
+        repository.getMediumExerciseStats(
             userId,
             onSuccess = { mediumStats -> _medium.value = mediumStats},
             onFailure = { e -> logError("Error fetching medium exercise stats:", e) }
         )
     }
 
-    fun getExerciseStatsHard(userId: String) {
-        repository.getExerciseStatsHard(
+    fun getHardExerciseStats(userId: String) {
+        repository.getHardExerciseStats(
             userId,
             onSuccess = { hardStats -> _hard.value = hardStats},
             onFailure = { e -> logError("Error fetching hard exercise stats:", e) }
         )
     }
 
-    fun getQuestStatsDaily(userId: String) {
-        repository.getQuestStatsDaily(
+    fun getDailyQuestStats(userId: String) {
+        repository.getDailyQuestStats(
             userId,
-            onSuccess = { dailyQuests -> _daily.value = dailyQuests },
+            onSuccess = { dailyQuest -> _daily.value = dailyQuest },
             onFailure = { e -> logError("Error fetching daily quest stats:", e) }
         )
     }
 
-    fun getQuestStatsWeekly(userId: String) {
-        repository.getQuestStatsWeekly(
+    fun getWeeklyQuestStats(userId: String) {
+        repository.getWeeklyQuestStats(
             userId,
-            onSuccess = { weeklyQuests -> _weekly.value = weeklyQuests },
+            onSuccess = { weeklyQuest -> _weekly.value = weeklyQuest },
             onFailure = { e -> logError("Error fetching weekly quest stats:", e) }
         )
     }
 
-    fun getChallengeStatsCompleted(userId: String) {
-        repository.getChallengeStatsCompleted(
+    fun getCompletedChallengeStats(userId: String) {
+        repository.getCompletedChallengeStats(
             userId,
             onSuccess = { completedChallenge -> _completed.value = completedChallenge },
             onFailure = { e -> logError("Error fetching completed challenge Stats:", e) }
         )
     }
 
-    fun getChallengeStatsCreated(userId: String) {
-        repository.getChallengeStatsCreated(
+    fun getCreatedChallengeStats(userId: String) {
+        repository.getCreatedChallengeStats(
             userId,
             onSuccess = { createdChallenge -> _created.value = createdChallenge },
             onFailure = { e -> logError("Error fetching created challenge Stats:", e) }
         )
     }
 
-    fun updateDays(userId: String) {
-        repository.updateDays(
+    fun updateDaysStreak(userId: String) {
+        repository.updateDaysStreak(
             userId,
             onSuccess = { logSuccess("Days streak updated successfully.") },
             onFailure = { e -> logError("Error updating days streak:", e) }
         )
     }
 
-    fun resetDays(userId: String) {
-        repository.resetDays(
+    fun resetDaysStreak(userId: String) {
+        repository.resetDaysStreak(
             userId,
             onSuccess = { logSuccess("Days streak reset successfully.") },
             onFailure = { e -> logError("Error reset days streak:", e) }
@@ -154,56 +154,56 @@ class StatsViewModel(private val repository: StatsRepository) : ViewModel() {
         )
     }
 
-    fun updateExerciseStatsEasy(userId: String) {
-        repository.updateExerciseStatsEasy(
+    fun updateEasyExerciseStats(userId: String) {
+        repository.updateEasyExerciseStats(
             userId,
             onSuccess = { logSuccess("Easy exercise stats updated successfully.") },
             onFailure = { e -> logError("Error updating easy exercise stats:", e) }
         )
     }
 
-    fun updateExerciseStatsMedium(userId: String) {
-        repository.updateExerciseStatsMedium(
+    fun updateMediumExerciseStats(userId: String) {
+        repository.updateMediumExerciseStats(
             userId,
             onSuccess = { logSuccess("Medium exercise stats updated successfully.") },
             onFailure = { e -> logError("Error updating medium exercise stats:", e) }
         )
     }
 
-    fun updateExerciseStatsHard(userId: String) {
-        repository.updateExerciseStatsHard(
+    fun updateHardExerciseStats(userId: String) {
+        repository.updateHardExerciseStats(
             userId,
             onSuccess = { logSuccess("Hard exercise stats updated successfully.") },
             onFailure = { e -> logError("Error updating hard exercise stats:", e) }
         )
     }
 
-    fun updateQuestStatsDaily(userId: String) {
-        repository.updateQuestStatsDaily(
+    fun updateDailyQuestStats(userId: String) {
+        repository.updateDailyQuestStats(
             userId,
             onSuccess = { logSuccess("Daily quest stats updated successfully.") },
             onFailure = { e -> logError("Error updating daily quest stats:", e) }
         )
     }
 
-    fun updateQuestStatsWeekly(userId: String) {
-        repository.updateQuestStatsWeekly(
+    fun updateWeeklyQuestStats(userId: String) {
+        repository.updateWeeklyQuestStats(
             userId,
             onSuccess = { logSuccess("Weekly quest stats updated successfully.") },
             onFailure = { e -> logError("Error updating weekly quest stats:", e) }
         )
     }
 
-    fun updateChallengeStatsCompleted(userId: String) {
-        repository.updateChallengeStatsCompleted(
+    fun updateCompletedChallengeStats(userId: String) {
+        repository.updateCompletedChallengeStats(
             userId,
             onSuccess = { logSuccess("Completed challenge stats updated successfully.") },
             onFailure = { e -> logError("Error updating completed challenge stats:", e) }
         )
     }
 
-    fun updateChallengeStatsCreated(userId: String) {
-        repository.updateChallengeStatsCreated(
+    fun updateCreatedChallengeStats(userId: String) {
+        repository.updateCreatedChallengeStats(
             userId,
             onSuccess = { logSuccess("Created challenge stats updated successfully.") },
             onFailure = { e -> logError("Error updating created challenge stats:", e) }

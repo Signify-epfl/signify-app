@@ -3,7 +3,7 @@ package com.github.se.signify.model.stats
 interface StatsRepository {
     fun init(onSuccess: () -> Unit)
 
-    fun getDays(
+    fun getDaysStreak(
         userId: String,
         onSuccess: (Int) -> Unit,
         onFailure: (Exception) -> Unit
@@ -15,55 +15,55 @@ interface StatsRepository {
         onFailure: (Exception) -> Unit
     )
 
-    fun getExerciseStatsEasy(
+    fun getEasyExerciseStats(
         userId: String,
         onSuccess: (Int) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
-    fun getExerciseStatsMedium(
+    fun getMediumExerciseStats(
         userId: String,
         onSuccess: (Int) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
-    fun getExerciseStatsHard(
+    fun getHardExerciseStats(
         userId: String,
         onSuccess: (Int) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
-    fun getQuestStatsDaily(
+    fun getDailyQuestStats(
         userId: String,
         onSuccess: (Int) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
-    fun getQuestStatsWeekly(
+    fun getWeeklyQuestStats(
         userId: String,
         onSuccess: (Int) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
-    fun getChallengeStatsCompleted(
+    fun getCompletedChallengeStats(
         userId: String,
         onSuccess: (Int) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
-    fun getChallengeStatsCreated(
+    fun getCreatedChallengeStats(
         userId: String,
         onSuccess: (Int) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
-    fun updateDays(
+    fun updateDaysStreak(
         userId: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     )
 
-    fun resetDays(
+    fun resetDaysStreak(
         userId: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
@@ -76,43 +76,43 @@ interface StatsRepository {
         onFailure: (Exception) -> Unit
     )
 
-    fun updateExerciseStatsEasy(
+    fun updateEasyExerciseStats(
         userId: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     )
 
-    fun updateExerciseStatsMedium(
+    fun updateMediumExerciseStats(
         userId: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     )
 
-    fun updateExerciseStatsHard(
+    fun updateHardExerciseStats(
         userId: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     )
 
-    fun updateQuestStatsDaily(
+    fun updateDailyQuestStats(
         userId: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     )
 
-    fun updateQuestStatsWeekly(
+    fun updateWeeklyQuestStats(
         userId: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     )
 
-    fun updateChallengeStatsCompleted(
+    fun updateCompletedChallengeStats(
         userId: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     )
 
-    fun updateChallengeStatsCreated(
+    fun updateCreatedChallengeStats(
         userId: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
