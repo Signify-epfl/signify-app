@@ -35,7 +35,6 @@ class FriendsListScreenTest {
 
     navigationActions = mock(NavigationActions::class.java)
     userRepository = mock(UserRepository::class.java)
-    userViewModel = UserViewModel(userRepository)
 
     // Mock getFriendsList method to return currentFriends
     doAnswer { invocation ->
@@ -55,7 +54,9 @@ class FriendsListScreenTest {
         .`when`(userRepository)
         .getRequestsFriendsList(Mockito.anyString(), anyOrNull(), anyOrNull())
 
-    composeTestRule.setContent { FriendsListScreen(navigationActions, userRepository) }
+      userViewModel = UserViewModel(userRepository)
+
+    composeTestRule.setContent { FriendsListScreen(navigationActions, userRepository, userViewModel) }
   }
 
   @Test
