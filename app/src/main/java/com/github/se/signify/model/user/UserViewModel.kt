@@ -4,8 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.github.se.signify.model.challenge.Challenge
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -44,13 +42,14 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
 
   // create factory
   companion object {
-    val Factory: ViewModelProvider.Factory =
-        object : ViewModelProvider.Factory {
-          @Suppress("UNCHECKED_CAST")
-          override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return UserViewModel(UserRepositoryFireStore(Firebase.firestore)) as T
-          }
+    fun factory(repository: UserRepository): ViewModelProvider.Factory {
+      return object : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+          return UserViewModel(repository) as T
         }
+      }
+    }
   }
 
   fun getFriendsList(currentUserId: String) {

@@ -6,7 +6,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.github.se.signify.model.hand.HandLandMarkImplementation
+import com.github.se.signify.model.di.AppDependencyProvider
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
 import org.junit.Before
@@ -26,8 +26,7 @@ class ExerciseScreenHardTest {
   @Before
   fun setup() {
     val context = mock(Context::class.java)
-    val handLandMarkImplementation =
-        HandLandMarkImplementation("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
+    val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
     handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
     mockNavigationActions = mock(NavigationActions::class.java)
     composeTestRule.setContent {
