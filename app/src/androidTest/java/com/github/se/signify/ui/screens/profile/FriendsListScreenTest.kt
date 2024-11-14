@@ -54,9 +54,11 @@ class FriendsListScreenTest {
         .`when`(userRepository)
         .getRequestsFriendsList(Mockito.anyString(), anyOrNull(), anyOrNull())
 
-      userViewModel = UserViewModel(userRepository)
+    userViewModel = UserViewModel(userRepository)
 
-    composeTestRule.setContent { FriendsListScreen(navigationActions, userRepository, userViewModel) }
+    composeTestRule.setContent {
+      FriendsListScreen(navigationActions, userRepository, userViewModel)
+    }
   }
 
   @Test

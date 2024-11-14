@@ -55,7 +55,10 @@ class ProfileScreenTest {
     composeTestRule.onNodeWithTag("SettingsButton").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("InfoButton").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("MyFriendsButton").performScrollTo().assertIsDisplayed()
-    composeTestRule.onNodeWithTag("MyFriendsButton").performScrollTo().assertTextEquals("My Friends")
+    composeTestRule
+        .onNodeWithTag("MyFriendsButton")
+        .performScrollTo()
+        .assertTextEquals("My Friends")
     composeTestRule.onNodeWithTag("MyStatsButton").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("MyStatsButton").performScrollTo().assertTextEquals("My Stats")
   }
