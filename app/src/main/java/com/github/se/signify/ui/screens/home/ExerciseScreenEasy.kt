@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -427,29 +426,5 @@ fun ExerciseScreenCommon(
 
     // Camera placeholder/composable
     CameraPlaceholder(handLandMarkViewModel)
-
-    Button(
-        onClick = {
-          onSuccess(
-              sentences = sentencesList,
-              currentLetterIndex = currentLetterIndex,
-              currentWordIndex = currentWordIndex,
-              currentSentenceIndex = currentSentenceIndex,
-              onProgressUpdate = { newLetterIndex, newWordIndex, newSentenceIndex ->
-                currentLetterIndex = newLetterIndex
-                currentWordIndex = newWordIndex
-                currentSentenceIndex = newSentenceIndex
-              },
-              onAllSentencesComplete = {
-                Toast.makeText(context, "Exercise completed!", Toast.LENGTH_SHORT).show()
-                // Reload or reset sentencesList, or handle end of exercise as needed
-                currentSentenceIndex = 0
-                currentWordIndex = 0
-                currentLetterIndex = 0
-              })
-        },
-        modifier = Modifier.padding(16.dp)) {
-          Text("Success")
-        }
   }
 }
