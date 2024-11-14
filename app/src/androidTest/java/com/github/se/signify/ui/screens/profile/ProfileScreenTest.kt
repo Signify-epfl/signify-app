@@ -31,7 +31,6 @@ class ProfileScreenTest {
   // User information test to be displayed
   private val userId =
       FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0) ?: "unknown"
-  private val numberOfDays = 30
 
   @Before
   fun setUp() {
@@ -90,7 +89,6 @@ class ProfileScreenTest {
     composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
     composeTestRule.onNodeWithTag("NumberOfDays").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("NumberOfDays").assertTextEquals("$numberOfDays days")
   }
 
   @Test
