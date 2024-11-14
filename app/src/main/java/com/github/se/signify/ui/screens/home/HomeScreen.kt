@@ -30,6 +30,7 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
@@ -54,7 +55,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.ui.MainScreenScaffold
-import com.github.se.signify.ui.StreakCounter
 import com.github.se.signify.ui.UtilButton
 import com.github.se.signify.ui.UtilTextButton
 import com.github.se.signify.ui.getIconResId
@@ -62,6 +62,7 @@ import com.github.se.signify.ui.getImageResId
 import com.github.se.signify.ui.getLetterIconResId
 import com.github.se.signify.ui.getTipResId
 import com.github.se.signify.ui.navigation.NavigationActions
+import com.github.se.signify.ui.navigation.Route
 import com.github.se.signify.ui.navigation.Screen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -113,7 +114,12 @@ fun HomeScreen(navigationActions: NavigationActions) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween) {
-                      StreakCounter(0, false)
+                      UtilButton(
+                          onClick = { navigationActions.navigateTo(Route.FEEDBACK) },
+                          buttonTestTag = "FeedbackButton",
+                          iconTestTag = "FeedbackIcon",
+                          icon = Icons.Outlined.Email,
+                          contentDescription = "Feedback")
                       UtilButton(
                           onClick = { navigationActions.navigateTo("Quest") },
                           buttonTestTag = "QuestsButton",
@@ -210,9 +216,8 @@ fun LetterDictionary(
         val currentLetter = letters[currentLetterIndex]
         Box(
             modifier =
-                Modifier.border(
-                        2.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp))
-                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(8.dp))
+                Modifier.border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
                     .padding(8.dp)
                     .clickable {
                       coroutineScope.launch {

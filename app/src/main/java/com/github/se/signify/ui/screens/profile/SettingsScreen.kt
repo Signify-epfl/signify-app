@@ -2,6 +2,7 @@ package com.github.se.signify.ui.screens.profile
 
 import android.content.Context
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -165,6 +166,7 @@ fun SettingsScreen(
     Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
       ActionButtons(
           {
+            Toast.makeText(context, "Changes canceled.", Toast.LENGTH_SHORT).show()
             newName = ""
             selectedImageUrl = profilePictureUrl.value
           },
@@ -178,6 +180,7 @@ fun SettingsScreen(
               userViewModel.updateUserName(currentUserId, newName)
             }
             userViewModel.updateProfilePictureUrl(currentUserId, selectedImageUrl)
+            Toast.makeText(context, "Changes saved.", Toast.LENGTH_SHORT).show()
           },
           MaterialTheme.colorScheme.primary,
           "Save",

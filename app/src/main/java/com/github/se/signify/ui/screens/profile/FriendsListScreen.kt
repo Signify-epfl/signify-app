@@ -69,18 +69,24 @@ fun FriendsListScreen(
     LaunchedEffect(Unit) {
       userViewModel.getFriendsList(currentUserId)
       userViewModel.getRequestsFriendsList(currentUserId)
+      userViewModel.getUserName(currentUserId)
+      userViewModel.getProfilePictureUrl(currentUserId)
+      userViewModel.updateStreak(currentUserId)
+      userViewModel.getStreak(currentUserId)
     }
     val friends = userViewModel.friends.collectAsState()
     val friendsRequests = userViewModel.friendsRequests.collectAsState()
     val searchResult = userViewModel.searchResult.collectAsState()
+    val userName = userViewModel.userName.collectAsState()
+    val streak = userViewModel.streak.collectAsState()
+    val profilePicture = userViewModel.profilePictureUrl.collectAsState()
 
     // Top information
     AccountInformation(
         userId = currentUserId,
-        userName = userViewModel.getUserName(currentUserId).toString(),
-        profilePictureUrl = userViewModel.getProfilePictureUrl(currentUserId).toString(),
-        days = 10 // TODO change with days (when the user model will be updated)
-        )
+        userName = userName.value,
+        profilePictureUrl = profilePicture.value,
+        days = streak.value)
     Spacer(modifier = Modifier.height(32.dp))
 
     SearchBar { searchQuery ->

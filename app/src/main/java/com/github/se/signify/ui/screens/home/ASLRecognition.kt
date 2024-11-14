@@ -1,22 +1,8 @@
 package com.github.se.signify.ui.screens.home
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
-import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.Preview
-import androidx.camera.core.resolutionselector.AspectRatioStrategy
-import androidx.camera.core.resolutionselector.ResolutionSelector
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -27,13 +13,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,62 +24,28 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
 import com.github.se.signify.R
 import com.github.se.signify.model.hand.HandLandMarkViewModel
+import com.github.se.signify.ui.CameraPlaceholder
+import com.github.se.signify.ui.UtilTextButton
+import com.github.se.signify.ui.gestureImageMap
 import com.github.se.signify.ui.navigation.BottomNavigationMenu
 import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
-import java.util.concurrent.Executors
 
-// Map to associate each letter with its corresponding drawable resource for ASL gestures
-val gestureImageMap =
-    mapOf(
-        "A" to R.drawable.letter_a,
-        "B" to R.drawable.letter_b,
-        "C" to R.drawable.letter_c,
-        "D" to R.drawable.letter_d,
-        "E" to R.drawable.letter_e,
-        "F" to R.drawable.letter_f,
-        "G" to R.drawable.letter_g,
-        "H" to R.drawable.letter_h,
-        "I" to R.drawable.letter_i,
-        "J" to R.drawable.letter_j,
-        "K" to R.drawable.letter_k,
-        "L" to R.drawable.letter_l,
-        "M" to R.drawable.letter_m,
-        "N" to R.drawable.letter_n,
-        "O" to R.drawable.letter_o,
-        "P" to R.drawable.letter_p,
-        "Q" to R.drawable.letter_q,
-        "R" to R.drawable.letter_r,
-        "S" to R.drawable.letter_s,
-        "T" to R.drawable.letter_t,
-        "U" to R.drawable.letter_u,
-        "V" to R.drawable.letter_v,
-        "W" to R.drawable.letter_w,
-        "X" to R.drawable.letter_x,
-        "Y" to R.drawable.letter_y,
-        "Z" to R.drawable.letter_z)
 /**
  * Composable that handles ASL recognition. It checks for camera permissions, launches the camera
  * preview, and displays recognized gestures and images.
@@ -110,86 +58,62 @@ fun ASLRecognition(
 ) {
   val buttonUriString = stringResource(id = R.string.button_uri_string)
   val context = LocalContext.current
-  var permissionGranted by remember { mutableStateOf(false) }
-
-  if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) ==
-      PackageManager.PERMISSION_GRANTED) {
-    permissionGranted = true
-  } else {
-    val permissionLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted
-          ->
-          permissionGranted = isGranted
-          if (!isGranted) {
-            Toast.makeText(context, "Camera permission denied", Toast.LENGTH_SHORT).show()
-          }
-        }
-
-    LaunchedEffect(Unit) { permissionLauncher.launch(Manifest.permission.CAMERA) }
-  }
-
-  if (permissionGranted) {
-    Scaffold(
-        topBar = {
-          TopAppBar(
-              modifier = Modifier.background(color = Color.Transparent),
-              title = {
-                Text("Practice ASL & Test it !", modifier = Modifier.testTag("aslRecognitionTitle"))
-              },
-              navigationIcon = {
-                IconButton(onClick = { navigationActions.goBack() }) {
-                  Icon(
-                      imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-                      contentDescription = "Back")
-                }
-              })
-        },
-        content = { paddingValues ->
-          Column(
-              modifier =
-                  Modifier.verticalScroll(rememberScrollState())
-                      .background(MaterialTheme.colorScheme.background)
-                      .padding(paddingValues)
-                      .padding(start = 40.dp, end = 40.dp),
-              horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(
-                    modifier =
-                        Modifier.width(336.dp)
-                            .height(252.dp)
-                            .background(color = MaterialTheme.colorScheme.background),
-                ) {
-                  CameraPreviewWithAnalysisView(handLandMarkViewModel)
-                }
-
-                Spacer(modifier = Modifier.height(30.dp))
-
-                GestureOverlayView(handLandMarkViewModel)
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                // Button: "More on American Sign Language"
-                Button(
-                    onClick = {
-                      val intent =
-                          Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(buttonUriString) }
-                      context.startActivity(intent)
-                    },
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-                    modifier = Modifier.width(336.dp).height(50.dp).testTag("practiceButton")) {
-                      Text(
-                          text = "More on ASL Alphabet",
-                          color = MaterialTheme.colorScheme.onPrimary)
-                    }
+  Scaffold(
+      topBar = {
+        TopAppBar(
+            modifier = Modifier.background(color = Color.Transparent),
+            title = {
+              Text("Practice your signs", modifier = Modifier.testTag("aslRecognitionTitle"))
+            },
+            navigationIcon = {
+              IconButton(onClick = { navigationActions.goBack() }) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                    contentDescription = "Back")
               }
-        },
-        bottomBar = {
-          BottomNavigationMenu(
-              onTabSelect = { route -> navigationActions.navigateTo(route) },
-              tabList = LIST_TOP_LEVEL_DESTINATION,
-              selectedItem = navigationActions.currentRoute(),
-              modifier = Modifier.testTag("bottomNavigationMenu"))
-        })
-  }
+            })
+      },
+      content = { paddingValues ->
+        Column(
+            modifier =
+                Modifier.background(MaterialTheme.colorScheme.background)
+                    .padding(paddingValues)
+                    .padding(start = 40.dp, end = 40.dp),
+            horizontalAlignment = Alignment.CenterHorizontally) {
+              Box(
+                  modifier =
+                      Modifier.width(336.dp)
+                          .height(252.dp)
+                          .background(color = MaterialTheme.colorScheme.background),
+              ) {
+                CameraPlaceholder(handLandMarkViewModel)
+              }
+
+              Spacer(modifier = Modifier.height(30.dp))
+
+              GestureOverlayView(handLandMarkViewModel)
+
+              Spacer(modifier = Modifier.height(20.dp))
+
+              // Button: "More on American Sign Language"
+              UtilTextButton(
+                  onClickAction = {
+                    val intent =
+                        Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(buttonUriString) }
+                    context.startActivity(intent)
+                  },
+                  testTag = "practiceButton",
+                  text = "More on ASL Alphabet",
+                  backgroundColor = MaterialTheme.colorScheme.primary)
+            }
+      },
+      bottomBar = {
+        BottomNavigationMenu(
+            onTabSelect = { route -> navigationActions.navigateTo(route) },
+            tabList = LIST_TOP_LEVEL_DESTINATION,
+            selectedItem = navigationActions.currentRoute(),
+            modifier = Modifier.testTag("bottomNavigationMenu"))
+      })
 }
 
 /**
@@ -211,44 +135,44 @@ fun HandGestureImage(gesture: String) {
   val imageResource = gestureImageMap[gesture] ?: R.drawable.vector
   Box(
       modifier =
-          Modifier.border(
-                  width = 3.dp,
+          Modifier.width(336.dp)
+              .height(200.dp)
+              .clip(RoundedCornerShape(size = 10.dp))
+              .background(MaterialTheme.colorScheme.primary)
+              .border(
+                  width = 2.dp,
                   color = MaterialTheme.colorScheme.outline,
                   shape = RoundedCornerShape(size = 10.dp))
-              .width(332.dp)
-              .height(270.dp)
-              .background(MaterialTheme.colorScheme.primary)
-              .padding(start = 116.dp, top = 85.dp, end = 116.dp, bottom = 85.dp)) {
-        Image(
+              .testTag("handGestureImage")) {
+        Icon(
             painter = painterResource(id = imageResource),
-            contentDescription = "Detected Gesture $gesture",
-            modifier = Modifier.size(120.dp).padding(16.dp))
+            contentDescription = "Letter gesture",
+            tint = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.size(200.dp).padding(16.dp).align(Alignment.Center))
       }
 }
+
 /** Draws the output text or the prompt to "Make a sign" on the screen. */
 @Composable
 fun DrawnOutPut(landmarks: List<NormalizedLandmark>?, text: String) {
-  val displayText =
-      if (landmarks.isNullOrEmpty()) {
-        "Make a sign"
-      } else {
-        text
-      }
-
+  val displayText = if (landmarks.isNullOrEmpty()) "Make a sign" else text
   val paintColor = MaterialTheme.colorScheme.background
   Box(
       modifier =
           Modifier.width(336.dp)
               .height(70.dp)
-              .background(color = MaterialTheme.colorScheme.primary)
-              .padding(vertical = 9.dp)
+              .clip(RoundedCornerShape(10.dp)) // Rounds corners to match button style
+              .background(MaterialTheme.colorScheme.primary)
+              .border(
+                  width = 2.dp,
+                  color = MaterialTheme.colorScheme.outline,
+                  shape = RoundedCornerShape(10.dp))
               .testTag("gestureOverlayView"),
       contentAlignment = Alignment.Center) {
         Canvas(modifier = Modifier.fillMaxSize()) {
           val fontSize = 80f
           val textX = size.width * 0.5f
           val textY = (size.height / 2) + (fontSize / 3)
-
           drawContext.canvas.nativeCanvas.apply {
             val paint =
                 android.graphics.Paint().apply {
@@ -261,54 +185,4 @@ fun DrawnOutPut(landmarks: List<NormalizedLandmark>?, text: String) {
           }
         }
       }
-}
-
-/**
- * Sets up the camera preview with image analysis for hand landmark detection. The camera is bound
- * to the lifecycle and processes images for analysis using the MediaPipe library.
- */
-@SuppressLint("RestrictedApi")
-@Composable
-fun CameraPreviewWithAnalysisView(handLandMarkViewModel: HandLandMarkViewModel) {
-  val context = LocalContext.current
-  val lifecycleOwner = LocalLifecycleOwner.current
-  val previewView = remember { PreviewView(context) }
-
-  AndroidView(factory = { previewView }, modifier = Modifier.fillMaxSize().testTag("cameraPreview"))
-
-  LaunchedEffect(Unit) {
-    val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
-    cameraProviderFuture.addListener(
-        {
-          val cameraProvider = cameraProviderFuture.get()
-          val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-
-          val resolutionSelector =
-              ResolutionSelector.Builder()
-                  .setAspectRatioStrategy(AspectRatioStrategy.RATIO_4_3_FALLBACK_AUTO_STRATEGY)
-                  .build()
-          val preview =
-              Preview.Builder().setResolutionSelector(resolutionSelector).build().also {
-                it.setSurfaceProvider(previewView.surfaceProvider)
-              }
-
-          val imageAnalysis =
-              ImageAnalysis.Builder()
-                  .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                  .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
-                  .build()
-
-          imageAnalysis.setAnalyzer(Executors.newSingleThreadExecutor()) { imageProxy ->
-            handLandMarkViewModel.processImageProxyThrottled(imageProxy)
-          }
-
-          try {
-            cameraProvider.unbindAll()
-            cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageAnalysis)
-          } catch (e: Exception) {
-            e.printStackTrace()
-          }
-        },
-        ContextCompat.getMainExecutor(context))
-  }
 }

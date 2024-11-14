@@ -11,6 +11,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import java.time.LocalDate
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import junit.framework.TestCase.fail
@@ -24,6 +25,7 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.never
 import org.mockito.kotlin.timeout
@@ -184,7 +186,7 @@ class UserRepositoryFireStoreTest {
   @Test
   fun updateUserName_shouldCallOnFailureWhenUpdateFails() {
     // Arrange
-    val testException = Exception("Test Firestore failure") // Simulate Firestore failure
+    val testException = Exception("Test Firestore failure") // Simulate FireStore failure
 
     // Mock FireStore document reference to fail the update
     `when`(mockCurrentUserDocRef.update(eq("name"), eq("NewName")))
@@ -242,9 +244,9 @@ class UserRepositoryFireStoreTest {
   @Test
   fun updateProfilePictureUrl_shouldCallOnFailureWhenUpdateFails() {
     // Arrange
-    val testException = Exception("Test Firestore failure") // Simulate Firestore failure
+    val testException = Exception("Test FireStore failure") // Simulate Firestore failure
 
-    // Mock Firestore document reference to fail the update
+    // Mock FireStore document reference to fail the update
     `when`(mockCurrentUserDocRef.update(eq("profileImageUrl"), eq("NewProfilePictureUrl")))
         .thenReturn(Tasks.forException(testException)) // Simulate failure
 
@@ -267,7 +269,7 @@ class UserRepositoryFireStoreTest {
     // Assert
     assertTrue(failureCallbackCalled)
 
-    // Verify that Firestore's update method was called with the correct arguments
+    // Verify that FireStore's update method was called with the correct arguments
     verify(mockCurrentUserDocRef).update(eq("profileImageUrl"), eq("NewProfilePictureUrl"))
   }
 
@@ -281,7 +283,9 @@ class UserRepositoryFireStoreTest {
             email = "testuser@example.com",
             profileImageUrl = null,
             friendRequests = listOf("fr1", "fr2"),
-            friends = listOf("f1", "f2"))
+            friends = listOf("f1", "f2"),
+            currentStreak = 0,
+            highestStreak = 0)
     val mockDocumentSnapshot = mock(DocumentSnapshot::class.java)
 
     // Simulate that the document exists
@@ -761,5 +765,140 @@ class UserRepositoryFireStoreTest {
 
     // Assert
     assertTrue(failureCallbackCalled)
+  }
+
+  @Test
+  fun getStreak_callsDocuments() {
+    // Ensure that mockToDoQuerySnapshot is properly initialized and mocked
+    `when`(mockCollectionReference.get()).thenReturn(Tasks.forResult(mockToDoQuerySnapshot))
+
+    // Ensure the QuerySnapshot returns a list of mock DocumentSnapshots
+    `when`(mockToDoQuerySnapshot.documents).thenReturn(listOf())
+
+    // Call the method under test
+    userRepositoryFireStore.getStreak(
+        currentUserId,
+        onSuccess = {
+          // Do nothing; we just want to verify that the 'documents' field was accessed
+        },
+        onFailure = { fail("Failure callback should not be called") })
+
+    // Verify that the 'documents' field was accessed
+    verify(timeout(100)) { (mockToDoQuerySnapshot).documents }
+  }
+
+  @Test
+  fun updateStreak_shouldUpdateStreakCorrectly() {
+    // Arrange: Mock existing user data
+    val lastLoginDate = "2024-11-10"
+    val currentStreak = 0L
+    val updatedDataCaptor = argumentCaptor<Map<String, Any>>()
+
+    `when`(mockUserDocumentSnapshot.exists()).thenReturn(true)
+    `when`(mockUserDocumentSnapshot.getString("lastLoginDate")).thenReturn(lastLoginDate)
+    `when`(mockUserDocumentSnapshot.getLong("currentStreak")).thenReturn(currentStreak)
+    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
+    `when`(mockCurrentUserDocRef.update(updatedDataCaptor.capture()))
+        .thenReturn(Tasks.forResult(null))
+
+    var successCallbackCalled = false
+    val onSuccess: () -> Unit = { successCallbackCalled = true }
+
+    // Act: Call the method under test
+    userRepositoryFireStore.updateStreak(
+        currentUserId,
+        onSuccess = onSuccess,
+        onFailure = { fail("Failure callback should not be called") })
+
+    // Idle the main looper to process the tasks
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert: Verify correct data updates
+    assertTrue(successCallbackCalled)
+    val capturedData = updatedDataCaptor.firstValue
+
+    // Verify lastLoginDate is updated
+    assertEquals(LocalDate.now().toString(), capturedData["lastLoginDate"])
+
+    // Verify streak update logic
+    val expectedCurrentStreak = currentStreak + 1L
+    assertEquals(expectedCurrentStreak.toInt(), capturedData["currentStreak"])
+
+    // Verify FireStore update is called
+    verify(mockCurrentUserDocRef).update(updatedDataCaptor.capture())
+  }
+
+  @Test
+  fun updateStreak_shouldResetStreakOnGap() {
+    // Arrange: Mock data with a gap in login dates
+    val lastLoginDate = "2024-11-01"
+    val currentStreak = 3L
+    val highestStreak = 5L
+    val updatedDataCaptor = argumentCaptor<Map<String, Any>>()
+
+    `when`(mockUserDocumentSnapshot.exists()).thenReturn(true)
+    `when`(mockUserDocumentSnapshot.getString("lastLoginDate")).thenReturn(lastLoginDate)
+    `when`(mockUserDocumentSnapshot.getLong("currentStreak")).thenReturn(currentStreak)
+    `when`(mockUserDocumentSnapshot.getLong("highestStreak")).thenReturn(highestStreak)
+    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
+    `when`(mockCurrentUserDocRef.update(updatedDataCaptor.capture()))
+        .thenReturn(Tasks.forResult(null))
+
+    var successCallbackCalled = false
+    val onSuccess: () -> Unit = { successCallbackCalled = true }
+
+    // Act: Call the method under test
+    userRepositoryFireStore.updateStreak(
+        currentUserId,
+        onSuccess = onSuccess,
+        onFailure = { fail("Failure callback should not be called") })
+
+    // Idle the main looper to process the tasks
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert: Verify correct data updates
+    assertTrue(successCallbackCalled)
+    val capturedData = updatedDataCaptor.firstValue
+
+    // Verify lastLoginDate is updated
+    assertEquals(LocalDate.now().toString(), capturedData["lastLoginDate"])
+
+    // Verify streak reset logic
+    assertEquals(1, capturedData["currentStreak"])
+
+    // Verify FireStore update is called
+    verify(mockCurrentUserDocRef).update(updatedDataCaptor.capture())
+  }
+
+  @Test
+  fun updateStreak_shouldHandleFirstLogin() {
+    // Arrange: Mock data with no previous login
+    `when`(mockUserDocumentSnapshot.exists()).thenReturn(true)
+    `when`(mockUserDocumentSnapshot.getString("lastLoginDate")).thenReturn(null)
+    `when`(mockUserDocumentSnapshot.getLong("currentStreak")).thenReturn(null)
+    `when`(mockUserDocumentSnapshot.getLong("highestStreak")).thenReturn(null)
+    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
+    `when`(mockCurrentUserDocRef.update(any<Map<String, Any>>())).thenReturn(Tasks.forResult(null))
+
+    var successCallbackCalled = false
+    val onSuccess: () -> Unit = { successCallbackCalled = true }
+
+    // Act: Call the method under test
+    userRepositoryFireStore.updateStreak(
+        currentUserId,
+        onSuccess = onSuccess,
+        onFailure = { fail("Failure callback should not be called") })
+
+    // Idle the main looper to process the tasks
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert: Verify correct data updates
+    assertTrue(successCallbackCalled)
+    verify(mockCurrentUserDocRef)
+        .update(
+            mapOf(
+                "lastLoginDate" to LocalDate.now().toString(),
+                "currentStreak" to 1,
+                "highestStreak" to 1L))
   }
 }
