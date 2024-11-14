@@ -89,7 +89,7 @@ class ProfileScreenTest {
     composeTestRule.onNodeWithTag("UserId").assertIsDisplayed()
     composeTestRule.onNodeWithTag("UserId").assertTextEquals(userId)
     composeTestRule.onNodeWithTag("UserName").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("UserId").assertTextEquals(userViewModel.userName.value)
+    composeTestRule.onNodeWithTag("UserName").assertTextEquals(userViewModel.userName.value)
     composeTestRule.onNodeWithTag("ProfilePicture").assertExists()
     composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()

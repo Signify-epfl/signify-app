@@ -1,0 +1,44 @@
+package com.github.se.signify.model.stats
+
+import org.junit.Assert.assertEquals
+import org.junit.Test
+
+class StatsTest {
+
+    @Test
+    fun defaultConstructorInitializePropertiesCorrectly() {
+        val stats = Stats()
+
+        assertEquals(emptyList<Char>(), stats.lettersLearned)
+        assertEquals(0, stats.easyExercise)
+        assertEquals(0, stats.mediumExercise)
+        assertEquals(0, stats.hardExercise)
+        assertEquals(0, stats.dailyQuest)
+        assertEquals(0, stats.weeklyQuest)
+        assertEquals(0, stats.completedChallenge)
+        assertEquals(0, stats.createdChallenge)
+    }
+
+    @Test
+    fun parameterizedConstructorInitializesPropertiesCorrectly() {
+        val stats = Stats(
+            lettersLearned = listOf('A', 'B', 'C'),
+            easyExercise = 5,
+            mediumExercise = 3,
+            hardExercise = 2,
+            dailyQuest = 3,
+            weeklyQuest = 0,
+            completedChallenge = 1,
+            createdChallenge = 1
+        )
+
+        assertEquals(listOf('A', 'B', 'C'), stats.lettersLearned)
+        assertEquals(5, stats.easyExercise)
+        assertEquals(3, stats.mediumExercise)
+        assertEquals(2, stats.hardExercise)
+        assertEquals(3, stats.dailyQuest)
+        assertEquals(0, stats.weeklyQuest)
+        assertEquals(1, stats.completedChallenge)
+        assertEquals(1, stats.createdChallenge)
+    }
+}

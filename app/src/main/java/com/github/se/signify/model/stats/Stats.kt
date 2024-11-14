@@ -1,7 +1,6 @@
 package com.github.se.signify.model.stats
 
 data class Stats(
-    val days: Int = 0,
     val lettersLearned: List<Char> = emptyList(),
     val easyExercise: Int = 0,
     val mediumExercise: Int = 0,
