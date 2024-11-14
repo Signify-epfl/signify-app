@@ -2,7 +2,6 @@ package com.github.se.signify.ui.screens.home
 
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -13,6 +12,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -407,9 +407,10 @@ fun ExerciseScreenCommon(
                   .border(
                       2.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(16.dp)),
           contentAlignment = Alignment.Center) {
-            Image(
+            Icon(
                 painter = painterResource(id = imageResId),
                 contentDescription = "Sign image",
+                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.size(120.dp))
           }
 
