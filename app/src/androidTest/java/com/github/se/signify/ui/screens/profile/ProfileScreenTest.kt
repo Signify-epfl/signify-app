@@ -7,6 +7,7 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
@@ -43,7 +44,7 @@ class ProfileScreenTest {
     `when`(navigationActions.currentRoute()).thenReturn(Screen.PROFILE)
     // Initialize the state of isHelpBoxVisible to true
     composeTestRule.setContent {
-      ProfileScreen(navigationActions, userViewModel)
+      ProfileScreen(navigationActions, userRepository)
       ProfilePicture(picturePath)
     }
   }
@@ -51,12 +52,15 @@ class ProfileScreenTest {
   @Test
   fun buttonsAreCorrectlyDisplayed() {
 
-    composeTestRule.onNodeWithTag("SettingsButton").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("InfoButton").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("MyFriendsButton").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("MyFriendsButton").assertTextEquals("My Friends")
-    composeTestRule.onNodeWithTag("MyStatsButton").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("MyStatsButton").assertTextEquals("My Stats")
+    composeTestRule.onNodeWithTag("SettingsButton").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("InfoButton").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("MyFriendsButton").performScrollTo().assertIsDisplayed()
+    composeTestRule
+        .onNodeWithTag("MyFriendsButton")
+        .performScrollTo()
+        .assertTextEquals("My Friends")
+    composeTestRule.onNodeWithTag("MyStatsButton").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("MyStatsButton").performScrollTo().assertTextEquals("My Stats")
   }
 
   @Test

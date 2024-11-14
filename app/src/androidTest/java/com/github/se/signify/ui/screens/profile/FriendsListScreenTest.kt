@@ -56,7 +56,9 @@ class FriendsListScreenTest {
 
     userViewModel = UserViewModel(userRepository)
 
-    composeTestRule.setContent { FriendsListScreen(navigationActions, userViewModel) }
+    composeTestRule.setContent {
+      FriendsListScreen(navigationActions, userRepository, userViewModel)
+    }
   }
 
   @Test
