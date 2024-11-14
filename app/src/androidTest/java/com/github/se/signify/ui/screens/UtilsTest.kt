@@ -410,7 +410,7 @@ class UtilsTest {
     composeTestRule.onNodeWithTag("ProfilePicture").assertExists()
     composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("NumberOfDays").assertTextEquals("10 days")
+    composeTestRule.onNodeWithTag("NumberOfDays").assertTextEquals("10")
   }
 
   @Test
