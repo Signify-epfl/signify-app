@@ -144,12 +144,11 @@ fun HandGestureImage(gesture: String) {
                   color = MaterialTheme.colorScheme.outline,
                   shape = RoundedCornerShape(size = 10.dp))
               .testTag("handGestureImage")) {
-      Icon(
-          painter = painterResource(id = imageResource),
-          contentDescription = "Letter gesture",
-          tint = MaterialTheme.colorScheme.onSurface,
-          modifier =
-          Modifier.size(200.dp).padding(16.dp).align(Alignment.Center))
+        Icon(
+            painter = painterResource(id = imageResource),
+            contentDescription = "Letter gesture",
+            tint = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.size(200.dp).padding(16.dp).align(Alignment.Center))
       }
 }
 
