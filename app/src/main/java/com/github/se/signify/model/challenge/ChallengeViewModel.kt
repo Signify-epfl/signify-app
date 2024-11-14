@@ -3,7 +3,6 @@ package com.github.se.signify.model.challenge
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -35,15 +34,14 @@ open class ChallengeViewModel(private val repository: ChallengeRepository) : Vie
         onFailure = { e -> Log.e(logTag, "Failed to delete challenge: ${e.message}") })
   }
 
-  // create factory
   companion object {
-    val Factory: ViewModelProvider.Factory =
-        object : ViewModelProvider.Factory {
-          @Suppress("UNCHECKED_CAST")
-          override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ChallengeViewModel(ChallengeRepositoryFireStore(FirebaseFirestore.getInstance()))
-                as T
-          }
+    fun factory(repository: ChallengeRepository): ViewModelProvider.Factory {
+      return object : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+          return ChallengeViewModel(repository) as T
         }
+      }
+    }
   }
 }

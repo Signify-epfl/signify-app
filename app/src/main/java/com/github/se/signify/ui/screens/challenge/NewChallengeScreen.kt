@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,7 +19,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,9 +31,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.model.challenge.Challenge
+import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.challenge.ChallengeViewModel
+import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
-import com.github.se.signify.ui.BackButton
+import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.UtilTextButton
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.screens.profile.currentUserId
@@ -44,9 +44,13 @@ import com.github.se.signify.ui.screens.profile.currentUserId
 @Composable
 fun NewChallengeScreen(
     navigationActions: NavigationActions,
-    userViewModel: UserViewModel = viewModel(factory = UserViewModel.Factory),
-    challengeViewModel: ChallengeViewModel = viewModel(factory = ChallengeViewModel.Factory)
+    userRepository: UserRepository,
+    challengeRepository: ChallengeRepository,
 ) {
+  val userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository))
+  val challengeViewModel: ChallengeViewModel =
+      viewModel(factory = ChallengeViewModel.factory(challengeRepository))
+
   // Fetch friends list and ongoing challenges when this screen is first displayed
   LaunchedEffect(Unit) {
     userViewModel.getFriendsList(currentUserId)
@@ -55,111 +59,78 @@ fun NewChallengeScreen(
 
   val ongoingChallenges by userViewModel.ongoingChallenges.collectAsState()
 
-  Scaffold(
-      topBar = {
-        Box(
-            modifier =
-                Modifier.fillMaxWidth()
-                    .height(4.dp)
-                    .background(MaterialTheme.colorScheme.primary)
-                    .testTag("TopBar"))
-      },
-      content = { padding ->
-        Box(modifier = Modifier.fillMaxSize().padding(padding).testTag("NewChallengeScreen")) {
-          // Back button aligned to the top-left corner
-          BackButton(
-              onClick = { navigationActions.goBack() },
-          )
+  AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = "NewChallengeScreen") {
+    // My Friends button
+    UtilTextButton(
+        onClickAction = { navigationActions.navigateTo("Friends") },
+        testTag = "MyFriendsButton",
+        text = "My Friends",
+        backgroundColor = MaterialTheme.colorScheme.primary,
+    )
 
+    Spacer(modifier = Modifier.height(32.dp)) // Increased space between buttons
+
+    // Create a challenge button
+    UtilTextButton(
+        onClickAction = { navigationActions.navigateTo("CreateChallenge") },
+        testTag = "CreateChallengeButton",
+        text = "Create a Challenge",
+        backgroundColor = MaterialTheme.colorScheme.primary,
+    )
+
+    Spacer(modifier = Modifier.height(32.dp)) // Increased space between buttons and the box
+
+    // Ongoing Challenges Section
+    Box(
+        modifier =
+            Modifier.fillMaxWidth()
+                .border(2.dp, MaterialTheme.colorScheme.onPrimary)
+                .background(MaterialTheme.colorScheme.primary)
+                .padding(16.dp)
+                .testTag("OngoingChallengesBox")) {
           Column(
-              modifier =
-                  Modifier.fillMaxSize()
-                      .padding(
-                          top = 80.dp,
-                          start = 16.dp,
-                          end = 16.dp) // Padding to avoid overlap with the back button
-                      .testTag("NewChallengeContent"),
-              horizontalAlignment = Alignment.CenterHorizontally) {
-                Spacer(modifier = Modifier.height(70.dp))
-
-                // My Friends button
-                UtilTextButton(
-                    onClickAction = { navigationActions.navigateTo("Friends") },
-                    testTag = "MyFriendsButton",
-                    text = "My Friends",
-                    backgroundColor = MaterialTheme.colorScheme.primary,
-                )
-
-                Spacer(modifier = Modifier.height(40.dp)) // Increased space between buttons
-
-                // Create a challenge button
-                UtilTextButton(
-                    onClickAction = { navigationActions.navigateTo("CreateChallenge") },
-                    testTag = "CreateChallengeButton",
-                    text = "Create a Challenge",
-                    backgroundColor = MaterialTheme.colorScheme.primary,
-                )
+              horizontalAlignment = Alignment.CenterHorizontally,
+              modifier = Modifier.testTag("OngoingChallengesContent")) {
+                Text(
+                    text = "My Ongoing Challenges",
+                    fontSize = 20.sp,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier.testTag("OngoingChallengesTitle"))
 
                 Spacer(
                     modifier =
-                        Modifier.height(60.dp)) // Increased space between buttons and the box
+                        Modifier.height(24.dp)) // Increased space between title and challenges
 
-                // Ongoing Challenges Section
+                // Scrollable Ongoing Challenges List
                 Box(
                     modifier =
                         Modifier.fillMaxWidth()
-                            .border(2.dp, MaterialTheme.colorScheme.onPrimary)
-                            .background(MaterialTheme.colorScheme.primary)
-                            .padding(16.dp)
-                            .testTag("OngoingChallengesBox")) {
-                      Column(
-                          horizontalAlignment = Alignment.CenterHorizontally,
-                          modifier = Modifier.testTag("OngoingChallengesContent")) {
-                            Text(
-                                text = "My Ongoing Challenges",
-                                fontSize = 20.sp,
-                                color = MaterialTheme.colorScheme.onPrimary,
-                                modifier = Modifier.testTag("OngoingChallengesTitle"))
-
-                            Spacer(
-                                modifier =
-                                    Modifier.height(
-                                        24.dp)) // Increased space between title and challenges
-
-                            // Scrollable Ongoing Challenges List
-                            Box(
-                                modifier =
-                                    Modifier.fillMaxWidth()
-                                        .height(250.dp) // Set a maximum height to make the box
-                                        // scrollable
-                                        .testTag("OngoingChallengesListBox")) {
-                                  LazyColumn(
-                                      verticalArrangement = Arrangement.spacedBy(16.dp),
-                                      modifier = Modifier.testTag("OngoingChallengesLazyColumn")) {
-                                        items(ongoingChallenges.size) { index ->
-                                          val challenge = ongoingChallenges[index]
-                                          OngoingChallengeCard(
-                                              challenge = challenge,
-                                              onDeleteClick = {
-                                                // Delete challenge from user's ongoing list and
-                                                // Firestore
-                                                userViewModel.removeOngoingChallenge(
-                                                    currentUserId, challenge.challengeId)
-                                                userViewModel.removeOngoingChallenge(
-                                                    challenge.player2, challenge.challengeId)
-                                                challengeViewModel.deleteChallenge(
-                                                    challenge.challengeId)
-                                              },
-                                              modifier =
-                                                  Modifier.testTag("OngoingChallengeCard$index"))
-                                        }
-                                      }
-                                }
+                            .height(250.dp) // Set a maximum height to make the box
+                            // scrollable
+                            .testTag("OngoingChallengesListBox")) {
+                      LazyColumn(
+                          verticalArrangement = Arrangement.spacedBy(16.dp),
+                          modifier = Modifier.testTag("OngoingChallengesLazyColumn")) {
+                            items(ongoingChallenges.size) { index ->
+                              val challenge = ongoingChallenges[index]
+                              OngoingChallengeCard(
+                                  challenge = challenge,
+                                  onDeleteClick = {
+                                    // Delete challenge from user's ongoing list and
+                                    // Firestore
+                                    userViewModel.removeOngoingChallenge(
+                                        currentUserId, challenge.challengeId)
+                                    userViewModel.removeOngoingChallenge(
+                                        challenge.player2, challenge.challengeId)
+                                    challengeViewModel.deleteChallenge(challenge.challengeId)
+                                  },
+                                  modifier = Modifier.testTag("OngoingChallengeCard$index"))
+                            }
                           }
                     }
               }
         }
-      })
+  }
 }
 
 @Composable

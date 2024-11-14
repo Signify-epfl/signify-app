@@ -15,7 +15,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.github.se.signify.model.hand.HandLandMarkImplementation
+import com.github.se.signify.model.di.AppDependencyProvider
+import com.github.se.signify.model.di.DependencyProvider
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Route
@@ -45,7 +46,7 @@ class MainActivity : ComponentActivity() {
         Surface(modifier = Modifier.fillMaxSize()) {
           val context = LocalContext.current
           val navigationState = MutableStateFlow<NavigationActions?>(null)
-          SignifyAppPreview(context, navigationState)
+          SignifyAppPreview(context, AppDependencyProvider, navigationState)
         }
       }
     }
@@ -54,11 +55,14 @@ class MainActivity : ComponentActivity() {
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun SignifyAppPreview(context: Context, navigationState: MutableStateFlow<NavigationActions?>) {
+fun SignifyAppPreview(
+    context: Context,
+    dependencyProvider: DependencyProvider,
+    navigationState: MutableStateFlow<NavigationActions?>
+) {
   val navController = rememberNavController()
   val navigationActions = NavigationActions(navController)
-  val handLandMarkImplementation =
-      HandLandMarkImplementation("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
+  val handLandMarkImplementation = dependencyProvider.handLandMarkRepository()
   val handLandMarkViewModel: HandLandMarkViewModel =
       viewModel(factory = HandLandMarkViewModel.provideFactory(context, handLandMarkImplementation))
   NavHost(navController = navController, startDestination = Route.WELCOME) {
@@ -83,14 +87,29 @@ fun SignifyAppPreview(context: Context, navigationState: MutableStateFlow<Naviga
       composable(Screen.CHALLENGE) { ChallengeScreen(navigationActions) }
     }
 
-    composable(Route.NEW_CHALLENGE) { NewChallengeScreen(navigationActions) }
-    composable(Route.CREATE_CHALLENGE) { CreateAChallengeScreen(navigationActions) }
+    composable(Route.NEW_CHALLENGE) {
+      NewChallengeScreen(
+          navigationActions,
+          dependencyProvider.userRepository(),
+          dependencyProvider.challengeRepository())
+    }
+    composable(Route.CREATE_CHALLENGE) {
+      CreateAChallengeScreen(
+          navigationActions,
+          dependencyProvider.userRepository(),
+          dependencyProvider.challengeRepository())
+    }
     composable(Route.CHALLENGE_HISTORY) { ChallengeHistoryScreen(navigationActions, 1, 1) }
     navigation(
         startDestination = Screen.QUEST,
         route = Route.QUEST,
     ) {
-      composable(Screen.QUEST) { QuestScreen(navigationActions) }
+      composable(Screen.QUEST) {
+        QuestScreen(
+            navigationActions,
+            dependencyProvider.questRepository(),
+            dependencyProvider.userRepository())
+      }
     }
 
     navigation(
@@ -104,9 +123,13 @@ fun SignifyAppPreview(context: Context, navigationState: MutableStateFlow<Naviga
         startDestination = Screen.PROFILE,
         route = Route.PROFILE,
     ) {
-      composable(Screen.PROFILE) { ProfileScreen(navigationActions = navigationActions) }
+      composable(Screen.PROFILE) {
+        ProfileScreen(navigationActions = navigationActions, dependencyProvider.userRepository())
+      }
 
-      composable(Route.FRIENDS) { FriendsListScreen(navigationActions) }
+      composable(Route.FRIENDS) {
+        FriendsListScreen(navigationActions, dependencyProvider.userRepository())
+      }
 
       composable(Route.STATS) {
         MyStatsScreen(
@@ -120,7 +143,9 @@ fun SignifyAppPreview(context: Context, navigationState: MutableStateFlow<Naviga
             questsAchieved = listOf(3, 0))
       }
 
-      composable(Route.SETTINGS) { SettingsScreen(navigationActions) }
+      composable(Route.SETTINGS) {
+        SettingsScreen(navigationActions, dependencyProvider.userRepository())
+      }
     }
     composable(Screen.PRACTICE) { ASLRecognition(handLandMarkViewModel, navigationActions) }
     composable(Screen.EXERCISE_EASY) {

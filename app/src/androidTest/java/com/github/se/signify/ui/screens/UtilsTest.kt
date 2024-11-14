@@ -14,7 +14,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.dp
 import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.R
-import com.github.se.signify.model.hand.HandLandMarkImplementation
+import com.github.se.signify.model.di.AppDependencyProvider
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.AccountInformation
 import com.github.se.signify.ui.AnnexScreenScaffold
@@ -426,8 +426,7 @@ class UtilsTest {
   @Test
   fun cameraPreview_isDisplayed() {
     val context = mock(Context::class.java)
-    val handLandMarkImplementation =
-        HandLandMarkImplementation("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
+    val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
     val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
 
     composeTestRule.setContent { CameraPlaceholder(handLandMarkViewModel) }

@@ -56,17 +56,30 @@ class FriendsListScreenTest {
 
     userViewModel = UserViewModel(userRepository)
 
-    composeTestRule.setContent { FriendsListScreen(navigationActions, userViewModel) }
+    composeTestRule.setContent {
+      FriendsListScreen(navigationActions, userRepository, userViewModel)
+    }
   }
 
   @Test
   fun testFriendsListScreenDisplaysCorrectInformation() {
+    // Verify top blue bar is displayed
+    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
+
+    // Verify top information are displayed
+    composeTestRule.onNodeWithTag("UserInfo").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("UserId").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("UserName").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("ProfilePicture").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("NumberOfDays").assertIsDisplayed()
 
     // Check if the Friends List title is displayed
     composeTestRule.onNodeWithText("My friends list").assertIsDisplayed()
 
     // Check if all friends are displayed
-    currentFriends.forEachIndexed() { index, friend ->
+    currentFriends.forEachIndexed { index, friend ->
       composeTestRule.onNodeWithTag("My friends list").performScrollToIndex(index)
       composeTestRule.waitForIdle()
       composeTestRule.onNodeWithText(friend).assertIsDisplayed()
@@ -76,7 +89,7 @@ class FriendsListScreenTest {
     composeTestRule.onNodeWithText("New friends demands").assertIsDisplayed()
 
     // Check if all friend requests are displayed
-    friendRequests.forEachIndexed() { index, request ->
+    friendRequests.forEachIndexed { index, request ->
       composeTestRule.onNodeWithTag("New friends demands").performScrollToIndex(index)
       composeTestRule.waitForIdle()
       composeTestRule.onNodeWithText(request).assertIsDisplayed()
