@@ -54,7 +54,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.ui.MainScreenScaffold
-import com.github.se.signify.ui.StreakCounter
 import com.github.se.signify.ui.UtilButton
 import com.github.se.signify.ui.UtilTextButton
 import com.github.se.signify.ui.getIconResId
@@ -113,7 +112,6 @@ fun HomeScreen(navigationActions: NavigationActions) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween) {
-                      StreakCounter(0, false)
                       UtilButton(
                           onClick = { navigationActions.navigateTo("Quest") },
                           buttonTestTag = "QuestsButton",

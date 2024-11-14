@@ -5,6 +5,8 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepository {
 
@@ -416,5 +418,81 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
               .addOnSuccessListener { onSuccess() }
               .addOnFailureListener { onFailure(it) }
         }
+  }
+
+  override fun updateStreak(userId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+    val userDocRef = db.collection("users").document(userId)
+
+    userDocRef
+        .get()
+        .addOnSuccessListener { document ->
+          val lastLoginDate = document.getString("lastLoginDate")
+          val currentStreak = document.getLong("currentStreak") ?: 0
+          val highestStreak = document.getLong("highestStreak") ?: 0
+
+          val today = LocalDate.now()
+          val lastLogin = lastLoginDate?.let { LocalDate.parse(it) }
+
+          val updatedData = mutableMapOf<String, Any>()
+          updatedData["lastLoginDate"] = today.toString()
+
+          if (lastLogin != null) {
+            val daysBetween = ChronoUnit.DAYS.between(lastLogin, today)
+
+            when {
+              daysBetween == 1L -> {
+                // Continuation of the streak
+                val newStreak = currentStreak + 1
+                updatedData["currentStreak"] = newStreak
+                updatedData["highestStreak"] = maxOf(highestStreak, newStreak)
+              }
+              daysBetween > 1L -> {
+                // Streak interrupted
+                updatedData["currentStreak"] = 1
+              }
+            // No additional changes needed for same-day login
+            }
+          } else {
+            // First login
+            updatedData["currentStreak"] = 1
+            updatedData["highestStreak"] = maxOf(highestStreak, 1)
+          }
+
+          // Always update Firestore, even if only the lastLoginDate changes
+          userDocRef
+              .update(updatedData)
+              .addOnSuccessListener {
+                onSuccess() // Call the success function
+              }
+              .addOnFailureListener { e ->
+                onFailure(e) // Call the error function
+              }
+        }
+        .addOnFailureListener { e ->
+          onFailure(e) // Handle errors when fetching data
+        }
+  }
+
+  override fun getStreak(
+      userId: String,
+      onSuccess: (Long) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    val userRef = db.collection(collectionPath).document(userId)
+
+    // Use of addSnapshotListener for instant updates
+    userRef.addSnapshotListener { documentSnapshot, e ->
+      if (e != null) {
+        onFailure(e)
+        return@addSnapshotListener
+      }
+
+      if (documentSnapshot != null && documentSnapshot.exists()) {
+        val streak = documentSnapshot["currentStreak"] as Long
+        onSuccess(streak)
+      } else {
+        onSuccess(0)
+      }
+    }
   }
 }

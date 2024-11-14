@@ -102,4 +102,8 @@ interface UserRepository {
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   )
+
+  fun updateStreak(userId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit)
+
+  fun getStreak(userId: String, onSuccess: (Long) -> Unit, onFailure: (Exception) -> Unit)
 }

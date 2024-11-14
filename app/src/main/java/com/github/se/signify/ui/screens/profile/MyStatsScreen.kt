@@ -18,7 +18,7 @@ fun MyStatsScreen(
     userId: String,
     userName: String,
     profilePictureUrl: String?,
-    numberOfDays: Int,
+    numberOfDays: Long,
     lettersLearned: List<Char>,
     exercisesAchieved: List<Int>,
     questsAchieved: List<Int>

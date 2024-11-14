@@ -32,7 +32,6 @@ class ProfileScreenTest {
   // User information test to be displayed
   private val userId =
       FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0) ?: "unknown"
-  private val numberOfDays = 30
 
   @Before
   fun setUp() {
@@ -42,7 +41,6 @@ class ProfileScreenTest {
     val picturePath = "file:///path/to/profile/picture.jpg"
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.PROFILE)
-    // Initialize the state of isHelpBoxVisible to true
     composeTestRule.setContent {
       ProfileScreen(navigationActions, userRepository)
       ProfilePicture(picturePath)
@@ -94,7 +92,6 @@ class ProfileScreenTest {
     composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
     composeTestRule.onNodeWithTag("NumberOfDays").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("NumberOfDays").assertTextEquals("$numberOfDays days")
   }
 
   @Test

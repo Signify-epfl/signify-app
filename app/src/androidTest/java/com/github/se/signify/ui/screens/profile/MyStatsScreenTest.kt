@@ -19,7 +19,7 @@ class MyStatsScreenTest {
   private val userId = "userIdTest"
   private val userName = "userNameTest"
   private val profilePictureUrl = "file:///path/to/profile/picture.jpg"
-  private val numberOfDays = 10
+  private val numberOfDays = 10L
   private val lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F')
   private val exercisesAchieved = listOf(10, 3)
   private val questsAchieved = listOf(4, 0)
@@ -55,7 +55,7 @@ class MyStatsScreenTest {
     composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
     composeTestRule.onNodeWithTag("NumberOfDays").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("NumberOfDays").assertTextEquals("$numberOfDays days")
+    composeTestRule.onNodeWithTag("NumberOfDays").assertTextEquals("$numberOfDays")
 
     // Verify letters learned section displays correctly
     composeTestRule.onNodeWithTag("AllLetterLearned").assertIsDisplayed()
