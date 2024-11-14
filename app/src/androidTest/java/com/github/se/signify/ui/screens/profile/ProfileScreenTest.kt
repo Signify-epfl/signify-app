@@ -40,7 +40,6 @@ class ProfileScreenTest {
     val picturePath = "file:///path/to/profile/picture.jpg"
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.PROFILE)
-    // Initialize the state of isHelpBoxVisible to true
     composeTestRule.setContent {
       ProfileScreen(navigationActions, userViewModel)
       ProfilePicture(picturePath)
