@@ -10,6 +10,6 @@ data class User(
     val ongoingChallenges: List<String> = emptyList(), // New field for ongoing challenges
     val pastChallenges: List<String> = emptyList(), // New field for past challenges
     val lastLoginDate: String = "",
-    val currentStreak: Long,
-    val highestStreak: Long
+    val currentStreak: Long = 1L,
+    val highestStreak: Long = 1L
 )
