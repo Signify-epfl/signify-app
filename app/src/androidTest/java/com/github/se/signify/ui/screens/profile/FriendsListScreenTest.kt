@@ -6,6 +6,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import com.github.se.signify.model.user.User
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
+import com.github.se.signify.ui.ProfilePicture
 import com.github.se.signify.ui.navigation.NavigationActions
 import org.junit.Assert.assertNull
 import org.junit.Before
@@ -35,9 +36,9 @@ class FriendsListScreenTest {
   private lateinit var userRepository: UserRepository
   private lateinit var userViewModel: UserViewModel
 
+  @Suppress("UNCHECKED_CAST")
   @Before
   fun setUp() {
-
     navigationActions = mock(NavigationActions::class.java)
     userRepository = mock(UserRepository::class.java)
 
@@ -60,9 +61,11 @@ class FriendsListScreenTest {
         .getRequestsFriendsList(Mockito.anyString(), anyOrNull(), anyOrNull())
 
     userViewModel = UserViewModel(userRepository)
+    val picturePath = "file:///path/to/profile/picture.jpg"
 
     composeTestRule.setContent {
       FriendsListScreen(navigationActions, userRepository, userViewModel)
+      ProfilePicture(picturePath)
     }
   }
 
