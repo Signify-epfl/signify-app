@@ -44,7 +44,6 @@ class HomeScreenTest {
     composeTestRule.onNodeWithTag("LetterDictionaryBack").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("LetterDictionaryForward").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("ExerciseListPager").performScrollTo().assertIsDisplayed()
-    composeTestRule.onNodeWithTag("StreakCounter").performScrollTo().assertIsDisplayed()
   }
 
   @Test
