@@ -58,9 +58,10 @@ fun QuestScreen(
     navigationActions: NavigationActions,
     questRepository: QuestRepository,
     userRepository: UserRepository,
-    questViewModel: QuestViewModel = viewModel(factory = QuestViewModel.factory(questRepository)),
-    userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository))
 ) {
+  val questViewModel: QuestViewModel = viewModel(factory = QuestViewModel.factory(questRepository))
+  val userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository))
+
   val quests = questViewModel.quest.collectAsState()
   LaunchedEffect(currentUserId) { userViewModel.checkAndUnlockNextQuest(currentUserId) }
 

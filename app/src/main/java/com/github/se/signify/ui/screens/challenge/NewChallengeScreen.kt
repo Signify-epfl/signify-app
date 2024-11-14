@@ -48,10 +48,11 @@ fun NewChallengeScreen(
     navigationActions: NavigationActions,
     userRepository: UserRepository,
     challengeRepository: ChallengeRepository,
-    userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository)),
-    challengeViewModel: ChallengeViewModel =
-        viewModel(factory = ChallengeViewModel.factory(challengeRepository))
 ) {
+  val userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository))
+  val challengeViewModel: ChallengeViewModel =
+      viewModel(factory = ChallengeViewModel.factory(challengeRepository))
+
   // Fetch friends list and ongoing challenges when this screen is first displayed
   LaunchedEffect(Unit) {
     userViewModel.getFriendsList(currentUserId)

@@ -60,8 +60,9 @@ import java.io.FileOutputStream
 fun SettingsScreen(
     navigationActions: NavigationActions,
     userRepository: UserRepository,
-    userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository)),
 ) {
+  val userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository))
+
   val context = LocalContext.current
 
   LaunchedEffect(Unit) {

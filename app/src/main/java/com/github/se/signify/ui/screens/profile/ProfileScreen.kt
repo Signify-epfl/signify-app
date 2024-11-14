@@ -30,8 +30,9 @@ import com.google.firebase.auth.FirebaseAuth
 fun ProfileScreen(
     navigationActions: NavigationActions,
     userRepository: UserRepository,
-    userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository))
 ) {
+  val userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository))
+
   MainScreenScaffold(
       navigationActions = navigationActions,
       testTagColumn = "ProfileScreen",

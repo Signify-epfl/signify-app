@@ -43,7 +43,7 @@ class ProfileScreenTest {
     `when`(navigationActions.currentRoute()).thenReturn(Screen.PROFILE)
     // Initialize the state of isHelpBoxVisible to true
     composeTestRule.setContent {
-      ProfileScreen(navigationActions, userRepository, userViewModel)
+      ProfileScreen(navigationActions, userRepository)
       ProfilePicture(picturePath)
     }
   }
