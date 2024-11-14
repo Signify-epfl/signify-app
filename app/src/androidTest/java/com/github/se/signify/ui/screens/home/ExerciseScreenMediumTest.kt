@@ -18,7 +18,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 
 @RunWith(AndroidJUnit4::class)
-class ExerciseScreenHardTest {
+class ExerciseScreenMediumTest {
 
   @get:Rule val composeTestRule = createComposeRule()
   @get:Rule
@@ -34,13 +34,13 @@ class ExerciseScreenHardTest {
     handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
     mockNavigationActions = mock(NavigationActions::class.java)
     composeTestRule.setContent {
-      ExerciseScreenHard(
+      ExerciseScreenMedium(
           navigationActions = mockNavigationActions, handLandMarkViewModel = handLandMarkViewModel)
     }
   }
 
   @Test
-  fun exerciseScreenHard_displaysComponentsCorrectly() {
+  fun exerciseScreenMedium_displaysComponentsCorrectly() {
 
     composeTestRule.onNodeWithTag("sentenceLayer").assertIsDisplayed()
     composeTestRule.onNodeWithTag("cameraPreview").assertIsDisplayed()

@@ -29,9 +29,6 @@ class ExerciseScreenEasyTest {
 
   private lateinit var mockNavigationActions: NavigationActions
   private lateinit var handLandMarkViewModel: HandLandMarkViewModel
-  private lateinit var mockOnNextLetter: (Int) -> Unit
-  private lateinit var mockOnNextWord: (Int) -> Unit
-  private lateinit var mockOnAllWordsComplete: () -> Unit
 
   @Before
   fun setup() {
@@ -47,9 +44,7 @@ class ExerciseScreenEasyTest {
       ExerciseScreenEasy(
           navigationActions = mockNavigationActions, handLandMarkViewModel = handLandMarkViewModel)
     }
-    // Verify if the back button is displayed
-    composeTestRule.onNodeWithContentDescription("Back").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("wordLayer").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("sentenceLayer").assertIsDisplayed()
     composeTestRule.onNodeWithTag("cameraPreview").assertIsDisplayed()
   }
 
@@ -65,27 +60,31 @@ class ExerciseScreenEasyTest {
 
   @Test
   fun handleGestureMatchingTest() {
-    mockOnNextLetter = mock<(Int) -> Unit>()
-    mockOnNextWord = mock<(Int) -> Unit>()
-    mockOnAllWordsComplete = mock<() -> Unit>()
+    // Mocks for callback functions
+    val mockOnProgressUpdate = mock<(Int, Int, Int) -> Unit>()
+    val mockOnAllSentencesComplete = mock<() -> Unit>()
+
+    // Test inputs
     val detectedGesture = "A"
-    val currentLetter = 'A'
     val currentLetterIndex = 0
     val currentWordIndex = 0
-    val wordsList = listOf("apple")
+    val currentSentenceIndex = 0
+    val sentencesList = listOf("apple is good", "banana is better")
 
     handleGestureMatching(
         detectedGesture = detectedGesture,
-        currentLetter = currentLetter,
         currentLetterIndex = currentLetterIndex,
         currentWordIndex = currentWordIndex,
-        wordsList = wordsList,
-        onNextLetter = mockOnNextLetter,
-        onNextWord = mockOnNextWord,
-        onAllWordsComplete = mockOnAllWordsComplete)
+        currentSentenceIndex = currentSentenceIndex,
+        sentencesList = sentencesList,
+        onProgressUpdate = mockOnProgressUpdate,
+        onAllSentencesComplete = mockOnAllSentencesComplete)
 
-    verify(mockOnNextLetter).invoke(currentLetterIndex + 1)
-    verifyNoInteractions(mockOnNextWord)
-    verifyNoInteractions(mockOnAllWordsComplete)
+    // Verify that onProgressUpdate is called with the next letter index
+    verify(mockOnProgressUpdate)
+        .invoke(currentLetterIndex + 1, currentWordIndex, currentSentenceIndex)
+
+    // Ensure onAllSentencesComplete is not invoked, as we're only moving to the next letter
+    verifyNoInteractions(mockOnAllSentencesComplete)
   }
 }

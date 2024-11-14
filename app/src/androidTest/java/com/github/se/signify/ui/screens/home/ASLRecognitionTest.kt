@@ -6,7 +6,6 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollTo
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
@@ -62,16 +61,16 @@ class ASLRecognitionTest : LifecycleOwner {
   @Test
   fun allComponentsAreDisplayed() {
     // Modify this to scroll to each component
-    composeTestRule.onNodeWithTag("practiceButton").performScrollTo().assertIsDisplayed()
-    composeTestRule.onNodeWithTag("cameraPreview").performScrollTo().assertIsDisplayed()
-    composeTestRule.onNodeWithTag("gestureOverlayView").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("practiceButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("cameraPreview").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("gestureOverlayView").assertIsDisplayed()
     composeTestRule.onNodeWithTag("aslRecognitionTitle").assertIsDisplayed()
     composeTestRule.onNodeWithTag("bottomNavigationMenu").assertIsDisplayed()
   }
 
   @Test
   fun buttonIsWorkingAsIntended() {
-    composeTestRule.onNodeWithTag("practiceButton").performScrollTo().performClick()
+    composeTestRule.onNodeWithTag("practiceButton").performClick()
   }
 
   override val lifecycle: Lifecycle

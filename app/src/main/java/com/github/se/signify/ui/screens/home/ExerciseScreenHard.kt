@@ -22,7 +22,6 @@ fun ExerciseScreenHard(
   ExerciseScreenCommon(
       navigationActions = navigationActions,
       handLandMarkViewModel = handLandMarkViewModel,
-      wordsResourceId = R.array.real_words_hard,
-      screenTag = "ExerciseScreenHard",
-      wordFilter = { it.length in 5..7 })
+      wordsResourceId = R.array.real_sentences,
+      screenTag = "ExerciseScreenHard")
 }

@@ -10,6 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
@@ -28,6 +29,8 @@ import com.github.se.signify.ui.screens.challenge.NewChallengeScreen
 import com.github.se.signify.ui.screens.home.ASLRecognition
 import com.github.se.signify.ui.screens.home.ExerciseScreenEasy
 import com.github.se.signify.ui.screens.home.ExerciseScreenHard
+import com.github.se.signify.ui.screens.home.ExerciseScreenMedium
+import com.github.se.signify.ui.screens.home.FeedbackScreen
 import com.github.se.signify.ui.screens.home.HomeScreen
 import com.github.se.signify.ui.screens.home.QuestScreen
 import com.github.se.signify.ui.screens.profile.FriendsListScreen
@@ -62,7 +65,8 @@ fun SignifyAppPreview(
   val navController = rememberNavController()
   val navigationActions = NavigationActions(navController)
   val handLandMarkImplementation = dependencyProvider.handLandMarkRepository()
-  val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
+  val handLandMarkViewModel: HandLandMarkViewModel =
+      viewModel(factory = HandLandMarkViewModel.provideFactory(context, handLandMarkImplementation))
   NavHost(navController = navController, startDestination = Route.WELCOME) {
     navigation(
         startDestination = Screen.WELCOME,
@@ -128,6 +132,7 @@ fun SignifyAppPreview(
       composable(Route.FRIENDS) {
         FriendsListScreen(navigationActions, dependencyProvider.userRepository())
       }
+      composable(Route.FEEDBACK) { FeedbackScreen(navigationActions) }
 
       composable(Route.STATS) {
         MyStatsScreen(
@@ -149,6 +154,10 @@ fun SignifyAppPreview(
     composable(Screen.EXERCISE_EASY) {
       ExerciseScreenEasy(navigationActions, handLandMarkViewModel)
     }
+    composable(Screen.EXERCISE_MEDIUM) {
+      ExerciseScreenMedium(navigationActions, handLandMarkViewModel)
+    }
+
     composable(Screen.EXERCISE_HARD) {
       ExerciseScreenHard(navigationActions, handLandMarkViewModel)
     }
