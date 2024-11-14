@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.util.Log
 import androidx.camera.core.ImageProxy
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.github.se.signify.model.hand.HandLandMarkConfig
 import com.github.se.signify.model.hand.HandLandMarkImplementation
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
@@ -18,13 +19,14 @@ class HandLandMarkImplementationInstrumentedTest {
 
   private lateinit var handLandMarkImplementation: HandLandMarkImplementation
   private lateinit var context: Context
-  private val pathToTask = "main/assets/hand_landmarker.task"
-  private val pathToModel = "main/assets/RFC_model_ir9_opset19.onnx"
+  private val config =
+      HandLandMarkConfig(
+          "main/assets/hand_landmarker.task", "main/assets/RFC_model_ir9_opset19.onnx")
 
   @Before
   fun setUp() {
     context = mock(Context::class.java)
-    handLandMarkImplementation = HandLandMarkImplementation(pathToTask, pathToModel)
+    handLandMarkImplementation = HandLandMarkImplementation(config)
   }
 
   @Test
@@ -35,10 +37,8 @@ class HandLandMarkImplementationInstrumentedTest {
 
   @Test
   fun test_init_failure() {
-    val invalidPathToTask = "invalid_task"
-    val invalidPathToModel = "invalid_model"
-    val invalidHandLandMarkImplementation =
-        HandLandMarkImplementation(invalidPathToTask, invalidPathToModel)
+    val invalidConfig = HandLandMarkConfig("invalid_task", "invalid_model")
+    val invalidHandLandMarkImplementation = HandLandMarkImplementation(invalidConfig)
     invalidHandLandMarkImplementation.init(context, { assert(false) }, { assert(true) })
   }
 

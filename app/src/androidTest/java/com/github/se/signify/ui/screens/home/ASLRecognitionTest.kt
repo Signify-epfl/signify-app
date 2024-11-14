@@ -13,7 +13,7 @@ import androidx.lifecycle.LifecycleRegistry
 import androidx.test.annotation.UiThreadTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
-import com.github.se.signify.model.hand.HandLandMarkImplementation
+import com.github.se.signify.model.di.AppDependencyProvider
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
@@ -48,8 +48,7 @@ class ASLRecognitionTest : LifecycleOwner {
     val context = mock(Context::class.java)
 
     navigationActions = mock(NavigationActions::class.java)
-    val handLandMarkImplementation =
-        HandLandMarkImplementation("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
+    val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
     handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.PRACTICE)

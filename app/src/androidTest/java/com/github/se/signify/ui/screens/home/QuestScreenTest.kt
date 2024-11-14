@@ -2,9 +2,7 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import com.github.se.signify.model.quest.Quest
 import com.github.se.signify.model.quest.QuestRepository
-import com.github.se.signify.model.quest.QuestViewModel
 import com.github.se.signify.model.user.UserRepository
-import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Route
 import com.github.se.signify.ui.screens.home.QuestBox
@@ -22,8 +20,6 @@ class QuestScreenTest {
   private lateinit var questRepository: QuestRepository
   private lateinit var userRepository: UserRepository
   private lateinit var navigationActions: NavigationActions
-  private lateinit var questViewModel: QuestViewModel
-  private lateinit var userViewModel: UserViewModel
 
   private val sampleQuest =
       Quest(index = "1", title = "Sample Quest", description = "This is a sample quest description")
@@ -35,8 +31,6 @@ class QuestScreenTest {
     questRepository = mock(QuestRepository::class.java)
     userRepository = mock(UserRepository::class.java)
     navigationActions = mock(NavigationActions::class.java)
-    questViewModel = QuestViewModel(questRepository)
-    userViewModel = UserViewModel(userRepository)
 
     `when`(navigationActions.currentRoute()).thenReturn(Route.QUEST)
   }
@@ -46,8 +40,9 @@ class QuestScreenTest {
     composeTestRule.setContent {
       QuestScreen(
           navigationActions = navigationActions,
-          questViewModel = questViewModel,
-          userViewModel = userViewModel)
+          userRepository = userRepository,
+          questRepository = questRepository,
+      )
     }
 
     composeTestRule.onNodeWithTag("QuestScreen").assertIsDisplayed()
@@ -74,8 +69,9 @@ class QuestScreenTest {
     composeTestRule.setContent {
       QuestScreen(
           navigationActions = navigationActions,
-          questViewModel = questViewModel,
-          userViewModel = userViewModel)
+          questRepository = questRepository,
+          userRepository = userRepository,
+      )
     }
 
     // Check that the back button is displayed
@@ -137,8 +133,9 @@ class QuestScreenTest {
     composeTestRule.setContent {
       QuestScreen(
           navigationActions = navigationActions,
-          questViewModel = questViewModel,
-          userViewModel = userViewModel)
+          questRepository = questRepository,
+          userRepository = userRepository,
+      )
     }
 
     // Click the back button
