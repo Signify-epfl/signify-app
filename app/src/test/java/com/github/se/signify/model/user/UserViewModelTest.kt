@@ -100,4 +100,16 @@ class UserViewModelTest {
     userViewModel.addOngoingChallenge(currentUserId, challengeId)
     verify(userRepository).addOngoingChallenge(eq(currentUserId), eq(challengeId), any(), any())
   }
+
+  @Test
+  fun getStreak_callsRepository() {
+    userViewModel.getStreak(currentUserId)
+    verify(userRepository).getStreak(eq(currentUserId), any(), any())
+  }
+
+  @Test
+  fun updateStreak_callsRepository() {
+    userViewModel.updateStreak(currentUserId)
+    verify(userRepository).updateStreak(eq(currentUserId), any(), any())
+  }
 }

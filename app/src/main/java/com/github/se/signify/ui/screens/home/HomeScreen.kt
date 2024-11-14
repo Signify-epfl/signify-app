@@ -216,9 +216,8 @@ fun LetterDictionary(
         val currentLetter = letters[currentLetterIndex]
         Box(
             modifier =
-                Modifier.border(
-                        2.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp))
-                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(8.dp))
+                Modifier.border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
                     .padding(8.dp)
                     .clickable {
                       coroutineScope.launch {

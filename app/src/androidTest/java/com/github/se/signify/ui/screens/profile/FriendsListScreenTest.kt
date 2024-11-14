@@ -6,6 +6,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import com.github.se.signify.model.user.User
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
+import com.github.se.signify.ui.ProfilePicture
 import com.github.se.signify.ui.navigation.NavigationActions
 import org.junit.Assert.assertNull
 import org.junit.Before
@@ -24,15 +25,20 @@ class FriendsListScreenTest {
 
   private val currentFriends = mutableStateListOf("Alice", "Bob", "Charlie", "Sam")
   private val friendRequests = mutableStateListOf("Dave", "Eve", "Daniel", "Leo")
-  private val testUser = User(uid = "testUserId", name = "Test User") // Test user data
+  private val testUser =
+      User(
+          uid = "testUserId",
+          name = "Test User",
+          currentStreak = 0L,
+          highestStreak = 0L) // Test user data
 
   private lateinit var navigationActions: NavigationActions
   private lateinit var userRepository: UserRepository
   private lateinit var userViewModel: UserViewModel
 
+  @Suppress("UNCHECKED_CAST")
   @Before
   fun setUp() {
-
     navigationActions = mock(NavigationActions::class.java)
     userRepository = mock(UserRepository::class.java)
 
@@ -55,9 +61,11 @@ class FriendsListScreenTest {
         .getRequestsFriendsList(Mockito.anyString(), anyOrNull(), anyOrNull())
 
     userViewModel = UserViewModel(userRepository)
+    val picturePath = "file:///path/to/profile/picture.jpg"
 
     composeTestRule.setContent {
       FriendsListScreen(navigationActions, userRepository, userViewModel)
+      ProfilePicture(picturePath)
     }
   }
 
@@ -205,7 +213,12 @@ class FriendsListScreenTest {
   @Test
   fun removeFriendAfterSearch() {
     // Arrange
-    val friendUser = User(uid = "Alice", name = "Friend User") // Simulated friend user data
+    val friendUser =
+        User(
+            uid = "Alice",
+            name = "Friend User",
+            currentStreak = 0L,
+            highestStreak = 0L) // Simulated friend user data
     userViewModel.setSearchResult(friendUser) // Simulate search result with existing friend
 
     // Act
