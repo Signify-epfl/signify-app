@@ -78,7 +78,7 @@ class FriendsListScreenTest {
     composeTestRule.onNodeWithTag("UserInfo").assertIsDisplayed()
     composeTestRule.onNodeWithTag("UserId").assertIsDisplayed()
     composeTestRule.onNodeWithTag("UserName").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("ProfilePicture").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("DefaultProfilePicture").assertIsDisplayed()
     composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
     composeTestRule.onNodeWithTag("NumberOfDays").assertIsDisplayed()

@@ -41,7 +41,7 @@ class MyStatsScreenTest {
     composeTestRule.onNodeWithTag("UserInfo").assertIsDisplayed()
     composeTestRule.onNodeWithTag("UserId").assertIsDisplayed()
     composeTestRule.onNodeWithTag("UserName").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("ProfilePicture").assertExists()
+    composeTestRule.onNodeWithTag("DefaultProfilePicture").assertExists()
     composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
     composeTestRule.onNodeWithTag("NumberOfDays").assertIsDisplayed()

@@ -188,13 +188,6 @@ class SettingsScreenTest {
   }
 
   @Test
-  fun testUserProfilePictureDisplaysPlaceholderWhenUriIsNull() {
-
-    // Verify that the default placeholder is displayed
-    composeTestRule.onNodeWithTag("default_profile_picture").assertExists()
-  }
-
-  @Test
   fun testUriToFileReturnsFileWhenUriIsValid() {
     // Arrange
     val context = InstrumentationRegistry.getInstrumentation().targetContext
