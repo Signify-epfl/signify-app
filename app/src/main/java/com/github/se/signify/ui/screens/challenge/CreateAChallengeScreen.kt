@@ -3,7 +3,6 @@ package com.github.se.signify.ui.screens.challenge
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -60,56 +58,56 @@ fun CreateAChallengeScreen(
   var selectedFriendId by remember { mutableStateOf<String?>(null) }
   var showDialog by remember { mutableStateOf(false) }
 
-    AnnexScreenScaffold(
-        navigationActions = navigationActions,
-        testTagColumn = "CreateAChallengeContent",
-    ) {
-        // Title
-        Text(
-            text = "Select a Friend to Challenge",
-            fontSize = 24.sp,
-            modifier = Modifier.testTag("ChallengeTitle"))
+  AnnexScreenScaffold(
+      navigationActions = navigationActions,
+      testTagColumn = "CreateAChallengeContent",
+  ) {
+    // Title
+    Text(
+        text = "Select a Friend to Challenge",
+        fontSize = 24.sp,
+        modifier = Modifier.testTag("ChallengeTitle"))
 
-        Spacer(modifier = Modifier.height(16.dp))
+    Spacer(modifier = Modifier.height(16.dp))
 
-        // Conditional display for friends list
-        if (friends.isEmpty()) {
-            Text(
-                text = "No friends available",
-                fontSize = 18.sp,
-                color = Color.Gray,
-                modifier = Modifier.testTag("NoFriendsText"))
-        } else {
-            // List of Friends
-            LazyColumn(
-                modifier = Modifier.fillMaxSize().weight(1f).testTag("FriendsList"),
-                verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                items(friends.size) { index ->
-                    val friendId = friends[index]
-                    FriendCard(friendId = friendId) {
-                        UtilTextButton(
-                            onClickAction = {
-                                selectedFriendId = friendId
-                                showDialog = true
-                            },
-                            testTag = "ChallengeButton_$friendId",
-                            text = "Challenge",
-                            backgroundColor = MaterialTheme.colorScheme.primary,
-                        )
-                    }
-                    }
-                }
+    // Conditional display for friends list
+    if (friends.isEmpty()) {
+      Text(
+          text = "No friends available",
+          fontSize = 18.sp,
+          color = Color.Gray,
+          modifier = Modifier.testTag("NoFriendsText"))
+    } else {
+      // List of Friends
+      LazyColumn(
+          modifier = Modifier.fillMaxSize().weight(1f).testTag("FriendsList"),
+          verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            items(friends.size) { index ->
+              val friendId = friends[index]
+              FriendCard(friendId = friendId) {
+                UtilTextButton(
+                    onClickAction = {
+                      selectedFriendId = friendId
+                      showDialog = true
+                    },
+                    testTag = "ChallengeButton_$friendId",
+                    text = "Challenge",
+                    backgroundColor = MaterialTheme.colorScheme.primary,
+                )
+              }
             }
-        }
+          }
+    }
+  }
 
-        // Show Challenge Dialog if showDialog is true
-        if (showDialog && selectedFriendId != null) {
-            ChallengeModeAlertDialog(
-                friendId = selectedFriendId!!,
-                onDismiss = { showDialog = false },
-                userViewModel = userViewModel,
-                challengeViewModel = challengeViewModel)
-        }
+  // Show Challenge Dialog if showDialog is true
+  if (showDialog && selectedFriendId != null) {
+    ChallengeModeAlertDialog(
+        friendId = selectedFriendId!!,
+        onDismiss = { showDialog = false },
+        userViewModel = userViewModel,
+        challengeViewModel = challengeViewModel)
+  }
 }
 
 @Composable
@@ -154,49 +152,49 @@ fun ChallengeModeAlertDialog(
   AlertDialog(
       onDismissRequest = onDismiss,
       confirmButton = {
-          UtilTextButton(
-              onClickAction = {
-                  if (selectedMode.value != null) {
-                      // Create the challenge in the challenges collection
-                      challengeViewModel.sendChallengeRequest(
-                          currentUserId, friendId, selectedMode.value!!, challengeId)
+        UtilTextButton(
+            onClickAction = {
+              if (selectedMode.value != null) {
+                // Create the challenge in the challenges collection
+                challengeViewModel.sendChallengeRequest(
+                    currentUserId, friendId, selectedMode.value!!, challengeId)
 
-                      // Add the challenge to the users' ongoing challenges
-                      userViewModel.addOngoingChallenge(currentUserId, challengeId)
-                      userViewModel.addOngoingChallenge(friendId, challengeId)
+                // Add the challenge to the users' ongoing challenges
+                userViewModel.addOngoingChallenge(currentUserId, challengeId)
+                userViewModel.addOngoingChallenge(friendId, challengeId)
 
-                      onDismiss() // Close the dialog after creating the challenge
-                  }
-              },
-              testTag = "SendChallengeButton",
-              text = "Send Challenge",
-              backgroundColor = MaterialTheme.colorScheme.primary,
-              enabled = selectedMode.value != null,
-          )
+                onDismiss() // Close the dialog after creating the challenge
+              }
+            },
+            testTag = "SendChallengeButton",
+            text = "Send Challenge",
+            backgroundColor = MaterialTheme.colorScheme.primary,
+            enabled = selectedMode.value != null,
+        )
       },
       dismissButton = {
-          UtilTextButton(
-              onClickAction = onDismiss,
-              testTag = "CancelButton",
-              text = "Cancel",
-              backgroundColor = MaterialTheme.colorScheme.surface,
-          )
+        UtilTextButton(
+            onClickAction = onDismiss,
+            testTag = "CancelButton",
+            text = "Cancel",
+            backgroundColor = MaterialTheme.colorScheme.surface,
+        )
       },
       title = { Text(text = "Pick a Mode", modifier = Modifier.testTag("DialogTitle")) },
       text = {
-          Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-          ) {
-              ChallengeMode.entries.forEach { mode ->
-                  Box (Modifier.weight(1f)){
-                      ModeButton(
-                          mode = mode,
-                          selectedMode = selectedMode,
-                      )
-                  }
-              }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+          ChallengeMode.entries.forEach { mode ->
+            Box(Modifier.weight(1f)) {
+              ModeButton(
+                  mode = mode,
+                  selectedMode = selectedMode,
+              )
+            }
           }
+        }
       })
 }
 
@@ -209,6 +207,8 @@ fun ModeButton(
       onClickAction = { selectedMode.value = mode },
       testTag = "${mode.modeName}ModeButton",
       text = mode.modeName,
-      backgroundColor = if (selectedMode.value == mode) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
-      )
+      backgroundColor =
+          if (selectedMode.value == mode) MaterialTheme.colorScheme.primary
+          else MaterialTheme.colorScheme.surface,
+  )
 }

@@ -159,13 +159,13 @@ fun UtilTextButton(
       modifier = Modifier.fillMaxWidth().height(40.dp).testTag(testTag),
       enabled = enabled,
   ) {
-        Text(
-            text,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface,
-            fontSize = 20.sp,
-            textAlign = TextAlign.Center)
-      }
+    Text(
+        text,
+        fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colorScheme.onSurface,
+        fontSize = 20.sp,
+        textAlign = TextAlign.Center)
+  }
 }
 
 /**

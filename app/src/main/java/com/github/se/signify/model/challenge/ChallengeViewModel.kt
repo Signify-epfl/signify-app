@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 enum class ChallengeMode(val modeName: String) {
-    SPRINT("Sprint"),
-    CHRONO("Chrono"),
+  SPRINT("Sprint"),
+  CHRONO("Chrono"),
 }
 
 open class ChallengeViewModel(private val repository: ChallengeRepository) : ViewModel() {

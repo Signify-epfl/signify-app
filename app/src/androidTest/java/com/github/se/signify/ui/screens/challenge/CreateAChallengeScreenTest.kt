@@ -102,7 +102,8 @@ class CreateAChallengeScreenTest {
     composeTestRule.onNodeWithTag("SendChallengeButton").performClick()
     // Verify that sendChallengeRequest and addOngoingChallenge were called
     verify(challengeRepository)
-        .sendChallengeRequest(eq(currentUserId), eq(friend), eq(ChallengeMode.SPRINT), any(), any(), any())
+        .sendChallengeRequest(
+            eq(currentUserId), eq(friend), eq(ChallengeMode.SPRINT), any(), any(), any())
     verify(userRepository).addOngoingChallenge(eq(currentUserId), any(), any(), any())
     verify(userRepository).addOngoingChallenge(eq(friend), any(), any(), any())
   }
