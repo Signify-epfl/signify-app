@@ -38,11 +38,13 @@ class StatsViewModel(private val repository: StatsRepository) : ViewModel() {
     repository.init {}
   }
 
-  fun factory(repository: StatsRepository): ViewModelProvider.Factory {
-    return object : ViewModelProvider.Factory {
-      @Suppress("UNCHECKED_CAST")
-      override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return StatsViewModel(repository) as T
+  companion object {
+    fun factory(repository: StatsRepository): ViewModelProvider.Factory {
+      return object : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+          return StatsViewModel(repository) as T
+        }
       }
     }
   }

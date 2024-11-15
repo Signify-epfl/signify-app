@@ -24,65 +24,63 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.robolectric.RobolectricTestRunner
 
-
 @RunWith(RobolectricTestRunner::class)
 class SaveStatsToFireStoreTest {
 
-    @Mock private lateinit var mockAuth: FirebaseAuth
-    @Mock private lateinit var mockCurrentUser: FirebaseUser
-    @Mock private lateinit var mockFirestore: FirebaseFirestore
-    @Mock private lateinit var mockCollectionReference: CollectionReference
-    @Mock private lateinit var mockUserDocument: DocumentReference
+  @Mock private lateinit var mockAuth: FirebaseAuth
+  @Mock private lateinit var mockCurrentUser: FirebaseUser
+  @Mock private lateinit var mockFirestore: FirebaseFirestore
+  @Mock private lateinit var mockCollectionReference: CollectionReference
+  @Mock private lateinit var mockUserDocument: DocumentReference
 
-    @Before
-    fun setup() {
-        MockitoAnnotations.openMocks(this)
+  @Before
+  fun setup() {
+    MockitoAnnotations.openMocks(this)
 
-        if (FirebaseApp.getApps(ApplicationProvider.getApplicationContext()).isEmpty()) {
-            FirebaseApp.initializeApp(ApplicationProvider.getApplicationContext())
-        }
-
-        mockAuth = mock(FirebaseAuth::class.java)
-        mockCurrentUser = mock(FirebaseUser::class.java)
-        mockFirestore = mock(FirebaseFirestore::class.java)
-        mockCollectionReference = mock(CollectionReference::class.java)
-        mockUserDocument = mock(DocumentReference::class.java)
-
-        // Mock Firestore document reference to return userDocument for any document request
-        `when`(mockFirestore.collection(anyString())).thenReturn(mockCollectionReference)
+    if (FirebaseApp.getApps(ApplicationProvider.getApplicationContext()).isEmpty()) {
+      FirebaseApp.initializeApp(ApplicationProvider.getApplicationContext())
     }
 
-    @Test
-    fun saveUserStatsToFirestoreShouldAddStatsIfDocumentDoesNotExist() {
-        val documentSnapshot = mock(DocumentSnapshot::class.java)
-        `when`(documentSnapshot.exists()).thenReturn(false)
+    mockAuth = mock(FirebaseAuth::class.java)
+    mockCurrentUser = mock(FirebaseUser::class.java)
+    mockFirestore = mock(FirebaseFirestore::class.java)
+    mockCollectionReference = mock(CollectionReference::class.java)
+    mockUserDocument = mock(DocumentReference::class.java)
 
-        `when`(mockUserDocument.get()).thenReturn(Tasks.forResult(documentSnapshot))
+    // Mock Firestore document reference to return userDocument for any document request
+    `when`(mockFirestore.collection(anyString())).thenReturn(mockCollectionReference)
+  }
 
-        saveStatsToFirestore()
+  @Test
+  fun saveUserStatsToFirestoreShouldAddStatsIfDocumentDoesNotExist() {
+    val documentSnapshot = mock(DocumentSnapshot::class.java)
+    `when`(documentSnapshot.exists()).thenReturn(false)
 
-        `when`(mockUserDocument.set(any(), eq(SetOptions.merge())))
-            .thenReturn(Tasks.forResult(null))
-    }
+    `when`(mockUserDocument.get()).thenReturn(Tasks.forResult(documentSnapshot))
 
-    @Test
-    fun saveUserStatsToFirestoreShouldNotAddUserStatsIfDocumentAlreadyExists() {
-        val documentSnapshot = mock(DocumentSnapshot::class.java)
-        `when`(documentSnapshot.exists()).thenReturn(true)
+    saveStatsToFirestore()
 
-        `when`(mockUserDocument.get()).thenReturn(Tasks.forResult(documentSnapshot))
+    `when`(mockUserDocument.set(any(), eq(SetOptions.merge()))).thenReturn(Tasks.forResult(null))
+  }
 
-        saveStatsToFirestore()
+  @Test
+  fun saveUserStatsToFirestoreShouldNotAddUserStatsIfDocumentAlreadyExists() {
+    val documentSnapshot = mock(DocumentSnapshot::class.java)
+    `when`(documentSnapshot.exists()).thenReturn(true)
 
-        verify(mockUserDocument, never()).set(any(), any())
-    }
+    `when`(mockUserDocument.get()).thenReturn(Tasks.forResult(documentSnapshot))
 
-    @Test
-    fun saveUserStatsToFirestoreShouldLogErrorIfThereIsAnError() {
-        `when`(mockAuth.currentUser).thenReturn(null)
+    saveStatsToFirestore()
 
-        saveStatsToFirestore()
+    verify(mockUserDocument, never()).set(any(), any())
+  }
 
-        verify(mockFirestore, never()).collection(any())
-    }
+  @Test
+  fun saveUserStatsToFirestoreShouldLogErrorIfThereIsAnError() {
+    `when`(mockAuth.currentUser).thenReturn(null)
+
+    saveStatsToFirestore()
+
+    verify(mockFirestore, never()).collection(any())
+  }
 }

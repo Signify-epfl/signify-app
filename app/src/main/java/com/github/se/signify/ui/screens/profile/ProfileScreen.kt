@@ -14,6 +14,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
+import com.github.se.signify.model.stats.StatsRepository
+import com.github.se.signify.model.stats.StatsViewModel
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.AccountInformation
@@ -30,9 +32,10 @@ import com.google.firebase.auth.FirebaseAuth
 fun ProfileScreen(
     navigationActions: NavigationActions,
     userRepository: UserRepository,
+    statsRepository: StatsRepository,
+    userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository)),
+    statsViewModel: StatsViewModel = viewModel(factory = StatsViewModel.factory(statsRepository))
 ) {
-  val userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository))
-
   MainScreenScaffold(
       navigationActions = navigationActions,
       testTagColumn = "ProfileScreen",
@@ -49,6 +52,7 @@ fun ProfileScreen(
     val userName = userViewModel.userName.collectAsState()
     val profilePictureUrl = userViewModel.profilePictureUrl.collectAsState()
     val streak = userViewModel.streak.collectAsState()
+    val lettersLearned = statsViewModel.lettersLearned.collectAsState()
 
     // Settings button
     UtilButton(
@@ -69,7 +73,7 @@ fun ProfileScreen(
     Spacer(modifier = Modifier.height(32.dp))
 
     // Letters learned
-    LearnedLetterList(lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F')) // TODO stats
+    LearnedLetterList(lettersLearned = lettersLearned.value)
     Spacer(modifier = Modifier.height(32.dp))
 
     // Friends List button

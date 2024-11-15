@@ -9,6 +9,8 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
+import com.github.se.signify.model.stats.StatsRepository
+import com.github.se.signify.model.stats.StatsViewModel
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.ProfilePicture
@@ -27,7 +29,9 @@ class ProfileScreenTest {
 
   private lateinit var navigationActions: NavigationActions
   private lateinit var userRepository: UserRepository
+  private lateinit var statsRepository: StatsRepository
   private lateinit var userViewModel: UserViewModel
+  private lateinit var statsViewModel: StatsViewModel
 
   // User information test to be displayed
   private val userId =
@@ -37,12 +41,14 @@ class ProfileScreenTest {
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
     userRepository = mock(UserRepository::class.java)
+    statsRepository = mock(StatsRepository::class.java)
     userViewModel = UserViewModel(userRepository)
+    statsViewModel = StatsViewModel(statsRepository)
     val picturePath = "file:///path/to/profile/picture.jpg"
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.PROFILE)
     composeTestRule.setContent {
-      ProfileScreen(navigationActions, userRepository)
+      ProfileScreen(navigationActions, userRepository, statsRepository)
       ProfilePicture(picturePath)
     }
   }

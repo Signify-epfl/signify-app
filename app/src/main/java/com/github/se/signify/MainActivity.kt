@@ -101,7 +101,9 @@ fun SignifyAppPreview(
           dependencyProvider.userRepository(),
           dependencyProvider.challengeRepository())
     }
-    composable(Route.CHALLENGE_HISTORY) { ChallengeHistoryScreen(navigationActions, 1, 1) }
+    composable(Route.CHALLENGE_HISTORY) {
+      ChallengeHistoryScreen(navigationActions, dependencyProvider.statsRepository())
+    }
     navigation(
         startDestination = Screen.QUEST,
         route = Route.QUEST,
@@ -126,7 +128,10 @@ fun SignifyAppPreview(
         route = Route.PROFILE,
     ) {
       composable(Screen.PROFILE) {
-        ProfileScreen(navigationActions = navigationActions, dependencyProvider.userRepository())
+        ProfileScreen(
+            navigationActions,
+            dependencyProvider.userRepository(),
+            dependencyProvider.statsRepository())
       }
 
       composable(Route.FRIENDS) {
@@ -136,14 +141,9 @@ fun SignifyAppPreview(
 
       composable(Route.STATS) {
         MyStatsScreen(
-            navigationActions = navigationActions,
-            userId = "Test ID 1",
-            userName = "Test Name 1",
-            profilePictureUrl = null, // Replace with actual URL or null
-            numberOfDays = 30,
-            lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F'),
-            exercisesAchieved = listOf(10, 3),
-            questsAchieved = listOf(3, 0))
+            navigationActions,
+            dependencyProvider.userRepository(),
+            dependencyProvider.statsRepository())
       }
 
       composable(Route.SETTINGS) {
