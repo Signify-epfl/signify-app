@@ -33,22 +33,6 @@ class ChallengeHistoryScreenTest {
     composeTestRule.setContent {
       ChallengeHistoryScreen(navigationActions, statsRepository, statsViewModel)
     }
-
-    /*// Mock the getCompletedChallengeStats method to return the number of completed challenges
-    doAnswer { invocation ->
-      val onSuccess = invocation.arguments[1] as (Int) -> Unit
-      onSuccess(friendChallengesAchieved)
-    }
-      .`when`(statsRepository)
-      .getCompletedChallengeStats(any(), any(), any())
-
-    // Mock the getCreatedChallengeStats method to return the number of created challenges
-    doAnswer { invocation ->
-      val onSuccess = invocation.arguments[1] as (Int) -> Unit
-      onSuccess(challengesCreated)
-    }
-      .`when`(statsRepository)
-      .getCreatedChallengeStats(any(), any(), any())*/
   }
 
   @Test
@@ -65,10 +49,6 @@ class ChallengeHistoryScreenTest {
         .onNodeWithTag("FriendsChallengesText")
         .assertTextEquals("Number of friends challenges achieved")
     composeTestRule.onNodeWithTag("FriendsChallengesCountBox").assertIsDisplayed()
-    /*composeTestRule.onNodeWithTag("$friendChallengesAchieved").assertIsDisplayed()
-    composeTestRule
-        .onNodeWithTag("$friendChallengesAchieved")
-        .assertTextEquals("$friendChallengesAchieved")*/
 
     // Verify challenges created section is displayed with counts
     composeTestRule.onNodeWithTag("ChallengesCreatedRow").assertIsDisplayed()
@@ -77,10 +57,6 @@ class ChallengeHistoryScreenTest {
         .onNodeWithTag("ChallengesCreatedText")
         .assertTextEquals("Number of challenges created")
     composeTestRule.onNodeWithTag("ChallengesCreatedCountBox").assertIsDisplayed()
-    /*composeTestRule.onNodeWithTag("$challengesCreated").assertIsDisplayed()
-    composeTestRule
-      .onNodeWithTag("$challengesCreated")
-      .assertTextEquals("$challengesCreated")*/
 
     // Verify graph placeholder is displayed
     composeTestRule.onNodeWithTag("GraphsAndStats").assertIsDisplayed()

@@ -28,7 +28,7 @@ fun MyStatsScreen(
 ) {
   val userName = userViewModel.userName.collectAsState()
   val streak = userViewModel.streak.collectAsState()
-  val profilePicture = userViewModel.profilePictureUrl.collectAsState()
+  val profilePictureUrl = userViewModel.profilePictureUrl.collectAsState()
   val lettersLearned = statsViewModel.lettersLearned.collectAsState()
   val easy = statsViewModel.easy.collectAsState()
   val hard = statsViewModel.hard.collectAsState()
@@ -43,7 +43,7 @@ fun MyStatsScreen(
     AccountInformation(
         userId = currentUserId,
         userName = userName.value,
-        profilePictureUrl = profilePicture.value,
+        profilePictureUrl = profilePictureUrl.value,
         days = streak.value)
     Spacer(modifier = Modifier.height(32.dp))
 
