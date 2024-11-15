@@ -140,6 +140,7 @@ fun UtilIconButton(onClickAction: () -> Unit, icon: ImageVector, iconDescription
  * @param testTag A string used for testing, which serves as the tag for the button.
  * @param text The text to be displayed inside the button.
  * @param backgroundColor The background color of the button.
+ * @param enabled A boolean value indicating whether the button is enabled.
  */
 @Composable
 fun UtilTextButton(
@@ -147,6 +148,7 @@ fun UtilTextButton(
     testTag: String,
     text: String,
     backgroundColor: Color,
+    enabled: Boolean = true,
 ) {
   OutlinedButton(
       onClick = onClickAction,
@@ -154,14 +156,16 @@ fun UtilTextButton(
           ButtonDefaults.outlinedButtonBorder.copy(
               width = 2.dp, brush = SolidColor(MaterialTheme.colorScheme.outline)),
       colors = ButtonDefaults.buttonColors(backgroundColor),
-      modifier = Modifier.fillMaxWidth().height(40.dp).testTag(testTag)) {
-        Text(
-            text,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface,
-            fontSize = 20.sp,
-            textAlign = TextAlign.Center)
-      }
+      modifier = Modifier.fillMaxWidth().height(40.dp).testTag(testTag),
+      enabled = enabled,
+  ) {
+    Text(
+        text,
+        fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colorScheme.onSurface,
+        fontSize = 20.sp,
+        textAlign = TextAlign.Center)
+  }
 }
 
 /**

@@ -35,7 +35,7 @@ class ChallengeRepositoryFireStoreTest {
   private val challengeId = "challengeId"
   private val player1Id = "player1Id"
   private val player2Id = "player2Id"
-  private val mode = "sprint"
+  private val mode = ChallengeMode.SPRINT
 
   @Before
   fun setUp() {
@@ -63,7 +63,7 @@ class ChallengeRepositoryFireStoreTest {
             "player2" to player2Id,
             "status" to "pending",
             "round" to 1,
-            "mode" to mode,
+            "mode" to mode.name,
             "player1Score" to 0,
             "player2Score" to 0,
             "currentGesture" to "",
