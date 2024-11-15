@@ -4,7 +4,7 @@ interface ChallengeRepository {
   fun sendChallengeRequest(
       player1Id: String,
       player2Id: String,
-      mode: String,
+      mode: ChallengeMode,
       challengeId: String,
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit

@@ -9,7 +9,7 @@ class ChallengeRepositoryFireStore(private val db: FirebaseFirestore) : Challeng
   override fun sendChallengeRequest(
       player1Id: String,
       player2Id: String,
-      mode: String,
+      mode: ChallengeMode,
       challengeId: String,
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
@@ -21,7 +21,7 @@ class ChallengeRepositoryFireStore(private val db: FirebaseFirestore) : Challeng
             "player2" to player2Id,
             "status" to "pending",
             "round" to 1,
-            "mode" to mode,
+            "mode" to mode.name,
             "player1Score" to 0,
             "player2Score" to 0,
             "currentGesture" to "",

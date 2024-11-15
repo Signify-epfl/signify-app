@@ -3,6 +3,7 @@ package com.github.se.signify.ui.screens.challenge
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import com.github.se.signify.model.challenge.ChallengeMode
 import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.ui.navigation.NavigationActions
@@ -101,7 +102,7 @@ class CreateAChallengeScreenTest {
     composeTestRule.onNodeWithTag("SendChallengeButton").performClick()
     // Verify that sendChallengeRequest and addOngoingChallenge were called
     verify(challengeRepository)
-        .sendChallengeRequest(eq(currentUserId), eq(friend), eq("sprint"), any(), any(), any())
+        .sendChallengeRequest(eq(currentUserId), eq(friend), eq(ChallengeMode.SPRINT), any(), any(), any())
     verify(userRepository).addOngoingChallenge(eq(currentUserId), any(), any(), any())
     verify(userRepository).addOngoingChallenge(eq(friend), any(), any(), any())
   }
