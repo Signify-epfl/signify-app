@@ -6,6 +6,11 @@ import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
+enum class ChallengeMode(val modeName: String) {
+  SPRINT("Sprint"),
+  CHRONO("Chrono"),
+}
+
 open class ChallengeViewModel(private val repository: ChallengeRepository) : ViewModel() {
   private val _challenge = MutableStateFlow<Challenge?>(null)
   val challenge: StateFlow<Challenge?> = _challenge
@@ -15,7 +20,7 @@ open class ChallengeViewModel(private val repository: ChallengeRepository) : Vie
   fun sendChallengeRequest(
       player1Id: String,
       player2Id: String,
-      mode: String,
+      mode: ChallengeMode,
       challengeId: String
   ) {
     repository.sendChallengeRequest(

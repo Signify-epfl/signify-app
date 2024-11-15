@@ -15,7 +15,7 @@ class ChallengeViewModelTest {
   private val challengeId = "challengeId"
   private val player1Id = "player1Id"
   private val player2Id = "player2Id"
-  private val mode = "sprint"
+  private val mode = ChallengeMode.SPRINT
 
   @Before
   fun setUp() {
