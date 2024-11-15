@@ -45,6 +45,8 @@ You can view the Figma project here: [Signify Figma Project](https://www.figma.c
 
 For the first milestone we provide also the following file with the figma wireframe and mockup: [Signify Figma M1](https://www.figma.com/design/hJsdCTG31DOo51A86W5NNC/Signify-App-M1?t=BKSwDNaqzPhiVu4y-1)
 
+For the second milestone we provide also the following file with the figma wireframe and mockup: [Signify Figma M2](https://www.figma.com/design/sqe0iMKLsNpGi72ohKHbhI/Signify-App-M2?node-id=0-1&node-type=canvas&t=kf898URWQxbvH1FA-0)
+
 ## Contributing
 
 All steps of the development of new features and bug fixes are organized through the [scrum board](https://github.com/orgs/Signify-epfl/projects/2) on Github.  
