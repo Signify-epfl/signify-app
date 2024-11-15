@@ -180,7 +180,9 @@ fun ChallengeModeAlertDialog(
             backgroundColor = MaterialTheme.colorScheme.surface,
         )
       },
-      title = { Text(text = "Pick a Mode", modifier = Modifier.testTag("DialogTitle")) },
+      title = {
+        Text(text = "Pick a Mode", modifier = Modifier.fillMaxWidth().testTag("DialogTitle"))
+      },
       text = {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -195,7 +197,9 @@ fun ChallengeModeAlertDialog(
             }
           }
         }
-      })
+      },
+      containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+  )
 }
 
 @Composable
