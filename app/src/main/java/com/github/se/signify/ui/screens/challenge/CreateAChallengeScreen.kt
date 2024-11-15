@@ -97,15 +97,6 @@ fun CreateAChallengeScreen(
                             backgroundColor = MaterialTheme.colorScheme.primary,
                         )
                     }
-                        Button(
-                            onClick = {
-                                selectedFriendId = friendId
-                                showDialog = true
-                            },
-                            modifier =
-                            Modifier.padding(8.dp).testTag("ChallengeButton_$friendId")) {
-                            Text("Challenge")
-                        }
                     }
                 }
             }
