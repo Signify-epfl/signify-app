@@ -10,6 +10,7 @@ import androidx.compose.ui.test.performClick
 import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.SignifyAppPreview
 import com.github.se.signify.model.di.AppDependencyProvider
+import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Route
@@ -33,12 +34,13 @@ class MainActivityTest {
   @Before
   fun setUp() {
     val userRepository = mock(UserRepository::class.java)
+    val statsRepository = mock(StatsRepository::class.java)
     val context = mock(Context::class.java)
 
     composeTestRule.setContent {
       FriendsListScreen(navigationActions, userRepository)
       SettingsScreen(navigationActions, userRepository)
-      ProfileScreen(navigationActions, userRepository)
+      ProfileScreen(navigationActions, userRepository, statsRepository)
       // Set the content with the mocked context
       SignifyAppPreview(context, AppDependencyProvider, navigationState)
     }

@@ -616,7 +616,7 @@ fun ProfilePicture(profilePictureUrl: String?) {
     Icon(
         imageVector = Icons.Default.Person,
         contentDescription = "Default Profile Picture",
-        modifier = Modifier.size(120.dp).testTag("default_profile_picture"))
+        modifier = Modifier.size(120.dp).testTag("DefaultProfilePicture"))
   }
 }
 

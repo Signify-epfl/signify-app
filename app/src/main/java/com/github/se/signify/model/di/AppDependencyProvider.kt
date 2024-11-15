@@ -7,6 +7,8 @@ import com.github.se.signify.model.hand.HandLandMarkImplementation
 import com.github.se.signify.model.hand.HandLandMarkRepository
 import com.github.se.signify.model.quest.QuestRepository
 import com.github.se.signify.model.quest.QuestRepositoryFireStore
+import com.github.se.signify.model.stats.StatsRepository
+import com.github.se.signify.model.stats.StatsRepositoryFirestore
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserRepositoryFireStore
 import com.google.firebase.Firebase
@@ -27,6 +29,10 @@ object AppDependencyProvider : DependencyProvider {
 
   override fun questRepository(): QuestRepository {
     return QuestRepositoryFireStore(Firebase.firestore)
+  }
+
+  override fun statsRepository(): StatsRepository {
+    return StatsRepositoryFirestore(Firebase.firestore)
   }
 
   override fun userRepository(): UserRepository {

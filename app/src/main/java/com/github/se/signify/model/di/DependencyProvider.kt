@@ -3,6 +3,7 @@ package com.github.se.signify.model.di
 import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.hand.HandLandMarkRepository
 import com.github.se.signify.model.quest.QuestRepository
+import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.user.UserRepository
 
 interface DependencyProvider {
@@ -11,6 +12,8 @@ interface DependencyProvider {
   fun handLandMarkRepository(): HandLandMarkRepository
 
   fun questRepository(): QuestRepository
+
+  fun statsRepository(): StatsRepository
 
   fun userRepository(): UserRepository
 }
