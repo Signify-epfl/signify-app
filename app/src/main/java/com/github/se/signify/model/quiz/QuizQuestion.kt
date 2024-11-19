@@ -5,4 +5,3 @@ data class QuizQuestion(
     val signs: List<Int> = emptyList(), // List of image names or URLs
     val confusers: List<String> = emptyList()
 )
-
