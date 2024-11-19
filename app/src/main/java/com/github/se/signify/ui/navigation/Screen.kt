@@ -11,4 +11,5 @@ object Screen {
   const val CHALLENGE = "Challenge Screen"
   const val AUTH = "Auth Screen"
   const val WELCOME = "Welcome Screen"
+  const val QUIZ = "Quiz Screen"
 }

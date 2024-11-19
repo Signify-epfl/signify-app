@@ -14,4 +14,5 @@ object Route {
   const val SETTINGS = "Settings"
   const val STATS = "Stats"
   const val FEEDBACK = "Feedback"
+  const val QUIZ = "Quiz"
 }
