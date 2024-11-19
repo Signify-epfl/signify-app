@@ -264,8 +264,7 @@ fun BottomBar(navigationActions: NavigationActions) {
   BottomNavigationMenu(
       onTabSelect = { route -> navigationActions.navigateTo(route) },
       tabList = LIST_TOP_LEVEL_DESTINATION,
-      selectedItem = navigationActions.currentRoute(),
-      modifier = Modifier.testTag("BottomNavigationMenu"))
+      selectedItem = navigationActions.currentRoute())
 }
 
 /**
