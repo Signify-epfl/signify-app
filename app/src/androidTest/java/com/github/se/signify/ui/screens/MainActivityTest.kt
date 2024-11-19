@@ -16,6 +16,7 @@ import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Route
 import com.github.se.signify.ui.navigation.Screen
 import com.github.se.signify.ui.screens.profile.FriendsListScreen
+import com.github.se.signify.ui.screens.profile.MyStatsScreen
 import com.github.se.signify.ui.screens.profile.ProfileScreen
 import com.github.se.signify.ui.screens.profile.SettingsScreen
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,6 +42,8 @@ class MainActivityTest {
       FriendsListScreen(navigationActions, userRepository)
       SettingsScreen(navigationActions, userRepository)
       ProfileScreen(navigationActions, userRepository, statsRepository)
+      MyStatsScreen(navigationActions, userRepository, statsRepository)
+
       // Set the content with the mocked context
       SignifyAppPreview(context, AppDependencyProvider, navigationState)
     }
@@ -76,7 +79,7 @@ class MainActivityTest {
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Route.HOME) }
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
 
-    composeTestRule.runOnIdle { navigationState.value?.navigateTo(Route.STATS) }
+    composeTestRule.runOnIdle { navigationActions.navigateTo(Route.STATS) }
     composeTestRule.onNodeWithTag("MyStatsScreen").assertIsDisplayed()
 
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Route.CHALLENGE_HISTORY) }
