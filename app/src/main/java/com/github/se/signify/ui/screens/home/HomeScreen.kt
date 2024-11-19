@@ -31,6 +31,7 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
@@ -120,6 +121,12 @@ fun HomeScreen(navigationActions: NavigationActions) {
                           iconTestTag = "FeedbackIcon",
                           icon = Icons.Outlined.Email,
                           contentDescription = "Feedback")
+                      UtilButton(
+                          onClick = { navigationActions.navigateTo("Quiz") },
+                          buttonTestTag = "QuizButton",
+                          iconTestTag = "QuizIcon",
+                          icon = Icons.Outlined.Star,
+                          contentDescription = "Quizzes")
                       UtilButton(
                           onClick = { navigationActions.navigateTo("Quest") },
                           buttonTestTag = "QuestsButton",
