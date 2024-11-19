@@ -46,7 +46,7 @@ class QuizRepositoryFireStore(private val db: FirebaseFirestore) : QuizRepositor
     }
   }
 
-  private fun getSignsForWord(word: String): List<Int> {
+  internal fun getSignsForWord(word: String): List<Int> {
     return word.lowercase().map { char -> getLetterIconResId(char) }
   }
 }
