@@ -60,35 +60,36 @@ fun QuizScreen(navigationActions: NavigationActions, quizRepository: QuizReposit
   Scaffold(
       modifier = Modifier.fillMaxSize(),
   ) { padding ->
-    if (currentQuiz != null) {
-      val shuffledOptions =
-          remember(currentQuiz) {
-            currentQuiz!!.confusers.plus(currentQuiz!!.correctWord).shuffled()
+    Column(
+        modifier = Modifier.fillMaxSize().padding(16.dp),
+    ) {
+      // Header with title (Always displayed)
+      Row(
+          verticalAlignment = Alignment.CenterVertically,
+          modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background)) {
+            IconButton(onClick = { navigationActions.goBack() }) {
+              Icon(
+                  imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                  contentDescription = "Back",
+                  tint = MaterialTheme.colorScheme.primary)
+            }
+            Spacer(modifier = Modifier.width(40.dp))
+
+            Text(
+                text = "Quiz Time !",
+                fontWeight = FontWeight.Bold,
+                fontSize = 30.sp,
+                color = MaterialTheme.colorScheme.primary)
           }
 
-      Column(
-          modifier = Modifier.fillMaxSize().padding(16.dp),
-      ) {
-        // Header with title
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background)) {
-              IconButton(onClick = { navigationActions.goBack() }) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = MaterialTheme.colorScheme.primary)
-              }
-              Spacer(modifier = Modifier.width(40.dp))
+      Spacer(modifier = Modifier.height(24.dp))
 
-              Text(
-                  text = "Quiz Time !",
-                  fontWeight = FontWeight.Bold,
-                  fontSize = 30.sp,
-                  color = MaterialTheme.colorScheme.primary)
+      // Main content (Conditional)
+      if (currentQuiz != null) {
+        val shuffledOptions =
+            remember(currentQuiz) {
+              currentQuiz!!.confusers.plus(currentQuiz!!.correctWord).shuffled()
             }
-
-        Spacer(modifier = Modifier.height(24.dp))
 
         LazyRow(
             modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
@@ -142,16 +143,13 @@ fun QuizScreen(navigationActions: NavigationActions, quizRepository: QuizReposit
         // Submit Button
         Button(
             onClick = {
-              // Inside your Button's onClick
               if (selectedOption != null) {
                 quizViewModel.submitAnswer(
                     selectedOption = selectedOption!!,
                     onCorrect = {
-                      // Handle correct answer feedback (e.g., show a toast)
                       Toast.makeText(context, "Correct answer!", Toast.LENGTH_SHORT).show()
                     },
                     onIncorrect = {
-                      // Handle incorrect answer feedback (e.g., show a toast)
                       Toast.makeText(context, "Incorrect answer, try again.", Toast.LENGTH_SHORT)
                           .show()
                     })
@@ -168,19 +166,19 @@ fun QuizScreen(navigationActions: NavigationActions, quizRepository: QuizReposit
         ) {
           Text(text = "Submit")
         }
+      } else {
+        // Show a message when there are no quizzes
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally) {
+              Text(
+                  text = "No quizzes available.",
+                  fontWeight = FontWeight.SemiBold,
+                  color = MaterialTheme.colorScheme.onSurface,
+                  modifier = Modifier.padding(bottom = 16.dp))
+            }
       }
-    } else {
-      // Show a message when there are no quizzes
-      Column(
-          modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp),
-          verticalArrangement = Arrangement.Center,
-          horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = "No quizzes available.",
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(bottom = 16.dp))
-          }
     }
   }
 }
