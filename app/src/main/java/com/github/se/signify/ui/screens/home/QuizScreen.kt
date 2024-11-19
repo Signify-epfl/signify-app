@@ -38,11 +38,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.model.quiz.QuizQuestion
 import com.github.se.signify.model.quiz.QuizRepository
 import com.github.se.signify.model.quiz.QuizViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
@@ -51,7 +53,6 @@ import com.github.se.signify.ui.navigation.NavigationActions
 fun QuizScreen(navigationActions: NavigationActions, quizRepository: QuizRepository) {
   val quizViewModel: QuizViewModel = viewModel(factory = QuizViewModel.factory(quizRepository))
 
-  // Observe the current quiz from the ViewModel
   val currentQuiz by quizViewModel.currentQuiz.collectAsState()
   var selectedOption by remember { mutableStateOf<String?>(null) }
 
@@ -63,122 +64,149 @@ fun QuizScreen(navigationActions: NavigationActions, quizRepository: QuizReposit
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
     ) {
-      // Header with title (Always displayed)
-      Row(
-          verticalAlignment = Alignment.CenterVertically,
-          modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background)) {
-            IconButton(onClick = { navigationActions.goBack() }) {
-              Icon(
-                  imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                  contentDescription = "Back",
-                  tint = MaterialTheme.colorScheme.primary)
-            }
-            Spacer(modifier = Modifier.width(40.dp))
-
-            Text(
-                text = "Quiz Time !",
-                fontWeight = FontWeight.Bold,
-                fontSize = 30.sp,
-                color = MaterialTheme.colorScheme.primary)
-          }
+      QuizHeader(navigationActions)
 
       Spacer(modifier = Modifier.height(24.dp))
 
-      // Main content (Conditional)
       if (currentQuiz != null) {
         val shuffledOptions =
             remember(currentQuiz) {
               currentQuiz!!.confusers.plus(currentQuiz!!.correctWord).shuffled()
             }
 
-        LazyRow(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-              items(items = currentQuiz!!.signs) { signResId ->
-                Image(
-                    painter = painterResource(id = signResId),
-                    contentDescription = "Sign for Letter",
-                    modifier =
-                        Modifier.size(80.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                            .border(
-                                2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(12.dp)))
-              }
-            }
-
-        // Display Quiz Options
-        Text(
-            text = "Choose the correct answer:",
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(bottom = 12.dp))
-        Column(
-            modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-              shuffledOptions.forEach { option ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier =
-                        Modifier.fillMaxWidth()
-                            .background(
-                                MaterialTheme.colorScheme.background, RoundedCornerShape(8.dp))
-                            .padding(12.dp)) {
-                      RadioButton(
-                          selected = selectedOption == option,
-                          onClick = { selectedOption = option },
-                          colors =
-                              RadioButtonDefaults.colors(
-                                  selectedColor = MaterialTheme.colorScheme.primary))
-                      Text(
-                          text = option,
-                          color = MaterialTheme.colorScheme.primary,
-                          fontWeight = FontWeight.Bold,
-                          fontSize = 20.sp,
-                          modifier = Modifier.padding(start = 8.dp))
-                    }
-              }
-            }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Submit Button
-        Button(
-            onClick = {
-              if (selectedOption != null) {
-                quizViewModel.submitAnswer(
-                    selectedOption = selectedOption!!,
-                    onCorrect = {
-                      Toast.makeText(context, "Correct answer!", Toast.LENGTH_SHORT).show()
-                    },
-                    onIncorrect = {
-                      Toast.makeText(context, "Incorrect answer, try again.", Toast.LENGTH_SHORT)
-                          .show()
-                    })
-                selectedOption = null // Reset the selection
-              }
-            },
-            enabled = selectedOption != null,
-            colors =
-                ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.background),
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-            shape = RoundedCornerShape(50),
-        ) {
-          Text(text = "Submit")
-        }
+        QuizContent(
+            currentQuiz = currentQuiz!!,
+            shuffledOptions = shuffledOptions,
+            selectedOption = selectedOption,
+            onOptionSelected = { selectedOption = it },
+            onSubmit = {
+              quizViewModel.submitAnswer(
+                  selectedOption = it,
+                  onCorrect = {
+                    Toast.makeText(context, "Correct answer!", Toast.LENGTH_SHORT).show()
+                  },
+                  onIncorrect = {
+                    Toast.makeText(context, "Incorrect answer, try again.", Toast.LENGTH_SHORT)
+                        .show()
+                  })
+              selectedOption = null
+            })
       } else {
-        // Show a message when there are no quizzes
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally) {
-              Text(
-                  text = "No quizzes available.",
-                  fontWeight = FontWeight.SemiBold,
-                  color = MaterialTheme.colorScheme.onSurface,
-                  modifier = Modifier.padding(bottom = 16.dp))
-            }
+        NoQuizAvailable()
       }
     }
   }
+}
+
+@Composable
+fun QuizHeader(navigationActions: NavigationActions) {
+  Row(
+      verticalAlignment = Alignment.CenterVertically,
+      modifier =
+          Modifier.fillMaxWidth()
+              .background(MaterialTheme.colorScheme.background)
+              .testTag("QuizHeader")) {
+        IconButton(
+            onClick = { navigationActions.goBack() }, modifier = Modifier.testTag("BackButton")) {
+              Icon(
+                  imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                  contentDescription = "Back",
+                  tint = MaterialTheme.colorScheme.primary)
+            }
+        Spacer(modifier = Modifier.width(40.dp))
+
+        Text(
+            text = "Quiz Time !",
+            fontWeight = FontWeight.Bold,
+            fontSize = 30.sp,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.testTag("QuizTitle"))
+      }
+}
+
+@Composable
+fun QuizContent(
+    currentQuiz: QuizQuestion,
+    shuffledOptions: List<String>,
+    selectedOption: String?,
+    onOptionSelected: (String) -> Unit,
+    onSubmit: (String) -> Unit
+) {
+  LazyRow(
+      modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp).testTag("SignsRow"),
+      horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        items(items = currentQuiz.signs) { signResId ->
+          Image(
+              painter = painterResource(id = signResId),
+              contentDescription = "Sign for Letter",
+              modifier =
+                  Modifier.size(80.dp)
+                      .clip(RoundedCornerShape(12.dp))
+                      .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(12.dp))
+                      .testTag("SignImage"))
+        }
+      }
+
+  Text(
+      text = "Choose the correct answer:",
+      fontWeight = FontWeight.Bold,
+      color = MaterialTheme.colorScheme.primary,
+      modifier = Modifier.padding(bottom = 12.dp).testTag("QuizPrompt"))
+
+  Column(
+      modifier = Modifier.fillMaxWidth().testTag("OptionsColumn"),
+      verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        shuffledOptions.forEach { option ->
+          Row(
+              verticalAlignment = Alignment.CenterVertically,
+              modifier =
+                  Modifier.fillMaxWidth()
+                      .background(MaterialTheme.colorScheme.background, RoundedCornerShape(8.dp))
+                      .padding(12.dp)
+                      .testTag("OptionRow")) {
+                RadioButton(
+                    selected = selectedOption == option,
+                    onClick = { onOptionSelected(option) },
+                    colors =
+                        RadioButtonDefaults.colors(
+                            selectedColor = MaterialTheme.colorScheme.primary),
+                    modifier = Modifier.testTag("OptionRadioButton"))
+                Text(
+                    text = option,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(start = 8.dp))
+              }
+        }
+      }
+
+  Spacer(modifier = Modifier.height(24.dp))
+
+  Button(
+      onClick = { if (selectedOption != null) onSubmit(selectedOption!!) },
+      enabled = selectedOption != null,
+      colors =
+          ButtonDefaults.buttonColors(
+              backgroundColor = MaterialTheme.colorScheme.primary,
+              contentColor = MaterialTheme.colorScheme.background),
+      modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).testTag("SubmitButton"),
+      shape = RoundedCornerShape(50),
+  ) {
+    Text(text = "Submit")
+  }
+}
+
+@Composable
+fun NoQuizAvailable() {
+  Column(
+      modifier = Modifier.fillMaxSize().testTag("NoQuizContainer"),
+      verticalArrangement = Arrangement.Center,
+      horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = "No quizzes available.",
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.padding(bottom = 16.dp).testTag("NoQuizzesText"))
+      }
 }
