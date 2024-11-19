@@ -13,7 +13,6 @@ import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.stats.StatsViewModel
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
-import com.github.se.signify.ui.ProfilePicture
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 import com.google.firebase.auth.FirebaseAuth
@@ -44,13 +43,9 @@ class ProfileScreenTest {
     statsRepository = mock(StatsRepository::class.java)
     userViewModel = UserViewModel(userRepository)
     statsViewModel = StatsViewModel(statsRepository)
-    val picturePath = "file:///path/to/profile/picture.jpg"
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.PROFILE)
-    composeTestRule.setContent {
-      ProfileScreen(navigationActions, userRepository, statsRepository)
-      ProfilePicture(picturePath)
-    }
+    composeTestRule.setContent { ProfileScreen(navigationActions, userRepository, statsRepository) }
   }
 
   @Test
@@ -94,7 +89,7 @@ class ProfileScreenTest {
     composeTestRule.onNodeWithTag("UserId").assertTextEquals(userId)
     composeTestRule.onNodeWithTag("UserName").assertIsDisplayed()
     composeTestRule.onNodeWithTag("UserName").assertTextEquals(userViewModel.userName.value)
-    composeTestRule.onNodeWithTag("ProfilePicture").assertExists()
+    composeTestRule.onNodeWithTag("DefaultProfilePicture").assertExists()
     composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
     composeTestRule.onNodeWithTag("NumberOfDays").assertIsDisplayed()
