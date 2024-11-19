@@ -33,6 +33,7 @@ import com.github.se.signify.ui.screens.home.ExerciseScreenMedium
 import com.github.se.signify.ui.screens.home.FeedbackScreen
 import com.github.se.signify.ui.screens.home.HomeScreen
 import com.github.se.signify.ui.screens.home.QuestScreen
+import com.github.se.signify.ui.screens.home.QuizScreen
 import com.github.se.signify.ui.screens.profile.FriendsListScreen
 import com.github.se.signify.ui.screens.profile.MyStatsScreen
 import com.github.se.signify.ui.screens.profile.ProfileScreen
@@ -113,6 +114,18 @@ fun SignifyAppPreview(
             navigationActions,
             dependencyProvider.questRepository(),
             dependencyProvider.userRepository())
+      }
+    }
+
+    navigation(
+        startDestination = Screen.QUIZ,
+        route = Route.QUIZ,
+    ) {
+      composable(Screen.QUIZ) {
+        QuizScreen(
+            navigationActions,
+            dependencyProvider.quizRepository(),
+        )
       }
     }
 
