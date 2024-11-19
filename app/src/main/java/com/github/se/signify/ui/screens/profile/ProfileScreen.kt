@@ -8,6 +8,10 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -53,6 +57,9 @@ fun ProfileScreen(
     val profilePictureUrl = userViewModel.profilePictureUrl.collectAsState()
     val streak = userViewModel.streak.collectAsState()
     val lettersLearned = statsViewModel.lettersLearned.collectAsState()
+    var updatedProfilePicture by remember { mutableStateOf(profilePictureUrl.value) }
+
+    LaunchedEffect(profilePictureUrl.value) { updatedProfilePicture = profilePictureUrl.value }
 
     // Settings button
     UtilButton(
@@ -67,7 +74,7 @@ fun ProfileScreen(
     AccountInformation(
         userId = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0) ?: "unknown",
         userName = userName.value,
-        profilePictureUrl = profilePictureUrl.value,
+        profilePictureUrl = updatedProfilePicture,
         days = streak.value)
 
     Spacer(modifier = Modifier.height(32.dp))
