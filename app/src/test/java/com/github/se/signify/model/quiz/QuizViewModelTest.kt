@@ -110,4 +110,10 @@ class QuizViewModelTest {
     assert(onCorrectCalled)
     assert(quizViewModel.currentQuiz_.value in mockQuizzes)
   }
+
+  @Test
+  fun getDailyQuestCallsRepository() {
+    quizViewModel.getQuizQuestions()
+    verify(quizRepository).getQuizQuestions(any(), any())
+  }
 }
