@@ -1,5 +1,6 @@
 package com.github.se.signify.model.user
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -106,7 +107,7 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
         onFailure = { e -> Log.e(logTag, "Failed to get profile picture: ${e.message}}") })
   }
 
-  fun updateProfilePictureUrl(currentUserId: String, newProfilePictureUrl: String?) {
+  fun updateProfilePictureUrl(currentUserId: String, newProfilePictureUrl: Uri?) {
     repository.updateProfilePictureUrl(
         currentUserId,
         newProfilePictureUrl,
