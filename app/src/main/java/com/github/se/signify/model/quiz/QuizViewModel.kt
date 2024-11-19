@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.asStateFlow
 class QuizViewModel(private val repository: QuizRepository) : ViewModel() {
 
   // State for the list of all quizzes
-  private val quizzes_ = MutableStateFlow<List<QuizQuestion>>(emptyList())
+  val quizzes_ = MutableStateFlow<List<QuizQuestion>>(emptyList())
   val quizzes: StateFlow<List<QuizQuestion>> = quizzes_.asStateFlow()
 
   // State for the current quiz
-  private val currentQuiz_ = MutableStateFlow<QuizQuestion?>(null)
+  val currentQuiz_ = MutableStateFlow<QuizQuestion?>(null)
   val currentQuiz: StateFlow<QuizQuestion?> = currentQuiz_.asStateFlow()
 
   init {
