@@ -7,11 +7,14 @@ import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.screens.home.NoQuizAvailable
 import com.github.se.signify.ui.screens.home.QuizContent
 import com.github.se.signify.ui.screens.home.QuizHeader
+import com.github.se.signify.ui.screens.home.QuizScreen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.*
+import org.mockito.kotlin.anyOrNull
 
+@Suppress("UNCHECKED_CAST")
 class QuizScreenComponentsTest {
 
   @get:Rule val composeTestRule = createComposeRule()
@@ -23,12 +26,7 @@ class QuizScreenComponentsTest {
       QuizQuestion(
           correctWord = "car",
           confusers = listOf("cat", "cup"),
-          signs =
-              listOf(
-                  getIconResId('c'),
-                  getIconResId('a'),
-                  getIconResId('r')) // Mocked image resource IDs
-          )
+          signs = listOf(getIconResId('c'), getIconResId('a'), getIconResId('r')))
 
   @Before
   fun setUp() {
@@ -94,6 +92,27 @@ class QuizScreenComponentsTest {
   @Test
   fun noQuizAvailable_displaysMessage() {
     composeTestRule.setContent { NoQuizAvailable() }
+
+    // Verify "No quizzes available" message
+    composeTestRule.onNodeWithTag("NoQuizContainer").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("NoQuizzesText").assertTextEquals("No quizzes available.")
+  }
+
+  @Test
+  fun quizScreen_displaysNoQuizAvailableWhenQuizIsNull() {
+    // Mock repository to return no quizzes
+    val mockQuizRepository = mock(QuizRepository::class.java)
+    doAnswer { invocation ->
+          val onSuccess = invocation.arguments[0] as (List<QuizQuestion>) -> Unit
+          onSuccess(emptyList()) // No quizzes available
+          null
+        }
+        .`when`(mockQuizRepository)
+        .getQuizQuestions(anyOrNull(), anyOrNull())
+
+    composeTestRule.setContent {
+      QuizScreen(navigationActions = mockNavigationActions, quizRepository = mockQuizRepository)
+    }
 
     // Verify "No quizzes available" message
     composeTestRule.onNodeWithTag("NoQuizContainer").assertIsDisplayed()
