@@ -36,8 +36,7 @@ class QuizRepositoryFireStore(private val db: FirebaseFirestore) : QuizRepositor
   internal fun documentToQuiz(document: DocumentSnapshot): QuizQuestion? {
     return try {
       val correctWord = document.getString("word") ?: return null
-      val confusers =
-          (document.get("confusers") as? List<*>)?.filterIsInstance<String>() ?: return null
+      val confusers = (document["confusers"] as? List<*>)?.filterIsInstance<String>() ?: return null
       val signs = getSignsForWord(correctWord)
       QuizQuestion(correctWord = correctWord, confusers = confusers, signs = signs)
     } catch (e: Exception) {
