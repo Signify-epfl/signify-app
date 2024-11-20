@@ -52,8 +52,16 @@ class QuizViewModelTest {
   fun submitAnswerCallsOnCorrectForCorrectAnswer() {
     // Arrange
     val quiz = QuizQuestion("Apple", listOf(1, 2, 3), listOf("Banana", "Orange"))
-    quizViewModel.quizzes_.value = listOf(quiz)
-    quizViewModel.currentQuiz_.value = quiz
+    quizViewModel.quizzesTesting.value = listOf(quiz)
+    quizViewModel.currentQuizTesting.value = quiz
+
+    val mockQuizzes = listOf(quiz)
+    doAnswer {
+          val onSuccess = it.arguments[0] as (List<QuizQuestion>) -> Unit
+          onSuccess(mockQuizzes)
+        }
+        .`when`(quizRepository)
+        .getQuizQuestions(any(), any())
 
     var onCorrectCalled = false
     var onIncorrectCalled = false
@@ -73,8 +81,8 @@ class QuizViewModelTest {
   fun submitAnswerCallsOnIncorrectForWrongAnswer() {
     // Arrange
     val quiz = QuizQuestion("Apple", listOf(1, 2, 3), listOf("Banana", "Orange"))
-    quizViewModel.quizzes_.value = listOf(quiz)
-    quizViewModel.currentQuiz_.value = quiz
+    quizViewModel.quizzesTesting.value = listOf(quiz)
+    quizViewModel.currentQuizTesting.value = quiz
 
     var onCorrectCalled = false
     var onIncorrectCalled = false
@@ -97,8 +105,8 @@ class QuizViewModelTest {
         listOf(
             QuizQuestion("Apple", listOf(1, 2, 3), listOf("Banana", "Orange")),
             QuizQuestion("Car", listOf(4, 5, 6), listOf("Bike", "Bus")))
-    quizViewModel.quizzes_.value = mockQuizzes
-    quizViewModel.currentQuiz_.value = mockQuizzes[0]
+    quizViewModel.quizzesTesting.value = mockQuizzes
+    quizViewModel.currentQuizTesting.value = mockQuizzes[0]
 
     var onCorrectCalled = false
 
@@ -108,7 +116,7 @@ class QuizViewModelTest {
 
     // Assert
     assert(onCorrectCalled)
-    assert(quizViewModel.currentQuiz_.value in mockQuizzes)
+    assert(quizViewModel.currentQuizTesting.value in mockQuizzes)
   }
 
   @Test

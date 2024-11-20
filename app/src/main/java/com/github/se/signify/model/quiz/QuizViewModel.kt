@@ -2,6 +2,7 @@ package com.github.se.signify.model.quiz
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.google.common.annotations.VisibleForTesting
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -9,12 +10,21 @@ import kotlinx.coroutines.flow.asStateFlow
 class QuizViewModel(private val repository: QuizRepository) : ViewModel() {
 
   // State for the list of all quizzes
-  val quizzes_ = MutableStateFlow<List<QuizQuestion>>(emptyList())
+  private val quizzes_ = MutableStateFlow<List<QuizQuestion>>(emptyList())
   val quizzes: StateFlow<List<QuizQuestion>> = quizzes_.asStateFlow()
 
   // State for the current quiz
-  val currentQuiz_ = MutableStateFlow<QuizQuestion?>(null)
+  private val currentQuiz_ = MutableStateFlow<QuizQuestion?>(null)
   val currentQuiz: StateFlow<QuizQuestion?> = currentQuiz_.asStateFlow()
+
+  // Expose for testing
+  @VisibleForTesting
+  val currentQuizTesting: MutableStateFlow<QuizQuestion?>
+    get() = currentQuiz_
+
+  @VisibleForTesting
+  val quizzesTesting: MutableStateFlow<List<QuizQuestion>>
+    get() = quizzes_
 
   init {
     repository.init { getQuizQuestions() }
