@@ -294,6 +294,7 @@ class FriendsListScreenTest {
     // Simulate a non successful search
     userViewModel.setSearchResult(null) // Initial state
     userViewModel.setErrorState("User not found")
+    composeTestRule.waitForIdle()
 
     // Act
 
