@@ -1,5 +1,6 @@
 package com.github.se.signify.ui.screens.home
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -40,8 +41,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -120,7 +119,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
                           icon = Icons.Outlined.Email,
                           contentDescription = "Feedback")
                       UtilButton(
-                          onClick = { navigationActions.navigateTo("Quest") },
+                          onClick = { navigationActions.navigateTo(Screen.QUEST) },
                           buttonTestTag = "QuestsButton",
                           iconTestTag = "QuestIcon",
                           icon = Icons.Outlined.DateRange,
@@ -188,67 +187,93 @@ fun CameraFeedbackButton(onClick: () -> Unit = {}) {
  * @param numbOfHeaders The number of headers at the top of the list, allowing for an offset when
  *   scrolling to the selected letter.
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LetterDictionary(
     scrollState: LazyListState,
     coroutineScope: CoroutineScope,
     numbOfHeaders: Int
 ) {
-  var currentLetterIndex by remember { mutableIntStateOf(0) }
   val letters = ('a'..'z').toList()
+  val pagerState = rememberPagerState(initialPage = 0, pageCount = { letters.size })
 
-  Row(
-      modifier = Modifier.fillMaxWidth().wrapContentHeight().testTag("LetterDictionary"),
-      horizontalArrangement = Arrangement.SpaceBetween,
-      verticalAlignment = Alignment.CenterVertically) {
-        IconButton(
-            onClick = {
-              currentLetterIndex = (currentLetterIndex - 1 + letters.size) % letters.size
-            },
-            modifier = Modifier.testTag("LetterDictionaryBack")) {
-              Icon(
-                  Icons.AutoMirrored.Outlined.ArrowBack,
-                  tint = MaterialTheme.colorScheme.onBackground,
-                  contentDescription = "Back")
-            }
+  Box(modifier = Modifier.fillMaxWidth().wrapContentHeight().testTag("LetterDictionary")) {
+    // Back Arrow at the start
+    IconButton(
+        onClick = {
+          coroutineScope.launch {
+            pagerState.animateScrollToPage(
+                (pagerState.currentPage - 1 + letters.size) % letters.size)
+          }
+        },
+        modifier = Modifier.align(Alignment.CenterStart).testTag("LetterDictionaryBack")) {
+          Icon(
+              Icons.AutoMirrored.Outlined.ArrowBack,
+              tint = MaterialTheme.colorScheme.onBackground,
+              contentDescription = "Back")
+        }
 
-        val currentLetter = letters[currentLetterIndex]
-        Box(
-            modifier =
-                Modifier.border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
-                    .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
-                    .padding(8.dp)
-                    .clickable {
-                      coroutineScope.launch {
-                        scrollState.animateScrollToItem(currentLetterIndex + numbOfHeaders)
+    // Horizontal Pager for letters in the center
+    HorizontalPager(
+        beyondBoundsPageCount = 1,
+        state = pagerState,
+        modifier = Modifier.size(300.dp, 50.dp).align(Alignment.Center).testTag("LetterPager"),
+    ) { page ->
+      val currentLetter = letters[page]
+      Log.d("LetterDictionary", "Current Letter: $currentLetter")
+      Box(
+          contentAlignment = Alignment.Center,
+          modifier =
+              Modifier.fillMaxSize()
+                  .size(100.dp, 50.dp)
+                  .clickable {
+                    coroutineScope.launch { scrollState.animateScrollToItem(page + numbOfHeaders) }
+                  }
+                  .testTag("LetterBox_${currentLetter.uppercaseChar()}")) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier =
+                    Modifier.border(
+                            2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
+                        .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))) {
+                  Row(
+                      verticalAlignment = Alignment.CenterVertically,
+                      horizontalArrangement = Arrangement.Center) {
+                        Text(
+                            text = "${currentLetter.uppercaseChar()} =",
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontSize = 32.sp,
+                            modifier =
+                                Modifier.testTag("LetterText_${currentLetter.uppercaseChar()}"))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Icon(
+                            painter = painterResource(id = getLetterIconResId(currentLetter)),
+                            contentDescription = "Letter gesture",
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier =
+                                Modifier.size(32.dp)
+                                    .testTag("LetterIcon_${currentLetter.uppercaseChar()}"))
                       }
-                    }
-                    .testTag("LetterBox_${currentLetter.uppercaseChar()}")) {
-              Row {
-                Text(
-                    text = "${currentLetter.uppercaseChar()} =",
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontSize = 32.sp,
-                    modifier = Modifier.testTag("LetterText_${currentLetter.uppercaseChar()}"))
-                Icon(
-                    painter = painterResource(id = getLetterIconResId(currentLetter)),
-                    contentDescription = "Letter gesture",
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    modifier =
-                        Modifier.size(32.dp).testTag("LetterIcon_${currentLetter.uppercaseChar()}"))
-              }
-            }
+                }
+          }
+    }
 
-        IconButton(
-            onClick = { currentLetterIndex = (currentLetterIndex + 1) % letters.size },
-            modifier = Modifier.testTag("LetterDictionaryForward")) {
-              Icon(
-                  Icons.AutoMirrored.Outlined.ArrowForward,
-                  tint = MaterialTheme.colorScheme.onBackground,
-                  contentDescription = "Forward")
-            }
-      }
+    // Forward Arrow at the end
+    IconButton(
+        onClick = {
+          coroutineScope.launch {
+            pagerState.animateScrollToPage((pagerState.currentPage + 1) % letters.size)
+          }
+        },
+        modifier = Modifier.align(Alignment.CenterEnd).testTag("LetterDictionaryForward")) {
+          Icon(
+              Icons.AutoMirrored.Outlined.ArrowForward,
+              tint = MaterialTheme.colorScheme.onBackground,
+              contentDescription = "Forward")
+        }
+  }
 }
+
 /**
  * Composable function that displays a horizontally scrollable list of exercises using a pager. Each
  * exercise is shown with a centered button that, when clicked, navigates to the exercise's specific
