@@ -520,38 +520,7 @@ fun StatisticsColumnRow(
                     }
               }
             }
-      } /*
-        // Construction of the statistic row
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).testTag(columnTestTag),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically) {
-              Text(
-                  text = lineText,
-                  fontSize = 16.sp,
-                  color = MaterialTheme.colorScheme.onBackground,
-                  modifier = Modifier.testTag(lineTextTag))
-              for (index in statsTextList.indices) {
-                Column(
-                    modifier =
-                        Modifier.size(50.dp)
-                            .border(
-                                2.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(12.dp))
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(MaterialTheme.colorScheme.background)
-                            .testTag(statsTextTagList[index]),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center) {
-                      for (subIndex in statsTextList[index].indices) {
-                        Text(
-                            text = statsTextList[index][subIndex],
-                            fontSize = statsTextSPList[index][subIndex].sp,
-                            color = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier.testTag(statsTextList[index][subIndex]))
-                      }
-                    }
-              }
-            }*/
+      }
 }
 
 /**
