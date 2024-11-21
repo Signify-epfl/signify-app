@@ -17,7 +17,7 @@ class StatsTest {
     assertEquals(0, stats.weeklyQuest)
     assertEquals(0, stats.completedChallenge)
     assertEquals(0, stats.createdChallenge)
-      assertEquals(0, stats.wonChallenge)
+    assertEquals(0, stats.wonChallenge)
   }
 
   @Test
@@ -42,6 +42,6 @@ class StatsTest {
     assertEquals(0, stats.weeklyQuest)
     assertEquals(1, stats.completedChallenge)
     assertEquals(1, stats.createdChallenge)
-      assertEquals(1, stats.wonChallenge)
+    assertEquals(1, stats.wonChallenge)
   }
 }

@@ -165,18 +165,17 @@ class StatsRepositoryFirestoreTest {
         onFailure = { fail("onFailure should not be called") })
   }
 
-    @Test
-    fun getWonChallengeStatsShouldReturnTheCorrectStats() {
-        val documentSnapshot: DocumentSnapshot = mock()
-        `when`(documentSnapshot.getLong("wonChallenge")).thenReturn(10L)
-        `when`(mockUserDocument.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot))
+  @Test
+  fun getWonChallengeStatsShouldReturnTheCorrectStats() {
+    val documentSnapshot: DocumentSnapshot = mock()
+    `when`(documentSnapshot.getLong("wonChallenge")).thenReturn(10L)
+    `when`(mockUserDocument.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot))
 
-        statsRepositoryFirestore.getWonChallengeStats(
-            userId,
-            onSuccess = { wonCount -> assertEquals(10, wonCount) },
-            onFailure = { fail("onFailure should not be called")}
-        )
-    }
+    statsRepositoryFirestore.getWonChallengeStats(
+        userId,
+        onSuccess = { wonCount -> assertEquals(10, wonCount) },
+        onFailure = { fail("onFailure should not be called") })
+  }
 
   @Test
   fun updateLettersLearnedShouldAddANewLetterToLettersLearned() {
@@ -268,16 +267,13 @@ class StatsRepositoryFirestoreTest {
         onFailure = { fail("onFailure should not be called") })
   }
 
-    @Test
-    fun updateWonChallengeStatsShouldIncrementWonChallengeCount() {
-        `when`(mockUserDocument.update(eq("wonChallenge"), any())).thenReturn(Tasks.forResult(null))
+  @Test
+  fun updateWonChallengeStatsShouldIncrementWonChallengeCount() {
+    `when`(mockUserDocument.update(eq("wonChallenge"), any())).thenReturn(Tasks.forResult(null))
 
-        statsRepositoryFirestore.updateWonChallengeStats(
-            userId,
-            onSuccess = {
-                verify(mockUserDocument).update("wonChallenge", FieldValue.increment(1))
-            },
-            onFailure = { fail("onFailure should not be called") }
-        )
-    }
+    statsRepositoryFirestore.updateWonChallengeStats(
+        userId,
+        onSuccess = { verify(mockUserDocument).update("wonChallenge", FieldValue.increment(1)) },
+        onFailure = { fail("onFailure should not be called") })
+  }
 }

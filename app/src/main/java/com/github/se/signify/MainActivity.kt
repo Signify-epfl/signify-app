@@ -128,12 +128,12 @@ fun SignifyAppPreview(
             dependencyProvider.questRepository(),
             dependencyProvider.userRepository())
       }
-        composable(Screen.QUIZ) {
-            QuizScreen(
-                navigationActions,
-                dependencyProvider.quizRepository(),
-            )
-        }
+      composable(Screen.QUIZ) {
+        QuizScreen(
+            navigationActions,
+            dependencyProvider.quizRepository(),
+        )
+      }
     }
 
     navigation(
