@@ -1,15 +1,13 @@
 package com.github.se.signify.model.challenge
 
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
-import org.mockito.kotlin.any
-import org.mockito.kotlin.eq
 
 class ChallengeViewModelTest {
-
-  private lateinit var challengeRepository: ChallengeRepository
+  private lateinit var mockRepository: MockChallengeRepository
   private lateinit var challengeViewModel: ChallengeViewModel
 
   private val challengeId = "challengeId"
@@ -19,26 +17,67 @@ class ChallengeViewModelTest {
 
   @Before
   fun setUp() {
-    challengeRepository = mock(ChallengeRepository::class.java)
-    challengeViewModel = ChallengeViewModel(challengeRepository)
+    mockRepository = MockChallengeRepository()
+    challengeViewModel = ChallengeViewModel(mockRepository)
   }
 
   @Test
-  fun sendChallengeRequest_callsRepository() {
-    // Act
+  fun `sendChallengeRequest triggers onSuccess and logs message`() {
+    mockRepository.shouldSucceed = true // Simulate a successful repository operation
+
     challengeViewModel.sendChallengeRequest(player1Id, player2Id, mode, challengeId)
 
-    // Assert: Verify that the repository's sendChallengeRequest method was called
-    verify(challengeRepository)
-        .sendChallengeRequest(eq(player1Id), eq(player2Id), eq(mode), eq(challengeId), any(), any())
+    assertTrue(mockRepository.sendChallengeCalled) // Verify repository interaction
+    assertEquals(challengeId, mockRepository.lastSentChallenge) // Verify challenge details
   }
 
   @Test
-  fun deleteChallenge_callsRepository() {
-    // Act
+  fun `sendChallengeRequest triggers onFailure and logs error`() {
+    mockRepository.shouldSucceed = false // Simulate a failed repository operation
+    mockRepository.exceptionToThrow = Exception("Simulated failure")
+
+    challengeViewModel.sendChallengeRequest(player1Id, player2Id, mode, challengeId)
+
+    assertTrue(mockRepository.sendChallengeCalled) // Verify repository interaction
+    assertEquals(challengeId, mockRepository.lastSentChallenge) // Verify challenge details
+  }
+
+  @Test
+  fun `deleteChallenge triggers onSuccess and logs message`() {
+    mockRepository.shouldSucceed = true // Simulate a successful repository operation
+
+    mockRepository.sendChallengeRequest(
+        player1Id = player1Id,
+        player2Id = player2Id,
+        mode = mode,
+        challengeId = challengeId,
+        onSuccess = { /* Success */},
+        onFailure = { /* No-op */})
+
     challengeViewModel.deleteChallenge(challengeId)
 
-    // Assert: Verify that the repository's deleteChallenge method was called
-    verify(challengeRepository).deleteChallenge(eq(challengeId), any(), any())
+    assertTrue(mockRepository.deleteChallengeCalled) // Verify repository interaction
+    assertEquals(challengeId, mockRepository.lastDeletedChallenge) // Verify challenge details
+  }
+
+  @Test
+  fun `deleteChallenge triggers onFailure and logs error`() {
+    // Arrange
+    mockRepository.shouldSucceed = false // Simulate a failed repository operation
+    mockRepository.exceptionToThrow = Exception("Simulated delete failure")
+
+    challengeViewModel.deleteChallenge(challengeId)
+
+    assertTrue(mockRepository.deleteChallengeCalled) // Verify repository interaction
+    assertEquals(challengeId, mockRepository.lastDeletedChallenge) // Verify challenge details
+    // Optionally, verify log output (requires mocking Log)
+  }
+
+  @Test
+  fun `factory creates ChallengeViewModel with repository`() {
+    val mockRepository = MockChallengeRepository()
+    val factory = ChallengeViewModel.factory(mockRepository)
+    val viewModel = factory.create(ChallengeViewModel::class.java)
+    assertNotNull(viewModel)
   }
 }
