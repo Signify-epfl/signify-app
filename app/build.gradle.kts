@@ -194,6 +194,9 @@ dependencies {
 
     // MediaPipe Hands solution
     implementation(libs.mediapipe.tasks.vision)
+    {
+        exclude(group = "com.google.protobuf", module="protobuf-java")
+    }
 
     // CameraX dependencies for accessing the phone's camera
     implementation(libs.camera.core)
@@ -207,7 +210,6 @@ dependencies {
     implementation(libs.converter.gson)
     // Pagers
     implementation(platform(libs.androidx.compose.bom.v20240100))
-
     // Testing Unit
     testImplementation(libs.junit)
     testImplementation(libs.json)
@@ -237,6 +239,7 @@ dependencies {
     // Test Jetpack Compose UI
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
 }
 
 
