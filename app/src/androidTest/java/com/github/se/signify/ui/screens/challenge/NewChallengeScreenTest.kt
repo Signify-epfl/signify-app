@@ -8,6 +8,7 @@ import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.user.User
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.ui.navigation.NavigationActions
+import com.github.se.signify.ui.navigation.Screen
 import com.github.se.signify.ui.screens.profile.currentUserId
 import org.junit.Before
 import org.junit.Rule
@@ -95,7 +96,7 @@ class NewChallengeScreenTest {
     // Perform click action on the "My Friends" button
     composeTestRule.onNodeWithTag("MyFriendsButton").performClick()
     // Verify navigation action is called
-    verify(navigationActions).navigateTo("Friends")
+    verify(navigationActions).navigateTo(Screen.FRIENDS)
   }
 
   @Test
@@ -105,7 +106,7 @@ class NewChallengeScreenTest {
     // Perform click action on the "Create a Challenge" button
     composeTestRule.onNodeWithTag("CreateChallengeButton").performClick()
     // Verify navigation action is called
-    verify(navigationActions).navigateTo("CreateChallenge")
+    verify(navigationActions).navigateTo(Screen.CREATE_CHALLENGE)
   }
   // Step 3: Test Ongoing Challenges Display
   @Test

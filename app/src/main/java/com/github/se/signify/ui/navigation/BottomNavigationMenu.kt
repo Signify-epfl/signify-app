@@ -1,6 +1,5 @@
 package com.github.se.signify.ui.navigation
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,14 +22,12 @@ fun BottomNavigationMenu(
     onTabSelect: (TopLevelDestination) -> Unit,
     tabList: List<TopLevelDestination>,
     selectedItem: String = Route.HOME, // Provide a default value
-    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
 ) {
   Box(
       modifier =
-          modifier
-              .border(2.dp, MaterialTheme.colorScheme.outlineVariant) // Top blue line
+          Modifier.border(2.dp, MaterialTheme.colorScheme.outlineVariant) // Top blue line
               .padding(bottom = 2.dp)
-              .testTag("BottomNavigationBar")) {
+              .testTag("BottomNavigationMenu")) {
         NavigationBar(
             modifier = Modifier.fillMaxWidth().height(60.dp),
             containerColor = MaterialTheme.colorScheme.background // Set background to white

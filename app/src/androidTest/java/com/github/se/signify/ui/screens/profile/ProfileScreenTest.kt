@@ -56,6 +56,7 @@ class ProfileScreenTest {
   @Test
   fun buttonsAreCorrectlyDisplayed() {
 
+    composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
     composeTestRule.onNodeWithTag("SettingsButton").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("InfoButton").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("MyFriendsButton").performScrollTo().assertIsDisplayed()
