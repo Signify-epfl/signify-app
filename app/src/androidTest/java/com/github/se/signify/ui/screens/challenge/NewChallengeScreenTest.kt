@@ -112,8 +112,8 @@ class NewChallengeScreenTest {
     composeTestRule.onNodeWithTag("DeleteButton$challengeIdToDelete").performClick()
 
     // Verify that the MockChallengeRepository is updated
-    assertTrue(challengeRepository.deleteChallengeCalled)
-    assertEquals(challengeIdToDelete, challengeRepository.lastDeletedChallenge)
+    assertTrue(challengeRepository.wasDeleteChallengeCalled())
+    assertEquals(challengeIdToDelete, challengeRepository.lastDeletedChallengeId())
   }
 
   @Test

@@ -23,29 +23,24 @@ class ChallengeViewModelTest {
 
   @Test
   fun `sendChallengeRequest triggers onSuccess and logs message`() {
-    mockRepository.shouldSucceed = true // Simulate a successful repository operation
-
     challengeViewModel.sendChallengeRequest(player1Id, player2Id, mode, challengeId)
 
-    assertTrue(mockRepository.sendChallengeCalled) // Verify repository interaction
-    assertEquals(challengeId, mockRepository.lastSentChallenge) // Verify challenge details
+    assertTrue(mockRepository.wasSendChallengeCalled())
+    assertEquals(challengeId, mockRepository.lastSentChallengeId())
   }
 
   @Test
   fun `sendChallengeRequest triggers onFailure and logs error`() {
-    mockRepository.shouldSucceed = false // Simulate a failed repository operation
-    mockRepository.exceptionToThrow = Exception("Simulated failure")
+    mockRepository.shouldSucceed = false
 
     challengeViewModel.sendChallengeRequest(player1Id, player2Id, mode, challengeId)
 
-    assertTrue(mockRepository.sendChallengeCalled) // Verify repository interaction
-    assertEquals(challengeId, mockRepository.lastSentChallenge) // Verify challenge details
+    assertTrue(mockRepository.wasSendChallengeCalled())
+    assertEquals(challengeId, mockRepository.lastSentChallengeId())
   }
 
   @Test
   fun `deleteChallenge triggers onSuccess and logs message`() {
-    mockRepository.shouldSucceed = true // Simulate a successful repository operation
-
     mockRepository.sendChallengeRequest(
         player1Id = player1Id,
         player2Id = player2Id,
@@ -56,21 +51,17 @@ class ChallengeViewModelTest {
 
     challengeViewModel.deleteChallenge(challengeId)
 
-    assertTrue(mockRepository.deleteChallengeCalled) // Verify repository interaction
-    assertEquals(challengeId, mockRepository.lastDeletedChallenge) // Verify challenge details
+    assertTrue(mockRepository.wasDeleteChallengeCalled())
+    assertEquals(challengeId, mockRepository.lastDeletedChallengeId())
   }
 
   @Test
   fun `deleteChallenge triggers onFailure and logs error`() {
-    // Arrange
-    mockRepository.shouldSucceed = false // Simulate a failed repository operation
-    mockRepository.exceptionToThrow = Exception("Simulated delete failure")
-
+    mockRepository.shouldSucceed = false
     challengeViewModel.deleteChallenge(challengeId)
 
-    assertTrue(mockRepository.deleteChallengeCalled) // Verify repository interaction
-    assertEquals(challengeId, mockRepository.lastDeletedChallenge) // Verify challenge details
-    // Optionally, verify log output (requires mocking Log)
+    assertTrue(mockRepository.wasDeleteChallengeCalled())
+    assertEquals(challengeId, mockRepository.lastDeletedChallengeId())
   }
 
   @Test

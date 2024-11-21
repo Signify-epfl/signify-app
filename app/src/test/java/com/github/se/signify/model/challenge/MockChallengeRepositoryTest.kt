@@ -23,7 +23,6 @@ class MockChallengeRepositoryTest {
 
   @Test
   fun `sendChallengeRequest succeeds when shouldSucceed is true`() {
-    mockRepository.shouldSucceed = true
     mockRepository.sendChallengeRequest(
         player1Id,
         player2Id,
@@ -37,7 +36,6 @@ class MockChallengeRepositoryTest {
   @Test
   fun `sendChallengeRequest fails when shouldSucceed is false`() {
     mockRepository.shouldSucceed = false
-    mockRepository.exceptionToThrow = Exception("Simulated failure")
     mockRepository.sendChallengeRequest(
         player1Id,
         player2Id,
@@ -49,7 +47,6 @@ class MockChallengeRepositoryTest {
 
   @Test
   fun `deleteChallenge succeeds when challenge exists`() {
-    mockRepository.shouldSucceed = true
     mockRepository.sendChallengeRequest(player1Id, player2Id, mode, challengeId, {}, {})
     mockRepository.deleteChallenge(
         challengeId, onSuccess = {}, onFailure = { fail("onFailure should not be called") })
@@ -58,7 +55,6 @@ class MockChallengeRepositoryTest {
 
   @Test
   fun `deleteChallenge fails when challenge does not exist`() {
-    mockRepository.shouldSucceed = true
     mockRepository.deleteChallenge(
         challengeId, onSuccess = { fail("onSuccess should not be called") }, onFailure = {})
   }
@@ -66,7 +62,6 @@ class MockChallengeRepositoryTest {
   @Test
   fun `deleteChallenge fails when shouldSucceed is false`() {
     mockRepository.shouldSucceed = false
-    mockRepository.exceptionToThrow = Exception("Simulated failure")
     mockRepository.deleteChallenge(
         challengeId,
         onSuccess = { fail("onSuccess should not be called") },
@@ -75,7 +70,6 @@ class MockChallengeRepositoryTest {
 
   @Test
   fun `getAllChallenges returns all stored challenges`() {
-    mockRepository.shouldSucceed = true
     mockRepository.sendChallengeRequest(player1Id, player2Id, mode, challengeId, {}, {})
     assertEquals(1, mockRepository.getAllChallenges().size)
   }
@@ -89,13 +83,13 @@ class MockChallengeRepositoryTest {
         challengeId = "challenge123",
         onSuccess = {},
         onFailure = {})
-    assertTrue(mockRepository.sendChallengeCalled)
+    assertTrue(mockRepository.wasSendChallengeCalled())
   }
 
   @Test
   fun `deleteChallenge sets deleteChallengeCalled to true`() {
     mockRepository.deleteChallenge(challengeId = "challenge123", onSuccess = {}, onFailure = {})
-    assertTrue(mockRepository.deleteChallengeCalled)
+    assertTrue(mockRepository.wasDeleteChallengeCalled())
   }
 
   @Test
@@ -107,7 +101,7 @@ class MockChallengeRepositoryTest {
         challengeId = "challenge123",
         onSuccess = {},
         onFailure = {})
-    assertEquals("challenge123", mockRepository.lastSentChallenge)
+    assertEquals("challenge123", mockRepository.lastSentChallengeId())
   }
 
   @Test
@@ -120,11 +114,11 @@ class MockChallengeRepositoryTest {
         onSuccess = {},
         onFailure = {})
     mockRepository.deleteChallenge(challengeId = "challenge123", onSuccess = {}, onFailure = {})
-    assertEquals("challenge123", mockRepository.lastDeletedChallenge)
+    assertEquals("challenge123", mockRepository.lastDeletedChallengeId())
   }
 
   @Test
-  fun testSetChallenges() {
+  fun `setChallenges correctly sets the list`() {
     val newChallenges =
         listOf(
             Challenge("challenge1", "player1", "player2", "Sprint", "pending"),
@@ -137,5 +131,50 @@ class MockChallengeRepositoryTest {
     assertNotNull(challenges[0])
     assertNotNull(challenges[1])
     assertEquals("player1", challenges[0].player1)
+  }
+
+  @Test
+  fun `reset clears all tracked calls and challenges`() {
+    mockRepository.setChallenges(
+        listOf(Challenge("challenge1", "player1", "player2", "Sprint", "pending")))
+    mockRepository.sendChallengeRequest(
+        "player1", "player2", ChallengeMode.SPRINT, "challenge1", {}, {})
+    mockRepository.deleteChallenge("challenge1", {}, {})
+
+    mockRepository.reset()
+
+    assertTrue(mockRepository.getSendChallengeCalls().isEmpty())
+    assertTrue(mockRepository.getDeleteChallengeCalls().isEmpty())
+    assertTrue(mockRepository.getAllChallenges().isEmpty())
+  }
+
+  @Test
+  fun `getSendChallengeCalls returns all sent challenges`() {
+    mockRepository.sendChallengeRequest(
+        "player1", "player2", ChallengeMode.SPRINT, "challenge1", {}, {})
+    mockRepository.sendChallengeRequest(
+        "player3", "player4", ChallengeMode.CHRONO, "challenge2", {}, {})
+
+    val sendCalls = mockRepository.getSendChallengeCalls()
+
+    assertEquals(2, sendCalls.size)
+    assertEquals("challenge1", sendCalls[0].challengeId)
+    assertEquals("challenge2", sendCalls[1].challengeId)
+  }
+
+  @Test
+  fun `getDeleteChallengeCalls returns all deleted challenge IDs`() {
+    mockRepository.setChallenges(
+        listOf(
+            Challenge("challenge1", "player1", "player2", "Sprint", "pending"),
+            Challenge("challenge2", "player3", "player4", "Chrono", "active")))
+    mockRepository.deleteChallenge("challenge1", {}, {})
+    mockRepository.deleteChallenge("challenge2", {}, {})
+
+    val deleteCalls = mockRepository.getDeleteChallengeCalls()
+
+    assertEquals(2, deleteCalls.size)
+    assertEquals("challenge1", deleteCalls[0])
+    assertEquals("challenge2", deleteCalls[1])
   }
 }

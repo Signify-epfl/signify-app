@@ -3,14 +3,38 @@ package com.github.se.signify.model.challenge
 class MockChallengeRepository : ChallengeRepository {
   private val challenges = mutableMapOf<String, Challenge>()
 
-  var shouldSucceed: Boolean = true // Determines whether the operation succeeds
-  var exceptionToThrow: Exception = Exception("Simulated failure") // Exception for failures
+  var shouldSucceed: Boolean = true
+  private val exceptionToThrow: Exception = Exception("Simulated failure")
 
-  var sendChallengeCalled: Boolean = false
-  var deleteChallengeCalled: Boolean = false
+  private val sendChallengeCalls = mutableListOf<Challenge>()
+  private val deleteChallengeCalls = mutableListOf<String>()
 
-  var lastSentChallenge: String? = null
-  var lastDeletedChallenge: String? = null
+  fun lastSentChallengeId(): String? = sendChallengeCalls.lastOrNull()?.challengeId
+
+  fun lastDeletedChallengeId(): String? = deleteChallengeCalls.lastOrNull()
+
+  fun wasSendChallengeCalled(): Boolean = sendChallengeCalls.isNotEmpty()
+
+  fun wasDeleteChallengeCalled(): Boolean = deleteChallengeCalls.isNotEmpty()
+
+  fun getChallenge(challengeId: String): Challenge? = challenges[challengeId]
+
+  fun getAllChallenges(): List<Challenge> = challenges.values.toList()
+
+  fun getSendChallengeCalls(): List<Challenge> = sendChallengeCalls.toList()
+
+  fun getDeleteChallengeCalls(): List<String> = deleteChallengeCalls.toList()
+
+  fun setChallenges(newChallenges: List<Challenge>) {
+    challenges.clear()
+    challenges.putAll(newChallenges.associateBy { it.challengeId })
+  }
+
+  fun reset() {
+    sendChallengeCalls.clear()
+    deleteChallengeCalls.clear()
+    challenges.clear()
+  }
 
   override fun sendChallengeRequest(
       player1Id: String,
@@ -20,21 +44,20 @@ class MockChallengeRepository : ChallengeRepository {
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    sendChallengeCalled = true
-    lastSentChallenge = challengeId
-
-    if (shouldSucceed) {
-      val newChallenge =
-          Challenge(
-              challengeId = challengeId,
-              player1 = player1Id,
-              player2 = player2Id,
-              mode = mode.name,
-              status = "pending")
+    val newChallenge =
+        Challenge(
+            challengeId = challengeId,
+            player1 = player1Id,
+            player2 = player2Id,
+            mode = mode.name,
+            status = "pending")
+    // track all calls, even unsuccessful ones
+    sendChallengeCalls.add(newChallenge)
+    if (!shouldSucceed) {
+      onFailure(exceptionToThrow)
+    } else {
       challenges[challengeId] = newChallenge
       onSuccess()
-    } else {
-      onFailure(exceptionToThrow)
     }
   }
 
@@ -43,30 +66,16 @@ class MockChallengeRepository : ChallengeRepository {
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    deleteChallengeCalled = true
-    lastDeletedChallenge = challengeId
-
-    if (shouldSucceed) {
-      if (challenges.remove(challengeId) != null) {
-        onSuccess()
-      } else {
-        onFailure(Exception("Challenge with ID $challengeId not found"))
-      }
-    } else {
+    deleteChallengeCalls.add(challengeId)
+    if (!shouldSucceed) {
       onFailure(exceptionToThrow)
+      return
     }
-  }
-
-  fun getChallenge(challengeId: String): Challenge? {
-    return challenges[challengeId]
-  }
-
-  fun getAllChallenges(): List<Challenge> {
-    return challenges.values.toList()
-  }
-
-  fun setChallenges(newChallenges: List<Challenge>) {
-    challenges.clear()
-    challenges.putAll(newChallenges.associateBy { it.challengeId })
+    if (!challenges.containsKey(challengeId)) {
+      onFailure(Exception("Challenge with ID $challengeId not found"))
+      return
+    }
+    challenges.remove(challengeId)
+    onSuccess()
   }
 }

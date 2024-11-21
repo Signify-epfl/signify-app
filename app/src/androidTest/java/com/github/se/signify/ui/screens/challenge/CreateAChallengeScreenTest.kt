@@ -99,9 +99,9 @@ class CreateAChallengeScreenTest {
     composeTestRule.onNodeWithTag("SendChallengeButton").assertIsEnabled()
     composeTestRule.onNodeWithTag("SendChallengeButton").performClick()
 
-    // Verify that the challengeRepository and userRepository were called
-    assertTrue(challengeRepository.sendChallengeCalled)
-    assertNotNull(challengeRepository.lastSentChallenge) // ensure it was set
+    // Verify that the challengeRepository was called
+    assertTrue(challengeRepository.wasSendChallengeCalled())
+    assertNotNull(challengeRepository.lastSentChallengeId())
   }
 
   @Test
