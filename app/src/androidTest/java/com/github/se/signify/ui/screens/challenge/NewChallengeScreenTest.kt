@@ -7,6 +7,7 @@ import com.github.se.signify.model.challenge.Challenge
 import com.github.se.signify.model.challenge.MockChallengeRepository
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.ui.navigation.NavigationActions
+import com.github.se.signify.ui.navigation.Screen
 import com.github.se.signify.ui.screens.profile.currentUserId
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -84,14 +85,14 @@ class NewChallengeScreenTest {
   fun testMyFriendsButtonIsDisplayedAndNavigates() {
     composeTestRule.onNodeWithTag("MyFriendsButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("MyFriendsButton").performClick()
-    verify(navigationActions).navigateTo("Friends")
+    verify(navigationActions).navigateTo(Screen.FRIENDS)
   }
 
   @Test
   fun testCreateChallengeButtonIsDisplayedAndNavigates() {
     composeTestRule.onNodeWithTag("CreateChallengeButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("CreateChallengeButton").performClick()
-    verify(navigationActions).navigateTo("CreateChallenge")
+    verify(navigationActions).navigateTo(Screen.CREATE_CHALLENGE)
   }
 
   @Test
