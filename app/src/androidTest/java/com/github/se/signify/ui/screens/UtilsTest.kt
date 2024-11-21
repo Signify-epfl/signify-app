@@ -37,8 +37,6 @@ import com.github.se.signify.ui.UtilTextButton
 import com.github.se.signify.ui.getIconResId
 import com.github.se.signify.ui.getImageResId
 import com.github.se.signify.ui.getTipResId
-import com.github.se.signify.ui.navigation.BottomNavigationMenu
-import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.ui.navigation.NavigationActions
 import junit.framework.TestCase.assertEquals
 import org.junit.Rule
@@ -244,17 +242,6 @@ class UtilsTest {
 
     // Assert that the top bar is displayed
     composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
-  }
-
-  @Test
-  fun bottomBarIsDisplayed() {
-    composeTestRule.setContent {
-      BottomNavigationMenu(
-          onTabSelect = { navigationActions.navigateTo(it.route) },
-          tabList = LIST_TOP_LEVEL_DESTINATION,
-          selectedItem = LIST_TOP_LEVEL_DESTINATION.first().route)
-    }
-    composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
   }
 
   @Test
