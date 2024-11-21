@@ -11,6 +11,7 @@ object Screen {
   const val EXERCISE_HARD = "Hard Exercise Screen"
   const val QUEST = "Quest Screen"
   const val FEEDBACK = "Feedback Screen"
+  const val QUIZ = "Quiz Screen"
 
   const val PROFILE = "Profile Screen"
   const val FRIENDS = "Friends Screen"
