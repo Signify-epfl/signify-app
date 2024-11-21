@@ -1,20 +1,14 @@
 package com.github.se.signify.model.challenge
 
 class MockChallengeRepository : ChallengeRepository {
-
-  // Data storage for challenges
   private val challenges = mutableMapOf<String, Challenge>()
 
-  // Control variables for simulating behavior
   var shouldSucceed: Boolean = true // Determines whether the operation succeeds
-  var exceptionToThrow: Exception =
-      Exception("Simulated failure") // Customizable exception for failure scenarios
+  var exceptionToThrow: Exception = Exception("Simulated failure") // Exception for failures
 
-  // Flags for verifying calls
   var sendChallengeCalled: Boolean = false
   var deleteChallengeCalled: Boolean = false
 
-  // Last actions for verification
   var lastSentChallenge: String? = null
   var lastDeletedChallenge: String? = null
 
@@ -63,13 +57,16 @@ class MockChallengeRepository : ChallengeRepository {
     }
   }
 
-  // Helper method to fetch challenges (optional, useful for tests)
   fun getChallenge(challengeId: String): Challenge? {
     return challenges[challengeId]
   }
 
-  // Helper method to fetch all challenges (optional)
   fun getAllChallenges(): List<Challenge> {
     return challenges.values.toList()
+  }
+
+  fun setChallenges(newChallenges: List<Challenge>) {
+    challenges.clear()
+    challenges.putAll(newChallenges.associateBy { it.challengeId })
   }
 }

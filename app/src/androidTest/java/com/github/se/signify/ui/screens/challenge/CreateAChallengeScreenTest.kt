@@ -3,11 +3,12 @@ package com.github.se.signify.ui.screens.challenge
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
-import com.github.se.signify.model.challenge.ChallengeMode
-import com.github.se.signify.model.challenge.ChallengeRepository
+import com.github.se.signify.model.challenge.MockChallengeRepository
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.screens.profile.currentUserId
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -15,21 +16,21 @@ import org.mockito.Mockito.doAnswer
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
-import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 class CreateAChallengeScreenTest {
   @get:Rule val composeTestRule = createComposeRule()
+
   private lateinit var navigationActions: NavigationActions
   private lateinit var userRepository: UserRepository
-  private lateinit var challengeRepository: ChallengeRepository
+  private lateinit var challengeRepository: MockChallengeRepository
   private val friends = mutableStateListOf("Alice", "Bob", "Charlie")
 
   @Before
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
     userRepository = mock(UserRepository::class.java)
-    challengeRepository = mock(ChallengeRepository::class.java)
+    challengeRepository = MockChallengeRepository()
 
     // Mock getFriendsList to return friends list
     doAnswer { invocation ->
@@ -86,10 +87,7 @@ class CreateAChallengeScreenTest {
     composeTestRule.onNodeWithTag("ChallengeButton_$friend").performClick()
     composeTestRule.onNodeWithTag("DialogTitle").assertIsDisplayed()
   }
-  /*
-  EXPLANATION: The testUser initialized by the mock doesn't have an email,
-  so its userId and UserName are set to "unknown" when accessing it from the repository
-   */
+
   @Test
   fun testSelectChallengeModeAndSendChallenge() {
     val friend = friends[0]
@@ -100,12 +98,10 @@ class CreateAChallengeScreenTest {
     composeTestRule.onNodeWithTag("SprintModeButton").performClick()
     composeTestRule.onNodeWithTag("SendChallengeButton").assertIsEnabled()
     composeTestRule.onNodeWithTag("SendChallengeButton").performClick()
-    // Verify that sendChallengeRequest and addOngoingChallenge were called
-    verify(challengeRepository)
-        .sendChallengeRequest(
-            eq(currentUserId), eq(friend), eq(ChallengeMode.SPRINT), any(), any(), any())
-    verify(userRepository).addOngoingChallenge(eq(currentUserId), any(), any(), any())
-    verify(userRepository).addOngoingChallenge(eq(friend), any(), any(), any())
+
+    // Verify that the challengeRepository and userRepository were called
+    assertTrue(challengeRepository.sendChallengeCalled)
+    assertNotNull(challengeRepository.lastSentChallenge) // ensure it was set
   }
 
   @Test

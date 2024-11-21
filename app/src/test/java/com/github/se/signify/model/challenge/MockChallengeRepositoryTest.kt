@@ -37,13 +37,14 @@ class MockChallengeRepositoryTest {
   @Test
   fun `sendChallengeRequest fails when shouldSucceed is false`() {
     mockRepository.shouldSucceed = false
+    mockRepository.exceptionToThrow = Exception("Simulated failure")
     mockRepository.sendChallengeRequest(
         player1Id,
         player2Id,
         mode,
         challengeId,
         onSuccess = { fail("onSuccess should not be called") },
-        onFailure = { /* Success */})
+        onFailure = { exception -> assertEquals("Simulated failure", exception.message) })
   }
 
   @Test
@@ -65,8 +66,11 @@ class MockChallengeRepositoryTest {
   @Test
   fun `deleteChallenge fails when shouldSucceed is false`() {
     mockRepository.shouldSucceed = false
+    mockRepository.exceptionToThrow = Exception("Simulated failure")
     mockRepository.deleteChallenge(
-        challengeId, onSuccess = { fail("onSuccess should not be called") }, onFailure = {})
+        challengeId,
+        onSuccess = { fail("onSuccess should not be called") },
+        onFailure = { exception -> assertEquals("Simulated failure", exception.message) })
   }
 
   @Test
@@ -117,5 +121,21 @@ class MockChallengeRepositoryTest {
         onFailure = {})
     mockRepository.deleteChallenge(challengeId = "challenge123", onSuccess = {}, onFailure = {})
     assertEquals("challenge123", mockRepository.lastDeletedChallenge)
+  }
+
+  @Test
+  fun testSetChallenges() {
+    val newChallenges =
+        listOf(
+            Challenge("challenge1", "player1", "player2", "Sprint", "pending"),
+            Challenge("challenge2", "player3", "player4", "Chrono", "active"))
+
+    mockRepository.setChallenges(newChallenges)
+
+    val challenges = mockRepository.getAllChallenges()
+    assertEquals(2, challenges.size)
+    assertNotNull(challenges[0])
+    assertNotNull(challenges[1])
+    assertEquals("player1", challenges[0].player1)
   }
 }
