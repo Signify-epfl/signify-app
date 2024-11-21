@@ -1,5 +1,6 @@
 package com.github.se.signify.model.di
 
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.hand.HandLandMarkRepository
 import com.github.se.signify.model.quest.QuestRepository
@@ -19,4 +20,6 @@ interface DependencyProvider {
   fun userRepository(): UserRepository
 
   fun quizRepository(): QuizRepository
+
+  fun userSession(): UserSession
 }

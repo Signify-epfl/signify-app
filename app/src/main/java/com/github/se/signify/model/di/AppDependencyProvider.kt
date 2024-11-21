@@ -1,5 +1,7 @@
 package com.github.se.signify.model.di
 
+import com.github.se.signify.model.auth.FirebaseUserSession
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.challenge.ChallengeRepositoryFireStore
 import com.github.se.signify.model.hand.HandLandMarkConfig
@@ -43,5 +45,9 @@ object AppDependencyProvider : DependencyProvider {
 
   override fun quizRepository(): QuizRepository {
     return QuizRepositoryFireStore(Firebase.firestore)
+  }
+
+  override fun userSession(): UserSession {
+    return FirebaseUserSession()
   }
 }
