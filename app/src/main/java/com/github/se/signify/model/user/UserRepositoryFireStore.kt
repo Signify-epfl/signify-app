@@ -1,14 +1,19 @@
 package com.github.se.signify.model.user
 
+import android.net.Uri
 import com.github.se.signify.model.challenge.Challenge
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
-class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepository {
+class UserRepositoryFireStore(
+    private val db: FirebaseFirestore,
+    store: FirebaseStorage = FirebaseStorage.getInstance()
+) : UserRepository {
 
   private val collectionPath = "users"
   private val friendsListPath = "friends"
@@ -16,6 +21,8 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
   private val challengesCollectionPath = "challenges"
   private val usernamePath = "name"
   private val profilePicturePath = "profileImageUrl"
+  private val firestore = FirebaseFirestore.getInstance()
+  private val storage = store.reference
 
   override fun init(onSuccess: () -> Unit) {
     Firebase.auth.addAuthStateListener {
@@ -153,6 +160,7 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
       onSuccess: (String?) -> Unit,
       onFailure: (Exception) -> Unit
   ) {
+
     val userRef = db.collection(collectionPath).document(userId)
 
     // Use of addSnapshotListener for instant updates
@@ -171,25 +179,45 @@ class UserRepositoryFireStore(private val db: FirebaseFirestore) : UserRepositor
     }
   }
 
+  /** Uploads a profile picture to Firebase Storage and updates the FireStore database. */
   override fun updateProfilePictureUrl(
       userId: String,
-      newProfilePictureUrl: String?,
+      newProfilePictureUrl: Uri?,
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   ) {
 
-    val userRef = db.collection(collectionPath).document(userId)
-    try {
-      userRef
-          .update(profilePicturePath, newProfilePictureUrl)
+    val imageRef = storage.child("profilePictures/${userId}.jpg")
+
+    // Upload the image to Firebase Storage
+    if (newProfilePictureUrl != null) {
+
+      imageRef
+          .putFile(newProfilePictureUrl)
           .addOnSuccessListener {
-            onSuccess() // Invoke the onSuccess callback
+            // Retrieve the download URL after a successful upload
+            imageRef.downloadUrl
+                .addOnSuccessListener { uri ->
+                  val newUrl = uri.toString()
+
+                  firestore
+                      .collection(collectionPath)
+                      .document(userId)
+                      .update(profilePicturePath, newUrl)
+                      .addOnSuccessListener { onSuccess() }
+                      .addOnFailureListener { onFailure(it) }
+                }
+                .addOnFailureListener { exception -> onFailure(exception) }
           }
-          .addOnFailureListener { e ->
-            onFailure(e) // Trigger onFailure callback
-          }
-    } catch (e: Exception) {
-      onFailure(e) // Trigger onFailure callback
+          .addOnFailureListener { exception -> onFailure(exception) }
+    } else {
+
+      firestore
+          .collection(collectionPath)
+          .document(userId)
+          .update(profilePicturePath, null)
+          .addOnSuccessListener { onSuccess() }
+          .addOnFailureListener { onFailure(it) }
     }
   }
 

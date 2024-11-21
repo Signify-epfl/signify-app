@@ -3,6 +3,7 @@ package com.github.se.signify.model.di
 import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.hand.HandLandMarkRepository
 import com.github.se.signify.model.quest.QuestRepository
+import com.github.se.signify.model.quiz.QuizRepository
 import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.user.UserRepository
 import org.mockito.Mockito.mock
@@ -26,5 +27,9 @@ object MockDependencyProvider : DependencyProvider {
 
   override fun userRepository(): UserRepository {
     return mock(UserRepository::class.java)
+  }
+
+  override fun quizRepository(): QuizRepository {
+    return mock(QuizRepository::class.java)
   }
 }

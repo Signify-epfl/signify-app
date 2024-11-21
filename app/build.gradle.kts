@@ -207,6 +207,7 @@ dependencies {
     implementation(libs.converter.gson)
     // Pagers
     implementation(platform(libs.androidx.compose.bom.v20240100))
+    implementation(libs.firebase.storage.ktx)
 
     // Testing Unit
     testImplementation(libs.junit)
