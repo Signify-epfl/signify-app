@@ -202,15 +202,33 @@ class HomeScreenTest {
   }
 
   @Test
-  fun dictionaryIsDisplayed() {
+  fun dictionaryIsDisplayedUsingButtons() {
     composeTestRule.setContent { HomeScreen(navigationActions) }
 
     ('A'..'Z').forEachIndexed { index, letter ->
       // Click on "LetterDictionaryForward" to navigate to the desired letter
-      repeat(index) { composeTestRule.onNodeWithTag("LetterDictionaryForward").performClick() }
-
+      if (index > 0) {
+        composeTestRule.onNodeWithTag("LetterDictionaryForward").performClick()
+      }
       // Click on the specific letter box
       composeTestRule.onNodeWithTag("LetterBox_$letter").performClick()
+
+      // Assert that the text and corresponding sign tip are displayed
+      composeTestRule.onNodeWithTag("LetterTextDict_$letter").assertIsDisplayed()
+      composeTestRule.onNodeWithTag("SignTipBox_$letter").assertIsDisplayed()
+
+      // Scroll to top button is clicked
+      composeTestRule.onNodeWithTag("ScrollToTopButton").performClick()
+    }
+  }
+
+  @Test
+  fun dictionaryIsDisplayedUsingPagersScrolling() {
+    composeTestRule.setContent { HomeScreen(navigationActions) }
+
+    ('A'..'Z').forEachIndexed { _, letter ->
+      // Click on the specific letter box by scrolling to it
+      composeTestRule.onNodeWithTag("LetterBox_$letter").performScrollTo().performClick()
 
       // Assert that the text and corresponding sign tip are displayed
       composeTestRule.onNodeWithTag("LetterTextDict_$letter").assertIsDisplayed()
