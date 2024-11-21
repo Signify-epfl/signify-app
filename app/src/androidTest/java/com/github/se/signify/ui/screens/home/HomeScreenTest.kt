@@ -227,8 +227,7 @@ class HomeScreenTest {
     composeTestRule.setContent { HomeScreen(navigationActions) }
 
     ('A'..'Z').forEachIndexed { _, letter ->
-      // Click on "LetterDictionaryForward" to navigate to the desired letter
-      // Click on the specific letter box
+      // Click on the specific letter box by scrolling to it
       composeTestRule.onNodeWithTag("LetterBox_$letter").performScrollTo().performClick()
 
       // Assert that the text and corresponding sign tip are displayed
