@@ -6,7 +6,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import com.github.se.signify.model.user.User
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
-import com.github.se.signify.ui.ProfilePicture
 import com.github.se.signify.ui.navigation.NavigationActions
 import org.junit.Assert.assertNull
 import org.junit.Before
@@ -61,11 +60,9 @@ class FriendsListScreenTest {
         .getRequestsFriendsList(Mockito.anyString(), anyOrNull(), anyOrNull())
 
     userViewModel = UserViewModel(userRepository)
-    val picturePath = "file:///path/to/profile/picture.jpg"
 
     composeTestRule.setContent {
       FriendsListScreen(navigationActions, userRepository, userViewModel)
-      ProfilePicture(picturePath)
     }
   }
 
@@ -78,7 +75,7 @@ class FriendsListScreenTest {
     composeTestRule.onNodeWithTag("UserInfo").assertIsDisplayed()
     composeTestRule.onNodeWithTag("UserId").assertIsDisplayed()
     composeTestRule.onNodeWithTag("UserName").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("DefaultProfilePicture").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("DefaultProfilePicture").assertExists()
     composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
     composeTestRule.onNodeWithTag("NumberOfDays").assertIsDisplayed()

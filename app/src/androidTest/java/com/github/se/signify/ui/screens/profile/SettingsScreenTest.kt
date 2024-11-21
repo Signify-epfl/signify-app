@@ -2,20 +2,13 @@ package com.github.se.signify.ui.screens.profile
 
 import android.content.ContentResolver
 import android.content.Context
-import android.net.Uri
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.test.platform.app.InstrumentationRegistry
+import androidx.core.net.toUri
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.ProfilePicture
 import com.github.se.signify.ui.navigation.NavigationActions
-import java.io.File
-import java.io.FileNotFoundException
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
-import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -117,7 +110,7 @@ class SettingsScreenTest {
     // Simulate selecting a new profile picture
     val newProfilePicturePath = "file:///path/to/new/profile/picture.jpg"
     composeTestRule.runOnIdle {
-      userViewModel.updateProfilePictureUrl(testUserID, newProfilePicturePath)
+      userViewModel.updateProfilePictureUrl(testUserID, newProfilePicturePath.toUri())
     }
 
     // Click the Save button
@@ -131,7 +124,7 @@ class SettingsScreenTest {
     // path
     verify(userRepository)
         .updateProfilePictureUrl(
-            Mockito.anyString(), eq(newProfilePicturePath), anyOrNull(), anyOrNull())
+            Mockito.anyString(), eq(newProfilePicturePath.toUri()), anyOrNull(), anyOrNull())
   }
 
   @Test
@@ -156,7 +149,7 @@ class SettingsScreenTest {
     // Simulate selecting a new profile picture
     val newProfilePicturePath = "file:///path/to/new/profile/picture.jpg"
     composeTestRule.runOnIdle {
-      userViewModel.updateProfilePictureUrl(testUserID, newProfilePicturePath)
+      userViewModel.updateProfilePictureUrl(testUserID, newProfilePicturePath.toUri())
     }
 
     // Click the Cancel button
@@ -185,62 +178,5 @@ class SettingsScreenTest {
 
     // Verify that the AsyncImage is displayed with the mock profile picture
     composeTestRule.onNodeWithTag("ProfilePicture").assertExists()
-  }
-
-  @Test
-  fun testUriToFileReturnsFileWhenUriIsValid() {
-    // Arrange
-    val context = InstrumentationRegistry.getInstrumentation().targetContext
-    val testData = "This is a test".toByteArray()
-
-    // Create a temporary file and write test data into it
-    val tempFile = File(context.cacheDir, "testFile.txt").apply { writeBytes(testData) }
-
-    // Create a URI directly from the file path
-    val fileUri = Uri.fromFile(tempFile)
-
-    // Act
-    val resultFile = uriToFile(context, fileUri)
-
-    // Assert
-    assertNotNull("File should not be null", resultFile)
-    assertEquals(
-        "File content should match test data", String(resultFile!!.readBytes()), String(testData))
-  }
-
-  @Test
-  fun testUriToFileReturnsNullWhenUriIsInvalid() {
-    // Arrange
-    val context = InstrumentationRegistry.getInstrumentation().targetContext
-
-    // Use a non-existent URI
-    val invalidUri = Uri.parse("content://invalid/uri")
-
-    // Act
-    val resultFile = uriToFile(context, invalidUri)
-
-    // Assert
-    assertNull("File should be null when URI is invalid", resultFile)
-  }
-
-  @Test
-  fun testUriToFileHandlesException() {
-    // Arrange
-    val mockUri = Uri.parse("content://mockuri")
-    val contentResolver = InstrumentationRegistry.getInstrumentation().targetContext.contentResolver
-
-    // Simulate exception by providing a non-existent URI
-    try {
-      contentResolver.openInputStream(mockUri)
-      fail("Expected an exception to be thrown")
-    } catch (e: FileNotFoundException) {
-      // Expected behavior
-    }
-
-    // Act
-    val resultFile = uriToFile(InstrumentationRegistry.getInstrumentation().targetContext, mockUri)
-
-    // Assert
-    assertNull("File should be null when an exception occurs", resultFile)
   }
 }

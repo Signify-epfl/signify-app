@@ -1,5 +1,6 @@
 package com.github.se.signify.model.user
 
+import android.net.Uri
 import com.github.se.signify.model.challenge.Challenge
 
 interface UserRepository {
@@ -37,7 +38,7 @@ interface UserRepository {
 
   fun updateProfilePictureUrl(
       userId: String,
-      newProfilePictureUrl: String?,
+      newProfilePictureUrl: Uri?,
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   )
