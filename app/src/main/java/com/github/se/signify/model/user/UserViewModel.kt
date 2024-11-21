@@ -28,6 +28,9 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
   private val _searchResult = MutableStateFlow<User?>(null)
   val searchResult: StateFlow<User?> = _searchResult
 
+  private val _errorState = MutableStateFlow<String?>(null)
+  val errorState: StateFlow<String?> = _errorState
+
   private val _ongoingChallenges = MutableStateFlow<List<Challenge>>(emptyList())
   val ongoingChallenges: StateFlow<List<Challenge>> = _ongoingChallenges
 
@@ -73,15 +76,27 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
   fun getUserById(userId: String) {
     repository.getUserById(
         userId,
-        onSuccess = { user -> setSearchResult(user) },
+        onSuccess = { user ->
+          setSearchResult(user)
+          clearErrorState() // Clear the error state on success.
+        },
         onFailure = { e ->
           setSearchResult(null)
+          setErrorState("${e.message}") // Update error state.
           Log.e(logTag, "Failed to get userId: ${e.message}}")
         })
   }
 
   fun setSearchResult(user: User?) {
     _searchResult.value = user
+  }
+
+  fun setErrorState(e: String?) {
+    _errorState.value = e
+  }
+
+  fun clearErrorState() {
+    _errorState.value = null // Clear any previous error messages
   }
 
   fun getUserName(currentUserId: String) {
