@@ -1,11 +1,11 @@
 package com.github.se.signify.model.auth
 
 interface UserSession {
-    fun getUserId(): String?
+  fun getUserId(): String?
 
-    suspend fun login(): Boolean
+  suspend fun login(): Boolean
 
-    suspend fun logout()
+  suspend fun logout()
 
-    fun isLoggedIn(): Boolean
+  fun isLoggedIn(): Boolean
 }
