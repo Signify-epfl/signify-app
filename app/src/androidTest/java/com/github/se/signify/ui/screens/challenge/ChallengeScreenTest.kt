@@ -5,6 +5,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.github.se.signify.ui.navigation.NavigationActions
+import com.github.se.signify.ui.navigation.Screen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -49,7 +50,7 @@ class ChallengeScreenTest {
 
     composeTestRule.onNodeWithTag("HistoryButton").performClick()
 
-    verify(navigationActions).navigateTo("ChallengeHistory")
+    verify(navigationActions).navigateTo(Screen.CHALLENGE_HISTORY)
   }
 
   @Test
@@ -57,7 +58,7 @@ class ChallengeScreenTest {
 
     composeTestRule.onNodeWithTag("ChallengeButton").performClick()
 
-    verify(navigationActions).navigateTo("NewChallenge")
+    verify(navigationActions).navigateTo(Screen.NEW_CHALLENGE)
   }
 
   @Test

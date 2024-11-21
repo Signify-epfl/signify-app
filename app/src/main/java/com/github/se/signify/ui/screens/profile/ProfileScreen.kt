@@ -24,7 +24,7 @@ import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.SquareButton
 import com.github.se.signify.ui.UtilButton
 import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.navigation.Route
+import com.github.se.signify.ui.navigation.Screen
 import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -56,7 +56,7 @@ fun ProfileScreen(
 
     // Settings button
     UtilButton(
-        onClick = { navigationActions.navigateTo(Route.SETTINGS) },
+        onClick = { navigationActions.navigateTo(Screen.SETTINGS) },
         buttonTestTag = "SettingsButton",
         iconTestTag = "SettingsIcon",
         icon = Icons.Outlined.Settings,
@@ -80,7 +80,7 @@ fun ProfileScreen(
     SquareButton(
         iconRes = R.drawable.friendsicon,
         label = "My Friends",
-        onClick = { navigationActions.navigateTo(Route.FRIENDS) },
+        onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
         size = 200,
         modifier = Modifier.testTag("MyFriendsButton"))
     Spacer(modifier = Modifier.height(32.dp))
@@ -89,7 +89,7 @@ fun ProfileScreen(
     SquareButton(
         iconRes = R.drawable.statisticsicon,
         label = "My Stats",
-        onClick = { navigationActions.navigateTo(Route.STATS) },
+        onClick = { navigationActions.navigateTo(Screen.STATS) },
         size = 200,
         modifier = Modifier.testTag("MyStatsButton"))
   }
