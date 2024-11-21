@@ -133,20 +133,6 @@ class StatsRepositoryFirestore(private val db: FirebaseFirestore) : StatsReposit
         .addOnFailureListener(onFailure)
   }
 
-  override fun getWonChallengeStats(
-      userId: String,
-      onSuccess: (Int) -> Unit,
-      onFailure: (Exception) -> Unit
-  ) {
-    getDocument(userId)
-        .get()
-        .addOnSuccessListener { document ->
-          val won = document.getLong("wonChallenge")?.toInt() ?: 0
-          onSuccess(won)
-        }
-        .addOnFailureListener(onFailure)
-  }
-
   override fun updateLettersLearned(
       userId: String,
       newLetter: Char,
@@ -232,17 +218,6 @@ class StatsRepositoryFirestore(private val db: FirebaseFirestore) : StatsReposit
   ) {
     getDocument(userId)
         .update("createdChallenge", FieldValue.increment(1))
-        .addOnSuccessListener { onSuccess() }
-        .addOnFailureListener(onFailure)
-  }
-
-  override fun updateWonChallengeStats(
-      userId: String,
-      onSuccess: () -> Unit,
-      onFailure: (Exception) -> Unit
-  ) {
-    getDocument(userId)
-        .update("wonChallenge", FieldValue.increment(1))
         .addOnSuccessListener { onSuccess() }
         .addOnFailureListener(onFailure)
   }

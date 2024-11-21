@@ -17,7 +17,6 @@ class StatsTest {
     assertEquals(0, stats.weeklyQuest)
     assertEquals(0, stats.completedChallenge)
     assertEquals(0, stats.createdChallenge)
-    assertEquals(0, stats.wonChallenge)
   }
 
   @Test
@@ -31,8 +30,7 @@ class StatsTest {
             dailyQuest = 3,
             weeklyQuest = 0,
             completedChallenge = 1,
-            createdChallenge = 1,
-            wonChallenge = 1)
+            createdChallenge = 1)
 
     assertEquals(listOf('A', 'B', 'C'), stats.lettersLearned)
     assertEquals(5, stats.easyExercise)
@@ -42,6 +40,5 @@ class StatsTest {
     assertEquals(0, stats.weeklyQuest)
     assertEquals(1, stats.completedChallenge)
     assertEquals(1, stats.createdChallenge)
-    assertEquals(1, stats.wonChallenge)
   }
 }

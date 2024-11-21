@@ -76,7 +76,7 @@ class HomeScreenTest {
 
     composeTestRule.onNodeWithTag("QuestsButton").performClick()
 
-    verify(navigationActions).navigateTo("Quest")
+    verify(navigationActions).navigateTo(Screen.QUEST)
   }
 
   @Test
