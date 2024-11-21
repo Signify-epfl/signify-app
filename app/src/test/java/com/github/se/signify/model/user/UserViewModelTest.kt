@@ -1,5 +1,6 @@
 package com.github.se.signify.model.user
 
+import androidx.core.net.toUri
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
@@ -61,8 +62,9 @@ class UserViewModelTest {
   @Test
   fun updateProfilePictureUrlRequestCallsRepository() {
     val newUrl = "testUrl"
-    userViewModel.updateProfilePictureUrl(currentUserId, newUrl)
-    verify(userRepository).updateProfilePictureUrl(eq(currentUserId), eq(newUrl), any(), any())
+    userViewModel.updateProfilePictureUrl(currentUserId, newUrl.toUri())
+    verify(userRepository)
+        .updateProfilePictureUrl(eq(currentUserId), eq(newUrl.toUri()), any(), any())
   }
 
   @Test

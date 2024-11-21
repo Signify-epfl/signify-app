@@ -74,18 +74,22 @@ fun FriendsListScreen(
       userViewModel.updateStreak(currentUserId)
       userViewModel.getStreak(currentUserId)
     }
+
     val friends = userViewModel.friends.collectAsState()
     val friendsRequests = userViewModel.friendsRequests.collectAsState()
     val searchResult = userViewModel.searchResult.collectAsState()
     val userName = userViewModel.userName.collectAsState()
     val streak = userViewModel.streak.collectAsState()
     val profilePicture = userViewModel.profilePictureUrl.collectAsState()
+    var updatedProfilePicture by remember { mutableStateOf(profilePicture.value) }
+
+    LaunchedEffect(profilePicture.value) { updatedProfilePicture = profilePicture.value }
 
     // Top information
     AccountInformation(
         userId = currentUserId,
         userName = userName.value,
-        profilePictureUrl = profilePicture.value,
+        profilePictureUrl = updatedProfilePicture,
         days = streak.value)
     Spacer(modifier = Modifier.height(32.dp))
 
