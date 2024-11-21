@@ -244,9 +244,6 @@ class UtilsTest {
     composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
   }
 
-  // TODO: test the bottom bar after the refactor of the BottomNavigationMenu()
-  @Test fun bottomBarIsDisplayed() {}
-
   @Test
   fun screenColumnDisplaysCorrectInformation() {
     composeTestRule.setContent {
@@ -276,7 +273,7 @@ class UtilsTest {
     }
 
     composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
-    // TODO: test the bottom bar after the refactor of the BottomNavigationMenu()
+    composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
     composeTestRule.onNodeWithTag("ScaffoldMainScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("InfoButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("Text").assertIsDisplayed()

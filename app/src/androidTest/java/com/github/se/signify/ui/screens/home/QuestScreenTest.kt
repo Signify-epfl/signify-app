@@ -1,13 +1,12 @@
+package com.github.se.signify.ui.screens.home
+
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import com.github.se.signify.model.quest.Quest
 import com.github.se.signify.model.quest.QuestRepository
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.navigation.Route
-import com.github.se.signify.ui.screens.home.QuestBox
-import com.github.se.signify.ui.screens.home.QuestDescriptionDialog
-import com.github.se.signify.ui.screens.home.QuestScreen
+import com.github.se.signify.ui.navigation.Screen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -32,7 +31,7 @@ class QuestScreenTest {
     userRepository = mock(UserRepository::class.java)
     navigationActions = mock(NavigationActions::class.java)
 
-    `when`(navigationActions.currentRoute()).thenReturn(Route.QUEST)
+    `when`(navigationActions.currentRoute()).thenReturn(Screen.QUEST)
   }
 
   @Test

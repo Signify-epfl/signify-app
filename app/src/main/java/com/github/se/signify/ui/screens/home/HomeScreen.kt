@@ -62,7 +62,6 @@ import com.github.se.signify.ui.getImageResId
 import com.github.se.signify.ui.getLetterIconResId
 import com.github.se.signify.ui.getTipResId
 import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.navigation.Route
 import com.github.se.signify.ui.navigation.Screen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -115,7 +114,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween) {
                       UtilButton(
-                          onClick = { navigationActions.navigateTo(Route.FEEDBACK) },
+                          onClick = { navigationActions.navigateTo(Screen.FEEDBACK) },
                           buttonTestTag = "FeedbackButton",
                           iconTestTag = "FeedbackIcon",
                           icon = Icons.Outlined.Email,
