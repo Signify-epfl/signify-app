@@ -8,6 +8,5 @@ data class Stats(
     val dailyQuest: Int = 0,
     val weeklyQuest: Int = 0,
     val completedChallenge: Int = 0,
-    val createdChallenge: Int = 0,
-    val wonChallenge: Int = 0
+    val createdChallenge: Int = 0
 )
