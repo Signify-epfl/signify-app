@@ -21,7 +21,7 @@ import com.github.se.signify.ui.AccountInformation
 import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.LearnedLetterList
 import com.github.se.signify.ui.NotImplementedYet
-import com.github.se.signify.ui.StatisticsRow
+import com.github.se.signify.ui.StatisticsColumnRow
 import com.github.se.signify.ui.navigation.NavigationActions
 
 @Composable
@@ -48,6 +48,7 @@ fun MyStatsScreen(
   val profilePictureUrl = userViewModel.profilePictureUrl.collectAsState()
   val lettersLearned = statsViewModel.lettersLearned.collectAsState()
   val easy = statsViewModel.easy.collectAsState()
+  val medium = statsViewModel.medium.collectAsState()
   val hard = statsViewModel.hard.collectAsState()
   val daily = statsViewModel.daily.collectAsState()
   val weekly = statsViewModel.weekly.collectAsState()
@@ -73,24 +74,23 @@ fun MyStatsScreen(
     Spacer(modifier = Modifier.height(64.dp))
 
     // Number of exercises achieved
-    StatisticsRow(
+    StatisticsColumnRow(
+        columnTestTag = "ExercisesColumn",
         rowTestTag = "ExercisesRow",
-        lineText = "Number of exercises achieved",
+        lineText = "Number of exercises achieved :",
         lineTextTag = "ExercisesText",
-        columnTextList = listOf(listOf("EASY", "${easy.value}"), listOf("HARD", "${hard.value}")),
-        columnTextSPList = listOf(listOf(12, 20), listOf(12, 20)),
-        columnTextTagList = listOf("ExercisesEasyCountBox", "ExercisesHardCountBox"))
-    Spacer(modifier = Modifier.height(12.dp))
+        statsTextList = listOf("Easy", "Medium", "Hard"),
+        statsNumberList = listOf("${easy.value}", "${medium.value}", "${hard.value}"))
+    Spacer(modifier = Modifier.height(32.dp))
 
     // Number of quests achieved
-    StatisticsRow(
+    StatisticsColumnRow(
+        columnTestTag = "QuestsColumn",
         rowTestTag = "QuestsRow",
-        lineText = "Number of quests achieved",
+        lineText = "Number of quests achieved :",
         lineTextTag = "QuestsText",
-        columnTextList =
-            listOf(listOf("DAILY", "${daily.value}"), listOf("WEEKLY", "${weekly.value}")),
-        columnTextSPList = listOf(listOf(12, 20), listOf(12, 20)),
-        columnTextTagList = listOf("DailyQuestCountBox", "WeeklyQuestsCountBox"))
+        statsTextList = listOf("Daily", "Weekly"),
+        statsNumberList = listOf("${daily.value}", "${weekly.value}"))
     Spacer(modifier = Modifier.height(64.dp))
 
     // Graphs and Stats

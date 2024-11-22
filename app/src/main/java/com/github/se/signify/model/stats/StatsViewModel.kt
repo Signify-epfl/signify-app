@@ -36,6 +36,9 @@ class StatsViewModel(
   private val _created = MutableStateFlow(0)
   val created: StateFlow<Int> = _created
 
+  private val _won = MutableStateFlow(0)
+  val won: StateFlow<Int> = _won
+
   private val logTag = "StatsViewModel"
 
   init {
@@ -113,6 +116,13 @@ class StatsViewModel(
         onFailure = { e -> logError("Error fetching created challenge Stats:", e) })
   }
 
+  fun getWonChallengeStats() {
+    repository.getWonChallengeStats(
+        userSession.getUserId()!!,
+        onSuccess = { wonChallenge -> _won.value = wonChallenge },
+        onFailure = { e -> logError("Error fetching won challenge Stats:", e) })
+  }
+
   fun updateLettersLearned(newLetter: Char) {
     repository.updateLettersLearned(
         userSession.getUserId()!!,
@@ -168,5 +178,12 @@ class StatsViewModel(
         userSession.getUserId()!!,
         onSuccess = { logSuccess("Created challenge stats updated successfully.") },
         onFailure = { e -> logError("Error updating created challenge stats:", e) })
+  }
+
+  fun updateWonChallengeStats() {
+    repository.updateWonChallengeStats(
+        userSession.getUserId()!!,
+        onSuccess = { logSuccess("Won challenge stats updated successfully.") },
+        onFailure = { e -> logError("Error updating won challenge stats:", e) })
   }
 }
