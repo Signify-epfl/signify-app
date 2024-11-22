@@ -1,5 +1,6 @@
 package com.github.se.signify.model.feedback
 
+import com.github.se.signify.model.auth.MockUserSession
 import com.github.se.signify.model.auth.UserSession
 import org.junit.Before
 import org.junit.Test
@@ -24,6 +25,7 @@ class FeedbackViewModelTest {
 
   @Before
   fun setUp() {
+    userSession = MockUserSession()
     feedbackRepository = mock(FeedbackRepository::class.java)
     feedbackViewModel = FeedbackViewModel(userSession, feedbackRepository)
   }

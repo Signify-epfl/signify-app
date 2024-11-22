@@ -15,7 +15,7 @@ class UserViewModelTest {
   private lateinit var userRepository: UserRepository
   private lateinit var userViewModel: UserViewModel
 
-  private val currentUserId = "currentUserId"
+  private lateinit var currentUserId: String
   private val friendUserId = "friendUserId"
   private val challengeId = "challengeId"
 
@@ -24,6 +24,8 @@ class UserViewModelTest {
     userSession = MockUserSession()
     userRepository = mock(UserRepository::class.java)
     userViewModel = UserViewModel(userSession, userRepository)
+
+    currentUserId = userSession.getUserId()!!
   }
 
   @Test

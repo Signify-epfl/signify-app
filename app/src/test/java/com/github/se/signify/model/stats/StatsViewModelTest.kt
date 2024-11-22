@@ -15,13 +15,15 @@ class StatsViewModelTest {
   private lateinit var statsRepositoryFirestore: StatsRepository
   private lateinit var statsViewModel: StatsViewModel
 
-  private val userId = "testUser"
+  private lateinit var userId: String
 
   @Before
   fun setUp() {
     userSession = MockDependencyProvider.userSession()
     statsRepositoryFirestore = mock(StatsRepository::class.java)
     statsViewModel = StatsViewModel(userSession, statsRepositoryFirestore)
+
+    userId = userSession.getUserId()!!
   }
 
   @Test
