@@ -7,6 +7,7 @@ import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.quest.Quest
 import com.github.se.signify.model.quest.QuestRepository
 import com.github.se.signify.model.user.UserRepository
+import com.github.se.signify.ui.isOfflineState
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 import org.junit.Before
@@ -30,6 +31,7 @@ class QuestScreenTest {
 
   @Before
   fun setUp() {
+    isOfflineState = false
     userSession = MockUserSession()
     questRepository = mock(QuestRepository::class.java)
     userRepository = mock(UserRepository::class.java)
