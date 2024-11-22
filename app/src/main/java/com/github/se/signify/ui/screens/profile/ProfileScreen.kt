@@ -56,10 +56,10 @@ fun ProfileScreen(
         helpText = stringResource(R.string.help_profile_screen),
     ) {
       LaunchedEffect(Unit) {
-        userViewModel.getUserName(currentUserId)
-        userViewModel.getProfilePictureUrl(currentUserId)
-        userViewModel.updateStreak(currentUserId)
-        userViewModel.getStreak(currentUserId)
+        userViewModel.getUserName()
+        userViewModel.getProfilePictureUrl()
+        userViewModel.updateStreak()
+        userViewModel.getStreak()
       }
       val userName = userViewModel.userName.collectAsState()
       val profilePictureUrl = userViewModel.profilePictureUrl.collectAsState()
