@@ -91,17 +91,22 @@ fun SignifyAppPreview(
       composable(Screen.NEW_CHALLENGE) {
         NewChallengeScreen(
             navigationActions,
+            dependencyProvider.userSession(),
             dependencyProvider.userRepository(),
             dependencyProvider.challengeRepository())
       }
       composable(Screen.CREATE_CHALLENGE) {
         CreateAChallengeScreen(
             navigationActions,
+            dependencyProvider.userSession(),
             dependencyProvider.userRepository(),
             dependencyProvider.challengeRepository())
       }
       composable(Screen.CHALLENGE_HISTORY) {
-        ChallengeHistoryScreen(navigationActions, dependencyProvider.statsRepository())
+        ChallengeHistoryScreen(
+            navigationActions,
+            dependencyProvider.userSession(),
+            dependencyProvider.statsRepository())
       }
     }
 
@@ -121,10 +126,16 @@ fun SignifyAppPreview(
       composable(Screen.EXERCISE_HARD) {
         ExerciseScreenHard(navigationActions, handLandMarkViewModel)
       }
-      composable(Screen.FEEDBACK) { FeedbackScreen(navigationActions) }
+      composable(Screen.FEEDBACK) {
+        FeedbackScreen(
+            navigationActions,
+            dependencyProvider.userSession(),
+            dependencyProvider.feedbackRepository())
+      }
       composable(Screen.QUEST) {
         QuestScreen(
             navigationActions,
+            dependencyProvider.userSession(),
             dependencyProvider.questRepository(),
             dependencyProvider.userRepository())
       }
@@ -143,20 +154,28 @@ fun SignifyAppPreview(
       composable(Screen.PROFILE) {
         ProfileScreen(
             navigationActions,
+            dependencyProvider.userSession(),
             dependencyProvider.userRepository(),
             dependencyProvider.statsRepository())
       }
       composable(Screen.FRIENDS) {
-        FriendsListScreen(navigationActions, dependencyProvider.userRepository())
+        FriendsListScreen(
+            navigationActions,
+            dependencyProvider.userSession(),
+            dependencyProvider.userRepository())
       }
       composable(Screen.STATS) {
         MyStatsScreen(
             navigationActions,
+            dependencyProvider.userSession(),
             dependencyProvider.userRepository(),
             dependencyProvider.statsRepository())
       }
       composable(Screen.SETTINGS) {
-        SettingsScreen(navigationActions, dependencyProvider.userRepository())
+        SettingsScreen(
+            navigationActions,
+            dependencyProvider.userSession(),
+            dependencyProvider.userRepository())
       }
     }
   }

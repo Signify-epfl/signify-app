@@ -19,17 +19,21 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.model.auth.UserSession
+import com.github.se.signify.model.feedback.FeedbackRepository
 import com.github.se.signify.model.feedback.FeedbackViewModel
 import com.github.se.signify.ui.BackButton
 import com.github.se.signify.ui.UtilTextButton
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
-import com.github.se.signify.ui.screens.profile.currentUserId
 
 @Composable
 fun FeedbackScreen(
     navigationActions: NavigationActions,
-    feedbackViewModel: FeedbackViewModel = viewModel(factory = FeedbackViewModel.Factory)
+    userSession: UserSession,
+    feedbackRepository: FeedbackRepository,
+    feedbackViewModel: FeedbackViewModel =
+        viewModel(factory = FeedbackViewModel.factory(userSession, feedbackRepository))
 ) {
   val context = LocalContext.current
 
@@ -89,10 +93,8 @@ fun FeedbackScreen(
               UtilTextButton(
                   onClickAction = {
                     if (feedbackTitle.text.isNotEmpty() && feedbackDescription.text.isNotEmpty()) {
-                      val userId = currentUserId
                       isLoading = true
                       feedbackViewModel.saveFeedback(
-                          uid = userId,
                           type = selectedFeedbackType,
                           title = feedbackTitle.text,
                           description = feedbackDescription.text,

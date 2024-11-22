@@ -31,6 +31,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.challenge.ChallengeMode
 import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.challenge.ChallengeViewModel
@@ -39,20 +40,21 @@ import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.UtilTextButton
 import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.screens.profile.currentUserId
 
 @Composable
 fun CreateAChallengeScreen(
     navigationActions: NavigationActions,
+    userSession: UserSession,
     userRepository: UserRepository,
     challengeRepository: ChallengeRepository,
 ) {
-  val userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository))
+  val userViewModel: UserViewModel =
+      viewModel(factory = UserViewModel.factory(userSession, userRepository))
   val challengeViewModel: ChallengeViewModel =
-      viewModel(factory = ChallengeViewModel.factory(challengeRepository))
+      viewModel(factory = ChallengeViewModel.factory(userSession, challengeRepository))
 
   // Fetch friends list when this screen is first displayed
-  LaunchedEffect(Unit) { userViewModel.getFriendsList(currentUserId) }
+  LaunchedEffect(Unit) { userViewModel.getFriendsList() }
 
   val friends by userViewModel.friends.collectAsState()
   var selectedFriendId by remember { mutableStateOf<String?>(null) }
@@ -105,6 +107,7 @@ fun CreateAChallengeScreen(
     ChallengeModeAlertDialog(
         friendId = selectedFriendId!!,
         onDismiss = { showDialog = false },
+        userSession = userSession,
         userViewModel = userViewModel,
         challengeViewModel = challengeViewModel)
   }
@@ -143,6 +146,7 @@ fun FriendCard(friendId: String, content: @Composable () -> Unit) {
 fun ChallengeModeAlertDialog(
     friendId: String,
     onDismiss: () -> Unit,
+    userSession: UserSession,
     userViewModel: UserViewModel,
     challengeViewModel: ChallengeViewModel
 ) {
@@ -156,11 +160,10 @@ fun ChallengeModeAlertDialog(
             onClickAction = {
               if (selectedMode.value != null) {
                 // Create the challenge in the challenges collection
-                challengeViewModel.sendChallengeRequest(
-                    currentUserId, friendId, selectedMode.value!!, challengeId)
+                challengeViewModel.sendChallengeRequest(friendId, selectedMode.value!!, challengeId)
 
                 // Add the challenge to the users' ongoing challenges
-                userViewModel.addOngoingChallenge(currentUserId, challengeId)
+                userViewModel.addOngoingChallenge(userSession.getUserId()!!, challengeId)
                 userViewModel.addOngoingChallenge(friendId, challengeId)
 
                 onDismiss() // Close the dialog after creating the challenge

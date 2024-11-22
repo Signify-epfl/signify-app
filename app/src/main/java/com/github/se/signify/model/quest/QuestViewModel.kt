@@ -6,7 +6,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-open class QuestViewModel(private val repository: QuestRepository) : ViewModel() {
+open class QuestViewModel(
+    private val repository: QuestRepository,
+) : ViewModel() {
 
   // For now fetch all the quests
   private val quest_ = MutableStateFlow<List<Quest>>(emptyList())
