@@ -3,6 +3,7 @@ package com.github.se.signify.model.challenge
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.github.se.signify.model.auth.UserSession
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -11,21 +12,19 @@ enum class ChallengeMode(val modeName: String) {
   CHRONO("Chrono"),
 }
 
-open class ChallengeViewModel(private val repository: ChallengeRepository) : ViewModel() {
+open class ChallengeViewModel(
+    private val userSession: UserSession,
+    private val repository: ChallengeRepository,
+) : ViewModel() {
   private val _challenge = MutableStateFlow<Challenge?>(null)
   val challenge: StateFlow<Challenge?> = _challenge
 
   private val logTag = "ChallengeViewModel"
 
-  fun sendChallengeRequest(
-      player1Id: String,
-      player2Id: String,
-      mode: ChallengeMode,
-      challengeId: String
-  ) {
+  fun sendChallengeRequest(opponentId: String, mode: ChallengeMode, challengeId: String) {
     repository.sendChallengeRequest(
-        player1Id,
-        player2Id,
+        userSession.getUserId()!!,
+        opponentId,
         mode,
         challengeId,
         onSuccess = { Log.d(logTag, "Challenge request sent successfully.") },
@@ -40,11 +39,14 @@ open class ChallengeViewModel(private val repository: ChallengeRepository) : Vie
   }
 
   companion object {
-    fun factory(repository: ChallengeRepository): ViewModelProvider.Factory {
+    fun factory(
+        userSession: UserSession,
+        repository: ChallengeRepository,
+    ): ViewModelProvider.Factory {
       return object : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-          return ChallengeViewModel(repository) as T
+          return ChallengeViewModel(userSession, repository) as T
         }
       }
     }

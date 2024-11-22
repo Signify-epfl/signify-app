@@ -1,5 +1,7 @@
 package com.github.se.signify.model.challenge
 
+import com.github.se.signify.model.auth.UserSession
+import com.github.se.signify.model.di.MockDependencyProvider
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -7,6 +9,7 @@ import org.junit.Before
 import org.junit.Test
 
 class ChallengeViewModelTest {
+  private lateinit var mockUserSession: UserSession
   private lateinit var mockRepository: MockChallengeRepository
   private lateinit var challengeViewModel: ChallengeViewModel
 
@@ -17,13 +20,14 @@ class ChallengeViewModelTest {
 
   @Before
   fun setUp() {
+    mockUserSession = MockDependencyProvider.userSession()
     mockRepository = MockChallengeRepository()
-    challengeViewModel = ChallengeViewModel(mockRepository)
+    challengeViewModel = ChallengeViewModel(mockUserSession, mockRepository)
   }
 
   @Test
   fun `sendChallengeRequest triggers onSuccess and logs message`() {
-    challengeViewModel.sendChallengeRequest(player1Id, player2Id, mode, challengeId)
+    challengeViewModel.sendChallengeRequest(player2Id, mode, challengeId)
 
     assertTrue(mockRepository.wasSendChallengeCalled())
     assertEquals(challengeId, mockRepository.lastSentChallengeId())
@@ -33,7 +37,7 @@ class ChallengeViewModelTest {
   fun `sendChallengeRequest triggers onFailure and logs error`() {
     mockRepository.shouldSucceed = false
 
-    challengeViewModel.sendChallengeRequest(player1Id, player2Id, mode, challengeId)
+    challengeViewModel.sendChallengeRequest(player2Id, mode, challengeId)
 
     assertTrue(mockRepository.wasSendChallengeCalled())
     assertEquals(challengeId, mockRepository.lastSentChallengeId())
@@ -66,8 +70,7 @@ class ChallengeViewModelTest {
 
   @Test
   fun `factory creates ChallengeViewModel with repository`() {
-    val mockRepository = MockChallengeRepository()
-    val factory = ChallengeViewModel.factory(mockRepository)
+    val factory = ChallengeViewModel.factory(mockUserSession, mockRepository)
     val viewModel = factory.create(ChallengeViewModel::class.java)
     assertNotNull(viewModel)
   }

@@ -2,6 +2,8 @@ package com.github.se.signify.ui.screens.home
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import com.github.se.signify.model.auth.MockUserSession
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.quest.Quest
 import com.github.se.signify.model.quest.QuestRepository
 import com.github.se.signify.model.user.UserRepository
@@ -16,6 +18,7 @@ import org.mockito.Mockito.`when`
 
 class QuestScreenTest {
 
+  private lateinit var userSession: UserSession
   private lateinit var questRepository: QuestRepository
   private lateinit var userRepository: UserRepository
   private lateinit var navigationActions: NavigationActions
@@ -27,6 +30,7 @@ class QuestScreenTest {
 
   @Before
   fun setUp() {
+    userSession = MockUserSession()
     questRepository = mock(QuestRepository::class.java)
     userRepository = mock(UserRepository::class.java)
     navigationActions = mock(NavigationActions::class.java)
@@ -38,6 +42,7 @@ class QuestScreenTest {
   fun hasRequiredComponent() {
     composeTestRule.setContent {
       QuestScreen(
+          userSession = userSession,
           navigationActions = navigationActions,
           userRepository = userRepository,
           questRepository = questRepository,
@@ -67,6 +72,7 @@ class QuestScreenTest {
   fun questScreen_displaysBackButtonAndTitle() {
     composeTestRule.setContent {
       QuestScreen(
+          userSession = userSession,
           navigationActions = navigationActions,
           questRepository = questRepository,
           userRepository = userRepository,
@@ -131,6 +137,7 @@ class QuestScreenTest {
   fun questScreen_backButtonNavigatesBack() {
     composeTestRule.setContent {
       QuestScreen(
+          userSession = userSession,
           navigationActions = navigationActions,
           questRepository = questRepository,
           userRepository = userRepository,

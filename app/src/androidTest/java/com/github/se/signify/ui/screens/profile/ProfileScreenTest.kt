@@ -9,6 +9,8 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
+import com.github.se.signify.model.auth.MockUserSession
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.stats.StatsViewModel
 import com.github.se.signify.model.user.UserRepository
@@ -28,6 +30,7 @@ class ProfileScreenTest {
   @get:Rule val composeTestRule = createComposeRule()
 
   private lateinit var navigationActions: NavigationActions
+  private lateinit var userSession: UserSession
   private lateinit var userRepository: UserRepository
   private lateinit var statsRepository: StatsRepository
   private lateinit var userViewModel: UserViewModel
@@ -41,13 +44,16 @@ class ProfileScreenTest {
   fun setUp() {
     isOfflineState = false
     navigationActions = mock(NavigationActions::class.java)
+    userSession = MockUserSession()
     userRepository = mock(UserRepository::class.java)
     statsRepository = mock(StatsRepository::class.java)
-    userViewModel = UserViewModel(userRepository)
-    statsViewModel = StatsViewModel(statsRepository)
+    userViewModel = UserViewModel(userSession, userRepository)
+    statsViewModel = StatsViewModel(userSession, statsRepository)
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.PROFILE)
-    composeTestRule.setContent { ProfileScreen(navigationActions, userRepository, statsRepository) }
+    composeTestRule.setContent {
+      ProfileScreen(navigationActions, userSession, userRepository, statsRepository)
+    }
   }
 
   @Test

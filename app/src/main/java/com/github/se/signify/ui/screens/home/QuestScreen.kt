@@ -44,6 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.quest.Quest
 import com.github.se.signify.model.quest.QuestRepository
 import com.github.se.signify.model.quest.QuestViewModel
@@ -51,19 +52,20 @@ import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.getLetterIconResId
 import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.screens.profile.currentUserId
 
 @Composable
 fun QuestScreen(
     navigationActions: NavigationActions,
+    userSession: UserSession,
     questRepository: QuestRepository,
     userRepository: UserRepository,
 ) {
   val questViewModel: QuestViewModel = viewModel(factory = QuestViewModel.factory(questRepository))
-  val userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository))
+  val userViewModel: UserViewModel =
+      viewModel(factory = UserViewModel.factory(userSession, userRepository))
 
   val quests = questViewModel.quest.collectAsState()
-  LaunchedEffect(currentUserId) { userViewModel.checkAndUnlockNextQuest(currentUserId) }
+  LaunchedEffect(userSession.getUserId()) { userViewModel.checkAndUnlockNextQuest() }
 
   val unlockedQuests by userViewModel.unlockedQuests.collectAsState()
 

@@ -2,6 +2,8 @@ package com.github.se.signify.ui.screens.profile
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import com.github.se.signify.model.auth.MockUserSession
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.ui.navigation.NavigationActions
@@ -16,18 +18,21 @@ class MyStatsScreenTest {
   @get:Rule val composeTestRule = createComposeRule()
 
   private lateinit var navigationActions: NavigationActions
+  private lateinit var userSession: UserSession
   private lateinit var userRepository: UserRepository
   private lateinit var statsRepository: StatsRepository
 
   @Before
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
+    userSession = MockUserSession()
     userRepository = mock(UserRepository::class.java)
     statsRepository = mock(StatsRepository::class.java)
 
     composeTestRule.setContent {
       MyStatsScreen(
           navigationActions = navigationActions,
+          userSession = userSession,
           userRepository = userRepository,
           statsRepository = statsRepository)
     }
@@ -51,25 +56,29 @@ class MyStatsScreenTest {
     composeTestRule.onNodeWithTag("AllLetterLearned").assertTextEquals("All letters learned")
     composeTestRule.onNodeWithTag("LettersBox").assertIsDisplayed()
 
-    // Verify exercises achieved section is displayed with counts
+    // Verify exercises achieved section is displayed
+    composeTestRule.onNodeWithTag("ExercisesColumn").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("ExercisesRow").assertIsDisplayed()
     composeTestRule.onNodeWithTag("ExercisesText").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("ExercisesText").assertTextEquals("Number of exercises achieved")
-    composeTestRule.onNodeWithTag("ExercisesEasyCountBox").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("EASY").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("EASY").assertTextEquals("EASY")
-    composeTestRule.onNodeWithTag("ExercisesHardCountBox").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("HARD").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("HARD").assertTextEquals("HARD")
+    composeTestRule
+        .onNodeWithTag("ExercisesText")
+        .assertTextEquals("Number of exercises achieved :")
+    composeTestRule.onNodeWithTag("Easy").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Easy").assertTextEquals("Easy")
+    composeTestRule.onNodeWithTag("Medium").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Medium").assertTextEquals("Medium")
+    composeTestRule.onNodeWithTag("Hard").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Hard").assertTextEquals("Hard")
 
-    // Verify quests achieved section is displayed with counts
+    // Verify quests achieved section is displayed
+    composeTestRule.onNodeWithTag("QuestsColumn").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("QuestsRow").assertIsDisplayed()
     composeTestRule.onNodeWithTag("QuestsText").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("QuestsText").assertTextEquals("Number of quests achieved")
-    composeTestRule.onNodeWithTag("DailyQuestCountBox").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("DAILY").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("DAILY").assertTextEquals("DAILY")
-    composeTestRule.onNodeWithTag("WeeklyQuestsCountBox").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("WEEKLY").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("WEEKLY").assertTextEquals("WEEKLY")
+    composeTestRule.onNodeWithTag("QuestsText").assertTextEquals("Number of quests achieved :")
+    composeTestRule.onNodeWithTag("Daily").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Daily").assertTextEquals("Daily")
+    composeTestRule.onNodeWithTag("Weekly").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Weekly").assertTextEquals("Weekly")
 
     // Verify graph placeholder is displayed
     composeTestRule.onNodeWithTag("GraphsAndStats").assertIsDisplayed()

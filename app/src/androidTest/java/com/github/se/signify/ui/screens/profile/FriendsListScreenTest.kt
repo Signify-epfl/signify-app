@@ -3,6 +3,8 @@ package com.github.se.signify.ui.screens.profile
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import com.github.se.signify.model.auth.MockUserSession
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.user.User
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
@@ -37,6 +39,7 @@ class FriendsListScreenTest {
   private val search = "Search"
 
   private lateinit var navigationActions: NavigationActions
+  private lateinit var userSession: UserSession
   private lateinit var userRepository: UserRepository
   private lateinit var userViewModel: UserViewModel
 
@@ -44,6 +47,7 @@ class FriendsListScreenTest {
   @Before
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
+    userSession = MockUserSession()
     userRepository = mock(UserRepository::class.java)
 
     // Mock getFriendsList method to return currentFriends
@@ -64,10 +68,10 @@ class FriendsListScreenTest {
         .`when`(userRepository)
         .getRequestsFriendsList(Mockito.anyString(), anyOrNull(), anyOrNull())
 
-    userViewModel = UserViewModel(userRepository)
+    userViewModel = UserViewModel(userSession, userRepository)
 
     composeTestRule.setContent {
-      FriendsListScreen(navigationActions, userRepository, userViewModel)
+      FriendsListScreen(navigationActions, userSession, userRepository, userViewModel)
     }
   }
 
@@ -246,7 +250,7 @@ class FriendsListScreenTest {
     // Create a User instance matching the authenticated user's ID
     val authenticatedUser =
         User(
-            uid = currentUserId,
+            uid = userSession.getUserId()!!,
             name = "Authenticated User",
             currentStreak = 10L,
             highestStreak = 20L)
@@ -297,6 +301,7 @@ class FriendsListScreenTest {
 
     composeTestRule.onNodeWithTag(searchBar).performTextInput(invalidUserId)
     composeTestRule.onNodeWithContentDescription(search).performClick()
+    composeTestRule.waitForIdle()
 
     // Assert
     assertNull(userViewModel.searchResult.value) // Verify that searchResult is set to null

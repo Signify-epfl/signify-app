@@ -506,65 +506,72 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
 /**
  * A reusable composable function that creates a row for statistics.
  *
- * Important to note that the list have the same size and the inner list should match their sizes.
- * Example (the number are the size): list1 = ((2), (1), (2)) => list2 = ((2), (1), (2)) and list3 =
- * (3)
+ * Important to note that the lists must have the same size.
  *
- * @param rowTestTag The principal tag for the row.
+ * @param columnTestTag The principal tag for the column.
+ * @param rowTestTag The principal tag for the row of stats.
  * @param lineText The text description for the statistic to show.
- * @param columnTextList A list of list of strings for the information to show.
- * @param columnTextSPList A list of list of int that correspond to the size of each string of
- *   columnTextList, (recommend 12.sp for text and 20.sp for number).
- * @param columnTextTagList A list of textTag corresponding to the column.
+ * @param lineTextTag The text tag of the lineText.
+ * @param statsTextList The list of type of stats to display.
+ * @param statsNumberList The list of number for stats to display.
  */
 @Composable
-fun StatisticsRow(
+fun StatisticsColumnRow(
+    columnTestTag: String,
     rowTestTag: String,
     lineText: String,
     lineTextTag: String,
-    columnTextList: List<List<String>>,
-    columnTextSPList: List<List<Int>>,
-    columnTextTagList: List<String>
+    statsTextList: List<String>,
+    statsNumberList: List<String>
 ) {
-  // Ensure that the list have the same size
-  require(
-      columnTextList.size == columnTextSPList.size &&
-          columnTextList.size == columnTextTagList.size) {
-        "All lists must have the same size."
-      }
-  columnTextList.zip(columnTextSPList).forEachIndexed { index, (textList, spList) ->
-    require(textList.size == spList.size) { "Sub lists at index $index must have the same size." }
-  }
-  // Construction of the statistic row
-  Row(
-      modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).testTag(rowTestTag),
-      horizontalArrangement = Arrangement.SpaceBetween,
-      verticalAlignment = Alignment.CenterVertically) {
+  // Ensure that the lists have the same size
+  require(statsTextList.size == statsNumberList.size) { "The lists must have the same size." }
+  // Construction of the statistic column
+  Column(
+      modifier = Modifier.fillMaxWidth().testTag(columnTestTag),
+      horizontalAlignment = Alignment.CenterHorizontally,
+      verticalArrangement = Arrangement.Center) {
         Text(
             text = lineText,
             fontSize = 16.sp,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.testTag(lineTextTag))
-        for (index in columnTextList.indices) {
-          Column(
-              modifier =
-                  Modifier.size(50.dp)
-                      .border(
-                          2.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(12.dp))
-                      .clip(RoundedCornerShape(12.dp))
-                      .background(MaterialTheme.colorScheme.background)
-                      .testTag(columnTextTagList[index]),
-              horizontalAlignment = Alignment.CenterHorizontally,
-              verticalArrangement = Arrangement.Center) {
-                for (subIndex in columnTextList[index].indices) {
-                  Text(
-                      text = columnTextList[index][subIndex],
-                      fontSize = columnTextSPList[index][subIndex].sp,
-                      color = MaterialTheme.colorScheme.onBackground,
-                      modifier = Modifier.testTag(columnTextList[index][subIndex]))
-                }
+        Spacer(modifier = Modifier.height(12.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth().testTag(rowTestTag),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically) {
+              for (index in statsTextList.indices) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically) {
+                      Text(
+                          text = statsTextList[index],
+                          fontSize = 12.sp,
+                          color = MaterialTheme.colorScheme.onBackground,
+                          modifier = Modifier.testTag(statsTextList[index]))
+                      Spacer(modifier = Modifier.width(12.dp))
+                      Row(
+                          modifier =
+                              Modifier.size(40.dp)
+                                  .border(
+                                      2.dp,
+                                      MaterialTheme.colorScheme.outlineVariant,
+                                      RoundedCornerShape(12.dp))
+                                  .clip(RoundedCornerShape(12.dp))
+                                  .background(MaterialTheme.colorScheme.background),
+                          horizontalArrangement = Arrangement.Center,
+                          verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = statsNumberList[index],
+                                fontSize = 20.sp,
+                                color = MaterialTheme.colorScheme.onBackground,
+                                // textAlign = TextAlign.Center,
+                                modifier = Modifier.testTag(statsNumberList[index]))
+                          }
+                    }
               }
-        }
+            }
       }
 }
 

@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.stats.StatsViewModel
 import com.github.se.signify.model.user.UserRepository
@@ -37,10 +38,13 @@ import com.google.firebase.auth.FirebaseAuth
 @Composable
 fun ProfileScreen(
     navigationActions: NavigationActions,
+    userSession: UserSession,
     userRepository: UserRepository,
     statsRepository: StatsRepository,
-    userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository)),
-    statsViewModel: StatsViewModel = viewModel(factory = StatsViewModel.factory(statsRepository))
+    userViewModel: UserViewModel =
+        viewModel(factory = UserViewModel.factory(userSession, userRepository)),
+    statsViewModel: StatsViewModel =
+        viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
 ) {
   if (isOfflineState) {
     WhiteOfflineScreen(navigationActions = navigationActions)
@@ -57,7 +61,6 @@ fun ProfileScreen(
         userViewModel.updateStreak(currentUserId)
         userViewModel.getStreak(currentUserId)
       }
-
       val userName = userViewModel.userName.collectAsState()
       val profilePictureUrl = userViewModel.profilePictureUrl.collectAsState()
       val streak = userViewModel.streak.collectAsState()

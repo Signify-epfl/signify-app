@@ -5,6 +5,7 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import com.github.se.signify.model.auth.MockUserSession
 import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.stats.StatsViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
@@ -18,20 +19,19 @@ class ChallengeHistoryScreenTest {
 
   @get:Rule val composeTestRule = createComposeRule()
 
+  private lateinit var userSession: MockUserSession
   private lateinit var navigationActions: NavigationActions
   private lateinit var statsRepository: StatsRepository
   private lateinit var statsViewModel: StatsViewModel
 
-  private val friendChallengesAchieved = 5
-  private val challengesCreated = 3
-
   @Before
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
+    userSession = MockUserSession()
     statsRepository = mock(StatsRepository::class.java)
-    statsViewModel = StatsViewModel(statsRepository)
+    statsViewModel = StatsViewModel(userSession, statsRepository)
     composeTestRule.setContent {
-      ChallengeHistoryScreen(navigationActions, statsRepository, statsViewModel)
+      ChallengeHistoryScreen(navigationActions, userSession, statsRepository, statsViewModel)
     }
   }
 
@@ -42,21 +42,17 @@ class ChallengeHistoryScreenTest {
     composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
     composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
 
-    // Verify friends challenges achieved section is displayed with counts
-    composeTestRule.onNodeWithTag("FriendsChallengesRow").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("FriendsChallengesText").assertIsDisplayed()
-    composeTestRule
-        .onNodeWithTag("FriendsChallengesText")
-        .assertTextEquals("Number of friends challenges achieved")
-    composeTestRule.onNodeWithTag("FriendsChallengesCountBox").assertIsDisplayed()
-
-    // Verify challenges created section is displayed with counts
-    composeTestRule.onNodeWithTag("ChallengesCreatedRow").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("ChallengesCreatedText").assertIsDisplayed()
-    composeTestRule
-        .onNodeWithTag("ChallengesCreatedText")
-        .assertTextEquals("Number of challenges created")
-    composeTestRule.onNodeWithTag("ChallengesCreatedCountBox").assertIsDisplayed()
+    // Verify challenges section is displayed
+    composeTestRule.onNodeWithTag("ChallengesColumn").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("ChallengesRow").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("ChallengesText").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("ChallengesText").assertTextEquals("Number of challenges :")
+    composeTestRule.onNodeWithTag("Completed").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Completed").assertTextEquals("Completed")
+    composeTestRule.onNodeWithTag("Created").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Created").assertTextEquals("Created")
+    composeTestRule.onNodeWithTag("Won").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Won").assertTextEquals("Won")
 
     // Verify graph placeholder is displayed
     composeTestRule.onNodeWithTag("GraphsAndStats").assertIsDisplayed()

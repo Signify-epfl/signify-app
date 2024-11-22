@@ -28,7 +28,7 @@ import com.github.se.signify.ui.NotImplementedYet
 import com.github.se.signify.ui.ProfilePicture
 import com.github.se.signify.ui.ScreenColumn
 import com.github.se.signify.ui.SquareButton
-import com.github.se.signify.ui.StatisticsRow
+import com.github.se.signify.ui.StatisticsColumnRow
 import com.github.se.signify.ui.StreakCounter
 import com.github.se.signify.ui.TopBar
 import com.github.se.signify.ui.UtilButton
@@ -331,28 +331,32 @@ class UtilsTest {
 
   @Test
   fun statisticsRowIsDisplayed() {
-    val rowTestTag = "Stats"
+    val columnTestTag = "StatsColumn"
+    val rowTestTag = "StatsRow"
     val lineText = "Line stats text"
     val lineTextTag = "LineTag"
-    val columnTextList = listOf(listOf("test", "10"))
-    val columnTextSPList = listOf(listOf(12, 20))
-    val columnTextTagList = listOf("BoxTag")
+    val statsTextList = listOf("test1", "test2")
+    val statsNumberList = listOf("1", "2")
     composeTestRule.setContent {
-      StatisticsRow(
+      StatisticsColumnRow(
+          columnTestTag = columnTestTag,
           rowTestTag = rowTestTag,
           lineText = lineText,
           lineTextTag = lineTextTag,
-          columnTextList = columnTextList,
-          columnTextSPList = columnTextSPList,
-          columnTextTagList = columnTextTagList)
+          statsTextList = statsTextList,
+          statsNumberList = statsNumberList)
     }
 
+    composeTestRule.onNodeWithTag(columnTestTag).assertIsDisplayed()
     composeTestRule.onNodeWithTag(rowTestTag).assertIsDisplayed()
     composeTestRule.onNodeWithTag(lineTextTag).assertIsDisplayed()
     composeTestRule.onNodeWithTag(lineTextTag).assertTextEquals(lineText)
-    composeTestRule.onNodeWithTag("BoxTag").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("test").assertTextEquals("test")
-    composeTestRule.onNodeWithTag("10").assertTextEquals("10")
+    statsTextList.forEach { statsText ->
+      composeTestRule.onNodeWithTag(statsText).assertIsDisplayed().assertTextEquals(statsText)
+    }
+    statsNumberList.forEach { statsNumber ->
+      composeTestRule.onNodeWithTag(statsNumber).assertIsDisplayed().assertTextEquals(statsNumber)
+    }
   }
 
   @Test

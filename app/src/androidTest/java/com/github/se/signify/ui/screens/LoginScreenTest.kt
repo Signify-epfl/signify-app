@@ -10,6 +10,7 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.toPackage
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
@@ -26,12 +27,14 @@ class LoginScreenTest : TestCase() {
   @get:Rule val composeTestRule = createComposeRule()
 
   private lateinit var navigationActions: NavigationActions
+  private lateinit var userSession: UserSession
 
   @Before
   fun setUp() {
     Intents.init()
 
     navigationActions = mock(NavigationActions::class.java)
+    userSession = mock(UserSession::class.java)
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.AUTH)
   }
@@ -44,7 +47,7 @@ class LoginScreenTest : TestCase() {
   @Test
   fun titleAndButtonAreCorrectlyDisplayed() {
 
-    composeTestRule.setContent { LoginScreen(navigationActions) }
+    composeTestRule.setContent { LoginScreen(navigationActions, userSession) }
 
     composeTestRule.onNodeWithTag("IntroMessage").assertIsDisplayed()
     composeTestRule
@@ -59,7 +62,7 @@ class LoginScreenTest : TestCase() {
   @Test
   fun googleSignInReturnsValidActivityResult() {
 
-    composeTestRule.setContent { LoginScreen(navigationActions) }
+    composeTestRule.setContent { LoginScreen(navigationActions, userSession) }
 
     composeTestRule.onNodeWithTag("loginButton").performClick()
     composeTestRule.waitForIdle()

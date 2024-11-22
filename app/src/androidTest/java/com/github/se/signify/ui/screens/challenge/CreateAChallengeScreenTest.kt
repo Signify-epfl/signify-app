@@ -3,10 +3,11 @@ package com.github.se.signify.ui.screens.challenge
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import com.github.se.signify.model.auth.MockUserSession
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.challenge.MockChallengeRepository
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.screens.profile.currentUserId
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -21,6 +22,7 @@ import org.mockito.kotlin.whenever
 class CreateAChallengeScreenTest {
   @get:Rule val composeTestRule = createComposeRule()
 
+  private lateinit var userSession: UserSession
   private lateinit var navigationActions: NavigationActions
   private lateinit var userRepository: UserRepository
   private lateinit var challengeRepository: MockChallengeRepository
@@ -28,6 +30,7 @@ class CreateAChallengeScreenTest {
 
   @Before
   fun setUp() {
+    userSession = MockUserSession()
     navigationActions = mock(NavigationActions::class.java)
     userRepository = mock(UserRepository::class.java)
     challengeRepository = MockChallengeRepository()
@@ -38,12 +41,13 @@ class CreateAChallengeScreenTest {
           onSuccess(friends)
         }
         .whenever(userRepository)
-        .getFriendsList(eq(currentUserId), any(), any())
+        .getFriendsList(eq(userSession.getUserId()!!), any(), any())
 
     // Set up the Composable content
     composeTestRule.setContent {
       CreateAChallengeScreen(
           navigationActions = navigationActions,
+          userSession = userSession,
           userRepository = userRepository,
           challengeRepository = challengeRepository)
     }

@@ -3,16 +3,19 @@ package com.github.se.signify.model.feedback
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.google.firebase.firestore.FirebaseFirestore
+import com.github.se.signify.model.auth.UserSession
 
-open class FeedbackViewModel(private val feedbackRepository: FeedbackRepository) : ViewModel() {
+open class FeedbackViewModel(
+    private val userSession: UserSession,
+    private val feedbackRepository: FeedbackRepository,
+) : ViewModel() {
 
   private val logTag = "FeedbackViewModel"
 
   // Function to save feedback in Firestore using FeedbackRepository
-  fun saveFeedback(uid: String, type: String, title: String, description: String, rating: Int) {
+  fun saveFeedback(type: String, title: String, description: String, rating: Int) {
     feedbackRepository.saveFeedback(
-        uid,
+        userSession.getUserId()!!,
         type,
         title,
         description,
@@ -21,15 +24,17 @@ open class FeedbackViewModel(private val feedbackRepository: FeedbackRepository)
         onFailure = { e -> Log.e(logTag, "Failed to send feedback request: ${e.message}") })
   }
 
-  // Companion object for creating the factory for FeedbackViewModel
   companion object {
-    val Factory: ViewModelProvider.Factory =
-        object : ViewModelProvider.Factory {
-          @Suppress("UNCHECKED_CAST")
-          override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return FeedbackViewModel(FeedbackRepositoryFireStore(FirebaseFirestore.getInstance()))
-                as T
-          }
+    fun factory(
+        userSession: UserSession,
+        repository: FeedbackRepository
+    ): ViewModelProvider.Factory {
+      return object : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+          return FeedbackViewModel(userSession, repository) as T
         }
+      }
+    }
   }
 }

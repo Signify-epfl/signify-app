@@ -3,10 +3,14 @@ package com.github.se.signify.model.stats
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.github.se.signify.model.auth.UserSession
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class StatsViewModel(private val repository: StatsRepository) : ViewModel() {
+class StatsViewModel(
+    private val userSession: UserSession,
+    private val repository: StatsRepository,
+) : ViewModel() {
 
   private val _lettersLearned = MutableStateFlow<List<Char>>(emptyList())
   val lettersLearned: StateFlow<List<Char>> = _lettersLearned
@@ -32,6 +36,9 @@ class StatsViewModel(private val repository: StatsRepository) : ViewModel() {
   private val _created = MutableStateFlow(0)
   val created: StateFlow<Int> = _created
 
+  private val _won = MutableStateFlow(0)
+  val won: StateFlow<Int> = _won
+
   private val logTag = "StatsViewModel"
 
   init {
@@ -39,11 +46,11 @@ class StatsViewModel(private val repository: StatsRepository) : ViewModel() {
   }
 
   companion object {
-    fun factory(repository: StatsRepository): ViewModelProvider.Factory {
+    fun factory(userSession: UserSession, repository: StatsRepository): ViewModelProvider.Factory {
       return object : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-          return StatsViewModel(repository) as T
+          return StatsViewModel(userSession, repository) as T
         }
       }
     }
@@ -53,116 +60,130 @@ class StatsViewModel(private val repository: StatsRepository) : ViewModel() {
 
   private fun logError(m: String, e: Exception) = Log.e(logTag, "$m: ${e.message}")
 
-  fun getLettersLearned(userId: String) {
+  fun getLettersLearned() {
     repository.getLettersLearned(
-        userId,
+        userSession.getUserId()!!,
         onSuccess = { letters -> _lettersLearned.value = letters },
         onFailure = { e -> logError("Error fetching letters learned:", e) })
   }
 
-  fun getEasyExerciseStats(userId: String) {
+  fun getEasyExerciseStats() {
     repository.getEasyExerciseStats(
-        userId,
+        userSession.getUserId()!!,
         onSuccess = { easyStats -> _easy.value = easyStats },
         onFailure = { e -> logError("Error fetching easy exercise stats:", e) })
   }
 
-  fun getMediumExerciseStats(userId: String) {
+  fun getMediumExerciseStats() {
     repository.getMediumExerciseStats(
-        userId,
+        userSession.getUserId()!!,
         onSuccess = { mediumStats -> _medium.value = mediumStats },
         onFailure = { e -> logError("Error fetching medium exercise stats:", e) })
   }
 
-  fun getHardExerciseStats(userId: String) {
+  fun getHardExerciseStats() {
     repository.getHardExerciseStats(
-        userId,
+        userSession.getUserId()!!,
         onSuccess = { hardStats -> _hard.value = hardStats },
         onFailure = { e -> logError("Error fetching hard exercise stats:", e) })
   }
 
-  fun getDailyQuestStats(userId: String) {
+  fun getDailyQuestStats() {
     repository.getDailyQuestStats(
-        userId,
+        userSession.getUserId()!!,
         onSuccess = { dailyQuest -> _daily.value = dailyQuest },
         onFailure = { e -> logError("Error fetching daily quest stats:", e) })
   }
 
-  fun getWeeklyQuestStats(userId: String) {
+  fun getWeeklyQuestStats() {
     repository.getWeeklyQuestStats(
-        userId,
+        userSession.getUserId()!!,
         onSuccess = { weeklyQuest -> _weekly.value = weeklyQuest },
         onFailure = { e -> logError("Error fetching weekly quest stats:", e) })
   }
 
-  fun getCompletedChallengeStats(userId: String) {
+  fun getCompletedChallengeStats() {
     repository.getCompletedChallengeStats(
-        userId,
+        userSession.getUserId()!!,
         onSuccess = { completedChallenge -> _completed.value = completedChallenge },
         onFailure = { e -> logError("Error fetching completed challenge Stats:", e) })
   }
 
-  fun getCreatedChallengeStats(userId: String) {
+  fun getCreatedChallengeStats() {
     repository.getCreatedChallengeStats(
-        userId,
+        userSession.getUserId()!!,
         onSuccess = { createdChallenge -> _created.value = createdChallenge },
         onFailure = { e -> logError("Error fetching created challenge Stats:", e) })
   }
 
-  fun updateLettersLearned(userId: String, newLetter: Char) {
+  fun getWonChallengeStats() {
+    repository.getWonChallengeStats(
+        userSession.getUserId()!!,
+        onSuccess = { wonChallenge -> _won.value = wonChallenge },
+        onFailure = { e -> logError("Error fetching won challenge Stats:", e) })
+  }
+
+  fun updateLettersLearned(newLetter: Char) {
     repository.updateLettersLearned(
-        userId,
+        userSession.getUserId()!!,
         newLetter,
         onSuccess = { logSuccess("Letterss learned updated successfully.") },
         onFailure = { e -> logError("Error updating letters learned:", e) })
   }
 
-  fun updateEasyExerciseStats(userId: String) {
+  fun updateEasyExerciseStats() {
     repository.updateEasyExerciseStats(
-        userId,
+        userSession.getUserId()!!,
         onSuccess = { logSuccess("Easy exercise stats updated successfully.") },
         onFailure = { e -> logError("Error updating easy exercise stats:", e) })
   }
 
-  fun updateMediumExerciseStats(userId: String) {
+  fun updateMediumExerciseStats() {
     repository.updateMediumExerciseStats(
-        userId,
+        userSession.getUserId()!!,
         onSuccess = { logSuccess("Medium exercise stats updated successfully.") },
         onFailure = { e -> logError("Error updating medium exercise stats:", e) })
   }
 
-  fun updateHardExerciseStats(userId: String) {
+  fun updateHardExerciseStats() {
     repository.updateHardExerciseStats(
-        userId,
+        userSession.getUserId()!!,
         onSuccess = { logSuccess("Hard exercise stats updated successfully.") },
         onFailure = { e -> logError("Error updating hard exercise stats:", e) })
   }
 
-  fun updateDailyQuestStats(userId: String) {
+  fun updateDailyQuestStats() {
     repository.updateDailyQuestStats(
-        userId,
+        userSession.getUserId()!!,
         onSuccess = { logSuccess("Daily quest stats updated successfully.") },
         onFailure = { e -> logError("Error updating daily quest stats:", e) })
   }
 
-  fun updateWeeklyQuestStats(userId: String) {
+  fun updateWeeklyQuestStats() {
     repository.updateWeeklyQuestStats(
-        userId,
+        userSession.getUserId()!!,
         onSuccess = { logSuccess("Weekly quest stats updated successfully.") },
         onFailure = { e -> logError("Error updating weekly quest stats:", e) })
   }
 
-  fun updateCompletedChallengeStats(userId: String) {
+  fun updateCompletedChallengeStats() {
     repository.updateCompletedChallengeStats(
-        userId,
+        userSession.getUserId()!!,
         onSuccess = { logSuccess("Completed challenge stats updated successfully.") },
         onFailure = { e -> logError("Error updating completed challenge stats:", e) })
   }
 
-  fun updateCreatedChallengeStats(userId: String) {
+  fun updateCreatedChallengeStats() {
     repository.updateCreatedChallengeStats(
-        userId,
+        userSession.getUserId()!!,
         onSuccess = { logSuccess("Created challenge stats updated successfully.") },
         onFailure = { e -> logError("Error updating created challenge stats:", e) })
+  }
+
+  fun updateWonChallengeStats() {
+    repository.updateWonChallengeStats(
+        userSession.getUserId()!!,
+        onSuccess = { logSuccess("Won challenge stats updated successfully.") },
+        onFailure = { e -> logError("Error updating won challenge stats:", e) })
   }
 }
