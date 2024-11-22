@@ -1,6 +1,8 @@
 package com.github.se.signify.model.user
 
 import androidx.core.net.toUri
+import com.github.se.signify.model.auth.MockUserSession
+import com.github.se.signify.model.auth.UserSession
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
@@ -9,6 +11,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
 
 class UserViewModelTest {
+  private lateinit var userSession: UserSession
   private lateinit var userRepository: UserRepository
   private lateinit var userViewModel: UserViewModel
 
@@ -18,19 +21,20 @@ class UserViewModelTest {
 
   @Before
   fun setUp() {
+    userSession = MockUserSession()
     userRepository = mock(UserRepository::class.java)
-    userViewModel = UserViewModel(userRepository)
+    userViewModel = UserViewModel(userSession, userRepository)
   }
 
   @Test
   fun getFriendsListRequestCallsRepository() {
-    userViewModel.getFriendsList(currentUserId)
+    userViewModel.getFriendsList()
     verify(userRepository).getFriendsList(eq(currentUserId), any(), any())
   }
 
   @Test
   fun getRequestsFriendsListRequestCallsRepository() {
-    userViewModel.getRequestsFriendsList(currentUserId)
+    userViewModel.getRequestsFriendsList()
     verify(userRepository).getRequestsFriendsList(eq(currentUserId), any(), any())
   }
 
@@ -42,52 +46,52 @@ class UserViewModelTest {
 
   @Test
   fun getUserNameRequestCallsRepository() {
-    userViewModel.getUserName(currentUserId)
+    userViewModel.getUserName()
     verify(userRepository).getUserName(eq(currentUserId), any(), any())
   }
 
   @Test
   fun updateUserNameRequestCallsRepository() {
     val newName = "newNameTest"
-    userViewModel.updateUserName(currentUserId, newName)
+    userViewModel.updateUserName(newName)
     verify(userRepository).updateUserName(eq(currentUserId), eq(newName), any(), any())
   }
 
   @Test
   fun getProfilePictureUrlRequestCallsRepository() {
-    userViewModel.getProfilePictureUrl(currentUserId)
+    userViewModel.getProfilePictureUrl()
     verify(userRepository).getProfilePictureUrl(eq(currentUserId), any(), any())
   }
 
   @Test
   fun updateProfilePictureUrlRequestCallsRepository() {
     val newUrl = "testUrl"
-    userViewModel.updateProfilePictureUrl(currentUserId, newUrl.toUri())
+    userViewModel.updateProfilePictureUrl(newUrl.toUri())
     verify(userRepository)
         .updateProfilePictureUrl(eq(currentUserId), eq(newUrl.toUri()), any(), any())
   }
 
   @Test
   fun sendFriendRequestCallsRepository() {
-    userViewModel.sendFriendRequest(currentUserId, friendUserId)
+    userViewModel.sendFriendRequest(friendUserId)
     verify(userRepository).sendFriendRequest(eq(currentUserId), eq(friendUserId), any(), any())
   }
 
   @Test
   fun acceptFriendRequestCallsRepository() {
-    userViewModel.acceptFriendRequest(currentUserId, friendUserId)
+    userViewModel.acceptFriendRequest(friendUserId)
     verify(userRepository).acceptFriendRequest(eq(currentUserId), eq(friendUserId), any(), any())
   }
 
   @Test
   fun declineFriendRequestCallsRepository() {
-    userViewModel.declineFriendRequest(currentUserId, friendUserId)
+    userViewModel.declineFriendRequest(friendUserId)
     verify(userRepository).declineFriendRequest(eq(currentUserId), eq(friendUserId), any(), any())
   }
 
   @Test
   fun removeFriendCallsRepository() {
-    userViewModel.removeFriend(currentUserId, friendUserId)
+    userViewModel.removeFriend(friendUserId)
     verify(userRepository).removeFriend(eq(currentUserId), eq(friendUserId), any(), any())
   }
 
@@ -105,13 +109,13 @@ class UserViewModelTest {
 
   @Test
   fun getStreak_callsRepository() {
-    userViewModel.getStreak(currentUserId)
+    userViewModel.getStreak()
     verify(userRepository).getStreak(eq(currentUserId), any(), any())
   }
 
   @Test
   fun updateStreak_callsRepository() {
-    userViewModel.updateStreak(currentUserId)
+    userViewModel.updateStreak()
     verify(userRepository).updateStreak(eq(currentUserId), any(), any())
   }
 }
