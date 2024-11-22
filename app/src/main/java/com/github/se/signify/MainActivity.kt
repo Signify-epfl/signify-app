@@ -33,6 +33,7 @@ import com.github.se.signify.ui.screens.home.ExerciseScreenMedium
 import com.github.se.signify.ui.screens.home.FeedbackScreen
 import com.github.se.signify.ui.screens.home.HomeScreen
 import com.github.se.signify.ui.screens.home.QuestScreen
+import com.github.se.signify.ui.screens.home.QuizScreen
 import com.github.se.signify.ui.screens.profile.FriendsListScreen
 import com.github.se.signify.ui.screens.profile.MyStatsScreen
 import com.github.se.signify.ui.screens.profile.ProfileScreen
@@ -87,32 +88,20 @@ fun SignifyAppPreview(
         route = Route.CHALLENGE,
     ) {
       composable(Screen.CHALLENGE) { ChallengeScreen(navigationActions) }
-    }
-
-    composable(Route.NEW_CHALLENGE) {
-      NewChallengeScreen(
-          navigationActions,
-          dependencyProvider.userRepository(),
-          dependencyProvider.challengeRepository())
-    }
-    composable(Route.CREATE_CHALLENGE) {
-      CreateAChallengeScreen(
-          navigationActions,
-          dependencyProvider.userRepository(),
-          dependencyProvider.challengeRepository())
-    }
-    composable(Route.CHALLENGE_HISTORY) {
-      ChallengeHistoryScreen(navigationActions, dependencyProvider.statsRepository())
-    }
-    navigation(
-        startDestination = Screen.QUEST,
-        route = Route.QUEST,
-    ) {
-      composable(Screen.QUEST) {
-        QuestScreen(
+      composable(Screen.NEW_CHALLENGE) {
+        NewChallengeScreen(
             navigationActions,
-            dependencyProvider.questRepository(),
-            dependencyProvider.userRepository())
+            dependencyProvider.userRepository(),
+            dependencyProvider.challengeRepository())
+      }
+      composable(Screen.CREATE_CHALLENGE) {
+        CreateAChallengeScreen(
+            navigationActions,
+            dependencyProvider.userRepository(),
+            dependencyProvider.challengeRepository())
+      }
+      composable(Screen.CHALLENGE_HISTORY) {
+        ChallengeHistoryScreen(navigationActions, dependencyProvider.statsRepository())
       }
     }
 
@@ -121,6 +110,30 @@ fun SignifyAppPreview(
         route = Route.HOME,
     ) {
       composable(Screen.HOME) { HomeScreen(navigationActions) }
+      composable(Screen.PRACTICE) { ASLRecognition(handLandMarkViewModel, navigationActions) }
+      composable(Screen.EXERCISE_EASY) {
+        ExerciseScreenEasy(navigationActions, handLandMarkViewModel)
+      }
+      composable(Screen.EXERCISE_MEDIUM) {
+        ExerciseScreenMedium(navigationActions, handLandMarkViewModel)
+      }
+
+      composable(Screen.EXERCISE_HARD) {
+        ExerciseScreenHard(navigationActions, handLandMarkViewModel)
+      }
+      composable(Screen.FEEDBACK) { FeedbackScreen(navigationActions) }
+      composable(Screen.QUEST) {
+        QuestScreen(
+            navigationActions,
+            dependencyProvider.questRepository(),
+            dependencyProvider.userRepository())
+      }
+      composable(Screen.QUIZ) {
+        QuizScreen(
+            navigationActions,
+            dependencyProvider.quizRepository(),
+        )
+      }
     }
 
     navigation(
@@ -133,33 +146,18 @@ fun SignifyAppPreview(
             dependencyProvider.userRepository(),
             dependencyProvider.statsRepository())
       }
-
-      composable(Route.FRIENDS) {
+      composable(Screen.FRIENDS) {
         FriendsListScreen(navigationActions, dependencyProvider.userRepository())
       }
-      composable(Route.FEEDBACK) { FeedbackScreen(navigationActions) }
-
-      composable(Route.STATS) {
+      composable(Screen.STATS) {
         MyStatsScreen(
             navigationActions,
             dependencyProvider.userRepository(),
             dependencyProvider.statsRepository())
       }
-
-      composable(Route.SETTINGS) {
+      composable(Screen.SETTINGS) {
         SettingsScreen(navigationActions, dependencyProvider.userRepository())
       }
-    }
-    composable(Screen.PRACTICE) { ASLRecognition(handLandMarkViewModel, navigationActions) }
-    composable(Screen.EXERCISE_EASY) {
-      ExerciseScreenEasy(navigationActions, handLandMarkViewModel)
-    }
-    composable(Screen.EXERCISE_MEDIUM) {
-      ExerciseScreenMedium(navigationActions, handLandMarkViewModel)
-    }
-
-    composable(Screen.EXERCISE_HARD) {
-      ExerciseScreenHard(navigationActions, handLandMarkViewModel)
     }
   }
   navigationState.value = navigationActions

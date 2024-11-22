@@ -1,6 +1,5 @@
 package com.github.se.signify.ui.screens.profile
 
-import android.content.Context
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -49,8 +48,6 @@ import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.NotImplementedYet
 import com.github.se.signify.ui.ProfilePicture
 import com.github.se.signify.ui.navigation.NavigationActions
-import java.io.File
-import java.io.FileOutputStream
 
 @Composable
 fun SettingsScreen(
@@ -71,15 +68,14 @@ fun SettingsScreen(
 
   var newName by remember { mutableStateOf("") }
   var selectedImageUrl by remember { mutableStateOf(profilePictureUrl.value) }
+  var selectedUri by remember { mutableStateOf<Uri?>(null) }
   LaunchedEffect(profilePictureUrl.value) { selectedImageUrl = profilePictureUrl.value }
 
   val galleryLauncher =
       rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) {
-          val file = uriToFile(context, uri)
-          if (file != null) {
-            selectedImageUrl = file.absolutePath
-          }
+          selectedImageUrl = uri.toString()
+          selectedUri = uri
         }
       }
 
@@ -107,7 +103,11 @@ fun SettingsScreen(
           Spacer(modifier = Modifier.height(16.dp))
 
           Icon(
-              modifier = Modifier.clickable { selectedImageUrl = null },
+              modifier =
+                  Modifier.clickable {
+                    selectedUri = null
+                    selectedImageUrl = null
+                  },
               imageVector = Icons.Outlined.Delete,
               contentDescription = "Delete Profile Picture",
               tint = MaterialTheme.colorScheme.onBackground,
@@ -179,7 +179,10 @@ fun SettingsScreen(
             if (newName.isNotBlank()) {
               userViewModel.updateUserName(currentUserId, newName)
             }
-            userViewModel.updateProfilePictureUrl(currentUserId, selectedImageUrl)
+
+            // Upload image and save URL
+            userViewModel.updateProfilePictureUrl(currentUserId, selectedUri)
+
             Toast.makeText(context, "Changes saved.", Toast.LENGTH_SHORT).show()
           },
           MaterialTheme.colorScheme.primary,
@@ -198,20 +201,4 @@ fun ActionButtons(onClickAction: () -> Unit, color: Color, text: String, modifie
         Text(
             text = text, color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Bold)
       }
-}
-
-fun uriToFile(context: Context, uri: Uri): File? {
-  val contentResolver = context.contentResolver
-  val file = File(context.cacheDir, "temp_image_${System.currentTimeMillis()}.jpg")
-
-  try {
-    val inputStream = contentResolver.openInputStream(uri) ?: return null
-    val outputStream = FileOutputStream(file)
-
-    inputStream.use { input -> outputStream.use { output -> input.copyTo(output) } }
-    return file
-  } catch (e: Exception) {
-    e.printStackTrace()
-  }
-  return null
 }

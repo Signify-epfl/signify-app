@@ -38,6 +38,7 @@ import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.UtilTextButton
 import com.github.se.signify.ui.navigation.NavigationActions
+import com.github.se.signify.ui.navigation.Screen
 import com.github.se.signify.ui.screens.profile.currentUserId
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -62,7 +63,7 @@ fun NewChallengeScreen(
   AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = "NewChallengeScreen") {
     // My Friends button
     UtilTextButton(
-        onClickAction = { navigationActions.navigateTo("Friends") },
+        onClickAction = { navigationActions.navigateTo(Screen.FRIENDS) },
         testTag = "MyFriendsButton",
         text = "My Friends",
         backgroundColor = MaterialTheme.colorScheme.primary,
@@ -72,7 +73,7 @@ fun NewChallengeScreen(
 
     // Create a challenge button
     UtilTextButton(
-        onClickAction = { navigationActions.navigateTo("CreateChallenge") },
+        onClickAction = { navigationActions.navigateTo(Screen.CREATE_CHALLENGE) },
         testTag = "CreateChallengeButton",
         text = "Create a Challenge",
         backgroundColor = MaterialTheme.colorScheme.primary,
