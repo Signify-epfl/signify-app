@@ -3,12 +3,13 @@ package com.github.se.signify.ui.screens.challenge
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import com.github.se.signify.model.auth.MockUserSession
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.challenge.Challenge
 import com.github.se.signify.model.challenge.MockChallengeRepository
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
-import com.github.se.signify.ui.screens.profile.currentUserId
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -24,6 +25,7 @@ import org.mockito.kotlin.whenever
 class NewChallengeScreenTest {
   @get:Rule val composeTestRule = createComposeRule()
 
+  private lateinit var userSession: UserSession
   private lateinit var navigationActions: NavigationActions
   private lateinit var userRepository: UserRepository
   private lateinit var challengeRepository: MockChallengeRepository
@@ -46,6 +48,7 @@ class NewChallengeScreenTest {
   @Before
   fun setUp() {
     navigationActions = Mockito.mock(NavigationActions::class.java)
+    userSession = MockUserSession()
     userRepository = Mockito.mock(UserRepository::class.java)
     challengeRepository = MockChallengeRepository()
 
@@ -55,7 +58,7 @@ class NewChallengeScreenTest {
           onSuccess(ongoingChallenges)
         }
         .whenever(userRepository)
-        .getOngoingChallenges(eq(currentUserId), any(), any())
+        .getOngoingChallenges(eq(userSession.getUserId()!!), any(), any())
 
     challengeRepository.setChallenges(ongoingChallenges)
 
@@ -63,6 +66,7 @@ class NewChallengeScreenTest {
     composeTestRule.setContent {
       NewChallengeScreen(
           navigationActions = navigationActions,
+          userSession = userSession,
           userRepository = userRepository,
           challengeRepository = challengeRepository)
     }
@@ -119,7 +123,7 @@ class NewChallengeScreenTest {
 
   @Test
   fun testNewChallengeScreenViewModelInitialization() {
-    verify(userRepository).getFriendsList(eq(currentUserId), any(), any())
-    verify(userRepository).getOngoingChallenges(eq(currentUserId), any(), any())
+    verify(userRepository).getFriendsList(eq(userSession.getUserId()!!), any(), any())
+    verify(userRepository).getOngoingChallenges(eq(userSession.getUserId()!!), any(), any())
   }
 }
