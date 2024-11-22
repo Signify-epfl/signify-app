@@ -21,99 +21,111 @@ class StatsViewModelTest {
   }
 
   @Test
-  fun getLettersLearnedShouldUpdateLettersLearnedFlowOnSuccess() {
+  fun getLettersLearnedShouldCallRepositoryGetLettersLearned() {
     statsViewModel.getLettersLearned(userId)
     verify(statsRepositoryFirestore).getLettersLearned(eq(userId), any(), any())
   }
 
   @Test
-  fun getEasyExerciseStatsShouldUpdateEasyFlowOnSuccess() {
+  fun getEasyExerciseStatsShouldCallRepositoryGetEasyExerciseStats() {
     statsViewModel.getEasyExerciseStats(userId)
     verify(statsRepositoryFirestore).getEasyExerciseStats(eq(userId), any(), any())
   }
 
   @Test
-  fun getMediumExerciseStatsShouldUpdateMediumFlowOnSuccess() {
+  fun getMediumExerciseStatsShouldCallRepositoryGetMediumExerciseStats() {
     statsViewModel.getMediumExerciseStats(userId)
     verify(statsRepositoryFirestore).getMediumExerciseStats(eq(userId), any(), any())
   }
 
   @Test
-  fun getHardExerciseStatsShouldUpdateHardFlowOnSuccess() {
+  fun getHardExerciseStatsShouldCallRepositoryGetHardExerciseStats() {
     statsViewModel.getHardExerciseStats(userId)
     verify(statsRepositoryFirestore).getHardExerciseStats(eq(userId), any(), any())
   }
 
   @Test
-  fun getDailyQuestStatsShouldUpdateDailyFlowOnSuccess() {
+  fun getDailyQuestStatsShouldCallRepositoryGetDailyQuestStats() {
     statsViewModel.getDailyQuestStats(userId)
     verify(statsRepositoryFirestore).getDailyQuestStats(eq(userId), any(), any())
   }
 
   @Test
-  fun getWeeklyQuestStatsShouldUpdateWeeklyFlowOnSuccess() {
+  fun getWeeklyQuestStatsShouldCallRepositoryGetWeeklyQuestStats() {
     statsViewModel.getWeeklyQuestStats(userId)
     verify(statsRepositoryFirestore).getWeeklyQuestStats(eq(userId), any(), any())
   }
 
   @Test
-  fun getCompletedChallengeStatsShouldUpdateCompletedFlowOnSuccess() {
+  fun getCompletedChallengeStatsShouldCallRepositoryGetCompletedChallengeStats() {
     statsViewModel.getCompletedChallengeStats(userId)
     verify(statsRepositoryFirestore).getCompletedChallengeStats(eq(userId), any(), any())
   }
 
   @Test
-  fun getCreatedChallengeStatsShouldUpdateCreatedFlowOnSuccess() {
+  fun getCreatedChallengeStatsShouldCallRepositoryGetCreatedChallengeStats() {
     statsViewModel.getCreatedChallengeStats(userId)
     verify(statsRepositoryFirestore).getCreatedChallengeStats(eq(userId), any(), any())
   }
 
   @Test
-  fun `updateLettersLearned should call repository updateLettersLearned`() {
+  fun getWonChallengeStatsShouldCallRepositoryGetWonChallengeStats() {
+    statsViewModel.getWonChallengeStats(userId)
+    verify(statsRepositoryFirestore).getWonChallengeStats(eq(userId), any(), any())
+  }
+
+  @Test
+  fun updateLettersLearnedShouldCallRepositoryUpdateLettersLearned() {
     val newLetter = 'D'
     statsViewModel.updateLettersLearned(userId, newLetter)
     verify(statsRepositoryFirestore).updateLettersLearned(eq(userId), eq(newLetter), any(), any())
   }
 
   @Test
-  fun `updateEasyExerciseStats should call repository updateEasyExerciseStats`() {
+  fun updateEasyExerciseStatsShouldCallRepositoryUpdateEasyExerciseStats() {
     statsViewModel.updateEasyExerciseStats(userId)
     verify(statsRepositoryFirestore).updateEasyExerciseStats(eq(userId), any(), any())
   }
 
   @Test
-  fun `updateMediumExerciseStats should call repository updateMediumExerciseStats`() {
+  fun updateMediumExerciseStatsShouldCallRepositoryUpdateMediumExerciseStats() {
     statsViewModel.updateMediumExerciseStats(userId)
     verify(statsRepositoryFirestore).updateMediumExerciseStats(eq(userId), any(), any())
   }
 
   @Test
-  fun `updateHardExerciseStats should call repository updateHardExerciseStats`() {
+  fun updateHardExerciseStatsShouldCallRepositoryUpdateHardExerciseStats() {
     statsViewModel.updateHardExerciseStats(userId)
     verify(statsRepositoryFirestore).updateHardExerciseStats(eq(userId), any(), any())
   }
 
   @Test
-  fun `updateDailyQuestStats should call repository updateDailyQuestStats`() {
+  fun updateDailyQuestStatsShouldCallRepositoryUpdateDailyQuestStats() {
     statsViewModel.updateDailyQuestStats(userId)
     verify(statsRepositoryFirestore).updateDailyQuestStats(eq(userId), any(), any())
   }
 
   @Test
-  fun `updateWeeklyQuestStats should call repository updateWeeklyQuestStats`() {
+  fun updateWeeklyQuestStatsShouldCallRepositoryUpdateWeeklyQuestStats() {
     statsViewModel.updateWeeklyQuestStats(userId)
     verify(statsRepositoryFirestore).updateWeeklyQuestStats(eq(userId), any(), any())
   }
 
   @Test
-  fun `updateCompletedChallengeStats should call repository updateCompletedChallengeStats`() {
+  fun updateCompletedChallengeStatsShouldCallRepositoryUpdateCompletedChallengeStats() {
     statsViewModel.updateCompletedChallengeStats(userId)
     verify(statsRepositoryFirestore).updateCompletedChallengeStats(eq(userId), any(), any())
   }
 
   @Test
-  fun `updateCreatedChallengeStats should call repository updateCreatedChallengeStats`() {
+  fun updateCreatedChallengeStatsShouldCallRepositoryUpdateCreatedChallengeStats() {
     statsViewModel.updateCreatedChallengeStats(userId)
     verify(statsRepositoryFirestore).updateCreatedChallengeStats(eq(userId), any(), any())
+  }
+
+  @Test
+  fun updateWonChallengeStatsShouldCallRepositoryUpdateWonChallengeStats() {
+    statsViewModel.updateWonChallengeStats(userId)
+    verify(statsRepositoryFirestore).updateWonChallengeStats(eq(userId), any(), any())
   }
 }
