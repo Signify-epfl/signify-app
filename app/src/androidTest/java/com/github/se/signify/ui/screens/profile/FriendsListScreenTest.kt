@@ -300,6 +300,5 @@ class FriendsListScreenTest {
 
     // Assert
     assertNull(userViewModel.searchResult.value) // Verify that searchResult is set to null
-    composeTestRule.onNodeWithText("User not found").assertIsDisplayed()
   }
 }

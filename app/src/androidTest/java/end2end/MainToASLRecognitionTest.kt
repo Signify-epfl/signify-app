@@ -15,6 +15,7 @@ class MainToASLRecognitionTest {
   @get:Rule val composeTestRule = createAndroidComposeRule<MainActivity>()
   @get:Rule
   val cameraAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
+
   @Test
   fun navigateToASLRecognitionScreen() {
     // Assert Welcome Screen is displayed
@@ -37,13 +38,13 @@ class MainToASLRecognitionTest {
     composeTestRule.onNodeWithTag("LetterBox_D").performClick()
     composeTestRule.onNodeWithTag("SignTipBox_D").assertIsDisplayed()
     composeTestRule.onNodeWithTag("ScrollToTopButton").performClick()
-    index = 14 // letter o
+    index = 11 // letter o
     repeat(index) { composeTestRule.onNodeWithTag("LetterDictionaryForward").performClick() }
     composeTestRule.onNodeWithTag("LetterBox_O").performClick()
     composeTestRule.onNodeWithTag("SignTipBox_O").assertIsDisplayed()
     composeTestRule.onNodeWithTag("ScrollToTopButton").performClick()
-    index = 6 // letter g
-    repeat(index) { composeTestRule.onNodeWithTag("LetterDictionaryForward").performClick() }
+    index = 8 // letter g
+    repeat(index) { composeTestRule.onNodeWithTag("LetterDictionaryBack").performClick() }
     composeTestRule.onNodeWithTag("LetterBox_G").performClick()
     composeTestRule.onNodeWithTag("SignTipBox_G").assertIsDisplayed()
     composeTestRule.onNodeWithTag("ScrollToTopButton").performClick()
