@@ -72,7 +72,7 @@ class LoginScreenTest : TestCase() {
 
   @Test
   fun offlineModeHelpsToConnect() {
-    composeTestRule.setContent { LoginScreen(navigationActions) }
+    composeTestRule.setContent { LoginScreen(navigationActions, userSession) }
     composeTestRule.onNodeWithTag("offlineButton").assertIsDisplayed().performClick()
   }
 }

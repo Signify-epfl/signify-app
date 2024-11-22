@@ -42,10 +42,10 @@ class MainActivityTest {
 
     composeTestRule.setContent {
       isOfflineState = false
-      FriendsListScreen(navigationActions, userRepository)
-      SettingsScreen(navigationActions, userRepository)
-      ProfileScreen(navigationActions, userRepository, statsRepository)
-      MyStatsScreen(navigationActions, userRepository, statsRepository)
+      FriendsListScreen(navigationActions, userSession, userRepository)
+      SettingsScreen(navigationActions, userSession, userRepository)
+      ProfileScreen(navigationActions, userSession, userRepository, statsRepository)
+      MyStatsScreen(navigationActions, userSession, userRepository, statsRepository)
 
       // Set the content with the mocked context
       SignifyAppPreview(context, AppDependencyProvider, navigationState)
