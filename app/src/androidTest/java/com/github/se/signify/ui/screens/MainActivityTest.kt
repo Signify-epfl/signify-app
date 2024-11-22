@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.SignifyAppPreview
+import com.github.se.signify.model.auth.MockUserSession
 import com.github.se.signify.model.di.AppDependencyProvider
 import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.user.UserRepository
@@ -28,6 +29,7 @@ class MainActivityTest {
   @get:Rule val composeTestRule = createComposeRule()
   private val navigationState = MutableStateFlow<NavigationActions?>(null)
   private val navigationActions = mock(NavigationActions::class.java)
+  private val userSession = MockUserSession()
   @get:Rule
   val cameraAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
 
@@ -38,10 +40,10 @@ class MainActivityTest {
     val context = mock(Context::class.java)
 
     composeTestRule.setContent {
-      FriendsListScreen(navigationActions, userRepository)
-      SettingsScreen(navigationActions, userRepository)
-      ProfileScreen(navigationActions, userRepository, statsRepository)
-      MyStatsScreen(navigationActions, userRepository, statsRepository)
+      FriendsListScreen(navigationActions, userSession, userRepository)
+      SettingsScreen(navigationActions, userSession, userRepository)
+      ProfileScreen(navigationActions, userSession, userRepository, statsRepository)
+      MyStatsScreen(navigationActions, userSession, userRepository, statsRepository)
 
       // Set the content with the mocked context
       SignifyAppPreview(context, AppDependencyProvider, navigationState)

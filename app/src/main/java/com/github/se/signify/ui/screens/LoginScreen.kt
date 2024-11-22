@@ -42,6 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.stats.saveStatsToFirestore
 import com.github.se.signify.model.user.saveUserToFireStore
 import com.github.se.signify.ui.navigation.NavigationActions
@@ -56,7 +57,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 @Composable
-fun LoginScreen(navigationActions: NavigationActions) {
+fun LoginScreen(navigationActions: NavigationActions, userSession: UserSession) {
   val context = LocalContext.current
 
   val launcher =

@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.AccountInformation
@@ -56,27 +57,26 @@ import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.ProfilePicture
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Route
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
-
-val currentUserId = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0) ?: "unknown"
 
 @Composable
 fun FriendsListScreen(
     navigationActions: NavigationActions,
+    userSession: UserSession,
     userRepository: UserRepository,
-    userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository))
+    userViewModel: UserViewModel =
+        viewModel(factory = UserViewModel.factory(userSession, userRepository))
 ) {
   var errorMessage by remember { mutableStateOf("") }
 
   AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = "FriendsListScreen") {
     LaunchedEffect(Unit) {
-      userViewModel.getFriendsList(currentUserId)
-      userViewModel.getRequestsFriendsList(currentUserId)
-      userViewModel.getUserName(currentUserId)
-      userViewModel.getProfilePictureUrl(currentUserId)
-      userViewModel.updateStreak(currentUserId)
-      userViewModel.getStreak(currentUserId)
+      userViewModel.getFriendsList()
+      userViewModel.getRequestsFriendsList()
+      userViewModel.getUserName()
+      userViewModel.getProfilePictureUrl()
+      userViewModel.updateStreak()
+      userViewModel.getStreak()
     }
 
     val friends = userViewModel.friends.collectAsState()
@@ -93,7 +93,7 @@ fun FriendsListScreen(
 
     // Top information
     AccountInformation(
-        userId = currentUserId,
+        userId = userSession.getUserId()!!,
         userName = userName.value,
         profilePictureUrl = updatedProfilePicture,
         days = streak.value)
@@ -144,7 +144,7 @@ fun FriendsListScreen(
                         color = MaterialTheme.colorScheme.onSurface)
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    if (searchResult.value!!.uid == currentUserId) {
+                    if (searchResult.value!!.uid == userSession.getUserId()) {
                       MyProfileButton(userViewModel, navigationActions)
                     } else if (friends.value.contains(searchResult.value!!.uid)) {
                       RemoveFriendButton(userViewModel)
@@ -184,7 +184,7 @@ fun AddFriendButton(userViewModel: UserViewModel) {
   val context = LocalContext.current
   Button(
       onClick = {
-        userViewModel.sendFriendRequest(currentUserId, userViewModel.searchResult.value!!.uid)
+        userViewModel.sendFriendRequest(userViewModel.searchResult.value!!.uid)
         userViewModel.setSearchResult(null)
         Toast.makeText(context, "Request sent.", Toast.LENGTH_SHORT).show()
       },
@@ -202,7 +202,7 @@ fun RemoveFriendButton(userViewModel: UserViewModel) {
   val context = LocalContext.current
   Button(
       onClick = {
-        userViewModel.removeFriend(currentUserId, userViewModel.searchResult.value!!.uid)
+        userViewModel.removeFriend(userViewModel.searchResult.value!!.uid)
         userViewModel.setSearchResult(null)
         Toast.makeText(context, "Friend removed.", Toast.LENGTH_SHORT).show()
       },
@@ -339,7 +339,7 @@ fun FriendItem(friendName: String, userViewModel: UserViewModel) {
 
     // Button "Remove"
     Button(
-        onClick = { userViewModel.removeFriend(currentUserId, friendName) },
+        onClick = { userViewModel.removeFriend(friendName) },
         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.error),
         shape = RoundedCornerShape(50.dp),
     ) {
@@ -358,14 +358,14 @@ fun FriendRequestItem(friendRequestName: String, userViewModel: UserViewModel) {
 
           // Button "Accept"
           ActionButton(
-              { userViewModel.acceptFriendRequest(currentUserId, friendRequestName) },
+              { userViewModel.acceptFriendRequest(friendRequestName) },
               Icons.Default.AddCircle,
               MaterialTheme.colorScheme.primary,
               "Accept")
 
           // Button "Decline"
           ActionButton(
-              { userViewModel.declineFriendRequest(currentUserId, friendRequestName) },
+              { userViewModel.declineFriendRequest(friendRequestName) },
               Icons.Default.Delete,
               MaterialTheme.colorScheme.error,
               "Decline")

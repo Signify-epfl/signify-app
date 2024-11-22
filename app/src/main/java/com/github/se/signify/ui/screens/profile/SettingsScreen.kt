@@ -42,6 +42,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.AnnexScreenScaffold
@@ -52,15 +53,17 @@ import com.github.se.signify.ui.navigation.NavigationActions
 @Composable
 fun SettingsScreen(
     navigationActions: NavigationActions,
+    userSession: UserSession,
     userRepository: UserRepository,
 ) {
-  val userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository))
+  val userViewModel: UserViewModel =
+      viewModel(factory = UserViewModel.factory(userSession, userRepository))
 
   val context = LocalContext.current
 
   LaunchedEffect(Unit) {
-    userViewModel.getUserName(currentUserId)
-    userViewModel.getProfilePictureUrl(currentUserId)
+    userViewModel.getUserName()
+    userViewModel.getProfilePictureUrl()
   }
 
   val userName = userViewModel.userName.collectAsState()
@@ -177,11 +180,11 @@ fun SettingsScreen(
       ActionButtons(
           {
             if (newName.isNotBlank()) {
-              userViewModel.updateUserName(currentUserId, newName)
+              userViewModel.updateUserName(newName)
             }
 
             // Upload image and save URL
-            userViewModel.updateProfilePictureUrl(currentUserId, selectedUri)
+            userViewModel.updateProfilePictureUrl(selectedUri)
 
             Toast.makeText(context, "Changes saved.", Toast.LENGTH_SHORT).show()
           },

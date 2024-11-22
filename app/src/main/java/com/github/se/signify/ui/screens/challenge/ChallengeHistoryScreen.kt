@@ -8,6 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.stats.StatsViewModel
 import com.github.se.signify.ui.AnnexScreenScaffold
@@ -19,8 +20,10 @@ import com.github.se.signify.ui.navigation.NavigationActions
 @Composable
 fun ChallengeHistoryScreen(
     navigationActions: NavigationActions,
+    userSession: UserSession,
     statsRepository: StatsRepository,
-    statsViewModel: StatsViewModel = viewModel(factory = StatsViewModel.factory(statsRepository))
+    statsViewModel: StatsViewModel =
+        viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
 ) {
   val challengesCompleted = statsViewModel.completed.collectAsState()
   val challengesCreated = statsViewModel.created.collectAsState()

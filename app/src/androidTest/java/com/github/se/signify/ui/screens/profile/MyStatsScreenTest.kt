@@ -2,6 +2,8 @@ package com.github.se.signify.ui.screens.profile
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import com.github.se.signify.model.auth.MockUserSession
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.ui.navigation.NavigationActions
@@ -16,18 +18,21 @@ class MyStatsScreenTest {
   @get:Rule val composeTestRule = createComposeRule()
 
   private lateinit var navigationActions: NavigationActions
+  private lateinit var userSession: UserSession
   private lateinit var userRepository: UserRepository
   private lateinit var statsRepository: StatsRepository
 
   @Before
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
+    userSession = MockUserSession()
     userRepository = mock(UserRepository::class.java)
     statsRepository = mock(StatsRepository::class.java)
 
     composeTestRule.setContent {
       MyStatsScreen(
           navigationActions = navigationActions,
+          userSession = userSession,
           userRepository = userRepository,
           statsRepository = statsRepository)
     }

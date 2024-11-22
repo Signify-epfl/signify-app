@@ -4,6 +4,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.challenge.Challenge
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -12,7 +13,10 @@ import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-open class UserViewModel(private val repository: UserRepository) : ViewModel() {
+open class UserViewModel(
+    private val userSession: UserSession,
+    private val repository: UserRepository,
+) : ViewModel() {
 
   private val _friends = MutableStateFlow<List<String>>(emptyList())
   val friends: StateFlow<List<String>> = _friends
@@ -49,26 +53,26 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
 
   // create factory
   companion object {
-    fun factory(repository: UserRepository): ViewModelProvider.Factory {
+    fun factory(userSession: UserSession, repository: UserRepository): ViewModelProvider.Factory {
       return object : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-          return UserViewModel(repository) as T
+          return UserViewModel(userSession, repository) as T
         }
       }
     }
   }
 
-  fun getFriendsList(currentUserId: String) {
+  fun getFriendsList() {
     repository.getFriendsList(
-        currentUserId,
+        userSession.getUserId()!!,
         onSuccess = { friendsList -> _friends.value = friendsList },
         onFailure = { e -> Log.e(logTag, "Failed to get friends list: ${e.message}}") })
   }
 
-  fun getRequestsFriendsList(currentUserId: String) {
+  fun getRequestsFriendsList() {
     repository.getRequestsFriendsList(
-        currentUserId,
+        userSession.getUserId()!!,
         onSuccess = { requestsList -> _friendsRequests.value = requestsList },
         onFailure = { e -> Log.e(logTag, "Failed to get requests list: ${e.message}}") })
   }
@@ -100,63 +104,63 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
     _errorState.value = null // Clear any previous error messages
   }
 
-  fun getUserName(currentUserId: String) {
+  fun getUserName() {
     repository.getUserName(
-        currentUserId,
+        userSession.getUserId()!!,
         onSuccess = { userName -> _userName.value = userName },
         onFailure = { e -> Log.e(logTag, "Failed to get user name: ${e.message}}") })
   }
 
-  fun updateUserName(currentUserId: String, newName: String) {
+  fun updateUserName(newName: String) {
     repository.updateUserName(
-        currentUserId,
+        userSession.getUserId()!!,
         newName,
         onSuccess = { Log.d(logTag, "User name updated successfully.") },
         onFailure = { e -> Log.e(logTag, "Failed to update user name: ${e.message}") })
   }
 
-  fun getProfilePictureUrl(currentUserId: String) {
+  fun getProfilePictureUrl() {
     repository.getProfilePictureUrl(
-        currentUserId,
+        userSession.getUserId()!!,
         onSuccess = { profilePictureUrl -> _profilePictureUrl.value = profilePictureUrl },
         onFailure = { e -> Log.e(logTag, "Failed to get profile picture: ${e.message}}") })
   }
 
-  fun updateProfilePictureUrl(currentUserId: String, newProfilePictureUrl: Uri?) {
+  fun updateProfilePictureUrl(newProfilePictureUrl: Uri?) {
     repository.updateProfilePictureUrl(
-        currentUserId,
+        userSession.getUserId()!!,
         newProfilePictureUrl,
         onSuccess = { Log.d(logTag, "Profile picture updated successfully.") },
         onFailure = { e -> Log.e(logTag, "Failed to update profile picture: ${e.message}") })
   }
 
-  fun sendFriendRequest(currentUserId: String, targetUserId: String) {
+  fun sendFriendRequest(targetUserId: String) {
     repository.sendFriendRequest(
-        currentUserId,
+        userSession.getUserId()!!,
         targetUserId,
         onSuccess = { Log.d(logTag, "Request sent successfully.") },
         onFailure = { e -> Log.e(logTag, "Failed to send request: ${e.message}") })
   }
 
-  fun acceptFriendRequest(currentUserId: String, friendUserId: String) {
+  fun acceptFriendRequest(friendUserId: String) {
     repository.acceptFriendRequest(
-        currentUserId,
+        userSession.getUserId()!!,
         friendUserId,
         onSuccess = { Log.d(logTag, "Friend request accepted successfully.") },
         onFailure = { e -> Log.e(logTag, "Failed to accept friend request: ${e.message}") })
   }
 
-  fun declineFriendRequest(currentUserId: String, friendUserId: String) {
+  fun declineFriendRequest(friendUserId: String) {
     repository.declineFriendRequest(
-        currentUserId,
+        userSession.getUserId()!!,
         friendUserId,
         onSuccess = { Log.d(logTag, "Friend request declined successfully.") },
         onFailure = { e -> Log.e(logTag, "Failed to decline friend request: ${e.message}") })
   }
 
-  fun removeFriend(currentUserId: String, friendUserId: String) {
+  fun removeFriend(friendUserId: String) {
     repository.removeFriend(
-        currentUserId,
+        userSession.getUserId()!!,
         friendUserId,
         onSuccess = { Log.d(logTag, "Friend removed successfully.") },
         onFailure = { e -> Log.e(logTag, "Failed to remove friend: ${e.message}") })
@@ -170,9 +174,9 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
         onFailure = { e -> Log.e(logTag, "Failed to add challenge to ongoing: ${e.message}") })
   }
 
-  fun getOngoingChallenges(userId: String) {
+  fun getOngoingChallenges() {
     repository.getOngoingChallenges(
-        userId,
+        userSession.getUserId()!!,
         onSuccess = { challenges -> _ongoingChallenges.value = challenges },
         onFailure = { e ->
           Log.e("UserViewModel", "Failed to fetch ongoing challenges: ${e.message}")
@@ -208,16 +212,16 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
   }
 
   // Check if a new quest should be unlocked based on the initial access date
-  fun checkAndUnlockNextQuest(currentUserId: String) {
+  fun checkAndUnlockNextQuest() {
     repository.getInitialQuestAccessDate(
-        currentUserId,
+        userSession.getUserId()!!,
         onSuccess = { initialAccessDate ->
           val currentDate = getCurrentDate()
 
           if (initialAccessDate == null) {
             // First time access, so set the initial access date
             repository.setInitialQuestAccessDate(
-                currentUserId,
+                userSession.getUserId()!!,
                 date = currentDate,
                 onSuccess = { Log.d("UserViewModel", "Initial access date set.") },
                 onFailure = { e ->
@@ -242,16 +246,16 @@ open class UserViewModel(private val repository: UserRepository) : ViewModel() {
         })
   }
 
-  fun updateStreak(currentUserId: String) {
+  fun updateStreak() {
     repository.updateStreak(
-        currentUserId,
+        userSession.getUserId()!!,
         onSuccess = { Log.d(logTag, "Streak update successful!") },
         onFailure = { e -> Log.e(logTag, "Error updating streak: ${e.message}") })
   }
 
-  fun getStreak(currentUserId: String) {
+  fun getStreak() {
     repository.getStreak(
-        currentUserId,
+        userSession.getUserId()!!,
         onSuccess = { s -> _streak.value = s },
         onFailure = { e -> Log.e(logTag, "Failed to get user's streak: ${e.message}}") })
   }

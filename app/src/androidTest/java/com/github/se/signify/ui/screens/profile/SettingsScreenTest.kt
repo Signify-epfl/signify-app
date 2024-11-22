@@ -5,6 +5,8 @@ import android.content.Context
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.net.toUri
+import com.github.se.signify.model.auth.MockUserSession
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.ProfilePicture
@@ -25,6 +27,7 @@ class SettingsScreenTest {
   @get:Rule val composeTestRule = createComposeRule()
 
   private lateinit var navigationActions: NavigationActions
+  private lateinit var userSession: UserSession
   private lateinit var userRepository: UserRepository
   private lateinit var userViewModel: UserViewModel
   private lateinit var context: Context
@@ -35,12 +38,13 @@ class SettingsScreenTest {
   @Before
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
+    userSession = MockUserSession()
     userRepository = mock(UserRepository::class.java)
-    userViewModel = UserViewModel(userRepository)
+    userViewModel = UserViewModel(userSession, userRepository)
     val picturePath = "file:///path/to/profile/picture.jpg"
 
     composeTestRule.setContent {
-      SettingsScreen(navigationActions, userRepository)
+      SettingsScreen(navigationActions, userSession, userRepository)
       ProfilePicture(picturePath)
     }
 
@@ -110,7 +114,7 @@ class SettingsScreenTest {
     // Simulate selecting a new profile picture
     val newProfilePicturePath = "file:///path/to/new/profile/picture.jpg"
     composeTestRule.runOnIdle {
-      userViewModel.updateProfilePictureUrl(testUserID, newProfilePicturePath.toUri())
+      userViewModel.updateProfilePictureUrl(newProfilePicturePath.toUri())
     }
 
     // Click the Save button
@@ -149,7 +153,7 @@ class SettingsScreenTest {
     // Simulate selecting a new profile picture
     val newProfilePicturePath = "file:///path/to/new/profile/picture.jpg"
     composeTestRule.runOnIdle {
-      userViewModel.updateProfilePictureUrl(testUserID, newProfilePicturePath.toUri())
+      userViewModel.updateProfilePictureUrl(newProfilePicturePath.toUri())
     }
 
     // Click the Cancel button

@@ -12,6 +12,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.stats.StatsViewModel
 import com.github.se.signify.model.user.UserRepository
@@ -26,17 +27,20 @@ import com.github.se.signify.ui.navigation.NavigationActions
 @Composable
 fun MyStatsScreen(
     navigationActions: NavigationActions,
+    userSession: UserSession,
     userRepository: UserRepository,
     statsRepository: StatsRepository,
-    userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository)),
-    statsViewModel: StatsViewModel = viewModel(factory = StatsViewModel.factory(statsRepository))
+    userViewModel: UserViewModel =
+        viewModel(factory = UserViewModel.factory(userSession, userRepository)),
+    statsViewModel: StatsViewModel =
+        viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
 ) {
 
   LaunchedEffect(Unit) {
-    userViewModel.getUserName(currentUserId)
-    userViewModel.getProfilePictureUrl(currentUserId)
-    userViewModel.updateStreak(currentUserId)
-    userViewModel.getStreak(currentUserId)
+    userViewModel.getUserName()
+    userViewModel.getProfilePictureUrl()
+    userViewModel.updateStreak()
+    userViewModel.getStreak()
   }
 
   val userName = userViewModel.userName.collectAsState()
@@ -59,7 +63,7 @@ fun MyStatsScreen(
 
     // Top information
     AccountInformation(
-        userId = currentUserId,
+        userId = userSession.getUserId()!!,
         userName = userName.value,
         profilePictureUrl = updatedProfilePicture,
         days = streak.value)

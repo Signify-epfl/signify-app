@@ -1,6 +1,9 @@
 package com.github.se.signify.model.di
 
+import com.github.se.signify.model.auth.MockUserSession
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.challenge.ChallengeRepository
+import com.github.se.signify.model.feedback.FeedbackRepository
 import com.github.se.signify.model.hand.HandLandMarkRepository
 import com.github.se.signify.model.quest.QuestRepository
 import com.github.se.signify.model.quiz.QuizRepository
@@ -31,5 +34,13 @@ object MockDependencyProvider : DependencyProvider {
 
   override fun quizRepository(): QuizRepository {
     return mock(QuizRepository::class.java)
+  }
+
+  override fun feedbackRepository(): FeedbackRepository {
+    return mock(FeedbackRepository::class.java)
+  }
+
+  override fun userSession(): UserSession {
+    return MockUserSession()
   }
 }

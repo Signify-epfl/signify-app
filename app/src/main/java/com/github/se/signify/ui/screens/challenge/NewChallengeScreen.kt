@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.challenge.Challenge
 import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.challenge.ChallengeViewModel
@@ -39,23 +40,24 @@ import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.UtilTextButton
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
-import com.github.se.signify.ui.screens.profile.currentUserId
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun NewChallengeScreen(
     navigationActions: NavigationActions,
+    userSession: UserSession,
     userRepository: UserRepository,
     challengeRepository: ChallengeRepository,
 ) {
-  val userViewModel: UserViewModel = viewModel(factory = UserViewModel.factory(userRepository))
+  val userViewModel: UserViewModel =
+      viewModel(factory = UserViewModel.factory(userSession, userRepository))
   val challengeViewModel: ChallengeViewModel =
-      viewModel(factory = ChallengeViewModel.factory(challengeRepository))
+      viewModel(factory = ChallengeViewModel.factory(userSession, challengeRepository))
 
   // Fetch friends list and ongoing challenges when this screen is first displayed
   LaunchedEffect(Unit) {
-    userViewModel.getFriendsList(currentUserId)
-    userViewModel.getOngoingChallenges(currentUserId)
+    userViewModel.getFriendsList()
+    userViewModel.getOngoingChallenges()
   }
 
   val ongoingChallenges by userViewModel.ongoingChallenges.collectAsState()
@@ -120,7 +122,7 @@ fun NewChallengeScreen(
                                     // Delete challenge from user's ongoing list and
                                     // Firestore
                                     userViewModel.removeOngoingChallenge(
-                                        currentUserId, challenge.challengeId)
+                                        userSession.getUserId()!!, challenge.challengeId)
                                     userViewModel.removeOngoingChallenge(
                                         challenge.player2, challenge.challengeId)
                                     challengeViewModel.deleteChallenge(challenge.challengeId)
