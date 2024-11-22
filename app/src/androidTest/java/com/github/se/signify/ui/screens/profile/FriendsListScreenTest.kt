@@ -9,6 +9,7 @@ import com.github.se.signify.model.user.User
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
+import com.github.se.signify.ui.navigation.Route
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
@@ -32,6 +33,10 @@ class FriendsListScreenTest {
           name = "Test User",
           currentStreak = 0L,
           highestStreak = 0L) // Test user data
+  private val searchBar = "SearchBar"
+  private val friendsList = "My friends list"
+  private val friendsDemands = "New friends demands"
+  private val search = "Search"
 
   private lateinit var navigationActions: NavigationActions
   private lateinit var userSession: UserSession
@@ -85,21 +90,21 @@ class FriendsListScreenTest {
     composeTestRule.onNodeWithTag("NumberOfDays").assertIsDisplayed()
 
     // Check if the Friends List title is displayed
-    composeTestRule.onNodeWithText("My friends list").assertIsDisplayed()
+    composeTestRule.onNodeWithText(friendsList).assertIsDisplayed()
 
     // Check if all friends are displayed
     currentFriends.forEachIndexed { index, friend ->
-      composeTestRule.onNodeWithTag("My friends list").performScrollToIndex(index)
+      composeTestRule.onNodeWithTag(friendsList).performScrollToIndex(index)
       composeTestRule.waitForIdle()
       composeTestRule.onNodeWithText(friend).assertIsDisplayed()
     }
 
     // Check if the Friend Requests title is displayed
-    composeTestRule.onNodeWithText("New friends demands").assertIsDisplayed()
+    composeTestRule.onNodeWithText(friendsDemands).assertIsDisplayed()
 
     // Check if all friend requests are displayed
     friendRequests.forEachIndexed { index, request ->
-      composeTestRule.onNodeWithTag("New friends demands").performScrollToIndex(index)
+      composeTestRule.onNodeWithTag(friendsDemands).performScrollToIndex(index)
       composeTestRule.waitForIdle()
       composeTestRule.onNodeWithText(request).assertIsDisplayed()
     }
@@ -140,7 +145,7 @@ class FriendsListScreenTest {
     val friendName = "Alice"
     // Scroll to the specific request
     composeTestRule
-        .onNodeWithTag("My friends list")
+        .onNodeWithTag(friendsList)
         .performScrollToIndex(currentFriends.indexOf(friendName))
     composeTestRule.waitForIdle()
 
@@ -154,7 +159,7 @@ class FriendsListScreenTest {
   fun testAcceptFriendRequest() {
     val requestName = "Dave"
     composeTestRule
-        .onNodeWithTag("New friends demands")
+        .onNodeWithTag(friendsDemands)
         .performScrollToIndex(friendRequests.indexOf(requestName))
     composeTestRule.waitForIdle()
 
@@ -169,7 +174,7 @@ class FriendsListScreenTest {
   fun testDeclineFriendRequest() {
     val requestName = "Dave"
     composeTestRule
-        .onNodeWithTag("New friends demands")
+        .onNodeWithTag(friendsDemands)
         .performScrollToIndex(friendRequests.indexOf(requestName))
     composeTestRule.waitForIdle()
 
@@ -185,8 +190,8 @@ class FriendsListScreenTest {
     userViewModel.setSearchResult(testUser) // Simulate a successful search result
 
     // Act
-    composeTestRule.onNodeWithTag("SearchBar").performTextInput(testUser.uid)
-    composeTestRule.onNodeWithContentDescription("Search").performClick()
+    composeTestRule.onNodeWithTag(searchBar).performTextInput(testUser.uid)
+    composeTestRule.onNodeWithContentDescription(search).performClick()
 
     // Assert
     composeTestRule
@@ -200,8 +205,8 @@ class FriendsListScreenTest {
     userViewModel.setSearchResult(testUser) // Simulate a successful search result
 
     // Act
-    composeTestRule.onNodeWithTag("SearchBar").performTextInput(testUser.uid)
-    composeTestRule.onNodeWithContentDescription("Search").performClick()
+    composeTestRule.onNodeWithTag(searchBar).performTextInput(testUser.uid)
+    composeTestRule.onNodeWithContentDescription(search).performClick()
 
     // Assert
     // Click "Add Friend" button
@@ -209,6 +214,8 @@ class FriendsListScreenTest {
     // Verify sendFriendRequest was called with the correct parameters
     verify(userRepository)
         .sendFriendRequest(Mockito.anyString(), eq(testUser.uid), anyOrNull(), anyOrNull())
+    // Verify that searchResult was reset to null
+    assertNull(userViewModel.searchResult.value)
   }
 
   @Test
@@ -223,8 +230,8 @@ class FriendsListScreenTest {
     userViewModel.setSearchResult(friendUser) // Simulate search result with existing friend
 
     // Act
-    composeTestRule.onNodeWithTag("SearchBar").performTextInput(friendUser.uid)
-    composeTestRule.onNodeWithContentDescription("Search").performClick()
+    composeTestRule.onNodeWithTag(searchBar).performTextInput(friendUser.uid)
+    composeTestRule.onNodeWithContentDescription(search).performClick()
 
     // Assert dialog shows "Remove Friend" button as they are friends
     composeTestRule.onNodeWithText("Remove Friend").assertIsDisplayed()
@@ -233,6 +240,35 @@ class FriendsListScreenTest {
     composeTestRule.onNodeWithText("Remove Friend").performClick()
     verify(userRepository)
         .removeFriend(Mockito.anyString(), eq(friendUser.uid), anyOrNull(), anyOrNull())
+    // Verify that searchResult was reset to null
+    assertNull(userViewModel.searchResult.value)
+  }
+
+  @Test
+  fun testMyProfileButtonForAuthenticatedUser() {
+    // Arrange
+    // Create a User instance matching the authenticated user's ID
+    val authenticatedUser =
+        User(
+            uid = userSession.getUserId()!!,
+            name = "Authenticated User",
+            currentStreak = 10L,
+            highestStreak = 20L)
+
+    // Set the search result to simulate the authenticated user
+    userViewModel.setSearchResult(authenticatedUser)
+
+    // Act
+    // Click the "My Profile" button (it should now be visible)
+    composeTestRule.onNodeWithText("My Profile").performClick()
+    composeTestRule.onNodeWithText(authenticatedUser.name!!).isDisplayed()
+
+    // Assert
+    // Verify navigation to the PROFILE screen was triggered
+    verify(navigationActions).navigateTo(Route.PROFILE)
+
+    // Verify that searchResult was reset to null
+    assertNull(userViewModel.searchResult.value)
   }
 
   @Test
@@ -241,8 +277,8 @@ class FriendsListScreenTest {
     userViewModel.setSearchResult(testUser) // Simulate a successful search result
 
     // Act
-    composeTestRule.onNodeWithTag("SearchBar").performTextInput(testUser.uid)
-    composeTestRule.onNodeWithContentDescription("Search").performClick()
+    composeTestRule.onNodeWithTag(searchBar).performTextInput(testUser.uid)
+    composeTestRule.onNodeWithContentDescription(search).performClick()
 
     // Assert
     // Click "Close" button
@@ -258,11 +294,13 @@ class FriendsListScreenTest {
 
     // Simulate a non successful search
     userViewModel.setSearchResult(null) // Initial state
+    userViewModel.setErrorState("User not found")
+    composeTestRule.waitForIdle()
 
     // Act
 
-    composeTestRule.onNodeWithTag("SearchBar").performTextInput(invalidUserId)
-    composeTestRule.onNodeWithContentDescription("Search").performClick()
+    composeTestRule.onNodeWithTag(searchBar).performTextInput(invalidUserId)
+    composeTestRule.onNodeWithContentDescription(search).performClick()
 
     // Assert
     assertNull(userViewModel.searchResult.value) // Verify that searchResult is set to null

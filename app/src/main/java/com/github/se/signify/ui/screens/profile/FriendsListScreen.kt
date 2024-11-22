@@ -1,5 +1,6 @@
 package com.github.se.signify.ui.screens.profile
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -41,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -52,7 +54,9 @@ import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.AccountInformation
 import com.github.se.signify.ui.AnnexScreenScaffold
+import com.github.se.signify.ui.ProfilePicture
 import com.github.se.signify.ui.navigation.NavigationActions
+import com.github.se.signify.ui.navigation.Route
 import kotlinx.coroutines.delay
 
 @Composable
@@ -78,6 +82,8 @@ fun FriendsListScreen(
     val friends = userViewModel.friends.collectAsState()
     val friendsRequests = userViewModel.friendsRequests.collectAsState()
     val searchResult = userViewModel.searchResult.collectAsState()
+    val errorState = userViewModel.errorState.collectAsState()
+
     val userName = userViewModel.userName.collectAsState()
     val streak = userViewModel.streak.collectAsState()
     val profilePicture = userViewModel.profilePictureUrl.collectAsState()
@@ -97,9 +103,6 @@ fun FriendsListScreen(
       if (searchQuery.isNotEmpty()) {
         try {
           userViewModel.getUserById(searchQuery)
-          if (searchResult.value == null) {
-            errorMessage = "User not found"
-          }
         } catch (e: Exception) {
           errorMessage = "Error : ${e.message}"
         }
@@ -107,15 +110,20 @@ fun FriendsListScreen(
     }
 
     errorMessage.let { message ->
+      if (errorState.value != null) {
+        errorMessage = errorState.value!!
+      }
+
       ErrorMessage(message)
       // Dismiss the message
       LaunchedEffect(message) {
         delay(3000)
         errorMessage = ""
+        userViewModel.clearErrorState()
       }
     }
 
-    if (searchResult.value != null && searchResult.value!!.uid != userSession.getUserId()) {
+    if (searchResult.value != null) {
       Dialog(onDismissRequest = { userViewModel.setSearchResult(null) }) {
         Surface(
             shape = RoundedCornerShape(16.dp),
@@ -126,7 +134,8 @@ fun FriendsListScreen(
                   verticalArrangement = Arrangement.Center,
                   modifier = Modifier.fillMaxWidth().padding(16.dp)) {
 
-                    // TODO: add the profile picture
+                    //  Display the user's profile picture
+                    ProfilePicture(searchResult.value!!.profileImageUrl)
 
                     // Display the user's name
                     Text(
@@ -135,8 +144,9 @@ fun FriendsListScreen(
                         color = MaterialTheme.colorScheme.onSurface)
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Check if the users are friends
-                    if (friends.value.contains(searchResult.value!!.uid)) {
+                    if (searchResult.value!!.uid == userSession.getUserId()) {
+                      MyProfileButton(userViewModel, navigationActions)
+                    } else if (friends.value.contains(searchResult.value!!.uid)) {
                       RemoveFriendButton(userViewModel)
                     } else {
                       AddFriendButton(userViewModel)
@@ -171,10 +181,12 @@ fun FriendsListScreen(
 
 @Composable
 fun AddFriendButton(userViewModel: UserViewModel) {
+  val context = LocalContext.current
   Button(
       onClick = {
         userViewModel.sendFriendRequest(userViewModel.searchResult.value!!.uid)
         userViewModel.setSearchResult(null)
+        Toast.makeText(context, "Request sent.", Toast.LENGTH_SHORT).show()
       },
       colors =
           ButtonDefaults.buttonColors(
@@ -187,10 +199,12 @@ fun AddFriendButton(userViewModel: UserViewModel) {
 
 @Composable
 fun RemoveFriendButton(userViewModel: UserViewModel) {
+  val context = LocalContext.current
   Button(
       onClick = {
         userViewModel.removeFriend(userViewModel.searchResult.value!!.uid)
         userViewModel.setSearchResult(null)
+        Toast.makeText(context, "Friend removed.", Toast.LENGTH_SHORT).show()
       },
       colors =
           ButtonDefaults.buttonColors(
@@ -198,6 +212,22 @@ fun RemoveFriendButton(userViewModel: UserViewModel) {
               contentColor = MaterialTheme.colorScheme.onError),
       modifier = Modifier.fillMaxWidth()) {
         Text("Remove Friend")
+      }
+}
+
+@Composable
+fun MyProfileButton(userViewModel: UserViewModel, navigationActions: NavigationActions) {
+  Button(
+      onClick = {
+        navigationActions.navigateTo(Route.PROFILE)
+        userViewModel.setSearchResult(null)
+      },
+      colors =
+          ButtonDefaults.buttonColors(
+              containerColor = MaterialTheme.colorScheme.primary,
+              contentColor = MaterialTheme.colorScheme.onPrimary),
+      modifier = Modifier.fillMaxWidth()) {
+        Text("My Profile")
       }
 }
 
@@ -232,7 +262,7 @@ fun SearchBar(
       colors =
           TextFieldDefaults.colors(
               focusedContainerColor = MaterialTheme.colorScheme.inverseSurface,
-              unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+              unfocusedContainerColor = MaterialTheme.colorScheme.inverseSurface,
               focusedTextColor = MaterialTheme.colorScheme.inverseOnSurface,
               cursorColor = MaterialTheme.colorScheme.inverseOnSurface),
       singleLine = true,
