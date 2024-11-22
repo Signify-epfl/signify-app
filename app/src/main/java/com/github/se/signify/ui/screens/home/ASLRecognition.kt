@@ -117,8 +117,7 @@ fun ASLRecognition(
         BottomNavigationMenu(
             onTabSelect = { route -> navigationActions.navigateTo(route) },
             tabList = LIST_TOP_LEVEL_DESTINATION,
-            selectedItem = navigationActions.currentRoute(),
-            modifier = Modifier.testTag("bottomNavigationMenu"))
+            selectedItem = navigationActions.currentRoute())
       })
 }
 

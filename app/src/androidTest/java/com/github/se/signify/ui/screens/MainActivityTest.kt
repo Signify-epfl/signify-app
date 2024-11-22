@@ -13,9 +13,9 @@ import com.github.se.signify.model.di.AppDependencyProvider
 import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.navigation.Route
 import com.github.se.signify.ui.navigation.Screen
 import com.github.se.signify.ui.screens.profile.FriendsListScreen
+import com.github.se.signify.ui.screens.profile.MyStatsScreen
 import com.github.se.signify.ui.screens.profile.ProfileScreen
 import com.github.se.signify.ui.screens.profile.SettingsScreen
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,6 +41,8 @@ class MainActivityTest {
       FriendsListScreen(navigationActions, userRepository)
       SettingsScreen(navigationActions, userRepository)
       ProfileScreen(navigationActions, userRepository, statsRepository)
+      MyStatsScreen(navigationActions, userRepository, statsRepository)
+
       // Set the content with the mocked context
       SignifyAppPreview(context, AppDependencyProvider, navigationState)
     }
@@ -51,13 +53,13 @@ class MainActivityTest {
 
     composeTestRule.onNodeWithTag("WelcomeScreen").assertIsDisplayed()
 
-    composeTestRule.runOnIdle { navigationActions.navigateTo(Route.PROFILE) }
+    composeTestRule.runOnIdle { navigationActions.navigateTo(Screen.PROFILE) }
     composeTestRule.onNodeWithTag("ProfileScreen").assertIsDisplayed()
 
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Screen.AUTH) }
     composeTestRule.onNodeWithTag("LoginScreen").assertIsDisplayed()
 
-    composeTestRule.runOnIdle { navigationActions.navigateTo(Route.FRIENDS) }
+    composeTestRule.runOnIdle { navigationActions.navigateTo(Screen.FRIENDS) }
     composeTestRule.onNodeWithTag("FriendsListScreen").assertIsDisplayed()
     composeTestRule.onNodeWithContentDescription("Search").performClick()
 
@@ -70,16 +72,16 @@ class MainActivityTest {
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Screen.EXERCISE_HARD) }
     composeTestRule.onNodeWithTag("ExerciseScreenHard").assertIsDisplayed()
 
-    composeTestRule.runOnIdle { navigationActions.navigateTo(Route.SETTINGS) }
+    composeTestRule.runOnIdle { navigationActions.navigateTo(Screen.SETTINGS) }
     composeTestRule.onNodeWithTag("SettingsScreen").assertIsDisplayed()
 
-    composeTestRule.runOnIdle { navigationState.value?.navigateTo(Route.HOME) }
+    composeTestRule.runOnIdle { navigationState.value?.navigateTo(Screen.HOME) }
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
 
-    composeTestRule.runOnIdle { navigationState.value?.navigateTo(Route.STATS) }
+    composeTestRule.runOnIdle { navigationActions.navigateTo(Screen.STATS) }
     composeTestRule.onNodeWithTag("MyStatsScreen").assertIsDisplayed()
 
-    composeTestRule.runOnIdle { navigationState.value?.navigateTo(Route.CHALLENGE_HISTORY) }
+    composeTestRule.runOnIdle { navigationState.value?.navigateTo(Screen.CHALLENGE_HISTORY) }
     composeTestRule.onNodeWithTag("ChallengeHistoryScreen").assertIsDisplayed()
 
     composeTestRule.runOnIdle { navigationState.value?.navigateTo(Screen.CHALLENGE) }

@@ -8,6 +8,10 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -24,7 +28,7 @@ import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.SquareButton
 import com.github.se.signify.ui.UtilButton
 import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.navigation.Route
+import com.github.se.signify.ui.navigation.Screen
 import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -53,10 +57,13 @@ fun ProfileScreen(
     val profilePictureUrl = userViewModel.profilePictureUrl.collectAsState()
     val streak = userViewModel.streak.collectAsState()
     val lettersLearned = statsViewModel.lettersLearned.collectAsState()
+    var updatedProfilePicture by remember { mutableStateOf(profilePictureUrl.value) }
+
+    LaunchedEffect(profilePictureUrl.value) { updatedProfilePicture = profilePictureUrl.value }
 
     // Settings button
     UtilButton(
-        onClick = { navigationActions.navigateTo(Route.SETTINGS) },
+        onClick = { navigationActions.navigateTo(Screen.SETTINGS) },
         buttonTestTag = "SettingsButton",
         iconTestTag = "SettingsIcon",
         icon = Icons.Outlined.Settings,
@@ -67,7 +74,7 @@ fun ProfileScreen(
     AccountInformation(
         userId = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0) ?: "unknown",
         userName = userName.value,
-        profilePictureUrl = profilePictureUrl.value,
+        profilePictureUrl = updatedProfilePicture,
         days = streak.value)
 
     Spacer(modifier = Modifier.height(32.dp))
@@ -80,7 +87,7 @@ fun ProfileScreen(
     SquareButton(
         iconRes = R.drawable.friendsicon,
         label = "My Friends",
-        onClick = { navigationActions.navigateTo(Route.FRIENDS) },
+        onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
         size = 200,
         modifier = Modifier.testTag("MyFriendsButton"))
     Spacer(modifier = Modifier.height(32.dp))
@@ -89,7 +96,7 @@ fun ProfileScreen(
     SquareButton(
         iconRes = R.drawable.statisticsicon,
         label = "My Stats",
-        onClick = { navigationActions.navigateTo(Route.STATS) },
+        onClick = { navigationActions.navigateTo(Screen.STATS) },
         size = 200,
         modifier = Modifier.testTag("MyStatsButton"))
   }
