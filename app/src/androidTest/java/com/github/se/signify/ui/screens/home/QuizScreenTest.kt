@@ -3,6 +3,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import com.github.se.signify.model.quiz.QuizQuestion
 import com.github.se.signify.model.quiz.QuizRepository
 import com.github.se.signify.ui.getIconResId
+import com.github.se.signify.ui.isOfflineState
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.screens.home.NoQuizAvailable
 import com.github.se.signify.ui.screens.home.QuizContent
@@ -30,6 +31,7 @@ class QuizScreenComponentsTest {
 
   @Before
   fun setUp() {
+    isOfflineState = false
     mockQuizRepository = mock(QuizRepository::class.java)
     mockNavigationActions = mock(NavigationActions::class.java)
   }

@@ -305,6 +305,5 @@ class FriendsListScreenTest {
 
     // Assert
     assertNull(userViewModel.searchResult.value) // Verify that searchResult is set to null
-    // TODO: Check if the error message is displayed
   }
 }

@@ -13,6 +13,7 @@ import com.github.se.signify.model.auth.MockUserSession
 import com.github.se.signify.model.di.AppDependencyProvider
 import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.user.UserRepository
+import com.github.se.signify.ui.isOfflineState
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 import com.github.se.signify.ui.screens.profile.FriendsListScreen
@@ -40,6 +41,7 @@ class MainActivityTest {
     val context = mock(Context::class.java)
 
     composeTestRule.setContent {
+      isOfflineState = false
       FriendsListScreen(navigationActions, userSession, userRepository)
       SettingsScreen(navigationActions, userSession, userRepository)
       ProfileScreen(navigationActions, userSession, userRepository, statsRepository)

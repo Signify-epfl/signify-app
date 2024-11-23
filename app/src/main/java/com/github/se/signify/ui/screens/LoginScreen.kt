@@ -22,8 +22,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -45,7 +48,9 @@ import com.github.se.signify.R
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.stats.saveStatsToFirestore
 import com.github.se.signify.model.user.saveUserToFireStore
+import com.github.se.signify.ui.isOfflineState
 import com.github.se.signify.ui.navigation.NavigationActions
+import com.github.se.signify.ui.navigation.Screen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -64,6 +69,7 @@ fun LoginScreen(navigationActions: NavigationActions, userSession: UserSession) 
       rememberFirebaseAuthLauncher(
           onAuthComplete = { result ->
             Log.d("SignInScreen", "User signed in: ${result.user?.displayName}")
+            isOfflineState = false // Set offline state to false when signed in
             Toast.makeText(context, "Login successful!", Toast.LENGTH_LONG).show()
             navigationActions.navigateTo("Home")
           },
@@ -74,16 +80,16 @@ fun LoginScreen(navigationActions: NavigationActions, userSession: UserSession) 
 
   val token = stringResource(id = R.string.default_web_client_id)
 
-  // Gradient brush for background (to be updated with startY and endY)
+  // Gradient brush for background
   val gradient =
       Brush.verticalGradient(
-          colors = // Gradient colors
-          listOf(
+          colors =
+              listOf(
                   MaterialTheme.colorScheme.background,
                   MaterialTheme.colorScheme.background,
                   MaterialTheme.colorScheme.background,
                   MaterialTheme.colorScheme.primary))
-  // The main container for the screen
+
   Scaffold(
       modifier = Modifier.fillMaxSize(),
       content = { padding ->
@@ -100,7 +106,6 @@ fun LoginScreen(navigationActions: NavigationActions, userSession: UserSession) 
           Image(
               painter = painterResource(id = R.drawable.vector),
               contentDescription = "image description",
-              // contentScale = ContentScale.None,
               modifier =
                   Modifier.padding(3.dp)
                       .width(139.dp)
@@ -110,7 +115,6 @@ fun LoginScreen(navigationActions: NavigationActions, userSession: UserSession) 
           Spacer(modifier = Modifier.height(70.dp))
 
           // Welcome Text
-
           Text(
               modifier = Modifier.width(250.dp).height(200.dp).testTag("IntroMessage"),
               text = "Signify is what you need to communicate with deaf and hard of hearing people",
@@ -118,7 +122,6 @@ fun LoginScreen(navigationActions: NavigationActions, userSession: UserSession) 
                   TextStyle(
                       fontSize = 32.sp,
                       lineHeight = 30.sp,
-                      // fontFamily = FontFamily(Font(R.font.roboto)),
                       fontWeight = FontWeight(400),
                       color = MaterialTheme.colorScheme.primary,
                       textAlign = TextAlign.Center,
@@ -138,6 +141,13 @@ fun LoginScreen(navigationActions: NavigationActions, userSession: UserSession) 
                 val googleSignInClient = GoogleSignIn.getClient(context, gso)
                 launcher.launch(googleSignInClient.signInIntent)
               })
+
+          OfflineModeButton {
+            isOfflineState = true // Set offline state to true
+            Log.d("SignInScreen", "Offline mode activated")
+            Toast.makeText(context, "Offline Mode Activated", Toast.LENGTH_LONG).show()
+            navigationActions.navigateTo(Screen.HOME)
+          }
         }
       })
 }
@@ -203,4 +213,38 @@ fun rememberFirebaseAuthLauncher(
       onAuthError(e)
     }
   }
+}
+
+@Composable
+fun OfflineModeButton(onOfflineClick: () -> Unit) {
+  Button(
+      modifier = Modifier.padding(8.dp).height(48.dp).testTag("offlineButton"),
+      onClick = onOfflineClick,
+      colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onPrimary),
+      shape = RoundedCornerShape(50),
+      border = BorderStroke(1.dp, MaterialTheme.colorScheme.background)) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.width(200.dp).testTag("offlineButton")) {
+              Icon(
+                  imageVector = Icons.Default.Home,
+                  contentDescription = "Offline Mode Icon",
+                  modifier = Modifier.size(30.dp).padding(end = 8.dp),
+                  tint = MaterialTheme.colorScheme.primary)
+
+              // Text for the button
+              Text(
+                  text = "Continue in Offline Mode",
+                  style =
+                      TextStyle(
+                          fontSize = 14.sp,
+                          lineHeight = 17.sp,
+                          fontWeight = FontWeight(500),
+                          color = MaterialTheme.colorScheme.onSecondary,
+                          textAlign = TextAlign.Center,
+                          letterSpacing = 0.25.sp,
+                      ))
+            }
+      }
 }

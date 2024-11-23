@@ -69,4 +69,10 @@ class LoginScreenTest : TestCase() {
     // assert that an Intent resolving to Google Mobile Services has been sent (for sign-in)
     intended(toPackage("com.google.android.gms"))
   }
+
+  @Test
+  fun offlineModeHelpsToConnect() {
+    composeTestRule.setContent { LoginScreen(navigationActions, userSession) }
+    composeTestRule.onNodeWithTag("offlineButton").assertIsDisplayed().performClick()
+  }
 }

@@ -208,7 +208,6 @@ dependencies {
     // Pagers
     implementation(platform(libs.androidx.compose.bom.v20240100))
     implementation(libs.firebase.storage.ktx)
-
     // Testing Unit
     testImplementation(libs.junit)
     testImplementation(libs.json)
@@ -224,6 +223,7 @@ dependencies {
     androidTestImplementation(libs.mockk.agent)
 
     // Test UI
+    androidTestImplementation(libs.mediapipe.tasks.vision)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.espresso.intents)
@@ -231,13 +231,22 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.mockito.android)
     androidTestImplementation(libs.mockito.kotlin)
-    androidTestImplementation(libs.kaspresso)
-    androidTestImplementation(libs.kaspresso.allure.support)
-    androidTestImplementation(libs.kaspresso.compose.support)
+
+    // Exclude Protobuf from Kaspresso dependencies to resolve version conflicts with MediaPipe
+    androidTestImplementation(libs.kaspresso) {
+        exclude(group = "com.google.protobuf")
+    }
+    androidTestImplementation(libs.kaspresso.allure.support) {
+        exclude(group = "com.google.protobuf")
+    }
+    androidTestImplementation(libs.kaspresso.compose.support) {
+        exclude(group = "com.google.protobuf")
+    }
 
     // Test Jetpack Compose UI
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
 }
 
 

@@ -15,6 +15,7 @@ import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.stats.StatsViewModel
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
+import com.github.se.signify.ui.isOfflineState
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 import com.google.firebase.auth.FirebaseAuth
@@ -41,6 +42,7 @@ class ProfileScreenTest {
 
   @Before
   fun setUp() {
+    isOfflineState = false
     navigationActions = mock(NavigationActions::class.java)
     userSession = MockUserSession()
     userRepository = mock(UserRepository::class.java)
