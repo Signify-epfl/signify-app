@@ -4,7 +4,6 @@ import android.content.Context
 import android.widget.Toast
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.NavOptionsBuilder
 import com.github.se.signify.R
 import com.github.se.signify.model.auth.UserSession
 
@@ -19,8 +18,12 @@ open class NavigationActions(
    * @param destination The top level destination to navigate to.
    */
   open fun navigateTo(destination: TopLevelDestination) {
+    if (destination.requiresAuth && !userSession.isLoggedIn()) {
+      onUnauthenticated()
+      return
+    }
 
-    navigateTo(destination.screen) {
+    navController.navigate(destination.route) {
       // Pop up to the start destination of the graph to
       // avoid building up a large stack of destinations
       popUpTo(navController.graph.findStartDestination().id) {
@@ -35,6 +38,7 @@ open class NavigationActions(
       // if (destination.route != Route.AUTH) {
       //  restoreState = true
       // }
+
     }
   }
 
@@ -43,14 +47,12 @@ open class NavigationActions(
    *
    * @param screen The screen to navigate to.
    */
-  open fun navigateTo(screen: Screen, builder: NavOptionsBuilder.() -> Unit = {}) {
+  open fun navigateTo(screen: Screen) {
     if (screen.requiresAuth && !userSession.isLoggedIn()) {
-      // TODO: Display a popup dialog to prompt the user to log in
-      Toast.makeText(context, context.getString(R.string.unauthenticated_error), Toast.LENGTH_SHORT)
-          .show()
-    } else {
-      navController.navigate(screen.route, builder)
+      onUnauthenticated()
+      return
     }
+    navController.navigate(screen.route)
   }
 
   open fun goBack() {
@@ -59,5 +61,11 @@ open class NavigationActions(
 
   open fun currentRoute(): String {
     return navController.currentDestination?.route ?: ""
+  }
+
+  private fun onUnauthenticated() {
+    // TODO: Display a popup dialog to prompt the user to log in
+    Toast.makeText(context, context.getString(R.string.unauthenticated_error), Toast.LENGTH_SHORT)
+        .show()
   }
 }

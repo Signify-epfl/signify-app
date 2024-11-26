@@ -38,9 +38,9 @@ fun BottomNavigationMenu(
                       Icon(
                           painterResource(id = tab.icon),
                           contentDescription = null,
-                          modifier = Modifier.testTag("TabIcon_${tab.screen.route}"))
+                          modifier = Modifier.testTag("TabIcon_${tab.route}"))
                     }, // Load the drawable icons
-                    selected = tab.screen.route == selectedItem,
+                    selected = tab.route == selectedItem,
                     onClick = { onTabSelect(tab) },
                     modifier = Modifier.clip(RoundedCornerShape(50.dp)))
               }
