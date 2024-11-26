@@ -30,7 +30,7 @@ class HomeScreenTest {
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
 
-    `when`(navigationActions.currentRoute()).thenReturn(Screen.HOME)
+    `when`(navigationActions.currentRoute()).thenReturn(Screen.HOME.route)
   }
 
   @Test
@@ -91,7 +91,11 @@ class HomeScreenTest {
   // The following 2 tests should be moved to their own file.
   @Test
   fun exerciseListDisplaysExerciseButtons() {
-    val exercises = listOf(Exercise("Easy"), Exercise("Medium"), Exercise("Hard"))
+    val exercises =
+        listOf(
+            Exercise("Easy", Screen.EXERCISE_EASY),
+            Exercise("Medium", Screen.EXERCISE_MEDIUM),
+            Exercise("Hard", Screen.EXERCISE_HARD))
 
     composeTestRule.setContent { ExerciseList(exercises, navigationActions) }
 
@@ -105,7 +109,11 @@ class HomeScreenTest {
 
   @Test
   fun exerciseButtonTextDisplaysCorrectly() {
-    val exercises = listOf(Exercise("Easy"), Exercise("Medium"), Exercise("Hard"))
+    val exercises =
+        listOf(
+            Exercise("Easy", Screen.EXERCISE_EASY),
+            Exercise("Medium", Screen.EXERCISE_MEDIUM),
+            Exercise("Hard", Screen.EXERCISE_HARD))
 
     composeTestRule.setContent { ExerciseList(exercises, navigationActions) }
 
@@ -122,9 +130,9 @@ class HomeScreenTest {
   fun clickingExerciseButtonsCallsOnClick() {
     val exercises =
         listOf(
-            Exercise("Easy", "Exercise Screen Easy"), Exercise("Hard", "Exercise Screen Hard")
-            // Need to modify hard to medium and hard should be as another exercise
-            )
+            Exercise("Easy", Screen.EXERCISE_EASY),
+            Exercise("Medium", Screen.EXERCISE_MEDIUM),
+            Exercise("Hard", Screen.EXERCISE_HARD))
 
     composeTestRule.setContent { ExerciseList(exercises, navigationActions) }
 
@@ -135,7 +143,7 @@ class HomeScreenTest {
           .performClick()
 
       verify(navigationActions)
-          .navigateTo(exercise.route) // Verify onClick was called with the exercise
+          .navigateTo(exercise.screen) // Verify onClick was called with the exercise
     }
   }
 

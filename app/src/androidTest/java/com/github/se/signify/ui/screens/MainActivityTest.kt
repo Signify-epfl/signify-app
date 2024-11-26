@@ -46,7 +46,7 @@ class MainActivityTest {
       MyStatsScreen(navigationActions, userSession, userRepository, statsRepository)
 
       // Set the content with the mocked context
-      SignifyAppPreview(context, AppDependencyProvider, navigationState)
+      SignifyAppPreview(context, AppDependencyProvider)
     }
   }
 

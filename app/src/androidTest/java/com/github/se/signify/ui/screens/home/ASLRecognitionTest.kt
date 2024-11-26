@@ -50,7 +50,7 @@ class ASLRecognitionTest : LifecycleOwner {
     val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
     handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
 
-    `when`(navigationActions.currentRoute()).thenReturn(Screen.PRACTICE)
+    `when`(navigationActions.currentRoute()).thenReturn(Screen.PRACTICE.route)
 
     composeTestRule.setContent {
       ASLRecognition(

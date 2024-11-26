@@ -26,9 +26,9 @@ class BottomNavigationBarTest {
   fun bottomNavigationBarIsDisplayedCorrectly() {
     composeTestRule.setContent {
       BottomNavigationMenu(
-          onTabSelect = { navigationActions.navigateTo(it.route) },
+          onTabSelect = { navigationActions.navigateTo(it.screen) },
           tabList = LIST_TOP_LEVEL_DESTINATION,
-          selectedItem = LIST_TOP_LEVEL_DESTINATION.first().route)
+          selectedItem = LIST_TOP_LEVEL_DESTINATION.first().screen.route)
     }
 
     composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()

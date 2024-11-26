@@ -48,7 +48,7 @@ class ProfileScreenTest {
     userViewModel = UserViewModel(userSession, userRepository)
     statsViewModel = StatsViewModel(userSession, statsRepository)
 
-    `when`(navigationActions.currentRoute()).thenReturn(Screen.PROFILE)
+    `when`(navigationActions.currentRoute()).thenReturn(Screen.PROFILE.route)
     composeTestRule.setContent {
       ProfileScreen(navigationActions, userSession, userRepository, statsRepository)
     }

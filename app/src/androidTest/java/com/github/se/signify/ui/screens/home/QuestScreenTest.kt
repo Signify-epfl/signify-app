@@ -41,7 +41,7 @@ class QuestScreenTest {
     userRepository = mock(UserRepository::class.java)
     navigationActions = mock(NavigationActions::class.java)
 
-    `when`(navigationActions.currentRoute()).thenReturn(Screen.QUEST)
+    `when`(navigationActions.currentRoute()).thenReturn(Screen.QUEST.route)
   }
 
   @Test
