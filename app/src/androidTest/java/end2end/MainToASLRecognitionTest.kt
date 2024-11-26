@@ -26,7 +26,7 @@ class MainToASLRecognitionTest {
     composeTestRule.onNodeWithTag("LoginScreen").assertIsDisplayed()
 
     // Simulate the Google sign-in process
-    composeTestRule.onNodeWithTag("offlineButton").performClick()
+    composeTestRule.onNodeWithTag("skipLoginButton").performClick()
 
     // Wait for navigation to Home Screen
     composeTestRule.waitForIdle()
