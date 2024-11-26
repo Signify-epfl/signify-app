@@ -142,10 +142,10 @@ fun LoginScreen(navigationActions: NavigationActions, userSession: UserSession) 
                 launcher.launch(googleSignInClient.signInIntent)
               })
 
-          OfflineModeButton {
+          SkipLoginButton {
             isOfflineState = true // Set offline state to true
-            Log.d("SignInScreen", "Offline mode activated")
-            Toast.makeText(context, "Offline Mode Activated", Toast.LENGTH_LONG).show()
+            Log.d("LoginScreen", "Proceeding in offline state.")
+            Toast.makeText(context, "You are not logged in.", Toast.LENGTH_LONG).show()
             navigationActions.navigateTo(Screen.HOME)
           }
         }
@@ -216,17 +216,17 @@ fun rememberFirebaseAuthLauncher(
 }
 
 @Composable
-fun OfflineModeButton(onOfflineClick: () -> Unit) {
+fun SkipLoginButton(onOfflineClick: () -> Unit) {
   Button(
-      modifier = Modifier.padding(8.dp).height(48.dp).testTag("offlineButton"),
+      modifier = Modifier.padding(8.dp).height(48.dp).testTag("skipLoginButton"),
       onClick = onOfflineClick,
-      colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onPrimary),
+      colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surface),
       shape = RoundedCornerShape(50),
-      border = BorderStroke(1.dp, MaterialTheme.colorScheme.background)) {
+      border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.width(200.dp).testTag("offlineButton")) {
+            modifier = Modifier.width(200.dp).testTag("skipLoginButton")) {
               Icon(
                   imageVector = Icons.Default.Home,
                   contentDescription = "Offline Mode Icon",
@@ -235,13 +235,13 @@ fun OfflineModeButton(onOfflineClick: () -> Unit) {
 
               // Text for the button
               Text(
-                  text = "Continue in Offline Mode",
+                  text = "Skip Login",
                   style =
                       TextStyle(
                           fontSize = 14.sp,
                           lineHeight = 17.sp,
                           fontWeight = FontWeight(500),
-                          color = MaterialTheme.colorScheme.onSecondary,
+                          color = MaterialTheme.colorScheme.onSurface,
                           textAlign = TextAlign.Center,
                           letterSpacing = 0.25.sp,
                       ))
