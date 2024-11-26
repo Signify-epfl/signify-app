@@ -68,10 +68,9 @@ import kotlinx.coroutines.launch
  * Data class representing an exercise with a name and an optional navigation route.
  *
  * @property name The name of the exercise, used for display and identification.
- * @property route The navigation route associated with the exercise. Defaults to "UNKNOWN_EXERCISE"
- *   if no specific route is provided.
+ * @property screen The screen associated with the exercise.
  */
-data class Exercise(val name: String, val route: String = "UNKNOWN_EXERCISE")
+data class Exercise(val name: String, val screen: Screen)
 /**
  * Composable function that displays the home screen with various UI elements including a list of
  * exercises, a letter dictionary, and navigation buttons. The screen uses a `LazyColumn` for
@@ -350,7 +349,7 @@ fun ExerciseList(exercises: List<Exercise>, navigationActions: NavigationActions
 @Composable
 fun ExerciseButton(exercise: Exercise, navigationActions: NavigationActions) {
   Button(
-      onClick = { navigationActions.navigateTo(exercise.route) },
+      onClick = { navigationActions.navigateTo(exercise.screen) },
       modifier =
           Modifier.aspectRatio(2f)
               .fillMaxWidth()

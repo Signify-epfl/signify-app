@@ -29,10 +29,10 @@ open class NavigationActions(
   /**
    * Navigate to the specified screen by route.
    *
-   * @param route The route to navigate to.
+   * @param screen The screen to navigate to.
    */
-  open fun navigateTo(route: String) {
-    navController.navigate(route)
+  open fun navigateTo(screen: Screen) {
+    navController.navigate(screen.route)
   }
 
   open fun goBack() {

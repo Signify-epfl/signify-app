@@ -1,25 +1,22 @@
 package com.github.se.signify.ui.navigation
 
-object Screen {
-  const val WELCOME = "Welcome Screen"
-  const val AUTH = "Auth Screen"
-
-  const val HOME = "Home Screen"
-  const val PRACTICE = "Practice Screen"
-  const val EXERCISE_EASY = "Easy Exercise Screen"
-  const val EXERCISE_MEDIUM = "Medium Exercise Screen"
-  const val EXERCISE_HARD = "Hard Exercise Screen"
-  const val QUEST = "Quest Screen"
-  const val FEEDBACK = "Feedback Screen"
-  const val QUIZ = "Quiz Screen"
-
-  const val PROFILE = "Profile Screen"
-  const val FRIENDS = "Friends Screen"
-  const val SETTINGS = "Settings Screen"
-  const val STATS = "Stats Screen"
-
-  const val CHALLENGE = "Challenge Screen"
-  const val NEW_CHALLENGE = "NewChallenge Screen"
-  const val CREATE_CHALLENGE = "CreateChallenge Screen"
-  const val CHALLENGE_HISTORY = "ChallengeHistory Screen"
+enum class Screen(val route: String, val requiresAuth: Boolean = true) {
+  WELCOME("Welcome Screen", false),
+  AUTH("Auth Screen", false),
+  HOME("Home Screen", false),
+  PRACTICE("Practice Screen", false),
+  EXERCISE_EASY("Easy Exercise Screen", false),
+  EXERCISE_MEDIUM("Medium Exercise Screen", false),
+  EXERCISE_HARD("Hard Exercise Screen", false),
+  QUEST("Quest Screen"),
+  FEEDBACK("Feedback Screen"),
+  QUIZ("Quiz Screen", false),
+  PROFILE("Profile Screen"),
+  FRIENDS("Friends Screen"),
+  SETTINGS("Settings Screen"),
+  STATS("Stats Screen"),
+  CHALLENGE("Challenge Screen"),
+  NEW_CHALLENGE("NewChallenge Screen"),
+  CREATE_CHALLENGE("CreateChallenge Screen"),
+  CHALLENGE_HISTORY("ChallengeHistory Screen")
 }
