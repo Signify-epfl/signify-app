@@ -40,7 +40,6 @@ import com.github.se.signify.ui.screens.profile.MyStatsScreen
 import com.github.se.signify.ui.screens.profile.ProfileScreen
 import com.github.se.signify.ui.screens.profile.SettingsScreen
 import com.github.se.signify.ui.theme.SignifyTheme
-import kotlinx.coroutines.flow.MutableStateFlow
 
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,8 +48,7 @@ class MainActivity : ComponentActivity() {
       SignifyTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
           val context = LocalContext.current
-          val navigationState = MutableStateFlow<NavigationActions?>(null)
-          SignifyAppPreview(context, AppDependencyProvider, navigationState)
+          SignifyAppPreview(context, AppDependencyProvider)
         }
       }
     }
@@ -62,7 +60,6 @@ class MainActivity : ComponentActivity() {
 fun SignifyAppPreview(
     context: Context,
     dependencyProvider: DependencyProvider,
-    navigationState: MutableStateFlow<NavigationActions?>
 ) {
   val navController = rememberNavController()
   val navigationActions = NavigationActions(navController)
@@ -180,5 +177,4 @@ fun SignifyAppPreview(
       }
     }
   }
-  navigationState.value = navigationActions
 }
