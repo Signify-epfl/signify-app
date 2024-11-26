@@ -62,7 +62,8 @@ fun SignifyAppPreview(
     dependencyProvider: DependencyProvider,
 ) {
   val navController = rememberNavController()
-  val navigationActions = NavigationActions(navController)
+  val navigationActions =
+      NavigationActions(context, navController, dependencyProvider.userSession())
   val handLandMarkImplementation = dependencyProvider.handLandMarkRepository()
   val handLandMarkViewModel: HandLandMarkViewModel =
       viewModel(factory = HandLandMarkViewModel.provideFactory(context, handLandMarkImplementation))

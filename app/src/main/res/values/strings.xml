@@ -78,5 +78,6 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="tip_x">Tips: Curl your index finger, pointing it up, while the other fingers are folded down. Your thumb rests near the index finger.</string>
     <string name="tip_y">Tips: Extend your pinky and thumb out to the sides, with the other fingers folded down.</string>
     <string name="tip_z">Tips: Move your index finger to trace a Z shape in the air.</string>
+    <string name="unauthenticated_error">You must be logged in to access this feature</string>
     <integer name="scroll_offset">8</integer>"
 </resources>

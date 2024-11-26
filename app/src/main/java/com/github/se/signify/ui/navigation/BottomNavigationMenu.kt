@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 fun BottomNavigationMenu(
     onTabSelect: (TopLevelDestination) -> Unit,
     tabList: List<TopLevelDestination>,
-    selectedItem: String = Route.HOME, // Provide a default value
+    selectedItem: String = Screen.HOME.route, // Provide a default value
 ) {
   Box(
       modifier =
@@ -38,9 +38,9 @@ fun BottomNavigationMenu(
                       Icon(
                           painterResource(id = tab.icon),
                           contentDescription = null,
-                          modifier = Modifier.testTag("TabIcon_${tab.route}"))
+                          modifier = Modifier.testTag("TabIcon_${tab.screen.route}"))
                     }, // Load the drawable icons
-                    selected = tab.route == selectedItem,
+                    selected = tab.screen.route == selectedItem,
                     onClick = { onTabSelect(tab) },
                     modifier = Modifier.clip(RoundedCornerShape(50.dp)))
               }
