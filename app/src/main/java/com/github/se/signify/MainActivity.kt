@@ -80,7 +80,7 @@ fun SignifyAppPreview(
         startDestination = Screen.AUTH,
         route = Route.AUTH,
     ) {
-      composable(Screen.AUTH) { LoginScreen(navigationActions, dependencyProvider.userSession()) }
+      composable(Screen.AUTH) { LoginScreen(navigationActions) }
     }
 
     navigation(

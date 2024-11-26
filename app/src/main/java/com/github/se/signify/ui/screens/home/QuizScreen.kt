@@ -47,58 +47,52 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.model.quiz.QuizQuestion
 import com.github.se.signify.model.quiz.QuizRepository
 import com.github.se.signify.model.quiz.QuizViewModel
-import com.github.se.signify.ui.WhiteOfflineScreen
-import com.github.se.signify.ui.isOfflineState
 import com.github.se.signify.ui.navigation.NavigationActions
 
 @Composable
 fun QuizScreen(navigationActions: NavigationActions, quizRepository: QuizRepository) {
-  if (isOfflineState) {
-    WhiteOfflineScreen(navigationActions)
-  } else {
-    val quizViewModel: QuizViewModel = viewModel(factory = QuizViewModel.factory(quizRepository))
+  val quizViewModel: QuizViewModel = viewModel(factory = QuizViewModel.factory(quizRepository))
 
-    val currentQuiz by quizViewModel.currentQuiz.collectAsState()
-    var selectedOption by remember { mutableStateOf<String?>(null) }
+  val currentQuiz by quizViewModel.currentQuiz.collectAsState()
+  var selectedOption by remember { mutableStateOf<String?>(null) }
 
-    val context = LocalContext.current
+  val context = LocalContext.current
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-    ) { padding ->
-      Column(
-          modifier = Modifier.fillMaxSize().padding(16.dp),
-      ) {
-        QuizHeader(navigationActions)
+  Scaffold(
+      modifier = Modifier.fillMaxSize(),
+  ) { padding ->
+    Column(
+        modifier = Modifier.fillMaxSize().padding(16.dp),
+    ) {
+      QuizHeader(navigationActions)
 
-        Spacer(modifier = Modifier.height(24.dp))
+      Spacer(modifier = Modifier.height(24.dp))
 
-        if (currentQuiz != null) {
-          val shuffledOptions =
-              remember(currentQuiz) {
-                currentQuiz!!.confusers.plus(currentQuiz!!.correctWord).shuffled()
-              }
+      if (currentQuiz != null) {
+        val shuffledOptions =
+            remember(currentQuiz) {
+              currentQuiz!!.confusers.plus(currentQuiz!!.correctWord).shuffled()
+            }
 
-          QuizContent(
-              currentQuiz = currentQuiz!!,
-              shuffledOptions = shuffledOptions,
-              selectedOption = selectedOption,
-              onOptionSelected = { selectedOption = it },
-              onSubmit = {
-                quizViewModel.submitAnswer(
-                    selectedOption = it,
-                    onCorrect = {
-                      Toast.makeText(context, "Correct answer!", Toast.LENGTH_SHORT).show()
-                    },
-                    onIncorrect = {
-                      Toast.makeText(context, "Incorrect answer, try again.", Toast.LENGTH_SHORT)
-                          .show()
-                    })
-                selectedOption = null
-              })
-        } else {
-          NoQuizAvailable()
-        }
+        QuizContent(
+            currentQuiz = currentQuiz!!,
+            shuffledOptions = shuffledOptions,
+            selectedOption = selectedOption,
+            onOptionSelected = { selectedOption = it },
+            onSubmit = {
+              quizViewModel.submitAnswer(
+                  selectedOption = it,
+                  onCorrect = {
+                    Toast.makeText(context, "Correct answer!", Toast.LENGTH_SHORT).show()
+                  },
+                  onIncorrect = {
+                    Toast.makeText(context, "Incorrect answer, try again.", Toast.LENGTH_SHORT)
+                        .show()
+                  })
+              selectedOption = null
+            })
+      } else {
+        NoQuizAvailable()
       }
     }
   }

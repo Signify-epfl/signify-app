@@ -45,10 +45,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
-import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.stats.saveStatsToFirestore
 import com.github.se.signify.model.user.saveUserToFireStore
-import com.github.se.signify.ui.isOfflineState
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -62,14 +60,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 @Composable
-fun LoginScreen(navigationActions: NavigationActions, userSession: UserSession) {
+fun LoginScreen(navigationActions: NavigationActions) {
   val context = LocalContext.current
 
   val launcher =
       rememberFirebaseAuthLauncher(
           onAuthComplete = { result ->
             Log.d("SignInScreen", "User signed in: ${result.user?.displayName}")
-            isOfflineState = false // Set offline state to false when signed in
             Toast.makeText(context, "Login successful!", Toast.LENGTH_LONG).show()
             navigationActions.navigateTo("Home")
           },
@@ -143,7 +140,6 @@ fun LoginScreen(navigationActions: NavigationActions, userSession: UserSession) 
               })
 
           SkipLoginButton {
-            isOfflineState = true // Set offline state to true
             Log.d("LoginScreen", "Proceeding in offline state.")
             Toast.makeText(context, "You are not logged in.", Toast.LENGTH_LONG).show()
             navigationActions.navigateTo(Screen.HOME)

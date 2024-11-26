@@ -86,8 +86,6 @@ import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 
-// Global or shared state for offline mode
-var isOfflineState by mutableStateOf(true)
 // Map to associate each letter with its corresponding drawable resource for ASL gestures
 val gestureImageMap =
     mapOf(
