@@ -34,12 +34,12 @@ import com.github.se.signify.ui.TopBar
 import com.github.se.signify.ui.UtilButton
 import com.github.se.signify.ui.UtilIconButton
 import com.github.se.signify.ui.UtilTextButton
-import com.github.se.signify.ui.WhiteOfflineScreen
 import com.github.se.signify.ui.getIconResId
 import com.github.se.signify.ui.getImageResId
 import com.github.se.signify.ui.getTipResId
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
+import com.github.se.signify.ui.screens.auth.WhiteOfflineScreen
 import junit.framework.TestCase.assertEquals
 import org.junit.Rule
 import org.junit.Test
