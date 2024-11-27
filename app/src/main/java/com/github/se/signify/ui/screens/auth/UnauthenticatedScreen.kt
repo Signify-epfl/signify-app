@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -36,7 +37,7 @@ import com.github.se.signify.ui.navigation.Screen
 fun UnauthenticatedScreen(navigationActions: NavigationActions) {
   MainScreenScaffold(
       navigationActions = navigationActions,
-      testTagColumn = "WhiteOfflineScreen",
+      testTagColumn = "UnauthenticatedScreen",
       helpTitle = "Offline Mode",
       helpText = stringResource(R.string.help_offline_mode)) {
         Column(
@@ -48,14 +49,14 @@ fun UnauthenticatedScreen(navigationActions: NavigationActions) {
             verticalArrangement = Arrangement.Center) {
               // "You are offline" text
               Text(
-                  text = "You are offline",
+                  text = "You are not logged in",
                   style =
                       TextStyle(
                           fontSize = 24.sp,
                           fontWeight = FontWeight.Bold,
                           color = Color.Black, // Black text
                           textAlign = TextAlign.Center),
-                  modifier = Modifier.padding(bottom = 16.dp) // Space below the text
+                  modifier = Modifier.padding(bottom = 16.dp).testTag("UnauthenticatedText") // Space below the text
                   )
 
               // "Log In" button using UtilTextButton

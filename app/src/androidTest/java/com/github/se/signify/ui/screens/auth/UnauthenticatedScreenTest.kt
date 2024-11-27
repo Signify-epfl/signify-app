@@ -20,14 +20,21 @@ class UnauthenticatedScreenTest {
     private lateinit var navigationActions: NavigationActions
 
     @Test
-    fun unauthenticatedScreenDisplaysCorrectly() {
+    fun allElementsAreCorrectlyDisplayed() {
         navigationActions = mock(NavigationActions::class.java)
         composeTestRule.setContent { UnauthenticatedScreen(navigationActions = navigationActions) }
 
-        composeTestRule.onNodeWithText("You are offline").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("UnauthenticatedScreen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("UnauthenticatedText").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("logInButtonInOfflineMode").assertIsDisplayed()
+    }
 
-        composeTestRule.onNodeWithText("Log In").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("logInButtonInOfflineMode").assertIsDisplayed().performClick()
+    @Test
+    fun loginButtonRoutesToLoginScreen() {
+        navigationActions = mock(NavigationActions::class.java)
+        composeTestRule.setContent { UnauthenticatedScreen(navigationActions = navigationActions) }
+
+        composeTestRule.onNodeWithText("Log in").performClick()
         verify(navigationActions).navigateTo(Screen.AUTH)
     }
 }
