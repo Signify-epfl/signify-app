@@ -39,7 +39,7 @@ import com.github.se.signify.ui.getImageResId
 import com.github.se.signify.ui.getTipResId
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
-import com.github.se.signify.ui.screens.auth.WhiteOfflineScreen
+import com.github.se.signify.ui.screens.auth.UnauthenticatedScreen
 import junit.framework.TestCase.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -505,10 +505,10 @@ class UtilsTest {
   }
 
   @Test
-  fun whiteOfflineScreenDisplaysCorrectly() {
+  fun unauthenticatedScreenDisplaysCorrectly() {
     // Set up the WhiteOfflineScreen
     navigationActions = mock(NavigationActions::class.java)
-    composeTestRule.setContent { WhiteOfflineScreen(navigationActions = navigationActions) }
+    composeTestRule.setContent { UnauthenticatedScreen(navigationActions = navigationActions) }
     composeTestRule.onNodeWithTag("WhiteOfflineScreen").assertIsDisplayed()
     // Assert the text "You are offline" is displayed
     composeTestRule.onNodeWithText("You are offline").assertIsDisplayed()
