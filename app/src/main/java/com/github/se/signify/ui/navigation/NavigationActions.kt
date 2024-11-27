@@ -18,12 +18,12 @@ open class NavigationActions(
    * @param destination The top level destination to navigate to.
    */
   open fun navigateTo(destination: TopLevelDestination) {
-    if (destination.requiresAuth && !userSession.isLoggedIn()) {
-      onUnauthenticated()
-      return
+    val route = if (destination.requiresAuth && !userSession.isLoggedIn()) {
+      Screen.UNAUTHENTICATED.route
+    } else {
+      destination.route
     }
-
-    navController.navigate(destination.route) {
+    navController.navigate(route) {
       // Pop up to the start destination of the graph to
       // avoid building up a large stack of destinations
       popUpTo(navController.graph.findStartDestination().id) {
