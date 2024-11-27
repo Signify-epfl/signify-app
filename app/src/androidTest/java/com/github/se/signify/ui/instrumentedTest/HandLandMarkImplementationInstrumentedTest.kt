@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.screens.home
+package com.github.se.signify.ui.instrumentedTest
 
 import android.content.Context
 import android.graphics.Bitmap
