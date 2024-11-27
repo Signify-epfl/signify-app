@@ -13,6 +13,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
+import com.github.se.signify.ui.screens.auth.LoginScreen
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
 import org.junit.After
 import org.junit.Before

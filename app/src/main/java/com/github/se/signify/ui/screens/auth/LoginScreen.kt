@@ -1,6 +1,6 @@
 @file:Suppress("DEPRECATION") // We were told to use deprecated Google Authentication API
 
-package com.github.se.signify.ui.screens
+package com.github.se.signify.ui.screens.auth
 
 import android.content.Intent
 import android.util.Log
