@@ -19,6 +19,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.whenever
 
+@Suppress("UNCHECKED_CAST")
 class CreateAChallengeScreenTest {
   @get:Rule val composeTestRule = createComposeRule()
 
