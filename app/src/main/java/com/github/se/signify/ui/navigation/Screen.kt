@@ -3,6 +3,7 @@ package com.github.se.signify.ui.navigation
 enum class Screen(val route: String, val requiresAuth: Boolean = true) {
   WELCOME("Welcome Screen", false),
   AUTH("Auth Screen", false),
+  UNAUTHENTICATED("Unauthenticated Screen", false),
   HOME("Home Screen", false),
   PRACTICE("Practice Screen", false),
   EXERCISE_EASY("Easy Exercise Screen", false),

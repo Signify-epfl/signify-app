@@ -21,8 +21,9 @@ import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Route
 import com.github.se.signify.ui.navigation.Screen
-import com.github.se.signify.ui.screens.LoginScreen
 import com.github.se.signify.ui.screens.WelcomeScreen
+import com.github.se.signify.ui.screens.auth.LoginScreen
+import com.github.se.signify.ui.screens.auth.UnauthenticatedScreen
 import com.github.se.signify.ui.screens.challenge.ChallengeHistoryScreen
 import com.github.se.signify.ui.screens.challenge.ChallengeScreen
 import com.github.se.signify.ui.screens.challenge.CreateAChallengeScreen
@@ -80,6 +81,7 @@ fun SignifyAppPreview(
         route = Route.AUTH,
     ) {
       composable(Screen.AUTH.route) { LoginScreen(navigationActions) }
+      composable(Screen.UNAUTHENTICATED.route) { UnauthenticatedScreen(navigationActions) }
     }
 
     navigation(
