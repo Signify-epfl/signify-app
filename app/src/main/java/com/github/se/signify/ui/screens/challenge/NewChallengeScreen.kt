@@ -1,6 +1,8 @@
 package com.github.se.signify.ui.screens.challenge
 
 import android.annotation.SuppressLint
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -8,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,6 +22,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -111,7 +116,6 @@ fun NewChallengeScreen(
                     ) {
                         items(ongoingChallenges.size) { index ->
                             val challenge = ongoingChallenges[index]
-                            val isTurnToPlay = challengeViewModel.isPlayerTurn(userSession.getUserId() ?: "")
 
                             OngoingChallengeCard(
                                 challenge = challenge,
@@ -126,13 +130,12 @@ fun NewChallengeScreen(
                                     challengeViewModel.deleteChallenge(challenge.challengeId)
                                 },
                                 onPlayClick = {
-                                    if (isTurnToPlay) {
-                                        navigationActions.navigateTo(Screen.chronoChallengeWithId(challenge.challengeId))
-                                    }
+                                    Log.d("Navigation", "Navigating with challengeId: ${challenge.challengeId}")
+                                    // Navigate to the ChronoChallengeGameScreen using the challengeId
+                                    navigationActions.navigateTo(Screen.chronoChallengeWithId(challenge.challengeId))
                                 },
-                                userSession = userSession, // Pass userSession as parameter
-                                modifier = Modifier.testTag("OngoingChallengeCard$index"),
-                                isTurnToPlay = isTurnToPlay
+                                userSession = userSession,
+                                modifier = Modifier.testTag("OngoingChallengeCard$index")
                             )
                         }
                     }
@@ -141,36 +144,52 @@ fun NewChallengeScreen(
         }
     }
 }
-
 @Composable
 fun OngoingChallengeCard(
     challenge: Challenge,
     onDeleteClick: () -> Unit,
     onPlayClick: () -> Unit,
     userSession: UserSession,
-    modifier: Modifier = Modifier,
-    isTurnToPlay: Boolean
+    modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+
+    // Determine if the current player has completed all rounds
+    val currentUserId = userSession.getUserId()
+    val isChallengeCompleted = if (currentUserId == challenge.player1) {
+        challenge.player1RoundCompleted.all { it }
+    } else {
+        challenge.player2RoundCompleted.all { it }
+    }
+
+    // Calculate the personal total time if the challenge is completed
+    val totalTime = if (isChallengeCompleted) {
+        if (currentUserId == challenge.player1) {
+            challenge.player1Times.sum() / 1000 // Divide by 1000 to get the time in seconds
+        } else {
+            challenge.player2Times.sum() / 1000 // Divide by 1000 to get the time in seconds
+        }
+    } else null
+
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 4.dp) // Padding for better separation between cards
-            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp)), // Adding border for better visual separation
-        shape = RoundedCornerShape(16.dp), // Rounded corners
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp)),
+        shape = RoundedCornerShape(16.dp),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp), // Padding inside the card for the content
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween // Space between opponent info and delete button
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column(
                 verticalArrangement = Arrangement.Center,
-                modifier = Modifier.weight(1f) // Take up all available space
+                modifier = Modifier.weight(1f)
             ) {
-                // Opponent information
-                val opponentName = if (userSession.getUserId() == challenge.player1) {
+                val opponentName = if (currentUserId == challenge.player1) {
                     challenge.player2
                 } else {
                     challenge.player1
@@ -186,7 +205,34 @@ fun OngoingChallengeCard(
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.surface
                 )
+                if (isChallengeCompleted) {
+                    Text(
+                        text = "Your Total Time: ${totalTime}s",
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.surface
+                    )
+                }
             }
+
+            // Play button always displayed
+            IconButton(
+                onClick = {
+                    if (isChallengeCompleted) {
+                        Toast.makeText(context, "Challenge already completed, wait for result", Toast.LENGTH_SHORT).show()
+                    } else {
+                        onPlayClick()
+                    }
+                },
+                modifier = Modifier.padding(start = 8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.PlayArrow,
+                    contentDescription = "Play Challenge",
+                    tint = if (isChallengeCompleted) Color.Gray else MaterialTheme.colorScheme.primary
+                )
+            }
+
+            // Always show delete button
             IconButton(
                 onClick = onDeleteClick,
                 modifier = Modifier
@@ -197,15 +243,6 @@ fun OngoingChallengeCard(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "Delete Challenge",
                     tint = MaterialTheme.colorScheme.surface
-                )
-            }
-            if (isTurnToPlay) {
-                // Play Challenge Button only visible if it's the player's turn
-                UtilTextButton(
-                    onClickAction = onPlayClick,
-                    testTag = "PlayButton${challenge.challengeId}",
-                    text = "Play",
-                    backgroundColor = MaterialTheme.colorScheme.primary,
                 )
             }
         }
