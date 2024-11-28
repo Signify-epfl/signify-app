@@ -3,6 +3,7 @@ package com.github.se.signify
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -115,8 +116,9 @@ fun SignifyAppPreview(
                     dependencyProvider.statsRepository()
                 )
             }
+
             composable(
-                route = Screen.CHRONO_CHALLENGE + "/{challengeId}",
+                route = "${Screen.CHRONO_CHALLENGE}/{challengeId}",
                 arguments = listOf(navArgument("challengeId") { type = NavType.StringType })
             ) { backStackEntry ->
                 val challengeId = backStackEntry.arguments?.getString("challengeId") ?: return@composable
@@ -124,9 +126,13 @@ fun SignifyAppPreview(
                     navigationActions = navigationActions,
                     userSession = dependencyProvider.userSession(),
                     challengeRepository = dependencyProvider.challengeRepository(),
+                    handLandMarkViewModel = handLandMarkViewModel, // Pass it here
                     challengeId = challengeId
                 )
             }
+
+
+
         }
 
         navigation(
