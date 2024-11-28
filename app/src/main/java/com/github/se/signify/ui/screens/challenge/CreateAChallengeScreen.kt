@@ -95,7 +95,7 @@ fun CreateAChallengeScreen(
                     testTag = "ChallengeButton_$friendId",
                     text = "Challenge",
                     backgroundColor = MaterialTheme.colorScheme.primary,
-                )
+                    textColor = MaterialTheme.colorScheme.onPrimary)
               }
             }
           }
@@ -173,7 +173,7 @@ fun ChallengeModeAlertDialog(
             text = "Send Challenge",
             backgroundColor = MaterialTheme.colorScheme.primary,
             enabled = selectedMode.value != null,
-        )
+            textColor = MaterialTheme.colorScheme.onPrimary)
       },
       dismissButton = {
         UtilTextButton(
@@ -181,7 +181,7 @@ fun ChallengeModeAlertDialog(
             testTag = "CancelButton",
             text = "Cancel",
             backgroundColor = MaterialTheme.colorScheme.surface,
-        )
+            textColor = MaterialTheme.colorScheme.onPrimary)
       },
       title = {
         Text(text = "Pick a Mode", modifier = Modifier.fillMaxWidth().testTag("DialogTitle"))
@@ -217,5 +217,5 @@ fun ModeButton(
       backgroundColor =
           if (selectedMode.value == mode) MaterialTheme.colorScheme.primary
           else MaterialTheme.colorScheme.surface,
-  )
+      textColor = MaterialTheme.colorScheme.onPrimary)
 }
