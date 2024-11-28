@@ -452,7 +452,7 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
         modifier =
             Modifier.border(
                     3.dp,
-                    MaterialTheme.colorScheme.onBackground,
+                    MaterialTheme.colorScheme.primary,
                     RoundedCornerShape(12.dp)) // Ensure the border wraps the popup
                 .testTag("InfoPopup")) {
           Column(
