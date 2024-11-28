@@ -45,4 +45,30 @@ class ChallengeRepositoryFireStore(private val db: FirebaseFirestore) : Challeng
         .addOnSuccessListener { onSuccess() }
         .addOnFailureListener { onFailure(it) }
   }
+
+    override fun getChallengeById(challengeId: String, onSuccess: (Challenge) -> Unit, onFailure: (Exception) -> Unit) {
+        db.collection("challenges").document(challengeId).get()
+            .addOnSuccessListener { document ->
+                val challenge = document.toObject(Challenge::class.java)
+                if (challenge != null) {
+                    onSuccess(challenge)
+                } else {
+                    onFailure(Exception("Challenge not found"))
+                }
+            }
+            .addOnFailureListener { onFailure(it) }
+    }
+
+    override fun updateChallenge(updatedChallenge: Challenge, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        db.collection("challenges").document(updatedChallenge.challengeId).set(updatedChallenge)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onFailure(it) }
+    }
+
+    override fun recordPlayerTime(challengeId: String, playerId: String, timeTaken: Long, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        db.collection("challenges").document(challengeId).update("playerTime", timeTaken)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onFailure(it) }
+    }
 }
+

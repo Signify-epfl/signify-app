@@ -6,6 +6,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.github.se.signify.model.auth.UserSession
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+
 
 enum class ChallengeMode(val modeName: String) {
   SPRINT("Sprint"),
@@ -14,7 +17,7 @@ enum class ChallengeMode(val modeName: String) {
 
 open class ChallengeViewModel(
     private val userSession: UserSession,
-    private val repository: ChallengeRepository,
+    private val challengeRepository: ChallengeRepository,
 ) : ViewModel() {
   private val _challenge = MutableStateFlow<Challenge?>(null)
   val challenge: StateFlow<Challenge?> = _challenge
@@ -22,7 +25,7 @@ open class ChallengeViewModel(
   private val logTag = "ChallengeViewModel"
 
   fun sendChallengeRequest(opponentId: String, mode: ChallengeMode, challengeId: String) {
-    repository.sendChallengeRequest(
+    challengeRepository.sendChallengeRequest(
         userSession.getUserId()!!,
         opponentId,
         mode,
@@ -32,13 +35,86 @@ open class ChallengeViewModel(
   }
 
   fun deleteChallenge(challengeId: String) {
-    repository.deleteChallenge(
+    challengeRepository.deleteChallenge(
         challengeId,
         onSuccess = { Log.d(logTag, "Challenge deleted successfully.") },
         onFailure = { e -> Log.e(logTag, "Failed to delete challenge: ${e.message}") })
   }
 
-  companion object {
+    private var currentChallenge: Challenge? = null
+
+    // Start a new challenge game in "chrono" mode
+    fun startGame(challengeId: String) {
+        viewModelScope.launch {
+            challengeRepository.getChallengeById(challengeId, onSuccess = { challenge ->
+                if (challenge.mode == "chrono") {
+                    currentChallenge = challenge.copy(
+                        gameStatus = "in_progress"
+                    )
+                    currentChallenge?.let { updatedChallenge ->
+                        challengeRepository.updateChallenge(
+                            updatedChallenge,
+                            onSuccess = {
+                                // Successfully started the game
+                            },
+                            onFailure = {
+                                // Handle failure during game start
+                            }
+                        )
+                    }
+                }
+            }, onFailure = {
+                // Handle failure during challenge retrieval
+            })
+        }
+    }
+
+    // Record the time taken by a player asynchronously
+    fun getChallengeById(challengeId: String, onSuccess: (Challenge) -> Unit, onFailure: (Exception) -> Unit) {
+        viewModelScope.launch {
+            challengeRepository.getChallengeById(challengeId, onSuccess, onFailure)
+        }
+    }
+
+    fun updateChallenge(updatedChallenge: Challenge, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        viewModelScope.launch {
+            challengeRepository.updateChallenge(updatedChallenge, onSuccess, onFailure)
+        }
+    }
+
+    fun recordPlayerTime(challengeId: String, playerId: String, timeTaken: Long, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        viewModelScope.launch {
+            challengeRepository.recordPlayerTime(challengeId, playerId, timeTaken, onSuccess, onFailure)
+        }
+    }
+
+    // Method to get the current challenge's status (e.g., for UI)
+    fun getCurrentChallengeStatus(): String? {
+        return currentChallenge?.gameStatus
+    }
+
+    // Method to check if it's the player's turn to play
+    fun isPlayerTurn(playerId: String): Boolean {
+        val challenge = currentChallenge ?: return false
+        return if (playerId == challenge.player1) {
+            !challenge.player1RoundCompleted[challenge.round - 1]
+        } else {
+            !challenge.player2RoundCompleted[challenge.round - 1]
+        }
+    }
+
+    // Helper to get the word for the current round (for display purposes)
+    fun getCurrentRoundWord(): String? {
+        val challenge = currentChallenge ?: return null
+        return if (challenge.round <= challenge.roundWords.size) {
+            challenge.roundWords[challenge.round - 1]  // Index based on 1-based round
+        } else {
+            null
+        }
+    }
+
+
+    companion object {
     fun factory(
         userSession: UserSession,
         repository: ChallengeRepository,
