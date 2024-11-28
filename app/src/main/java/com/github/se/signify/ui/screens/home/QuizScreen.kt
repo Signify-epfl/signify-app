@@ -1,7 +1,6 @@
 package com.github.se.signify.ui.screens.home
 
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -57,10 +56,8 @@ fun QuizScreen(navigationActions: NavigationActions, quizRepository: QuizReposit
     WhiteOfflineScreen(navigationActions)
   } else {
     val quizViewModel: QuizViewModel = viewModel(factory = QuizViewModel.factory(quizRepository))
-
     val currentQuiz by quizViewModel.currentQuiz.collectAsState()
     var selectedOption by remember { mutableStateOf<String?>(null) }
-
     val context = LocalContext.current
 
     Scaffold(
@@ -142,8 +139,9 @@ fun QuizContent(
       modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp).testTag("SignsRow"),
       horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         items(items = currentQuiz.signs) { signResId ->
-          Image(
+          Icon(
               painter = painterResource(id = signResId),
+              tint = MaterialTheme.colorScheme.primary,
               contentDescription = "Sign for Letter",
               modifier =
                   Modifier.size(80.dp)
@@ -156,7 +154,7 @@ fun QuizContent(
   Text(
       text = "Choose the correct answer:",
       fontWeight = FontWeight.Bold,
-      color = MaterialTheme.colorScheme.primary,
+      color = MaterialTheme.colorScheme.onBackground,
       modifier = Modifier.padding(bottom = 12.dp).testTag("QuizPrompt"))
 
   Column(
@@ -175,7 +173,10 @@ fun QuizContent(
                     onClick = { onOptionSelected(option) },
                     colors =
                         RadioButtonDefaults.colors(
-                            selectedColor = MaterialTheme.colorScheme.primary),
+                            selectedColor = MaterialTheme.colorScheme.primary,
+                            unselectedColor =
+                                MaterialTheme.colorScheme.onSurfaceVariant // Added unselected color
+                            ),
                     modifier = Modifier.testTag("OptionRadioButton"))
                 Text(
                     text = option,
@@ -195,7 +196,8 @@ fun QuizContent(
       colors =
           ButtonDefaults.buttonColors(
               containerColor = MaterialTheme.colorScheme.primary,
-              contentColor = MaterialTheme.colorScheme.background),
+              contentColor = MaterialTheme.colorScheme.onPrimary // Updated from background
+              ),
       modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).testTag("SubmitButton"),
       shape = RoundedCornerShape(50),
   ) {
@@ -212,7 +214,7 @@ fun NoQuizAvailable() {
         Text(
             text = "No quizzes available.",
             fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = MaterialTheme.colorScheme.onBackground, // Updated from onSurface
             modifier = Modifier.padding(bottom = 16.dp).testTag("NoQuizzesText"))
       }
 }
