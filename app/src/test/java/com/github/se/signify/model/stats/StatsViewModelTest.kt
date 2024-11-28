@@ -2,136 +2,221 @@ package com.github.se.signify.model.stats
 
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.di.MockDependencyProvider
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Test
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
-import org.mockito.kotlin.any
-import org.mockito.kotlin.eq
+import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
 
-class StatsViewModelTest {
+@RunWith(Parameterized::class)
+class StatsViewModelTest(
+    private val getStatName: String,
+    private val updateStatName: String,
+    private val getAction: () -> Unit,
+    private val updateAction: () -> Unit,
+    private val expectedValueGet: Int,
+    private val expectedValueUpdate: Int,
+    private val stateFlowValue: () -> Int
+) {
 
-  private lateinit var userSession: UserSession
-  private lateinit var statsRepositoryFirestore: StatsRepository
-  private lateinit var statsViewModel: StatsViewModel
+  companion object {
+    private lateinit var mockUserSession: UserSession
+    private lateinit var statsViewModel: StatsViewModel
+    private lateinit var mockStatsRepository: MockStatsRepository
 
-  private lateinit var userId: String
+    private lateinit var userId: String
 
+    private val initialStats =
+        Stats(
+            lettersLearned = listOf('A', 'B'),
+            easyExercise = 5,
+            mediumExercise = 3,
+            hardExercise = 2,
+            dailyQuest = 1,
+            weeklyQuest = 1,
+            completedChallenge = 4,
+            createdChallenge = 2,
+            wonChallenge = 3)
+
+    @JvmStatic
+    @BeforeClass
+    fun setup() {
+      mockUserSession = MockDependencyProvider.userSession()
+      mockStatsRepository = MockStatsRepository()
+      userId = mockUserSession.getUserId()!!
+      statsViewModel = StatsViewModel(mockUserSession, mockStatsRepository)
+      mockStatsRepository.setStatsForUser(userId, initialStats)
+    }
+
+    @JvmStatic
+    @Parameterized.Parameters
+    fun data(): Collection<Array<Any>> {
+      return listOf(
+          arrayOf(
+              "getEasyExerciseStats",
+              "updateEasyExerciseStats",
+              { statsViewModel.getEasyExerciseStats() },
+              { statsViewModel.updateEasyExerciseStats() },
+              initialStats.easyExercise,
+              initialStats.easyExercise + 1,
+              { statsViewModel.easy.value }),
+          arrayOf(
+              "getMediumExerciseStats",
+              "updateMediumExerciseStats",
+              { statsViewModel.getMediumExerciseStats() },
+              { statsViewModel.updateMediumExerciseStats() },
+              initialStats.mediumExercise,
+              initialStats.mediumExercise + 1,
+              { statsViewModel.medium.value }),
+          arrayOf(
+              "getHardExerciseStats",
+              "updateHardExerciseStats",
+              { statsViewModel.getHardExerciseStats() },
+              { statsViewModel.updateHardExerciseStats() },
+              initialStats.hardExercise,
+              initialStats.hardExercise + 1,
+              { statsViewModel.hard.value }),
+          arrayOf(
+              "getDailyQuestStats",
+              "updateDailyQuestStats",
+              { statsViewModel.getDailyQuestStats() },
+              { statsViewModel.updateDailyQuestStats() },
+              initialStats.dailyQuest,
+              initialStats.dailyQuest + 1,
+              { statsViewModel.daily.value }),
+          arrayOf(
+              "getWeeklyQuestStats",
+              "updateWeeklyQuestStats",
+              { statsViewModel.getWeeklyQuestStats() },
+              { statsViewModel.updateWeeklyQuestStats() },
+              initialStats.weeklyQuest,
+              initialStats.weeklyQuest + 1,
+              { statsViewModel.weekly.value }),
+          arrayOf(
+              "getCompletedChallengeStats",
+              "updateCompletedChallengeStats",
+              { statsViewModel.getCompletedChallengeStats() },
+              { statsViewModel.updateCompletedChallengeStats() },
+              initialStats.completedChallenge,
+              initialStats.completedChallenge + 1,
+              { statsViewModel.completed.value }),
+          arrayOf(
+              "getCreatedChallengeStats",
+              "updateCreatedChallengeStats",
+              { statsViewModel.getCreatedChallengeStats() },
+              { statsViewModel.updateCreatedChallengeStats() },
+              initialStats.createdChallenge,
+              initialStats.createdChallenge + 1,
+              { statsViewModel.created.value }),
+          arrayOf(
+              "getWonChallengeStats",
+              "updateWonChallengeStats",
+              { statsViewModel.getWonChallengeStats() },
+              { statsViewModel.updateWonChallengeStats() },
+              initialStats.wonChallenge,
+              initialStats.wonChallenge + 1,
+              { statsViewModel.won.value }))
+    }
+  }
+  // Issues with how the test case resets when parametrised,
+  // doing 2 blocks one @BeforeClass and one @Before fixes it for the moment.
   @Before
-  fun setUp() {
-    userSession = MockDependencyProvider.userSession()
-    statsRepositoryFirestore = mock(StatsRepository::class.java)
-    statsViewModel = StatsViewModel(userSession, statsRepositoryFirestore)
-
-    userId = userSession.getUserId()!!
+  fun setupDependencies() {
+    mockUserSession = MockDependencyProvider.userSession()
+    mockStatsRepository = MockStatsRepository()
+    userId = mockUserSession.getUserId()!!
+    statsViewModel = StatsViewModel(mockUserSession, mockStatsRepository)
+    mockStatsRepository.setStatsForUser(userId, initialStats)
   }
 
   @Test
-  fun getLettersLearnedShouldCallRepositoryGetLettersLearned() {
+  fun `getIntFunctions should handle success correctly`() {
+    getAction()
+    assertTrue(mockStatsRepository.wasMethodCalled(getStatName))
+    assertEquals(expectedValueGet, stateFlowValue())
+  }
+
+  @Test
+  fun `getIntFunctions should handle failure correctly`() {
+    mockStatsRepository.shouldSucceed = false
+    getAction()
+    assertTrue(mockStatsRepository.wasMethodCalled(getStatName))
+    assertEquals(0, stateFlowValue())
+  }
+
+  @Test
+  fun `updateIntFunctions should handle success correctly`() {
+    updateAction()
+
+    assertTrue(mockStatsRepository.wasMethodCalled(updateStatName))
+
+    getAction()
+
+    assertEquals(expectedValueUpdate, stateFlowValue())
+  }
+
+  @Test
+  fun `updateIntFunctions should handle failure correctly`() {
+    mockStatsRepository.shouldSucceed = false
+
+    updateAction()
+
+    assertTrue(mockStatsRepository.wasMethodCalled(updateStatName))
+
+    mockStatsRepository.shouldSucceed = true
+    getAction()
+
+    assertEquals(expectedValueGet, stateFlowValue())
+  }
+
+  @Test
+  fun getLettersLearnedShouldHandleSuccessCorrectly() {
     statsViewModel.getLettersLearned()
-    verify(statsRepositoryFirestore).getLettersLearned(eq(userId), any(), any())
+
+    assertTrue(mockStatsRepository.wasMethodCalled("getLettersLearned"))
+
+    assertEquals(initialStats.lettersLearned, statsViewModel.lettersLearned.value)
   }
 
   @Test
-  fun getEasyExerciseStatsShouldCallRepositoryGetEasyExerciseStats() {
-    statsViewModel.getEasyExerciseStats()
-    verify(statsRepositoryFirestore).getEasyExerciseStats(eq(userId), any(), any())
+  fun getLettersLearnedShouldHandleFailureCorrectly() {
+    mockStatsRepository.shouldSucceed = false
+
+    statsViewModel.getLettersLearned()
+
+    assertTrue(mockStatsRepository.wasMethodCalled("getLettersLearned"))
+
+    assertEquals(emptyList<Char>(), statsViewModel.lettersLearned.value)
   }
 
   @Test
-  fun getMediumExerciseStatsShouldCallRepositoryGetMediumExerciseStats() {
-    statsViewModel.getMediumExerciseStats()
-    verify(statsRepositoryFirestore).getMediumExerciseStats(eq(userId), any(), any())
-  }
-
-  @Test
-  fun getHardExerciseStatsShouldCallRepositoryGetHardExerciseStats() {
-    statsViewModel.getHardExerciseStats()
-    verify(statsRepositoryFirestore).getHardExerciseStats(eq(userId), any(), any())
-  }
-
-  @Test
-  fun getDailyQuestStatsShouldCallRepositoryGetDailyQuestStats() {
-    statsViewModel.getDailyQuestStats()
-    verify(statsRepositoryFirestore).getDailyQuestStats(eq(userId), any(), any())
-  }
-
-  @Test
-  fun getWeeklyQuestStatsShouldCallRepositoryGetWeeklyQuestStats() {
-    statsViewModel.getWeeklyQuestStats()
-    verify(statsRepositoryFirestore).getWeeklyQuestStats(eq(userId), any(), any())
-  }
-
-  @Test
-  fun getCompletedChallengeStatsShouldCallRepositoryGetCompletedChallengeStats() {
-    statsViewModel.getCompletedChallengeStats()
-    verify(statsRepositoryFirestore).getCompletedChallengeStats(eq(userId), any(), any())
-  }
-
-  @Test
-  fun getCreatedChallengeStatsShouldCallRepositoryGetCreatedChallengeStats() {
-    statsViewModel.getCreatedChallengeStats()
-    verify(statsRepositoryFirestore).getCreatedChallengeStats(eq(userId), any(), any())
-  }
-
-  @Test
-  fun getWonChallengeStatsShouldCallRepositoryGetWonChallengeStats() {
-    statsViewModel.getWonChallengeStats()
-    verify(statsRepositoryFirestore).getWonChallengeStats(eq(userId), any(), any())
-  }
-
-  @Test
-  fun updateLettersLearnedShouldCallRepositoryUpdateLettersLearned() {
+  fun updateLettersLearnedShouldHandleSuccessCorrectly() {
     val newLetter = 'D'
+
     statsViewModel.updateLettersLearned(newLetter)
-    verify(statsRepositoryFirestore).updateLettersLearned(eq(userId), eq(newLetter), any(), any())
+
+    assertTrue(mockStatsRepository.wasMethodCalled("updateLettersLearned"))
+
+    statsViewModel.getLettersLearned()
+
+    assertEquals(initialStats.lettersLearned + newLetter, statsViewModel.lettersLearned.value)
   }
 
   @Test
-  fun updateEasyExerciseStatsShouldCallRepositoryUpdateEasyExerciseStats() {
-    statsViewModel.updateEasyExerciseStats()
-    verify(statsRepositoryFirestore).updateEasyExerciseStats(eq(userId), any(), any())
-  }
+  fun updateLettersLearnedShouldHandleFailureCorrectly() {
+    val newLetter = 'D'
 
-  @Test
-  fun updateMediumExerciseStatsShouldCallRepositoryUpdateMediumExerciseStats() {
-    statsViewModel.updateMediumExerciseStats()
-    verify(statsRepositoryFirestore).updateMediumExerciseStats(eq(userId), any(), any())
-  }
+    mockStatsRepository.shouldSucceed = false
 
-  @Test
-  fun updateHardExerciseStatsShouldCallRepositoryUpdateHardExerciseStats() {
-    statsViewModel.updateHardExerciseStats()
-    verify(statsRepositoryFirestore).updateHardExerciseStats(eq(userId), any(), any())
-  }
+    statsViewModel.updateLettersLearned(newLetter)
 
-  @Test
-  fun updateDailyQuestStatsShouldCallRepositoryUpdateDailyQuestStats() {
-    statsViewModel.updateDailyQuestStats()
-    verify(statsRepositoryFirestore).updateDailyQuestStats(eq(userId), any(), any())
-  }
+    assertTrue(mockStatsRepository.wasMethodCalled("updateLettersLearned"))
 
-  @Test
-  fun updateWeeklyQuestStatsShouldCallRepositoryUpdateWeeklyQuestStats() {
-    statsViewModel.updateWeeklyQuestStats()
-    verify(statsRepositoryFirestore).updateWeeklyQuestStats(eq(userId), any(), any())
-  }
+    mockStatsRepository.shouldSucceed = true
+    statsViewModel.getLettersLearned()
 
-  @Test
-  fun updateCompletedChallengeStatsShouldCallRepositoryUpdateCompletedChallengeStats() {
-    statsViewModel.updateCompletedChallengeStats()
-    verify(statsRepositoryFirestore).updateCompletedChallengeStats(eq(userId), any(), any())
-  }
-
-  @Test
-  fun updateCreatedChallengeStatsShouldCallRepositoryUpdateCreatedChallengeStats() {
-    statsViewModel.updateCreatedChallengeStats()
-    verify(statsRepositoryFirestore).updateCreatedChallengeStats(eq(userId), any(), any())
-  }
-
-  @Test
-  fun updateWonChallengeStatsShouldCallRepositoryUpdateWonChallengeStats() {
-    statsViewModel.updateWonChallengeStats()
-    verify(statsRepositoryFirestore).updateWonChallengeStats(eq(userId), any(), any())
+    assertEquals(initialStats.lettersLearned, statsViewModel.lettersLearned.value)
   }
 }
