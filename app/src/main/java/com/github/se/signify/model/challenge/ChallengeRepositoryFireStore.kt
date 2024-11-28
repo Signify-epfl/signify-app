@@ -14,12 +14,23 @@ class ChallengeRepositoryFireStore(private val db: FirebaseFirestore) : Challeng
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
+        // Generate initial words for each round
+        val roundWords = listOf("apple", "banana", "cherry")  // Replace with dynamic word generation if needed
+
+        // Create the challenge object
         val challenge = Challenge(
             challengeId = challengeId,
             player1 = player1Id,
             player2 = player2Id,
             mode = mode.name,
-            status = "pending"
+            status = "pending",
+            round = 1,
+            roundWords = roundWords,
+            player1Times = mutableListOf(),
+            player2Times = mutableListOf(),
+            player1RoundCompleted = mutableListOf(false, false, false),
+            player2RoundCompleted = mutableListOf(false, false, false),
+            gameStatus = "not_started"
         )
 
         // Add challenge to Firestore for both players
@@ -36,6 +47,7 @@ class ChallengeRepositoryFireStore(private val db: FirebaseFirestore) : Challeng
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { onFailure(it) }
     }
+
 
 
     override fun deleteChallenge(
