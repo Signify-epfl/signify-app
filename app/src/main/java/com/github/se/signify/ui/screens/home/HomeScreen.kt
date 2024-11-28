@@ -219,7 +219,7 @@ fun LetterDictionary(
 
     // Horizontal Pager for letters in the center
     HorizontalPager(
-        beyondBoundsPageCount = 1,
+        beyondViewportPageCount = 1,
         state = pagerState,
         modifier = Modifier.size(300.dp, 50.dp).align(Alignment.Center).testTag("LetterPager"),
     ) { page ->
@@ -295,7 +295,7 @@ fun ExerciseList(exercises: List<Exercise>, navigationActions: NavigationActions
 
   Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
     HorizontalPager(
-        beyondBoundsPageCount = exercises.size,
+        beyondViewportPageCount = exercises.size,
         state = pagerState,
         modifier = Modifier.height(160.dp).padding(8.dp).testTag("ExerciseListPager"),
         verticalAlignment = Alignment.CenterVertically) { page ->
