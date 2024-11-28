@@ -177,7 +177,7 @@ fun CameraFeedbackButton(onClick: () -> Unit = {}) {
   UtilTextButton(
       onClickAction = onClick,
       testTag = "CameraFeedbackButton",
-      text = "Try it out",
+      text = "Try hand signs here !",
       backgroundColor = MaterialTheme.colorScheme.primary,
   )
 }
@@ -228,19 +228,17 @@ fun LetterDictionary(
       Log.d("LetterDictionary", "Current Letter: $currentLetter")
       Box(
           contentAlignment = Alignment.Center,
-          modifier =
-              Modifier.fillMaxSize()
-                  .size(100.dp, 50.dp)
-                  .clickable {
-                    coroutineScope.launch { scrollState.animateScrollToItem(page + numbOfHeaders) }
-                  }
-                  .testTag("LetterBox_${currentLetter.uppercaseChar()}")) {
+          modifier = Modifier.fillMaxSize().size(100.dp, 50.dp)) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier =
                     Modifier.border(
                             2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))) {
+                        .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
+                        .clickable {
+                          coroutineScope.launch { scrollState.scrollToItem(page + numbOfHeaders) }
+                        }
+                        .testTag("LetterBox_${currentLetter.uppercaseChar()}")) {
                   Row(
                       verticalAlignment = Alignment.CenterVertically,
                       horizontalArrangement = Arrangement.Center) {
