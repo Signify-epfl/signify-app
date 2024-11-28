@@ -63,8 +63,8 @@ fun ASLRecognition(
         TopAppBar(
             colors =
                 TopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.onPrimary,
-                    scrolledContainerColor = MaterialTheme.colorScheme.onPrimary,
+                    containerColor = MaterialTheme.colorScheme.background,
+                    scrolledContainerColor = MaterialTheme.colorScheme.background,
                     navigationIconContentColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.primary,
                     actionIconContentColor = MaterialTheme.colorScheme.primary),
@@ -110,7 +110,8 @@ fun ASLRecognition(
                   },
                   testTag = "practiceButton",
                   text = "More on ASL Alphabet",
-                  backgroundColor = MaterialTheme.colorScheme.primary)
+                  backgroundColor = MaterialTheme.colorScheme.primary,
+                  textColor = MaterialTheme.colorScheme.onPrimary)
             }
       },
       bottomBar = {
@@ -146,13 +147,13 @@ fun HandGestureImage(gesture: String) {
               .background(MaterialTheme.colorScheme.primary)
               .border(
                   width = 2.dp,
-                  color = MaterialTheme.colorScheme.outline,
+                  color = MaterialTheme.colorScheme.primary,
                   shape = RoundedCornerShape(size = 10.dp))
               .testTag("handGestureImage")) {
         Icon(
             painter = painterResource(id = imageResource),
             contentDescription = "Letter gesture",
-            tint = MaterialTheme.colorScheme.onSurface,
+            tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.size(200.dp).padding(16.dp).align(Alignment.Center))
       }
 }
@@ -170,7 +171,7 @@ fun DrawnOutPut(landmarks: List<NormalizedLandmark>?, text: String) {
               .background(MaterialTheme.colorScheme.primary)
               .border(
                   width = 2.dp,
-                  color = MaterialTheme.colorScheme.outline,
+                  color = MaterialTheme.colorScheme.primary,
                   shape = RoundedCornerShape(10.dp))
               .testTag("gestureOverlayView"),
       contentAlignment = Alignment.Center) {
