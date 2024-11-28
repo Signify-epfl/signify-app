@@ -130,6 +130,7 @@ fun NewChallengeScreen(
                                         navigationActions.navigateTo(Screen.chronoChallengeWithId(challenge.challengeId))
                                     }
                                 },
+                                userSession = userSession, // Pass userSession as parameter
                                 modifier = Modifier.testTag("OngoingChallengeCard$index"),
                                 isTurnToPlay = isTurnToPlay
                             )
@@ -143,9 +144,10 @@ fun NewChallengeScreen(
 
 @Composable
 fun OngoingChallengeCard(
-    challenge: Challenge, // Using the existing Challenge data class
+    challenge: Challenge,
     onDeleteClick: () -> Unit,
     onPlayClick: () -> Unit,
+    userSession: UserSession,
     modifier: Modifier = Modifier,
     isTurnToPlay: Boolean
 ) {
@@ -168,8 +170,13 @@ fun OngoingChallengeCard(
                 modifier = Modifier.weight(1f) // Take up all available space
             ) {
                 // Opponent information
+                val opponentName = if (userSession.getUserId() == challenge.player1) {
+                    challenge.player2
+                } else {
+                    challenge.player1
+                }
                 Text(
-                    text = "Opponent: ${challenge.player2}",
+                    text = "Opponent: $opponentName",
                     fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.surface,
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold

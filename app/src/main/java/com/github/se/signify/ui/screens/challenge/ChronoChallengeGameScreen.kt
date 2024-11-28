@@ -18,7 +18,6 @@ import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.challenge.Challenge
 import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.hand.HandLandMarkViewModel
-
 import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.CameraPlaceholder
 import com.github.se.signify.ui.navigation.NavigationActions
