@@ -1,16 +1,34 @@
 package com.github.se.signify.model.user
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.core.net.toUri
 import com.github.se.signify.model.auth.MockUserSession
 import com.github.se.signify.model.auth.UserSession
+import com.github.se.signify.model.challenge.Challenge
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.mockito.kotlin.any
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.eq
+import org.mockito.kotlin.whenever
 
+@ExperimentalCoroutinesApi
 class UserViewModelTest {
+
+  @get:Rule val instantExecutorRule = InstantTaskExecutorRule()
+
   private lateinit var userSession: UserSession
   private lateinit var userRepository: UserRepository
   private lateinit var userViewModel: UserViewModel
@@ -19,8 +37,11 @@ class UserViewModelTest {
   private val friendUserId = "friendUserId"
   private val challengeId = "challengeId"
 
+  private val testDispatcher = UnconfinedTestDispatcher()
+
   @Before
   fun setUp() {
+    Dispatchers.setMain(testDispatcher)
     userSession = MockUserSession()
     userRepository = mock(UserRepository::class.java)
     userViewModel = UserViewModel(userSession, userRepository)
@@ -119,5 +140,381 @@ class UserViewModelTest {
   fun updateStreak_callsRepository() {
     userViewModel.updateStreak()
     verify(userRepository).updateStreak(eq(currentUserId), any(), any())
+  }
+
+  @Test
+  fun getFriendsListUpdatesFriendsOnSuccess() = runTest {
+    // Arrange
+    val friendsList = listOf("friend1", "friend2")
+    doAnswer {
+          val onSuccess = it.getArgument<(List<String>) -> Unit>(1)
+          onSuccess(friendsList)
+          null
+        }
+        .whenever(userRepository)
+        .getFriendsList(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.getFriendsList()
+
+    // Assert
+    assertEquals(friendsList, userViewModel.friends.value)
+  }
+
+  @Test
+  fun getFriendsListHandlesFailure() = runTest {
+    // Arrange
+    val exception = Exception("Failed to get friends list")
+    doAnswer {
+          val onFailure = it.getArgument<(Exception) -> Unit>(2)
+          onFailure(exception)
+          null
+        }
+        .whenever(userRepository)
+        .getFriendsList(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.getFriendsList()
+
+    // Assert
+    // Error is logged; verify the method call
+    verify(userRepository).getFriendsList(eq(currentUserId), any(), any())
+  }
+
+  @Test
+  fun getUserByIdUpdatesSearchResultOnSuccess() = runTest {
+    // Arrange
+    val testUser = User(uid = "testUserId", name = "Test User")
+    doAnswer {
+          val onSuccess = it.getArgument<(User) -> Unit>(1)
+          onSuccess(testUser)
+          null
+        }
+        .whenever(userRepository)
+        .getUserById(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.getUserById(currentUserId)
+
+    // Assert
+    assertEquals(testUser, userViewModel.searchResult.value)
+    assertNull(userViewModel.errorState.value)
+  }
+
+  @Test
+  fun getUserByIdUpdatesErrorStateOnFailure() = runTest {
+    // Arrange
+    val exception = Exception("User not found")
+    doAnswer {
+          val onFailure = it.getArgument<(Exception) -> Unit>(2)
+          onFailure(exception)
+          null
+        }
+        .whenever(userRepository)
+        .getUserById(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.getUserById(currentUserId)
+
+    // Assert
+    assertNull(userViewModel.searchResult.value)
+    assertEquals("User not found", userViewModel.errorState.value)
+  }
+
+  @Test
+  fun setSearchResultUpdatesSearchResult() {
+    // Arrange
+    val testUser = User(uid = "testUserId", name = "Test User")
+
+    // Act
+    userViewModel.setSearchResult(testUser)
+
+    // Assert
+    assertEquals(testUser, userViewModel.searchResult.value)
+  }
+
+  @Test
+  fun setErrorStateUpdatesErrorState() {
+    // Arrange
+    val errorMessage = "An error occurred"
+
+    // Act
+    userViewModel.setErrorState(errorMessage)
+
+    // Assert
+    assertEquals(errorMessage, userViewModel.errorState.value)
+  }
+
+  @Test
+  fun clearErrorStateClearsErrorState() {
+    // Arrange
+    userViewModel.setErrorState("An error occurred")
+
+    // Act
+    userViewModel.clearErrorState()
+
+    // Assert
+    assertNull(userViewModel.errorState.value)
+  }
+
+  @Test
+  fun getUserNameUpdatesUserNameOnSuccess() = runTest {
+    // Arrange
+    val userName = "Test User"
+    doAnswer {
+          val onSuccess = it.getArgument<(String) -> Unit>(1)
+          onSuccess(userName)
+          null
+        }
+        .whenever(userRepository)
+        .getUserName(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.getUserName()
+
+    // Assert
+    assertEquals(userName, userViewModel.userName.value)
+  }
+
+  @Test
+  fun getUserNameHandlesFailure() = runTest {
+    // Arrange
+    val exception = Exception("Failed to get user name")
+    doAnswer {
+          val onFailure = it.getArgument<(Exception) -> Unit>(2)
+          onFailure(exception)
+          null
+        }
+        .whenever(userRepository)
+        .getUserName(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.getUserName()
+
+    // Assert
+    verify(userRepository).getUserName(eq(currentUserId), any(), any())
+  }
+
+  @Test
+  fun getProfilePictureUrlUpdatesProfileUrlOnSuccess() = runTest {
+    // Arrange
+    val profileUrl = "http://example.com/profile.jpg"
+    doAnswer {
+          val onSuccess = it.getArgument<(String?) -> Unit>(1)
+          onSuccess(profileUrl)
+          null
+        }
+        .whenever(userRepository)
+        .getProfilePictureUrl(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.getProfilePictureUrl()
+
+    // Assert
+    assertEquals(profileUrl, userViewModel.profilePictureUrl.value)
+  }
+
+  @Test
+  fun getProfilePictureUrlHandlesFailure() = runTest {
+    // Arrange
+    val exception = Exception("Failed to get profile picture")
+    doAnswer {
+          val onFailure = it.getArgument<(Exception) -> Unit>(2)
+          onFailure(exception)
+          null
+        }
+        .whenever(userRepository)
+        .getProfilePictureUrl(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.getProfilePictureUrl()
+
+    // Assert
+    verify(userRepository).getProfilePictureUrl(eq(currentUserId), any(), any())
+  }
+
+  @Test
+  fun updateProfilePictureUrlCallsRepositoryAndHandlesSuccess() = runTest {
+    // Arrange
+    val uri = "http://example.com/new_profile.jpg".toUri()
+    doAnswer {
+          val onSuccess = it.getArgument<() -> Unit>(2)
+          onSuccess()
+          null
+        }
+        .whenever(userRepository)
+        .updateProfilePictureUrl(eq(currentUserId), eq(uri), any(), any())
+
+    // Act
+    userViewModel.updateProfilePictureUrl(uri)
+
+    // Assert
+    verify(userRepository).updateProfilePictureUrl(eq(currentUserId), eq(uri), any(), any())
+  }
+
+  @Test
+  fun updateProfilePictureUrlHandlesFailure() = runTest {
+    // Arrange
+    val uri = "http://example.com/new_profile.jpg".toUri()
+    val exception = Exception("Failed to update profile picture")
+    doAnswer {
+          val onFailure = it.getArgument<(Exception) -> Unit>(3)
+          onFailure(exception)
+          null
+        }
+        .whenever(userRepository)
+        .updateProfilePictureUrl(eq(currentUserId), eq(uri), any(), any())
+
+    // Act
+    userViewModel.updateProfilePictureUrl(uri)
+
+    // Assert
+    verify(userRepository).updateProfilePictureUrl(eq(currentUserId), eq(uri), any(), any())
+  }
+
+  @Test
+  fun getOngoingChallengesUpdatesChallengesOnSuccess() = runTest {
+    // Arrange
+    val challenges =
+        listOf(Challenge(challengeId = "challenge1"), Challenge(challengeId = "challenge2"))
+    doAnswer {
+          val onSuccess = it.getArgument<(List<Challenge>) -> Unit>(1)
+          onSuccess(challenges)
+          null
+        }
+        .whenever(userRepository)
+        .getOngoingChallenges(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.getOngoingChallenges()
+
+    // Assert
+    assertEquals(challenges, userViewModel.ongoingChallenges.value)
+  }
+
+  @Test
+  fun getOngoingChallengesHandlesFailure() = runTest {
+    // Arrange
+    val exception = Exception("Failed to fetch ongoing challenges")
+    doAnswer {
+          val onFailure = it.getArgument<(Exception) -> Unit>(2)
+          onFailure(exception)
+          null
+        }
+        .whenever(userRepository)
+        .getOngoingChallenges(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.getOngoingChallenges()
+
+    // Assert
+    verify(userRepository).getOngoingChallenges(eq(currentUserId), any(), any())
+  }
+
+  @Test
+  fun removeOngoingChallengeHandlesFailure() = runTest {
+    // Arrange
+    val exception = Exception("Failed to remove challenge")
+    doAnswer {
+          val onFailure = it.getArgument<(Exception) -> Unit>(3)
+          onFailure(exception)
+          null
+        }
+        .whenever(userRepository)
+        .removeOngoingChallenge(eq(currentUserId), eq(challengeId), any(), any())
+
+    // Act
+    userViewModel.removeOngoingChallenge(currentUserId, challengeId)
+
+    // Assert
+    verify(userRepository).removeOngoingChallenge(eq(currentUserId), eq(challengeId), any(), any())
+  }
+
+  @Test
+  fun checkAndUnlockNextQuestSetsInitialAccessDateWhenNull() = runTest {
+    // Arrange
+    doAnswer {
+          val onSuccess = it.getArgument<(String?) -> Unit>(1)
+          onSuccess(null)
+          null
+        }
+        .whenever(userRepository)
+        .getInitialQuestAccessDate(eq(currentUserId), any(), any())
+
+    doAnswer {
+          val onSuccess = it.getArgument<() -> Unit>(2)
+          onSuccess()
+          null
+        }
+        .whenever(userRepository)
+        .setInitialQuestAccessDate(eq(currentUserId), any(), any(), any())
+
+    // Act
+    userViewModel.checkAndUnlockNextQuest()
+
+    // Assert
+    assertEquals("1", userViewModel.unlockedQuests.value)
+  }
+
+  @Test
+  fun checkAndUnlockNextQuestHandlesFailureInGetInitialQuestAccessDate() = runTest {
+    // Arrange
+    val exception = Exception("Failed to get initial quest access date")
+    doAnswer {
+          val onFailure = it.getArgument<(Exception) -> Unit>(2)
+          onFailure(exception)
+          null
+        }
+        .whenever(userRepository)
+        .getInitialQuestAccessDate(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.checkAndUnlockNextQuest()
+
+    // Assert
+    verify(userRepository).getInitialQuestAccessDate(eq(currentUserId), any(), any())
+  }
+
+  @Test
+  fun getStreakUpdatesStreakOnSuccess() = runTest {
+    // Arrange
+    val testStreak = 5L
+    doAnswer {
+          val onSuccess = it.getArgument<(Long) -> Unit>(1)
+          onSuccess(testStreak)
+          null
+        }
+        .whenever(userRepository)
+        .getStreak(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.getStreak()
+
+    // Assert
+    assertEquals(testStreak, userViewModel.streak.value)
+  }
+
+  @Test
+  fun getStreakHandlesFailure() = runTest {
+    // Arrange
+    val exception = Exception("Failed to get user's streak")
+    doAnswer {
+          val onFailure = it.getArgument<(Exception) -> Unit>(2)
+          onFailure(exception)
+          null
+        }
+        .whenever(userRepository)
+        .getStreak(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.getStreak()
+
+    // Assert
+    verify(userRepository).getStreak(eq(currentUserId), any(), any())
+  }
+
+  @After
+  fun tearDown() {
+    Dispatchers.resetMain()
   }
 }
