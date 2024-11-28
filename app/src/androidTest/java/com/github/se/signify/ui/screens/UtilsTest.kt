@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -105,7 +106,7 @@ class UtilsTest {
           testTag = textTag,
           text = buttonText,
           backgroundColor = Color.Blue,
-      )
+          textColor = MaterialTheme.colorScheme.onPrimary)
     }
 
     // Assert the button is displayed
@@ -128,7 +129,7 @@ class UtilsTest {
           testTag = textTag,
           text = buttonText,
           backgroundColor = Color.Blue,
-      )
+          textColor = MaterialTheme.colorScheme.onPrimary)
     }
 
     // Perform a click action on the button

@@ -159,7 +159,8 @@ fun WhiteOfflineScreen(navigationActions: NavigationActions) {
                   }, // Navigate to Screen.AUTH
                   testTag = "logInButtonInOfflineMode",
                   text = "Log In",
-                  backgroundColor = MaterialTheme.colorScheme.primary)
+                  backgroundColor = MaterialTheme.colorScheme.primary,
+                  textColor = MaterialTheme.colorScheme.onPrimary)
             }
       }
 }
@@ -200,6 +201,7 @@ fun UtilTextButton(
     testTag: String,
     text: String,
     backgroundColor: Color,
+    textColor: Color,
     enabled: Boolean = true,
 ) {
   OutlinedButton(
@@ -214,7 +216,7 @@ fun UtilTextButton(
     Text(
         text,
         fontWeight = FontWeight.Bold,
-        color = MaterialTheme.colorScheme.onSurface,
+        color = textColor,
         fontSize = 20.sp,
         textAlign = TextAlign.Center)
   }
