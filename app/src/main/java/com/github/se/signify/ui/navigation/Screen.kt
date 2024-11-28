@@ -24,7 +24,6 @@ object Screen {
   const val CREATE_CHALLENGE = "CreateChallenge Screen"
   const val CHALLENGE_HISTORY = "ChallengeHistory Screen"
 
-  // Removed the placeholder in the constant declaration
   const val CHRONO_CHALLENGE = "ChronoChallenge Screen"
 
   // Function to generate a route for a specific challenge ID

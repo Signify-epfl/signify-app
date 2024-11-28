@@ -16,38 +16,45 @@ class ChallengeTest {
     assertEquals("", challenge.mode)
     assertEquals("pending", challenge.status)
     assertEquals(1, challenge.round)
-    assertEquals(0, challenge.player1Score)
-    assertEquals(0, challenge.player2Score)
-    assertEquals("", challenge.currentGesture)
-    assertEquals(emptyMap<String, String>(), challenge.responses)
+    assertEquals(emptyList<Long>(), challenge.player1Times)
+    assertEquals(emptyList<Long>(), challenge.player2Times)
+    assertEquals(listOf(false, false, false), challenge.player1RoundCompleted)
+    assertEquals(listOf(false, false, false), challenge.player2RoundCompleted)
+    assertEquals("not_started", challenge.gameStatus)
   }
 
   @Test
   fun `parameterized constructor initializes properties correctly`() {
-    val responses = mapOf("player1" to "response1", "player2" to "response2")
+    val player1Times = mutableListOf(5000L, 6000L, 7000L)
+    val player2Times = mutableListOf(4000L, 3000L, 8000L)
+    val player1RoundCompleted = mutableListOf(true, true, true)
+    val player2RoundCompleted = mutableListOf(true, false, true)
+
     val challenge =
         Challenge(
             challengeId = "challenge123",
             player1 = "player1",
             player2 = "player2",
-            mode = "sprint",
-            status = "active",
+            mode = "chrono",
+            status = "in_progress",
             round = 2,
-            player1Score = 5,
-            player2Score = 3,
-            currentGesture = "wave",
-            responses = responses)
+            player1Times = player1Times,
+            player2Times = player2Times,
+            player1RoundCompleted = player1RoundCompleted,
+            player2RoundCompleted = player2RoundCompleted,
+            gameStatus = "in_progress")
 
     assertEquals("challenge123", challenge.challengeId)
     assertEquals("player1", challenge.player1)
     assertEquals("player2", challenge.player2)
-    assertEquals("sprint", challenge.mode)
-    assertEquals("active", challenge.status)
+    assertEquals("chrono", challenge.mode)
+    assertEquals("in_progress", challenge.status)
     assertEquals(2, challenge.round)
-    assertEquals(5, challenge.player1Score)
-    assertEquals(3, challenge.player2Score)
-    assertEquals("wave", challenge.currentGesture)
-    assertEquals(responses, challenge.responses)
+    assertEquals(player1Times, challenge.player1Times)
+    assertEquals(player2Times, challenge.player2Times)
+    assertEquals(player1RoundCompleted, challenge.player1RoundCompleted)
+    assertEquals(player2RoundCompleted, challenge.player2RoundCompleted)
+    assertEquals("in_progress", challenge.gameStatus)
   }
 
   @Test
@@ -57,25 +64,27 @@ class ChallengeTest {
             challengeId = "challenge123",
             player1 = "player1",
             player2 = "player2",
-            mode = "sprint",
-            status = "active",
+            mode = "chrono",
+            status = "in_progress",
             round = 2,
-            player1Score = 5,
-            player2Score = 3,
-            currentGesture = "wave",
-            responses = mapOf("player1" to "response1"))
+            player1Times = mutableListOf(5000L, 6000L, 7000L),
+            player2Times = mutableListOf(4000L, 3000L, 8000L),
+            player1RoundCompleted = mutableListOf(true, true, true),
+            player2RoundCompleted = mutableListOf(true, false, true),
+            gameStatus = "in_progress")
     val challenge2 =
         Challenge(
             challengeId = "challenge123",
             player1 = "player1",
             player2 = "player2",
-            mode = "sprint",
-            status = "active",
+            mode = "chrono",
+            status = "in_progress",
             round = 2,
-            player1Score = 5,
-            player2Score = 3,
-            currentGesture = "wave",
-            responses = mapOf("player1" to "response1"))
+            player1Times = mutableListOf(5000L, 6000L, 7000L),
+            player2Times = mutableListOf(4000L, 3000L, 8000L),
+            player1RoundCompleted = mutableListOf(true, true, true),
+            player2RoundCompleted = mutableListOf(true, false, true),
+            gameStatus = "in_progress")
 
     assertEquals(challenge1, challenge2)
     assertEquals(challenge1.hashCode(), challenge2.hashCode())
@@ -96,25 +105,27 @@ class ChallengeTest {
             challengeId = "challenge123",
             player1 = "player1",
             player2 = "player2",
-            mode = "sprint",
-            status = "active",
+            mode = "chrono",
+            status = "in_progress",
             round = 2,
-            player1Score = 5,
-            player2Score = 3,
-            currentGesture = "wave",
-            responses = mapOf("player1" to "response1"))
+            player1Times = mutableListOf(5000L, 6000L, 7000L),
+            player2Times = mutableListOf(4000L, 3000L, 8000L),
+            player1RoundCompleted = mutableListOf(true, true, true),
+            player2RoundCompleted = mutableListOf(true, false, true),
+            gameStatus = "in_progress")
 
-    val modifiedChallenge = challenge.copy(status = "completed", player1Score = 10)
+    val modifiedChallenge = challenge.copy(status = "completed", round = 3)
 
     assertEquals("challenge123", modifiedChallenge.challengeId)
     assertEquals("player1", modifiedChallenge.player1)
     assertEquals("player2", modifiedChallenge.player2)
-    assertEquals("sprint", modifiedChallenge.mode)
+    assertEquals("chrono", modifiedChallenge.mode)
     assertEquals("completed", modifiedChallenge.status) // Modified
-    assertEquals(2, modifiedChallenge.round)
-    assertEquals(10, modifiedChallenge.player1Score) // Modified
-    assertEquals(3, modifiedChallenge.player2Score)
-    assertEquals("wave", modifiedChallenge.currentGesture)
-    assertEquals(mapOf("player1" to "response1"), modifiedChallenge.responses)
+    assertEquals(3, modifiedChallenge.round) // Modified
+    assertEquals(challenge.player1Times, modifiedChallenge.player1Times)
+    assertEquals(challenge.player2Times, modifiedChallenge.player2Times)
+    assertEquals(challenge.player1RoundCompleted, modifiedChallenge.player1RoundCompleted)
+    assertEquals(challenge.player2RoundCompleted, modifiedChallenge.player2RoundCompleted)
+    assertEquals(challenge.gameStatus, modifiedChallenge.gameStatus)
   }
 }
