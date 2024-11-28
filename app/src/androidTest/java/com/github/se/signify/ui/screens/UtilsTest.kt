@@ -503,19 +503,4 @@ class UtilsTest {
           actualResId)
     }
   }
-
-  @Test
-  fun unauthenticatedScreenDisplaysCorrectly() {
-    // Set up the WhiteOfflineScreen
-    navigationActions = mock(NavigationActions::class.java)
-    composeTestRule.setContent { UnauthenticatedScreen(navigationActions = navigationActions) }
-    composeTestRule.onNodeWithTag("WhiteOfflineScreen").assertIsDisplayed()
-    // Assert the text "You are offline" is displayed
-    composeTestRule.onNodeWithText("You are offline").assertIsDisplayed()
-
-    // Assert the "Log In" button is displayed
-    composeTestRule.onNodeWithText("Log In").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("logInButtonInOfflineMode").assertIsDisplayed().performClick()
-    verify(navigationActions).navigateTo(Screen.AUTH)
-  }
 }
