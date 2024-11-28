@@ -79,4 +79,7 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="tip_y">Tips: Extend your pinky and thumb out to the sides, with the other fingers folded down.</string>
     <string name="tip_z">Tips: Move your index finger to trace a Z shape in the air.</string>
     <integer name="scroll_offset">8</integer>"
+    <string name="friends_requests">Requests</string>
+    <string name="friends">Friends</string>
+
 </resources>

@@ -34,9 +34,12 @@ class FriendsListScreenTest {
           currentStreak = 0L,
           highestStreak = 0L) // Test user data
   private val searchBar = "SearchBar"
-  private val friendsList = "My friends list"
-  private val friendsDemands = "New friends demands"
+  private val friendsList = "My Friends list"
+  private val friendsDemands = "New Friends Requests"
   private val search = "Search"
+  private val friendsButton = "FriendsButton"
+  private val requestsButton = "RequestsButton"
+  private val dialogQuestion = "Are you sure you want to remove this friend?"
 
   private lateinit var navigationActions: NavigationActions
   private lateinit var userSession: UserSession
@@ -77,17 +80,15 @@ class FriendsListScreenTest {
 
   @Test
   fun testFriendsListScreenDisplaysCorrectInformation() {
-    // Verify top blue bar is displayed
-    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
 
-    // Verify top information are displayed
-    composeTestRule.onNodeWithTag("UserInfo").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("UserId").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("UserName").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("DefaultProfilePicture").assertExists()
-    composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("NumberOfDays").assertIsDisplayed()
+    // Verify the SearchBar is displayed
+    composeTestRule.onNodeWithTag(searchBar).assertIsDisplayed()
+
+    // Verify the friends button
+    composeTestRule.onNodeWithTag(friendsButton).assertIsDisplayed()
+
+    // Verify the friends requests button
+    composeTestRule.onNodeWithTag(requestsButton).assertIsDisplayed()
 
     // Check if the Friends List title is displayed
     composeTestRule.onNodeWithText(friendsList).assertIsDisplayed()
@@ -100,6 +101,7 @@ class FriendsListScreenTest {
     }
 
     // Check if the Friend Requests title is displayed
+    composeTestRule.onNodeWithTag(requestsButton).performClick()
     composeTestRule.onNodeWithText(friendsDemands).assertIsDisplayed()
 
     // Check if all friend requests are displayed
@@ -127,17 +129,45 @@ class FriendsListScreenTest {
     composeTestRule.waitForIdle()
 
     // Verify empty message is displayed
-    composeTestRule.onNodeWithText("You have no friends").assertIsDisplayed()
+    composeTestRule.onNodeWithText("You have no Friends").assertIsDisplayed()
   }
 
   @Test
   fun displayEmptyFriendRequests() {
+    composeTestRule.onNodeWithTag(requestsButton).performClick()
+
     // Use an empty list for friend requests
     friendRequests.clear()
     composeTestRule.waitForIdle()
-
     // Verify empty message is displayed for friend requests
-    composeTestRule.onNodeWithText("No new friend requests").assertIsDisplayed()
+    composeTestRule.onNodeWithText("No new friend Requests").assertIsDisplayed()
+  }
+
+  @Test
+  fun testClickingNoInConfirmationDialog() {
+    val friendName = "Alice"
+    // Scroll to the specific request
+    composeTestRule
+        .onNodeWithTag(friendsList)
+        .performScrollToIndex(currentFriends.indexOf(friendName))
+    composeTestRule.waitForIdle()
+
+    // Target the accept button based on index
+    composeTestRule
+        .onAllNodesWithContentDescription("Remove")[currentFriends.indexOf(friendName)]
+        .performClick()
+
+    // Verify the confirmation dialog is displayed
+    composeTestRule.onNodeWithText(dialogQuestion).assertIsDisplayed()
+
+    // Click "No" to cancel the action
+    composeTestRule.onNodeWithText("No").performClick()
+
+    // Verify the dialog is dismissed
+    composeTestRule.onNodeWithText(dialogQuestion).assertDoesNotExist()
+
+    // Verify the friend is still in the list
+    composeTestRule.onNodeWithText("Alice").assertIsDisplayed()
   }
 
   @Test
@@ -150,13 +180,23 @@ class FriendsListScreenTest {
     composeTestRule.waitForIdle()
 
     // Target the accept button based on index
-    composeTestRule.onAllNodesWithText("Remove")[currentFriends.indexOf(friendName)].performClick()
+    composeTestRule
+        .onAllNodesWithContentDescription("Remove")[currentFriends.indexOf(friendName)]
+        .performClick()
+
+    // Verify confirmation dialog is displayed
+    composeTestRule.onNodeWithText(dialogQuestion).assertIsDisplayed()
+
+    // Click "Yes" to confirm
+    composeTestRule.onNodeWithText("Yes").performClick()
+
     verify(userRepository)
         .removeFriend(Mockito.anyString(), eq(friendName), anyOrNull(), anyOrNull())
   }
 
   @Test
   fun testAcceptFriendRequest() {
+    composeTestRule.onNodeWithTag(requestsButton).performClick()
     val requestName = "Dave"
     composeTestRule
         .onNodeWithTag(friendsDemands)
@@ -172,6 +212,7 @@ class FriendsListScreenTest {
 
   @Test
   fun testDeclineFriendRequest() {
+    composeTestRule.onNodeWithTag(requestsButton).performClick()
     val requestName = "Dave"
     composeTestRule
         .onNodeWithTag(friendsDemands)
@@ -238,6 +279,15 @@ class FriendsListScreenTest {
 
     // Perform remove action and check if friend is removed
     composeTestRule.onNodeWithText("Remove Friend").performClick()
+
+    // Verify confirmation dialog is displayed
+    composeTestRule
+        .onNodeWithText("Are you sure you want to remove this friend?")
+        .assertIsDisplayed()
+
+    // Click "Yes" to confirm
+    composeTestRule.onNodeWithText("Yes").performClick()
+
     verify(userRepository)
         .removeFriend(Mockito.anyString(), eq(friendUser.uid), anyOrNull(), anyOrNull())
     // Verify that searchResult was reset to null
