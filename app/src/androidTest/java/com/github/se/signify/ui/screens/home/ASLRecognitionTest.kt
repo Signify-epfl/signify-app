@@ -22,6 +22,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
+import org.mockito.kotlin.verify
 
 @RunWith(AndroidJUnit4::class)
 class ASLRecognitionTest : LifecycleOwner {
@@ -61,6 +62,7 @@ class ASLRecognitionTest : LifecycleOwner {
   @Test
   fun allComponentsAreDisplayed() {
     // Modify this to scroll to each component
+    composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("practiceButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("cameraPreview").assertIsDisplayed()
     composeTestRule.onNodeWithTag("gestureOverlayView").assertIsDisplayed()
@@ -71,6 +73,12 @@ class ASLRecognitionTest : LifecycleOwner {
   @Test
   fun buttonIsWorkingAsIntended() {
     composeTestRule.onNodeWithTag("practiceButton").performClick()
+  }
+
+  @Test
+  fun backButtonIsWorkingAsIntended() {
+    composeTestRule.onNodeWithTag("BackButton").performClick()
+    verify(navigationActions).goBack()
   }
 
   override val lifecycle: Lifecycle
