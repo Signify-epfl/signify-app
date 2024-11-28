@@ -6,35 +6,39 @@ import com.google.firebase.firestore.SetOptions
 class ChallengeRepositoryFireStore(private val db: FirebaseFirestore) : ChallengeRepository {
   private val collectionPath = "challenges"
 
-  override fun sendChallengeRequest(
-      player1Id: String,
-      player2Id: String,
-      mode: ChallengeMode,
-      challengeId: String,
-      onSuccess: () -> Unit,
-      onFailure: (Exception) -> Unit
-  ) {
-    val challenge =
-        hashMapOf(
-            "challengeId" to challengeId,
-            "player1" to player1Id,
-            "player2" to player2Id,
-            "status" to "pending",
-            "round" to 1,
-            "mode" to mode.name,
-            "player1Score" to 0,
-            "player2Score" to 0,
-            "currentGesture" to "",
-            "responses" to hashMapOf<String, String>())
+    override fun sendChallengeRequest(
+        player1Id: String,
+        player2Id: String,
+        mode: ChallengeMode,
+        challengeId: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val challenge = Challenge(
+            challengeId = challengeId,
+            player1 = player1Id,
+            player2 = player2Id,
+            mode = mode.name,
+            status = "pending"
+        )
 
-    db.collection(collectionPath)
-        .document(challengeId)
-        .set(challenge, SetOptions.merge())
-        .addOnSuccessListener { onSuccess() }
-        .addOnFailureListener { onFailure(it) }
-  }
+        // Add challenge to Firestore for both players
+        val batch = db.batch()
+        val challengeRef = db.collection(collectionPath).document(challengeId)
+        batch.set(challengeRef, challenge, SetOptions.merge())
 
-  override fun deleteChallenge(
+        val player1ChallengeRef = db.collection("users").document(player1Id).collection("challenges").document(challengeId)
+        val player2ChallengeRef = db.collection("users").document(player2Id).collection("challenges").document(challengeId)
+        batch.set(player1ChallengeRef, challenge, SetOptions.merge())
+        batch.set(player2ChallengeRef, challenge, SetOptions.merge())
+
+        batch.commit()
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onFailure(it) }
+    }
+
+
+    override fun deleteChallenge(
       challengeId: String,
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
