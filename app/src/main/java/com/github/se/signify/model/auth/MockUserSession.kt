@@ -1,7 +1,7 @@
 package com.github.se.signify.model.auth
 
 class MockUserSession : UserSession {
-  private var loggedIn = true
+  var loggedIn = true
   private var userId: String = "mockUserId"
 
   override fun getUserId(): String? {
