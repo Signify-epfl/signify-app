@@ -2,6 +2,7 @@ package com.github.se.signify.model.stats
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Before
@@ -145,6 +146,7 @@ class MockStatsRepositoryTest(
 
     mockStatsRepository.reset()
 
+    assertNull(mockStatsRepository.getStatsForUser(userId))
     assertTrue(mockStatsRepository.getMethodCalls().isEmpty())
     assertTrue(mockStatsRepository.wasMethodCalled("getEasyExerciseStats").not())
     assertTrue(mockStatsRepository.wasMethodCalled("updateEasyExerciseStats").not())

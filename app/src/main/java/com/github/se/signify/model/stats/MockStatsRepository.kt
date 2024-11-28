@@ -18,6 +18,10 @@ class MockStatsRepository : StatsRepository {
     this.stats[userId] = stats
   }
 
+  fun getStatsForUser(userId: String): Stats? {
+    return stats[userId]
+  }
+
   fun reset() {
     shouldSucceed = true
     stats.clear()
