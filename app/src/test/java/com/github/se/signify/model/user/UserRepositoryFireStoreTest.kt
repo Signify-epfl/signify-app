@@ -807,4 +807,163 @@ class UserRepositoryFireStoreTest {
                 currentStreak to 1,
                 highestStreak to 1L))
   }
+
+  @Test
+  fun getOngoingChallenges_shouldHandleUserDocNotExist() {
+    // Arrange
+    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
+    `when`(mockUserDocumentSnapshot.exists()).thenReturn(false)
+
+    var successCallbackCalled = false
+    val onSuccess: (List<Challenge>) -> Unit = { challenges ->
+      successCallbackCalled = true
+      assertTrue(challenges.isEmpty())
+    }
+
+    // Act
+    userRepositoryFireStore.getOngoingChallenges(
+        currentUserId, onSuccess = onSuccess, onFailure = { fail(noFailure) })
+
+    // Idle the main looper
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert
+    assertTrue(successCallbackCalled)
+  }
+
+  @Test
+  fun getOngoingChallenges_shouldHandleNullChallengeIds() {
+    // Arrange
+    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
+    `when`(mockUserDocumentSnapshot.exists()).thenReturn(true)
+    `when`(mockUserDocumentSnapshot.get(ongoingChallenges)).thenReturn(null)
+
+    var successCallbackCalled = false
+    val onSuccess: (List<Challenge>) -> Unit = { challenges ->
+      successCallbackCalled = true
+      assertTrue(challenges.isEmpty())
+    }
+
+    // Act
+    userRepositoryFireStore.getOngoingChallenges(
+        currentUserId, onSuccess = onSuccess, onFailure = { fail(noFailure) })
+
+    // Idle the main looper
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert
+    assertTrue(successCallbackCalled)
+  }
+
+  @Test
+  fun setInitialQuestAccessDate_shouldHandleUpdateFailureAndSetSuccess() {
+    // Arrange
+    val date = LocalDate.now().toString()
+    val updateException = Exception(fireStoreFailure)
+    `when`(mockCurrentUserDocRef.update(anyString(), any()))
+        .thenReturn(Tasks.forException(updateException))
+    `when`(mockCurrentUserDocRef.set(any<Map<String, Any>>())).thenReturn(Tasks.forResult(null))
+
+    var successCallbackCalled = false
+    val onSuccess: () -> Unit = { successCallbackCalled = true }
+
+    // Act
+    userRepositoryFireStore.setInitialQuestAccessDate(
+        currentUserId, date, onSuccess = onSuccess, onFailure = { fail(noFailure) })
+
+    // Idle the main looper
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert
+    assertTrue(successCallbackCalled)
+    verify(mockCurrentUserDocRef).set(mapOf("initialQuestAccessDate" to date))
+  }
+
+  @Test
+  fun setInitialQuestAccessDate_shouldHandleSetFailure() {
+    // Arrange
+    val date = LocalDate.now().toString()
+    val updateException = Exception("Update Failure")
+    val setException = Exception("Set Failure")
+    `when`(mockCurrentUserDocRef.update(anyString(), any()))
+        .thenReturn(Tasks.forException(updateException))
+    `when`(mockCurrentUserDocRef.set(any<Map<String, Any>>()))
+        .thenReturn(Tasks.forException(setException))
+
+    var failureCallbackCalled = false
+    val onFailure: (Exception) -> Unit = {
+      failureCallbackCalled = true
+      assertEquals(setException, it)
+    }
+
+    // Act
+    userRepositoryFireStore.setInitialQuestAccessDate(
+        currentUserId, date, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
+
+    // Idle the main looper
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert
+    assertTrue(failureCallbackCalled)
+    verify(mockCurrentUserDocRef).set(mapOf("initialQuestAccessDate" to date))
+  }
+
+  @Test
+  fun updateStreak_shouldHandleGetFailure() {
+    // Arrange
+    val testException = Exception(fireStoreFailure)
+    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forException(testException))
+
+    var failureCallbackCalled = false
+    val onFailure: (Exception) -> Unit = {
+      failureCallbackCalled = true
+      assertEquals(testException, it)
+    }
+
+    // Act
+    userRepositoryFireStore.updateStreak(
+        currentUserId, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
+
+    // Idle the main looper
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert
+    assertTrue(failureCallbackCalled)
+    verify(mockCurrentUserDocRef).get()
+  }
+
+  @Test
+  fun updateStreak_shouldHandleUpdateFailure() {
+    // Arrange
+    val testLastLoginDate = "2024-11-10"
+    val testCurrentStreak = 1L
+    val testHighestStreak = 1L
+    val updateException = Exception(fireStoreFailure)
+    val updatedDataCaptor = argumentCaptor<Map<String, Any>>()
+
+    `when`(mockUserDocumentSnapshot.exists()).thenReturn(true)
+    `when`(mockUserDocumentSnapshot.getString(lastLoginDate)).thenReturn(testLastLoginDate)
+    `when`(mockUserDocumentSnapshot.getLong(currentStreak)).thenReturn(testCurrentStreak)
+    `when`(mockUserDocumentSnapshot.getLong(highestStreak)).thenReturn(testHighestStreak)
+    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
+    `when`(mockCurrentUserDocRef.update(updatedDataCaptor.capture()))
+        .thenReturn(Tasks.forException(updateException))
+
+    var failureCallbackCalled = false
+    val onFailure: (Exception) -> Unit = {
+      failureCallbackCalled = true
+      assertEquals(updateException, it)
+    }
+
+    // Act
+    userRepositoryFireStore.updateStreak(
+        currentUserId, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
+
+    // Idle the main looper
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert
+    assertTrue(failureCallbackCalled)
+    verify(mockCurrentUserDocRef).update(updatedDataCaptor.firstValue)
+  }
 }
