@@ -147,7 +147,7 @@ fun WhiteOfflineScreen(navigationActions: NavigationActions) {
                       TextStyle(
                           fontSize = 24.sp,
                           fontWeight = FontWeight.Bold,
-                          color = Color.Black, // Black text
+                          color = MaterialTheme.colorScheme.primary, // Black text
                           textAlign = TextAlign.Center),
                   modifier = Modifier.padding(bottom = 16.dp) // Space below the text
                   )
@@ -244,7 +244,7 @@ fun SquareButton(
       modifier =
           modifier
               .size(size.dp)
-              .border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
+              .border(2.dp, MaterialTheme.colorScheme.background, RoundedCornerShape(12.dp))
               .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(12.dp))
               .padding(16.dp)
               .clickable { onClick() }) {
@@ -304,7 +304,7 @@ fun TopBar() {
       modifier =
           Modifier.fillMaxWidth()
               .height(5.dp)
-              .background(MaterialTheme.colorScheme.primary)
+              .background(MaterialTheme.colorScheme.background)
               .testTag("TopBar"))
 }
 
@@ -394,26 +394,22 @@ fun MainScreenScaffold(
       topBar = { TopBar() },
       bottomBar = { BottomBar(navigationActions) },
       content = { padding ->
-        ScreenColumn(
-            padding,
-            testTagColumn,
-            MaterialTheme.colorScheme.background // to replace with the background color theme
-            ) {
-              UtilButton(
-                  { isHelpBoxVisible = !isHelpBoxVisible },
-                  "InfoButton",
-                  "InfoIcon",
-                  Icons.Outlined.Info,
-                  "Help")
-              content()
-              // Show popup when the info button is clicked
-              if (isHelpBoxVisible) {
-                InfoPopup(
-                    onDismiss = { isHelpBoxVisible = false },
-                    helpTitle = helpTitle,
-                    helpText = helpText)
-              }
-            }
+        ScreenColumn(padding, testTagColumn, MaterialTheme.colorScheme.background) {
+          UtilButton(
+              { isHelpBoxVisible = !isHelpBoxVisible },
+              "InfoButton",
+              "InfoIcon",
+              Icons.Outlined.Info,
+              "Help")
+          content()
+          // Show popup when the info button is clicked
+          if (isHelpBoxVisible) {
+            InfoPopup(
+                onDismiss = { isHelpBoxVisible = false },
+                helpTitle = helpTitle,
+                helpText = helpText)
+          }
+        }
       })
 }
 
@@ -433,14 +429,10 @@ fun AnnexScreenScaffold(
   Scaffold(
       topBar = { TopBar() },
       content = { padding ->
-        ScreenColumn(
-            padding,
-            testTagColumn,
-            MaterialTheme.colorScheme.background // to replace with the background color theme
-            ) {
-              BackButton { navigationActions.goBack() }
-              content()
-            }
+        ScreenColumn(padding, testTagColumn, MaterialTheme.colorScheme.background) {
+          BackButton { navigationActions.goBack() }
+          content()
+        }
       })
 }
 
@@ -456,11 +448,11 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
   Dialog(onDismissRequest = { onDismiss() }) {
     Surface(
         shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.primary, // Background for the popup
+        color = MaterialTheme.colorScheme.background, // Background for the popup
         modifier =
             Modifier.border(
                     3.dp,
-                    MaterialTheme.colorScheme.outline,
+                    MaterialTheme.colorScheme.onBackground,
                     RoundedCornerShape(12.dp)) // Ensure the border wraps the popup
                 .testTag("InfoPopup")) {
           Column(
@@ -479,7 +471,7 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
                               }
                         },
                     fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.testTag("InfoPopupTitle"))
                 Spacer(modifier = Modifier.height(8.dp))
@@ -488,7 +480,7 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
                 Text(
                     text = helpText,
                     fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.testTag("InfoPopupBody"))
                 Spacer(modifier = Modifier.height(16.dp))
@@ -496,9 +488,9 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
                 // Close button for the popup
                 Button(
                     onClick = { onDismiss() },
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.surface),
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
                     modifier = Modifier.testTag("InfoPopupCloseButton")) {
-                      Text(text = "Close", color = MaterialTheme.colorScheme.onSurface)
+                      Text(text = "Close", color = MaterialTheme.colorScheme.onPrimary)
                     }
               }
         }
@@ -558,7 +550,7 @@ fun StatisticsColumnRow(
                               Modifier.size(40.dp)
                                   .border(
                                       2.dp,
-                                      MaterialTheme.colorScheme.outlineVariant,
+                                      MaterialTheme.colorScheme.onBackground,
                                       RoundedCornerShape(12.dp))
                                   .clip(RoundedCornerShape(12.dp))
                                   .background(MaterialTheme.colorScheme.background),
@@ -599,7 +591,7 @@ fun HorizontalLetterList(lettersLearned: List<Char>) {
           fontWeight = FontWeight.Bold,
           color =
               if (isLearned) MaterialTheme.colorScheme.primary
-              else MaterialTheme.colorScheme.onBackground.copy(alpha = .5f),
+              else MaterialTheme.colorScheme.primary.copy(alpha = .5f),
           modifier = Modifier.padding(horizontal = 8.dp).testTag(letter.toString()))
     }
   }
@@ -616,12 +608,12 @@ fun LearnedLetterList(lettersLearned: List<Char>) {
       text = "All letters learned",
       fontWeight = FontWeight.Bold,
       fontSize = 16.sp,
-      color = MaterialTheme.colorScheme.surface,
+      color = MaterialTheme.colorScheme.onBackground,
       modifier = Modifier.testTag("AllLetterLearned"))
   Box(
       modifier =
           Modifier.fillMaxWidth()
-              .border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
+              .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(12.dp))
               .clip(RoundedCornerShape(8.dp))
               .padding(12.dp)
               .testTag("LettersBox")) {
@@ -668,7 +660,7 @@ fun ProfilePicture(profilePictureUrl: String?) {
         modifier =
             Modifier.size(120.dp)
                 .clip(CircleShape)
-                .background(SolidColor(MaterialTheme.colorScheme.surface))
+                .background(MaterialTheme.colorScheme.background)
                 .testTag("ProfilePicture"),
         contentScale = ContentScale.Crop) // Crop the image to fit within the bounds
   } else {
@@ -676,7 +668,8 @@ fun ProfilePicture(profilePictureUrl: String?) {
     Icon(
         imageVector = Icons.Default.Person,
         contentDescription = "Default Profile Picture",
-        modifier = Modifier.size(120.dp).testTag("DefaultProfilePicture"))
+        modifier = Modifier.size(120.dp).testTag("DefaultProfilePicture"),
+        tint = MaterialTheme.colorScheme.onBackground)
   }
 }
 
@@ -731,7 +724,7 @@ fun NotImplementedYet(testTag: String, text: String) {
       modifier =
           Modifier.fillMaxWidth()
               .height(240.dp)
-              .border(3.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
+              .border(3.dp, MaterialTheme.colorScheme.errorContainer, RoundedCornerShape(12.dp))
               .background(MaterialTheme.colorScheme.errorContainer, RoundedCornerShape(12.dp))
               .padding(16.dp)
               .testTag(testTag),
@@ -823,8 +816,9 @@ fun CameraPlaceholder(handLandMarkViewModel: HandLandMarkViewModel, modifier: Mo
                 .fillMaxWidth()
                 .padding(16.dp)
                 .height(350.dp)
-                .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
-                .border(2.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(16.dp)),
+                .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp))
+                .border(
+                    2.dp, MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp)),
         contentAlignment = Alignment.Center) {
           AndroidView(
               factory = { previewView },
@@ -873,9 +867,9 @@ fun CameraPlaceholder(handLandMarkViewModel: HandLandMarkViewModel, modifier: Mo
                 .fillMaxWidth()
                 .padding(16.dp)
                 .height(350.dp)
-                .background(
-                    MaterialTheme.colorScheme.errorContainer, shape = RoundedCornerShape(16.dp))
-                .border(2.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(16.dp)),
+                .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp))
+                .border(
+                    2.dp, MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp)),
         contentAlignment = Alignment.Center) {
           Text("Camera permission required", color = MaterialTheme.colorScheme.errorContainer)
         }
