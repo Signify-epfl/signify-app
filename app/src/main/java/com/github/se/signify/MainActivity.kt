@@ -2,12 +2,17 @@ package com.github.se.signify
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -42,14 +47,40 @@ import com.github.se.signify.ui.theme.SignifyTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class MainActivity : ComponentActivity() {
+
+  private lateinit var sharedPreferences: SharedPreferences
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
+    // Initialize SharedPreferences
+    sharedPreferences = getSharedPreferences("theme_prefs", Context.MODE_PRIVATE)
+
+    // Get the saved theme state (default is false for light mode)
+    val savedTheme = sharedPreferences.getBoolean("is_dark_theme", false)
+
     setContent {
-      SignifyTheme {
+      var isDarkTheme by remember { mutableStateOf(savedTheme) }
+
+      // Save theme state when toggled
+      fun saveThemePreference(isDark: Boolean) {
+        sharedPreferences.edit().putBoolean("is_dark_theme", isDark).apply()
+      }
+
+      SignifyTheme(darkTheme = isDarkTheme) {
         Surface(modifier = Modifier.fillMaxSize()) {
           val context = LocalContext.current
           val navigationState = MutableStateFlow<NavigationActions?>(null)
-          SignifyAppPreview(context, AppDependencyProvider, navigationState)
+
+          SignifyAppPreview(
+              context,
+              AppDependencyProvider,
+              navigationState,
+              isDarkTheme = isDarkTheme,
+              onThemeChange = {
+                isDarkTheme = it
+                saveThemePreference(it)
+              })
         }
       }
     }
@@ -61,7 +92,9 @@ class MainActivity : ComponentActivity() {
 fun SignifyAppPreview(
     context: Context,
     dependencyProvider: DependencyProvider,
-    navigationState: MutableStateFlow<NavigationActions?>
+    navigationState: MutableStateFlow<NavigationActions?>,
+    isDarkTheme: Boolean,
+    onThemeChange: (Boolean) -> Unit
 ) {
   val navController = rememberNavController()
   val navigationActions = NavigationActions(navController)
@@ -175,7 +208,9 @@ fun SignifyAppPreview(
         SettingsScreen(
             navigationActions,
             dependencyProvider.userSession(),
-            dependencyProvider.userRepository())
+            dependencyProvider.userRepository(),
+            isDarkTheme = isDarkTheme,
+            onThemeChange = onThemeChange)
       }
     }
   }
