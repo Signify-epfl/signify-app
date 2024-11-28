@@ -19,6 +19,7 @@ class MockStatsRepository : StatsRepository {
   }
 
   fun reset() {
+    shouldSucceed = true
     stats.clear()
     methodCalls.clear()
   }

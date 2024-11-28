@@ -6,26 +6,103 @@ import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
 
-class MockStatsRepositoryTest {
-  private lateinit var mockStatsRepository: MockStatsRepository
-  private val userId = "testUser"
+@RunWith(Parameterized::class)
+class MockStatsRepositoryTest(
+    private val getStatName: String,
+    private val updateStatName: String,
+    private val getAction: (String, (Int) -> Unit, (Exception) -> Unit) -> Unit,
+    private val updateAction: (String, () -> Unit, (Exception) -> Unit) -> Unit,
+    private val expectedValueGet: Int,
+    private val expectedValueUpdate: Int
+) {
 
-  private val initialStats =
-      Stats(
-          lettersLearned = listOf('A', 'B'),
-          easyExercise = 5,
-          mediumExercise = 3,
-          hardExercise = 2,
-          dailyQuest = 1,
-          weeklyQuest = 1,
-          completedChallenge = 4,
-          createdChallenge = 2,
-          wonChallenge = 3)
+  companion object {
+    private val mockStatsRepository = MockStatsRepository()
+    private val userId = "testUser"
+
+    private val initialStats =
+        Stats(
+            lettersLearned = listOf('A', 'B'),
+            easyExercise = 5,
+            mediumExercise = 3,
+            hardExercise = 2,
+            dailyQuest = 1,
+            weeklyQuest = 1,
+            completedChallenge = 4,
+            createdChallenge = 2,
+            wonChallenge = 3)
+
+    @JvmStatic
+    @Parameterized.Parameters
+    fun data(): Collection<Array<Any>> {
+      mockStatsRepository.setStatsForUser(userId, initialStats)
+
+      return listOf(
+          arrayOf(
+              "getEasyExerciseStats",
+              "updateEasyExerciseStats",
+              mockStatsRepository::getEasyExerciseStats,
+              mockStatsRepository::updateEasyExerciseStats,
+              initialStats.easyExercise,
+              initialStats.easyExercise + 1),
+          arrayOf(
+              "getMediumExerciseStats",
+              "updateMediumExerciseStats",
+              mockStatsRepository::getMediumExerciseStats,
+              mockStatsRepository::updateMediumExerciseStats,
+              initialStats.mediumExercise,
+              initialStats.mediumExercise + 1),
+          arrayOf(
+              "getHardExerciseStats",
+              "updateHardExerciseStats",
+              mockStatsRepository::getHardExerciseStats,
+              mockStatsRepository::updateHardExerciseStats,
+              initialStats.hardExercise,
+              initialStats.hardExercise + 1),
+          arrayOf(
+              "getDailyQuestStats",
+              "updateDailyQuestStats",
+              mockStatsRepository::getDailyQuestStats,
+              mockStatsRepository::updateDailyQuestStats,
+              initialStats.dailyQuest,
+              initialStats.dailyQuest + 1),
+          arrayOf(
+              "getWeeklyQuestStats",
+              "updateWeeklyQuestStats",
+              mockStatsRepository::getWeeklyQuestStats,
+              mockStatsRepository::updateWeeklyQuestStats,
+              initialStats.weeklyQuest,
+              initialStats.weeklyQuest + 1),
+          arrayOf(
+              "getCompletedChallengeStats",
+              "updateCompletedChallengeStats",
+              mockStatsRepository::getCompletedChallengeStats,
+              mockStatsRepository::updateCompletedChallengeStats,
+              initialStats.completedChallenge,
+              initialStats.completedChallenge + 1),
+          arrayOf(
+              "getCreatedChallengeStats",
+              "updateCreatedChallengeStats",
+              mockStatsRepository::getCreatedChallengeStats,
+              mockStatsRepository::updateCreatedChallengeStats,
+              initialStats.createdChallenge,
+              initialStats.createdChallenge + 1),
+          arrayOf(
+              "getWonChallengeStats",
+              "updateWonChallengeStats",
+              mockStatsRepository::getWonChallengeStats,
+              mockStatsRepository::updateWonChallengeStats,
+              initialStats.wonChallenge,
+              initialStats.wonChallenge + 1))
+    }
+  }
 
   @Before
-  fun setUp() {
-    mockStatsRepository = MockStatsRepository()
+  fun resetStats() {
+    mockStatsRepository.reset()
     mockStatsRepository.setStatsForUser(userId, initialStats)
   }
 
@@ -74,6 +151,51 @@ class MockStatsRepositoryTest {
   }
 
   @Test
+  fun `getStat should return the correct value`() {
+    getAction(
+        userId, { stat -> assertEquals(expectedValueGet, stat) }, { fail("This should not fail") })
+    assertTrue(mockStatsRepository.wasMethodCalled(getStatName))
+  }
+
+  @Test
+  fun `getStat should fail`() {
+    mockStatsRepository.shouldSucceed = false
+    getAction(
+        userId,
+        { fail("This should not succeed") },
+        { exception -> assertEquals("Simulated failure", exception.message) })
+    assertTrue(mockStatsRepository.wasMethodCalled(getStatName))
+  }
+
+  @Test
+  fun `updateStat should return the correct value`() {
+    updateAction(userId, {}, { fail("This should not fail") })
+
+    assertTrue(mockStatsRepository.wasMethodCalled(updateStatName))
+
+    getAction(
+        userId,
+        { stat -> assertEquals(expectedValueUpdate, stat) },
+        { fail("This should not fail") })
+  }
+
+  @Test
+  fun `updateStat should fail and not modify`() {
+    mockStatsRepository.shouldSucceed = false
+    updateAction(
+        userId,
+        { fail("This should not succeed") },
+        { exception -> assertEquals("Simulated failure", exception.message) })
+
+    assertTrue(mockStatsRepository.wasMethodCalled(updateStatName))
+
+    mockStatsRepository.shouldSucceed = true
+
+    getAction(
+        userId, { stat -> assertEquals(expectedValueGet, stat) }, { fail("This should not fail") })
+  }
+
+  @Test
   fun `getLettersLearned should return correct value on success`() {
     mockStatsRepository.getLettersLearned(
         userId,
@@ -95,12 +217,8 @@ class MockStatsRepositoryTest {
   @Test
   fun `updateLettersLearned should add a new letter on success`() {
     val newLetter = 'D'
-
     mockStatsRepository.updateLettersLearned(
-        userId,
-        newLetter,
-        onSuccess = { /* Success callback */},
-        onFailure = { fail("This should not fail") })
+        userId, newLetter, onSuccess = {}, onFailure = { fail("This should not fail") })
 
     assertTrue(mockStatsRepository.wasMethodCalled("updateLettersLearned"))
 
@@ -130,321 +248,5 @@ class MockStatsRepositoryTest {
         userId,
         onSuccess = { lettersLearned -> assertEquals(initialStats.lettersLearned, lettersLearned) },
         onFailure = { fail("This should not fail") })
-  }
-
-  private fun verifyGetStat(
-      statName: String,
-      expectedValue: Int,
-      getStat: (String, (Int) -> Unit, (Exception) -> Unit) -> Unit
-  ) {
-    getStat(
-        userId,
-        { stat -> assertEquals(expectedValue, stat) }, // Success callback
-        { fail("This should not fail") } // Failure callback
-        )
-    assertTrue(mockStatsRepository.wasMethodCalled(statName))
-  }
-
-  private fun verifyGetStatFailure(
-      statName: String,
-      getStat: (String, (Int) -> Unit, (Exception) -> Unit) -> Unit
-  ) {
-    mockStatsRepository.shouldSucceed = false
-    getStat(
-        userId,
-        { fail("This should not succeed") }, // Success callback
-        { exception -> assertEquals("Simulated failure", exception.message) } // Failure callback
-        )
-    assertTrue(mockStatsRepository.wasMethodCalled(statName))
-  }
-
-  private fun verifyUpdateStat(
-      statName: String,
-      incrementedValue: Int,
-      updateStat: (String, () -> Unit, (Exception) -> Unit) -> Unit,
-      getStat: (String, (Int) -> Unit, (Exception) -> Unit) -> Unit
-  ) {
-    updateStat(
-        userId,
-        {}, // Success callback
-        { fail("This should not fail") } // Failure callback
-        )
-
-    assertTrue(mockStatsRepository.wasMethodCalled(statName))
-
-    getStat(
-        userId,
-        { stat -> assertEquals(incrementedValue, stat) }, // Success callback
-        { fail("This should not fail") } // Failure callback
-        )
-  }
-
-  private fun verifyUpdateStatFailure(
-      statName: String,
-      expectedValue: Int,
-      updateStat: (String, () -> Unit, (Exception) -> Unit) -> Unit,
-      getStat: (String, (Int) -> Unit, (Exception) -> Unit) -> Unit
-  ) {
-    mockStatsRepository.shouldSucceed = false
-    updateStat(
-        userId,
-        { fail("This should not succeed") }, // Success callback
-        { exception -> assertEquals("Simulated failure", exception.message) } // Failure callback
-        )
-
-    assertTrue(mockStatsRepository.wasMethodCalled(statName))
-
-    mockStatsRepository.shouldSucceed = true
-
-    getStat(
-        userId,
-        { stat -> assertEquals(expectedValue, stat) }, // Success callback
-        { fail("This should not fail") } // Failure callback
-        )
-  }
-
-  @Test
-  fun `getEasyExerciseStats should return correct value on success`() {
-    verifyGetStat(
-        "getEasyExerciseStats",
-        initialStats.easyExercise,
-        mockStatsRepository::getEasyExerciseStats)
-  }
-
-  @Test
-  fun `getEasyExerciseStats should fail when shouldSucceed is false`() {
-    verifyGetStatFailure("getEasyExerciseStats", mockStatsRepository::getEasyExerciseStats)
-  }
-
-  @Test
-  fun `updateEasyExerciseStats should increment stat on success`() {
-    verifyUpdateStat(
-        "updateEasyExerciseStats",
-        initialStats.easyExercise + 1,
-        mockStatsRepository::updateEasyExerciseStats,
-        mockStatsRepository::getEasyExerciseStats)
-  }
-
-  @Test
-  fun `updateEasyExerciseStats should not modify stats on failure`() {
-    verifyUpdateStatFailure(
-        "updateEasyExerciseStats",
-        initialStats.easyExercise,
-        mockStatsRepository::updateEasyExerciseStats,
-        mockStatsRepository::getEasyExerciseStats)
-  }
-
-  @Test
-  fun `getMediumExerciseStats should return correct value on success`() {
-    verifyGetStat(
-        "getMediumExerciseStats",
-        initialStats.mediumExercise,
-        mockStatsRepository::getMediumExerciseStats)
-  }
-
-  @Test
-  fun `getMediumExerciseStats should fail when shouldSucceed is false`() {
-    verifyGetStatFailure("getMediumExerciseStats", mockStatsRepository::getMediumExerciseStats)
-  }
-
-  @Test
-  fun `updateMediumExerciseStats should increment stat on success`() {
-    verifyUpdateStat(
-        "updateMediumExerciseStats",
-        initialStats.mediumExercise + 1,
-        mockStatsRepository::updateMediumExerciseStats,
-        mockStatsRepository::getMediumExerciseStats)
-  }
-
-  @Test
-  fun `updateMediumExerciseStats should not modify stats on failure`() {
-    verifyUpdateStatFailure(
-        "updateMediumExerciseStats",
-        initialStats.mediumExercise,
-        mockStatsRepository::updateMediumExerciseStats,
-        mockStatsRepository::getMediumExerciseStats)
-  }
-
-  @Test
-  fun `getHardExerciseStats should return correct value on success`() {
-    verifyGetStat(
-        "getHardExerciseStats",
-        initialStats.hardExercise,
-        mockStatsRepository::getHardExerciseStats)
-  }
-
-  @Test
-  fun `getHardExerciseStats should fail when shouldSucceed is false`() {
-    verifyGetStatFailure("getHardExerciseStats", mockStatsRepository::getHardExerciseStats)
-  }
-
-  @Test
-  fun `updateHardExerciseStats should increment stat on success`() {
-    verifyUpdateStat(
-        "updateHardExerciseStats",
-        initialStats.hardExercise + 1,
-        mockStatsRepository::updateHardExerciseStats,
-        mockStatsRepository::getHardExerciseStats)
-  }
-
-  @Test
-  fun `updateHardExerciseStats should not modify stats on failure`() {
-    verifyUpdateStatFailure(
-        "updateHardExerciseStats",
-        initialStats.hardExercise,
-        mockStatsRepository::updateHardExerciseStats,
-        mockStatsRepository::getHardExerciseStats)
-  }
-
-  @Test
-  fun `getDailyQuestStats should return correct value on success`() {
-    verifyGetStat(
-        "getDailyQuestStats", initialStats.dailyQuest, mockStatsRepository::getDailyQuestStats)
-  }
-
-  @Test
-  fun `getDailyQuestStats should fail when shouldSucceed is false`() {
-    verifyGetStatFailure("getDailyQuestStats", mockStatsRepository::getDailyQuestStats)
-  }
-
-  @Test
-  fun `updateDailyQuestStats should increment stat on success`() {
-    verifyUpdateStat(
-        "updateDailyQuestStats",
-        initialStats.dailyQuest + 1,
-        mockStatsRepository::updateDailyQuestStats,
-        mockStatsRepository::getDailyQuestStats)
-  }
-
-  @Test
-  fun `updateDailyQuestStats should not modify stats on failure`() {
-    verifyUpdateStatFailure(
-        "updateDailyQuestStats",
-        initialStats.dailyQuest,
-        mockStatsRepository::updateDailyQuestStats,
-        mockStatsRepository::getDailyQuestStats)
-  }
-
-  @Test
-  fun `getWeeklyQuestStats should return correct value on success`() {
-    verifyGetStat(
-        "getWeeklyQuestStats", initialStats.weeklyQuest, mockStatsRepository::getWeeklyQuestStats)
-  }
-
-  @Test
-  fun `getWeeklyQuestStats should fail when shouldSucceed is false`() {
-    verifyGetStatFailure("getWeeklyQuestStats", mockStatsRepository::getWeeklyQuestStats)
-  }
-
-  @Test
-  fun `updateWeeklyQuestStats should increment stat on success`() {
-    verifyUpdateStat(
-        "updateWeeklyQuestStats",
-        initialStats.weeklyQuest + 1,
-        mockStatsRepository::updateWeeklyQuestStats,
-        mockStatsRepository::getWeeklyQuestStats)
-  }
-
-  @Test
-  fun `updateWeeklyQuestStats should not modify stats on failure`() {
-    verifyUpdateStatFailure(
-        "updateWeeklyQuestStats",
-        initialStats.weeklyQuest,
-        mockStatsRepository::updateWeeklyQuestStats,
-        mockStatsRepository::getWeeklyQuestStats)
-  }
-
-  @Test
-  fun `getCompletedChallengeStats should return correct value on success`() {
-    verifyGetStat(
-        "getCompletedChallengeStats",
-        initialStats.completedChallenge,
-        mockStatsRepository::getCompletedChallengeStats)
-  }
-
-  @Test
-  fun `getCompletedChallengeStats should fail when shouldSucceed is false`() {
-    verifyGetStatFailure(
-        "getCompletedChallengeStats", mockStatsRepository::getCompletedChallengeStats)
-  }
-
-  @Test
-  fun `updateCompletedChallengeStats should increment stat on success`() {
-    verifyUpdateStat(
-        "updateCompletedChallengeStats",
-        initialStats.completedChallenge + 1,
-        mockStatsRepository::updateCompletedChallengeStats,
-        mockStatsRepository::getCompletedChallengeStats)
-  }
-
-  @Test
-  fun `updateCompletedChallengeStats should not modify stats on failure`() {
-    verifyUpdateStatFailure(
-        "updateCompletedChallengeStats",
-        initialStats.completedChallenge,
-        mockStatsRepository::updateCompletedChallengeStats,
-        mockStatsRepository::getCompletedChallengeStats)
-  }
-
-  @Test
-  fun `getCreatedChallengeStats should return correct value on success`() {
-    verifyGetStat(
-        "getCreatedChallengeStats",
-        initialStats.createdChallenge,
-        mockStatsRepository::getCreatedChallengeStats)
-  }
-
-  @Test
-  fun `getCreatedChallengeStats should fail when shouldSucceed is false`() {
-    verifyGetStatFailure("getCreatedChallengeStats", mockStatsRepository::getCreatedChallengeStats)
-  }
-
-  @Test
-  fun `updateCreatedChallengeStats should increment stat on success`() {
-    verifyUpdateStat(
-        "updateCreatedChallengeStats",
-        initialStats.createdChallenge + 1,
-        mockStatsRepository::updateCreatedChallengeStats,
-        mockStatsRepository::getCreatedChallengeStats)
-  }
-
-  @Test
-  fun `updateCreatedChallengeStats should not modify stats on failure`() {
-    verifyUpdateStatFailure(
-        "updateCreatedChallengeStats",
-        initialStats.createdChallenge,
-        mockStatsRepository::updateCreatedChallengeStats,
-        mockStatsRepository::getCreatedChallengeStats)
-  }
-
-  @Test
-  fun `getWonChallengeStats should return correct value on success`() {
-    verifyGetStat(
-        "getWonChallengeStats",
-        initialStats.wonChallenge,
-        mockStatsRepository::getWonChallengeStats)
-  }
-
-  @Test
-  fun `getWonChallengeStats should fail when shouldSucceed is false`() {
-    verifyGetStatFailure("getWonChallengeStats", mockStatsRepository::getWonChallengeStats)
-  }
-
-  @Test
-  fun `updateWonChallengeStats should increment stat on success`() {
-    verifyUpdateStat(
-        "updateWonChallengeStats",
-        initialStats.wonChallenge + 1,
-        mockStatsRepository::updateWonChallengeStats,
-        mockStatsRepository::getWonChallengeStats)
-  }
-
-  @Test
-  fun `updateWonChallengeStats should not modify stats on failure`() {
-    verifyUpdateStatFailure(
-        "updateWonChallengeStats",
-        initialStats.wonChallenge,
-        mockStatsRepository::updateWonChallengeStats,
-        mockStatsRepository::getWonChallengeStats)
   }
 }

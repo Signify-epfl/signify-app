@@ -5,98 +5,170 @@ import com.github.se.signify.model.di.MockDependencyProvider
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
 
-class StatsViewModelTest {
+@RunWith(Parameterized::class)
+class StatsViewModelTest(
+    private val getStatName: String,
+    private val updateStatName: String,
+    private val getAction: () -> Unit,
+    private val updateAction: () -> Unit,
+    private val expectedValueGet: Int,
+    private val expectedValueUpdate: Int,
+    private val stateFlowValue: () -> Int
+) {
 
-  private lateinit var userSession: UserSession
-  private lateinit var mockStatsRepository: MockStatsRepository
-  private lateinit var statsViewModel: StatsViewModel
+  companion object {
+    private lateinit var mockUserSession: UserSession
+    private lateinit var statsViewModel: StatsViewModel
+    private lateinit var mockStatsRepository: MockStatsRepository
 
-  private lateinit var userId: String
+    private lateinit var userId: String
 
-  private val initialStats =
-      Stats(
-          lettersLearned = listOf('A', 'B'),
-          easyExercise = 5,
-          mediumExercise = 3,
-          hardExercise = 2,
-          dailyQuest = 1,
-          weeklyQuest = 1,
-          completedChallenge = 4,
-          createdChallenge = 2,
-          wonChallenge = 3)
+    private val initialStats =
+        Stats(
+            lettersLearned = listOf('A', 'B'),
+            easyExercise = 5,
+            mediumExercise = 3,
+            hardExercise = 2,
+            dailyQuest = 1,
+            weeklyQuest = 1,
+            completedChallenge = 4,
+            createdChallenge = 2,
+            wonChallenge = 3)
 
+    @JvmStatic
+    @BeforeClass
+    fun setup() {
+      mockUserSession = MockDependencyProvider.userSession()
+      mockStatsRepository = MockStatsRepository()
+      userId = mockUserSession.getUserId()!!
+      statsViewModel = StatsViewModel(mockUserSession, mockStatsRepository)
+      mockStatsRepository.setStatsForUser(userId, initialStats)
+    }
+
+    @JvmStatic
+    @Parameterized.Parameters
+    fun data(): Collection<Array<Any>> {
+      return listOf(
+          arrayOf(
+              "getEasyExerciseStats",
+              "updateEasyExerciseStats",
+              { statsViewModel.getEasyExerciseStats() },
+              { statsViewModel.updateEasyExerciseStats() },
+              initialStats.easyExercise,
+              initialStats.easyExercise + 1,
+              { statsViewModel.easy.value }),
+          arrayOf(
+              "getMediumExerciseStats",
+              "updateMediumExerciseStats",
+              { statsViewModel.getMediumExerciseStats() },
+              { statsViewModel.updateMediumExerciseStats() },
+              initialStats.mediumExercise,
+              initialStats.mediumExercise + 1,
+              { statsViewModel.medium.value }),
+          arrayOf(
+              "getHardExerciseStats",
+              "updateHardExerciseStats",
+              { statsViewModel.getHardExerciseStats() },
+              { statsViewModel.updateHardExerciseStats() },
+              initialStats.hardExercise,
+              initialStats.hardExercise + 1,
+              { statsViewModel.hard.value }),
+          arrayOf(
+              "getDailyQuestStats",
+              "updateDailyQuestStats",
+              { statsViewModel.getDailyQuestStats() },
+              { statsViewModel.updateDailyQuestStats() },
+              initialStats.dailyQuest,
+              initialStats.dailyQuest + 1,
+              { statsViewModel.daily.value }),
+          arrayOf(
+              "getWeeklyQuestStats",
+              "updateWeeklyQuestStats",
+              { statsViewModel.getWeeklyQuestStats() },
+              { statsViewModel.updateWeeklyQuestStats() },
+              initialStats.weeklyQuest,
+              initialStats.weeklyQuest + 1,
+              { statsViewModel.weekly.value }),
+          arrayOf(
+              "getCompletedChallengeStats",
+              "updateCompletedChallengeStats",
+              { statsViewModel.getCompletedChallengeStats() },
+              { statsViewModel.updateCompletedChallengeStats() },
+              initialStats.completedChallenge,
+              initialStats.completedChallenge + 1,
+              { statsViewModel.completed.value }),
+          arrayOf(
+              "getCreatedChallengeStats",
+              "updateCreatedChallengeStats",
+              { statsViewModel.getCreatedChallengeStats() },
+              { statsViewModel.updateCreatedChallengeStats() },
+              initialStats.createdChallenge,
+              initialStats.createdChallenge + 1,
+              { statsViewModel.created.value }),
+          arrayOf(
+              "getWonChallengeStats",
+              "updateWonChallengeStats",
+              { statsViewModel.getWonChallengeStats() },
+              { statsViewModel.updateWonChallengeStats() },
+              initialStats.wonChallenge,
+              initialStats.wonChallenge + 1,
+              { statsViewModel.won.value }))
+    }
+  }
+  // Issues with how the test case resets when parametrised,
+  // doing 2 blocks one @BeforeClass and one @Before fixes it for the moment.
   @Before
-  fun setUp() {
-    userSession = MockDependencyProvider.userSession()
+  fun setupDependencies() {
+    mockUserSession = MockDependencyProvider.userSession()
     mockStatsRepository = MockStatsRepository()
-    statsViewModel = StatsViewModel(userSession, mockStatsRepository)
-    userId = userSession.getUserId()!!
-
+    userId = mockUserSession.getUserId()!!
+    statsViewModel = StatsViewModel(mockUserSession, mockStatsRepository)
     mockStatsRepository.setStatsForUser(userId, initialStats)
   }
 
-  private fun assertGetStatSuccess(
-      statName: String,
-      getAction: () -> Unit,
-      expectedValue: Int,
-      stateFlowValue: () -> Int
-  ) {
+  @Test
+  fun `getIntFunctions should handle success correctly`() {
     getAction()
-
-    assertTrue(mockStatsRepository.wasMethodCalled(statName))
-
-    assertEquals(expectedValue, stateFlowValue())
+    assertTrue(mockStatsRepository.wasMethodCalled(getStatName))
+    assertEquals(expectedValueGet, stateFlowValue())
   }
 
-  private fun assertGetStatFailure(
-      statName: String,
-      getAction: () -> Unit,
-      stateFlowValue: () -> Int
-  ) {
+  @Test
+  fun `getIntFunctions should handle failure correctly`() {
     mockStatsRepository.shouldSucceed = false
-
     getAction()
-
-    assertTrue(mockStatsRepository.wasMethodCalled(statName))
-
+    assertTrue(mockStatsRepository.wasMethodCalled(getStatName))
     assertEquals(0, stateFlowValue())
   }
 
-  private fun assertUpdateStatSuccess(
-      methodName: String,
-      updateAction: () -> Unit,
-      getAction: () -> Unit,
-      expectedValue: Int,
-      stateFlowValue: () -> Int
-  ) {
+  @Test
+  fun `updateIntFunctions should handle success correctly`() {
     updateAction()
 
-    assertTrue(mockStatsRepository.wasMethodCalled(methodName))
+    assertTrue(mockStatsRepository.wasMethodCalled(updateStatName))
 
     getAction()
 
-    assertEquals(expectedValue, stateFlowValue())
+    assertEquals(expectedValueUpdate, stateFlowValue())
   }
 
-  private fun assertUpdateStatFailure(
-      methodName: String,
-      updateAction: () -> Unit,
-      getAction: () -> Unit,
-      expectedValue: Int,
-      stateFlowValue: () -> Int
-  ) {
+  @Test
+  fun `updateIntFunctions should handle failure correctly`() {
     mockStatsRepository.shouldSucceed = false
 
     updateAction()
 
-    assertTrue(mockStatsRepository.wasMethodCalled(methodName))
+    assertTrue(mockStatsRepository.wasMethodCalled(updateStatName))
 
     mockStatsRepository.shouldSucceed = true
     getAction()
 
-    assertEquals(expectedValue, stateFlowValue())
+    assertEquals(expectedValueGet, stateFlowValue())
   }
 
   @Test
@@ -117,142 +189,6 @@ class StatsViewModelTest {
     assertTrue(mockStatsRepository.wasMethodCalled("getLettersLearned"))
 
     assertEquals(emptyList<Char>(), statsViewModel.lettersLearned.value)
-  }
-
-  @Test
-  fun getEasyExerciseStatsShouldHandleSuccessCorrectly() {
-    assertGetStatSuccess(
-        statName = "getEasyExerciseStats",
-        getAction = { statsViewModel.getEasyExerciseStats() },
-        expectedValue = initialStats.easyExercise,
-        stateFlowValue = { statsViewModel.easy.value })
-  }
-
-  @Test
-  fun getEasyExerciseStatsShouldHandleFailureCorrectly() {
-    assertGetStatFailure(
-        statName = "getEasyExerciseStats",
-        getAction = { statsViewModel.getEasyExerciseStats() },
-        stateFlowValue = { statsViewModel.easy.value })
-  }
-
-  @Test
-  fun getMediumExerciseStatsShouldHandleSuccessCorrectly() {
-    assertGetStatSuccess(
-        statName = "getMediumExerciseStats",
-        getAction = { statsViewModel.getMediumExerciseStats() },
-        expectedValue = initialStats.mediumExercise,
-        stateFlowValue = { statsViewModel.medium.value })
-  }
-
-  @Test
-  fun getMediumExerciseStatsShouldHandleFailureCorrectly() {
-    assertGetStatFailure(
-        statName = "getMediumExerciseStats",
-        getAction = { statsViewModel.getMediumExerciseStats() },
-        stateFlowValue = { statsViewModel.medium.value })
-  }
-
-  @Test
-  fun getHardExerciseStatsShouldHandleSuccessCorrectly() {
-    assertGetStatSuccess(
-        statName = "getHardExerciseStats",
-        getAction = { statsViewModel.getHardExerciseStats() },
-        expectedValue = initialStats.hardExercise,
-        stateFlowValue = { statsViewModel.hard.value })
-  }
-
-  @Test
-  fun getHardExerciseStatsShouldHandleFailureCorrectly() {
-    assertGetStatFailure(
-        statName = "getHardExerciseStats",
-        getAction = { statsViewModel.getHardExerciseStats() },
-        stateFlowValue = { statsViewModel.hard.value })
-  }
-
-  @Test
-  fun getDailyQuestStatsShouldHandleSuccessCorrectly() {
-    assertGetStatSuccess(
-        statName = "getDailyQuestStats",
-        getAction = { statsViewModel.getDailyQuestStats() },
-        expectedValue = initialStats.dailyQuest,
-        stateFlowValue = { statsViewModel.daily.value })
-  }
-
-  @Test
-  fun getDailyQuestStatsShouldHandleFailureCorrectly() {
-    assertGetStatFailure(
-        statName = "getDailyQuestStats",
-        getAction = { statsViewModel.getDailyQuestStats() },
-        stateFlowValue = { statsViewModel.daily.value })
-  }
-
-  @Test
-  fun getWeeklyQuestStatsShouldHandleSuccessCorrectly() {
-    assertGetStatSuccess(
-        statName = "getWeeklyQuestStats",
-        getAction = { statsViewModel.getWeeklyQuestStats() },
-        expectedValue = initialStats.weeklyQuest,
-        stateFlowValue = { statsViewModel.weekly.value })
-  }
-
-  @Test
-  fun getWeeklyQuestStatsShouldHandleFailureCorrectly() {
-    assertGetStatFailure(
-        statName = "getWeeklyQuestStats",
-        getAction = { statsViewModel.getWeeklyQuestStats() },
-        stateFlowValue = { statsViewModel.weekly.value })
-  }
-
-  @Test
-  fun getCompletedChallengeStatsShouldHandleSuccessCorrectly() {
-    assertGetStatSuccess(
-        statName = "getCompletedChallengeStats",
-        getAction = { statsViewModel.getCompletedChallengeStats() },
-        expectedValue = initialStats.completedChallenge,
-        stateFlowValue = { statsViewModel.completed.value })
-  }
-
-  @Test
-  fun getCompletedChallengeStatsShouldHandleFailureCorrectly() {
-    assertGetStatFailure(
-        statName = "getCompletedChallengeStats",
-        getAction = { statsViewModel.getCompletedChallengeStats() },
-        stateFlowValue = { statsViewModel.completed.value })
-  }
-
-  @Test
-  fun getCreatedChallengeStatsShouldHandleSuccessCorrectly() {
-    assertGetStatSuccess(
-        statName = "getCreatedChallengeStats",
-        getAction = { statsViewModel.getCreatedChallengeStats() },
-        expectedValue = initialStats.createdChallenge,
-        stateFlowValue = { statsViewModel.created.value })
-  }
-
-  @Test
-  fun getCreatedChallengeStatsShouldHandleFailureCorrectly() {
-    assertGetStatFailure(
-        statName = "getCreatedChallengeStats",
-        getAction = { statsViewModel.getCreatedChallengeStats() },
-        stateFlowValue = { statsViewModel.created.value })
-  }
-
-  @Test
-  fun getWonChallengeStatsShouldHandleSuccessCorrectly() {
-    assertGetStatSuccess(
-        statName = "getWonChallengeStats",
-        getAction = { statsViewModel.getWonChallengeStats() },
-        expectedValue = initialStats.wonChallenge,
-        stateFlowValue = { statsViewModel.won.value })
-  }
-
-  @Test
-  fun getWonChallengeStatsShouldHandleFailureCorrectly() {
-    assertGetStatFailure(
-        statName = "getWonChallengeStats",
-        getAction = { statsViewModel.getWonChallengeStats() },
-        stateFlowValue = { statsViewModel.won.value })
   }
 
   @Test
@@ -282,165 +218,5 @@ class StatsViewModelTest {
     statsViewModel.getLettersLearned()
 
     assertEquals(initialStats.lettersLearned, statsViewModel.lettersLearned.value)
-  }
-
-  @Test
-  fun updateEasyExerciseStatsShouldHandleSuccessCorrectly() {
-    assertUpdateStatSuccess(
-        methodName = "updateEasyExerciseStats",
-        updateAction = { statsViewModel.updateEasyExerciseStats() },
-        getAction = { statsViewModel.getEasyExerciseStats() },
-        expectedValue = initialStats.easyExercise + 1,
-        stateFlowValue = { statsViewModel.easy.value })
-  }
-
-  @Test
-  fun updateEasyExerciseStatsShouldHandleFailureCorrectly() {
-    assertUpdateStatFailure(
-        methodName = "updateEasyExerciseStats",
-        updateAction = { statsViewModel.updateEasyExerciseStats() },
-        getAction = { statsViewModel.getEasyExerciseStats() },
-        expectedValue = initialStats.easyExercise,
-        stateFlowValue = { statsViewModel.easy.value })
-  }
-
-  @Test
-  fun updateMediumExerciseStatsShouldHandleSuccessCorrectly() {
-    assertUpdateStatSuccess(
-        methodName = "updateMediumExerciseStats",
-        updateAction = { statsViewModel.updateMediumExerciseStats() },
-        getAction = { statsViewModel.getMediumExerciseStats() },
-        expectedValue = initialStats.mediumExercise + 1,
-        stateFlowValue = { statsViewModel.medium.value })
-  }
-
-  @Test
-  fun updateMediumExerciseStatsShouldHandleFailureCorrectly() {
-    assertUpdateStatFailure(
-        methodName = "updateMediumExerciseStats",
-        updateAction = { statsViewModel.updateMediumExerciseStats() },
-        getAction = { statsViewModel.getMediumExerciseStats() },
-        expectedValue = initialStats.mediumExercise,
-        stateFlowValue = { statsViewModel.medium.value })
-  }
-
-  @Test
-  fun updateHardExerciseStatsShouldHandleSuccessCorrectly() {
-    assertUpdateStatSuccess(
-        methodName = "updateHardExerciseStats",
-        updateAction = { statsViewModel.updateHardExerciseStats() },
-        getAction = { statsViewModel.getHardExerciseStats() },
-        expectedValue = initialStats.hardExercise + 1,
-        stateFlowValue = { statsViewModel.hard.value })
-  }
-
-  @Test
-  fun updateHardExerciseStatsShouldHandleFailureCorrectly() {
-    assertUpdateStatFailure(
-        methodName = "updateHardExerciseStats",
-        updateAction = { statsViewModel.updateHardExerciseStats() },
-        getAction = { statsViewModel.getHardExerciseStats() },
-        expectedValue = initialStats.hardExercise,
-        stateFlowValue = { statsViewModel.hard.value })
-  }
-
-  @Test
-  fun updateDailyQuestStatsShouldHandleSuccessCorrectly() {
-    assertUpdateStatSuccess(
-        methodName = "updateDailyQuestStats",
-        updateAction = { statsViewModel.updateDailyQuestStats() },
-        getAction = { statsViewModel.getDailyQuestStats() },
-        expectedValue = initialStats.dailyQuest + 1,
-        stateFlowValue = { statsViewModel.daily.value })
-  }
-
-  @Test
-  fun updateDailyQuestStatsShouldHandleFailureCorrectly() {
-    assertUpdateStatFailure(
-        methodName = "updateDailyQuestStats",
-        updateAction = { statsViewModel.updateDailyQuestStats() },
-        getAction = { statsViewModel.getDailyQuestStats() },
-        expectedValue = initialStats.dailyQuest,
-        stateFlowValue = { statsViewModel.daily.value })
-  }
-
-  @Test
-  fun updateWeeklyQuestStatsShouldHandleSuccessCorrectly() {
-    assertUpdateStatSuccess(
-        methodName = "updateWeeklyQuestStats",
-        updateAction = { statsViewModel.updateWeeklyQuestStats() },
-        getAction = { statsViewModel.getWeeklyQuestStats() },
-        expectedValue = initialStats.weeklyQuest + 1,
-        stateFlowValue = { statsViewModel.weekly.value })
-  }
-
-  @Test
-  fun updateWeeklyQuestStatsShouldHandleFailureCorrectly() {
-    assertUpdateStatFailure(
-        methodName = "updateWeeklyQuestStats",
-        updateAction = { statsViewModel.updateWeeklyQuestStats() },
-        getAction = { statsViewModel.getWeeklyQuestStats() },
-        expectedValue = initialStats.weeklyQuest,
-        stateFlowValue = { statsViewModel.weekly.value })
-  }
-
-  @Test
-  fun updateCompletedChallengeStatsShouldHandleSuccessCorrectly() {
-    assertUpdateStatSuccess(
-        methodName = "updateCompletedChallengeStats",
-        updateAction = { statsViewModel.updateCompletedChallengeStats() },
-        getAction = { statsViewModel.getCompletedChallengeStats() },
-        expectedValue = initialStats.completedChallenge + 1,
-        stateFlowValue = { statsViewModel.completed.value })
-  }
-
-  @Test
-  fun updateCompletedChallengeStatsShouldHandleFailureCorrectly() {
-    assertUpdateStatFailure(
-        methodName = "updateCompletedChallengeStats",
-        updateAction = { statsViewModel.updateCompletedChallengeStats() },
-        getAction = { statsViewModel.getCompletedChallengeStats() },
-        expectedValue = initialStats.completedChallenge,
-        stateFlowValue = { statsViewModel.completed.value })
-  }
-
-  @Test
-  fun updateCreatedChallengeStatsShouldHandleSuccessCorrectly() {
-    assertUpdateStatSuccess(
-        methodName = "updateCreatedChallengeStats",
-        updateAction = { statsViewModel.updateCreatedChallengeStats() },
-        getAction = { statsViewModel.getCreatedChallengeStats() },
-        expectedValue = initialStats.createdChallenge + 1,
-        stateFlowValue = { statsViewModel.created.value })
-  }
-
-  @Test
-  fun updateCreatedChallengeStatsShouldHandleFailureCorrectly() {
-    assertUpdateStatFailure(
-        methodName = "updateCreatedChallengeStats",
-        updateAction = { statsViewModel.updateCreatedChallengeStats() },
-        getAction = { statsViewModel.getCreatedChallengeStats() },
-        expectedValue = initialStats.createdChallenge,
-        stateFlowValue = { statsViewModel.created.value })
-  }
-
-  @Test
-  fun updateWonChallengeStatsShouldHandleSuccessCorrectly() {
-    assertUpdateStatSuccess(
-        methodName = "updateWonChallengeStats",
-        updateAction = { statsViewModel.updateWonChallengeStats() },
-        getAction = { statsViewModel.getWonChallengeStats() },
-        expectedValue = initialStats.wonChallenge + 1,
-        stateFlowValue = { statsViewModel.won.value })
-  }
-
-  @Test
-  fun updateWonChallengeStatsShouldHandleFailureCorrectly() {
-    assertUpdateStatFailure(
-        methodName = "updateWonChallengeStats",
-        updateAction = { statsViewModel.updateWonChallengeStats() },
-        getAction = { statsViewModel.getWonChallengeStats() },
-        expectedValue = initialStats.wonChallenge,
-        stateFlowValue = { statsViewModel.won.value })
   }
 }
