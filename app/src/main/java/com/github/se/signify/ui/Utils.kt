@@ -208,7 +208,7 @@ fun UtilTextButton(
       onClick = onClickAction,
       border =
           ButtonDefaults.outlinedButtonBorder.copy(
-              width = 2.dp, brush = SolidColor(MaterialTheme.colorScheme.outline)),
+              width = 2.dp, brush = SolidColor(MaterialTheme.colorScheme.background)),
       colors = ButtonDefaults.buttonColors(backgroundColor),
       modifier = Modifier.fillMaxWidth().height(40.dp).testTag(testTag),
       enabled = enabled,

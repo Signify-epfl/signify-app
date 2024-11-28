@@ -49,6 +49,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
@@ -99,6 +100,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
         FloatingActionButton(
             onClick = { coroutineScope.launch { scrollState.animateScrollToItem(0) } },
             containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.testTag("ScrollToTopButton")) {
               Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Scroll to Top")
             }
@@ -156,8 +158,9 @@ fun HomeScreen(navigationActions: NavigationActions) {
               items(('A'..'Z').toList()) { letter ->
                 Text(
                     text = "Letter $letter",
+                    fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(vertical = 8.dp).testTag("LetterTextDict_$letter"))
                 SignTipBox(letter = letter)
                 Spacer(modifier = Modifier.height(16.dp))
@@ -179,7 +182,7 @@ fun CameraFeedbackButton(onClick: () -> Unit = {}) {
       testTag = "CameraFeedbackButton",
       text = "Try it out",
       backgroundColor = MaterialTheme.colorScheme.primary,
-  )
+      textColor = MaterialTheme.colorScheme.onPrimary)
 }
 /**
  * Composable function that displays a horizontally arranged letter navigator. Users can scroll
@@ -214,7 +217,7 @@ fun LetterDictionary(
         modifier = Modifier.align(Alignment.CenterStart).testTag("LetterDictionaryBack")) {
           Icon(
               Icons.AutoMirrored.Outlined.ArrowBack,
-              tint = MaterialTheme.colorScheme.onBackground,
+              tint = MaterialTheme.colorScheme.primary,
               contentDescription = "Back")
         }
 
@@ -239,14 +242,14 @@ fun LetterDictionary(
                 contentAlignment = Alignment.Center,
                 modifier =
                     Modifier.border(
-                            2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
+                            2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
                         .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))) {
                   Row(
                       verticalAlignment = Alignment.CenterVertically,
                       horizontalArrangement = Arrangement.Center) {
                         Text(
                             text = "${currentLetter.uppercaseChar()} =",
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = MaterialTheme.colorScheme.onPrimary,
                             fontSize = 32.sp,
                             modifier =
                                 Modifier.testTag("LetterText_${currentLetter.uppercaseChar()}"))
@@ -254,7 +257,7 @@ fun LetterDictionary(
                         Icon(
                             painter = painterResource(id = getLetterIconResId(currentLetter)),
                             contentDescription = "Letter gesture",
-                            tint = MaterialTheme.colorScheme.onSurface,
+                            tint = MaterialTheme.colorScheme.onPrimary,
                             modifier =
                                 Modifier.size(32.dp)
                                     .testTag("LetterIcon_${currentLetter.uppercaseChar()}"))
@@ -273,7 +276,7 @@ fun LetterDictionary(
         modifier = Modifier.align(Alignment.CenterEnd).testTag("LetterDictionaryForward")) {
           Icon(
               Icons.AutoMirrored.Outlined.ArrowForward,
-              tint = MaterialTheme.colorScheme.onBackground,
+              tint = MaterialTheme.colorScheme.primary,
               contentDescription = "Forward")
         }
   }
@@ -309,7 +312,7 @@ fun ExerciseList(exercises: List<Exercise>, navigationActions: NavigationActions
                             .clip(RoundedCornerShape(8.dp))
                             .background(MaterialTheme.colorScheme.primary)
                             .border(
-                                1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
+                                1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
                             .testTag("${exercises[page].name}ExerciseBox")) {
                       Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                         ExerciseButton(
@@ -332,7 +335,7 @@ fun ExerciseList(exercises: List<Exercise>, navigationActions: NavigationActions
                             color =
                                 if (pagerState.currentPage == index)
                                     MaterialTheme.colorScheme.primary
-                                else MaterialTheme.colorScheme.surface,
+                                else MaterialTheme.colorScheme.primary.copy(alpha = .5f),
                             shape = RoundedCornerShape(50)))
           }
         }
@@ -354,7 +357,7 @@ fun ExerciseButton(exercise: Exercise, navigationActions: NavigationActions) {
       modifier =
           Modifier.aspectRatio(2f)
               .fillMaxWidth()
-              .border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
+              .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
               .testTag("${exercise.name}ExerciseButton"),
       shape = RoundedCornerShape(8.dp),
       colors =
