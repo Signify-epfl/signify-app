@@ -7,6 +7,7 @@ object Screen {
   const val HOME = "Home Screen"
   const val PRACTICE = "Practice Screen"
   const val EXERCISE_EASY = "Easy Exercise Screen"
+
   const val EXERCISE_MEDIUM = "Medium Exercise Screen"
   const val EXERCISE_HARD = "Hard Exercise Screen"
   const val QUEST = "Quest Screen"
@@ -22,4 +23,10 @@ object Screen {
   const val NEW_CHALLENGE = "NewChallenge Screen"
   const val CREATE_CHALLENGE = "CreateChallenge Screen"
   const val CHALLENGE_HISTORY = "ChallengeHistory Screen"
+
+  // Removed the placeholder in the constant declaration
+  const val CHRONO_CHALLENGE = "ChronoChallenge Screen"
+
+  // Function to generate a route for a specific challenge ID
+  fun chronoChallengeWithId(challengeId: String) = "$CHRONO_CHALLENGE/$challengeId"
 }
