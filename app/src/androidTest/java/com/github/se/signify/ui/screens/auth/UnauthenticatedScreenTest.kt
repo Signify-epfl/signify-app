@@ -5,6 +5,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 import org.junit.Rule
@@ -25,8 +26,8 @@ class UnauthenticatedScreenTest {
         composeTestRule.setContent { UnauthenticatedScreen(navigationActions = navigationActions) }
 
         composeTestRule.onNodeWithTag("UnauthenticatedScreen").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("UnauthenticatedText").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("logInButtonInOfflineMode").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("UnauthenticatedText").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithTag("logInButton").performScrollTo().assertIsDisplayed()
     }
 
     @Test
@@ -34,7 +35,7 @@ class UnauthenticatedScreenTest {
         navigationActions = mock(NavigationActions::class.java)
         composeTestRule.setContent { UnauthenticatedScreen(navigationActions = navigationActions) }
 
-        composeTestRule.onNodeWithText("Log in").performClick()
+        composeTestRule.onNodeWithTag("logInButton").performClick()
         verify(navigationActions).navigateTo(Screen.AUTH)
     }
 }

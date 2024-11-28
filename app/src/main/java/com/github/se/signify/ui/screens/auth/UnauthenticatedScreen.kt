@@ -64,7 +64,7 @@ fun UnauthenticatedScreen(navigationActions: NavigationActions) {
                   onClickAction = {
                     navigationActions.navigateTo(Screen.AUTH)
                   }, // Navigate to Screen.AUTH
-                  testTag = "logInButtonInOfflineMode",
+                  testTag = "logInButton",
                   text = "Log In",
                   backgroundColor = MaterialTheme.colorScheme.primary)
             }
