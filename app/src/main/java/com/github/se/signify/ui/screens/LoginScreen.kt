@@ -103,14 +103,17 @@ fun LoginScreen(navigationActions: NavigationActions, userSession: UserSession) 
             verticalArrangement = Arrangement.Center,
         ) {
           // App Logo Image
-          Image(
+          Icon(
               painter = painterResource(id = R.drawable.vector),
-              contentDescription = "image description",
+              contentDescription = "icon description",
+              tint = MaterialTheme.colorScheme.primary,
               modifier =
                   Modifier.padding(3.dp)
                       .width(139.dp)
                       .height(81.dp)
-                      .background(color = MaterialTheme.colorScheme.background))
+                      .background(
+                          color = MaterialTheme.colorScheme.background) // Primary background
+              )
 
           Spacer(modifier = Modifier.height(70.dp))
 
@@ -220,7 +223,7 @@ fun OfflineModeButton(onOfflineClick: () -> Unit) {
   Button(
       modifier = Modifier.padding(8.dp).height(48.dp).testTag("offlineButton"),
       onClick = onOfflineClick,
-      colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onPrimary),
+      colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.background),
       shape = RoundedCornerShape(50),
       border = BorderStroke(1.dp, MaterialTheme.colorScheme.background)) {
         Row(
@@ -241,7 +244,7 @@ fun OfflineModeButton(onOfflineClick: () -> Unit) {
                           fontSize = 14.sp,
                           lineHeight = 17.sp,
                           fontWeight = FontWeight(500),
-                          color = MaterialTheme.colorScheme.onSecondary,
+                          color = MaterialTheme.colorScheme.onBackground,
                           textAlign = TextAlign.Center,
                           letterSpacing = 0.25.sp,
                       ))
