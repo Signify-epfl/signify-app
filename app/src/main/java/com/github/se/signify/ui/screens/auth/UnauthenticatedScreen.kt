@@ -56,7 +56,9 @@ fun UnauthenticatedScreen(navigationActions: NavigationActions) {
                           fontWeight = FontWeight.Bold,
                           color = Color.Black, // Black text
                           textAlign = TextAlign.Center),
-                  modifier = Modifier.padding(bottom = 16.dp).testTag("UnauthenticatedText") // Space below the text
+                  modifier =
+                      Modifier.padding(bottom = 16.dp)
+                          .testTag("UnauthenticatedText") // Space below the text
                   )
 
               // "Log In" button using UtilTextButton
