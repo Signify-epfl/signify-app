@@ -10,6 +10,7 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="button_uri_string">
         https://nerdish.io/topics/what-you-should-know-about-sign-language/
     </string>
+    <string name="help_asl_recognition">Practice your ASL hand gestures using the camera and see real-time feedback.</string>
     <string name="help_offline_mode">You are currently offline. Use the login button to return online.</string>
     <string-array name="real_words">
         <item>cat</item>
@@ -79,4 +80,7 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="tip_y">Tips: Extend your pinky and thumb out to the sides, with the other fingers folded down.</string>
     <string name="tip_z">Tips: Move your index finger to trace a Z shape in the air.</string>
     <integer name="scroll_offset">8</integer>"
+    <string name="friends_requests">Requests</string>
+    <string name="friends">Friends</string>
+
 </resources>

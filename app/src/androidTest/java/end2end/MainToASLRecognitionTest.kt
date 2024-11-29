@@ -52,7 +52,8 @@ class MainToASLRecognitionTest {
     composeTestRule.onNodeWithTag("CameraFeedbackButton").assertIsDisplayed().performClick()
 
     // Go to ASLRecognition screen
-    composeTestRule.onNodeWithTag("aslRecognitionTitle").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("cameraPreview").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("gestureOverlayView").assertIsDisplayed()
     composeTestRule.waitForIdle()
   }
 }

@@ -9,21 +9,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -38,11 +32,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.github.se.signify.R
 import com.github.se.signify.model.hand.HandLandMarkViewModel
+import com.github.se.signify.ui.BackButton
 import com.github.se.signify.ui.CameraPlaceholder
+import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.UtilTextButton
 import com.github.se.signify.ui.gestureImageMap
-import com.github.se.signify.ui.navigation.BottomNavigationMenu
-import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 
@@ -57,43 +51,25 @@ fun ASLRecognition(
     navigationActions: NavigationActions
 ) {
   val buttonUriString = stringResource(id = R.string.button_uri_string)
+  val helpText = stringResource(id = R.string.help_asl_recognition)
   val context = LocalContext.current
-  Scaffold(
-      topBar = {
-        TopAppBar(
-            colors =
-                TopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                    scrolledContainerColor = MaterialTheme.colorScheme.background,
-                    navigationIconContentColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                    actionIconContentColor = MaterialTheme.colorScheme.primary),
-            title = {
-              Text("Practice your signs", modifier = Modifier.testTag("aslRecognitionTitle"))
-            },
-            navigationIcon = {
-              IconButton(onClick = { navigationActions.goBack() }) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-                    contentDescription = "Back")
-              }
-            })
-      },
-      content = { paddingValues ->
+
+  MainScreenScaffold(
+      navigationActions = navigationActions,
+      testTagColumn = "ASLRecognitionScreen",
+      helpTitle = "ASL Recognition",
+      helpText = helpText) {
         Column(
-            modifier =
-                Modifier.background(MaterialTheme.colorScheme.background)
-                    .padding(paddingValues)
-                    .padding(start = 40.dp, end = 40.dp),
-            horizontalAlignment = Alignment.CenterHorizontally) {
+            modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+              BackButton { navigationActions.goBack() }
               Box(
                   modifier =
-                      Modifier.width(336.dp)
+                      Modifier.fillMaxWidth()
                           .height(252.dp)
-                          .background(color = MaterialTheme.colorScheme.background),
-              ) {
-                CameraPlaceholder(handLandMarkViewModel)
-              }
+                          .padding(horizontal = 16.dp)
+                          .background(MaterialTheme.colorScheme.background)) {
+                    CameraPlaceholder(handLandMarkViewModel)
+                  }
 
               Spacer(modifier = Modifier.height(30.dp))
 
@@ -101,7 +77,7 @@ fun ASLRecognition(
 
               Spacer(modifier = Modifier.height(20.dp))
 
-              // Button: "More on American Sign Language"
+              // Button: "More on ASL Alphabet"
               UtilTextButton(
                   onClickAction = {
                     val intent =
@@ -113,13 +89,7 @@ fun ASLRecognition(
                   backgroundColor = MaterialTheme.colorScheme.primary,
                   textColor = MaterialTheme.colorScheme.onPrimary)
             }
-      },
-      bottomBar = {
-        BottomNavigationMenu(
-            onTabSelect = { route -> navigationActions.navigateTo(route) },
-            tabList = LIST_TOP_LEVEL_DESTINATION,
-            selectedItem = navigationActions.currentRoute())
-      })
+      }
 }
 
 /**
