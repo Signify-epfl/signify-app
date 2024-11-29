@@ -36,7 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.se.signify.model.exercise.ExerciseInformation
+import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.CameraPlaceholder
@@ -53,21 +53,19 @@ import com.github.se.signify.ui.navigation.NavigationActions
  * @param navigationActions Provides navigation actions for the screen.
  * @param handLandMarkViewModel ViewModel responsible for managing hand landmark detection and
  *   gesture matching.
- * @param exerciseInformation Provides complementary information about the level.
+ * @param exerciseLevel Provides complementary information about the level.
  */
 @Composable
 fun ExerciseScreen(
     navigationActions: NavigationActions,
     handLandMarkViewModel: HandLandMarkViewModel,
-    exerciseInformation: ExerciseInformation
+    exerciseLevel: ExerciseLevel
 ) {
   val context = LocalContext.current
-  val realSentences = stringArrayResource(exerciseInformation.wordsResourceId).toList()
+  val realSentences = stringArrayResource(exerciseLevel.wordsResourceId).toList()
   val sentencesList by rememberSaveable {
     mutableStateOf(
-        List(3) {
-          realSentences.filter { exerciseInformation.wordFilter?.invoke(it) ?: true }.random()
-        })
+        List(3) { realSentences.filter { exerciseLevel.wordFilter?.invoke(it) ?: true }.random() })
   }
 
   var currentSentenceIndex by rememberSaveable { mutableIntStateOf(0) }
@@ -102,7 +100,7 @@ fun ExerciseScreen(
   }
 
   AnnexScreenScaffold(
-      navigationActions = navigationActions, testTagColumn = exerciseInformation.screenTag) {
+      navigationActions = navigationActions, testTagColumn = exerciseLevel.screenTag) {
 
         // Display sign image for the current letter
         val imageName = "letter_${currentLetter.lowercase()}"

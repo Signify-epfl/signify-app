@@ -52,7 +52,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
-import com.github.se.signify.model.exercise.ExerciseInformation
 import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.UtilButton
@@ -75,11 +74,7 @@ import kotlinx.coroutines.launch
  */
 @Composable
 fun HomeScreen(navigationActions: NavigationActions) {
-  val defaultExercises =
-      listOf(
-          ExerciseInformation(ExerciseLevel.Easy),
-          ExerciseInformation(ExerciseLevel.Medium),
-          ExerciseInformation(ExerciseLevel.Hard))
+  val defaultExercises = listOf(ExerciseLevel.Easy, ExerciseLevel.Medium, ExerciseLevel.Hard)
 
   val scrollState = rememberLazyListState()
   val coroutineScope = rememberCoroutineScope()
@@ -285,7 +280,7 @@ fun LetterDictionary(
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ExerciseList(exercises: List<ExerciseInformation>, navigationActions: NavigationActions) {
+fun ExerciseList(exercises: List<ExerciseLevel>, navigationActions: NavigationActions) {
   val pagerState = rememberPagerState(initialPage = 0, pageCount = { exercises.size })
 
   Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
@@ -342,7 +337,7 @@ fun ExerciseList(exercises: List<ExerciseInformation>, navigationActions: Naviga
  * @param navigationActions The `NavigationActions` object that handles navigation between screens.
  */
 @Composable
-fun ExerciseButton(exercise: ExerciseInformation, navigationActions: NavigationActions) {
+fun ExerciseButton(exercise: ExerciseLevel, navigationActions: NavigationActions) {
   Button(
       onClick = { navigationActions.navigateTo(exercise.levelRoute) },
       modifier =

@@ -10,7 +10,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import com.github.se.signify.model.exercise.ExerciseInformation
 import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
@@ -93,11 +92,7 @@ class HomeScreenTest {
   // The following 2 tests should be moved to their own file.
   @Test
   fun exerciseListDisplaysExerciseButtons() {
-    val exercises =
-        listOf(
-            ExerciseInformation(ExerciseLevel.Easy),
-            ExerciseInformation(ExerciseLevel.Medium),
-            ExerciseInformation(ExerciseLevel.Hard))
+    val exercises = listOf(ExerciseLevel.Easy, ExerciseLevel.Medium, ExerciseLevel.Hard)
 
     composeTestRule.setContent { ExerciseList(exercises, navigationActions) }
 
@@ -111,11 +106,7 @@ class HomeScreenTest {
 
   @Test
   fun exerciseButtonTextDisplaysCorrectly() {
-    val exercises =
-        listOf(
-            ExerciseInformation(ExerciseLevel.Easy),
-            ExerciseInformation(ExerciseLevel.Medium),
-            ExerciseInformation(ExerciseLevel.Hard))
+    val exercises = listOf(ExerciseLevel.Easy, ExerciseLevel.Medium, ExerciseLevel.Hard)
 
     composeTestRule.setContent { ExerciseList(exercises, navigationActions) }
 
@@ -130,11 +121,7 @@ class HomeScreenTest {
 
   @Test
   fun clickingExerciseButtonsCallsOnClick() {
-    val exercises =
-        listOf(
-            ExerciseInformation(ExerciseLevel.Easy),
-            ExerciseInformation(ExerciseLevel.Medium),
-            ExerciseInformation(ExerciseLevel.Hard))
+    val exercises = listOf(ExerciseLevel.Easy, ExerciseLevel.Medium, ExerciseLevel.Hard)
 
     composeTestRule.setContent { ExerciseList(exercises, navigationActions) }
 

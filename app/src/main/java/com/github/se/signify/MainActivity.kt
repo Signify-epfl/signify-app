@@ -17,7 +17,6 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.github.se.signify.model.di.AppDependencyProvider
 import com.github.se.signify.model.di.DependencyProvider
-import com.github.se.signify.model.exercise.ExerciseInformation
 import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
@@ -117,16 +116,13 @@ fun SignifyAppPreview(
       composable(Screen.HOME) { HomeScreen(navigationActions) }
       composable(Screen.PRACTICE) { ASLRecognition(handLandMarkViewModel, navigationActions) }
       composable(Screen.EXERCISE_EASY) {
-        ExerciseScreen(
-            navigationActions, handLandMarkViewModel, ExerciseInformation(ExerciseLevel.Easy))
+        ExerciseScreen(navigationActions, handLandMarkViewModel, ExerciseLevel.Easy)
       }
       composable(Screen.EXERCISE_MEDIUM) {
-        ExerciseScreen(
-            navigationActions, handLandMarkViewModel, ExerciseInformation(ExerciseLevel.Medium))
+        ExerciseScreen(navigationActions, handLandMarkViewModel, ExerciseLevel.Medium)
       }
       composable(Screen.EXERCISE_HARD) {
-        ExerciseScreen(
-            navigationActions, handLandMarkViewModel, ExerciseInformation(ExerciseLevel.Hard))
+        ExerciseScreen(navigationActions, handLandMarkViewModel, ExerciseLevel.Hard)
       }
       composable(Screen.FEEDBACK) {
         FeedbackScreen(
