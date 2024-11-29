@@ -54,6 +54,7 @@ class MainActivity : ComponentActivity() {
     super.onCreate(savedInstanceState)
 
     // Initialize SharedPreferences
+    @Suppress("SonarCloud:UNENCRYPTED_SHARED_PREF")
     sharedPreferences = getSharedPreferences("theme_prefs", Context.MODE_PRIVATE)
 
     // Get the saved theme state (default is false for light mode)
