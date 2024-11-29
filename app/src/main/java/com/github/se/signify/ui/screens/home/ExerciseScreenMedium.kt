@@ -1,7 +1,8 @@
 package com.github.se.signify.ui.screens.home
 
 import androidx.compose.runtime.Composable
-import com.github.se.signify.R
+import com.github.se.signify.model.exercise.ExerciseInformation
+import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
 
@@ -13,7 +14,5 @@ fun ExerciseScreenMedium(
   ExerciseScreenCommon(
       navigationActions = navigationActions,
       handLandMarkViewModel = handLandMarkViewModel,
-      wordsResourceId = R.array.real_words_hard,
-      screenTag = "ExerciseScreenMedium",
-      wordFilter = { it.length in 5..7 })
+      exerciseInformation = ExerciseInformation(ExerciseLevel.Medium))
 }

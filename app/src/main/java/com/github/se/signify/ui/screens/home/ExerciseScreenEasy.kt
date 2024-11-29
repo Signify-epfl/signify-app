@@ -36,7 +36,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.se.signify.R
+import com.github.se.signify.model.exercise.ExerciseInformation
+import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.CameraPlaceholder
@@ -59,8 +60,7 @@ fun ExerciseScreenEasy(
   ExerciseScreenCommon(
       navigationActions = navigationActions,
       handLandMarkViewModel = handLandMarkViewModel,
-      wordsResourceId = R.array.real_words,
-      screenTag = "ExerciseScreenEasy")
+      exerciseInformation = ExerciseInformation(ExerciseLevel.Easy))
 }
 
 /**
@@ -341,23 +341,21 @@ fun handleGestureMatching(
  * @param navigationActions Provides navigation actions for the screen.
  * @param handLandMarkViewModel ViewModel responsible for managing hand landmark detection and
  *   gesture matching.
- * @param wordsResourceId Resource ID for the list of words or sentences to be used in the exercise.
- * @param screenTag Tag used for identifying the screen in tests.
- * @param wordFilter Optional filter function to specify criteria for selecting words from the
- *   resource.
+ * @param exerciseInformation Provides complementary information about the level.
  */
 @Composable
 fun ExerciseScreenCommon(
     navigationActions: NavigationActions,
     handLandMarkViewModel: HandLandMarkViewModel,
-    wordsResourceId: Int,
-    screenTag: String,
-    wordFilter: ((String) -> Boolean)? = null
+    exerciseInformation: ExerciseInformation
 ) {
   val context = LocalContext.current
-  val realSentences = stringArrayResource(wordsResourceId).toList()
+  val realSentences = stringArrayResource(exerciseInformation.wordsResourceId).toList()
   val sentencesList by rememberSaveable {
-    mutableStateOf(List(3) { realSentences.filter { wordFilter?.invoke(it) ?: true }.random() })
+    mutableStateOf(
+        List(3) {
+          realSentences.filter { exerciseInformation.wordFilter?.invoke(it) ?: true }.random()
+        })
   }
 
   var currentSentenceIndex by rememberSaveable { mutableIntStateOf(0) }
@@ -391,41 +389,45 @@ fun ExerciseScreenCommon(
         })
   }
 
-  AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = screenTag) {
+  AnnexScreenScaffold(
+      navigationActions = navigationActions, testTagColumn = exerciseInformation.screenTag) {
 
-    // Display sign image for the current letter
-    val imageName = "letter_${currentLetter.lowercase()}"
-    val imageResId = context.resources.getIdentifier(imageName, "drawable", context.packageName)
+        // Display sign image for the current letter
+        val imageName = "letter_${currentLetter.lowercase()}"
+        val imageResId = context.resources.getIdentifier(imageName, "drawable", context.packageName)
 
-    if (imageResId != 0) {
-      Box(
-          modifier =
-              Modifier.fillMaxWidth()
-                  .padding(horizontal = 16.dp)
-                  .height(150.dp)
-                  .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
-                  .border(
-                      2.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(16.dp)),
-          contentAlignment = Alignment.Center) {
-            Icon(
-                painter = painterResource(id = imageResId),
-                contentDescription = "Sign image",
-                tint = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.size(120.dp))
-          }
+        if (imageResId != 0) {
+          Box(
+              modifier =
+                  Modifier.fillMaxWidth()
+                      .padding(horizontal = 16.dp)
+                      .height(150.dp)
+                      .background(
+                          MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
+                      .border(
+                          2.dp,
+                          MaterialTheme.colorScheme.outline,
+                          shape = RoundedCornerShape(16.dp)),
+              contentAlignment = Alignment.Center) {
+                Icon(
+                    painter = painterResource(id = imageResId),
+                    contentDescription = "Sign image",
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.size(120.dp))
+              }
 
-      Spacer(modifier = Modifier.height(16.dp))
-    }
+          Spacer(modifier = Modifier.height(16.dp))
+        }
 
-    // Sentence layer display
-    SentenceLayer(
-        sentencesList,
-        currentLetterIndex,
-        currentWordIndex,
-        currentSentenceIndex,
-    )
+        // Sentence layer display
+        SentenceLayer(
+            sentencesList,
+            currentLetterIndex,
+            currentWordIndex,
+            currentSentenceIndex,
+        )
 
-    // Camera placeholder/composable
-    CameraPlaceholder(handLandMarkViewModel)
-  }
+        // Camera placeholder/composable
+        CameraPlaceholder(handLandMarkViewModel)
+      }
 }
