@@ -1,7 +1,6 @@
 package com.github.se.signify.ui.screens.home
 
 import android.util.Log
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -181,7 +180,6 @@ fun CameraFeedbackButton(onClick: () -> Unit = {}) {
  * @param numbOfHeaders The number of headers at the top of the list, allowing for an offset when
  *   scrolling to the selected letter.
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LetterDictionary(
     scrollState: LazyListState,
@@ -209,7 +207,7 @@ fun LetterDictionary(
 
     // Horizontal Pager for letters in the center
     HorizontalPager(
-        beyondBoundsPageCount = 1,
+        beyondViewportPageCount = 1,
         state = pagerState,
         modifier = Modifier.size(300.dp, 50.dp).align(Alignment.Center).testTag("LetterPager"),
     ) { page ->
@@ -276,14 +274,13 @@ fun LetterDictionary(
  * @param navigationActions The `NavigationActions` object responsible for handling navigation
  *   between screens.
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ExerciseList(exercises: List<ExerciseLevel>, navigationActions: NavigationActions) {
   val pagerState = rememberPagerState(initialPage = 0, pageCount = { exercises.size })
 
   Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
     HorizontalPager(
-        beyondBoundsPageCount = exercises.size,
+        beyondViewportPageCount = exercises.size,
         state = pagerState,
         modifier = Modifier.height(160.dp).padding(8.dp).testTag("ExerciseListPager"),
         verticalAlignment = Alignment.CenterVertically) { page ->
@@ -337,7 +334,7 @@ fun ExerciseList(exercises: List<ExerciseLevel>, navigationActions: NavigationAc
 @Composable
 fun ExerciseButton(exercise: ExerciseLevel, navigationActions: NavigationActions) {
   Button(
-      onClick = { navigationActions.navigateTo(exercise.levelRoute) },
+      onClick = { navigationActions.navigateTo(exercise.levelScreen) },
       modifier =
           Modifier.aspectRatio(2f)
               .fillMaxWidth()

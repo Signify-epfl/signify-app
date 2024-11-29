@@ -1,13 +1,18 @@
 package com.github.se.signify.ui.screens.home
 
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.assertHasClickAction
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import com.github.se.signify.model.auth.MockUserSession
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.quest.Quest
 import com.github.se.signify.model.quest.QuestRepository
 import com.github.se.signify.model.user.UserRepository
-import com.github.se.signify.ui.isOfflineState
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 import org.junit.Before
@@ -31,13 +36,12 @@ class QuestScreenTest {
 
   @Before
   fun setUp() {
-    isOfflineState = false
     userSession = MockUserSession()
     questRepository = mock(QuestRepository::class.java)
     userRepository = mock(UserRepository::class.java)
     navigationActions = mock(NavigationActions::class.java)
 
-    `when`(navigationActions.currentRoute()).thenReturn(Screen.QUEST)
+    `when`(navigationActions.currentRoute()).thenReturn(Screen.QUEST.route)
   }
 
   @Test

@@ -62,7 +62,7 @@ import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.ProfilePicture
 import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.navigation.Route
+import com.github.se.signify.ui.navigation.Screen
 import kotlinx.coroutines.delay
 
 @Composable
@@ -260,7 +260,7 @@ fun RemoveFriendButton(userViewModel: UserViewModel) {
 fun MyProfileButton(userViewModel: UserViewModel, navigationActions: NavigationActions) {
   Button(
       onClick = {
-        navigationActions.navigateTo(Route.PROFILE)
+        navigationActions.navigateTo(Screen.PROFILE)
         userViewModel.setSearchResult(null)
       },
       colors =

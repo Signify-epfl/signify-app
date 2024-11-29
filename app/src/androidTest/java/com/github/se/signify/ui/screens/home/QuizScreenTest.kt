@@ -1,9 +1,14 @@
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import com.github.se.signify.model.quiz.QuizQuestion
 import com.github.se.signify.model.quiz.QuizRepository
 import com.github.se.signify.ui.getIconResId
-import com.github.se.signify.ui.isOfflineState
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.screens.home.NoQuizAvailable
 import com.github.se.signify.ui.screens.home.QuizContent
@@ -12,7 +17,9 @@ import com.github.se.signify.ui.screens.home.QuizScreen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.*
+import org.mockito.Mockito.doAnswer
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
 import org.mockito.kotlin.anyOrNull
 
 @Suppress("UNCHECKED_CAST")
@@ -31,7 +38,6 @@ class QuizScreenComponentsTest {
 
   @Before
   fun setUp() {
-    isOfflineState = false
     mockQuizRepository = mock(QuizRepository::class.java)
     mockNavigationActions = mock(NavigationActions::class.java)
   }

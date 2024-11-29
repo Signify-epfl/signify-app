@@ -4,12 +4,33 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Star
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,8 +45,6 @@ import com.github.se.signify.model.feedback.FeedbackRepository
 import com.github.se.signify.model.feedback.FeedbackViewModel
 import com.github.se.signify.ui.BackButton
 import com.github.se.signify.ui.UtilTextButton
-import com.github.se.signify.ui.WhiteOfflineScreen
-import com.github.se.signify.ui.isOfflineState
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 
@@ -37,92 +56,85 @@ fun FeedbackScreen(
     feedbackViewModel: FeedbackViewModel =
         viewModel(factory = FeedbackViewModel.factory(userSession, feedbackRepository))
 ) {
-  if (isOfflineState) {
-    WhiteOfflineScreen(navigationActions)
-  } else {
-    val context = LocalContext.current
+  val context = LocalContext.current
 
-    val feedbackOptions = listOf("Bug Report", "Feature Suggestion", "Question", "Other")
-    var selectedFeedbackType by remember { mutableStateOf(feedbackOptions[0]) }
-    var feedbackTitle by remember { mutableStateOf(TextFieldValue("")) }
-    var feedbackDescription by remember { mutableStateOf(TextFieldValue("")) }
-    var selectedRating by remember { mutableIntStateOf(0) }
-    var isLoading by remember { mutableStateOf(false) }
+  val feedbackOptions = listOf("Bug Report", "Feature Suggestion", "Question", "Other")
+  var selectedFeedbackType by remember { mutableStateOf(feedbackOptions[0]) }
+  var feedbackTitle by remember { mutableStateOf(TextFieldValue("")) }
+  var feedbackDescription by remember { mutableStateOf(TextFieldValue("")) }
+  var selectedRating by remember { mutableIntStateOf(0) }
+  var isLoading by remember { mutableStateOf(false) }
 
-    Scaffold(
-        topBar = {
-          Column {
-            Box(
-                modifier =
-                    Modifier.fillMaxWidth()
-                        .height(4.dp)
-                        .background(MaterialTheme.colorScheme.primary)
-                        .testTag("TopBlueBar"))
-            BackButton { navigationActions.goBack() }
-          }
-        },
-        content = { padding ->
-          Column(
+  Scaffold(
+      topBar = {
+        Column {
+          Box(
               modifier =
-                  Modifier.fillMaxSize()
-                      .padding(padding)
-                      .padding(16.dp)
-                      .testTag("FeedbackScreenContent"),
-              horizontalAlignment = Alignment.CenterHorizontally,
-              verticalArrangement = Arrangement.Top) {
-                FeedbackDropdown(
-                    selectedFeedbackType = selectedFeedbackType,
-                    onFeedbackTypeSelected = { selectedFeedbackType = it },
-                    feedbackOptions = feedbackOptions)
+                  Modifier.fillMaxWidth()
+                      .height(4.dp)
+                      .background(MaterialTheme.colorScheme.primary)
+                      .testTag("TopBlueBar"))
+          BackButton { navigationActions.goBack() }
+        }
+      },
+      content = { padding ->
+        Column(
+            modifier =
+                Modifier.fillMaxSize()
+                    .padding(padding)
+                    .padding(16.dp)
+                    .testTag("FeedbackScreenContent"),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top) {
+              FeedbackDropdown(
+                  selectedFeedbackType = selectedFeedbackType,
+                  onFeedbackTypeSelected = { selectedFeedbackType = it },
+                  feedbackOptions = feedbackOptions)
 
-                FeedbackInputField(
-                    value = feedbackTitle,
-                    onValueChange = { feedbackTitle = it },
-                    label = "Feedback Title",
-                    modifier =
-                        Modifier.fillMaxWidth()
-                            .padding(bottom = 16.dp)
-                            .testTag("FeedbackTitleInput"))
+              FeedbackInputField(
+                  value = feedbackTitle,
+                  onValueChange = { feedbackTitle = it },
+                  label = "Feedback Title",
+                  modifier =
+                      Modifier.fillMaxWidth().padding(bottom = 16.dp).testTag("FeedbackTitleInput"))
 
-                FeedbackInputField(
-                    value = feedbackDescription,
-                    onValueChange = { feedbackDescription = it },
-                    label = "Feedback Description",
-                    modifier =
-                        Modifier.fillMaxWidth()
-                            .height(150.dp)
-                            .padding(bottom = 16.dp)
-                            .testTag("FeedbackDescriptionInput"))
+              FeedbackInputField(
+                  value = feedbackDescription,
+                  onValueChange = { feedbackDescription = it },
+                  label = "Feedback Description",
+                  modifier =
+                      Modifier.fillMaxWidth()
+                          .height(150.dp)
+                          .padding(bottom = 16.dp)
+                          .testTag("FeedbackDescriptionInput"))
 
-                RatingSection(
-                    selectedRating = selectedRating, onRatingSelected = { selectedRating = it })
+              RatingSection(
+                  selectedRating = selectedRating, onRatingSelected = { selectedRating = it })
 
-                UtilTextButton(
-                    onClickAction = {
-                      if (feedbackTitle.text.isNotEmpty() &&
-                          feedbackDescription.text.isNotEmpty()) {
-                        isLoading = true
-                        feedbackViewModel.saveFeedback(
-                            type = selectedFeedbackType,
-                            title = feedbackTitle.text,
-                            description = feedbackDescription.text,
-                            rating = selectedRating)
-                        isLoading = false
-                        Toast.makeText(context, "Review sent", Toast.LENGTH_LONG).show()
-                        navigationActions.navigateTo(Screen.HOME)
-                      } else {
-                        Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT)
-                            .show()
-                      }
-                    },
-                    testTag = "SendFeedbackButton",
-                    text = "Send Feedback",
-                    backgroundColor = MaterialTheme.colorScheme.primary)
+              UtilTextButton(
+                  onClickAction = {
+                    if (feedbackTitle.text.isNotEmpty() && feedbackDescription.text.isNotEmpty()) {
+                      isLoading = true
+                      feedbackViewModel.saveFeedback(
+                          type = selectedFeedbackType,
+                          title = feedbackTitle.text,
+                          description = feedbackDescription.text,
+                          rating = selectedRating)
+                      isLoading = false
+                      Toast.makeText(context, "Review sent", Toast.LENGTH_LONG).show()
+                      navigationActions.navigateTo(Screen.HOME)
+                    } else {
+                      Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT)
+                          .show()
+                    }
+                  },
+                  testTag = "SendFeedbackButton",
+                  text = "Send Feedback",
+                  backgroundColor = MaterialTheme.colorScheme.primary)
 
-                LoadingIndicator(isLoading = isLoading)
-              }
-        })
-  }
+              LoadingIndicator(isLoading = isLoading)
+            }
+      })
 }
 
 @Composable

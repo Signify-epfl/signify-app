@@ -22,7 +22,9 @@ import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Route
 import com.github.se.signify.ui.navigation.Screen
-import com.github.se.signify.ui.screens.*
+import com.github.se.signify.ui.screens.WelcomeScreen
+import com.github.se.signify.ui.screens.auth.LoginScreen
+import com.github.se.signify.ui.screens.auth.UnauthenticatedScreen
 import com.github.se.signify.ui.screens.challenge.ChallengeHistoryScreen
 import com.github.se.signify.ui.screens.challenge.ChallengeScreen
 import com.github.se.signify.ui.screens.challenge.CreateAChallengeScreen
@@ -38,7 +40,6 @@ import com.github.se.signify.ui.screens.profile.MyStatsScreen
 import com.github.se.signify.ui.screens.profile.ProfileScreen
 import com.github.se.signify.ui.screens.profile.SettingsScreen
 import com.github.se.signify.ui.theme.SignifyTheme
-import kotlinx.coroutines.flow.MutableStateFlow
 
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,8 +48,7 @@ class MainActivity : ComponentActivity() {
       SignifyTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
           val context = LocalContext.current
-          val navigationState = MutableStateFlow<NavigationActions?>(null)
-          SignifyAppPreview(context, AppDependencyProvider, navigationState)
+          SignifyAppPreview(context, AppDependencyProvider)
         }
       }
     }
@@ -60,48 +60,49 @@ class MainActivity : ComponentActivity() {
 fun SignifyAppPreview(
     context: Context,
     dependencyProvider: DependencyProvider,
-    navigationState: MutableStateFlow<NavigationActions?>
 ) {
   val navController = rememberNavController()
-  val navigationActions = NavigationActions(navController)
+  val navigationActions =
+      NavigationActions(context, navController, dependencyProvider.userSession())
   val handLandMarkImplementation = dependencyProvider.handLandMarkRepository()
   val handLandMarkViewModel: HandLandMarkViewModel =
       viewModel(factory = HandLandMarkViewModel.provideFactory(context, handLandMarkImplementation))
   NavHost(navController = navController, startDestination = Route.WELCOME) {
     navigation(
-        startDestination = Screen.WELCOME,
+        startDestination = Screen.WELCOME.route,
         route = Route.WELCOME,
     ) {
-      composable(Screen.WELCOME) { WelcomeScreen(navigationActions) }
+      composable(Screen.WELCOME.route) { WelcomeScreen(navigationActions) }
     }
 
     navigation(
-        startDestination = Screen.AUTH,
+        startDestination = Screen.AUTH.route,
         route = Route.AUTH,
     ) {
-      composable(Screen.AUTH) { LoginScreen(navigationActions, dependencyProvider.userSession()) }
+      composable(Screen.AUTH.route) { LoginScreen(navigationActions) }
+      composable(Screen.UNAUTHENTICATED.route) { UnauthenticatedScreen(navigationActions) }
     }
 
     navigation(
-        startDestination = Screen.CHALLENGE,
+        startDestination = Screen.CHALLENGE.route,
         route = Route.CHALLENGE,
     ) {
-      composable(Screen.CHALLENGE) { ChallengeScreen(navigationActions) }
-      composable(Screen.NEW_CHALLENGE) {
+      composable(Screen.CHALLENGE.route) { ChallengeScreen(navigationActions) }
+      composable(Screen.NEW_CHALLENGE.route) {
         NewChallengeScreen(
             navigationActions,
             dependencyProvider.userSession(),
             dependencyProvider.userRepository(),
             dependencyProvider.challengeRepository())
       }
-      composable(Screen.CREATE_CHALLENGE) {
+      composable(Screen.CREATE_CHALLENGE.route) {
         CreateAChallengeScreen(
             navigationActions,
             dependencyProvider.userSession(),
             dependencyProvider.userRepository(),
             dependencyProvider.challengeRepository())
       }
-      composable(Screen.CHALLENGE_HISTORY) {
+      composable(Screen.CHALLENGE_HISTORY.route) {
         ChallengeHistoryScreen(
             navigationActions,
             dependencyProvider.userSession(),
@@ -110,30 +111,30 @@ fun SignifyAppPreview(
     }
 
     navigation(
-        startDestination = Screen.HOME,
+        startDestination = Screen.HOME.route,
         route = Route.HOME,
     ) {
-      composable(Screen.HOME) { HomeScreen(navigationActions) }
-      composable(Screen.PRACTICE) { ASLRecognition(handLandMarkViewModel, navigationActions) }
+      composable(Screen.HOME.route) { HomeScreen(navigationActions) }
+      composable(Screen.PRACTICE.route) { ASLRecognition(handLandMarkViewModel, navigationActions) }
       ExerciseLevel.entries.forEach { exerciseLevel ->
-        composable(exerciseLevel.levelRoute) {
+        composable(exerciseLevel.levelScreen.route) {
           ExerciseScreen(navigationActions, handLandMarkViewModel, exerciseLevel)
         }
       }
-      composable(Screen.FEEDBACK) {
+      composable(Screen.FEEDBACK.route) {
         FeedbackScreen(
             navigationActions,
             dependencyProvider.userSession(),
             dependencyProvider.feedbackRepository())
       }
-      composable(Screen.QUEST) {
+      composable(Screen.QUEST.route) {
         QuestScreen(
             navigationActions,
             dependencyProvider.userSession(),
             dependencyProvider.questRepository(),
             dependencyProvider.userRepository())
       }
-      composable(Screen.QUIZ) {
+      composable(Screen.QUIZ.route) {
         QuizScreen(
             navigationActions,
             dependencyProvider.quizRepository(),
@@ -142,30 +143,30 @@ fun SignifyAppPreview(
     }
 
     navigation(
-        startDestination = Screen.PROFILE,
+        startDestination = Screen.PROFILE.route,
         route = Route.PROFILE,
     ) {
-      composable(Screen.PROFILE) {
+      composable(Screen.PROFILE.route) {
         ProfileScreen(
             navigationActions,
             dependencyProvider.userSession(),
             dependencyProvider.userRepository(),
             dependencyProvider.statsRepository())
       }
-      composable(Screen.FRIENDS) {
+      composable(Screen.FRIENDS.route) {
         FriendsListScreen(
             navigationActions,
             dependencyProvider.userSession(),
             dependencyProvider.userRepository())
       }
-      composable(Screen.STATS) {
+      composable(Screen.STATS.route) {
         MyStatsScreen(
             navigationActions,
             dependencyProvider.userSession(),
             dependencyProvider.userRepository(),
             dependencyProvider.statsRepository())
       }
-      composable(Screen.SETTINGS) {
+      composable(Screen.SETTINGS.route) {
         SettingsScreen(
             navigationActions,
             dependencyProvider.userSession(),
@@ -173,5 +174,4 @@ fun SignifyAppPreview(
       }
     }
   }
-  navigationState.value = navigationActions
 }

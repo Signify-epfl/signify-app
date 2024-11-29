@@ -9,7 +9,7 @@ import com.github.se.signify.model.user.User
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.navigation.Route
+import com.github.se.signify.ui.navigation.Screen
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
@@ -315,7 +315,7 @@ class FriendsListScreenTest {
 
     // Assert
     // Verify navigation to the PROFILE screen was triggered
-    verify(navigationActions).navigateTo(Route.PROFILE)
+    verify(navigationActions).navigateTo(Screen.PROFILE)
 
     // Verify that searchResult was reset to null
     assertNull(userViewModel.searchResult.value)

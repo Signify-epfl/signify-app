@@ -31,7 +31,7 @@ class HomeScreenTest {
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
 
-    `when`(navigationActions.currentRoute()).thenReturn(Screen.HOME)
+    `when`(navigationActions.currentRoute()).thenReturn(Screen.HOME.route)
   }
 
   @Test
@@ -132,7 +132,7 @@ class HomeScreenTest {
           .performClick()
 
       verify(navigationActions)
-          .navigateTo(exercise.levelRoute) // Verify onClick was called with the exercise
+          .navigateTo(exercise.levelScreen) // Verify onClick was called with the exercise
     }
   }
 
