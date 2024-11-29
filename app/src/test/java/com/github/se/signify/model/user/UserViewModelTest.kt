@@ -159,6 +159,8 @@ class UserViewModelTest {
     userViewModel.getFriendsList()
 
     // Assert
+    // Verifies that the friends list is updated correctly in the ViewModel when the repository call
+    // succeeds
     assertEquals(friendsList, userViewModel.friends.value)
   }
 
@@ -181,7 +183,7 @@ class UserViewModelTest {
     // Error is logged; verify the method call
     verify(userRepository).getFriendsList(eq(currentUserId), any(), any())
 
-    // Ensure that the state remains consistent after a failure
+    // Verifies that the friends list in the ViewModel remains empty when the repository call fails
     assertTrue(userViewModel.friends.value.isEmpty())
   }
 
@@ -201,7 +203,9 @@ class UserViewModelTest {
     userViewModel.getUserById(currentUserId)
 
     // Assert
+    // Verifies that the search result is updated with the correct user data on success
     assertEquals(testUser, userViewModel.searchResult.value)
+    // Ensures no error is present when the repository call is successful
     assertNull(userViewModel.errorState.value)
   }
 
@@ -221,7 +225,9 @@ class UserViewModelTest {
     userViewModel.getUserById(currentUserId)
 
     // Assert
+    // Verifies that the search result remains null on failure
     assertNull(userViewModel.searchResult.value)
+    // Ensures the error state is updated with the correct error message
     assertEquals("User not found", userViewModel.errorState.value)
   }
 
@@ -234,6 +240,7 @@ class UserViewModelTest {
     userViewModel.setSearchResult(testUser)
 
     // Assert
+    // Confirms that the search result is updated correctly in the ViewModel
     assertEquals(testUser, userViewModel.searchResult.value)
   }
 
@@ -246,6 +253,7 @@ class UserViewModelTest {
     userViewModel.setErrorState(errorMessage)
 
     // Assert
+    // Confirms that the error state is updated with the specified message
     assertEquals(errorMessage, userViewModel.errorState.value)
   }
 
@@ -258,6 +266,7 @@ class UserViewModelTest {
     userViewModel.clearErrorState()
 
     // Assert
+    // Verifies that the error state is cleared properly
     assertNull(userViewModel.errorState.value)
   }
 
@@ -277,6 +286,7 @@ class UserViewModelTest {
     userViewModel.getUserName()
 
     // Assert
+    // Verifies that the user name is updated correctly on a successful repository call
     assertEquals(userName, userViewModel.userName.value)
   }
 
@@ -296,6 +306,7 @@ class UserViewModelTest {
     userViewModel.getUserName()
 
     // Assert
+    // Ensures the repository method is called with the correct arguments
     verify(userRepository).getUserName(eq(currentUserId), any(), any())
   }
 
@@ -315,6 +326,7 @@ class UserViewModelTest {
     userViewModel.getProfilePictureUrl()
 
     // Assert
+    // Verifies that the profile picture URL is updated correctly on success
     assertEquals(profileUrl, userViewModel.profilePictureUrl.value)
   }
 
@@ -334,6 +346,7 @@ class UserViewModelTest {
     userViewModel.getProfilePictureUrl()
 
     // Assert
+    // Ensures the repository method is called with the correct arguments
     verify(userRepository).getProfilePictureUrl(eq(currentUserId), any(), any())
   }
 
@@ -353,6 +366,8 @@ class UserViewModelTest {
     userViewModel.updateProfilePictureUrl(uri)
 
     // Assert
+    // Confirms the repository method is called with the correct arguments when updating the profile
+    // picture
     verify(userRepository).updateProfilePictureUrl(eq(currentUserId), eq(uri), any(), any())
   }
 
@@ -373,6 +388,7 @@ class UserViewModelTest {
     userViewModel.updateProfilePictureUrl(uri)
 
     // Assert
+    // Confirms the repository method is called with the correct arguments even on failure
     verify(userRepository).updateProfilePictureUrl(eq(currentUserId), eq(uri), any(), any())
   }
 
@@ -393,6 +409,7 @@ class UserViewModelTest {
     userViewModel.getOngoingChallenges()
 
     // Assert
+    // Verifies that the ongoing challenges list is updated correctly in the ViewModel
     assertEquals(challenges, userViewModel.ongoingChallenges.value)
   }
 
@@ -412,6 +429,7 @@ class UserViewModelTest {
     userViewModel.getOngoingChallenges()
 
     // Assert
+    // Ensures the repository method is called with the correct arguments
     verify(userRepository).getOngoingChallenges(eq(currentUserId), any(), any())
   }
 
@@ -431,6 +449,7 @@ class UserViewModelTest {
     userViewModel.removeOngoingChallenge(currentUserId, challengeId)
 
     // Assert
+    // Confirms the repository method is called with the correct arguments when removing a challenge
     verify(userRepository).removeOngoingChallenge(eq(currentUserId), eq(challengeId), any(), any())
   }
 
@@ -457,6 +476,8 @@ class UserViewModelTest {
     userViewModel.checkAndUnlockNextQuest()
 
     // Assert
+    // Verifies that the unlocked quests value is updated correctly when the initial access date is
+    // null
     assertEquals("1", userViewModel.unlockedQuests.value)
   }
 
@@ -476,6 +497,7 @@ class UserViewModelTest {
     userViewModel.checkAndUnlockNextQuest()
 
     // Assert
+    // Ensures the repository method is called with the correct arguments on failure
     verify(userRepository).getInitialQuestAccessDate(eq(currentUserId), any(), any())
   }
 
@@ -495,6 +517,7 @@ class UserViewModelTest {
     userViewModel.getStreak()
 
     // Assert
+    // Verifies that the streak value is updated correctly in the ViewModel
     assertEquals(testStreak, userViewModel.streak.value)
   }
 
@@ -514,6 +537,7 @@ class UserViewModelTest {
     userViewModel.getStreak()
 
     // Assert
+    // Confirms the repository method is called with the correct arguments on failure
     verify(userRepository).getStreak(eq(currentUserId), any(), any())
   }
 

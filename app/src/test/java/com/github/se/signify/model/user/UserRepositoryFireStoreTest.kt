@@ -828,6 +828,8 @@ class UserRepositoryFireStoreTest {
     shadowOf(Looper.getMainLooper()).idle()
 
     // Assert
+    // Ensures the success callback is invoked and verifies the challenges list is empty when the
+    // user document does not exist
     assertTrue(successCallbackCalled)
   }
 
@@ -852,6 +854,8 @@ class UserRepositoryFireStoreTest {
     shadowOf(Looper.getMainLooper()).idle()
 
     // Assert
+    // Ensures the success callback is invoked and verifies the challenges list is empty when no
+    // challenge IDs are present in the document
     assertTrue(successCallbackCalled)
   }
 
@@ -875,7 +879,10 @@ class UserRepositoryFireStoreTest {
     shadowOf(Looper.getMainLooper()).idle()
 
     // Assert
+    // Ensures the success callback is invoked when the `set` operation succeeds after an `update`
+    // failure
     assertTrue(successCallbackCalled)
+    // Verifies that the correct data is set in FireStore after the update failure
     verify(mockCurrentUserDocRef).set(mapOf("initialQuestAccessDate" to date))
   }
 
@@ -904,7 +911,10 @@ class UserRepositoryFireStoreTest {
     shadowOf(Looper.getMainLooper()).idle()
 
     // Assert
+    // Ensures the failure callback is invoked with the correct exception when the `set` operation
+    // fails
     assertTrue(failureCallbackCalled)
+    // Verifies that the `set` operation was attempted with the correct data
     verify(mockCurrentUserDocRef).set(mapOf("initialQuestAccessDate" to date))
   }
 
@@ -928,7 +938,10 @@ class UserRepositoryFireStoreTest {
     shadowOf(Looper.getMainLooper()).idle()
 
     // Assert
+    // Ensures the failure callback is invoked with the correct exception when the `get` operation
+    // fails
     assertTrue(failureCallbackCalled)
+    // Verifies that the `get` operation was called on the Firestore document reference
     verify(mockCurrentUserDocRef).get()
   }
 
@@ -963,7 +976,10 @@ class UserRepositoryFireStoreTest {
     shadowOf(Looper.getMainLooper()).idle()
 
     // Assert
+    // Ensures the failure callback is invoked with the correct exception when the `update`
+    // operation fails
     assertTrue(failureCallbackCalled)
+    // Verifies that the `update` operation was called with the expected data
     verify(mockCurrentUserDocRef).update(updatedDataCaptor.firstValue)
   }
 }
