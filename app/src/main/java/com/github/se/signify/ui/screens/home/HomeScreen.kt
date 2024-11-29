@@ -236,15 +236,12 @@ fun LetterDictionary(
                 contentAlignment = Alignment.Center,
                 modifier =
                     Modifier.border(
-
-
                             2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
                         .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
                         .clickable {
                           coroutineScope.launch { scrollState.scrollToItem(page + numbOfHeaders) }
                         }
                         .testTag("LetterBox_${currentLetter.uppercaseChar()}")) {
-
                   Row(
                       verticalAlignment = Alignment.CenterVertically,
                       horizontalArrangement = Arrangement.Center) {
