@@ -17,6 +17,8 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.github.se.signify.model.di.AppDependencyProvider
 import com.github.se.signify.model.di.DependencyProvider
+import com.github.se.signify.model.exercise.ExerciseInformation
+import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Route
@@ -27,9 +29,7 @@ import com.github.se.signify.ui.screens.challenge.ChallengeScreen
 import com.github.se.signify.ui.screens.challenge.CreateAChallengeScreen
 import com.github.se.signify.ui.screens.challenge.NewChallengeScreen
 import com.github.se.signify.ui.screens.home.ASLRecognition
-import com.github.se.signify.ui.screens.home.ExerciseScreenEasy
-import com.github.se.signify.ui.screens.home.ExerciseScreenHard
-import com.github.se.signify.ui.screens.home.ExerciseScreenMedium
+import com.github.se.signify.ui.screens.home.ExerciseScreen
 import com.github.se.signify.ui.screens.home.FeedbackScreen
 import com.github.se.signify.ui.screens.home.HomeScreen
 import com.github.se.signify.ui.screens.home.QuestScreen
@@ -117,14 +117,16 @@ fun SignifyAppPreview(
       composable(Screen.HOME) { HomeScreen(navigationActions) }
       composable(Screen.PRACTICE) { ASLRecognition(handLandMarkViewModel, navigationActions) }
       composable(Screen.EXERCISE_EASY) {
-        ExerciseScreenEasy(navigationActions, handLandMarkViewModel)
+        ExerciseScreen(
+            navigationActions, handLandMarkViewModel, ExerciseInformation(ExerciseLevel.Easy))
       }
       composable(Screen.EXERCISE_MEDIUM) {
-        ExerciseScreenMedium(navigationActions, handLandMarkViewModel)
+        ExerciseScreen(
+            navigationActions, handLandMarkViewModel, ExerciseInformation(ExerciseLevel.Medium))
       }
-
       composable(Screen.EXERCISE_HARD) {
-        ExerciseScreenHard(navigationActions, handLandMarkViewModel)
+        ExerciseScreen(
+            navigationActions, handLandMarkViewModel, ExerciseInformation(ExerciseLevel.Hard))
       }
       composable(Screen.FEEDBACK) {
         FeedbackScreen(
