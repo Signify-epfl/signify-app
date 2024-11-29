@@ -1,7 +1,6 @@
 package com.github.se.signify.ui.screens.home
 
 import android.util.Log
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -52,6 +51,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
+import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.UtilButton
 import com.github.se.signify.ui.UtilTextButton
@@ -65,13 +65,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 /**
- * Data class representing an exercise with a name and an optional navigation route.
- *
- * @property name The name of the exercise, used for display and identification.
- * @property screen The screen associated with the exercise.
- */
-data class Exercise(val name: String, val screen: Screen)
-/**
  * Composable function that displays the home screen with various UI elements including a list of
  * exercises, a letter dictionary, and navigation buttons. The screen uses a `LazyColumn` for
  * vertical scrolling and incorporates a floating action button to quickly scroll back to the top.
@@ -80,11 +73,7 @@ data class Exercise(val name: String, val screen: Screen)
  */
 @Composable
 fun HomeScreen(navigationActions: NavigationActions) {
-  val defaultExercises =
-      listOf(
-          Exercise("Easy", Screen.EXERCISE_EASY),
-          Exercise("Medium", Screen.EXERCISE_MEDIUM),
-          Exercise("Hard", Screen.EXERCISE_HARD))
+  val defaultExercises = ExerciseLevel.entries
 
   val scrollState = rememberLazyListState()
   val coroutineScope = rememberCoroutineScope()
@@ -176,7 +165,7 @@ fun CameraFeedbackButton(onClick: () -> Unit = {}) {
   UtilTextButton(
       onClickAction = onClick,
       testTag = "CameraFeedbackButton",
-      text = "Try it out",
+      text = "Try hand signs here !",
       backgroundColor = MaterialTheme.colorScheme.primary,
   )
 }
@@ -191,7 +180,6 @@ fun CameraFeedbackButton(onClick: () -> Unit = {}) {
  * @param numbOfHeaders The number of headers at the top of the list, allowing for an offset when
  *   scrolling to the selected letter.
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LetterDictionary(
     scrollState: LazyListState,
@@ -227,19 +215,17 @@ fun LetterDictionary(
       Log.d("LetterDictionary", "Current Letter: $currentLetter")
       Box(
           contentAlignment = Alignment.Center,
-          modifier =
-              Modifier.fillMaxSize()
-                  .size(100.dp, 50.dp)
-                  .clickable {
-                    coroutineScope.launch { scrollState.animateScrollToItem(page + numbOfHeaders) }
-                  }
-                  .testTag("LetterBox_${currentLetter.uppercaseChar()}")) {
+          modifier = Modifier.fillMaxSize().size(100.dp, 50.dp)) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier =
                     Modifier.border(
                             2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))) {
+                        .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
+                        .clickable {
+                          coroutineScope.launch { scrollState.scrollToItem(page + numbOfHeaders) }
+                        }
+                        .testTag("LetterBox_${currentLetter.uppercaseChar()}")) {
                   Row(
                       verticalAlignment = Alignment.CenterVertically,
                       horizontalArrangement = Arrangement.Center) {
@@ -288,9 +274,8 @@ fun LetterDictionary(
  * @param navigationActions The `NavigationActions` object responsible for handling navigation
  *   between screens.
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ExerciseList(exercises: List<Exercise>, navigationActions: NavigationActions) {
+fun ExerciseList(exercises: List<ExerciseLevel>, navigationActions: NavigationActions) {
   val pagerState = rememberPagerState(initialPage = 0, pageCount = { exercises.size })
 
   Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
@@ -309,7 +294,7 @@ fun ExerciseList(exercises: List<Exercise>, navigationActions: NavigationActions
                             .background(MaterialTheme.colorScheme.primary)
                             .border(
                                 1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
-                            .testTag("${exercises[page].name}ExerciseBox")) {
+                            .testTag("${exercises[page].levelName}ExerciseBox")) {
                       Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                         ExerciseButton(
                             exercise = exercises[page], navigationActions = navigationActions)
@@ -347,19 +332,21 @@ fun ExerciseList(exercises: List<Exercise>, navigationActions: NavigationActions
  * @param navigationActions The `NavigationActions` object that handles navigation between screens.
  */
 @Composable
-fun ExerciseButton(exercise: Exercise, navigationActions: NavigationActions) {
+fun ExerciseButton(exercise: ExerciseLevel, navigationActions: NavigationActions) {
   Button(
-      onClick = { navigationActions.navigateTo(exercise.screen) },
+      onClick = { navigationActions.navigateTo(exercise.levelScreen) },
       modifier =
           Modifier.aspectRatio(2f)
               .fillMaxWidth()
               .border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
-              .testTag("${exercise.name}ExerciseButton"),
+              .testTag("${exercise.levelName}ExerciseButton"),
       shape = RoundedCornerShape(8.dp),
       colors =
           ButtonDefaults.buttonColors(
               MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.onPrimary)) {
-        Text(exercise.name, modifier = Modifier.testTag("${exercise.name}ExerciseButtonText"))
+        Text(
+            exercise.levelName,
+            modifier = Modifier.testTag("${exercise.levelName}ExerciseButtonText"))
       }
 }
 /**

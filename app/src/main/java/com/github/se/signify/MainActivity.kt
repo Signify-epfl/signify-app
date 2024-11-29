@@ -17,6 +17,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.github.se.signify.model.di.AppDependencyProvider
 import com.github.se.signify.model.di.DependencyProvider
+import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Route
@@ -29,9 +30,7 @@ import com.github.se.signify.ui.screens.challenge.ChallengeScreen
 import com.github.se.signify.ui.screens.challenge.CreateAChallengeScreen
 import com.github.se.signify.ui.screens.challenge.NewChallengeScreen
 import com.github.se.signify.ui.screens.home.ASLRecognition
-import com.github.se.signify.ui.screens.home.ExerciseScreenEasy
-import com.github.se.signify.ui.screens.home.ExerciseScreenHard
-import com.github.se.signify.ui.screens.home.ExerciseScreenMedium
+import com.github.se.signify.ui.screens.home.ExerciseScreen
 import com.github.se.signify.ui.screens.home.FeedbackScreen
 import com.github.se.signify.ui.screens.home.HomeScreen
 import com.github.se.signify.ui.screens.home.QuestScreen
@@ -117,15 +116,10 @@ fun SignifyAppPreview(
     ) {
       composable(Screen.HOME.route) { HomeScreen(navigationActions) }
       composable(Screen.PRACTICE.route) { ASLRecognition(handLandMarkViewModel, navigationActions) }
-      composable(Screen.EXERCISE_EASY.route) {
-        ExerciseScreenEasy(navigationActions, handLandMarkViewModel)
-      }
-      composable(Screen.EXERCISE_MEDIUM.route) {
-        ExerciseScreenMedium(navigationActions, handLandMarkViewModel)
-      }
-
-      composable(Screen.EXERCISE_HARD.route) {
-        ExerciseScreenHard(navigationActions, handLandMarkViewModel)
+      ExerciseLevel.entries.forEach { exerciseLevel ->
+        composable(exerciseLevel.levelScreen.route) {
+          ExerciseScreen(navigationActions, handLandMarkViewModel, exerciseLevel)
+        }
       }
       composable(Screen.FEEDBACK.route) {
         FeedbackScreen(
