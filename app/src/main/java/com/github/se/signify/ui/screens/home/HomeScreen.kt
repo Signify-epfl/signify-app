@@ -74,7 +74,7 @@ import kotlinx.coroutines.launch
  */
 @Composable
 fun HomeScreen(navigationActions: NavigationActions) {
-  val defaultExercises = listOf(ExerciseLevel.Easy, ExerciseLevel.Medium, ExerciseLevel.Hard)
+  val defaultExercises = ExerciseLevel.entries
 
   val scrollState = rememberLazyListState()
   val coroutineScope = rememberCoroutineScope()
@@ -299,7 +299,7 @@ fun ExerciseList(exercises: List<ExerciseLevel>, navigationActions: NavigationAc
                             .background(MaterialTheme.colorScheme.primary)
                             .border(
                                 1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
-                            .testTag("${exercises[page].level}ExerciseBox")) {
+                            .testTag("${exercises[page].levelName}ExerciseBox")) {
                       Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                         ExerciseButton(
                             exercise = exercises[page], navigationActions = navigationActions)
@@ -344,12 +344,14 @@ fun ExerciseButton(exercise: ExerciseLevel, navigationActions: NavigationActions
           Modifier.aspectRatio(2f)
               .fillMaxWidth()
               .border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
-              .testTag("${exercise.level}ExerciseButton"),
+              .testTag("${exercise.levelName}ExerciseButton"),
       shape = RoundedCornerShape(8.dp),
       colors =
           ButtonDefaults.buttonColors(
               MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.onPrimary)) {
-        Text(exercise.level, modifier = Modifier.testTag("${exercise.level}ExerciseButtonText"))
+        Text(
+            exercise.levelName,
+            modifier = Modifier.testTag("${exercise.levelName}ExerciseButtonText"))
       }
 }
 /**

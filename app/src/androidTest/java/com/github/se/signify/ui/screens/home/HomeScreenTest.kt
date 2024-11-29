@@ -92,13 +92,13 @@ class HomeScreenTest {
   // The following 2 tests should be moved to their own file.
   @Test
   fun exerciseListDisplaysExerciseButtons() {
-    val exercises = listOf(ExerciseLevel.Easy, ExerciseLevel.Medium, ExerciseLevel.Hard)
+    val exercises = ExerciseLevel.entries
 
     composeTestRule.setContent { ExerciseList(exercises, navigationActions) }
 
     exercises.forEach { exercise ->
       composeTestRule
-          .onNodeWithTag("${exercise.level}ExerciseButton")
+          .onNodeWithTag("${exercise.levelName}ExerciseButton")
           .performScrollTo()
           .assertIsDisplayed()
     }
@@ -106,28 +106,28 @@ class HomeScreenTest {
 
   @Test
   fun exerciseButtonTextDisplaysCorrectly() {
-    val exercises = listOf(ExerciseLevel.Easy, ExerciseLevel.Medium, ExerciseLevel.Hard)
+    val exercises = ExerciseLevel.entries
 
     composeTestRule.setContent { ExerciseList(exercises, navigationActions) }
 
     exercises.forEach { exercise ->
       composeTestRule
-          .onNodeWithTag("${exercise.level}ExerciseButtonText", useUnmergedTree = true)
+          .onNodeWithTag("${exercise.levelName}ExerciseButtonText", useUnmergedTree = true)
           .performScrollTo()
           .assertIsDisplayed()
-          .assertTextEquals(exercise.level)
+          .assertTextEquals(exercise.levelName)
     }
   }
 
   @Test
   fun clickingExerciseButtonsCallsOnClick() {
-    val exercises = listOf(ExerciseLevel.Easy, ExerciseLevel.Medium, ExerciseLevel.Hard)
+    val exercises = ExerciseLevel.entries
 
     composeTestRule.setContent { ExerciseList(exercises, navigationActions) }
 
     exercises.forEach { exercise ->
       composeTestRule
-          .onNodeWithTag("${exercise.level}ExerciseButton")
+          .onNodeWithTag("${exercise.levelName}ExerciseButton")
           .performScrollTo()
           .performClick()
 
