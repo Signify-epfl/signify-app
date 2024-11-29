@@ -14,6 +14,7 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -179,6 +180,9 @@ class UserViewModelTest {
     // Assert
     // Error is logged; verify the method call
     verify(userRepository).getFriendsList(eq(currentUserId), any(), any())
+
+    // Ensure that the state remains consistent after a failure
+    assertTrue(userViewModel.friends.value.isEmpty())
   }
 
   @Test
