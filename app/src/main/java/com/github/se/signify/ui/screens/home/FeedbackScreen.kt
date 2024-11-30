@@ -72,7 +72,7 @@ fun FeedbackScreen(
               modifier =
                   Modifier.fillMaxWidth()
                       .height(4.dp)
-                      .background(MaterialTheme.colorScheme.primary)
+                      .background(MaterialTheme.colorScheme.background)
                       .testTag("TopBlueBar"))
           BackButton { navigationActions.goBack() }
         }
@@ -130,7 +130,8 @@ fun FeedbackScreen(
                   },
                   testTag = "SendFeedbackButton",
                   text = "Send Feedback",
-                  backgroundColor = MaterialTheme.colorScheme.primary)
+                  backgroundColor = MaterialTheme.colorScheme.primary,
+                  textColor = MaterialTheme.colorScheme.onPrimary)
 
               LoadingIndicator(isLoading = isLoading)
             }
@@ -159,7 +160,7 @@ private fun FeedbackDropdown(
             onDismissRequest = { expanded = false },
             modifier =
                 Modifier.fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.onBackground, RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
                     .testTag("DropdownMenu")) {
               feedbackOptions.forEach { option ->
                 DropdownMenuItem(
@@ -206,7 +207,8 @@ private fun RatingSection(selectedRating: Int, onRatingSelected: (Int) -> Unit) 
               imageVector = Icons.Outlined.Star,
               contentDescription = "Star $i",
               tint =
-                  if (i <= selectedRating) Color.Yellow else MaterialTheme.colorScheme.onBackground,
+                  if (i <= selectedRating) MaterialTheme.colorScheme.primary
+                  else MaterialTheme.colorScheme.onBackground,
               modifier =
                   Modifier.size(32.dp)
                       .clickable { onRatingSelected(i) }

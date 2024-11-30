@@ -295,17 +295,16 @@ fun SearchBar(
           Modifier.fillMaxWidth()
               .padding(start = 30.dp, end = 30.dp)
               .border(
-                  BorderStroke(2.dp, MaterialTheme.colorScheme.outline), RoundedCornerShape(16.dp))
+                  BorderStroke(2.dp, MaterialTheme.colorScheme.onBackground),
+                  RoundedCornerShape(16.dp))
               .testTag("SearchBar"),
-      placeholder = {
-        Text("Search by user ID", color = MaterialTheme.colorScheme.inverseOnSurface)
-      },
+      placeholder = { Text("Search by user ID", color = MaterialTheme.colorScheme.onBackground) },
       colors =
           TextFieldDefaults.colors(
-              focusedContainerColor = MaterialTheme.colorScheme.inverseSurface,
-              unfocusedContainerColor = MaterialTheme.colorScheme.inverseSurface,
-              focusedTextColor = MaterialTheme.colorScheme.inverseOnSurface,
-              cursorColor = MaterialTheme.colorScheme.inverseOnSurface),
+              focusedContainerColor = MaterialTheme.colorScheme.background,
+              unfocusedContainerColor = MaterialTheme.colorScheme.background,
+              focusedTextColor = MaterialTheme.colorScheme.onBackground,
+              cursorColor = MaterialTheme.colorScheme.onBackground),
       singleLine = true,
       trailingIcon = {
         ActionButton(
@@ -314,7 +313,7 @@ fun SearchBar(
               searchQuery = ""
             },
             Icons.Default.Search,
-            MaterialTheme.colorScheme.primary,
+            MaterialTheme.colorScheme.background,
             "Search")
       })
 }
@@ -434,7 +433,7 @@ fun ActionButton(
         Icon(
             imageVector = icon,
             contentDescription = contentDescription,
-            tint = MaterialTheme.colorScheme.background,
+            tint = MaterialTheme.colorScheme.onBackground,
         )
       }
 }

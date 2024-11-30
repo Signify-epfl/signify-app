@@ -75,7 +75,7 @@ fun WelcomeScreen(navigationActions: NavigationActions) {
         Icon(
             painter = painterResource(id = images[currentImage]),
             contentDescription = "Hand Sign Images",
-            tint = MaterialTheme.colorScheme.onSurface,
+            tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.width(100.dp).height(100.dp))
         // Highlight the corresponding letter in the welcome text
         HighlightedText(text = welcomeText, highlightIndex = highlightIndices[currentImage])

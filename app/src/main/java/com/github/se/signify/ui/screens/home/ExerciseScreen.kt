@@ -229,7 +229,7 @@ fun SentenceLayer(
               .height(150.dp)
               .padding(horizontal = 16.dp)
               .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
-              .border(2.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(16.dp))
+              .border(2.dp, MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
               .testTag("sentenceLayer"),
       contentAlignment = Alignment.Center) {
         Text(
