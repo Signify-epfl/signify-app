@@ -150,7 +150,7 @@ fun OngoingChallengeCard(
                   horizontal = 8.dp, vertical = 4.dp) // Padding for better separation between cards
               .border(
                   1.dp,
-                  MaterialTheme.colorScheme.primary,
+                  MaterialTheme.colorScheme.onPrimary,
                   RoundedCornerShape(16.dp)), // Adding border for better visual separation
       shape = RoundedCornerShape(16.dp), // Rounded corners
   ) {
@@ -169,12 +169,12 @@ fun OngoingChallengeCard(
                 Text(
                     text = "Opponent: ${challenge.player2}",
                     fontSize = 18.sp,
-                    color = MaterialTheme.colorScheme.surface,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
                 Text(
                     text = "Mode: ${challenge.mode}",
                     fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.surface)
+                    color = MaterialTheme.colorScheme.onPrimary)
               }
           IconButton(
               onClick = onDeleteClick,
@@ -183,7 +183,7 @@ fun OngoingChallengeCard(
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "Delete Challenge",
-                    tint = MaterialTheme.colorScheme.surface)
+                    tint = MaterialTheme.colorScheme.error)
               }
         }
   }

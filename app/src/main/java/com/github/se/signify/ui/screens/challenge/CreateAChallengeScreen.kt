@@ -181,7 +181,7 @@ fun ChallengeModeAlertDialog(
             testTag = "CancelButton",
             text = "Cancel",
             backgroundColor = MaterialTheme.colorScheme.surface,
-            textColor = MaterialTheme.colorScheme.onPrimary)
+            textColor = MaterialTheme.colorScheme.onSurface)
       },
       title = {
         Text(text = "Pick a Mode", modifier = Modifier.fillMaxWidth().testTag("DialogTitle"))
@@ -201,7 +201,7 @@ fun ChallengeModeAlertDialog(
           }
         }
       },
-      containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+      containerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.5f),
   )
 }
 
@@ -217,5 +217,7 @@ fun ModeButton(
       backgroundColor =
           if (selectedMode.value == mode) MaterialTheme.colorScheme.primary
           else MaterialTheme.colorScheme.surface,
-      textColor = MaterialTheme.colorScheme.onPrimary)
+      textColor =
+          if (selectedMode.value == mode) MaterialTheme.colorScheme.onPrimary
+          else MaterialTheme.colorScheme.onSurface)
 }
