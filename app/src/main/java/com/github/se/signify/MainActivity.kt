@@ -14,7 +14,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -53,31 +52,29 @@ class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    // Initialize SharedPreferences
-    @Suppress("SonarCloud:UNENCRYPTED_SHARED_PREF")
-    sharedPreferences = getSharedPreferences("theme_prefs", Context.MODE_PRIVATE)
+    // Load string resources for preference name and key
+    val prefName = getString(R.string.pref_name)
+    val prefKeyIsDarkTheme = getString(R.string.pref_key_is_dark_theme)
 
-    // Get the saved theme state (default is false for light mode)
-    val savedTheme = sharedPreferences.getBoolean("is_dark_theme", false)
+    // Initialize SharedPreferences
+    sharedPreferences = getSharedPreferences(prefName, Context.MODE_PRIVATE)
+
+    // Load the saved theme state (default is false for light mode)
+    val savedTheme = sharedPreferences.getBoolean(prefKeyIsDarkTheme, false)
 
     setContent {
       var isDarkTheme by remember { mutableStateOf(savedTheme) }
 
-      // Save theme state when toggled
-      fun saveThemePreference(isDark: Boolean) {
-        sharedPreferences.edit().putBoolean("is_dark_theme", isDark).apply()
-      }
-
       SignifyTheme(darkTheme = isDarkTheme) {
         Surface(modifier = Modifier.fillMaxSize()) {
-          val context = LocalContext.current
           SignifyAppPreview(
-              context,
-              AppDependencyProvider,
+              context = this,
+              dependencyProvider = AppDependencyProvider,
               isDarkTheme = isDarkTheme,
-              onThemeChange = {
-                isDarkTheme = it
-                saveThemePreference(it)
+              onThemeChange = { isDark ->
+                isDarkTheme = isDark
+                // Save theme preference
+                sharedPreferences.edit().putBoolean(prefKeyIsDarkTheme, isDark).apply()
               })
         }
       }
