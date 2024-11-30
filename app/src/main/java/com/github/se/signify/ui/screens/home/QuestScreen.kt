@@ -67,29 +67,29 @@ fun QuestScreen(
 
   val unlockedQuests by userViewModel.unlockedQuests.collectAsState()
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize().testTag("QuestScreen"),
-    ) { padding ->
-      Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier =
-                Modifier.fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(horizontal = 16.dp, vertical = 8.dp)) {
-              IconButton(onClick = { navigationActions.goBack() }) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = MaterialTheme.colorScheme.primary)
-              }
-              Spacer(modifier = Modifier.width(20.dp))
-              Text(
-                  text = "Your daily quests",
-                  fontWeight = FontWeight.Bold,
-                  fontSize = 25.sp,
-                  color = MaterialTheme.colorScheme.primary)
+  Scaffold(
+      modifier = Modifier.fillMaxSize().testTag("QuestScreen"),
+  ) { padding ->
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+      Row(
+          verticalAlignment = Alignment.CenterVertically,
+          modifier =
+              Modifier.fillMaxWidth()
+                  .background(MaterialTheme.colorScheme.background)
+                  .padding(horizontal = 16.dp, vertical = 8.dp)) {
+            IconButton(onClick = { navigationActions.goBack() }) {
+              Icon(
+                  imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                  contentDescription = "Back",
+                  tint = MaterialTheme.colorScheme.primary)
             }
+            Spacer(modifier = Modifier.width(20.dp))
+            Text(
+                text = "Your daily quests",
+                fontWeight = FontWeight.Bold,
+                fontSize = 25.sp,
+                color = MaterialTheme.colorScheme.primary)
+          }
 
       LazyColumn(
           contentPadding = PaddingValues(vertical = 8.dp),

@@ -65,31 +65,31 @@ fun FeedbackScreen(
   var selectedRating by remember { mutableIntStateOf(0) }
   var isLoading by remember { mutableStateOf(false) }
 
-    Scaffold(
-        topBar = {
-          Column {
-            Box(
-                modifier =
-                    Modifier.fillMaxWidth()
-                        .height(4.dp)
-                        .background(MaterialTheme.colorScheme.background)
-                        .testTag("TopBlueBar"))
-            BackButton { navigationActions.goBack() }
-          }
-        },
-        content = { padding ->
-          Column(
+  Scaffold(
+      topBar = {
+        Column {
+          Box(
               modifier =
-                  Modifier.fillMaxSize()
-                      .padding(padding)
-                      .padding(16.dp)
-                      .testTag("FeedbackScreenContent"),
-              horizontalAlignment = Alignment.CenterHorizontally,
-              verticalArrangement = Arrangement.Top) {
-                FeedbackDropdown(
-                    selectedFeedbackType = selectedFeedbackType,
-                    onFeedbackTypeSelected = { selectedFeedbackType = it },
-                    feedbackOptions = feedbackOptions)
+                  Modifier.fillMaxWidth()
+                      .height(4.dp)
+                      .background(MaterialTheme.colorScheme.background)
+                      .testTag("TopBlueBar"))
+          BackButton { navigationActions.goBack() }
+        }
+      },
+      content = { padding ->
+        Column(
+            modifier =
+                Modifier.fillMaxSize()
+                    .padding(padding)
+                    .padding(16.dp)
+                    .testTag("FeedbackScreenContent"),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top) {
+              FeedbackDropdown(
+                  selectedFeedbackType = selectedFeedbackType,
+                  onFeedbackTypeSelected = { selectedFeedbackType = it },
+                  feedbackOptions = feedbackOptions)
 
               FeedbackInputField(
                   value = feedbackTitle,
@@ -111,28 +111,27 @@ fun FeedbackScreen(
               RatingSection(
                   selectedRating = selectedRating, onRatingSelected = { selectedRating = it })
 
-                UtilTextButton(
-                    onClickAction = {
-                      if (feedbackTitle.text.isNotEmpty() &&
-                          feedbackDescription.text.isNotEmpty()) {
-                        isLoading = true
-                        feedbackViewModel.saveFeedback(
-                            type = selectedFeedbackType,
-                            title = feedbackTitle.text,
-                            description = feedbackDescription.text,
-                            rating = selectedRating)
-                        isLoading = false
-                        Toast.makeText(context, "Review sent", Toast.LENGTH_LONG).show()
-                        navigationActions.navigateTo(Screen.HOME)
-                      } else {
-                        Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT)
-                            .show()
-                      }
-                    },
-                    testTag = "SendFeedbackButton",
-                    text = "Send Feedback",
-                    backgroundColor = MaterialTheme.colorScheme.primary,
-                    textColor = MaterialTheme.colorScheme.onPrimary)
+              UtilTextButton(
+                  onClickAction = {
+                    if (feedbackTitle.text.isNotEmpty() && feedbackDescription.text.isNotEmpty()) {
+                      isLoading = true
+                      feedbackViewModel.saveFeedback(
+                          type = selectedFeedbackType,
+                          title = feedbackTitle.text,
+                          description = feedbackDescription.text,
+                          rating = selectedRating)
+                      isLoading = false
+                      Toast.makeText(context, "Review sent", Toast.LENGTH_LONG).show()
+                      navigationActions.navigateTo(Screen.HOME)
+                    } else {
+                      Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT)
+                          .show()
+                    }
+                  },
+                  testTag = "SendFeedbackButton",
+                  text = "Send Feedback",
+                  backgroundColor = MaterialTheme.colorScheme.primary,
+                  textColor = MaterialTheme.colorScheme.onPrimary)
 
               LoadingIndicator(isLoading = isLoading)
             }
