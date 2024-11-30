@@ -1,6 +1,6 @@
 @file:Suppress("DEPRECATION") // We were told to use deprecated Google Authentication API
 
-package com.github.se.signify.ui.screens
+package com.github.se.signify.ui.screens.auth
 
 import android.content.Intent
 import android.util.Log
@@ -45,10 +45,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
-import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.stats.saveStatsToFirestore
 import com.github.se.signify.model.user.saveUserToFireStore
-import com.github.se.signify.ui.isOfflineState
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -62,16 +60,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 @Composable
-fun LoginScreen(navigationActions: NavigationActions, userSession: UserSession) {
+fun LoginScreen(navigationActions: NavigationActions) {
   val context = LocalContext.current
 
   val launcher =
       rememberFirebaseAuthLauncher(
           onAuthComplete = { result ->
             Log.d("SignInScreen", "User signed in: ${result.user?.displayName}")
-            isOfflineState = false // Set offline state to false when signed in
             Toast.makeText(context, "Login successful!", Toast.LENGTH_LONG).show()
-            navigationActions.navigateTo("Home")
+            navigationActions.navigateTo(Screen.HOME)
           },
           onAuthError = {
             Log.e("SignInScreen", "Failed to sign in: ${it.statusCode}")
@@ -145,10 +142,9 @@ fun LoginScreen(navigationActions: NavigationActions, userSession: UserSession) 
                 launcher.launch(googleSignInClient.signInIntent)
               })
 
-          OfflineModeButton {
-            isOfflineState = true // Set offline state to true
-            Log.d("SignInScreen", "Offline mode activated")
-            Toast.makeText(context, "Offline Mode Activated", Toast.LENGTH_LONG).show()
+          SkipLoginButton {
+            Log.d("LoginScreen", "Proceeding in offline state.")
+            Toast.makeText(context, "You are not logged in.", Toast.LENGTH_LONG).show()
             navigationActions.navigateTo(Screen.HOME)
           }
         }
@@ -219,9 +215,9 @@ fun rememberFirebaseAuthLauncher(
 }
 
 @Composable
-fun OfflineModeButton(onOfflineClick: () -> Unit) {
+fun SkipLoginButton(onOfflineClick: () -> Unit) {
   Button(
-      modifier = Modifier.padding(8.dp).height(48.dp).testTag("offlineButton"),
+      modifier = Modifier.padding(8.dp).height(48.dp).testTag("skipLoginButton"),
       onClick = onOfflineClick,
       colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.background),
       shape = RoundedCornerShape(50),
@@ -229,7 +225,7 @@ fun OfflineModeButton(onOfflineClick: () -> Unit) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.width(200.dp).testTag("offlineButton")) {
+            modifier = Modifier.width(200.dp).testTag("skipLoginButton")) {
               Icon(
                   imageVector = Icons.Default.Home,
                   contentDescription = "Offline Mode Icon",
@@ -238,7 +234,7 @@ fun OfflineModeButton(onOfflineClick: () -> Unit) {
 
               // Text for the button
               Text(
-                  text = "Continue in Offline Mode",
+                  text = "Skip Login",
                   style =
                       TextStyle(
                           fontSize = 14.sp,

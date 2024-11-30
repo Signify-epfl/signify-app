@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 fun BottomNavigationMenu(
     onTabSelect: (TopLevelDestination) -> Unit,
     tabList: List<TopLevelDestination>,
-    selectedItem: String = Route.HOME, // Provide a default value
+    selectedItem: String = Screen.HOME.route, // Provide a default value
 ) {
   Box(
       modifier =

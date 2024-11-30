@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.model.di.AppDependencyProvider
+import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
 import org.junit.Before
@@ -21,7 +22,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 
 @RunWith(AndroidJUnit4::class)
-class ExerciseScreenEasyTest {
+class ExerciseScreenTest {
 
   @get:Rule val composeTestRule = createComposeRule()
   @get:Rule
@@ -39,20 +40,24 @@ class ExerciseScreenEasyTest {
   }
 
   @Test
-  fun exerciseScreenEasy_displaysComponentsCorrectly() {
+  fun exerciseScreenDisplaysComponentsCorrectly() {
     composeTestRule.setContent {
-      ExerciseScreenEasy(
-          navigationActions = mockNavigationActions, handLandMarkViewModel = handLandMarkViewModel)
+      ExerciseScreen(
+          navigationActions = mockNavigationActions,
+          handLandMarkViewModel = handLandMarkViewModel,
+          exerciseLevel = ExerciseLevel.Easy)
     }
     composeTestRule.onNodeWithTag("sentenceLayer").assertIsDisplayed()
     composeTestRule.onNodeWithTag("cameraPreview").assertIsDisplayed()
   }
 
   @Test
-  fun imageIsDisplayed_ifImageExists() {
+  fun imageIsDisplayedIfImageExists() {
     composeTestRule.setContent {
-      ExerciseScreenEasy(
-          navigationActions = mockNavigationActions, handLandMarkViewModel = handLandMarkViewModel)
+      ExerciseScreen(
+          navigationActions = mockNavigationActions,
+          handLandMarkViewModel = handLandMarkViewModel,
+          exerciseLevel = ExerciseLevel.Easy)
     }
 
     composeTestRule.onNodeWithContentDescription("Sign image").assertIsDisplayed()

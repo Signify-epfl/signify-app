@@ -1,7 +1,6 @@
 package com.github.se.signify.ui.screens.home
 
 import android.util.Log
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -53,6 +52,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
+import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.UtilButton
 import com.github.se.signify.ui.UtilTextButton
@@ -66,14 +66,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 /**
- * Data class representing an exercise with a name and an optional navigation route.
- *
- * @property name The name of the exercise, used for display and identification.
- * @property route The navigation route associated with the exercise. Defaults to "UNKNOWN_EXERCISE"
- *   if no specific route is provided.
- */
-data class Exercise(val name: String, val route: String = "UNKNOWN_EXERCISE")
-/**
  * Composable function that displays the home screen with various UI elements including a list of
  * exercises, a letter dictionary, and navigation buttons. The screen uses a `LazyColumn` for
  * vertical scrolling and incorporates a floating action button to quickly scroll back to the top.
@@ -82,11 +74,7 @@ data class Exercise(val name: String, val route: String = "UNKNOWN_EXERCISE")
  */
 @Composable
 fun HomeScreen(navigationActions: NavigationActions) {
-  val defaultExercises =
-      listOf(
-          Exercise("Easy", Screen.EXERCISE_EASY),
-          Exercise("Medium", Screen.EXERCISE_MEDIUM),
-          Exercise("Hard", Screen.EXERCISE_HARD))
+  val defaultExercises = ExerciseLevel.entries
 
   val scrollState = rememberLazyListState()
   val coroutineScope = rememberCoroutineScope()
@@ -195,7 +183,6 @@ fun CameraFeedbackButton(onClick: () -> Unit = {}) {
  * @param numbOfHeaders The number of headers at the top of the list, allowing for an offset when
  *   scrolling to the selected letter.
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LetterDictionary(
     scrollState: LazyListState,
@@ -223,7 +210,7 @@ fun LetterDictionary(
 
     // Horizontal Pager for letters in the center
     HorizontalPager(
-        beyondBoundsPageCount = 1,
+        beyondViewportPageCount = 1,
         state = pagerState,
         modifier = Modifier.size(300.dp, 50.dp).align(Alignment.Center).testTag("LetterPager"),
     ) { page ->
@@ -290,14 +277,13 @@ fun LetterDictionary(
  * @param navigationActions The `NavigationActions` object responsible for handling navigation
  *   between screens.
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ExerciseList(exercises: List<Exercise>, navigationActions: NavigationActions) {
+fun ExerciseList(exercises: List<ExerciseLevel>, navigationActions: NavigationActions) {
   val pagerState = rememberPagerState(initialPage = 0, pageCount = { exercises.size })
 
   Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
     HorizontalPager(
-        beyondBoundsPageCount = exercises.size,
+        beyondViewportPageCount = exercises.size,
         state = pagerState,
         modifier = Modifier.height(160.dp).padding(8.dp).testTag("ExerciseListPager"),
         verticalAlignment = Alignment.CenterVertically) { page ->
@@ -311,7 +297,7 @@ fun ExerciseList(exercises: List<Exercise>, navigationActions: NavigationActions
                             .background(MaterialTheme.colorScheme.primary)
                             .border(
                                 1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
-                            .testTag("${exercises[page].name}ExerciseBox")) {
+                            .testTag("${exercises[page].levelName}ExerciseBox")) {
                       Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                         ExerciseButton(
                             exercise = exercises[page], navigationActions = navigationActions)
@@ -349,19 +335,21 @@ fun ExerciseList(exercises: List<Exercise>, navigationActions: NavigationActions
  * @param navigationActions The `NavigationActions` object that handles navigation between screens.
  */
 @Composable
-fun ExerciseButton(exercise: Exercise, navigationActions: NavigationActions) {
+fun ExerciseButton(exercise: ExerciseLevel, navigationActions: NavigationActions) {
   Button(
-      onClick = { navigationActions.navigateTo(exercise.route) },
+      onClick = { navigationActions.navigateTo(exercise.levelScreen) },
       modifier =
           Modifier.aspectRatio(2f)
               .fillMaxWidth()
               .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
-              .testTag("${exercise.name}ExerciseButton"),
+              .testTag("${exercise.levelName}ExerciseButton"),
       shape = RoundedCornerShape(8.dp),
       colors =
           ButtonDefaults.buttonColors(
               MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.onPrimary)) {
-        Text(exercise.name, modifier = Modifier.testTag("${exercise.name}ExerciseButtonText"))
+        Text(
+            exercise.levelName,
+            modifier = Modifier.testTag("${exercise.levelName}ExerciseButtonText"))
       }
 }
 /**

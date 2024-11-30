@@ -13,6 +13,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
+import com.github.se.signify.ui.screens.auth.LoginScreen
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
 import org.junit.After
 import org.junit.Before
@@ -36,7 +37,7 @@ class LoginScreenTest : TestCase() {
     navigationActions = mock(NavigationActions::class.java)
     userSession = mock(UserSession::class.java)
 
-    `when`(navigationActions.currentRoute()).thenReturn(Screen.AUTH)
+    `when`(navigationActions.currentRoute()).thenReturn(Screen.AUTH.route)
   }
 
   @After
@@ -47,7 +48,7 @@ class LoginScreenTest : TestCase() {
   @Test
   fun titleAndButtonAreCorrectlyDisplayed() {
 
-    composeTestRule.setContent { LoginScreen(navigationActions, userSession) }
+    composeTestRule.setContent { LoginScreen(navigationActions) }
 
     composeTestRule.onNodeWithTag("IntroMessage").assertIsDisplayed()
     composeTestRule
@@ -62,7 +63,7 @@ class LoginScreenTest : TestCase() {
   @Test
   fun googleSignInReturnsValidActivityResult() {
 
-    composeTestRule.setContent { LoginScreen(navigationActions, userSession) }
+    composeTestRule.setContent { LoginScreen(navigationActions) }
 
     composeTestRule.onNodeWithTag("loginButton").performClick()
     composeTestRule.waitForIdle()
@@ -72,7 +73,7 @@ class LoginScreenTest : TestCase() {
 
   @Test
   fun offlineModeHelpsToConnect() {
-    composeTestRule.setContent { LoginScreen(navigationActions, userSession) }
-    composeTestRule.onNodeWithTag("offlineButton").assertIsDisplayed().performClick()
+    composeTestRule.setContent { LoginScreen(navigationActions) }
+    composeTestRule.onNodeWithTag("skipLoginButton").assertIsDisplayed().performClick()
   }
 }

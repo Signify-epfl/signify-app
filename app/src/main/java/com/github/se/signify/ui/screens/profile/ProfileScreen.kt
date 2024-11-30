@@ -28,8 +28,6 @@ import com.github.se.signify.ui.LearnedLetterList
 import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.SquareButton
 import com.github.se.signify.ui.UtilButton
-import com.github.se.signify.ui.WhiteOfflineScreen
-import com.github.se.signify.ui.isOfflineState
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 import com.google.firebase.auth.FirebaseAuth
@@ -46,67 +44,63 @@ fun ProfileScreen(
     statsViewModel: StatsViewModel =
         viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
 ) {
-  if (isOfflineState) {
-    WhiteOfflineScreen(navigationActions = navigationActions)
-  } else {
-    MainScreenScaffold(
-        navigationActions = navigationActions,
-        testTagColumn = "ProfileScreen",
-        helpTitle = "Profile",
-        helpText = stringResource(R.string.help_profile_screen),
-    ) {
-      LaunchedEffect(Unit) {
-        userViewModel.getUserName()
-        userViewModel.getProfilePictureUrl()
-        userViewModel.updateStreak()
-        userViewModel.getStreak()
-      }
-      val userName = userViewModel.userName.collectAsState()
-      val profilePictureUrl = userViewModel.profilePictureUrl.collectAsState()
-      val streak = userViewModel.streak.collectAsState()
-      val lettersLearned = statsViewModel.lettersLearned.collectAsState()
-      var updatedProfilePicture by remember { mutableStateOf(profilePictureUrl.value) }
-
-      LaunchedEffect(profilePictureUrl.value) { updatedProfilePicture = profilePictureUrl.value }
-
-      // Settings button
-      UtilButton(
-          onClick = { navigationActions.navigateTo(Screen.SETTINGS) },
-          buttonTestTag = "SettingsButton",
-          iconTestTag = "SettingsIcon",
-          icon = Icons.Outlined.Settings,
-          contentDescription = "Settings")
-      Spacer(modifier = Modifier.height(32.dp))
-
-      // Top information
-      AccountInformation(
-          userId = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0) ?: "unknown",
-          userName = userName.value,
-          profilePictureUrl = updatedProfilePicture,
-          days = streak.value)
-
-      Spacer(modifier = Modifier.height(32.dp))
-
-      // Letters learned
-      LearnedLetterList(lettersLearned = lettersLearned.value)
-      Spacer(modifier = Modifier.height(32.dp))
-
-      // Friends List button
-      SquareButton(
-          iconRes = R.drawable.friendsicon,
-          label = "My Friends",
-          onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
-          size = 200,
-          modifier = Modifier.testTag("MyFriendsButton"))
-      Spacer(modifier = Modifier.height(32.dp))
-
-      // Statistics Button
-      SquareButton(
-          iconRes = R.drawable.statisticsicon,
-          label = "My Stats",
-          onClick = { navigationActions.navigateTo(Screen.STATS) },
-          size = 200,
-          modifier = Modifier.testTag("MyStatsButton"))
+  MainScreenScaffold(
+      navigationActions = navigationActions,
+      testTagColumn = "ProfileScreen",
+      helpTitle = "Profile",
+      helpText = stringResource(R.string.help_profile_screen),
+  ) {
+    LaunchedEffect(Unit) {
+      userViewModel.getUserName()
+      userViewModel.getProfilePictureUrl()
+      userViewModel.updateStreak()
+      userViewModel.getStreak()
     }
+    val userName = userViewModel.userName.collectAsState()
+    val profilePictureUrl = userViewModel.profilePictureUrl.collectAsState()
+    val streak = userViewModel.streak.collectAsState()
+    val lettersLearned = statsViewModel.lettersLearned.collectAsState()
+    var updatedProfilePicture by remember { mutableStateOf(profilePictureUrl.value) }
+
+    LaunchedEffect(profilePictureUrl.value) { updatedProfilePicture = profilePictureUrl.value }
+
+    // Settings button
+    UtilButton(
+        onClick = { navigationActions.navigateTo(Screen.SETTINGS) },
+        buttonTestTag = "SettingsButton",
+        iconTestTag = "SettingsIcon",
+        icon = Icons.Outlined.Settings,
+        contentDescription = "Settings")
+    Spacer(modifier = Modifier.height(32.dp))
+
+    // Top information
+    AccountInformation(
+        userId = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0) ?: "unknown",
+        userName = userName.value,
+        profilePictureUrl = updatedProfilePicture,
+        days = streak.value)
+
+    Spacer(modifier = Modifier.height(32.dp))
+
+    // Letters learned
+    LearnedLetterList(lettersLearned = lettersLearned.value)
+    Spacer(modifier = Modifier.height(32.dp))
+
+    // Friends List button
+    SquareButton(
+        iconRes = R.drawable.friendsicon,
+        label = "My Friends",
+        onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
+        size = 200,
+        modifier = Modifier.testTag("MyFriendsButton"))
+    Spacer(modifier = Modifier.height(32.dp))
+
+    // Statistics Button
+    SquareButton(
+        iconRes = R.drawable.statisticsicon,
+        label = "My Stats",
+        onClick = { navigationActions.navigateTo(Screen.STATS) },
+        size = 200,
+        modifier = Modifier.testTag("MyStatsButton"))
   }
 }

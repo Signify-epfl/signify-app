@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.ui.navigation.NavigationActions
+import com.github.se.signify.ui.navigation.Screen
 import kotlinx.coroutines.delay
 
 @Composable
@@ -63,7 +63,7 @@ fun WelcomeScreen(navigationActions: NavigationActions) {
       currentImage += 1
     }
     delay(2000) // Pause after the last image
-    navigationActions.navigateTo("Auth")
+    navigationActions.navigateTo(Screen.AUTH)
   }
   Column(
       modifier =

@@ -36,31 +36,110 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.se.signify.R
+import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.CameraPlaceholder
 import com.github.se.signify.ui.navigation.NavigationActions
 
 /**
- * Composable function for the Easy Level Exercise Screen. This screen allows the user to practice
- * recognizing letters in American Sign Language (ASL) using the hand landmarks detected by the
- * device's camera.
+ * Composable function for a common exercise screen layout, handling gesture detection, sentence
+ * progression, and displaying the current sign image based on letter recognition.
  *
- * @param navigationActions A collection of navigation actions that can be triggered from this
- *   screen.
- * @param handLandMarkViewModel The ViewModel responsible for managing hand landmark detection.
+ * This function displays the current letter from a list of sentences, updates the current word and
+ * letter when gestures are correctly matched.When all sentences are completed, it resets and
+ * displays a completion message.
+ *
+ * @param navigationActions Provides navigation actions for the screen.
+ * @param handLandMarkViewModel ViewModel responsible for managing hand landmark detection and
+ *   gesture matching.
+ * @param exerciseLevel Provides complementary information about the level.
  */
 @Composable
-fun ExerciseScreenEasy(
+fun ExerciseScreen(
     navigationActions: NavigationActions,
-    handLandMarkViewModel: HandLandMarkViewModel
+    handLandMarkViewModel: HandLandMarkViewModel,
+    exerciseLevel: ExerciseLevel
 ) {
-  ExerciseScreenCommon(
-      navigationActions = navigationActions,
-      handLandMarkViewModel = handLandMarkViewModel,
-      wordsResourceId = R.array.real_words,
-      screenTag = "ExerciseScreenEasy")
+  val context = LocalContext.current
+  val realSentences = stringArrayResource(exerciseLevel.wordsResourceId).toList()
+  val sentencesList by rememberSaveable {
+    mutableStateOf(
+        List(3) { realSentences.filter { exerciseLevel.wordFilter?.invoke(it) ?: true }.random() })
+  }
+
+  var currentSentenceIndex by rememberSaveable { mutableIntStateOf(0) }
+  var currentWordIndex by rememberSaveable { mutableIntStateOf(0) }
+  var currentLetterIndex by rememberSaveable { mutableIntStateOf(0) }
+
+  val currentLetter =
+      getCurrentLetter(sentencesList, currentLetterIndex, currentWordIndex, currentSentenceIndex)
+
+  val landmarksState = handLandMarkViewModel.landMarks().collectAsState()
+  val detectedGesture = handLandMarkViewModel.getSolution()
+
+  if (!landmarksState.value.isNullOrEmpty()) {
+    handleGestureMatching(
+        detectedGesture = detectedGesture,
+        currentLetterIndex = currentLetterIndex,
+        currentWordIndex = currentWordIndex,
+        currentSentenceIndex = currentSentenceIndex,
+        sentencesList = sentencesList,
+        onProgressUpdate = { newLetterIndex, newWordIndex, newSentenceIndex ->
+          currentLetterIndex = newLetterIndex
+          currentWordIndex = newWordIndex
+          currentSentenceIndex = newSentenceIndex
+        },
+        onAllSentencesComplete = {
+          Toast.makeText(context, "Exercise completed!", Toast.LENGTH_SHORT).show()
+          // Reload or reset sentencesList, or handle end of exercise as needed
+          currentSentenceIndex = 0
+          currentWordIndex = 0
+          currentLetterIndex = 0
+        })
+  }
+
+  AnnexScreenScaffold(
+      navigationActions = navigationActions, testTagColumn = exerciseLevel.screenTag) {
+
+        // Display sign image for the current letter
+        val imageName = "letter_${currentLetter.lowercase()}"
+        val imageResId = context.resources.getIdentifier(imageName, "drawable", context.packageName)
+
+        if (imageResId != 0) {
+          Box(
+              modifier =
+                  Modifier.fillMaxWidth()
+                      .padding(horizontal = 16.dp)
+                      .height(150.dp)
+                      .background(
+                          MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
+                      .border(
+                          2.dp,
+                          MaterialTheme.colorScheme.outline,
+                          shape = RoundedCornerShape(16.dp)),
+              contentAlignment = Alignment.Center) {
+                Icon(
+                    painter = painterResource(id = imageResId),
+                    contentDescription = "Sign image",
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.size(120.dp))
+              }
+
+          Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        // Sentence layer display
+        SentenceLayer(
+            sentencesList,
+            currentLetterIndex,
+            currentWordIndex,
+            currentSentenceIndex,
+        )
+
+        // Camera placeholder/composable
+        CameraPlaceholder(handLandMarkViewModel)
+      }
 }
 
 /**
@@ -327,105 +406,5 @@ fun handleGestureMatching(
     Log.d(
         "ExerciseScreenEasy",
         "Detected gesture ($detectedGesture) does not match the current letter ($currentLetter)")
-  }
-}
-
-/**
- * Composable function for a common exercise screen layout, handling gesture detection, sentence
- * progression, and displaying the current sign image based on letter recognition.
- *
- * This function displays the current letter from a list of sentences, updates the current word and
- * letter when gestures are correctly matched.When all sentences are completed, it resets and
- * displays a completion message.
- *
- * @param navigationActions Provides navigation actions for the screen.
- * @param handLandMarkViewModel ViewModel responsible for managing hand landmark detection and
- *   gesture matching.
- * @param wordsResourceId Resource ID for the list of words or sentences to be used in the exercise.
- * @param screenTag Tag used for identifying the screen in tests.
- * @param wordFilter Optional filter function to specify criteria for selecting words from the
- *   resource.
- */
-@Composable
-fun ExerciseScreenCommon(
-    navigationActions: NavigationActions,
-    handLandMarkViewModel: HandLandMarkViewModel,
-    wordsResourceId: Int,
-    screenTag: String,
-    wordFilter: ((String) -> Boolean)? = null
-) {
-  val context = LocalContext.current
-  val realSentences = stringArrayResource(wordsResourceId).toList()
-  val sentencesList by rememberSaveable {
-    mutableStateOf(List(3) { realSentences.filter { wordFilter?.invoke(it) ?: true }.random() })
-  }
-
-  var currentSentenceIndex by rememberSaveable { mutableIntStateOf(0) }
-  var currentWordIndex by rememberSaveable { mutableIntStateOf(0) }
-  var currentLetterIndex by rememberSaveable { mutableIntStateOf(0) }
-
-  val currentLetter =
-      getCurrentLetter(sentencesList, currentLetterIndex, currentWordIndex, currentSentenceIndex)
-
-  val landmarksState = handLandMarkViewModel.landMarks().collectAsState()
-  val detectedGesture = handLandMarkViewModel.getSolution()
-
-  if (!landmarksState.value.isNullOrEmpty()) {
-    handleGestureMatching(
-        detectedGesture = detectedGesture,
-        currentLetterIndex = currentLetterIndex,
-        currentWordIndex = currentWordIndex,
-        currentSentenceIndex = currentSentenceIndex,
-        sentencesList = sentencesList,
-        onProgressUpdate = { newLetterIndex, newWordIndex, newSentenceIndex ->
-          currentLetterIndex = newLetterIndex
-          currentWordIndex = newWordIndex
-          currentSentenceIndex = newSentenceIndex
-        },
-        onAllSentencesComplete = {
-          Toast.makeText(context, "Exercise completed!", Toast.LENGTH_SHORT).show()
-          // Reload or reset sentencesList, or handle end of exercise as needed
-          currentSentenceIndex = 0
-          currentWordIndex = 0
-          currentLetterIndex = 0
-        })
-  }
-
-  AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = screenTag) {
-
-    // Display sign image for the current letter
-    val imageName = "letter_${currentLetter.lowercase()}"
-    val imageResId = context.resources.getIdentifier(imageName, "drawable", context.packageName)
-
-    if (imageResId != 0) {
-      Box(
-          modifier =
-              Modifier.fillMaxWidth()
-                  .padding(horizontal = 16.dp)
-                  .height(150.dp)
-                  .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
-                  .border(
-                      2.dp, MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp)),
-          contentAlignment = Alignment.Center) {
-            Icon(
-                painter = painterResource(id = imageResId),
-                contentDescription = "Sign image",
-                tint = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.size(120.dp))
-          }
-
-      Spacer(modifier = Modifier.height(16.dp))
-    }
-
-    // Sentence layer display
-    SentenceLayer(
-        sentencesList,
-        currentLetterIndex,
-        currentWordIndex,
-        currentSentenceIndex,
-    )
-
-    // Camera placeholder/composable
-    CameraPlaceholder(handLandMarkViewModel)
   }
 }

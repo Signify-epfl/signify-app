@@ -10,6 +10,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 import kotlinx.coroutines.CoroutineScope
@@ -30,7 +31,7 @@ class HomeScreenTest {
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
 
-    `when`(navigationActions.currentRoute()).thenReturn(Screen.HOME)
+    `when`(navigationActions.currentRoute()).thenReturn(Screen.HOME.route)
   }
 
   @Test
@@ -91,13 +92,13 @@ class HomeScreenTest {
   // The following 2 tests should be moved to their own file.
   @Test
   fun exerciseListDisplaysExerciseButtons() {
-    val exercises = listOf(Exercise("Easy"), Exercise("Medium"), Exercise("Hard"))
+    val exercises = ExerciseLevel.entries
 
     composeTestRule.setContent { ExerciseList(exercises, navigationActions) }
 
     exercises.forEach { exercise ->
       composeTestRule
-          .onNodeWithTag("${exercise.name}ExerciseButton")
+          .onNodeWithTag("${exercise.levelName}ExerciseButton")
           .performScrollTo()
           .assertIsDisplayed()
     }
@@ -105,37 +106,33 @@ class HomeScreenTest {
 
   @Test
   fun exerciseButtonTextDisplaysCorrectly() {
-    val exercises = listOf(Exercise("Easy"), Exercise("Medium"), Exercise("Hard"))
+    val exercises = ExerciseLevel.entries
 
     composeTestRule.setContent { ExerciseList(exercises, navigationActions) }
 
     exercises.forEach { exercise ->
       composeTestRule
-          .onNodeWithTag("${exercise.name}ExerciseButtonText", useUnmergedTree = true)
+          .onNodeWithTag("${exercise.levelName}ExerciseButtonText", useUnmergedTree = true)
           .performScrollTo()
           .assertIsDisplayed()
-          .assertTextEquals(exercise.name)
+          .assertTextEquals(exercise.levelName)
     }
   }
 
   @Test
   fun clickingExerciseButtonsCallsOnClick() {
-    val exercises =
-        listOf(
-            Exercise("Easy", "Exercise Screen Easy"), Exercise("Hard", "Exercise Screen Hard")
-            // Need to modify hard to medium and hard should be as another exercise
-            )
+    val exercises = ExerciseLevel.entries
 
     composeTestRule.setContent { ExerciseList(exercises, navigationActions) }
 
     exercises.forEach { exercise ->
       composeTestRule
-          .onNodeWithTag("${exercise.name}ExerciseButton")
+          .onNodeWithTag("${exercise.levelName}ExerciseButton")
           .performScrollTo()
           .performClick()
 
       verify(navigationActions)
-          .navigateTo(exercise.route) // Verify onClick was called with the exercise
+          .navigateTo(exercise.levelScreen) // Verify onClick was called with the exercise
     }
   }
 

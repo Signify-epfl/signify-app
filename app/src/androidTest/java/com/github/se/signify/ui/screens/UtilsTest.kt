@@ -35,17 +35,14 @@ import com.github.se.signify.ui.TopBar
 import com.github.se.signify.ui.UtilButton
 import com.github.se.signify.ui.UtilIconButton
 import com.github.se.signify.ui.UtilTextButton
-import com.github.se.signify.ui.WhiteOfflineScreen
 import com.github.se.signify.ui.getIconResId
 import com.github.se.signify.ui.getImageResId
 import com.github.se.signify.ui.getTipResId
 import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.navigation.Screen
 import junit.framework.TestCase.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
 
 class UtilsTest {
 
@@ -503,20 +500,5 @@ class UtilsTest {
           expectedResId,
           actualResId)
     }
-  }
-
-  @Test
-  fun whiteOfflineScreenDisplaysCorrectly() {
-    // Set up the WhiteOfflineScreen
-    navigationActions = mock(NavigationActions::class.java)
-    composeTestRule.setContent { WhiteOfflineScreen(navigationActions = navigationActions) }
-    composeTestRule.onNodeWithTag("WhiteOfflineScreen").assertIsDisplayed()
-    // Assert the text "You are offline" is displayed
-    composeTestRule.onNodeWithText("You are offline").assertIsDisplayed()
-
-    // Assert the "Log In" button is displayed
-    composeTestRule.onNodeWithText("Log In").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("logInButtonInOfflineMode").assertIsDisplayed().performClick()
-    verify(navigationActions).navigateTo(Screen.AUTH)
   }
 }

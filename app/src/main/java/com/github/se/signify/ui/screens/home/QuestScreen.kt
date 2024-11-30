@@ -48,9 +48,7 @@ import com.github.se.signify.model.quest.QuestRepository
 import com.github.se.signify.model.quest.QuestViewModel
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
-import com.github.se.signify.ui.WhiteOfflineScreen
 import com.github.se.signify.ui.getLetterIconResId
-import com.github.se.signify.ui.isOfflineState
 import com.github.se.signify.ui.navigation.NavigationActions
 
 @Composable
@@ -60,18 +58,14 @@ fun QuestScreen(
     questRepository: QuestRepository,
     userRepository: UserRepository,
 ) {
-  if (isOfflineState) {
-    WhiteOfflineScreen(navigationActions)
-  } else {
-    val questViewModel: QuestViewModel =
-        viewModel(factory = QuestViewModel.factory(questRepository))
-    val userViewModel: UserViewModel =
-        viewModel(factory = UserViewModel.factory(userSession, userRepository))
+  val questViewModel: QuestViewModel = viewModel(factory = QuestViewModel.factory(questRepository))
+  val userViewModel: UserViewModel =
+      viewModel(factory = UserViewModel.factory(userSession, userRepository))
 
-    val quests = questViewModel.quest.collectAsState()
-    LaunchedEffect(userSession.getUserId()) { userViewModel.checkAndUnlockNextQuest() }
+  val quests = questViewModel.quest.collectAsState()
+  LaunchedEffect(userSession.getUserId()) { userViewModel.checkAndUnlockNextQuest() }
 
-    val unlockedQuests by userViewModel.unlockedQuests.collectAsState()
+  val unlockedQuests by userViewModel.unlockedQuests.collectAsState()
 
     Scaffold(
         modifier = Modifier.fillMaxSize().testTag("QuestScreen"),
@@ -97,15 +91,14 @@ fun QuestScreen(
                   color = MaterialTheme.colorScheme.primary)
             }
 
-        LazyColumn(
-            contentPadding = PaddingValues(vertical = 8.dp),
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(padding)) {
-              items(quests.value.size) { index ->
-                val isUnlocked = index < unlockedQuests.toInt()
-                QuestBox(quest = quests.value[index], isUnlocked)
-              }
+      LazyColumn(
+          contentPadding = PaddingValues(vertical = 8.dp),
+          modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(padding)) {
+            items(quests.value.size) { index ->
+              val isUnlocked = index < unlockedQuests.toInt()
+              QuestBox(quest = quests.value[index], isUnlocked)
             }
-      }
+          }
     }
   }
 }

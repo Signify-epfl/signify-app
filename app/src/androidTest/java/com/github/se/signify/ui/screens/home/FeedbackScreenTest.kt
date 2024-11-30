@@ -10,7 +10,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.se.signify.model.auth.MockUserSession
 import com.github.se.signify.model.feedback.FeedbackRepository
 import com.github.se.signify.model.feedback.FeedbackViewModel
-import com.github.se.signify.ui.isOfflineState
 import com.github.se.signify.ui.navigation.NavigationActions
 import org.junit.Rule
 import org.junit.Test
@@ -29,7 +28,6 @@ class FeedbackScreenTest {
 
   @Test
   fun feedbackScreen_uiElementsAreDisplayed() {
-    isOfflineState = false
     composeTestRule.setContent {
       FeedbackScreen(
           navigationActions = mockNavigationActions,
@@ -61,7 +59,6 @@ class FeedbackScreenTest {
 
   @Test
   fun feedbackScreen_interactWithDropdownMenu() {
-    isOfflineState = false
     composeTestRule.setContent {
       FeedbackScreen(
           navigationActions = mockNavigationActions,
@@ -82,8 +79,6 @@ class FeedbackScreenTest {
 
   @Test
   fun feedbackScreen_fillAndSendFeedback() {
-    isOfflineState = false
-
     composeTestRule.setContent {
       FeedbackScreen(
           navigationActions = mockNavigationActions,
@@ -106,8 +101,6 @@ class FeedbackScreenTest {
 
   @Test
   fun feedbackScreen_selectRating() {
-    isOfflineState = false
-
     composeTestRule.setContent {
       FeedbackScreen(
           navigationActions = mockNavigationActions,
