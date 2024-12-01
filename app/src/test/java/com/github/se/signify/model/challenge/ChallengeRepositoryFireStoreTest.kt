@@ -4,10 +4,7 @@ import android.os.Looper
 import androidx.test.core.app.ApplicationProvider
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.FirebaseApp
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.*
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import junit.framework.TestCase.fail
@@ -15,6 +12,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.any
@@ -27,138 +25,235 @@ import org.robolectric.Shadows.shadowOf
 class ChallengeRepositoryFireStoreTest {
 
   @Mock private lateinit var mockFirestore: FirebaseFirestore
+
   @Mock private lateinit var mockChallengesCollection: CollectionReference
+
   @Mock private lateinit var mockChallengeDocRef: DocumentReference
+
+  @Mock private lateinit var mockBatch: WriteBatch
 
   private lateinit var challengeRepositoryFireStore: ChallengeRepositoryFireStore
 
   private val challengeId = "challengeId"
-  private val player1Id = "player1Id"
-  private val player2Id = "player2Id"
-  private val mode = ChallengeMode.SPRINT
 
   @Before
   fun setUp() {
     MockitoAnnotations.openMocks(this)
 
-    // Initialize Firebase if necessary
     if (FirebaseApp.getApps(ApplicationProvider.getApplicationContext()).isEmpty()) {
       FirebaseApp.initializeApp(ApplicationProvider.getApplicationContext())
     }
 
-    // Set up the mocks
     `when`(mockFirestore.collection(any())).thenReturn(mockChallengesCollection)
     `when`(mockChallengesCollection.document(eq(challengeId))).thenReturn(mockChallengeDocRef)
+    `when`(mockFirestore.batch()).thenReturn(mockBatch)
+
+    `when`(mockBatch.set(any<DocumentReference>(), any<Challenge>(), any<SetOptions>()))
+        .thenReturn(mockBatch)
+
+    val mockPlayer1Collection = Mockito.mock(CollectionReference::class.java)
+    val mockPlayer2Collection = Mockito.mock(CollectionReference::class.java)
+    val mockPlayer1DocRef = Mockito.mock(DocumentReference::class.java)
+    val mockPlayer2DocRef = Mockito.mock(DocumentReference::class.java)
+
+    `when`(mockFirestore.collection("users")).thenReturn(mockChallengesCollection)
+    `when`(mockChallengesCollection.document(eq("player1"))).thenReturn(mockPlayer1DocRef)
+    `when`(mockChallengesCollection.document(eq("player2"))).thenReturn(mockPlayer2DocRef)
+    `when`(mockPlayer1DocRef.collection("challenges")).thenReturn(mockPlayer1Collection)
+    `when`(mockPlayer2DocRef.collection("challenges")).thenReturn(mockPlayer2Collection)
+    `when`(mockPlayer1Collection.document(eq(challengeId))).thenReturn(mockPlayer1DocRef)
+    `when`(mockPlayer2Collection.document(eq(challengeId))).thenReturn(mockPlayer2DocRef)
+
+    `when`(mockBatch.set(eq(mockPlayer1DocRef), any<Challenge>(), any<SetOptions>()))
+        .thenReturn(mockBatch)
+    `when`(mockBatch.set(eq(mockPlayer2DocRef), any<Challenge>(), any<SetOptions>()))
+        .thenReturn(mockBatch)
 
     challengeRepositoryFireStore = ChallengeRepositoryFireStore(mockFirestore)
   }
 
   @Test
-  fun sendChallengeRequest_shouldCreateChallengeInFirestore() {
-    // Arrange
-    val challenge =
-        hashMapOf(
-            "challengeId" to challengeId,
-            "player1" to player1Id,
-            "player2" to player2Id,
-            "status" to "pending",
-            "round" to 1,
-            "mode" to mode.name,
-            "player1Score" to 0,
-            "player2Score" to 0,
-            "currentGesture" to "",
-            "responses" to hashMapOf<String, String>())
-
-    `when`(mockChallengeDocRef.set(eq(challenge), any<SetOptions>()))
-        .thenReturn(Tasks.forResult(null))
-
-    // Act
-    var successCalled = false
-    challengeRepositoryFireStore.sendChallengeRequest(
-        player1Id,
-        player2Id,
-        mode,
-        challengeId,
-        onSuccess = { successCalled = true },
-        onFailure = { fail("Failure callback should not be called") })
-
-    // Idle the main looper to process the tasks
-    shadowOf(Looper.getMainLooper()).idle()
-
-    // Assert
-    assertTrue(successCalled)
-    verify(mockChallengeDocRef).set(eq(challenge), any<SetOptions>())
-  }
-
-  @Test
-  fun sendChallengeRequest_shouldCallOnFailureOnFirestoreError() {
-    // Arrange
-    val exception = Exception("Firestore error")
-    `when`(mockChallengeDocRef.set(any(), any<SetOptions>()))
-        .thenReturn(Tasks.forException(exception))
-
-    // Act
-    var failureCalled = false
-    challengeRepositoryFireStore.sendChallengeRequest(
-        player1Id,
-        player2Id,
-        mode,
-        challengeId,
-        onSuccess = { fail("Success callback should not be called") },
-        onFailure = {
-          failureCalled = true
-          assertEquals(exception, it)
-        })
-
-    // Idle the main looper to process the tasks
-    shadowOf(Looper.getMainLooper()).idle()
-
-    // Assert
-    assertTrue(failureCalled)
-    verify(mockChallengeDocRef).set(any(), any<SetOptions>())
-  }
-
-  @Test
   fun deleteChallenge_shouldDeleteChallengeFromFirestore() {
-    // Arrange
     `when`(mockChallengeDocRef.delete()).thenReturn(Tasks.forResult(null))
 
-    // Act
     var successCalled = false
     challengeRepositoryFireStore.deleteChallenge(
-        challengeId,
+        challengeId = challengeId,
         onSuccess = { successCalled = true },
         onFailure = { fail("Failure callback should not be called") })
 
-    // Idle the main looper to process the tasks
     shadowOf(Looper.getMainLooper()).idle()
 
-    // Assert
     assertTrue(successCalled)
     verify(mockChallengeDocRef).delete()
   }
 
   @Test
   fun deleteChallenge_shouldCallOnFailureOnFirestoreError() {
-    // Arrange
     val exception = Exception("Firestore error")
     `when`(mockChallengeDocRef.delete()).thenReturn(Tasks.forException(exception))
 
-    // Act
     var failureCalled = false
     challengeRepositoryFireStore.deleteChallenge(
-        challengeId,
+        challengeId = challengeId,
         onSuccess = { fail("Success callback should not be called") },
         onFailure = {
           failureCalled = true
           assertEquals(exception, it)
         })
 
-    // Idle the main looper to process the tasks
     shadowOf(Looper.getMainLooper()).idle()
 
-    // Assert
     assertTrue(failureCalled)
     verify(mockChallengeDocRef).delete()
+  }
+
+  @Test
+  fun sendChallengeRequest_shouldCallOnFailureOnFirestoreError() {
+    val exception = Exception("Firestore error")
+    val mockTask = Tasks.forException<Void>(exception)
+
+    `when`(mockBatch.set(any(), any<Challenge>(), any<SetOptions>())).thenReturn(mockBatch)
+    `when`(mockBatch.commit()).thenReturn(mockTask)
+
+    var failureCalled = false
+    challengeRepositoryFireStore.sendChallengeRequest(
+        player1Id = "player1",
+        player2Id = "player2",
+        mode = ChallengeMode.CHRONO,
+        challengeId = challengeId,
+        onSuccess = { fail("Success callback should not be called") },
+        onFailure = {
+          failureCalled = true
+          assertEquals(exception, it)
+        })
+
+    shadowOf(Looper.getMainLooper()).idle()
+
+    assertTrue(failureCalled)
+    verify(mockBatch).commit()
+  }
+
+  @Test
+  fun getChallengeById_shouldReturnChallengeOnSuccess() {
+    val mockDocumentSnapshot = Mockito.mock(DocumentSnapshot::class.java)
+    val challenge = Challenge(challengeId = challengeId)
+    `when`(mockDocumentSnapshot.toObject(Challenge::class.java)).thenReturn(challenge)
+
+    `when`(mockChallengeDocRef.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot))
+
+    var successChallenge: Challenge? = null
+    challengeRepositoryFireStore.getChallengeById(
+        challengeId = challengeId,
+        onSuccess = { successChallenge = it },
+        onFailure = { fail("Failure callback should not be called") })
+
+    shadowOf(Looper.getMainLooper()).idle()
+
+    assertEquals(challenge, successChallenge)
+    verify(mockChallengeDocRef).get()
+  }
+
+  @Test
+  fun getChallengeById_shouldCallOnFailureOnFirestoreError() {
+    val exception = Exception("Firestore error")
+    `when`(mockChallengeDocRef.get()).thenReturn(Tasks.forException(exception))
+
+    var failureCalled = false
+    challengeRepositoryFireStore.getChallengeById(
+        challengeId = challengeId,
+        onSuccess = { fail("Success callback should not be called") },
+        onFailure = {
+          failureCalled = true
+          assertEquals(exception, it)
+        })
+
+    shadowOf(Looper.getMainLooper()).idle()
+
+    assertTrue(failureCalled)
+    verify(mockChallengeDocRef).get()
+  }
+
+  @Test
+  fun updateChallenge_shouldUpdateChallengeInFirestore() {
+    val updatedChallenge = Challenge(challengeId = challengeId, status = "in_progress")
+    `when`(mockChallengeDocRef.set(updatedChallenge)).thenReturn(Tasks.forResult(null))
+
+    var successCalled = false
+    challengeRepositoryFireStore.updateChallenge(
+        updatedChallenge = updatedChallenge,
+        onSuccess = { successCalled = true },
+        onFailure = { fail("Failure callback should not be called") })
+
+    shadowOf(Looper.getMainLooper()).idle()
+
+    assertTrue(successCalled)
+    verify(mockChallengeDocRef).set(updatedChallenge)
+  }
+
+  @Test
+  fun updateChallenge_shouldCallOnFailureOnFirestoreError() {
+    val updatedChallenge = Challenge(challengeId = challengeId, status = "in_progress")
+    val exception = Exception("Firestore error")
+    `when`(mockChallengeDocRef.set(updatedChallenge)).thenReturn(Tasks.forException(exception))
+
+    var failureCalled = false
+    challengeRepositoryFireStore.updateChallenge(
+        updatedChallenge = updatedChallenge,
+        onSuccess = { fail("Success callback should not be called") },
+        onFailure = {
+          failureCalled = true
+          assertEquals(exception, it)
+        })
+
+    shadowOf(Looper.getMainLooper()).idle()
+
+    assertTrue(failureCalled)
+    verify(mockChallengeDocRef).set(updatedChallenge)
+  }
+
+  @Test
+  fun recordPlayerTime_shouldUpdatePlayerTimeInFirestore() {
+    val playerId = "player1"
+    val timeTaken: Long = 120
+    `when`(mockChallengeDocRef.update("playerTime", timeTaken)).thenReturn(Tasks.forResult(null))
+
+    var successCalled = false
+    challengeRepositoryFireStore.recordPlayerTime(
+        challengeId = challengeId,
+        playerId = playerId,
+        timeTaken = timeTaken,
+        onSuccess = { successCalled = true },
+        onFailure = { fail("Failure callback should not be called") })
+
+    shadowOf(Looper.getMainLooper()).idle()
+
+    assertTrue(successCalled)
+    verify(mockChallengeDocRef).update("playerTime", timeTaken)
+  }
+
+  @Test
+  fun recordPlayerTime_shouldCallOnFailureOnFirestoreError() {
+    val playerId = "player1"
+    val timeTaken: Long = 120
+    val exception = Exception("Firestore error")
+    `when`(mockChallengeDocRef.update("playerTime", timeTaken))
+        .thenReturn(Tasks.forException(exception))
+
+    var failureCalled = false
+    challengeRepositoryFireStore.recordPlayerTime(
+        challengeId = challengeId,
+        playerId = playerId,
+        timeTaken = timeTaken,
+        onSuccess = { fail("Success callback should not be called") },
+        onFailure = {
+          failureCalled = true
+          assertEquals(exception, it)
+        })
+
+    shadowOf(Looper.getMainLooper()).idle()
+
+    assertTrue(failureCalled)
+    verify(mockChallengeDocRef).update("playerTime", timeTaken)
   }
 }

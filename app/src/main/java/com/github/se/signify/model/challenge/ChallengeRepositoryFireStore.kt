@@ -14,24 +14,39 @@ class ChallengeRepositoryFireStore(private val db: FirebaseFirestore) : Challeng
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    val challenge =
-        hashMapOf(
-            "challengeId" to challengeId,
-            "player1" to player1Id,
-            "player2" to player2Id,
-            "status" to "pending",
-            "round" to 1,
-            "mode" to mode.name,
-            "player1Score" to 0,
-            "player2Score" to 0,
-            "currentGesture" to "",
-            "responses" to hashMapOf<String, String>())
+    // Generate initial words for each round
+    val roundWords =
+        listOf("apple", "banana", "cherry") // Replace with dynamic word generation if needed
 
-    db.collection(collectionPath)
-        .document(challengeId)
-        .set(challenge, SetOptions.merge())
-        .addOnSuccessListener { onSuccess() }
-        .addOnFailureListener { onFailure(it) }
+    // Create the challenge object
+    val challenge =
+        Challenge(
+            challengeId = challengeId,
+            player1 = player1Id,
+            player2 = player2Id,
+            mode = mode.name,
+            status = "pending",
+            round = 1,
+            roundWords = roundWords,
+            player1Times = mutableListOf(),
+            player2Times = mutableListOf(),
+            player1RoundCompleted = mutableListOf(false, false, false),
+            player2RoundCompleted = mutableListOf(false, false, false),
+            gameStatus = "not_started")
+
+    // Add challenge to Firestore for both players
+    val batch = db.batch()
+    val challengeRef = db.collection(collectionPath).document(challengeId)
+    batch.set(challengeRef, challenge, SetOptions.merge())
+
+    val player1ChallengeRef =
+        db.collection("users").document(player1Id).collection("challenges").document(challengeId)
+    val player2ChallengeRef =
+        db.collection("users").document(player2Id).collection("challenges").document(challengeId)
+    batch.set(player1ChallengeRef, challenge, SetOptions.merge())
+    batch.set(player2ChallengeRef, challenge, SetOptions.merge())
+
+    batch.commit().addOnSuccessListener { onSuccess() }.addOnFailureListener { onFailure(it) }
   }
 
   override fun deleteChallenge(
@@ -42,6 +57,51 @@ class ChallengeRepositoryFireStore(private val db: FirebaseFirestore) : Challeng
     db.collection(collectionPath)
         .document(challengeId)
         .delete()
+        .addOnSuccessListener { onSuccess() }
+        .addOnFailureListener { onFailure(it) }
+  }
+
+  override fun getChallengeById(
+      challengeId: String,
+      onSuccess: (Challenge) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    db.collection("challenges")
+        .document(challengeId)
+        .get()
+        .addOnSuccessListener { document ->
+          val challenge = document.toObject(Challenge::class.java)
+          if (challenge != null) {
+            onSuccess(challenge)
+          } else {
+            onFailure(Exception("Challenge not found"))
+          }
+        }
+        .addOnFailureListener { onFailure(it) }
+  }
+
+  override fun updateChallenge(
+      updatedChallenge: Challenge,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    db.collection("challenges")
+        .document(updatedChallenge.challengeId)
+        .set(updatedChallenge)
+        .addOnSuccessListener { onSuccess() }
+        .addOnFailureListener { onFailure(it) }
+  }
+
+  override fun recordPlayerTime(
+      challengeId: String,
+      playerId: String,
+      timeTaken: Long,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    db.collection("challenges")
+        .document(challengeId)
+        .update("playerTime", timeTaken)
         .addOnSuccessListener { onSuccess() }
         .addOnFailureListener { onFailure(it) }
   }

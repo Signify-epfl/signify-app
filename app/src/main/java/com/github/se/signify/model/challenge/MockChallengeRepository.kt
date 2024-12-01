@@ -78,4 +78,74 @@ class MockChallengeRepository : ChallengeRepository {
     challenges.remove(challengeId)
     onSuccess()
   }
+
+  override fun getChallengeById(
+      challengeId: String,
+      onSuccess: (Challenge) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    if (!shouldSucceed) {
+      onFailure(exceptionToThrow)
+      return
+    }
+
+    val challenge = challenges[challengeId]
+    if (challenge != null) {
+      onSuccess(challenge)
+    } else {
+      onFailure(Exception("Challenge with ID $challengeId not found"))
+    }
+  }
+
+  override fun updateChallenge(
+      updatedChallenge: Challenge,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    if (!shouldSucceed) {
+      onFailure(exceptionToThrow)
+      return
+    }
+
+    val existingChallenge = challenges[updatedChallenge.challengeId]
+    if (existingChallenge != null) {
+      challenges[updatedChallenge.challengeId] = updatedChallenge
+      onSuccess()
+    } else {
+      onFailure(Exception("Challenge with ID ${updatedChallenge.challengeId} not found"))
+    }
+  }
+
+  override fun recordPlayerTime(
+      challengeId: String,
+      playerId: String,
+      timeTaken: Long,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    if (!shouldSucceed) {
+      onFailure(exceptionToThrow)
+      return
+    }
+
+    val challenge = challenges[challengeId]
+    if (challenge != null) {
+      // Update the player's time accordingly (assuming player1Times or player2Times)
+      when (playerId) {
+        challenge.player1 -> {
+          challenge.player1Times.add(timeTaken)
+        }
+        challenge.player2 -> {
+          challenge.player2Times.add(timeTaken)
+        }
+        else -> {
+          onFailure(Exception("Invalid player ID"))
+          return
+        }
+      }
+      onSuccess()
+    } else {
+      onFailure(Exception("Challenge with ID $challengeId not found"))
+    }
+  }
 }
