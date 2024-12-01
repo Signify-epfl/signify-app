@@ -52,7 +52,6 @@ fun NewChallengeScreen(
   val challengeViewModel: ChallengeViewModel =
       viewModel(factory = ChallengeViewModel.factory(userSession, challengeRepository))
 
-  // Fetch friends list and ongoing challenges when this screen is first displayed
   LaunchedEffect(Unit) {
     userViewModel.getFriendsList()
     userViewModel.getOngoingChallenges()
@@ -69,7 +68,7 @@ fun NewChallengeScreen(
         backgroundColor = MaterialTheme.colorScheme.primary,
     )
 
-    Spacer(modifier = Modifier.height(32.dp)) // Increased space between buttons
+    Spacer(modifier = Modifier.height(32.dp))
 
     // Create a challenge button
     UtilTextButton(
@@ -79,7 +78,7 @@ fun NewChallengeScreen(
         backgroundColor = MaterialTheme.colorScheme.primary,
     )
 
-    Spacer(modifier = Modifier.height(32.dp)) // Increased space between buttons and the box
+    Spacer(modifier = Modifier.height(32.dp))
 
     // Ongoing Challenges Section
     Box(
@@ -100,13 +99,13 @@ fun NewChallengeScreen(
 
                 Spacer(
                     modifier =
-                        Modifier.height(24.dp)) // Increased space between title and challenges
+                        Modifier.height(24.dp))
 
                 // Scrollable Ongoing Challenges List
                 Box(
                     modifier =
                         Modifier.fillMaxWidth()
-                            .height(250.dp) // Set a maximum height to make the box scrollable
+                            .height(250.dp)
                             .testTag("OngoingChallengesListBox")) {
                       LazyColumn(
                           verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -117,7 +116,6 @@ fun NewChallengeScreen(
                               OngoingChallengeCard(
                                   challenge = challenge,
                                   onDeleteClick = {
-                                    // Delete challenge from user's ongoing list and Firestore
                                     userViewModel.removeOngoingChallenge(
                                         userSession.getUserId()!!, challenge.challengeId)
                                     userViewModel.removeOngoingChallenge(
@@ -128,8 +126,6 @@ fun NewChallengeScreen(
                                     Log.d(
                                         "Navigation",
                                         "Navigating with challengeId: ${challenge.challengeId}")
-                                    // Navigate to the ChronoChallengeGameScreen using the
-                                    // challengeId
                                     navigationActions.navigateTo(
                                         Screen.chronoChallengeWithId(challenge.challengeId))
                                   },
@@ -151,94 +147,124 @@ fun OngoingChallengeCard(
     userSession: UserSession,
     modifier: Modifier = Modifier
 ) {
-  val context = LocalContext.current
+    val context = LocalContext.current
 
-  // Determine if the current player has completed all rounds
-  val currentUserId = userSession.getUserId()
-  val isChallengeCompleted =
-      if (currentUserId == challenge.player1) {
+    // Determine if the current player has completed all rounds
+    val currentUserId = userSession.getUserId()
+    val isChallengeCompleted = if (currentUserId == challenge.player1) {
         challenge.player1RoundCompleted.all { it }
-      } else {
+    } else {
         challenge.player2RoundCompleted.all { it }
-      }
+    }
 
-  // Calculate the personal total time if the challenge is completed
-  val totalTime =
-      if (isChallengeCompleted) {
+    // Calculate the personal total time if the challenge is completed
+    val totalTime = if (isChallengeCompleted) {
         if (currentUserId == challenge.player1) {
-          challenge.player1Times.sum() / 1000 // Divide by 1000 to get the time in seconds
+            challenge.player1Times.sum() / 1000
         } else {
-          challenge.player2Times.sum() / 1000 // Divide by 1000 to get the time in seconds
+            challenge.player2Times.sum() / 1000
         }
-      } else null
+    } else null
 
-  Card(
-      modifier =
-          modifier
-              .fillMaxWidth()
-              .padding(horizontal = 8.dp, vertical = 4.dp)
-              .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp)),
-      shape = RoundedCornerShape(16.dp),
-  ) {
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween) {
-          Column(verticalArrangement = Arrangement.Center, modifier = Modifier.weight(1f)) {
-            val opponentName =
-                if (currentUserId == challenge.player1) {
-                  challenge.player2
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.primary), // Explicitly set background color for better contrast
+        shape = RoundedCornerShape(16.dp),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            // Opponent Info Column
+            Column(
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.weight(1f)
+            ) {
+                val opponentName = if (currentUserId == challenge.player1) {
+                    challenge.player2
                 } else {
-                  challenge.player1
+                    challenge.player1
                 }
-            Text(
-                text = "Opponent: $opponentName",
-                fontSize = 18.sp,
-                color = MaterialTheme.colorScheme.surface,
-                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
-            Text(
-                text = "Mode: ${challenge.mode}",
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.surface)
-            if (isChallengeCompleted) {
-              Text(
-                  text = "Your Total Time: ${totalTime}s",
-                  fontSize = 14.sp,
-                  color = MaterialTheme.colorScheme.surface)
-            }
-          }
-
-          // Play button always displayed
-          IconButton(
-              onClick = {
+                Text(
+                    text = "Opponent: $opponentName",
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colorScheme.surface,
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                )
+                Text(
+                    text = "Mode: ${challenge.mode}",
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.surface
+                )
                 if (isChallengeCompleted) {
-                  Toast.makeText(
-                          context,
-                          "Challenge already completed, wait for result",
-                          Toast.LENGTH_SHORT)
-                      .show()
-                } else {
-                  onPlayClick()
+                    Text(
+                        text = "Your Total Time: ${totalTime}s",
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.surface
+                    )
                 }
-              },
-              modifier = Modifier.padding(start = 8.dp)) {
-                Icon(
-                    imageVector = Icons.Default.PlayArrow,
-                    contentDescription = "Play Challenge",
-                    tint =
-                        if (isChallengeCompleted) Color.Gray else MaterialTheme.colorScheme.primary)
-              }
+            }
 
-          // Always show delete button
-          IconButton(
-              onClick = onDeleteClick,
-              modifier =
-                  Modifier.padding(start = 8.dp).testTag("DeleteButton${challenge.challengeId}")) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Delete Challenge",
-                    tint = MaterialTheme.colorScheme.surface)
-              }
+            // Play Button
+            Box(
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .size(48.dp) // Set size to ensure consistency between buttons
+            ) {
+                IconButton(
+                    onClick = {
+                        if (isChallengeCompleted) {
+                            Toast.makeText(
+                                context,
+                                "Challenge already completed, wait for result",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            onPlayClick()
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxSize() // Make the button fill the Box size
+                        .testTag("PlayButton${challenge.challengeId}")
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.PlayArrow,
+                        contentDescription = "Play Challenge",
+                        tint = if (isChallengeCompleted) Color.Gray else MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(36.dp) // Icon size for better visibility
+                    )
+                }
+            }
+
+            // Delete Button
+            Box(
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .size(48.dp) // Set size to ensure consistency between buttons
+            ) {
+                IconButton(
+                    onClick = onDeleteClick,
+                    modifier = Modifier
+                        .fillMaxSize() // Make the button fill the Box size
+                        .testTag("DeleteButton${challenge.challengeId}")
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Delete Challenge",
+                        tint = Color.Gray, // Explicitly set color for visibility
+                        modifier = Modifier.size(30.dp) // Icon size for better visibility
+                    )
+                }
+            }
         }
-  }
+    }
+
 }
+
+
