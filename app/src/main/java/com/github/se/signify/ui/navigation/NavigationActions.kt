@@ -50,12 +50,24 @@ open class NavigationActions(
    *
    * @param screen The screen to navigate to.
    */
-  open fun navigateTo(screen: Screen) {
+  open fun navigateTo(screen: Screen, params: Map<String, String>? = null) {
     if (screen.requiresAuth && !userSession.isLoggedIn()) {
       onUnauthenticated()
       return
     }
-    navController.navigate(screen.route)
+
+    val route =
+        if (params != null) {
+          var routeWithParams = screen.route
+          params.forEach { (key, value) ->
+            routeWithParams = routeWithParams.replace("{$key}", value)
+          }
+          routeWithParams
+        } else {
+          screen.route
+        }
+
+    navController.navigate(route)
   }
 
   open fun goBack() {
