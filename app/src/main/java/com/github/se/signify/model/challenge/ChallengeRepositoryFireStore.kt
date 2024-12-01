@@ -99,6 +99,7 @@ class ChallengeRepositoryFireStore(private val db: FirebaseFirestore) : Challeng
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   ) {
+    assert(timeTaken > 0)
     db.collection("challenges")
         .document(challengeId)
         .update("playerTime", timeTaken)
