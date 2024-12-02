@@ -1,12 +1,14 @@
 package com.github.se.signify.model.user
 
 import android.util.Log
+import com.github.se.signify.ui.navigation.NavigationActions
+import com.github.se.signify.ui.navigation.Screen
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import java.time.LocalDate
 
-fun saveUserToFireStore() {
+fun saveUserToFireStore(navigationActions: NavigationActions) {
   val auth = FirebaseAuth.getInstance()
   val db = FirebaseFirestore.getInstance()
   val collectionPath = "users"
@@ -44,7 +46,10 @@ fun saveUserToFireStore() {
             // The user does not exist yet, so we add them
             userDocRef
                 .set(user, SetOptions.merge())
-                .addOnSuccessListener { Log.d(logTag, "User added successfully") }
+                .addOnSuccessListener {
+                  Log.d(logTag, "User added successfully")
+                  navigationActions.navigateTo(Screen.TUTORIAL)
+                }
                 .addOnFailureListener { e -> Log.e(logTag, "Error adding user", e) }
           } else {
             Log.d(logTag, "User already exists")

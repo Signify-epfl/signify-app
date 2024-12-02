@@ -46,6 +46,7 @@ import com.github.se.signify.ui.screens.profile.FriendsListScreen
 import com.github.se.signify.ui.screens.profile.MyStatsScreen
 import com.github.se.signify.ui.screens.profile.ProfileScreen
 import com.github.se.signify.ui.screens.profile.SettingsScreen
+import com.github.se.signify.ui.screens.tutorial.TutorialScreen
 import com.github.se.signify.ui.theme.SignifyTheme
 
 class MainActivity : ComponentActivity() {
@@ -191,6 +192,15 @@ fun SignifyAppPreview(
             navigationActions,
             dependencyProvider.quizRepository(),
         )
+      }
+      composable(Screen.TUTORIAL.route) {
+        TutorialScreen(
+            navigationActions = navigationActions,
+            onFinish = {
+              navController.navigate(Screen.HOME.route) {
+                popUpTo(Screen.TUTORIAL.route) { inclusive = true }
+              }
+            })
       }
     }
 

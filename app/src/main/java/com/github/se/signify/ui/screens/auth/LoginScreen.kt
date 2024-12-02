@@ -68,6 +68,8 @@ fun LoginScreen(navigationActions: NavigationActions) {
           onAuthComplete = { result ->
             Log.d("SignInScreen", "User signed in: ${result.user?.displayName}")
             Toast.makeText(context, "Login successful!", Toast.LENGTH_LONG).show()
+            saveUserToFireStore(navigationActions)
+            saveStatsToFirestore()
             navigationActions.navigateTo(Screen.HOME)
           },
           onAuthError = {
@@ -205,8 +207,6 @@ fun rememberFirebaseAuthLauncher(
       scope.launch {
         val authResult = Firebase.auth.signInWithCredential(credential).await()
         onAuthComplete(authResult)
-        saveUserToFireStore()
-        saveStatsToFirestore()
       }
     } catch (e: ApiException) {
       onAuthError(e)

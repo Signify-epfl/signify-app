@@ -1,4 +1,4 @@
-package com.github.se.signify.model.navigation
+package com.github.se.signify.ui.navigation
 
 enum class Screen(val route: String, val requiresAuth: Boolean = true) {
   WELCOME("Welcome Screen", false),
@@ -21,6 +21,7 @@ enum class Screen(val route: String, val requiresAuth: Boolean = true) {
   CREATE_CHALLENGE("CreateChallenge Screen"),
   CHALLENGE_HISTORY("ChallengeHistory Screen"),
   CHRONO_CHALLENGE("ChronoChallenge Screen/{challengeId}"),
+  TUTORIAL("Tutorial Screen"),
 
   // For testing purposes
   REQUIRE_AUTH("RequireAuth", true),

@@ -2,6 +2,7 @@ package com.github.se.signify.model.user
 
 import android.os.Looper
 import androidx.test.core.app.ApplicationProvider
+import com.github.se.signify.ui.navigation.NavigationActions
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.FirebaseApp
@@ -36,8 +37,9 @@ class SaveUserToFireStoreTest {
   @Mock private lateinit var mockCollectionReference: CollectionReference
   @Mock private lateinit var mockDocumentReference: DocumentReference
   @Mock private lateinit var mockDocumentSnapshot: DocumentSnapshot
-  @Mock private lateinit var mockSetTask: Task<Void>
   @Mock private lateinit var mockGetTask: Task<DocumentSnapshot>
+
+  private lateinit var navigationActions: NavigationActions
 
   @Before
   fun setUp() {
@@ -47,6 +49,8 @@ class SaveUserToFireStoreTest {
       FirebaseApp.initializeApp(ApplicationProvider.getApplicationContext())
     }
 
+    navigationActions = mock(NavigationActions::class.java)
+
     // Mock FirebaseAuth and FirebaseFirestore initialization
     mockAuth = mock(FirebaseAuth::class.java)
     mockFirestore = mock(FirebaseFirestore::class.java)
@@ -55,14 +59,14 @@ class SaveUserToFireStoreTest {
     mockCurrentUser = mock(FirebaseUser::class.java)
     `when`(mockAuth.currentUser).thenReturn(mockCurrentUser)
 
-    // Mock Firestore collection and document reference
+    // Mock FireStore collection and document reference
     mockCollectionReference = mock(CollectionReference::class.java)
     mockDocumentReference = mock(DocumentReference::class.java)
 
     `when`(mockFirestore.collection(anyString())).thenReturn(mockCollectionReference)
     `when`(mockCollectionReference.document(anyString())).thenReturn(mockDocumentReference)
 
-    // Mock Firestore document get task
+    // Mock FireStore document get task
     mockGetTask = mock(Task::class.java) as Task<DocumentSnapshot>
     `when`(mockDocumentReference.get()).thenReturn(mockGetTask)
   }
@@ -83,7 +87,7 @@ class SaveUserToFireStoreTest {
     `when`(mockDocumentReference.set(any(), eq(SetOptions.merge()))).thenReturn(mockSetTask)
 
     // Act
-    saveUserToFireStore()
+    saveUserToFireStore(navigationActions)
 
     // Idle the main looper to process tasks
     shadowOf(Looper.getMainLooper()).idle()
@@ -105,7 +109,7 @@ class SaveUserToFireStoreTest {
     `when`(mockGetTask.result).thenReturn(mockDocumentSnapshot)
 
     // Act
-    saveUserToFireStore()
+    saveUserToFireStore(navigationActions)
 
     // Idle the main looper to process tasks
     shadowOf(Looper.getMainLooper()).idle()
@@ -120,7 +124,7 @@ class SaveUserToFireStoreTest {
     `when`(mockAuth.currentUser).thenReturn(null) // Simulate no user logged in
 
     // Act
-    saveUserToFireStore()
+    saveUserToFireStore(navigationActions)
 
     // Verify that the error is logged
     // (Since we cannot easily verify logs, we focus on ensuring no Firestore interaction occurs)
