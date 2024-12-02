@@ -11,7 +11,7 @@ import com.github.se.signify.MainActivity
 import org.junit.Rule
 import org.junit.Test
 
-class MainToASLRecognitionTest {
+class PracticeEnd2endTest {
   @get:Rule val composeTestRule = createAndroidComposeRule<MainActivity>()
   @get:Rule
   val cameraAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
