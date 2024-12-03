@@ -12,7 +12,6 @@ import com.github.se.signify.MainActivity
 import com.google.firebase.Firebase
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -21,10 +20,8 @@ class ExerciseEnd2endTest {
   @get:Rule
   val cameraAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
 
-  @Before
-  fun setUp() {
-    Firebase.auth.useEmulator("10.0.2.2", 9099)
-
+  @Test
+  fun exerciseFeatureTest() {
     composeTestRule.onNodeWithText("Welcome to Signify").assertIsDisplayed()
     // Wait for the transition to Login Screen
     composeTestRule.mainClock.advanceTimeBy(7_000)
@@ -36,10 +33,6 @@ class ExerciseEnd2endTest {
     // Wait for navigation to Home Screen
     composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
-  }
-
-  @Test
-  fun exerciseFeatureTest() {
     // Click on the EasyExercise
     composeTestRule.onNodeWithTag("EasyExerciseButtonText", useUnmergedTree = true).performClick()
     composeTestRule.onNodeWithTag("ExerciseScreenEasy", useUnmergedTree = true).assertIsDisplayed()
@@ -62,13 +55,24 @@ class ExerciseEnd2endTest {
         .performScrollTo()
         .performClick()
     composeTestRule.onNodeWithTag("ExerciseScreenHard", useUnmergedTree = true).assertIsDisplayed()
-    // Advance by 7 seconds, at this point the user finished the Hard exercise
-    composeTestRule.mainClock.advanceTimeBy(7_000)
     composeTestRule.onNodeWithTag("BackButton").performClick()
   }
 
   @Test
   fun questFeatureTest() {
+    Firebase.auth.useEmulator("10.0.2.2", 9099)
+    composeTestRule.onNodeWithText("Welcome to Signify").assertIsDisplayed()
+    // Wait for the transition to Login Screen
+    composeTestRule.mainClock.advanceTimeBy(7_000)
+    composeTestRule.onNodeWithTag("LoginScreen").assertIsDisplayed()
+
+    // Simulate the Google sign-in process
+    composeTestRule.onNodeWithTag("skipLoginButton").performClick()
+
+    // Wait for navigation to Home Screen
+    composeTestRule.waitForIdle()
+    composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
+
     val mockIdToken =
         """
     {
@@ -94,6 +98,5 @@ class ExerciseEnd2endTest {
     composeTestRule.onNodeWithTag("logInButton").performClick()
     composeTestRule.onNodeWithTag("LoginScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("loginButton").performClick()
-    composeTestRule.waitForIdle()
   }
 }
