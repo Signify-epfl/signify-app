@@ -146,8 +146,13 @@ fun SignifyAppPreview(
       composable(Screen.HOME.route) { HomeScreen(navigationActions) }
       composable(Screen.PRACTICE.route) { ASLRecognition(handLandMarkViewModel, navigationActions) }
       ExerciseLevel.entries.forEach { exerciseLevel ->
-        composable(exerciseLevel.levelScreen.route) {
-          ExerciseScreen(navigationActions, handLandMarkViewModel, exerciseLevel)
+        composable(exerciseLevel.screen.route) {
+          ExerciseScreen(
+              navigationActions,
+              handLandMarkViewModel,
+              dependencyProvider.userSession(),
+              dependencyProvider.statsRepository(),
+              exerciseLevel)
         }
       }
       composable(Screen.FEEDBACK.route) {
