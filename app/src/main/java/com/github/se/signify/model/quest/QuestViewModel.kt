@@ -2,20 +2,30 @@ package com.github.se.signify.model.quest
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
-open class QuestViewModel(
+class QuestViewModel(
     private val repository: QuestRepository,
 ) : ViewModel() {
 
-  // For now fetch all the quests
   private val quest_ = MutableStateFlow<List<Quest>>(emptyList())
   val quest: StateFlow<List<Quest>> = quest_.asStateFlow()
 
   init {
-    repository.init { getDailyQuest() }
+    fetchAllQuests()
+  }
+
+  private fun fetchAllQuests() {
+    CoroutineScope(Dispatchers.IO).launch {
+      repository.getQuests(
+          onSuccess = { quests -> quest_.value = quests },
+          onFailure = { exception -> exception.printStackTrace() })
+    }
   }
 
   companion object {
@@ -27,9 +37,5 @@ open class QuestViewModel(
         }
       }
     }
-  }
-
-  fun getDailyQuest() {
-    repository.getDailyQuest(onSuccess = { quest_.value = it }, onFailure = {})
   }
 }
