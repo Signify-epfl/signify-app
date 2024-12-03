@@ -19,7 +19,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.github.se.signify.model.di.AppDependencyProvider
 import com.github.se.signify.model.di.DependencyProvider
 import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.model.hand.HandLandMarkViewModel
@@ -48,6 +47,7 @@ import com.github.se.signify.ui.theme.SignifyTheme
 class MainActivity : ComponentActivity() {
 
   private lateinit var sharedPreferences: SharedPreferences
+  private val dependencyProvider by lazy { (application as BaseApplication).dependencyProvider }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -69,7 +69,7 @@ class MainActivity : ComponentActivity() {
         Surface(modifier = Modifier.fillMaxSize()) {
           SignifyAppPreview(
               context = this,
-              dependencyProvider = AppDependencyProvider,
+              dependencyProvider = dependencyProvider,
               isDarkTheme = isDarkTheme,
               onThemeChange = { isDark ->
                 isDarkTheme = isDark

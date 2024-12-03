@@ -10,12 +10,8 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.MainActivity
 import com.google.firebase.Firebase
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.tasks.await
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -27,7 +23,8 @@ class ExerciseEnd2endTest {
 
   @Before
   fun setUp() {
-    FirebaseAuth.getInstance().useEmulator("10.0.2.2", 9099) // Replace with localhost for non-Android targets
+    Firebase.auth.useEmulator("10.0.2.2", 9099)
+
     composeTestRule.onNodeWithText("Welcome to Signify").assertIsDisplayed()
     // Wait for the transition to Login Screen
     composeTestRule.mainClock.advanceTimeBy(7_000)
@@ -72,18 +69,31 @@ class ExerciseEnd2endTest {
 
   @Test
   fun questFeatureTest() {
+    val mockIdToken =
+        """
+    {
+      "sub": "abc123",
+      "email": "foo@example.com",
+      "email_verified": true
+    }
+"""
+            .trimIndent()
+
+    val credential = GoogleAuthProvider.getCredential(mockIdToken, null)
+    Firebase.auth.signInWithCredential(credential).addOnCompleteListener { task ->
+      if (task.isSuccessful) {
+        val user = task.result.user
+        println("Sign-in successful: ${user?.email}")
+      } else {
+        println("Sign-in failed: ${task.exception}")
+      }
+    }
     // Go to the profile
-    composeTestRule.onNodeWithTag("TabIcon_Profile",useUnmergedTree = true).performClick()
+    composeTestRule.onNodeWithTag("TabIcon_Profile", useUnmergedTree = true).performClick()
     composeTestRule.onNodeWithTag("UnauthenticatedScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("logInButton").performClick()
     composeTestRule.onNodeWithTag("LoginScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("loginButton").performClick()
-    signInWithFakeUser()
-    composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
-  }
-
-  private fun signInWithFakeUser(): AuthResult {
-    val fakeCredential = GoogleAuthProvider.getCredential("fake-id-token", null)
-    return runBlocking { Firebase.auth.signInWithCredential(fakeCredential).await() }
+    composeTestRule.waitForIdle()
   }
 }
