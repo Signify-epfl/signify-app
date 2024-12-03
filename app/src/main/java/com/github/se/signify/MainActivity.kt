@@ -23,6 +23,7 @@ import com.github.se.signify.model.di.AppDependencyProvider
 import com.github.se.signify.model.di.DependencyProvider
 import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.model.hand.HandLandMarkViewModel
+import com.github.se.signify.model.quest.QuestRepositoryLocal
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Route
 import com.github.se.signify.ui.navigation.Screen
@@ -160,7 +161,7 @@ fun SignifyAppPreview(
         QuestScreen(
             navigationActions,
             dependencyProvider.userSession(),
-            dependencyProvider.questRepository(),
+            questRepository = QuestRepositoryLocal(context),
             dependencyProvider.userRepository())
       }
       composable(Screen.QUIZ.route) {
