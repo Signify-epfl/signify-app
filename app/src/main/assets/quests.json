@@ -1,0 +1,14 @@
+[
+  {
+    "index": "1",
+    "title": "Hello",
+    "description": "Learn how to greet someone using ASL.",
+    "videoPath": "android.resource://com.github.se.signify/raw/hello"
+  },
+  {
+    "index": "2",
+    "title": "Thank You",
+    "description": "Learn how to express gratitude in ASL.",
+    "videoPath": "android.resource://com.github.se.signify/raw/thankyou"
+  }
+]
