@@ -1,5 +1,6 @@
 package com.github.se.signify.ui.screens.home
 
+import android.widget.VideoView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -27,7 +28,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,11 +36,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.quest.Quest
@@ -48,7 +48,6 @@ import com.github.se.signify.model.quest.QuestRepository
 import com.github.se.signify.model.quest.QuestViewModel
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
-import com.github.se.signify.ui.getLetterIconResId
 import com.github.se.signify.ui.navigation.NavigationActions
 
 @Composable
@@ -58,19 +57,20 @@ fun QuestScreen(
     questRepository: QuestRepository,
     userRepository: UserRepository,
 ) {
+  // ViewModels
   val questViewModel: QuestViewModel = viewModel(factory = QuestViewModel.factory(questRepository))
   val userViewModel: UserViewModel =
       viewModel(factory = UserViewModel.factory(userSession, userRepository))
 
+  // Collect quest data
   val quests = questViewModel.quest.collectAsState()
-  LaunchedEffect(userSession.getUserId()) { userViewModel.checkAndUnlockNextQuest() }
-
   val unlockedQuests by userViewModel.unlockedQuests.collectAsState()
 
   Scaffold(
       modifier = Modifier.fillMaxSize().testTag("QuestScreen"),
   ) { padding ->
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+      // Header Row
       Row(
           verticalAlignment = Alignment.CenterVertically,
           modifier =
@@ -91,12 +91,13 @@ fun QuestScreen(
                 color = MaterialTheme.colorScheme.primary)
           }
 
+      // Quests List
       LazyColumn(
           contentPadding = PaddingValues(vertical = 8.dp),
           modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(padding)) {
             items(quests.value.size) { index ->
               val isUnlocked = index < unlockedQuests.toInt()
-              QuestBox(quest = quests.value[index], isUnlocked)
+              QuestBox(quest = quests.value[index], isUnlocked = isUnlocked)
             }
           }
     }
@@ -154,20 +155,20 @@ fun QuestDescriptionDialog(quest: Quest, onDismiss: () -> Unit) {
       },
       text = {
         Column(modifier = Modifier.wrapContentSize().padding(8.dp)) {
+          // Display the video using VideoView
+          AndroidView(
+              factory = { context ->
+                VideoView(context).apply {
+                  setVideoPath(quest.videoPath) // Set video path (local or remote)
 
-          // Retrieve and display the image for the corresponding letter
-          val letter =
-              'a' +
-                  (quest.index.toInt() -
-                      1) // Convert index to letter, e.g., 1 -> 'a', 2 -> 'b', etc.
-          val imageResId = getLetterIconResId(letter)
-
-          Icon(
-              painter = painterResource(id = imageResId),
-              contentDescription = "Image for letter ${quest.title}",
-              tint = MaterialTheme.colorScheme.primary,
-              modifier =
-                  Modifier.size(150.dp).padding(bottom = 8.dp).align(Alignment.CenterHorizontally))
+                  // Prepare the video and start playback
+                  setOnPreparedListener { mediaPlayer ->
+                    mediaPlayer.isLooping = true // Loop video automatically
+                    start()
+                  }
+                }
+              },
+              modifier = Modifier.fillMaxWidth().height(200.dp).align(Alignment.CenterHorizontally))
 
           Spacer(modifier = Modifier.height(20.dp))
 
