@@ -60,7 +60,6 @@ class ExerciseEnd2endTest {
 
   @Test
   fun questFeatureTest() {
-    Firebase.auth.useEmulator("10.0.2.2", 9099)
     composeTestRule.onNodeWithText("Welcome to Signify").assertIsDisplayed()
     // Wait for the transition to Login Screen
     composeTestRule.mainClock.advanceTimeBy(7_000)
