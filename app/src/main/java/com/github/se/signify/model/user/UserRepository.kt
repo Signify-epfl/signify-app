@@ -3,6 +3,8 @@ package com.github.se.signify.model.user
 import android.net.Uri
 import com.github.se.signify.model.challenge.Challenge
 
+const val USER_NOT_FOUND_MESSAGE = "User not found"
+
 interface UserRepository {
 
   fun init(onSuccess: () -> Unit)
@@ -78,6 +80,8 @@ interface UserRepository {
       onFailure: (Exception) -> Unit
   )
 
+  // TODO: This should only return the challenge IDs. The challenges themselves should be fetched
+  // from the `ChallengeRepository`.
   fun getOngoingChallenges(
       userId: String,
       onSuccess: (List<Challenge>) -> Unit,

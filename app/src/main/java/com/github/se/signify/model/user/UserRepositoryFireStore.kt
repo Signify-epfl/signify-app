@@ -104,7 +104,7 @@ class UserRepositoryFireStore(
               onFailure(e)
             }
           } else {
-            onFailure(Exception("User not found"))
+            onFailure(Exception(USER_NOT_FOUND_MESSAGE))
           }
         }
         .addOnFailureListener { e -> onFailure(e) }
