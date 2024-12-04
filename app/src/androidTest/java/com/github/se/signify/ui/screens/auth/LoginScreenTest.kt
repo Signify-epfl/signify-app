@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.screens
+package com.github.se.signify.ui.screens.auth
 
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
@@ -10,13 +10,15 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.toPackage
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.github.se.signify.model.auth.FirebaseAuthService
 import com.github.se.signify.model.auth.MockAuthService
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
-import com.github.se.signify.ui.screens.auth.LoginScreen
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
+import junit.framework.AssertionFailedError
 import org.junit.After
+import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -64,13 +66,27 @@ class LoginScreenTest : TestCase() {
 
   @Test
   fun googleSignInReturnsValidActivityResult() {
-
-    composeTestRule.setContent { LoginScreen(navigationActions, authService) }
+    // Use a real FirebaseAuthService
+    val firebaseAuthService = FirebaseAuthService()
+    composeTestRule.setContent { LoginScreen(navigationActions, firebaseAuthService) }
 
     composeTestRule.onNodeWithTag("loginButton").performClick()
     composeTestRule.waitForIdle()
     // assert that an Intent resolving to Google Mobile Services has been sent (for sign-in)
     intended(toPackage("com.google.android.gms"))
+  }
+
+  @Test
+  fun googleSignInWithMockAuthServiceDoesNotLaunchIntent() {
+    // Use MockAuthService for testing
+
+    composeTestRule.setContent { LoginScreen(navigationActions, authService) }
+
+    composeTestRule.onNodeWithTag("loginButton").performClick()
+    composeTestRule.waitForIdle()
+
+    // Assert that no intent to Google Mobile Services has been sent
+    assertThrows(AssertionFailedError::class.java) { intended(toPackage("com.google.android.gms")) }
   }
 
   @Test
