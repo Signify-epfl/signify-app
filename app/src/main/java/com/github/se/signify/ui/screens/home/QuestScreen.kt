@@ -36,12 +36,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.R
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.quest.Quest
 import com.github.se.signify.model.quest.QuestRepository
@@ -64,7 +66,8 @@ fun QuestScreen(
 
   // Collect quest data
   val quests = questViewModel.quest.collectAsState()
-  val unlockedQuests by userViewModel.unlockedQuests.collectAsState()
+  val unlockedQuests = 2
+  // by userViewModel.unlockedQuests.collectAsState()
 
   Scaffold(
       modifier = Modifier.fillMaxSize().testTag("QuestScreen"),
@@ -85,7 +88,7 @@ fun QuestScreen(
             }
             Spacer(modifier = Modifier.width(20.dp))
             Text(
-                text = "Your daily quests",
+                text = stringResource(R.string.quest_screen_title),
                 fontWeight = FontWeight.Bold,
                 fontSize = 25.sp,
                 color = MaterialTheme.colorScheme.primary)
@@ -114,7 +117,7 @@ fun QuestBox(quest: Quest, isUnlocked: Boolean) {
       colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primary)) {
         Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
           Text(
-              text = "Learn letter" + " " + quest.title,
+              text = quest.title,
               color = MaterialTheme.colorScheme.onPrimary,
               fontWeight = FontWeight.Bold,
               fontSize = 20.sp,
@@ -148,7 +151,7 @@ fun QuestDescriptionDialog(quest: Quest, onDismiss: () -> Unit) {
       containerColor = MaterialTheme.colorScheme.background,
       title = {
         Text(
-            text = "Quest: Learn about letter " + quest.title,
+            text = quest.title + " in sign language",
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
             color = MaterialTheme.colorScheme.primary)
