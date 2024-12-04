@@ -8,6 +8,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.MainActivity
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -16,14 +17,18 @@ class PracticeEnd2endTest {
   @get:Rule
   val cameraAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
 
-  @Test
-  fun navigateToASLRecognitionScreen() {
+  @Before
+  fun setup() {
     // Assert Welcome Screen is displayed
     composeTestRule.onNodeWithText("Welcome to Signify").assertIsDisplayed()
 
     // Wait for the transition to Login Screen
     composeTestRule.mainClock.advanceTimeBy(7_000)
     composeTestRule.onNodeWithTag("LoginScreen").assertIsDisplayed()
+  }
+
+  @Test
+  fun navigateToASLRecognitionScreen() {
 
     // Simulate the Google sign-in process
     composeTestRule.onNodeWithTag("skipLoginButton").performClick()
