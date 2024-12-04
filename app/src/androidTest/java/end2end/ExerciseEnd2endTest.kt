@@ -76,19 +76,28 @@ class ExerciseEnd2endTest {
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("QuestsButton").performClick()
     composeTestRule.onNodeWithTag("QuestScreen").assertIsDisplayed()
-
+    // After finishing the task go back
     composeTestRule.onNodeWithTag("BackButton").performClick()
-
+    // The user wants to do a quiz
     composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("QuizButton").performClick()
     composeTestRule.onNodeWithTag("QuizTitle").assertIsDisplayed()
-
+    // After finishing the task go back
     composeTestRule.onNodeWithTag("BackButton").performClick()
-    // The user want to give feedback
+
+    composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("QuestsButton").performClick()
+    composeTestRule.onNodeWithTag("QuestScreen").assertIsDisplayed()
+    // After finishing the task go back
+    composeTestRule.onNodeWithTag("BackButton").performClick()
+
+    // The user wants to give feedback
     composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FeedbackButton").performClick()
     composeTestRule.onNodeWithTag("FeedbackScreenContent").assertIsDisplayed()
+
+    // The user finished 'playing' with the HomeScreen features.
   }
 }
