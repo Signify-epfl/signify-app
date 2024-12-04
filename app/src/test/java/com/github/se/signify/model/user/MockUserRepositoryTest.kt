@@ -1,10 +1,15 @@
 package com.github.se.signify.model.user
 
 import android.net.Uri
+import android.os.Looper
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.Shadows.shadowOf
 
+@RunWith(RobolectricTestRunner::class)
 class MockUserRepositoryTest {
 
   private lateinit var mockUserRepository: MockUserRepository
@@ -13,19 +18,7 @@ class MockUserRepositoryTest {
   private val doNotSucceed: () -> Unit = { fail("Should not succeed") }
   private val doNotSucceedAny: (Any?) -> Unit = { doNotSucceed() }
 
-  private val blankUser =
-      User(
-          uid = "blankUserId",
-          name = "",
-          email = "",
-          profileImageUrl = "",
-          friendRequests = emptyList(),
-          friends = emptyList(),
-          ongoingChallenges = emptyList(),
-          pastChallenges = emptyList(),
-          lastLoginDate = "",
-          currentStreak = 0,
-          highestStreak = 0)
+  private val blankUser = User(uid = "blankUserId")
   private val activeUser =
       User(
           uid = "userId",
@@ -53,7 +46,7 @@ class MockUserRepositoryTest {
           currentStreak = 2,
           highestStreak = 2)
   private val users = listOf(blankUser, activeUser, otherUser)
-  private val profilePictureUrl = Uri.parse("http://example.com/profile.jpg")
+  private val profilePictureUrl = Uri.parse("profilePictureUrl")
 
   @Before
   fun setUp() {
@@ -89,6 +82,7 @@ class MockUserRepositoryTest {
     mockUserRepository.updateStreak(blankUser.uid, onSuccess, doNotFail)
     mockUserRepository.getStreak(blankUser.uid, onSuccessAny, doNotFail)
 
+    shadowOf(Looper.getMainLooper()).idle()
     assertEquals(19, success)
   }
 
@@ -120,6 +114,7 @@ class MockUserRepositoryTest {
     mockUserRepository.updateStreak(blankUser.uid, doNotSucceed, onFailure)
     mockUserRepository.getStreak(blankUser.uid, doNotSucceedAny, onFailure)
 
+    shadowOf(Looper.getMainLooper()).idle()
     assertEquals(18, failure)
   }
 
@@ -129,7 +124,6 @@ class MockUserRepositoryTest {
     var failure = 0
     val onFailure: (Exception) -> Unit = { failure += 1 }
 
-    mockUserRepository.init(doNotSucceed)
     mockUserRepository.getFriendsList(userId, doNotSucceedAny, onFailure)
     mockUserRepository.getRequestsFriendsList(userId, doNotSucceedAny, onFailure)
     mockUserRepository.getUserById(userId, doNotSucceedAny, onFailure)
@@ -138,25 +132,29 @@ class MockUserRepositoryTest {
     mockUserRepository.getProfilePictureUrl(userId, doNotSucceedAny, onFailure)
     mockUserRepository.updateProfilePictureUrl(userId, profilePictureUrl, doNotSucceed, onFailure)
     mockUserRepository.sendFriendRequest(userId, otherUser.uid, doNotSucceed, onFailure)
+    mockUserRepository.sendFriendRequest(activeUser.uid, userId, doNotSucceed, onFailure)
     mockUserRepository.acceptFriendRequest(userId, otherUser.uid, doNotSucceed, onFailure)
+    mockUserRepository.acceptFriendRequest(activeUser.uid, userId, doNotSucceed, onFailure)
     mockUserRepository.removeFriend(userId, otherUser.uid, doNotSucceed, onFailure)
+    mockUserRepository.removeFriend(activeUser.uid, userId, doNotSucceed, onFailure)
     mockUserRepository.declineFriendRequest(userId, otherUser.uid, doNotSucceed, onFailure)
+    mockUserRepository.declineFriendRequest(activeUser.uid, userId, doNotSucceed, onFailure)
     mockUserRepository.addOngoingChallenge(userId, "challengeId", doNotSucceed, onFailure)
     mockUserRepository.getOngoingChallenges(userId, doNotSucceedAny, onFailure)
     mockUserRepository.removeOngoingChallenge(userId, "challengeId", doNotSucceed, onFailure)
     mockUserRepository.getInitialQuestAccessDate(userId, doNotSucceedAny, onFailure)
     mockUserRepository.setInitialQuestAccessDate(userId, "2024-01-01", doNotSucceed, onFailure)
     mockUserRepository.updateStreak(userId, doNotSucceed, onFailure)
-    mockUserRepository.getStreak(userId, doNotSucceedAny, onFailure)
+
+    shadowOf(Looper.getMainLooper()).idle()
+    assertEquals(21, failure)
   }
 
   @Test
   fun clearUsersWorks() {
     mockUserRepository.clearUsers()
 
-    users.forEach { user ->
-      mockUserRepository.getUserById(user.uid, { response -> assertNull(response) }, doNotFail)
-    }
+    users.forEach { user -> mockUserRepository.getUserById(user.uid, doNotSucceedAny) {} }
   }
 
   @Test
@@ -175,8 +173,7 @@ class MockUserRepositoryTest {
         blankUser.uid, { response -> assertNotNull(response) }, doNotFail)
     mockUserRepository.getUserById(
         activeUser.uid, { response -> assertNotNull(response) }, doNotFail)
-    mockUserRepository.getUserById(
-        otherUser.uid, doNotSucceedAny, { response -> assertNull(response) })
+    mockUserRepository.getUserById(otherUser.uid, doNotSucceedAny) {}
   }
 
   @Test
@@ -184,8 +181,8 @@ class MockUserRepositoryTest {
     mockUserRepository.removeUser(blankUser.uid)
     mockUserRepository.removeUser(activeUser.uid)
 
-    mockUserRepository.getUserById(blankUser.uid, { response -> assertNull(response) }, doNotFail)
-    mockUserRepository.getUserById(activeUser.uid, { response -> assertNull(response) }, doNotFail)
+    mockUserRepository.getUserById(blankUser.uid, doNotSucceedAny) {}
+    mockUserRepository.getUserById(activeUser.uid, doNotSucceedAny) {}
     mockUserRepository.getUserById(
         otherUser.uid, { response -> assertNotNull(response) }, doNotFail)
   }
@@ -221,7 +218,7 @@ class MockUserRepositoryTest {
 
   @Test
   fun getUserNameWorks() {
-    mockUserRepository.getUserName(blankUser.uid, { assertNull(it) }, doNotFail)
+    mockUserRepository.getUserName(blankUser.uid, { assertEquals("unknown", it) }, doNotFail)
 
     mockUserRepository.getUserName(activeUser.uid, { assertEquals(activeUser.name, it) }, doNotFail)
   }
@@ -399,7 +396,8 @@ class MockUserRepositoryTest {
 
   @Test
   fun getInitialQuestAccessDateWorks() {
-    mockUserRepository.getInitialQuestAccessDate(blankUser.uid, { assertNull(it) }, doNotFail)
+    mockUserRepository.getInitialQuestAccessDate(
+        blankUser.uid, { assertEquals(blankUser.lastLoginDate, it) }, doNotFail)
 
     mockUserRepository.getInitialQuestAccessDate(
         activeUser.uid, { assertEquals(activeUser.lastLoginDate, it) }, doNotFail)
@@ -433,7 +431,8 @@ class MockUserRepositoryTest {
 
   @Test
   fun getStreakWorks() {
-    mockUserRepository.getStreak(blankUser.uid, { assertNull(it) }, doNotFail)
+    mockUserRepository.getStreak(
+        blankUser.uid, { assertEquals(blankUser.currentStreak, it) }, doNotFail)
 
     mockUserRepository.getStreak(
         activeUser.uid, { assertEquals(activeUser.currentStreak, it) }, doNotFail)

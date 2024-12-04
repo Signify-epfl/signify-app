@@ -293,9 +293,15 @@ class MockUserRepository : UserRepository {
       onFailure: (Exception) -> Unit
   ) {
     if (!checkFailure(onFailure)) return
-    if (!checkUser(userId, onFailure)) return
 
-    val user = users[userId]!!
+    // This was done to match the implementation of the UserRepositoryFireStore.
+    // TODO: Make this fail on invalid userIds
+    val user = users[userId]
+    if (user == null) {
+      onSuccess(0)
+      return
+    }
+
     onSuccess(user.currentStreak)
   }
 
