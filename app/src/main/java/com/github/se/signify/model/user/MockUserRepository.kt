@@ -37,6 +37,8 @@ class MockUserRepository : UserRepository {
   }
 
   override fun init(onSuccess: () -> Unit) {
+    if (checkFailure {}) return
+
     onSuccess()
   }
 
