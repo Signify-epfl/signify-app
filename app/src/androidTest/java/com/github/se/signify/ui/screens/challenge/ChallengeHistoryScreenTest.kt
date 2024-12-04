@@ -7,7 +7,6 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.github.se.signify.model.auth.MockUserSession
 import com.github.se.signify.model.stats.StatsRepository
-import com.github.se.signify.model.stats.StatsViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
 import org.junit.Before
 import org.junit.Rule
@@ -22,16 +21,14 @@ class ChallengeHistoryScreenTest {
   private lateinit var userSession: MockUserSession
   private lateinit var navigationActions: NavigationActions
   private lateinit var statsRepository: StatsRepository
-  private lateinit var statsViewModel: StatsViewModel
 
   @Before
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
     userSession = MockUserSession()
     statsRepository = mock(StatsRepository::class.java)
-    statsViewModel = StatsViewModel(userSession, statsRepository)
     composeTestRule.setContent {
-      ChallengeHistoryScreen(navigationActions, userSession, statsRepository, statsViewModel)
+      ChallengeHistoryScreen(navigationActions, userSession, statsRepository)
     }
   }
 

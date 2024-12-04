@@ -54,50 +54,43 @@ fun QuizScreen(navigationActions: NavigationActions, quizRepository: QuizReposit
 
   val context = LocalContext.current
 
-    AnnexScreenScaffold(
-        navigationActions = navigationActions,
-        testTagColumn = "QuizScreen"
-    ) {
-        Text(
-            text = "Quiz Time !",
-            fontWeight = FontWeight.Bold,
-            fontSize = 30.sp,
-            color = MaterialTheme.colorScheme.primary,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .testTag("QuizTitle")
-        )
+  AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = "QuizScreen") {
+    Text(
+        text = "Quiz Time !",
+        fontWeight = FontWeight.Bold,
+        fontSize = 30.sp,
+        color = MaterialTheme.colorScheme.primary,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth().testTag("QuizTitle"))
 
-        Spacer(modifier = Modifier.height(24.dp))
+    Spacer(modifier = Modifier.height(24.dp))
 
-        if (currentQuiz != null) {
-            val shuffledOptions =
-                remember(currentQuiz) {
-                    currentQuiz!!.confusers.plus(currentQuiz!!.correctWord).shuffled()
-                }
+    if (currentQuiz != null) {
+      val shuffledOptions =
+          remember(currentQuiz) {
+            currentQuiz!!.confusers.plus(currentQuiz!!.correctWord).shuffled()
+          }
 
-            QuizContent(
-                currentQuiz = currentQuiz!!,
-                shuffledOptions = shuffledOptions,
-                selectedOption = selectedOption,
-                onOptionSelected = { selectedOption = it },
-                onSubmit = {
-                    quizViewModel.submitAnswer(
-                        selectedOption = it,
-                        onCorrect = {
-                            Toast.makeText(context, "Correct answer!", Toast.LENGTH_SHORT).show()
-                        },
-                        onIncorrect = {
-                            Toast.makeText(context, "Incorrect answer, try again.", Toast.LENGTH_SHORT)
-                                .show()
-                        })
-                    selectedOption = null
+      QuizContent(
+          currentQuiz = currentQuiz!!,
+          shuffledOptions = shuffledOptions,
+          selectedOption = selectedOption,
+          onOptionSelected = { selectedOption = it },
+          onSubmit = {
+            quizViewModel.submitAnswer(
+                selectedOption = it,
+                onCorrect = {
+                  Toast.makeText(context, "Correct answer!", Toast.LENGTH_SHORT).show()
+                },
+                onIncorrect = {
+                  Toast.makeText(context, "Incorrect answer, try again.", Toast.LENGTH_SHORT).show()
                 })
-        } else {
-            NoQuizAvailable()
-        }
+            selectedOption = null
+          })
+    } else {
+      NoQuizAvailable()
     }
+  }
 }
 
 @Composable

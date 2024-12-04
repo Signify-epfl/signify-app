@@ -27,10 +27,7 @@ class FeedbackScreenTest {
   @Test
   fun feedbackScreen_uiElementsAreDisplayed() {
     composeTestRule.setContent {
-      FeedbackScreen(
-          navigationActions = mockNavigationActions,
-          userSession,
-          feedbackRepository)
+      FeedbackScreen(navigationActions = mockNavigationActions, userSession, feedbackRepository)
     }
 
     // Check that top blue bar and back button are displayed
@@ -57,10 +54,7 @@ class FeedbackScreenTest {
   @Test
   fun feedbackScreen_interactWithDropdownMenu() {
     composeTestRule.setContent {
-      FeedbackScreen(
-          navigationActions = mockNavigationActions,
-          userSession,
-          feedbackRepository)
+      FeedbackScreen(navigationActions = mockNavigationActions, userSession, feedbackRepository)
     }
 
     // Open the dropdown menu
@@ -76,10 +70,7 @@ class FeedbackScreenTest {
   @Test
   fun feedbackScreen_fillAndSendFeedback() {
     composeTestRule.setContent {
-      FeedbackScreen(
-          navigationActions = mockNavigationActions,
-          userSession,
-          feedbackRepository)
+      FeedbackScreen(navigationActions = mockNavigationActions, userSession, feedbackRepository)
     }
 
     // Fill in feedback title
@@ -97,10 +88,7 @@ class FeedbackScreenTest {
   @Test
   fun feedbackScreen_selectRating() {
     composeTestRule.setContent {
-      FeedbackScreen(
-          navigationActions = mockNavigationActions,
-          userSession,
-          feedbackRepository)
+      FeedbackScreen(navigationActions = mockNavigationActions, userSession, feedbackRepository)
     }
 
     // Click on the 5th star for rating

@@ -30,11 +30,11 @@ fun MyStatsScreen(
     userSession: UserSession,
     userRepository: UserRepository,
     statsRepository: StatsRepository,
-    userViewModel: UserViewModel =
-        viewModel(factory = UserViewModel.factory(userSession, userRepository)),
-    statsViewModel: StatsViewModel =
-        viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
 ) {
+  val userViewModel: UserViewModel =
+      viewModel(factory = UserViewModel.factory(userSession, userRepository))
+  val statsViewModel: StatsViewModel =
+      viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
 
   LaunchedEffect(Unit) {
     userViewModel.getUserName()

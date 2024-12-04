@@ -8,11 +8,9 @@ data class Feedback(
     val rating: Int = 0
 )
 
-enum class FeedbackOption(
-    val category: String
-) {
-    BUG_REPORT("Bug Report"),
-    FEATURE_SUGGESTION("Feature Suggestion"),
-    QUESTION("Question"),
-    OTHER("Other")
+enum class FeedbackOption(val category: String) {
+  BUG_REPORT("Bug Report"),
+  FEATURE_SUGGESTION("Feature Suggestion"),
+  QUESTION("Question"),
+  OTHER("Other")
 }

@@ -343,22 +343,22 @@ fun MainScreenScaffold(
         ScreenColumn(
             padding,
             testTagColumn,
-            ) {
-              UtilButton(
-                  { isHelpBoxVisible = !isHelpBoxVisible },
-                  "InfoButton",
-                  "InfoIcon",
-                  Icons.Outlined.Info,
-                  "Help")
-              content()
-              // Show popup when the info button is clicked
-              if (isHelpBoxVisible) {
-                InfoPopup(
-                    onDismiss = { isHelpBoxVisible = false },
-                    helpTitle = helpTitle,
-                    helpText = helpText)
-              }
-            }
+        ) {
+          UtilButton(
+              { isHelpBoxVisible = !isHelpBoxVisible },
+              "InfoButton",
+              "InfoIcon",
+              Icons.Outlined.Info,
+              "Help")
+          content()
+          // Show popup when the info button is clicked
+          if (isHelpBoxVisible) {
+            InfoPopup(
+                onDismiss = { isHelpBoxVisible = false },
+                helpTitle = helpTitle,
+                helpText = helpText)
+          }
+        }
       })
 }
 

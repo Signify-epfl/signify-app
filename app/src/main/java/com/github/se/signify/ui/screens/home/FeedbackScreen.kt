@@ -52,8 +52,8 @@ fun FeedbackScreen(
     userSession: UserSession,
     feedbackRepository: FeedbackRepository
 ) {
-    val feedbackViewModel: FeedbackViewModel =
-        viewModel(factory = FeedbackViewModel.factory(userSession, feedbackRepository))
+  val feedbackViewModel: FeedbackViewModel =
+      viewModel(factory = FeedbackViewModel.factory(userSession, feedbackRepository))
   val context = LocalContext.current
 
   var selectedFeedbackType by remember { mutableStateOf(FeedbackOption.BUG_REPORT.category) }
@@ -62,57 +62,52 @@ fun FeedbackScreen(
   var selectedRating by remember { mutableIntStateOf(0) }
   var isLoading by remember { mutableStateOf(false) }
 
-    AnnexScreenScaffold(
-        navigationActions = navigationActions, testTagColumn = "FeedbackScreen"
-    ) {
-        FeedbackDropdown(
-            selectedFeedbackType = selectedFeedbackType,
-            onFeedbackTypeSelected = { selectedFeedbackType = it })
+  AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = "FeedbackScreen") {
+    FeedbackDropdown(
+        selectedFeedbackType = selectedFeedbackType,
+        onFeedbackTypeSelected = { selectedFeedbackType = it })
 
-        FeedbackInputField(
-            value = feedbackTitle,
-            onValueChange = { feedbackTitle = it },
-            label = "Feedback Title",
-            modifier =
-            Modifier.fillMaxWidth().padding(bottom = 16.dp).testTag("FeedbackTitleInput"))
+    FeedbackInputField(
+        value = feedbackTitle,
+        onValueChange = { feedbackTitle = it },
+        label = "Feedback Title",
+        modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp).testTag("FeedbackTitleInput"))
 
-        FeedbackInputField(
-            value = feedbackDescription,
-            onValueChange = { feedbackDescription = it },
-            label = "Feedback Description",
-            modifier =
+    FeedbackInputField(
+        value = feedbackDescription,
+        onValueChange = { feedbackDescription = it },
+        label = "Feedback Description",
+        modifier =
             Modifier.fillMaxWidth()
                 .height(150.dp)
                 .padding(bottom = 16.dp)
                 .testTag("FeedbackDescriptionInput"))
 
-        RatingSection(
-            selectedRating = selectedRating, onRatingSelected = { selectedRating = it })
+    RatingSection(selectedRating = selectedRating, onRatingSelected = { selectedRating = it })
 
-        UtilTextButton(
-            onClickAction = {
-                if (feedbackTitle.text.isNotEmpty() && feedbackDescription.text.isNotEmpty()) {
-                    isLoading = true
-                    feedbackViewModel.saveFeedback(
-                        type = selectedFeedbackType,
-                        title = feedbackTitle.text,
-                        description = feedbackDescription.text,
-                        rating = selectedRating)
-                    isLoading = false
-                    Toast.makeText(context, "Review sent", Toast.LENGTH_LONG).show()
-                    navigationActions.navigateTo(Screen.HOME)
-                } else {
-                    Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            },
-            testTag = "SendFeedbackButton",
-            text = "Send Feedback",
-            backgroundColor = MaterialTheme.colorScheme.primary,
-            textColor = MaterialTheme.colorScheme.onPrimary)
+    UtilTextButton(
+        onClickAction = {
+          if (feedbackTitle.text.isNotEmpty() && feedbackDescription.text.isNotEmpty()) {
+            isLoading = true
+            feedbackViewModel.saveFeedback(
+                type = selectedFeedbackType,
+                title = feedbackTitle.text,
+                description = feedbackDescription.text,
+                rating = selectedRating)
+            isLoading = false
+            Toast.makeText(context, "Review sent", Toast.LENGTH_LONG).show()
+            navigationActions.navigateTo(Screen.HOME)
+          } else {
+            Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT).show()
+          }
+        },
+        testTag = "SendFeedbackButton",
+        text = "Send Feedback",
+        backgroundColor = MaterialTheme.colorScheme.primary,
+        textColor = MaterialTheme.colorScheme.onPrimary)
 
-        LoadingIndicator(isLoading = isLoading)
-    }
+    LoadingIndicator(isLoading = isLoading)
+  }
 }
 
 @Composable
@@ -140,7 +135,9 @@ private fun FeedbackDropdown(
                     .testTag("DropdownMenu")) {
               FeedbackOption.entries.forEach { option ->
                 DropdownMenuItem(
-                    text = { Text(text = option.category, color = MaterialTheme.colorScheme.onPrimary) },
+                    text = {
+                      Text(text = option.category, color = MaterialTheme.colorScheme.onPrimary)
+                    },
                     onClick = {
                       onFeedbackTypeSelected(option.category)
                       expanded = false
