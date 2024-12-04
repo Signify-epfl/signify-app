@@ -297,7 +297,7 @@ fun ExerciseList(exercises: List<ExerciseLevel>, navigationActions: NavigationAc
                             .background(MaterialTheme.colorScheme.primary)
                             .border(
                                 1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
-                            .testTag("${exercises[page].levelName}ExerciseBox")) {
+                            .testTag("${exercises[page].id}ExerciseBox")) {
                       Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                         ExerciseButton(
                             exercise = exercises[page], navigationActions = navigationActions)
@@ -337,19 +337,17 @@ fun ExerciseList(exercises: List<ExerciseLevel>, navigationActions: NavigationAc
 @Composable
 fun ExerciseButton(exercise: ExerciseLevel, navigationActions: NavigationActions) {
   Button(
-      onClick = { navigationActions.navigateTo(exercise.levelScreen) },
+      onClick = { navigationActions.navigateTo(exercise.screen) },
       modifier =
           Modifier.aspectRatio(2f)
               .fillMaxWidth()
               .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
-              .testTag("${exercise.levelName}ExerciseButton"),
+              .testTag("${exercise.id}ExerciseButton"),
       shape = RoundedCornerShape(8.dp),
       colors =
           ButtonDefaults.buttonColors(
               MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.onPrimary)) {
-        Text(
-            exercise.levelName,
-            modifier = Modifier.testTag("${exercise.levelName}ExerciseButtonText"))
+        Text(exercise.id, modifier = Modifier.testTag("${exercise.id}ExerciseButtonText"))
       }
 }
 /**
