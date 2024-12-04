@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.model.auth.AuthService
+import com.github.se.signify.model.auth.MockAuthService
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -62,6 +63,7 @@ import kotlinx.coroutines.tasks.await
 @Composable
 fun LoginScreen(navigationActions: NavigationActions, authService: AuthService) {
   val context = LocalContext.current
+  val scope = rememberCoroutineScope() // Remember coroutine scope for launching coroutines
 
   val launcher =
       rememberFirebaseAuthLauncher(
@@ -109,9 +111,7 @@ fun LoginScreen(navigationActions: NavigationActions, authService: AuthService) 
                   Modifier.padding(3.dp)
                       .width(139.dp)
                       .height(81.dp)
-                      .background(
-                          color = MaterialTheme.colorScheme.background) // Primary background
-              )
+                      .background(color = MaterialTheme.colorScheme.background))
 
           Spacer(modifier = Modifier.height(70.dp))
 
@@ -134,13 +134,31 @@ fun LoginScreen(navigationActions: NavigationActions, authService: AuthService) 
           // Authenticate With Google Button
           GoogleSignInButton(
               onSignInClick = {
-                val gso =
-                    GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(token)
-                        .requestEmail()
-                        .build()
-                val googleSignInClient = GoogleSignIn.getClient(context, gso)
-                launcher.launch(googleSignInClient.signInIntent)
+                if (authService is MockAuthService) {
+                  scope.launch {
+                    try {
+                      Log.d("LoginScreen", "Mock login: Simulating Google Sign-In.")
+                      val isSuccessful = authService.signInWithGoogle("mock-token")
+                      if (isSuccessful) {
+                        Toast.makeText(context, "Mock Login successful!", Toast.LENGTH_LONG).show()
+                        navigationActions.navigateTo(Screen.HOME)
+                      } else {
+                        Toast.makeText(context, "Mock Login failed!", Toast.LENGTH_LONG).show()
+                      }
+                    } catch (e: Exception) {
+                      Log.e("LoginScreen", "Mock sign-in error: ${e.message}")
+                      Toast.makeText(context, "Mock Login failed!", Toast.LENGTH_LONG).show()
+                    }
+                  }
+                } else {
+                  val gso =
+                      GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                          .requestIdToken(token)
+                          .requestEmail()
+                          .build()
+                  val googleSignInClient = GoogleSignIn.getClient(context, gso)
+                  launcher.launch(googleSignInClient.signInIntent)
+                }
               })
 
           SkipLoginButton {

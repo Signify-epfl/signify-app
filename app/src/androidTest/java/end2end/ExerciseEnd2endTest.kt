@@ -69,7 +69,7 @@ class ExerciseEnd2endTest {
   fun questFeatureTest() {
 
     // Simulate the Google sign-in process
-    composeTestRule.onNodeWithTag("skipLoginButton").performClick()
+    composeTestRule.onNodeWithTag("loginButton").performClick()
 
     // Wait for navigation to Home Screen
     composeTestRule.waitForIdle()
