@@ -17,15 +17,19 @@ class MockUserRepository : UserRepository {
     shouldFail = true
   }
 
+  fun clearUsers() {
+    users.clear()
+  }
+
+  fun addUser(user: User) {
+    users[user.uid] = user
+  }
+
   fun setUsers(users: List<User>) {
     this.users.clear()
     for (user in users) {
       addUser(user)
     }
-  }
-
-  fun addUser(user: User) {
-    users[user.uid] = user
   }
 
   fun removeUser(userId: String) {
