@@ -48,7 +48,7 @@ class ASLRecognitionTest : LifecycleOwner {
     val context = mock(Context::class.java)
 
     navigationActions = mock(NavigationActions::class.java)
-    val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
+    val handLandMarkImplementation = AppDependencyProvider().handLandMarkRepository()
     handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.PRACTICE.route)

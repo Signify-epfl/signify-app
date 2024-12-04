@@ -1,7 +1,7 @@
 package com.github.se.signify.model.challenge
 
+import com.github.se.signify.model.auth.MockUserSession
 import com.github.se.signify.model.auth.UserSession
-import com.github.se.signify.model.di.MockDependencyProvider
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -20,7 +20,7 @@ class ChallengeViewModelTest {
 
   @Before
   fun setUp() {
-    mockUserSession = MockDependencyProvider.userSession()
+    mockUserSession = MockUserSession()
     mockRepository = MockChallengeRepository()
     challengeViewModel = ChallengeViewModel(mockUserSession, mockRepository)
   }

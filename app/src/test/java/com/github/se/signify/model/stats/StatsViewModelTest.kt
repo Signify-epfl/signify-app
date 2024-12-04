@@ -43,7 +43,7 @@ class StatsViewModelTest(
     @JvmStatic
     @BeforeClass
     fun setup() {
-      mockUserSession = MockDependencyProvider.userSession()
+      mockUserSession = MockDependencyProvider().userSession()
       mockStatsRepository = MockStatsRepository()
       userId = mockUserSession.getUserId()!!
       statsViewModel = StatsViewModel(mockUserSession, mockStatsRepository)
@@ -124,7 +124,7 @@ class StatsViewModelTest(
   // doing 2 blocks one @BeforeClass and one @Before fixes it for the moment.
   @Before
   fun setupDependencies() {
-    mockUserSession = MockDependencyProvider.userSession()
+    mockUserSession = MockDependencyProvider().userSession()
     mockStatsRepository = MockStatsRepository()
     userId = mockUserSession.getUserId()!!
     statsViewModel = StatsViewModel(mockUserSession, mockStatsRepository)

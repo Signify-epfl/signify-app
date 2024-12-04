@@ -428,7 +428,7 @@ class UtilsTest {
   @Test
   fun cameraPreview_isDisplayed() {
     val context = mock(Context::class.java)
-    val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
+    val handLandMarkImplementation = AppDependencyProvider().handLandMarkRepository()
     val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
 
     composeTestRule.setContent { CameraPlaceholder(handLandMarkViewModel) }
