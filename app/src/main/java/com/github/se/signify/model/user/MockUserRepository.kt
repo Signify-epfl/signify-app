@@ -50,7 +50,7 @@ class MockUserRepository : UserRepository {
     if (!checkFailure(onFailure)) return
     if (!checkUser(userId, onFailure)) return
 
-    val user = users[userId]!!
+    val user = users.getValue(userId)
     onSuccess(user.friends)
   }
 
@@ -62,7 +62,7 @@ class MockUserRepository : UserRepository {
     if (!checkFailure(onFailure)) return
     if (!checkUser(userId, onFailure)) return
 
-    val user = users[userId]!!
+    val user = users.getValue(userId)
     onSuccess(user.friendRequests)
   }
 
@@ -74,7 +74,7 @@ class MockUserRepository : UserRepository {
     if (!checkFailure(onFailure)) return
     if (!checkUser(userId, onFailure)) return
 
-    val user = users[userId]!!
+    val user = users.getValue(userId)
     onSuccess(user)
   }
 
@@ -86,7 +86,7 @@ class MockUserRepository : UserRepository {
     if (!checkFailure(onFailure)) return
     if (!checkUser(userId, onFailure)) return
 
-    val user = users[userId]!!
+    val user = users.getValue(userId)
 
     // This was done to match the implementation of the UserRepositoryFireStore
     // TODO: Make this non-nullable
@@ -102,7 +102,7 @@ class MockUserRepository : UserRepository {
     if (!checkFailure(onFailure)) return
     if (!checkUser(userId, onFailure)) return
 
-    val user = users[userId]!!
+    val user = users.getValue(userId)
     users[userId] = user.copy(name = newName)
     onSuccess()
   }
@@ -115,7 +115,7 @@ class MockUserRepository : UserRepository {
     if (!checkFailure(onFailure)) return
     if (!checkUser(userId, onFailure)) return
 
-    val user = users[userId]!!
+    val user = users.getValue(userId)
     onSuccess(user.profileImageUrl)
   }
 
@@ -128,7 +128,7 @@ class MockUserRepository : UserRepository {
     if (!checkFailure(onFailure)) return
     if (!checkUser(userId, onFailure)) return
 
-    val user = users[userId]!!
+    val user = users.getValue(userId)
     users[userId] = user.copy(profileImageUrl = newProfilePictureUrl.toString())
     onSuccess()
   }
@@ -143,7 +143,7 @@ class MockUserRepository : UserRepository {
     if (!checkUser(currentUserId, onFailure)) return
     if (!checkUser(targetUserId, onFailure)) return
 
-    val targetUser = users[targetUserId]!!
+    val targetUser = users.getValue(targetUserId)
     users[targetUserId] =
         targetUser.copy(friendRequests = targetUser.friendRequests + currentUserId)
     onSuccess()
@@ -159,8 +159,8 @@ class MockUserRepository : UserRepository {
     if (!checkUser(currentUserId, onFailure)) return
     if (!checkUser(friendUserId, onFailure)) return
 
-    val currentUser = users[currentUserId]!!
-    val friendUser = users[friendUserId]!!
+    val currentUser = users.getValue(currentUserId)
+    val friendUser = users.getValue(friendUserId)
 
     users[currentUserId] =
         currentUser.copy(
@@ -180,8 +180,8 @@ class MockUserRepository : UserRepository {
     if (!checkUser(currentUserId, onFailure)) return
     if (!checkUser(friendUserId, onFailure)) return
 
-    val currentUser = users[currentUserId]!!
-    val friendUser = users[friendUserId]!!
+    val currentUser = users.getValue(currentUserId)
+    val friendUser = users.getValue(friendUserId)
 
     users[currentUserId] = currentUser.copy(friends = currentUser.friends - friendUserId)
     users[friendUserId] = friendUser.copy(friends = friendUser.friends - currentUserId)
@@ -198,7 +198,7 @@ class MockUserRepository : UserRepository {
     if (!checkUser(currentUserId, onFailure)) return
     if (!checkUser(friendUserId, onFailure)) return
 
-    val currentUser = users[currentUserId]!!
+    val currentUser = users.getValue(currentUserId)
     users[currentUserId] =
         currentUser.copy(friendRequests = currentUser.friendRequests - friendUserId)
     onSuccess()
@@ -213,7 +213,7 @@ class MockUserRepository : UserRepository {
     if (!checkFailure(onFailure)) return
     if (!checkUser(userId, onFailure)) return
 
-    val user = users[userId]!!
+    val user = users.getValue(userId)
     users[userId] = user.copy(ongoingChallenges = user.ongoingChallenges + challengeId)
     onSuccess()
   }
@@ -231,7 +231,7 @@ class MockUserRepository : UserRepository {
     if (!checkFailure(onFailure)) return
     if (!checkUser(userId, onFailure)) return
 
-    val user = users[userId]!!
+    val user = users.getValue(userId)
     val challenges = user.ongoingChallenges.map { Challenge(it) }
     onSuccess(challenges)
   }
@@ -245,7 +245,7 @@ class MockUserRepository : UserRepository {
     if (!checkFailure(onFailure)) return
     if (!checkUser(userId, onFailure)) return
 
-    val user = users[userId]!!
+    val user = users.getValue(userId)
     users[userId] = user.copy(ongoingChallenges = user.ongoingChallenges - challengeId)
     onSuccess()
   }
@@ -258,7 +258,7 @@ class MockUserRepository : UserRepository {
     if (!checkFailure(onFailure)) return
     if (!checkUser(userId, onFailure)) return
 
-    val user = users[userId]!!
+    val user = users.getValue(userId)
     onSuccess(user.lastLoginDate)
   }
 
@@ -271,7 +271,7 @@ class MockUserRepository : UserRepository {
     if (!checkFailure(onFailure)) return
     if (!checkUser(userId, onFailure)) return
 
-    val user = users[userId]!!
+    val user = users.getValue(userId)
     users[userId] = user.copy(lastLoginDate = date)
     onSuccess()
   }
@@ -282,7 +282,7 @@ class MockUserRepository : UserRepository {
     if (!checkFailure(onFailure)) return
     if (!checkUser(userId, onFailure)) return
 
-    val user = users[userId]!!
+    val user = users.getValue(userId)
     users[userId] = user.copy(currentStreak = user.currentStreak + 1)
     onSuccess()
   }
