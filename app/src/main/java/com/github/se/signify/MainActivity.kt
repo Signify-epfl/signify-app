@@ -108,7 +108,9 @@ fun SignifyAppPreview(
         startDestination = Screen.AUTH.route,
         route = Route.AUTH,
     ) {
-      composable(Screen.AUTH.route) { LoginScreen(navigationActions) }
+      composable(Screen.AUTH.route) {
+        LoginScreen(navigationActions, dependencyProvider.provideAuthService())
+      }
       composable(Screen.UNAUTHENTICATED.route) { UnauthenticatedScreen(navigationActions) }
     }
 

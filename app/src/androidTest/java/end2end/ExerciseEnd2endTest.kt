@@ -71,9 +71,6 @@ class ExerciseEnd2endTest {
 
     // Go to the profile
     composeTestRule.onNodeWithTag("TabIcon_Profile", useUnmergedTree = true).performClick()
-    composeTestRule.onNodeWithTag("UnauthenticatedScreen").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("logInButton").performClick()
-    composeTestRule.onNodeWithTag("LoginScreen").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("loginButton").performClick()
+    composeTestRule.onNodeWithTag("ProfileScreen").assertIsDisplayed()
   }
 }

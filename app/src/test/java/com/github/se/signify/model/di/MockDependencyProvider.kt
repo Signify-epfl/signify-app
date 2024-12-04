@@ -1,5 +1,6 @@
 package com.github.se.signify.model.di
 
+import com.github.se.signify.model.auth.AuthService
 import com.github.se.signify.model.auth.MockUserSession
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.challenge.ChallengeRepository
@@ -42,5 +43,9 @@ object MockDependencyProvider : DependencyProvider {
 
   override fun userSession(): UserSession {
     return MockUserSession()
+  }
+
+  override fun provideAuthService(): AuthService {
+    return MockAuthService()
   }
 }

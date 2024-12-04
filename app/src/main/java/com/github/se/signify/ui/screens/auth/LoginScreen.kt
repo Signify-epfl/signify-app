@@ -45,13 +45,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
-import com.github.se.signify.model.stats.saveStatsToFirestore
-import com.github.se.signify.model.user.saveUserToFireStore
+import com.github.se.signify.model.auth.AuthService
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Status
 import com.google.firebase.Firebase
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.GoogleAuthProvider
@@ -60,7 +60,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 @Composable
-fun LoginScreen(navigationActions: NavigationActions) {
+fun LoginScreen(navigationActions: NavigationActions, authService: AuthService) {
   val context = LocalContext.current
 
   val launcher =
@@ -73,7 +73,8 @@ fun LoginScreen(navigationActions: NavigationActions) {
           onAuthError = {
             Log.e("SignInScreen", "Failed to sign in: ${it.statusCode}")
             Toast.makeText(context, "Login Failed!", Toast.LENGTH_LONG).show()
-          })
+          },
+          authService = authService)
 
   val token = stringResource(id = R.string.default_web_client_id)
 
@@ -193,7 +194,8 @@ fun GoogleSignInButton(onSignInClick: () -> Unit) {
 @Composable
 fun rememberFirebaseAuthLauncher(
     onAuthComplete: (AuthResult) -> Unit,
-    onAuthError: (ApiException) -> Unit
+    onAuthError: (ApiException) -> Unit,
+    authService: AuthService
 ): ManagedActivityResultLauncher<Intent, ActivityResult> {
   val scope = rememberCoroutineScope()
   return rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -201,12 +203,16 @@ fun rememberFirebaseAuthLauncher(
     val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
     try {
       val account = task.getResult(ApiException::class.java)!!
-      val credential = GoogleAuthProvider.getCredential(account.idToken!!, null)
+      val idToken = account.idToken!!
       scope.launch {
-        val authResult = Firebase.auth.signInWithCredential(credential).await()
-        onAuthComplete(authResult)
-        saveUserToFireStore()
-        saveStatsToFirestore()
+        val isSuccessful = authService.signInWithGoogle(idToken)
+        if (isSuccessful) {
+          val credential = GoogleAuthProvider.getCredential(account.idToken!!, null)
+          val authResult = Firebase.auth.signInWithCredential(credential).await()
+          onAuthComplete(authResult) // Return your auth result here
+        } else {
+          onAuthError(ApiException(Status.RESULT_INTERNAL_ERROR))
+        }
       }
     } catch (e: ApiException) {
       onAuthError(e)

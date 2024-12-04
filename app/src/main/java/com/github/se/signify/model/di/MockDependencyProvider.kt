@@ -1,5 +1,6 @@
 package com.github.se.signify.model.di
 
+import com.github.se.signify.model.auth.AuthService
 import com.github.se.signify.model.auth.FirebaseUserSession
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.challenge.ChallengeRepository
@@ -18,8 +19,6 @@ import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserRepositoryFireStore
 import com.google.firebase.Firebase
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 
 private val appHandLandMarkConfig =
@@ -55,27 +54,25 @@ class MockDependencyProvider : DependencyProvider {
   }
 
   override fun userSession(): UserSession {
-    return FirebaseUserSession().apply {
-      Firebase.auth.useEmulator("10.0.2.2", 9099)
-      val mockIdToken =
-          """
-    {
-      "sub": "abc123",
-      "email": "foo@example.com",
-      "email_verified": true
-    }
-"""
-              .trimIndent()
+    return FirebaseUserSession(provideAuthService())
+  }
 
-      val credential = GoogleAuthProvider.getCredential(mockIdToken, null)
-      Firebase.auth.signInWithCredential(credential).addOnCompleteListener { task ->
-        if (task.isSuccessful) {
-          val user = task.result.user
-          println("Sign-in successful: ${user?.email}")
-        } else {
-          println("Sign-in failed: ${task.exception}")
-        }
-      }
-    }
+  override fun provideAuthService(): AuthService {
+    return MockAuthService()
+  }
+}
+
+class MockAuthService : AuthService {
+
+  override suspend fun signInWithGoogle(idToken: String): Boolean {
+    return true
+  }
+
+  override suspend fun signOut(): Boolean {
+    return true
+  }
+
+  override fun getCurrentUser(): String {
+    return "foo@example.com"
   }
 }

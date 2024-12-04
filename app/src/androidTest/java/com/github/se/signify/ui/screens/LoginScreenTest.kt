@@ -11,6 +11,7 @@ import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.toPackage
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.se.signify.model.auth.UserSession
+import com.github.se.signify.model.di.MockAuthService
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 import com.github.se.signify.ui.screens.auth.LoginScreen
@@ -29,6 +30,7 @@ class LoginScreenTest : TestCase() {
 
   private lateinit var navigationActions: NavigationActions
   private lateinit var userSession: UserSession
+  private lateinit var authService: MockAuthService
 
   @Before
   fun setUp() {
@@ -36,7 +38,7 @@ class LoginScreenTest : TestCase() {
 
     navigationActions = mock(NavigationActions::class.java)
     userSession = mock(UserSession::class.java)
-
+    authService = MockAuthService()
     `when`(navigationActions.currentRoute()).thenReturn(Screen.AUTH.route)
   }
 
@@ -48,7 +50,7 @@ class LoginScreenTest : TestCase() {
   @Test
   fun titleAndButtonAreCorrectlyDisplayed() {
 
-    composeTestRule.setContent { LoginScreen(navigationActions) }
+    composeTestRule.setContent { LoginScreen(navigationActions, authService) }
 
     composeTestRule.onNodeWithTag("IntroMessage").assertIsDisplayed()
     composeTestRule
@@ -63,7 +65,7 @@ class LoginScreenTest : TestCase() {
   @Test
   fun googleSignInReturnsValidActivityResult() {
 
-    composeTestRule.setContent { LoginScreen(navigationActions) }
+    composeTestRule.setContent { LoginScreen(navigationActions, authService) }
 
     composeTestRule.onNodeWithTag("loginButton").performClick()
     composeTestRule.waitForIdle()
@@ -73,7 +75,7 @@ class LoginScreenTest : TestCase() {
 
   @Test
   fun offlineModeHelpsToConnect() {
-    composeTestRule.setContent { LoginScreen(navigationActions) }
+    composeTestRule.setContent { LoginScreen(navigationActions, authService) }
     composeTestRule.onNodeWithTag("skipLoginButton").assertIsDisplayed().performClick()
   }
 }
