@@ -9,7 +9,6 @@ import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.se.signify.model.auth.MockUserSession
 import com.github.se.signify.model.feedback.FeedbackRepository
-import com.github.se.signify.model.feedback.FeedbackViewModel
 import com.github.se.signify.ui.navigation.NavigationActions
 import org.junit.Rule
 import org.junit.Test
@@ -24,7 +23,6 @@ class FeedbackScreenTest {
   private val userSession = MockUserSession()
   private val feedbackRepository = Mockito.mock(FeedbackRepository::class.java)
   private val mockNavigationActions = Mockito.mock(NavigationActions::class.java)
-  private val mockFeedbackViewModel = Mockito.mock(FeedbackViewModel::class.java)
 
   @Test
   fun feedbackScreen_uiElementsAreDisplayed() {
@@ -32,12 +30,11 @@ class FeedbackScreenTest {
       FeedbackScreen(
           navigationActions = mockNavigationActions,
           userSession,
-          feedbackRepository,
-          feedbackViewModel = mockFeedbackViewModel)
+          feedbackRepository)
     }
 
     // Check that top blue bar and back button are displayed
-    composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
     composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
 
     // Check that feedback type dropdown is displayed
@@ -63,8 +60,7 @@ class FeedbackScreenTest {
       FeedbackScreen(
           navigationActions = mockNavigationActions,
           userSession,
-          feedbackRepository,
-          feedbackViewModel = mockFeedbackViewModel)
+          feedbackRepository)
     }
 
     // Open the dropdown menu
@@ -83,8 +79,7 @@ class FeedbackScreenTest {
       FeedbackScreen(
           navigationActions = mockNavigationActions,
           userSession,
-          feedbackRepository,
-          feedbackViewModel = mockFeedbackViewModel)
+          feedbackRepository)
     }
 
     // Fill in feedback title
@@ -105,8 +100,7 @@ class FeedbackScreenTest {
       FeedbackScreen(
           navigationActions = mockNavigationActions,
           userSession,
-          feedbackRepository,
-          feedbackViewModel = mockFeedbackViewModel)
+          feedbackRepository)
     }
 
     // Click on the 5th star for rating

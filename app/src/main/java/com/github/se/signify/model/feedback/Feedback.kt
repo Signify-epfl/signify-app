@@ -7,3 +7,12 @@ data class Feedback(
     val description: String = "",
     val rating: Int = 0
 )
+
+enum class FeedbackOption(
+    val category: String
+) {
+    BUG_REPORT("Bug Report"),
+    FEATURE_SUGGESTION("Feature Suggestion"),
+    QUESTION("Question"),
+    OTHER("Other")
+}
