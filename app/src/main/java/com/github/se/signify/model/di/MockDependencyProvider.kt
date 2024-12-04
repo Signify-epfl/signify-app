@@ -18,6 +18,7 @@ import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserRepositoryFireStore
 import com.google.firebase.Firebase
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 
@@ -38,7 +39,7 @@ class MockDependencyProvider : DependencyProvider {
   }
 
   override fun statsRepository(): StatsRepository {
-    return MockStatsRepository() // Replace with mock
+    return MockStatsRepository()
   }
 
   override fun userRepository(): UserRepository {
@@ -54,6 +55,27 @@ class MockDependencyProvider : DependencyProvider {
   }
 
   override fun userSession(): UserSession {
-    return FirebaseUserSession().apply { Firebase.auth.useEmulator("10.0.2.2", 9099) }
+    return FirebaseUserSession().apply {
+      Firebase.auth.useEmulator("10.0.2.2", 9099)
+      val mockIdToken =
+          """
+    {
+      "sub": "abc123",
+      "email": "foo@example.com",
+      "email_verified": true
+    }
+"""
+              .trimIndent()
+
+      val credential = GoogleAuthProvider.getCredential(mockIdToken, null)
+      Firebase.auth.signInWithCredential(credential).addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+          val user = task.result.user
+          println("Sign-in successful: ${user?.email}")
+        } else {
+          println("Sign-in failed: ${task.exception}")
+        }
+      }
+    }
   }
 }

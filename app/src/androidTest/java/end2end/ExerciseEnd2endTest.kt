@@ -9,9 +9,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.MainActivity
-import com.google.firebase.Firebase
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.auth
 import org.junit.Rule
 import org.junit.Test
 
@@ -72,25 +69,6 @@ class ExerciseEnd2endTest {
     composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
 
-    val mockIdToken =
-        """
-    {
-      "sub": "abc123",
-      "email": "foo@example.com",
-      "email_verified": true
-    }
-"""
-            .trimIndent()
-
-    val credential = GoogleAuthProvider.getCredential(mockIdToken, null)
-    Firebase.auth.signInWithCredential(credential).addOnCompleteListener { task ->
-      if (task.isSuccessful) {
-        val user = task.result.user
-        println("Sign-in successful: ${user?.email}")
-      } else {
-        println("Sign-in failed: ${task.exception}")
-      }
-    }
     // Go to the profile
     composeTestRule.onNodeWithTag("TabIcon_Profile", useUnmergedTree = true).performClick()
     composeTestRule.onNodeWithTag("UnauthenticatedScreen").assertIsDisplayed()
