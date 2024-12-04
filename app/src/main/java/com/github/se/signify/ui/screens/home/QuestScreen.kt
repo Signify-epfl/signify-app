@@ -66,7 +66,7 @@ fun QuestScreen(
 
   // Collect quest data
   val quests = questViewModel.quest.collectAsState()
-  val unlockedQuests = 2
+  val unlockedQuests = 20
   // by userViewModel.unlockedQuests.collectAsState()
 
   Scaffold(
