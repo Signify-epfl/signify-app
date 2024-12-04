@@ -37,7 +37,7 @@ class MockUserRepository : UserRepository {
   }
 
   override fun init(onSuccess: () -> Unit) {
-    if (checkFailure {}) return
+    if (!checkFailure {}) return
 
     onSuccess()
   }
@@ -47,8 +47,8 @@ class MockUserRepository : UserRepository {
       onSuccess: (List<String>) -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    if (checkFailure(onFailure)) return
-    if (checkUser(userId, onFailure)) return
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
 
     val user = users[userId]!!
     onSuccess(user.friends)
@@ -59,8 +59,8 @@ class MockUserRepository : UserRepository {
       onSuccess: (List<String>) -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    if (checkFailure(onFailure)) return
-    if (checkUser(userId, onFailure)) return
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
 
     val user = users[userId]!!
     onSuccess(user.friendRequests)
@@ -71,8 +71,8 @@ class MockUserRepository : UserRepository {
       onSuccess: (User) -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    if (checkFailure(onFailure)) return
-    if (checkUser(userId, onFailure)) return
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
 
     val user = users[userId]!!
     onSuccess(user)
@@ -83,8 +83,8 @@ class MockUserRepository : UserRepository {
       onSuccess: (String) -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    if (checkFailure(onFailure)) return
-    if (checkUser(userId, onFailure)) return
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
 
     val user = users[userId]!!
 
@@ -99,8 +99,8 @@ class MockUserRepository : UserRepository {
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    if (checkFailure(onFailure)) return
-    if (checkUser(userId, onFailure)) return
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
 
     val user = users[userId]!!
     users[userId] = user.copy(name = newName)
@@ -112,8 +112,8 @@ class MockUserRepository : UserRepository {
       onSuccess: (String?) -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    if (checkFailure(onFailure)) return
-    if (checkUser(userId, onFailure)) return
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
 
     val user = users[userId]!!
     onSuccess(user.profileImageUrl)
@@ -125,8 +125,8 @@ class MockUserRepository : UserRepository {
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    if (checkFailure(onFailure)) return
-    if (checkUser(userId, onFailure)) return
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
 
     val user = users[userId]!!
     users[userId] = user.copy(profileImageUrl = newProfilePictureUrl.toString())
@@ -139,9 +139,9 @@ class MockUserRepository : UserRepository {
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    if (checkFailure(onFailure)) return
-    if (checkUser(currentUserId, onFailure)) return
-    if (checkUser(targetUserId, onFailure)) return
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(currentUserId, onFailure)) return
+    if (!checkUser(targetUserId, onFailure)) return
 
     val targetUser = users[targetUserId]!!
     users[targetUserId] =
@@ -155,9 +155,9 @@ class MockUserRepository : UserRepository {
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    if (checkFailure(onFailure)) return
-    if (checkUser(currentUserId, onFailure)) return
-    if (checkUser(friendUserId, onFailure)) return
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(currentUserId, onFailure)) return
+    if (!checkUser(friendUserId, onFailure)) return
 
     val currentUser = users[currentUserId]!!
     val friendUser = users[friendUserId]!!
@@ -176,9 +176,9 @@ class MockUserRepository : UserRepository {
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    if (checkFailure(onFailure)) return
-    if (checkUser(currentUserId, onFailure)) return
-    if (checkUser(friendUserId, onFailure)) return
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(currentUserId, onFailure)) return
+    if (!checkUser(friendUserId, onFailure)) return
 
     val currentUser = users[currentUserId]!!
     val friendUser = users[friendUserId]!!
@@ -194,9 +194,9 @@ class MockUserRepository : UserRepository {
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    if (checkFailure(onFailure)) return
-    if (checkUser(currentUserId, onFailure)) return
-    if (checkUser(friendUserId, onFailure)) return
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(currentUserId, onFailure)) return
+    if (!checkUser(friendUserId, onFailure)) return
 
     val currentUser = users[currentUserId]!!
     users[currentUserId] =
@@ -210,8 +210,8 @@ class MockUserRepository : UserRepository {
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    if (checkFailure(onFailure)) return
-    if (checkUser(userId, onFailure)) return
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
 
     val user = users[userId]!!
     users[userId] = user.copy(ongoingChallenges = user.ongoingChallenges + challengeId)
@@ -228,8 +228,8 @@ class MockUserRepository : UserRepository {
       onSuccess: (List<Challenge>) -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    if (checkFailure(onFailure)) return
-    if (checkUser(userId, onFailure)) return
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
 
     val user = users[userId]!!
     val challenges = user.ongoingChallenges.map { Challenge(it) }
@@ -242,8 +242,8 @@ class MockUserRepository : UserRepository {
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    if (checkFailure(onFailure)) return
-    if (checkUser(userId, onFailure)) return
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
 
     val user = users[userId]!!
     users[userId] = user.copy(ongoingChallenges = user.ongoingChallenges - challengeId)
@@ -255,8 +255,8 @@ class MockUserRepository : UserRepository {
       onSuccess: (String?) -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    if (checkFailure(onFailure)) return
-    if (checkUser(userId, onFailure)) return
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
 
     val user = users[userId]!!
     onSuccess(user.lastLoginDate)
@@ -268,8 +268,8 @@ class MockUserRepository : UserRepository {
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    if (checkFailure(onFailure)) return
-    if (checkUser(userId, onFailure)) return
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
 
     val user = users[userId]!!
     users[userId] = user.copy(lastLoginDate = date)
@@ -279,8 +279,8 @@ class MockUserRepository : UserRepository {
   // This was simplified to not use the current date. It does not match the implementation of
   // `UserRepositoryFireStore`.
   override fun updateStreak(userId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-    if (checkFailure(onFailure)) return
-    if (checkUser(userId, onFailure)) return
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
 
     val user = users[userId]!!
     users[userId] = user.copy(currentStreak = user.currentStreak + 1)
@@ -292,8 +292,8 @@ class MockUserRepository : UserRepository {
       onSuccess: (Long) -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    if (checkFailure(onFailure)) return
-    if (checkUser(userId, onFailure)) return
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
 
     val user = users[userId]!!
     onSuccess(user.currentStreak)
