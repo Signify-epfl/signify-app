@@ -3,6 +3,7 @@ package com.github.se.signify.model.stats
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.di.MockDependencyProvider
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.BeforeClass
@@ -18,9 +19,8 @@ class StatsViewModelTest(
     private val updateAction: () -> Unit,
     private val expectedValueGet: Int,
     private val expectedValueUpdate: Int,
-    private val stateFlowValue: () -> Int
+    private val stateFlowValue: () -> Int,
 ) {
-
   companion object {
     private lateinit var mockUserSession: UserSession
     private lateinit var statsViewModel: StatsViewModel
@@ -144,6 +144,42 @@ class StatsViewModelTest(
     getAction()
     assertTrue(mockStatsRepository.wasMethodCalled(getStatName))
     assertEquals(0, stateFlowValue())
+  }
+
+  @Test
+  fun `resetUpdateStatsEvent should set state to Idle`() {
+    updateAction()
+
+    assertNotEquals(StatsViewModel.UpdateStatsEvent.Idle, statsViewModel.updateStatsEvent.value)
+
+    statsViewModel.resetUpdateStatsEvent()
+
+    assertEquals(StatsViewModel.UpdateStatsEvent.Idle, statsViewModel.updateStatsEvent.value)
+  }
+
+  @Test
+  fun `update state should transition from Idle to Success on update function call`() {
+    val initialState = statsViewModel.updateStatsEvent.value
+
+    assertEquals(StatsViewModel.UpdateStatsEvent.Idle, initialState)
+
+    updateAction()
+
+    val finalState = statsViewModel.updateStatsEvent.value
+    assertEquals(StatsViewModel.UpdateStatsEvent.Success, finalState)
+  }
+
+  @Test
+  fun `update state should transition from Idle to Failure on update function call`() {
+    mockStatsRepository.shouldSucceed = false
+
+    val initialState = statsViewModel.updateStatsEvent.value
+    assertEquals(StatsViewModel.UpdateStatsEvent.Idle, initialState)
+
+    updateAction()
+
+    val finalState = statsViewModel.updateStatsEvent.value
+    assertTrue(finalState is StatsViewModel.UpdateStatsEvent.Failure)
   }
 
   @Test

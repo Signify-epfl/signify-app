@@ -12,6 +12,22 @@ class StatsViewModel(
     private val repository: StatsRepository,
 ) : ViewModel() {
 
+  sealed class UpdateStatsEvent {
+    object Loading : UpdateStatsEvent()
+
+    object Idle : UpdateStatsEvent()
+
+    object Success : UpdateStatsEvent()
+
+    data class Failure(val message: String) : UpdateStatsEvent()
+  }
+
+  fun resetUpdateStatsEvent() {
+    _updateStatsEvent.value = UpdateStatsEvent.Idle
+  }
+
+  private val _updateStatsEvent = MutableStateFlow<UpdateStatsEvent>(UpdateStatsEvent.Idle)
+  val updateStatsEvent: StateFlow<UpdateStatsEvent> = _updateStatsEvent
   private val _lettersLearned = MutableStateFlow<List<Char>>(emptyList())
   val lettersLearned: StateFlow<List<Char>> = _lettersLearned
 
@@ -124,66 +140,138 @@ class StatsViewModel(
   }
 
   fun updateLettersLearned(newLetter: Char) {
+    _updateStatsEvent.value = UpdateStatsEvent.Loading
+
     repository.updateLettersLearned(
         userSession.getUserId()!!,
         newLetter,
-        onSuccess = { logSuccess("Letterss learned updated successfully.") },
-        onFailure = { e -> logError("Error updating letters learned:", e) })
+        onSuccess = {
+          logSuccess("Letters learned updated successfully.")
+          _updateStatsEvent.value = UpdateStatsEvent.Success
+        },
+        onFailure = { e ->
+          logError("Error updating letters learned:", e)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: "Unknown error")
+        })
   }
 
   fun updateEasyExerciseStats() {
+    _updateStatsEvent.value = UpdateStatsEvent.Loading
+
     repository.updateEasyExerciseStats(
         userSession.getUserId()!!,
-        onSuccess = { logSuccess("Easy exercise stats updated successfully.") },
-        onFailure = { e -> logError("Error updating easy exercise stats:", e) })
+        onSuccess = {
+          logSuccess("Easy exercise stats updated successfully.")
+          _updateStatsEvent.value = UpdateStatsEvent.Success
+        },
+        onFailure = { e ->
+          logError("Error updating easy exercise stats:", e)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: "Unknown error")
+        })
   }
 
   fun updateMediumExerciseStats() {
+    _updateStatsEvent.value = UpdateStatsEvent.Loading
+
     repository.updateMediumExerciseStats(
         userSession.getUserId()!!,
-        onSuccess = { logSuccess("Medium exercise stats updated successfully.") },
-        onFailure = { e -> logError("Error updating medium exercise stats:", e) })
+        onSuccess = {
+          logSuccess("Medium exercise stats updated successfully.")
+          _updateStatsEvent.value = UpdateStatsEvent.Success
+        },
+        onFailure = { e ->
+          logError("Error updating medium exercise stats:", e)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: "Unknown error")
+        })
   }
 
   fun updateHardExerciseStats() {
+    _updateStatsEvent.value = UpdateStatsEvent.Loading
+
     repository.updateHardExerciseStats(
         userSession.getUserId()!!,
-        onSuccess = { logSuccess("Hard exercise stats updated successfully.") },
-        onFailure = { e -> logError("Error updating hard exercise stats:", e) })
+        onSuccess = {
+          logSuccess("Hard exercise stats updated successfully.")
+          _updateStatsEvent.value = UpdateStatsEvent.Success
+        },
+        onFailure = { e ->
+          logError("Error updating hard exercise stats:", e)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: "Unknown error")
+        })
   }
 
   fun updateDailyQuestStats() {
+    _updateStatsEvent.value = UpdateStatsEvent.Loading
+
     repository.updateDailyQuestStats(
         userSession.getUserId()!!,
-        onSuccess = { logSuccess("Daily quest stats updated successfully.") },
-        onFailure = { e -> logError("Error updating daily quest stats:", e) })
+        onSuccess = {
+          logSuccess("Daily quest stats updated successfully.")
+          _updateStatsEvent.value = UpdateStatsEvent.Success
+        },
+        onFailure = { e ->
+          logError("Error updating daily quest stats:", e)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: "Unknown error")
+        })
   }
 
   fun updateWeeklyQuestStats() {
+    _updateStatsEvent.value = UpdateStatsEvent.Loading
+
     repository.updateWeeklyQuestStats(
         userSession.getUserId()!!,
-        onSuccess = { logSuccess("Weekly quest stats updated successfully.") },
-        onFailure = { e -> logError("Error updating weekly quest stats:", e) })
+        onSuccess = {
+          logSuccess("Weekly quest stats updated successfully.")
+          _updateStatsEvent.value = UpdateStatsEvent.Success
+        },
+        onFailure = { e ->
+          logError("Error updating weekly quest stats:", e)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: "Unknown error")
+        })
   }
 
   fun updateCompletedChallengeStats() {
+    _updateStatsEvent.value = UpdateStatsEvent.Loading
+
     repository.updateCompletedChallengeStats(
         userSession.getUserId()!!,
-        onSuccess = { logSuccess("Completed challenge stats updated successfully.") },
-        onFailure = { e -> logError("Error updating completed challenge stats:", e) })
+        onSuccess = {
+          logSuccess("Completed challenge stats updated successfully.")
+          _updateStatsEvent.value = UpdateStatsEvent.Success
+        },
+        onFailure = { e ->
+          logError("Error updating completed challenge stats:", e)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: "Unknown error")
+        })
   }
 
   fun updateCreatedChallengeStats() {
+    _updateStatsEvent.value = UpdateStatsEvent.Loading
+
     repository.updateCreatedChallengeStats(
         userSession.getUserId()!!,
-        onSuccess = { logSuccess("Created challenge stats updated successfully.") },
-        onFailure = { e -> logError("Error updating created challenge stats:", e) })
+        onSuccess = {
+          logSuccess("Created challenge stats updated successfully.")
+          _updateStatsEvent.value = UpdateStatsEvent.Success
+        },
+        onFailure = { e ->
+          logError("Error updating created challenge stats:", e)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: "Unknown error")
+        })
   }
 
   fun updateWonChallengeStats() {
+    _updateStatsEvent.value = UpdateStatsEvent.Loading
+
     repository.updateWonChallengeStats(
         userSession.getUserId()!!,
-        onSuccess = { logSuccess("Won challenge stats updated successfully.") },
-        onFailure = { e -> logError("Error updating won challenge stats:", e) })
+        onSuccess = {
+          logSuccess("Won challenge stats updated successfully.")
+          _updateStatsEvent.value = UpdateStatsEvent.Success
+        },
+        onFailure = { e ->
+          logError("Error updating won challenge stats:", e)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: "Unknown error")
+        })
   }
 }
