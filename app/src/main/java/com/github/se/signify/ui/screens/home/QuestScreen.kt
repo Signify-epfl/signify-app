@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.model.auth.UserSession
-import com.github.se.signify.model.getLetterIconResId
+import com.github.se.signify.model.getIconResId
 import com.github.se.signify.model.quest.Quest
 import com.github.se.signify.model.quest.QuestRepository
 import com.github.se.signify.model.quest.QuestViewModel
@@ -160,7 +160,7 @@ fun QuestDescriptionDialog(quest: Quest, onDismiss: () -> Unit) {
               'a' +
                   (quest.index.toInt() -
                       1) // Convert index to letter, e.g., 1 -> 'a', 2 -> 'b', etc.
-          val imageResId = getLetterIconResId(letter)
+          val imageResId = getIconResId(letter)
 
           Icon(
               painter = painterResource(id = imageResId),

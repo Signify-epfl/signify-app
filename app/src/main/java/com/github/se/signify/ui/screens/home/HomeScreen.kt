@@ -55,7 +55,6 @@ import com.github.se.signify.R
 import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.model.getIconResId
 import com.github.se.signify.model.getImageResId
-import com.github.se.signify.model.getLetterIconResId
 import com.github.se.signify.model.getTipResId
 import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.UtilButton
@@ -240,7 +239,7 @@ fun LetterDictionary(
                                 Modifier.testTag("LetterText_${currentLetter.uppercaseChar()}"))
                         Spacer(modifier = Modifier.width(8.dp))
                         Icon(
-                            painter = painterResource(id = getLetterIconResId(currentLetter)),
+                            painter = painterResource(id = getIconResId(currentLetter)),
                             contentDescription = "Letter gesture",
                             tint = MaterialTheme.colorScheme.onPrimary,
                             modifier =

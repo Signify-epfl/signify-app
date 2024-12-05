@@ -31,7 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.github.se.signify.R
-import com.github.se.signify.model.getLetterIconResId
+import com.github.se.signify.model.getIconResId
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.BackButton
 import com.github.se.signify.ui.CameraPlaceholder
@@ -108,8 +108,7 @@ fun GestureOverlayView(handLandMarkViewModel: HandLandMarkViewModel) {
 /** Displays the image associated with the detected ASL hand gesture. */
 @Composable
 fun HandGestureImage(gesture: String) {
-  val imageResource =
-      if (gesture.isEmpty()) R.drawable.vector else getLetterIconResId(gesture.first())
+  val imageResource = if (gesture.isEmpty()) R.drawable.vector else getIconResId(gesture.first())
 
   Box(
       modifier =
