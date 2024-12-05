@@ -19,26 +19,28 @@ import com.github.se.signify.ui.navigation.Screen
 fun ChallengeScreen(navigationActions: NavigationActions) {
   MainScreenScaffold(
       navigationActions = navigationActions,
-      testTagColumn = "ChallengeScreen",
+      testTag = "ChallengeScreen",
       helpTitle = "Challenge",
       helpText = stringResource(R.string.description_challenge)) {
         Spacer(modifier = Modifier.height(64.dp))
 
         // Challenge square button
         SquareButton(
-            iconRes = R.drawable.battleicon,
-            label = "Challenge",
+            iconId = R.drawable.battleicon,
             onClick = { navigationActions.navigateTo(Screen.NEW_CHALLENGE) },
+            text = "Challenge",
             size = 240,
-            modifier = Modifier.testTag("ChallengeButton"))
+            modifier = Modifier.testTag("ChallengeButton"),
+        )
         Spacer(modifier = Modifier.height(32.dp))
 
         // History square button
         SquareButton(
-            iconRes = R.drawable.historyicon,
-            label = "History",
+            iconId = R.drawable.historyicon,
             onClick = { navigationActions.navigateTo(Screen.CHALLENGE_HISTORY) },
+            text = "History",
             size = 240,
-            modifier = Modifier.testTag("HistoryButton"))
+            modifier = Modifier.testTag("HistoryButton"),
+        )
       }
 }

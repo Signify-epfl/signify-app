@@ -34,7 +34,7 @@ import com.github.se.signify.R
 import com.github.se.signify.model.getIconResId
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.BackButton
-import com.github.se.signify.ui.CameraPlaceholder
+import com.github.se.signify.ui.CameraBox
 import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.TextButton
 import com.github.se.signify.ui.navigation.NavigationActions
@@ -56,7 +56,7 @@ fun ASLRecognition(
 
   MainScreenScaffold(
       navigationActions = navigationActions,
-      testTagColumn = "ASLRecognitionScreen",
+      testTag = "ASLRecognitionScreen",
       helpTitle = "ASL Recognition",
       helpText = helpText) {
         Column(
@@ -68,7 +68,7 @@ fun ASLRecognition(
                           .height(252.dp)
                           .padding(horizontal = 16.dp)
                           .background(MaterialTheme.colorScheme.background)) {
-                    CameraPlaceholder(handLandMarkViewModel)
+                    CameraBox(handLandMarkViewModel)
                   }
 
               Spacer(modifier = Modifier.height(30.dp))
@@ -79,7 +79,7 @@ fun ASLRecognition(
 
               // Button: "More on ASL Alphabet"
               TextButton(
-                  onClickAction = {
+                  onClick = {
                     val intent =
                         Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(buttonUriString) }
                     context.startActivity(intent)

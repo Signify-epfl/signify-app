@@ -59,10 +59,10 @@ fun NewChallengeScreen(
 
   val ongoingChallenges by userViewModel.ongoingChallenges.collectAsState()
 
-  AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = "NewChallengeScreen") {
+  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "NewChallengeScreen") {
     // My Friends button
     TextButton(
-        onClickAction = { navigationActions.navigateTo(Screen.FRIENDS) },
+        onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
         testTag = "MyFriendsButton",
         text = "My Friends",
         backgroundColor = MaterialTheme.colorScheme.primary,
@@ -73,7 +73,7 @@ fun NewChallengeScreen(
 
     // Create a challenge button
     TextButton(
-        onClickAction = { navigationActions.navigateTo(Screen.CREATE_CHALLENGE) },
+        onClick = { navigationActions.navigateTo(Screen.CREATE_CHALLENGE) },
         testTag = "CreateChallengeButton",
         text = "Create a Challenge",
         backgroundColor = MaterialTheme.colorScheme.primary,

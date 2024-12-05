@@ -37,7 +37,7 @@ import com.github.se.signify.ui.navigation.Screen
 fun UnauthenticatedScreen(navigationActions: NavigationActions) {
   MainScreenScaffold(
       navigationActions = navigationActions,
-      testTagColumn = "UnauthenticatedScreen",
+      testTag = "UnauthenticatedScreen",
       helpTitle = "Offline Mode",
       helpText = stringResource(R.string.help_offline_mode)) {
         Column(
@@ -63,7 +63,7 @@ fun UnauthenticatedScreen(navigationActions: NavigationActions) {
 
               // "Log In" button using UtilTextButton
               TextButton(
-                  onClickAction = {
+                  onClick = {
                     navigationActions.navigateTo(Screen.AUTH)
                   }, // Navigate to Screen.AUTH
                   testTag = "logInButton",

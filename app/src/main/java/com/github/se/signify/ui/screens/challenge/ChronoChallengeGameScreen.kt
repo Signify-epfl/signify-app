@@ -28,7 +28,7 @@ import com.github.se.signify.model.challenge.Challenge
 import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.CameraPlaceholder
+import com.github.se.signify.ui.CameraBox
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 import kotlinx.coroutines.delay
@@ -129,22 +129,19 @@ fun ChronoChallengeGameScreen(
   }
 
   // Render the challenge screen
-  AnnexScreenScaffold(
-      navigationActions = navigationActions, testTagColumn = "ChronoChallengeScreen") {
-        if (currentWord.isNotEmpty()) {
-          ChronoChallengeContent(
-              elapsedTime = elapsedTime,
-              currentWord = currentWord,
-              currentLetterIndex = currentLetterIndex,
-              handLandMarkViewModel = handLandMarkViewModel,
-          )
-        } else {
-          // If no words are available, show appropriate message
-          Text(
-              "No word available for this round.",
-              modifier = Modifier.testTag("NoWordAvailableText"))
-        }
-      }
+  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "ChronoChallengeScreen") {
+    if (currentWord.isNotEmpty()) {
+      ChronoChallengeContent(
+          elapsedTime = elapsedTime,
+          currentWord = currentWord,
+          currentLetterIndex = currentLetterIndex,
+          handLandMarkViewModel = handLandMarkViewModel,
+      )
+    } else {
+      // If no words are available, show appropriate message
+      Text("No word available for this round.", modifier = Modifier.testTag("NoWordAvailableText"))
+    }
+  }
 }
 
 @Composable
@@ -163,7 +160,7 @@ fun ChronoChallengeContent(
 
         CurrentLetterDisplay(currentWord, currentLetterIndex)
         SentenceLayerDisplay(currentWord, currentLetterIndex)
-        CameraPlaceholder(handLandMarkViewModel, "CameraPlaceholder")
+        CameraBox(handLandMarkViewModel, "CameraPlaceholder")
       }
 }
 

@@ -63,7 +63,7 @@ fun MyStatsScreen(
 
   AnnexScreenScaffold(
       navigationActions = navigationActions,
-      testTagColumn = "MyStatsScreen",
+      testTag = "MyStatsScreen",
   ) {
 
     // Top information
@@ -71,7 +71,7 @@ fun MyStatsScreen(
         userId = userSession.getUserId()!!,
         userName = userName.value,
         profilePictureUrl = updatedProfilePicture,
-        days = streak.value)
+        streak = streak.value)
     Spacer(modifier = Modifier.height(32.dp))
 
     // Letters learned
@@ -80,25 +80,25 @@ fun MyStatsScreen(
 
     // Number of exercises achieved
     StatisticsList(
+        lineText = "Number of exercises achieved :",
+        statsTexts = listOf("Easy", "Medium", "Hard"),
+        statsNumberList = listOf("${easy.value}", "${medium.value}", "${hard.value}"),
         columnTestTag = "ExercisesColumn",
         rowTestTag = "ExercisesRow",
-        lineText = "Number of exercises achieved :",
-        lineTextTag = "ExercisesText",
-        statsTextList = listOf("Easy", "Medium", "Hard"),
-        statsNumberList = listOf("${easy.value}", "${medium.value}", "${hard.value}"))
+        lineTextTestTag = "ExercisesText")
     Spacer(modifier = Modifier.height(32.dp))
 
     // Number of quests achieved
     StatisticsList(
+        lineText = "Number of quests achieved :",
+        statsTexts = listOf("Daily", "Weekly"),
+        statsNumberList = listOf("${daily.value}", "${weekly.value}"),
         columnTestTag = "QuestsColumn",
         rowTestTag = "QuestsRow",
-        lineText = "Number of quests achieved :",
-        lineTextTag = "QuestsText",
-        statsTextList = listOf("Daily", "Weekly"),
-        statsNumberList = listOf("${daily.value}", "${weekly.value}"))
+        lineTextTestTag = "QuestsText")
     Spacer(modifier = Modifier.height(64.dp))
 
     // Graphs and Stats
-    NotImplementedYet(testTag = "GraphsAndStats", text = "Graphs and Stats")
+    NotImplementedYet(text = "Graphs and Stats", testTag = "GraphsAndStats")
   }
 }

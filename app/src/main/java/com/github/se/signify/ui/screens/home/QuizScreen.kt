@@ -54,7 +54,7 @@ fun QuizScreen(navigationActions: NavigationActions, quizRepository: QuizReposit
 
   val context = LocalContext.current
 
-  AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = "QuizScreen") {
+  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "QuizScreen") {
     Text(
         text = "Quiz Time !",
         fontWeight = FontWeight.Bold,

@@ -7,6 +7,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.DrawableRes
+import androidx.annotation.VisibleForTesting
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
@@ -84,7 +86,7 @@ import com.github.se.signify.ui.navigation.NavigationActions
 /**
  * A reusable composable function that creates an outlined button with customizable text.
  *
- * @param onClickAction A lambda function to execute when the button is clicked.
+ * @param onClick A lambda function to execute when the button is clicked.
  * @param testTag A string used for testing, which serves as the tag for the button.
  * @param text The text to be displayed inside the button.
  * @param backgroundColor The background color of the button.
@@ -92,19 +94,21 @@ import com.github.se.signify.ui.navigation.NavigationActions
  */
 @Composable
 fun TextButton(
-    onClickAction: () -> Unit,
+    onClick: () -> Unit,
     testTag: String,
     text: String,
     backgroundColor: Color,
     textColor: Color,
+    enabled: Boolean = true,
     modifier: Modifier = Modifier,
 ) {
   OutlinedButton(
-      onClick = onClickAction,
+      onClick = onClick,
       border =
           ButtonDefaults.outlinedButtonBorder.copy(
               width = 2.dp, brush = SolidColor(MaterialTheme.colorScheme.background)),
       colors = ButtonDefaults.buttonColors(backgroundColor),
+      enabled = enabled,
       modifier = modifier.fillMaxWidth().height(40.dp).testTag(testTag),
   ) {
     Text(
@@ -120,17 +124,18 @@ fun TextButton(
  * A reusable composable function that creates a square button with customizable text above the
  * icon.
  *
- * @param iconRes The icon for the button.
- * @param label The text for the button.
+ * @param iconId The icon for the button.
+ * @param text The text for the button.
  * @param onClick A lambda function to execute when the button is clicked.
  * @param size The size of the button. It will be used to scale the other elements of the button.
  * @param modifier Modifier to be applied to the button. This should be avoided.
  */
 @Composable
 fun SquareButton(
-    iconRes: Int,
-    label: String,
+    @DrawableRes iconId: Int,
     onClick: () -> Unit,
+    text: String,
+    testTag: String = "",
     size: Int,
     modifier: Modifier = Modifier,
 ) {
@@ -144,15 +149,15 @@ fun SquareButton(
               .padding(16.dp)
               .clickable { onClick() }) {
         Text(
-            text = label,
+            text = text,
             fontSize = (size * 0.15).sp,
             color = MaterialTheme.colorScheme.onPrimary,
         )
         Spacer(modifier = Modifier.height(8.dp))
         Box(contentAlignment = Alignment.Center) {
           Icon(
-              painter = painterResource(id = iconRes),
-              contentDescription = label,
+              painter = painterResource(id = iconId),
+              contentDescription = text,
               tint = MaterialTheme.colorScheme.onPrimary,
               modifier = Modifier.size((size * 0.7).dp))
         }
@@ -172,9 +177,9 @@ fun SquareButton(
 @Composable
 fun BasicButton(
     onClick: () -> Unit,
+    icon: ImageVector,
     buttonTestTag: String,
     iconTestTag: String,
-    icon: ImageVector,
     contentDescription: String,
     modifier: Modifier = Modifier,
 ) {
@@ -196,6 +201,7 @@ fun BasicButton(
 
 /** A reusable composable function that creates the top bar. */
 @Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun TopBar() {
   Box(
       modifier =
@@ -211,6 +217,7 @@ fun TopBar() {
  * @param navigationActions The navigationActions of the bottom navigation menu.
  */
 @Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun BottomBar(navigationActions: NavigationActions) {
   BottomNavigationMenu(
       onTabSelect = { route -> navigationActions.navigateTo(route) },
@@ -224,6 +231,7 @@ fun BottomBar(navigationActions: NavigationActions) {
  * @param onClick A lambda function to execute when the button is clicked.
  */
 @Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun BackButton(onClick: () -> Unit) {
   Row(
       modifier = Modifier.fillMaxWidth().padding(16.dp),
@@ -246,6 +254,7 @@ fun BackButton(onClick: () -> Unit) {
  * @param content A lambda function for the content of the column.
  */
 @Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun ScreenColumn(
     padding: PaddingValues,
     testTag: String,
@@ -268,7 +277,7 @@ fun ScreenColumn(
  * A reusable composable function that creates a basic scaffold for all the main screens.
  *
  * @param navigationActions The navigationActions of the bottom navigation menu.
- * @param testTagColumn The test tag of the column (test tag of the screen).
+ * @param testTag The test tag of the column (test tag of the screen).
  * @param helpTitle The title of the info popup.
  * @param helpText The text of the info popup.
  * @param floatingActionButton A lambda function for the floating action button.
@@ -277,7 +286,7 @@ fun ScreenColumn(
 @Composable
 fun MainScreenScaffold(
     navigationActions: NavigationActions,
-    testTagColumn: String,
+    testTag: String,
     helpTitle: String,
     helpText: String,
     floatingActionButton: @Composable () -> Unit = {},
@@ -291,13 +300,13 @@ fun MainScreenScaffold(
       content = { padding ->
         ScreenColumn(
             padding,
-            testTagColumn,
+            testTag,
         ) {
           BasicButton(
               { isHelpBoxVisible = !isHelpBoxVisible },
+              Icons.Outlined.Info,
               "InfoButton",
               "InfoIcon",
-              Icons.Outlined.Info,
               "Help")
           content()
           // Show popup when the info button is clicked
@@ -315,19 +324,19 @@ fun MainScreenScaffold(
  * A reusable composable function that creates a basic scaffold for all the annexe screens.
  *
  * @param navigationActions The navigationActions of the bottom navigation menu.
- * @param testTagColumn The test tag of the column (test tag of the screen).
+ * @param testTag The test tag of the column (test tag of the screen).
  * @param content A lambda function for the content of the column.
  */
 @Composable
 fun AnnexScreenScaffold(
     navigationActions: NavigationActions,
-    testTagColumn: String,
+    testTag: String,
     content: @Composable ColumnScope.() -> Unit
 ) {
   Scaffold(
       topBar = { TopBar() },
       content = { padding ->
-        ScreenColumn(padding, testTagColumn) {
+        ScreenColumn(padding, testTag) {
           BackButton { navigationActions.goBack() }
           content()
         }
@@ -342,6 +351,7 @@ fun AnnexScreenScaffold(
  * @param helpText The text of the info popup.
  */
 @Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
   Dialog(onDismissRequest = { onDismiss() }) {
     Surface(
@@ -403,21 +413,21 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
  * @param columnTestTag The principal tag for the column.
  * @param rowTestTag The principal tag for the row of stats.
  * @param lineText The text description for the statistic to show.
- * @param lineTextTag The text tag of the lineText.
- * @param statsTextList The list of type of stats to display.
+ * @param lineTextTestTag The text tag of the lineText.
+ * @param statsTexts The list of type of stats to display.
  * @param statsNumberList The list of number for stats to display.
  */
 @Composable
 fun StatisticsList(
+    lineText: String,
+    statsTexts: List<String>,
+    statsNumberList: List<String>,
     columnTestTag: String,
     rowTestTag: String,
-    lineText: String,
-    lineTextTag: String,
-    statsTextList: List<String>,
-    statsNumberList: List<String>
+    lineTextTestTag: String
 ) {
   // Ensure that the lists have the same size
-  require(statsTextList.size == statsNumberList.size) { "The lists must have the same size." }
+  require(statsTexts.size == statsNumberList.size) { "The lists must have the same size." }
   // Construction of the statistic column
   Column(
       modifier = Modifier.fillMaxWidth().testTag(columnTestTag),
@@ -427,21 +437,21 @@ fun StatisticsList(
             text = lineText,
             fontSize = 16.sp,
             color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.testTag(lineTextTag))
+            modifier = Modifier.testTag(lineTextTestTag))
         Spacer(modifier = Modifier.height(12.dp))
         Row(
             modifier = Modifier.fillMaxWidth().testTag(rowTestTag),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically) {
-              for (index in statsTextList.indices) {
+              for (index in statsTexts.indices) {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically) {
                       Text(
-                          text = statsTextList[index],
+                          text = statsTexts[index],
                           fontSize = 12.sp,
                           color = MaterialTheme.colorScheme.onBackground,
-                          modifier = Modifier.testTag(statsTextList[index]))
+                          modifier = Modifier.testTag(statsTexts[index]))
                       Spacer(modifier = Modifier.width(12.dp))
                       Row(
                           modifier =
@@ -473,16 +483,17 @@ fun StatisticsList(
  *
  * Important to note that it is helper function to AllLetterLearned()
  *
- * @param lettersLearned The list of character already learned.
+ * @param learnedLetters The list of character already learned.
  */
 @Composable
-fun LetterList(lettersLearned: List<Char>) {
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun LetterList(learnedLetters: List<Char>) {
   val allLetters = ('A'..'Z').toList() // All capital letters from A to Z
   val scrollState = rememberScrollState()
 
   Row(modifier = Modifier.fillMaxWidth().horizontalScroll(scrollState).testTag("LettersList")) {
     allLetters.forEach { letter ->
-      val isLearned = letter in lettersLearned
+      val isLearned = letter in learnedLetters
       Text(
           text = letter.toString(),
           fontSize = 24.sp,
@@ -577,10 +588,10 @@ fun ProfilePicture(profilePictureUrl: String?) {
  * @param userId A string for the user id.
  * @param userName A string for the personalized user name.
  * @param profilePictureUrl A string for the profile picture URL.
- * @param days An int value for the number of days (streak).
+ * @param streak The user's streak in days.
  */
 @Composable
-fun AccountInformation(userId: String, userName: String, profilePictureUrl: String?, days: Long) {
+fun AccountInformation(userId: String, userName: String, profilePictureUrl: String?, streak: Long) {
   Row(
       modifier = Modifier.fillMaxWidth().testTag("UserInfo"),
       horizontalArrangement = Arrangement.SpaceBetween,
@@ -605,7 +616,7 @@ fun AccountInformation(userId: String, userName: String, profilePictureUrl: Stri
         ProfilePicture(profilePictureUrl)
 
         // Number of days
-        StreakCounter(days)
+        StreakCounter(streak)
       }
 }
 
@@ -617,7 +628,7 @@ fun AccountInformation(userId: String, userName: String, profilePictureUrl: Stri
  * @param text The text to be displayed inside the box.
  */
 @Composable
-fun NotImplementedYet(testTag: String, text: String) {
+fun NotImplementedYet(text: String, testTag: String) {
   Box(
       modifier =
           Modifier.fillMaxWidth()
@@ -642,7 +653,7 @@ fun NotImplementedYet(testTag: String, text: String) {
  * @param handLandMarkViewModel The ViewModel responsible for managing hand landmark detection.
  */
 @Composable
-fun CameraPlaceholder(handLandMarkViewModel: HandLandMarkViewModel, testTag: String = "") {
+fun CameraBox(handLandMarkViewModel: HandLandMarkViewModel, testTag: String = "") {
   val context = LocalContext.current
   val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
   val previewView = remember { PreviewView(context) }

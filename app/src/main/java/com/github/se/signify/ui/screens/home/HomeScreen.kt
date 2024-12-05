@@ -80,7 +80,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
 
   MainScreenScaffold(
       navigationActions = navigationActions,
-      testTagColumn = "HomeScreen",
+      testTag = "HomeScreen",
       helpTitle = "Home",
       helpText = stringResource(R.string.help_home_screen),
       floatingActionButton = {
@@ -102,21 +102,21 @@ fun HomeScreen(navigationActions: NavigationActions) {
                     horizontalArrangement = Arrangement.SpaceBetween) {
                       BasicButton(
                           onClick = { navigationActions.navigateTo(Screen.FEEDBACK) },
+                          icon = Icons.Outlined.Email,
                           buttonTestTag = "FeedbackButton",
                           iconTestTag = "FeedbackIcon",
-                          icon = Icons.Outlined.Email,
                           contentDescription = "Feedback")
                       BasicButton(
                           onClick = { navigationActions.navigateTo(Screen.QUIZ) },
+                          icon = Icons.Outlined.Star,
                           buttonTestTag = "QuizButton",
                           iconTestTag = "QuizIcon",
-                          icon = Icons.Outlined.Star,
                           contentDescription = "Quizzes")
                       BasicButton(
                           onClick = { navigationActions.navigateTo(Screen.QUEST) },
+                          icon = Icons.Outlined.DateRange,
                           buttonTestTag = "QuestsButton",
                           iconTestTag = "QuestIcon",
-                          icon = Icons.Outlined.DateRange,
                           contentDescription = "Quests")
                     }
               }
@@ -165,7 +165,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
 @Composable
 fun CameraFeedbackButton(onClick: () -> Unit = {}) {
   TextButton(
-      onClickAction = onClick,
+      onClick = onClick,
       testTag = "CameraFeedbackButton",
       text = "Try hand signs here !",
       backgroundColor = MaterialTheme.colorScheme.primary,

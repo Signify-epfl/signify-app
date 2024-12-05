@@ -21,7 +21,7 @@ import com.github.se.signify.ui.AccountInformation
 import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.BackButton
 import com.github.se.signify.ui.BasicButton
-import com.github.se.signify.ui.CameraPlaceholder
+import com.github.se.signify.ui.CameraBox
 import com.github.se.signify.ui.InfoPopup
 import com.github.se.signify.ui.LearnedLetterList
 import com.github.se.signify.ui.LetterList
@@ -57,7 +57,7 @@ class UtilsTest {
     // Set the content for the test
     composeTestRule.setContent {
       TextButton(
-          onClickAction = {},
+          onClick = {},
           testTag = textTag,
           text = buttonText,
           backgroundColor = Color.Blue,
@@ -81,7 +81,7 @@ class UtilsTest {
     // Set the content for the test with a click listener that increments the counter
     composeTestRule.setContent {
       TextButton(
-          onClickAction = { clickCounter++ },
+          onClick = { clickCounter++ },
           testTag = textTag,
           text = buttonText,
           backgroundColor = Color.Blue,
@@ -101,11 +101,12 @@ class UtilsTest {
     val label = "Test Button"
     composeTestRule.setContent {
       SquareButton(
-          iconRes = R.drawable.battleicon,
-          label = label,
+          iconId = R.drawable.battleicon,
           onClick = {},
+          text = label,
           size = 100,
-          modifier = Modifier.testTag(label))
+          modifier = Modifier.testTag(label),
+      )
     }
 
     // Assert that the button is displayed
@@ -121,11 +122,12 @@ class UtilsTest {
     val label = "Test Button"
     composeTestRule.setContent {
       SquareButton(
-          iconRes = R.drawable.battleicon,
-          label = label,
+          iconId = R.drawable.battleicon,
           onClick = { clicked = true },
+          text = label,
           size = 100,
-          modifier = Modifier.testTag(label))
+          modifier = Modifier.testTag(label),
+      )
     }
 
     // Perform click action on the button
@@ -141,9 +143,9 @@ class UtilsTest {
     composeTestRule.setContent {
       BasicButton(
           onClick = {},
+          icon = Icons.Outlined.Info,
           buttonTestTag = "UtilButton",
           iconTestTag = "UtilIcon",
-          icon = Icons.Outlined.Info,
           contentDescription = "Info")
     }
 
@@ -160,9 +162,9 @@ class UtilsTest {
     composeTestRule.setContent {
       BasicButton(
           onClick = { clicked = true },
+          icon = Icons.Outlined.Info,
           buttonTestTag = "UtilButton",
           iconTestTag = "UtilIcon",
-          icon = Icons.Outlined.Info,
           contentDescription = "Info")
     }
 
@@ -226,7 +228,7 @@ class UtilsTest {
     composeTestRule.setContent {
       MainScreenScaffold(
           navigationActions = navigationActions,
-          testTagColumn = "ScaffoldMainScreen",
+          testTag = "ScaffoldMainScreen",
           helpTitle = "Help",
           helpText = "This is the help text") {
             Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
@@ -244,10 +246,9 @@ class UtilsTest {
   fun annexScreenScaffoldDisplaysCorrectInformation() {
     navigationActions = mock(NavigationActions::class.java)
     composeTestRule.setContent {
-      AnnexScreenScaffold(
-          navigationActions = navigationActions, testTagColumn = "ScaffoldAnnexeScreen") {
-            Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
-          }
+      AnnexScreenScaffold(navigationActions = navigationActions, testTag = "ScaffoldAnnexeScreen") {
+        Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
+      }
     }
 
     composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
@@ -297,12 +298,12 @@ class UtilsTest {
     val statsNumberList = listOf("1", "2")
     composeTestRule.setContent {
       StatisticsList(
+          lineText = lineText,
+          statsTexts = statsTextList,
+          statsNumberList = statsNumberList,
           columnTestTag = columnTestTag,
           rowTestTag = rowTestTag,
-          lineText = lineText,
-          lineTextTag = lineTextTag,
-          statsTextList = statsTextList,
-          statsNumberList = statsNumberList)
+          lineTextTestTag = lineTextTag)
     }
 
     composeTestRule.onNodeWithTag(columnTestTag).assertIsDisplayed()
@@ -379,7 +380,7 @@ class UtilsTest {
   fun notImplementedYetIsDisplayed() {
     val testTag = "Tag"
     val text = "Nothing for now"
-    composeTestRule.setContent { NotImplementedYet(testTag, text) }
+    composeTestRule.setContent { NotImplementedYet(text, testTag) }
 
     composeTestRule.onNodeWithTag(testTag).onChild().assertIsDisplayed()
     composeTestRule.onNodeWithTag(testTag).onChild().assertTextEquals(text)
@@ -391,7 +392,7 @@ class UtilsTest {
     val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
     val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
 
-    composeTestRule.setContent { CameraPlaceholder(handLandMarkViewModel) }
+    composeTestRule.setContent { CameraBox(handLandMarkViewModel) }
     composeTestRule.onNodeWithTag("cameraPreview").assertIsDisplayed()
   }
 }

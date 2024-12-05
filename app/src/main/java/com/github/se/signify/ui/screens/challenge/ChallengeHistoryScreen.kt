@@ -32,23 +32,23 @@ fun ChallengeHistoryScreen(
 
   AnnexScreenScaffold(
       navigationActions = navigationActions,
-      testTagColumn = "ChallengeHistoryScreen",
+      testTag = "ChallengeHistoryScreen",
   ) {
     // Challenge's statistics
     StatisticsList(
-        columnTestTag = "ChallengesColumn",
-        rowTestTag = "ChallengesRow",
         lineText = "Number of challenges :",
-        lineTextTag = "ChallengesText",
-        statsTextList = listOf("Completed", "Created", "Won"),
+        statsTexts = listOf("Completed", "Created", "Won"),
         statsNumberList =
             listOf(
                 "${challengesCompleted.value}",
                 "${challengesCreated.value}",
-                "${challengesWon.value}"))
+                "${challengesWon.value}"),
+        columnTestTag = "ChallengesColumn",
+        rowTestTag = "ChallengesRow",
+        lineTextTestTag = "ChallengesText")
     Spacer(modifier = Modifier.height(32.dp))
 
     // Graphs and Stats
-    NotImplementedYet(testTag = "GraphsAndStats", text = "Graphs and Stats")
+    NotImplementedYet(text = "Graphs and Stats", testTag = "GraphsAndStats")
   }
 }

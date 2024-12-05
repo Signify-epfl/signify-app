@@ -62,7 +62,7 @@ fun FeedbackScreen(
   var selectedRating by remember { mutableIntStateOf(0) }
   var isLoading by remember { mutableStateOf(false) }
 
-  AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = "FeedbackScreen") {
+  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "FeedbackScreen") {
     FeedbackDropdown(
         selectedFeedbackType = selectedFeedbackType,
         onFeedbackTypeSelected = { selectedFeedbackType = it })
@@ -86,7 +86,7 @@ fun FeedbackScreen(
     RatingSection(selectedRating = selectedRating, onRatingSelected = { selectedRating = it })
 
     TextButton(
-        onClickAction = {
+        onClick = {
           if (feedbackTitle.text.isNotEmpty() && feedbackDescription.text.isNotEmpty()) {
             isLoading = true
             feedbackViewModel.saveFeedback(

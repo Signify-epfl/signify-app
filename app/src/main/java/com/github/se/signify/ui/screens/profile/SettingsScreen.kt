@@ -84,7 +84,7 @@ fun SettingsScreen(
         }
       }
 
-  AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = "SettingsScreen") {
+  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "SettingsScreen") {
     Row(
         modifier = Modifier.fillMaxWidth().padding(16.dp).clickable { onThemeChange(!isDarkTheme) },
         verticalAlignment = Alignment.CenterVertically,
@@ -175,7 +175,7 @@ fun SettingsScreen(
     Spacer(modifier = Modifier.height(32.dp))
 
     // Other Settings Section
-    NotImplementedYet(testTag = "OtherSettings", text = "Other settings:\nLanguage,\nTheme,\n...")
+    NotImplementedYet(text = "Other settings:\nLanguage,\nTheme,\n...", testTag = "OtherSettings")
     Spacer(modifier = Modifier.height(32.dp))
 
     // Cancel and Save Buttons

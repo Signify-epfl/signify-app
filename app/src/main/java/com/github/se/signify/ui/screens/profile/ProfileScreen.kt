@@ -47,7 +47,7 @@ fun ProfileScreen(
 
   MainScreenScaffold(
       navigationActions = navigationActions,
-      testTagColumn = "ProfileScreen",
+      testTag = "ProfileScreen",
       helpTitle = "Profile",
       helpText = stringResource(R.string.help_profile_screen),
   ) {
@@ -68,9 +68,9 @@ fun ProfileScreen(
     // Settings button
     BasicButton(
         onClick = { navigationActions.navigateTo(Screen.SETTINGS) },
+        icon = Icons.Outlined.Settings,
         buttonTestTag = "SettingsButton",
         iconTestTag = "SettingsIcon",
-        icon = Icons.Outlined.Settings,
         contentDescription = "Settings")
     Spacer(modifier = Modifier.height(32.dp))
 
@@ -79,7 +79,7 @@ fun ProfileScreen(
         userId = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0) ?: "unknown",
         userName = userName.value,
         profilePictureUrl = updatedProfilePicture,
-        days = streak.value)
+        streak = streak.value)
 
     Spacer(modifier = Modifier.height(32.dp))
 
@@ -89,19 +89,21 @@ fun ProfileScreen(
 
     // Friends List button
     SquareButton(
-        iconRes = R.drawable.friendsicon,
-        label = "My Friends",
+        iconId = R.drawable.friendsicon,
         onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
+        text = "My Friends",
         size = 200,
-        modifier = Modifier.testTag("MyFriendsButton"))
+        modifier = Modifier.testTag("MyFriendsButton"),
+    )
     Spacer(modifier = Modifier.height(32.dp))
 
     // Statistics Button
     SquareButton(
-        iconRes = R.drawable.statisticsicon,
-        label = "My Stats",
+        iconId = R.drawable.statisticsicon,
         onClick = { navigationActions.navigateTo(Screen.STATS) },
+        text = "My Stats",
         size = 200,
-        modifier = Modifier.testTag("MyStatsButton"))
+        modifier = Modifier.testTag("MyStatsButton"),
+    )
   }
 }

@@ -1,7 +1,6 @@
 package com.github.se.signify.ui.screens.challenge
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -48,7 +47,7 @@ fun CreateAChallengeScreen(
 
   AnnexScreenScaffold(
       navigationActions = navigationActions,
-      testTagColumn = "CreateAChallengeContent",
+      testTag = "CreateAChallengeContent",
   ) {
     // Title
     Text(
@@ -74,14 +73,15 @@ fun CreateAChallengeScreen(
               val friendId = friends[index]
               FriendCard(friendId = friendId) {
                 TextButton(
-                    onClickAction = {
+                    onClick = {
                       selectedFriendId = friendId
                       showDialog = true
                     },
                     testTag = "ChallengeButton_$friendId",
                     text = "Challenge",
                     backgroundColor = MaterialTheme.colorScheme.primary,
-                    textColor = MaterialTheme.colorScheme.onPrimary)
+                    textColor = MaterialTheme.colorScheme.onPrimary,
+                )
               }
             }
           }
@@ -143,7 +143,7 @@ fun ChallengeModeAlertDialog(
       onDismissRequest = onDismiss,
       confirmButton = {
         TextButton(
-            onClickAction = {
+            onClick = {
               if (selectedMode.value != null) {
                 // Create the challenge in the challenges collection
                 challengeViewModel.sendChallengeRequest(friendId, selectedMode.value!!, challengeId)
@@ -159,15 +159,17 @@ fun ChallengeModeAlertDialog(
             text = "Send Challenge",
             backgroundColor = MaterialTheme.colorScheme.primary,
             textColor = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier.clickable(selectedMode.value != null) {})
+            enabled = selectedMode.value != null,
+        )
       },
       dismissButton = {
         TextButton(
-            onClickAction = onDismiss,
+            onClick = onDismiss,
             testTag = "CancelButton",
             text = "Cancel",
             backgroundColor = MaterialTheme.colorScheme.surface,
-            textColor = MaterialTheme.colorScheme.onSurface)
+            textColor = MaterialTheme.colorScheme.onSurface,
+        )
       },
       title = {
         Text(text = "Pick a Mode", modifier = Modifier.fillMaxWidth().testTag("DialogTitle"))
@@ -197,7 +199,7 @@ fun ModeButton(
     selectedMode: MutableState<ChallengeMode?>,
 ) {
   TextButton(
-      onClickAction = { selectedMode.value = mode },
+      onClick = { selectedMode.value = mode },
       testTag = "${mode.modeName}ModeButton",
       text = mode.modeName,
       backgroundColor =
@@ -205,5 +207,6 @@ fun ModeButton(
           else MaterialTheme.colorScheme.surface,
       textColor =
           if (selectedMode.value == mode) MaterialTheme.colorScheme.onPrimary
-          else MaterialTheme.colorScheme.onSurface)
+          else MaterialTheme.colorScheme.onSurface,
+  )
 }
