@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -33,9 +32,8 @@ import androidx.compose.ui.unit.dp
 import com.github.se.signify.R
 import com.github.se.signify.model.getIconResId
 import com.github.se.signify.model.hand.HandLandMarkViewModel
-import com.github.se.signify.ui.BackButton
+import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.CameraBox
-import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.TextButton
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
@@ -44,53 +42,44 @@ import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
  * Composable that handles ASL recognition. It checks for camera permissions, launches the camera
  * preview, and displays recognized gestures and images.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ASLRecognition(
     handLandMarkViewModel: HandLandMarkViewModel,
     navigationActions: NavigationActions
 ) {
   val buttonUriString = stringResource(id = R.string.button_uri_string)
-  val helpText = stringResource(id = R.string.help_asl_recognition)
   val context = LocalContext.current
 
-  MainScreenScaffold(
-      navigationActions = navigationActions,
-      testTag = "ASLRecognitionScreen",
-      helpTitle = "ASL Recognition",
-      helpText = helpText) {
-        Column(
-            modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-              BackButton { navigationActions.goBack() }
-              Box(
-                  modifier =
-                      Modifier.fillMaxWidth()
-                          .height(252.dp)
-                          .padding(horizontal = 16.dp)
-                          .background(MaterialTheme.colorScheme.background)) {
-                    CameraBox(handLandMarkViewModel)
-                  }
+  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "ASLRecognitionScreen") {
+    Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+      Box(
+          modifier =
+              Modifier.fillMaxWidth()
+                  .height(252.dp)
+                  .padding(horizontal = 16.dp)
+                  .background(MaterialTheme.colorScheme.background)) {
+            CameraBox(handLandMarkViewModel)
+          }
 
-              Spacer(modifier = Modifier.height(30.dp))
+      Spacer(modifier = Modifier.height(30.dp))
 
-              GestureOverlayView(handLandMarkViewModel)
+      GestureOverlayView(handLandMarkViewModel)
 
-              Spacer(modifier = Modifier.height(20.dp))
+      Spacer(modifier = Modifier.height(20.dp))
 
-              // Button: "More on ASL Alphabet"
-              TextButton(
-                  onClick = {
-                    val intent =
-                        Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(buttonUriString) }
-                    context.startActivity(intent)
-                  },
-                  testTag = "practiceButton",
-                  text = "More on ASL Alphabet",
-                  backgroundColor = MaterialTheme.colorScheme.primary,
-                  textColor = MaterialTheme.colorScheme.onPrimary,
-                  modifier = Modifier)
-            }
-      }
+      // Button: "More on ASL Alphabet"
+      TextButton(
+          onClick = {
+            val intent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(buttonUriString) }
+            context.startActivity(intent)
+          },
+          testTag = "practiceButton",
+          text = "More on ASL Alphabet",
+          backgroundColor = MaterialTheme.colorScheme.primary,
+          textColor = MaterialTheme.colorScheme.onPrimary,
+          modifier = Modifier)
+    }
+  }
 }
 
 /**
