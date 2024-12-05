@@ -56,8 +56,8 @@ open class NavigationActions(
     navController.popBackStack()
   }
 
-  open fun currentRoute(): String {
-    return navController.currentDestination?.route ?: ""
+  open fun currentRoute(): String? {
+    return navController.currentDestination?.route
   }
 
   private fun onUnauthenticated() {

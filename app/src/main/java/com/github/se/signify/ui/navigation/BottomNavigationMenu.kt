@@ -23,7 +23,7 @@ import com.github.se.signify.model.navigation.TopLevelDestination
 fun BottomNavigationMenu(
     onTabSelect: (TopLevelDestination) -> Unit,
     tabList: List<TopLevelDestination>,
-    selectedItem: String = Screen.HOME.route, // Provide a default value
+    selectedItem: String? = Screen.HOME.route, // Provide a default value
 ) {
   Box(
       modifier =
