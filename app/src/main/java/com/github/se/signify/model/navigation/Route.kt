@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.navigation
+package com.github.se.signify.model.navigation
 
 object Route {
   const val WELCOME = "Welcome"

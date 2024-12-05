@@ -9,8 +9,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.se.signify.model.auth.MockUserSession
 import com.github.se.signify.model.feedback.FeedbackRepository
-import com.github.se.signify.model.feedback.FeedbackViewModel
-import com.github.se.signify.ui.navigation.NavigationActions
+import com.github.se.signify.model.navigation.NavigationActions
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,20 +23,15 @@ class FeedbackScreenTest {
   private val userSession = MockUserSession()
   private val feedbackRepository = Mockito.mock(FeedbackRepository::class.java)
   private val mockNavigationActions = Mockito.mock(NavigationActions::class.java)
-  private val mockFeedbackViewModel = Mockito.mock(FeedbackViewModel::class.java)
 
   @Test
   fun feedbackScreen_uiElementsAreDisplayed() {
     composeTestRule.setContent {
-      FeedbackScreen(
-          navigationActions = mockNavigationActions,
-          userSession,
-          feedbackRepository,
-          feedbackViewModel = mockFeedbackViewModel)
+      FeedbackScreen(navigationActions = mockNavigationActions, userSession, feedbackRepository)
     }
 
     // Check that top blue bar and back button are displayed
-    composeTestRule.onNodeWithTag("TopBlueBar").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
     composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
 
     // Check that feedback type dropdown is displayed
@@ -60,11 +54,7 @@ class FeedbackScreenTest {
   @Test
   fun feedbackScreen_interactWithDropdownMenu() {
     composeTestRule.setContent {
-      FeedbackScreen(
-          navigationActions = mockNavigationActions,
-          userSession,
-          feedbackRepository,
-          feedbackViewModel = mockFeedbackViewModel)
+      FeedbackScreen(navigationActions = mockNavigationActions, userSession, feedbackRepository)
     }
 
     // Open the dropdown menu
@@ -80,11 +70,7 @@ class FeedbackScreenTest {
   @Test
   fun feedbackScreen_fillAndSendFeedback() {
     composeTestRule.setContent {
-      FeedbackScreen(
-          navigationActions = mockNavigationActions,
-          userSession,
-          feedbackRepository,
-          feedbackViewModel = mockFeedbackViewModel)
+      FeedbackScreen(navigationActions = mockNavigationActions, userSession, feedbackRepository)
     }
 
     // Fill in feedback title
@@ -102,11 +88,7 @@ class FeedbackScreenTest {
   @Test
   fun feedbackScreen_selectRating() {
     composeTestRule.setContent {
-      FeedbackScreen(
-          navigationActions = mockNavigationActions,
-          userSession,
-          feedbackRepository,
-          feedbackViewModel = mockFeedbackViewModel)
+      FeedbackScreen(navigationActions = mockNavigationActions, userSession, feedbackRepository)
     }
 
     // Click on the 5th star for rating

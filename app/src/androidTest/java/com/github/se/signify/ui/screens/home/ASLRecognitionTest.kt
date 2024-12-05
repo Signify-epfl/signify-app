@@ -14,8 +14,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.model.di.AppDependencyProvider
 import com.github.se.signify.model.hand.HandLandMarkViewModel
-import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.navigation.Screen
+import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.navigation.Screen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

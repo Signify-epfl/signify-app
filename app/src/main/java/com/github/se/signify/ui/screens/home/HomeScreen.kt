@@ -53,6 +53,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.model.exercise.ExerciseLevel
+import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.UtilButton
 import com.github.se.signify.ui.UtilTextButton
@@ -60,8 +62,6 @@ import com.github.se.signify.ui.getIconResId
 import com.github.se.signify.ui.getImageResId
 import com.github.se.signify.ui.getLetterIconResId
 import com.github.se.signify.ui.getTipResId
-import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.navigation.Screen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -297,7 +297,7 @@ fun ExerciseList(exercises: List<ExerciseLevel>, navigationActions: NavigationAc
                             .background(MaterialTheme.colorScheme.primary)
                             .border(
                                 1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
-                            .testTag("${exercises[page].levelName}ExerciseBox")) {
+                            .testTag("${exercises[page].id}ExerciseBox")) {
                       Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                         ExerciseButton(
                             exercise = exercises[page], navigationActions = navigationActions)
@@ -337,19 +337,17 @@ fun ExerciseList(exercises: List<ExerciseLevel>, navigationActions: NavigationAc
 @Composable
 fun ExerciseButton(exercise: ExerciseLevel, navigationActions: NavigationActions) {
   Button(
-      onClick = { navigationActions.navigateTo(exercise.levelScreen) },
+      onClick = { navigationActions.navigateTo(exercise.screen) },
       modifier =
           Modifier.aspectRatio(2f)
               .fillMaxWidth()
               .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
-              .testTag("${exercise.levelName}ExerciseButton"),
+              .testTag("${exercise.id}ExerciseButton"),
       shape = RoundedCornerShape(8.dp),
       colors =
           ButtonDefaults.buttonColors(
               MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.onPrimary)) {
-        Text(
-            exercise.levelName,
-            modifier = Modifier.testTag("${exercise.levelName}ExerciseButtonText"))
+        Text(exercise.id, modifier = Modifier.testTag("${exercise.id}ExerciseButtonText"))
       }
 }
 /**

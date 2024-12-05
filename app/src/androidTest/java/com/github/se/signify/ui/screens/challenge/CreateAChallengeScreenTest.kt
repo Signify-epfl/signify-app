@@ -5,9 +5,10 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import com.github.se.signify.model.auth.MockUserSession
 import com.github.se.signify.model.auth.UserSession
+import com.github.se.signify.model.challenge.ChallengeMode
 import com.github.se.signify.model.challenge.MockChallengeRepository
+import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.user.UserRepository
-import com.github.se.signify.ui.navigation.NavigationActions
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -117,6 +118,77 @@ class CreateAChallengeScreenTest {
     // Click "Cancel" button
     composeTestRule.onNodeWithTag("CancelButton").performClick()
     // Verify that the dialog is dismissed
+    composeTestRule.onNodeWithTag("DialogTitle").assertDoesNotExist()
+  }
+
+  @Test
+  fun testDialogAppearsForCorrectFriend() {
+    val friend = friends[1]
+    composeTestRule.onNodeWithTag("ChallengeButton_$friend").performClick()
+    composeTestRule.onNodeWithTag("DialogTitle").assertIsDisplayed()
+    composeTestRule
+        .onNodeWithTag("FriendName_$friend")
+        .assertIsDisplayed() // Verify correct friend in dialog
+  }
+
+  @Test
+  fun testDifferentChallengeModesSelectable() {
+    val friend = friends[0]
+    composeTestRule.onNodeWithTag("ChallengeButton_$friend").performClick()
+    composeTestRule.onNodeWithTag("DialogTitle").assertIsDisplayed()
+
+    ChallengeMode.entries.forEach { mode ->
+      composeTestRule.onNodeWithTag("${mode.modeName}ModeButton").performClick()
+      composeTestRule.onNodeWithTag("SendChallengeButton").assertIsEnabled()
+    }
+  }
+
+  @Test
+  fun testConfirmAndCancelDialogActions() {
+    val friend = friends[0]
+    composeTestRule.onNodeWithTag("ChallengeButton_$friend").performClick()
+    composeTestRule.onNodeWithTag("DialogTitle").assertIsDisplayed()
+
+    // Test confirm button is disabled by default
+    composeTestRule.onNodeWithTag("SendChallengeButton").assertIsNotEnabled()
+
+    // Select "Sprint" mode
+    composeTestRule.onNodeWithTag("SprintModeButton").performClick()
+    composeTestRule.onNodeWithTag("SendChallengeButton").assertIsEnabled()
+
+    // Test cancel button
+    composeTestRule.onNodeWithTag("CancelButton").performClick()
+    composeTestRule.onNodeWithTag("DialogTitle").assertDoesNotExist()
+
+    // Test that dialog no longer appears after cancel
+    composeTestRule.onNodeWithTag("ChallengeButton_$friend").assertIsDisplayed()
+  }
+
+  @Test
+  fun testFriendsListUpdatesCorrectly() {
+    // Initially, verify all friends are displayed
+    friends.forEach { friend ->
+      composeTestRule.onNodeWithTag("FriendCard_$friend").assertIsDisplayed()
+    }
+
+    // Update friends list to contain only one friend
+    friends.clear()
+    friends.add("David")
+    composeTestRule.waitForIdle()
+
+    // Verify the new friend list is displayed
+    composeTestRule.onNodeWithTag("FriendCard_David").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("FriendCard_Alice").assertDoesNotExist()
+  }
+
+  @Test
+  fun testDismissDialogWithoutSelectionDoesNotCrash() {
+    val friend = friends[0]
+    composeTestRule.onNodeWithTag("ChallengeButton_$friend").performClick()
+    composeTestRule.onNodeWithTag("DialogTitle").assertIsDisplayed()
+
+    // Dismiss the dialog without selecting anything
+    composeTestRule.onNodeWithTag("CancelButton").performClick()
     composeTestRule.onNodeWithTag("DialogTitle").assertDoesNotExist()
   }
 }
