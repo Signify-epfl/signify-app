@@ -21,7 +21,6 @@ import com.github.se.signify.ui.AccountInformation
 import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.BackButton
 import com.github.se.signify.ui.CameraPlaceholder
-import com.github.se.signify.ui.HorizontalLetterList
 import com.github.se.signify.ui.InfoPopup
 import com.github.se.signify.ui.LearnedLetterList
 import com.github.se.signify.ui.MainScreenScaffold
@@ -29,12 +28,12 @@ import com.github.se.signify.ui.NotImplementedYet
 import com.github.se.signify.ui.ProfilePicture
 import com.github.se.signify.ui.ScreenColumn
 import com.github.se.signify.ui.SquareButton
-import com.github.se.signify.ui.StatisticsColumnRow
+import com.github.se.signify.ui.StatisticsList
 import com.github.se.signify.ui.StreakCounter
 import com.github.se.signify.ui.TopBar
-import com.github.se.signify.ui.UtilButton
-import com.github.se.signify.ui.UtilIconButton
-import com.github.se.signify.ui.UtilTextButton
+import com.github.se.signify.ui.BasicButton
+import com.github.se.signify.ui.HorizontalLetterList
+import com.github.se.signify.ui.TextButton
 import com.github.se.signify.ui.navigation.NavigationActions
 import org.junit.Rule
 import org.junit.Test
@@ -51,50 +50,13 @@ class UtilsTest {
   private val picturePath = "file:///path/to/profile/picture.jpg"
 
   @Test
-  fun utilIconButtonIsDisplayedAndClickable() {
-    val iconDescription = "Info"
-
-    // Set the content for the test
-    composeTestRule.setContent {
-      UtilIconButton(
-          onClickAction = {}, icon = Icons.Outlined.Info, iconDescription = iconDescription)
-    }
-
-    // Assert the button is displayed
-    composeTestRule.onNodeWithTag(iconDescription + "Button").assertIsDisplayed()
-
-    // Assert the button has a click action
-    composeTestRule.onNodeWithTag(iconDescription + "Button").assertHasClickAction()
-  }
-
-  @Test
-  fun utilIconButtonPerformsClick() {
-    var clickCounter = 0
-    val iconDescription = "Info"
-
-    // Set the content for the test with a click listener that increments the counter
-    composeTestRule.setContent {
-      UtilIconButton(
-          onClickAction = { clickCounter++ },
-          icon = Icons.Outlined.Info,
-          iconDescription = iconDescription)
-    }
-
-    // Perform a click action on the button
-    composeTestRule.onNodeWithTag(iconDescription + "Button").performClick()
-
-    // Assert the click listener was triggered
-    assert(clickCounter == 1)
-  }
-
-  @Test
   fun utilTextButtonIsDisplayedWithCorrectText() {
     val textTag = "TestButton"
     val buttonText = "Click Me"
 
     // Set the content for the test
     composeTestRule.setContent {
-      UtilTextButton(
+      TextButton(
           onClickAction = {},
           testTag = textTag,
           text = buttonText,
@@ -117,7 +79,7 @@ class UtilsTest {
 
     // Set the content for the test with a click listener that increments the counter
     composeTestRule.setContent {
-      UtilTextButton(
+      TextButton(
           onClickAction = { clickCounter++ },
           testTag = textTag,
           text = buttonText,
@@ -175,7 +137,7 @@ class UtilsTest {
   @Test
   fun utilButtonIsDisplayedAndClickable() {
     composeTestRule.setContent {
-      UtilButton(
+      BasicButton(
           onClick = {},
           buttonTestTag = "UtilButton",
           iconTestTag = "UtilIcon",
@@ -194,7 +156,7 @@ class UtilsTest {
   fun utilButtonPerformsClick() {
     var clicked = false
     composeTestRule.setContent {
-      UtilButton(
+      BasicButton(
           onClick = { clicked = true },
           buttonTestTag = "UtilButton",
           iconTestTag = "UtilIcon",
@@ -332,7 +294,7 @@ class UtilsTest {
     val statsTextList = listOf("test1", "test2")
     val statsNumberList = listOf("1", "2")
     composeTestRule.setContent {
-      StatisticsColumnRow(
+      StatisticsList(
           columnTestTag = columnTestTag,
           rowTestTag = rowTestTag,
           lineText = lineText,

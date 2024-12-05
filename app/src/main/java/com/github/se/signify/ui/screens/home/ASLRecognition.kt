@@ -36,7 +36,7 @@ import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.BackButton
 import com.github.se.signify.ui.CameraPlaceholder
 import com.github.se.signify.ui.MainScreenScaffold
-import com.github.se.signify.ui.UtilTextButton
+import com.github.se.signify.ui.TextButton
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 
@@ -78,7 +78,7 @@ fun ASLRecognition(
               Spacer(modifier = Modifier.height(20.dp))
 
               // Button: "More on ASL Alphabet"
-              UtilTextButton(
+              TextButton(
                   onClickAction = {
                     val intent =
                         Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(buttonUriString) }

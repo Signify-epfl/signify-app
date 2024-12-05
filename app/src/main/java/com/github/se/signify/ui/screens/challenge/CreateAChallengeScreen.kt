@@ -23,7 +23,7 @@ import com.github.se.signify.model.challenge.ChallengeViewModel
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.UtilTextButton
+import com.github.se.signify.ui.TextButton
 import com.github.se.signify.ui.navigation.NavigationActions
 
 @Composable
@@ -72,7 +72,7 @@ fun CreateAChallengeScreen(
             items(friends.size) { index ->
               val friendId = friends[index]
               FriendCard(friendId = friendId) {
-                UtilTextButton(
+                TextButton(
                     onClickAction = {
                       selectedFriendId = friendId
                       showDialog = true
@@ -141,7 +141,7 @@ fun ChallengeModeAlertDialog(
   AlertDialog(
       onDismissRequest = onDismiss,
       confirmButton = {
-        UtilTextButton(
+        TextButton(
             onClickAction = {
               if (selectedMode.value != null) {
                 // Create the challenge in the challenges collection
@@ -162,7 +162,7 @@ fun ChallengeModeAlertDialog(
         )
       },
       dismissButton = {
-        UtilTextButton(
+        TextButton(
             onClickAction = onDismiss,
             testTag = "CancelButton",
             text = "Cancel",
@@ -196,7 +196,7 @@ fun ModeButton(
     mode: ChallengeMode,
     selectedMode: MutableState<ChallengeMode?>,
 ) {
-  UtilTextButton(
+  TextButton(
       onClickAction = { selectedMode.value = mode },
       testTag = "${mode.modeName}ModeButton",
       text = mode.modeName,

@@ -83,27 +83,6 @@ import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.ui.navigation.NavigationActions
 
 /**
- * A reusable composable function that creates an outlined button with an icon.
- *
- * @param onClickAction A lambda function to execute when the button is clicked.
- * @param icon The ImageVector representing the icon to be displayed in the button.
- * @param iconDescription A string description of the icon, used for accessibility and testing.
- */
-@Composable
-fun UtilIconButton(onClickAction: () -> Unit, icon: ImageVector, iconDescription: String) {
-  OutlinedButton(
-      onClick = onClickAction,
-      modifier = Modifier.padding(8.dp).testTag(iconDescription + "Button"),
-      border =
-          ButtonDefaults.outlinedButtonBorder.copy(
-              width = 2.dp, brush = SolidColor(MaterialTheme.colorScheme.surface)),
-      colors = ButtonDefaults.outlinedButtonColors(MaterialTheme.colorScheme.primary),
-  ) {
-    Icon(icon, tint = MaterialTheme.colorScheme.surface, contentDescription = iconDescription)
-  }
-}
-
-/**
  * A reusable composable function that creates an outlined button with customizable text.
  *
  * @param onClickAction A lambda function to execute when the button is clicked.
@@ -113,7 +92,7 @@ fun UtilIconButton(onClickAction: () -> Unit, icon: ImageVector, iconDescription
  * @param enabled A boolean value indicating whether the button is enabled.
  */
 @Composable
-fun UtilTextButton(
+fun TextButton(
     onClickAction: () -> Unit,
     testTag: String,
     text: String,
@@ -191,7 +170,7 @@ fun SquareButton(
  * @param contentDescription The description text of the icon.
  */
 @Composable
-fun UtilButton(
+fun BasicButton(
     onClick: () -> Unit,
     buttonTestTag: String,
     iconTestTag: String,
@@ -313,7 +292,7 @@ fun MainScreenScaffold(
             padding,
             testTagColumn,
         ) {
-          UtilButton(
+          BasicButton(
               { isHelpBoxVisible = !isHelpBoxVisible },
               "InfoButton",
               "InfoIcon",
@@ -428,7 +407,7 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
  * @param statsNumberList The list of number for stats to display.
  */
 @Composable
-fun StatisticsColumnRow(
+fun StatisticsList(
     columnTestTag: String,
     rowTestTag: String,
     lineText: String,

@@ -57,8 +57,8 @@ import com.github.se.signify.model.getIconResId
 import com.github.se.signify.model.getImageResId
 import com.github.se.signify.model.getTipResId
 import com.github.se.signify.ui.MainScreenScaffold
-import com.github.se.signify.ui.UtilButton
-import com.github.se.signify.ui.UtilTextButton
+import com.github.se.signify.ui.BasicButton
+import com.github.se.signify.ui.TextButton
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 import kotlinx.coroutines.CoroutineScope
@@ -100,19 +100,19 @@ fun HomeScreen(navigationActions: NavigationActions) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween) {
-                      UtilButton(
+                      BasicButton(
                           onClick = { navigationActions.navigateTo(Screen.FEEDBACK) },
                           buttonTestTag = "FeedbackButton",
                           iconTestTag = "FeedbackIcon",
                           icon = Icons.Outlined.Email,
                           contentDescription = "Feedback")
-                      UtilButton(
+                      BasicButton(
                           onClick = { navigationActions.navigateTo(Screen.QUIZ) },
                           buttonTestTag = "QuizButton",
                           iconTestTag = "QuizIcon",
                           icon = Icons.Outlined.Star,
                           contentDescription = "Quizzes")
-                      UtilButton(
+                      BasicButton(
                           onClick = { navigationActions.navigateTo(Screen.QUEST) },
                           buttonTestTag = "QuestsButton",
                           iconTestTag = "QuestIcon",
@@ -164,7 +164,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
  */
 @Composable
 fun CameraFeedbackButton(onClick: () -> Unit = {}) {
-  UtilTextButton(
+  TextButton(
       onClickAction = onClick,
       testTag = "CameraFeedbackButton",
       text = "Try hand signs here !",

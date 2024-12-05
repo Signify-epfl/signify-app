@@ -35,7 +35,7 @@ import com.github.se.signify.model.challenge.ChallengeViewModel
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.UtilTextButton
+import com.github.se.signify.ui.TextButton
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 
@@ -61,7 +61,7 @@ fun NewChallengeScreen(
 
   AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = "NewChallengeScreen") {
     // My Friends button
-    UtilTextButton(
+    TextButton(
         onClickAction = { navigationActions.navigateTo(Screen.FRIENDS) },
         testTag = "MyFriendsButton",
         text = "My Friends",
@@ -71,7 +71,7 @@ fun NewChallengeScreen(
     Spacer(modifier = Modifier.height(32.dp))
 
     // Create a challenge button
-    UtilTextButton(
+    TextButton(
         onClickAction = { navigationActions.navigateTo(Screen.CREATE_CHALLENGE) },
         testTag = "CreateChallengeButton",
         text = "Create a Challenge",

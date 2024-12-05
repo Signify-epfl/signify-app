@@ -13,7 +13,7 @@ import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.stats.StatsViewModel
 import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.NotImplementedYet
-import com.github.se.signify.ui.StatisticsColumnRow
+import com.github.se.signify.ui.StatisticsList
 import com.github.se.signify.ui.navigation.NavigationActions
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -35,7 +35,7 @@ fun ChallengeHistoryScreen(
       testTagColumn = "ChallengeHistoryScreen",
   ) {
     // Challenge's statistics
-    StatisticsColumnRow(
+    StatisticsList(
         columnTestTag = "ChallengesColumn",
         rowTestTag = "ChallengesRow",
         lineText = "Number of challenges :",

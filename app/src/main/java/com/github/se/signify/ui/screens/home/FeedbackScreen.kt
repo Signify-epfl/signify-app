@@ -42,7 +42,7 @@ import com.github.se.signify.model.feedback.FeedbackOption
 import com.github.se.signify.model.feedback.FeedbackRepository
 import com.github.se.signify.model.feedback.FeedbackViewModel
 import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.UtilTextButton
+import com.github.se.signify.ui.TextButton
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 
@@ -85,7 +85,7 @@ fun FeedbackScreen(
 
     RatingSection(selectedRating = selectedRating, onRatingSelected = { selectedRating = it })
 
-    UtilTextButton(
+    TextButton(
         onClickAction = {
           if (feedbackTitle.text.isNotEmpty() && feedbackDescription.text.isNotEmpty()) {
             isLoading = true

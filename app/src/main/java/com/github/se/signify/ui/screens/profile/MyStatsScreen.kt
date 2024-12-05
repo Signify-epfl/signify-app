@@ -21,7 +21,7 @@ import com.github.se.signify.ui.AccountInformation
 import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.LearnedLetterList
 import com.github.se.signify.ui.NotImplementedYet
-import com.github.se.signify.ui.StatisticsColumnRow
+import com.github.se.signify.ui.StatisticsList
 import com.github.se.signify.ui.navigation.NavigationActions
 
 @Composable
@@ -79,7 +79,7 @@ fun MyStatsScreen(
     Spacer(modifier = Modifier.height(64.dp))
 
     // Number of exercises achieved
-    StatisticsColumnRow(
+    StatisticsList(
         columnTestTag = "ExercisesColumn",
         rowTestTag = "ExercisesRow",
         lineText = "Number of exercises achieved :",
@@ -89,7 +89,7 @@ fun MyStatsScreen(
     Spacer(modifier = Modifier.height(32.dp))
 
     // Number of quests achieved
-    StatisticsColumnRow(
+    StatisticsList(
         columnTestTag = "QuestsColumn",
         rowTestTag = "QuestsRow",
         lineText = "Number of quests achieved :",

@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.ui.MainScreenScaffold
-import com.github.se.signify.ui.UtilTextButton
+import com.github.se.signify.ui.TextButton
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 
@@ -62,7 +62,7 @@ fun UnauthenticatedScreen(navigationActions: NavigationActions) {
                   )
 
               // "Log In" button using UtilTextButton
-              UtilTextButton(
+              TextButton(
                   onClickAction = {
                     navigationActions.navigateTo(Screen.AUTH)
                   }, // Navigate to Screen.AUTH
