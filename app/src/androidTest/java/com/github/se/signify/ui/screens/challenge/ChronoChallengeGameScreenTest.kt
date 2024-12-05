@@ -13,7 +13,7 @@ import com.github.se.signify.model.challenge.Challenge
 import com.github.se.signify.model.challenge.MockChallengeRepository
 import com.github.se.signify.model.di.AppDependencyProvider
 import com.github.se.signify.model.hand.HandLandMarkViewModel
-import com.github.se.signify.ui.navigation.NavigationActions
+import com.github.se.signify.model.navigation.NavigationActions
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

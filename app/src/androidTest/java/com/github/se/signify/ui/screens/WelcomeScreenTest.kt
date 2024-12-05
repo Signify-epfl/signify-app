@@ -4,7 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import com.github.se.signify.ui.navigation.NavigationActions
+import com.github.se.signify.model.navigation.NavigationActions
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

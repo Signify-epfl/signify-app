@@ -25,9 +25,9 @@ import com.github.se.signify.model.di.AppDependencyProvider
 import com.github.se.signify.model.di.DependencyProvider
 import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.model.hand.HandLandMarkViewModel
-import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.navigation.Route
-import com.github.se.signify.ui.navigation.Screen
+import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.navigation.Route
+import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.screens.WelcomeScreen
 import com.github.se.signify.ui.screens.auth.LoginScreen
 import com.github.se.signify.ui.screens.auth.UnauthenticatedScreen
@@ -106,8 +106,7 @@ fun SignifyAppPreview(
     onLanguageChange: (Boolean) -> Unit
 ) {
   val navController = rememberNavController()
-  val navigationActions =
-      NavigationActions(context, navController, dependencyProvider.userSession())
+  val navigationActions = NavigationActions(navController, dependencyProvider.userSession())
   val handLandMarkImplementation = dependencyProvider.handLandMarkRepository()
   val handLandMarkViewModel: HandLandMarkViewModel =
       viewModel(factory = HandLandMarkViewModel.provideFactory(context, handLandMarkImplementation))
