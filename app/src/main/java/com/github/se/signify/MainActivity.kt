@@ -140,11 +140,9 @@ fun SignifyAppPreview(
             showTutorial = {
               // Navigate to Tutorial or Home depending on completion
               if (tutorialCompleted) {
-                navController.navigate(Route.HOME) { popUpTo(Route.WELCOME) { inclusive = true } }
+                navigationActions.navigateTo(Screen.HOME)
               } else {
-                navController.navigate(Route.TUTORIAL) {
-                  popUpTo(Route.WELCOME) { inclusive = true }
-                }
+                navigationActions.navigateTo(Screen.TUTORIAL)
               }
             })
       }
@@ -199,14 +197,7 @@ fun SignifyAppPreview(
         route = Route.TUTORIAL,
     ) {
       composable(Screen.TUTORIAL.route) {
-        TutorialScreen(
-            navigationActions = navigationActions,
-            onFinish = {
-              onTutorialComplete()
-              navController.navigate(Screen.HOME.route) {
-                popUpTo(Screen.TUTORIAL.route) { inclusive = true }
-              }
-            })
+        TutorialScreen(navigationActions = navigationActions, onFinish = onTutorialComplete)
       }
     }
 

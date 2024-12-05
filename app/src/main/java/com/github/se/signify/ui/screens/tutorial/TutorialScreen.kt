@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.ui.navigation.NavigationActions
+import com.github.se.signify.ui.navigation.Screen
 import com.github.se.signify.ui.screens.home.HomeScreen
 
 private val overlayColor
@@ -67,7 +68,11 @@ fun TutorialScreen(navigationActions: NavigationActions, onFinish: () -> Unit) {
           TutorialOverlay(
               text = stringResource(R.string.tutorial_last_screen),
               highlightArea = { FullScreenSemiTransparentOverlay() },
-              onNext = onFinish)
+              onNext = {
+                navigationActions.tutorialActive = false
+                navigationActions.navigateTo(Screen.HOME)
+                onFinish()
+              })
     }
   }
 }
