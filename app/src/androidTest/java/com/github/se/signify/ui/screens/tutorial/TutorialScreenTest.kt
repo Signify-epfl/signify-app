@@ -3,7 +3,6 @@ package com.github.se.signify.ui.screens.tutorial
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.theme.SignifyTheme
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -26,7 +25,7 @@ class TutorialScreenTest {
     navigationActions = mock(NavigationActions::class.java)
 
     composeTestRule.setContent {
-      SignifyTheme { TutorialScreen(navigationActions = navigationActions, onFinish = {}) }
+      TutorialScreen(navigationActions = navigationActions, onFinish = {})
     }
   }
 
