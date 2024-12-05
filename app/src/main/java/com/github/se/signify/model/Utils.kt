@@ -37,7 +37,7 @@ fun getIconResId(letter: Char): Int {
  * @param letter The character from which we want the icon.
  */
 fun getLetterIconResId(letter: Char): Int {
-    return when (letter) {
+    return when (letter.lowercaseChar()) {
         'a' -> R.drawable.letter_a
         'b' -> R.drawable.letter_b
         'c' -> R.drawable.letter_c
@@ -78,33 +78,33 @@ fun getLetterIconResId(letter: Char): Int {
  * @return The integer ID of the string resource for the corresponding tip.
  */
 fun getTipResId(letter: Char): Int {
-  return when (letter) {
-    'A' -> R.string.tip_a
-    'B' -> R.string.tip_b
-    'C' -> R.string.tip_c
-    'D' -> R.string.tip_d
-    'E' -> R.string.tip_e
-    'F' -> R.string.tip_f
-    'G' -> R.string.tip_g
-    'H' -> R.string.tip_h
-    'I' -> R.string.tip_i
-    'J' -> R.string.tip_j
-    'K' -> R.string.tip_k
-    'L' -> R.string.tip_l
-    'M' -> R.string.tip_m
-    'N' -> R.string.tip_n
-    'O' -> R.string.tip_o
-    'P' -> R.string.tip_p
-    'Q' -> R.string.tip_q
-    'R' -> R.string.tip_r
-    'S' -> R.string.tip_s
-    'T' -> R.string.tip_t
-    'U' -> R.string.tip_u
-    'V' -> R.string.tip_v
-    'W' -> R.string.tip_w
-    'X' -> R.string.tip_x
-    'Y' -> R.string.tip_y
-    'Z' -> R.string.tip_z
-    else -> R.string.tip_a
-  }
+    return when (letter.lowercaseChar()) {
+        'a' -> R.string.tip_a
+        'b' -> R.string.tip_b
+        'c' -> R.string.tip_c
+        'd' -> R.string.tip_d
+        'e' -> R.string.tip_e
+        'f' -> R.string.tip_f
+        'g' -> R.string.tip_g
+        'h' -> R.string.tip_h
+        'i' -> R.string.tip_i
+        'j' -> R.string.tip_j
+        'k' -> R.string.tip_k
+        'l' -> R.string.tip_l
+        'm' -> R.string.tip_m
+        'n' -> R.string.tip_n
+        'o' -> R.string.tip_o
+        'p' -> R.string.tip_p
+        'q' -> R.string.tip_q
+        'r' -> R.string.tip_r
+        's' -> R.string.tip_s
+        't' -> R.string.tip_t
+        'u' -> R.string.tip_u
+        'v' -> R.string.tip_v
+        'w' -> R.string.tip_w
+        'x' -> R.string.tip_x
+        'y' -> R.string.tip_y
+        'z' -> R.string.tip_z
+        else -> R.string.tip_a
+    }
 }
