@@ -52,7 +52,8 @@ fun TutorialScreen(navigationActions: NavigationActions, onFinish: () -> Unit) {
           TutorialOverlay(
               text = stringResource(R.string.tutorial_screen1),
               highlightArea = { FullScreenSemiTransparentOverlay() },
-              onNext = { step++ })
+              onNext = { step++ },
+              textTag = "WelcomeTextTag")
       1 ->
           TutorialOverlay(
               text = stringResource(R.string.tutorial_screen2),
@@ -63,7 +64,8 @@ fun TutorialScreen(navigationActions: NavigationActions, onFinish: () -> Unit) {
                     highlightWidth = 230.dp,
                     highlightHeight = 190.dp)
               },
-              onNext = { step++ })
+              onNext = { step++ },
+              textTag = "ExerciseTextTag")
       2 ->
           TutorialOverlay(
               text = stringResource(R.string.tutorial_last_screen),
@@ -72,13 +74,19 @@ fun TutorialScreen(navigationActions: NavigationActions, onFinish: () -> Unit) {
                 navigationActions.tutorialActive = false
                 navigationActions.navigateTo(Screen.HOME)
                 onFinish()
-              })
+              },
+              textTag = "CompletionTextTag")
     }
   }
 }
 
 @Composable
-fun TutorialOverlay(text: String, highlightArea: @Composable () -> Unit, onNext: () -> Unit) {
+fun TutorialOverlay(
+    text: String,
+    highlightArea: @Composable () -> Unit,
+    onNext: () -> Unit,
+    textTag: String
+) {
   Box(modifier = Modifier.fillMaxSize().testTag("HighlightArea")) {
 
     // Highlight the relevant area
@@ -98,9 +106,10 @@ fun TutorialOverlay(text: String, highlightArea: @Composable () -> Unit, onNext:
           fontSize = 16.sp,
           fontWeight = FontWeight.Bold,
           textAlign = TextAlign.Center,
-          modifier = Modifier.padding(bottom = 16.dp))
+          modifier = Modifier.padding(bottom = 16.dp).testTag(textTag))
       Button(
           onClick = onNext,
+          modifier = Modifier.testTag("nextButton"),
           colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)) {
             Text("Next", color = MaterialTheme.colorScheme.onPrimary)
           }
