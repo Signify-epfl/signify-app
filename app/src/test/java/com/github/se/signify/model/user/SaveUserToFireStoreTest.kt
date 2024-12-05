@@ -51,7 +51,7 @@ class SaveUserToFireStoreTest {
 
     navigationActions = mock(NavigationActions::class.java)
 
-    // Mock FirebaseAuth and FirebaseFirestore initialization
+    // Mock FirebaseAuth and FirebaseFireStore initialization
     mockAuth = mock(FirebaseAuth::class.java)
     mockFirestore = mock(FirebaseFirestore::class.java)
 
@@ -83,11 +83,11 @@ class SaveUserToFireStoreTest {
     `when`(mockDocumentSnapshot.exists()).thenReturn(false) // Document does not exist
 
     // Simulate successful set task
-    val mockSetTask = Tasks.forResult<Void>(null) // Simulate successful Firestore set task
+    val mockSetTask = Tasks.forResult<Void>(null) // Simulate successful FireStore set task
     `when`(mockDocumentReference.set(any(), eq(SetOptions.merge()))).thenReturn(mockSetTask)
 
     // Act
-    saveUserToFireStore(navigationActions)
+    saveUserToFireStore()
 
     // Idle the main looper to process tasks
     shadowOf(Looper.getMainLooper()).idle()
@@ -109,7 +109,7 @@ class SaveUserToFireStoreTest {
     `when`(mockGetTask.result).thenReturn(mockDocumentSnapshot)
 
     // Act
-    saveUserToFireStore(navigationActions)
+    saveUserToFireStore()
 
     // Idle the main looper to process tasks
     shadowOf(Looper.getMainLooper()).idle()
@@ -124,7 +124,7 @@ class SaveUserToFireStoreTest {
     `when`(mockAuth.currentUser).thenReturn(null) // Simulate no user logged in
 
     // Act
-    saveUserToFireStore(navigationActions)
+    saveUserToFireStore()
 
     // Verify that the error is logged
     // (Since we cannot easily verify logs, we focus on ensuring no Firestore interaction occurs)

@@ -59,6 +59,8 @@ class MainActivity : ComponentActivity() {
     // Load string resources for preference name and key
     val prefName = getString(R.string.pref_name)
     val prefKeyIsDarkTheme = getString(R.string.pref_key_is_dark_theme)
+    val prefKeyTutorialCompleted = getString(R.string.pref_key_tutorial_completed)
+    val prefKeyTutorialVersion = getString(R.string.pref_key_tutorial_version)
 
     // Initialize SharedPreferences
     sharedPreferences = getSharedPreferences(prefName, Context.MODE_PRIVATE)
@@ -66,8 +68,22 @@ class MainActivity : ComponentActivity() {
     // Load the saved theme state (default is false for light mode)
     val savedTheme = sharedPreferences.getBoolean(prefKeyIsDarkTheme, false)
 
+    // Tutorial versioning logic
+    val currentTutorialVersion = 1 // Update this when the tutorial changes
+    val savedTutorialVersion = sharedPreferences.getInt(prefKeyTutorialVersion, 0)
+
+    val isTutorialCompleted =
+        sharedPreferences.getBoolean(prefKeyTutorialCompleted, false) &&
+            savedTutorialVersion == currentTutorialVersion
+
+    // Update tutorial version if outdated
+    if (savedTutorialVersion != currentTutorialVersion) {
+      sharedPreferences.edit().putInt(prefKeyTutorialVersion, currentTutorialVersion).apply()
+    }
+
     setContent {
       var isDarkTheme by remember { mutableStateOf(savedTheme) }
+      var tutorialCompleted by remember { mutableStateOf(isTutorialCompleted) }
 
       SignifyTheme(darkTheme = isDarkTheme) {
         Surface(modifier = Modifier.fillMaxSize()) {
@@ -79,6 +95,11 @@ class MainActivity : ComponentActivity() {
                 isDarkTheme = isDark
                 // Save theme preference
                 sharedPreferences.edit().putBoolean(prefKeyIsDarkTheme, isDark).apply()
+              },
+              tutorialCompleted = tutorialCompleted,
+              onTutorialComplete = {
+                tutorialCompleted = true
+                sharedPreferences.edit().putBoolean(prefKeyTutorialCompleted, true).apply()
               })
         }
       }
@@ -92,7 +113,9 @@ fun SignifyAppPreview(
     context: Context,
     dependencyProvider: DependencyProvider,
     isDarkTheme: Boolean,
-    onThemeChange: (Boolean) -> Unit
+    onThemeChange: (Boolean) -> Unit,
+    tutorialCompleted: Boolean,
+    onTutorialComplete: () -> Unit
 ) {
   val navController = rememberNavController()
   val navigationActions = NavigationActions(navController, dependencyProvider.userSession())
@@ -111,7 +134,20 @@ fun SignifyAppPreview(
         startDestination = Screen.AUTH.route,
         route = Route.AUTH,
     ) {
-      composable(Screen.AUTH.route) { LoginScreen(navigationActions) }
+      composable(Screen.AUTH.route) {
+        LoginScreen(
+            navigationActions,
+            showTutorial = {
+              // Navigate to Tutorial or Home depending on completion
+              if (tutorialCompleted) {
+                navController.navigate(Route.HOME) { popUpTo(Route.WELCOME) { inclusive = true } }
+              } else {
+                navController.navigate(Route.TUTORIAL) {
+                  popUpTo(Route.WELCOME) { inclusive = true }
+                }
+              }
+            })
+      }
       composable(Screen.UNAUTHENTICATED.route) { UnauthenticatedScreen(navigationActions) }
     }
 
@@ -159,6 +195,22 @@ fun SignifyAppPreview(
     }
 
     navigation(
+        startDestination = Screen.TUTORIAL.route,
+        route = Route.TUTORIAL,
+    ) {
+      composable(Screen.TUTORIAL.route) {
+        TutorialScreen(
+            navigationActions = navigationActions,
+            onFinish = {
+              onTutorialComplete()
+              navController.navigate(Screen.HOME.route) {
+                popUpTo(Screen.TUTORIAL.route) { inclusive = true }
+              }
+            })
+      }
+    }
+
+    navigation(
         startDestination = Screen.HOME.route,
         route = Route.HOME,
     ) {
@@ -192,15 +244,6 @@ fun SignifyAppPreview(
             navigationActions,
             dependencyProvider.quizRepository(),
         )
-      }
-      composable(Screen.TUTORIAL.route) {
-        TutorialScreen(
-            navigationActions = navigationActions,
-            onFinish = {
-              navController.navigate(Screen.HOME.route) {
-                popUpTo(Screen.TUTORIAL.route) { inclusive = true }
-              }
-            })
       }
     }
 
