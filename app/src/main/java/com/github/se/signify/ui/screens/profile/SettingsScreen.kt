@@ -39,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -56,7 +57,9 @@ fun SettingsScreen(
     userSession: UserSession,
     userRepository: UserRepository,
     isDarkTheme: Boolean,
-    onThemeChange: (Boolean) -> Unit
+    onThemeChange: (Boolean) -> Unit,
+    isFrench: Boolean,
+    onLanguageChange: (Boolean) -> Unit
 ) {
   val userViewModel: UserViewModel =
       viewModel(factory = UserViewModel.factory(userSession, userRepository))
@@ -96,6 +99,8 @@ fun SettingsScreen(
           androidx.compose.material3.Switch(
               checked = isDarkTheme, onCheckedChange = { onThemeChange(it) })
         }
+    // Switch between English and French
+    LanguageSwitch(isFrench, onLanguageChange)
     // Editable Profile Picture
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
       Row(
@@ -216,5 +221,24 @@ fun ActionButtons(onClickAction: () -> Unit, color: Color, text: String, modifie
       modifier = modifier) {
         Text(
             text = text, color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Bold)
+      }
+}
+
+@Composable
+fun LanguageSwitch(isFrench: Boolean, onLanguageChange: (Boolean) -> Unit) {
+  Row(
+      modifier =
+          Modifier.fillMaxWidth()
+              .padding(16.dp)
+              .clickable { onLanguageChange(!isFrench) }
+              .testTag("LanguageSwitch"),
+      verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.SpaceBetween) {
+        Text(
+            text = if (isFrench) "FR" else "EN",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onBackground)
+        androidx.compose.material3.Switch(
+            checked = isFrench, onCheckedChange = { onLanguageChange(it) })
       }
 }
