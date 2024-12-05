@@ -39,11 +39,12 @@ fun ProfileScreen(
     userSession: UserSession,
     userRepository: UserRepository,
     statsRepository: StatsRepository,
-    userViewModel: UserViewModel =
-        viewModel(factory = UserViewModel.factory(userSession, userRepository)),
-    statsViewModel: StatsViewModel =
-        viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
 ) {
+  val userViewModel: UserViewModel =
+      viewModel(factory = UserViewModel.factory(userSession, userRepository))
+  val statsViewModel: StatsViewModel =
+      viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
+
   MainScreenScaffold(
       navigationActions = navigationActions,
       testTagColumn = "ProfileScreen",

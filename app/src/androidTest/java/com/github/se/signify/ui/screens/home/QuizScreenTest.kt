@@ -1,3 +1,5 @@
+package com.github.se.signify.ui.screens.home
+
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -10,10 +12,6 @@ import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.quiz.QuizQuestion
 import com.github.se.signify.model.quiz.QuizRepository
 import com.github.se.signify.ui.getIconResId
-import com.github.se.signify.ui.screens.home.NoQuizAvailable
-import com.github.se.signify.ui.screens.home.QuizContent
-import com.github.se.signify.ui.screens.home.QuizHeader
-import com.github.se.signify.ui.screens.home.QuizScreen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -44,7 +42,7 @@ class QuizScreenComponentsTest {
 
   @Test
   fun quizHeader_displaysTitleAndBackButton() {
-    composeTestRule.setContent { QuizHeader(navigationActions = mockNavigationActions) }
+    composeTestRule.setContent { QuizScreen(mockNavigationActions, mockQuizRepository) }
 
     // Verify header components
     composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
@@ -53,7 +51,7 @@ class QuizScreenComponentsTest {
 
   @Test
   fun quizHeader_backButtonTriggersNavigation() {
-    composeTestRule.setContent { QuizHeader(navigationActions = mockNavigationActions) }
+    composeTestRule.setContent { QuizScreen(mockNavigationActions, mockQuizRepository) }
 
     // Click back button
     composeTestRule.onNodeWithTag("BackButton").performClick()

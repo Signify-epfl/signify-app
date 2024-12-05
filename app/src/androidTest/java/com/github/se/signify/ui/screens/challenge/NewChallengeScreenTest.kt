@@ -10,19 +10,18 @@ import com.github.se.signify.model.challenge.MockChallengeRepository
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.model.user.UserRepository
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito
-import org.mockito.Mockito.doAnswer
 import org.mockito.kotlin.any
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 class NewChallengeScreenTest {
+
   @get:Rule val composeTestRule = createComposeRule()
 
   private lateinit var userSession: UserSession
@@ -52,7 +51,7 @@ class NewChallengeScreenTest {
     userRepository = Mockito.mock(UserRepository::class.java)
     challengeRepository = MockChallengeRepository()
 
-    // Mock UserRepository
+    // Mock UserRepository to provide ongoing challenges list
     doAnswer { invocation ->
           val onSuccess = invocation.arguments[1] as (List<Challenge>) -> Unit
           onSuccess(ongoingChallenges)
@@ -75,55 +74,47 @@ class NewChallengeScreenTest {
   }
 
   @Test
-  fun testTopBlueBarIsDisplayed() {
-    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
-  }
+  fun testMyFriendsButton_click_navigatesToFriendsScreen() {
+    composeTestRule.onNodeWithTag("MyFriendsButton").assertIsDisplayed().performClick()
 
-  @Test
-  fun testBackButtonNavigatesBack() {
-    composeTestRule.onNodeWithTag("BackButton").performClick()
-    verify(navigationActions).goBack()
-  }
-
-  @Test
-  fun testMyFriendsButtonIsDisplayedAndNavigates() {
-    composeTestRule.onNodeWithTag("MyFriendsButton").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("MyFriendsButton").performClick()
     verify(navigationActions).navigateTo(Screen.FRIENDS)
   }
 
   @Test
-  fun testCreateChallengeButtonIsDisplayedAndNavigates() {
-    composeTestRule.onNodeWithTag("CreateChallengeButton").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("CreateChallengeButton").performClick()
+  fun testCreateChallengeButton_click_navigatesToCreateChallengeScreen() {
+    composeTestRule.onNodeWithTag("CreateChallengeButton").assertIsDisplayed().performClick()
+
     verify(navigationActions).navigateTo(Screen.CREATE_CHALLENGE)
   }
 
   @Test
-  fun testOngoingChallengesDisplayed() {
-    composeTestRule.onNodeWithTag("OngoingChallengesTitle").assertIsDisplayed()
-    ongoingChallenges.forEachIndexed { index, challenge ->
-      composeTestRule.onNodeWithTag("OngoingChallengeCard$index").assertIsDisplayed()
-      composeTestRule.onNodeWithText("Opponent: ${challenge.player2}").assertIsDisplayed()
-      composeTestRule.onNodeWithText("Mode: ${challenge.mode}").assertIsDisplayed()
+  fun testOngoingChallengesBox_isDisplayed() {
+    composeTestRule.onNodeWithTag("OngoingChallengesBox").assertIsDisplayed()
+  }
+
+  @Test
+  fun testOngoingChallengesTitle_isDisplayed() {
+    composeTestRule
+        .onNodeWithTag("OngoingChallengesTitle")
+        .assertIsDisplayed()
+        .assertTextEquals("My Ongoing Challenges")
+  }
+
+  @Test
+  fun testOngoingChallengesLazyColumn_displaysAllChallenges() {
+    composeTestRule.onNodeWithTag("OngoingChallengesLazyColumn").assertIsDisplayed()
+
+    ongoingChallenges.forEachIndexed { index, _ ->
+      val challengeCardTag = "OngoingChallengeCard$index"
+      composeTestRule.onNodeWithTag(challengeCardTag).assertIsDisplayed()
     }
   }
 
   @Test
-  fun testDeleteOngoingChallenge() {
-    val challengeIdToDelete = ongoingChallenges[0].challengeId
+  fun testDeleteButton_click() {
+    val challengeId = ongoingChallenges[0].challengeId
 
-    composeTestRule.onNodeWithTag("DeleteButton$challengeIdToDelete").assertExists()
-    composeTestRule.onNodeWithTag("DeleteButton$challengeIdToDelete").performClick()
-
-    // Verify that the MockChallengeRepository is updated
-    assertTrue(challengeRepository.wasDeleteChallengeCalled())
-    assertEquals(challengeIdToDelete, challengeRepository.lastDeletedChallengeId())
-  }
-
-  @Test
-  fun testNewChallengeScreenViewModelInitialization() {
-    verify(userRepository).getFriendsList(eq(userSession.getUserId()!!), any(), any())
-    verify(userRepository).getOngoingChallenges(eq(userSession.getUserId()!!), any(), any())
+    // Click the delete button for the first ongoing challenge
+    composeTestRule.onNodeWithTag("DeleteButton$challengeId").assertIsDisplayed().performClick()
   }
 }

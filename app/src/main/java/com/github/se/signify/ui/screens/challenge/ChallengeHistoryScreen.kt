@@ -22,9 +22,10 @@ fun ChallengeHistoryScreen(
     navigationActions: NavigationActions,
     userSession: UserSession,
     statsRepository: StatsRepository,
-    statsViewModel: StatsViewModel =
-        viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
 ) {
+  val statsViewModel: StatsViewModel =
+      viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
+
   val challengesCompleted = statsViewModel.completed.collectAsState()
   val challengesCreated = statsViewModel.created.collectAsState()
   val challengesWon = statsViewModel.won.collectAsState()

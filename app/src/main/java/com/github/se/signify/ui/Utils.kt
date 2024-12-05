@@ -252,7 +252,7 @@ fun TopBar() {
       modifier =
           Modifier.fillMaxWidth()
               .height(5.dp)
-              .background(MaterialTheme.colorScheme.background)
+              .background(MaterialTheme.colorScheme.primary)
               .testTag("TopBar"))
 }
 
@@ -294,14 +294,12 @@ fun BackButton(onClick: () -> Unit) {
  *
  * @param padding The default padding value of the column.
  * @param testTag The test tag of the column (test tag of the screen).
- * @param backgroundColor The color of the background (has to be defined by the theme).
  * @param content A lambda function for the content of the column.
  */
 @Composable
 fun ScreenColumn(
     padding: PaddingValues,
     testTag: String,
-    backgroundColor: Color = MaterialTheme.colorScheme.background,
     content: @Composable ColumnScope.() -> Unit
 ) {
   Column(
@@ -310,7 +308,7 @@ fun ScreenColumn(
               .padding(padding)
               .padding(16.dp)
               .verticalScroll(rememberScrollState())
-              .background(backgroundColor)
+              .background(MaterialTheme.colorScheme.background)
               .testTag(testTag),
       horizontalAlignment = Alignment.CenterHorizontally) {
         content()
@@ -345,23 +343,22 @@ fun MainScreenScaffold(
         ScreenColumn(
             padding,
             testTagColumn,
-            MaterialTheme.colorScheme.background // to replace with the background color theme
-            ) {
-              UtilButton(
-                  { isHelpBoxVisible = !isHelpBoxVisible },
-                  "InfoButton",
-                  "InfoIcon",
-                  Icons.Outlined.Info,
-                  "Help")
-              content()
-              // Show popup when the info button is clicked
-              if (isHelpBoxVisible) {
-                InfoPopup(
-                    onDismiss = { isHelpBoxVisible = false },
-                    helpTitle = helpTitle,
-                    helpText = helpText)
-              }
-            }
+        ) {
+          UtilButton(
+              { isHelpBoxVisible = !isHelpBoxVisible },
+              "InfoButton",
+              "InfoIcon",
+              Icons.Outlined.Info,
+              "Help")
+          content()
+          // Show popup when the info button is clicked
+          if (isHelpBoxVisible) {
+            InfoPopup(
+                onDismiss = { isHelpBoxVisible = false },
+                helpTitle = helpTitle,
+                helpText = helpText)
+          }
+        }
       })
 }
 
@@ -381,7 +378,7 @@ fun AnnexScreenScaffold(
   Scaffold(
       topBar = { TopBar() },
       content = { padding ->
-        ScreenColumn(padding, testTagColumn, MaterialTheme.colorScheme.background) {
+        ScreenColumn(padding, testTagColumn) {
           BackButton { navigationActions.goBack() }
           content()
         }
