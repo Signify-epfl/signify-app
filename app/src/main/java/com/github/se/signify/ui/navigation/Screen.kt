@@ -19,5 +19,11 @@ enum class Screen(val route: String, val requiresAuth: Boolean = true) {
   CHALLENGE("Challenge Screen"),
   NEW_CHALLENGE("NewChallenge Screen"),
   CREATE_CHALLENGE("CreateChallenge Screen"),
-  CHALLENGE_HISTORY("ChallengeHistory Screen")
+  CHALLENGE_HISTORY("ChallengeHistory Screen"),
+  CHRONO_CHALLENGE("ChronoChallenge Screen/{challengeId}");
+
+  companion object {
+    // Generate dynamic route for a specific challenge ID
+    fun chronoChallengeWithId(challengeId: String) = "ChronoChallenge Screen/$challengeId"
+  }
 }
