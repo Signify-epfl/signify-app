@@ -19,5 +19,9 @@ enum class Screen(val route: String, val requiresAuth: Boolean = true) {
   CHALLENGE("Challenge Screen"),
   NEW_CHALLENGE("NewChallenge Screen"),
   CREATE_CHALLENGE("CreateChallenge Screen"),
-  CHALLENGE_HISTORY("ChallengeHistory Screen")
+  CHALLENGE_HISTORY("ChallengeHistory Screen"),
+
+  // For testing purposes
+  REQUIRE_AUTH("RequireAuth", true),
+  DO_NOT_REQUIRE_AUTH("DoNotRequireAuth", false),
 }
