@@ -20,10 +20,6 @@ import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.screens.home.HomeScreen
-import com.github.se.signify.ui.theme.Error
-import com.github.se.signify.ui.theme.OnBackground
-import com.github.se.signify.ui.theme.OnPrimary
-import com.github.se.signify.ui.theme.Primary
 
 @Composable
 fun TutorialScreen(navigationActions: NavigationActions, onFinish: () -> Unit) {
@@ -90,14 +86,16 @@ fun TutorialOverlay(text: String, highlightArea: @Composable () -> Unit, onNext:
     ) {
       Text(
           text = text,
-          color = OnPrimary,
+          color = MaterialTheme.colorScheme.onPrimary,
           fontSize = 16.sp,
           fontWeight = FontWeight.Bold,
           textAlign = TextAlign.Center,
           modifier = Modifier.padding(bottom = 16.dp))
-      Button(onClick = onNext, colors = ButtonDefaults.buttonColors(Primary)) {
-        Text("Next", color = OnPrimary)
-      }
+      Button(
+          onClick = onNext,
+          colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)) {
+            Text("Next", color = MaterialTheme.colorScheme.onPrimary)
+          }
     }
   }
 }
@@ -105,8 +103,8 @@ fun TutorialOverlay(text: String, highlightArea: @Composable () -> Unit, onNext:
 @Composable
 fun HighlightedBox(xOffset: Dp, yOffset: Dp, highlightWidth: Dp, highlightHeight: Dp) {
   // Fixed colors for overlay and border
-  val overlayColor = OnBackground.copy(alpha = 0.8F)
-  val borderColor = Error
+  val overlayColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8F)
+  val borderColor = MaterialTheme.colorScheme.tertiary
 
   Box(modifier = Modifier.fillMaxSize()) {
     // Top dark overlay above the highlight area
@@ -153,7 +151,8 @@ fun HighlightedBox(xOffset: Dp, yOffset: Dp, highlightWidth: Dp, highlightHeight
 
 @Composable
 fun FullScreenSemiTransparentOverlay(
-    color: Color = OnBackground.copy(alpha = 0.8F) // Default semi-transparent black
+    color: Color =
+        MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8F) // Default semi-transparent black
 ) {
   Box(modifier = Modifier.fillMaxSize().background(color))
 }
