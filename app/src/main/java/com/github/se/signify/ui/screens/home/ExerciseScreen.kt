@@ -38,9 +38,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.model.hand.HandLandMarkViewModel
+import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.CameraPlaceholder
-import com.github.se.signify.ui.navigation.NavigationActions
 
 /**
  * Composable function for a common exercise screen layout, handling gesture detection, sentence

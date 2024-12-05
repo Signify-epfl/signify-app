@@ -44,10 +44,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.quiz.QuizQuestion
 import com.github.se.signify.model.quiz.QuizRepository
 import com.github.se.signify.model.quiz.QuizViewModel
-import com.github.se.signify.ui.navigation.NavigationActions
 
 @Composable
 fun QuizScreen(navigationActions: NavigationActions, quizRepository: QuizRepository) {

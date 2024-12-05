@@ -6,10 +6,10 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.quiz.QuizQuestion
 import com.github.se.signify.model.quiz.QuizRepository
 import com.github.se.signify.ui.getIconResId
-import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.screens.home.NoQuizAvailable
 import com.github.se.signify.ui.screens.home.QuizContent
 import com.github.se.signify.ui.screens.home.QuizHeader

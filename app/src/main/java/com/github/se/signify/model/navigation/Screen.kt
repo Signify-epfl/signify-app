@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.navigation
+package com.github.se.signify.model.navigation
 
 enum class Screen(val route: String, val requiresAuth: Boolean = true) {
   WELCOME("Welcome Screen", false),

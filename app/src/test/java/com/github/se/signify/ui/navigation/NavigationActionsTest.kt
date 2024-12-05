@@ -3,6 +3,11 @@ package com.github.se.signify.ui.navigation
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
 import com.github.se.signify.model.auth.MockUserSession
+import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.navigation.Route
+import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.model.navigation.TopLevelDestination
+import com.github.se.signify.model.navigation.TopLevelDestinations
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.any

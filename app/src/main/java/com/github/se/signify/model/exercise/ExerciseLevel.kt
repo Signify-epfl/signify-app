@@ -1,7 +1,7 @@
 package com.github.se.signify.model.exercise
 
 import com.github.se.signify.R
-import com.github.se.signify.ui.navigation.Screen
+import com.github.se.signify.model.navigation.Screen
 
 /**
  * Enum class that regroup information of the different level of exercise

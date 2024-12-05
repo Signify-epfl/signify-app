@@ -43,10 +43,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.feedback.FeedbackRepository
 import com.github.se.signify.model.feedback.FeedbackViewModel
+import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.BackButton
 import com.github.se.signify.ui.UtilTextButton
-import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.navigation.Screen
 
 @Composable
 fun FeedbackScreen(
