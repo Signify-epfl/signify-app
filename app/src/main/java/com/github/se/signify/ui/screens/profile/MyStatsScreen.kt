@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.model.auth.UserSession
+import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.stats.StatsViewModel
 import com.github.se.signify.model.user.UserRepository
@@ -22,7 +23,6 @@ import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.LearnedLetterList
 import com.github.se.signify.ui.NotImplementedYet
 import com.github.se.signify.ui.StatisticsColumnRow
-import com.github.se.signify.ui.navigation.NavigationActions
 
 @Composable
 fun MyStatsScreen(
@@ -30,17 +30,22 @@ fun MyStatsScreen(
     userSession: UserSession,
     userRepository: UserRepository,
     statsRepository: StatsRepository,
-    userViewModel: UserViewModel =
-        viewModel(factory = UserViewModel.factory(userSession, userRepository)),
-    statsViewModel: StatsViewModel =
-        viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
 ) {
+  val userViewModel: UserViewModel =
+      viewModel(factory = UserViewModel.factory(userSession, userRepository))
+  val statsViewModel: StatsViewModel =
+      viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
 
   LaunchedEffect(Unit) {
     userViewModel.getUserName()
     userViewModel.getProfilePictureUrl()
     userViewModel.updateStreak()
     userViewModel.getStreak()
+    statsViewModel.getEasyExerciseStats()
+    statsViewModel.getMediumExerciseStats()
+    statsViewModel.getHardExerciseStats()
+    statsViewModel.getDailyQuestStats()
+    statsViewModel.getWeeklyQuestStats()
   }
 
   val userName = userViewModel.userName.collectAsState()

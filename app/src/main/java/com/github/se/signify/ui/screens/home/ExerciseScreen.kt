@@ -36,11 +36,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.exercise.ExerciseLevel
+import com.github.se.signify.model.exercise.ExerciseLevelName
 import com.github.se.signify.model.hand.HandLandMarkViewModel
+import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.stats.StatsRepository
+import com.github.se.signify.model.stats.StatsViewModel
 import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.CameraPlaceholder
-import com.github.se.signify.ui.navigation.NavigationActions
 
 /**
  * Composable function for a common exercise screen layout, handling gesture detection, sentence
@@ -59,8 +64,13 @@ import com.github.se.signify.ui.navigation.NavigationActions
 fun ExerciseScreen(
     navigationActions: NavigationActions,
     handLandMarkViewModel: HandLandMarkViewModel,
+    userSession: UserSession,
+    statsRepository: StatsRepository,
     exerciseLevel: ExerciseLevel
 ) {
+  val statsViewModel: StatsViewModel =
+      viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
+
   val context = LocalContext.current
   val realSentences = stringArrayResource(exerciseLevel.wordsResourceId).toList()
   val sentencesList by rememberSaveable {
@@ -91,6 +101,11 @@ fun ExerciseScreen(
           currentSentenceIndex = newSentenceIndex
         },
         onAllSentencesComplete = {
+          when (exerciseLevel.id) {
+            ExerciseLevelName.EASY -> statsViewModel.updateEasyExerciseStats()
+            ExerciseLevelName.MEDIUM -> statsViewModel.updateMediumExerciseStats()
+            ExerciseLevelName.HARD -> statsViewModel.updateHardExerciseStats()
+          }
           Toast.makeText(context, "Exercise completed!", Toast.LENGTH_SHORT).show()
           // Reload or reset sentencesList, or handle end of exercise as needed
           currentSentenceIndex = 0

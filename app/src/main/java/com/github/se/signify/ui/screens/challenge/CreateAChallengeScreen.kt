@@ -1,31 +1,17 @@
 package com.github.se.signify.ui.screens.challenge
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,11 +20,11 @@ import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.challenge.ChallengeMode
 import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.challenge.ChallengeViewModel
+import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.UtilTextButton
-import com.github.se.signify.ui.navigation.NavigationActions
 
 @Composable
 fun CreateAChallengeScreen(
@@ -67,7 +53,6 @@ fun CreateAChallengeScreen(
     Text(
         text = "Select a Friend to Challenge",
         fontSize = 24.sp,
-        color = MaterialTheme.colorScheme.onBackground,
         modifier = Modifier.testTag("ChallengeTitle"))
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -77,7 +62,7 @@ fun CreateAChallengeScreen(
       Text(
           text = "No friends available",
           fontSize = 18.sp,
-          color = MaterialTheme.colorScheme.error,
+          color = Color.Gray,
           modifier = Modifier.testTag("NoFriendsText"))
     } else {
       // List of Friends
@@ -119,7 +104,7 @@ fun FriendCard(friendId: String, content: @Composable () -> Unit) {
       modifier =
           Modifier.fillMaxWidth()
               .padding(8.dp)
-              .border(1.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(16.dp))
+              .border(1.dp, Color.Gray, RoundedCornerShape(16.dp))
               .testTag("FriendCard_$friendId"), // Add test tag for each friend card
       shape = RoundedCornerShape(16.dp),
   ) {
@@ -131,7 +116,7 @@ fun FriendCard(friendId: String, content: @Composable () -> Unit) {
           Text(
               text = friendId,
               fontSize = 20.sp,
-              color = MaterialTheme.colorScheme.primary,
+              color = Color.Black,
               modifier = Modifier.testTag("FriendName_$friendId"))
 
           Spacer(modifier = Modifier.width(16.dp))
@@ -172,8 +157,9 @@ fun ChallengeModeAlertDialog(
             testTag = "SendChallengeButton",
             text = "Send Challenge",
             backgroundColor = MaterialTheme.colorScheme.primary,
+            textColor = MaterialTheme.colorScheme.onPrimary,
             enabled = selectedMode.value != null,
-            textColor = MaterialTheme.colorScheme.onPrimary)
+        )
       },
       dismissButton = {
         UtilTextButton(
@@ -201,7 +187,7 @@ fun ChallengeModeAlertDialog(
           }
         }
       },
-      containerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.5f),
+      containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
   )
 }
 

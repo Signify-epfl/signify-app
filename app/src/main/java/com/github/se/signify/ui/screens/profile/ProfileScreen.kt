@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
 import com.github.se.signify.model.auth.UserSession
+import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.stats.StatsViewModel
 import com.github.se.signify.model.user.UserRepository
@@ -28,8 +30,6 @@ import com.github.se.signify.ui.LearnedLetterList
 import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.SquareButton
 import com.github.se.signify.ui.UtilButton
-import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.navigation.Screen
 import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -39,11 +39,12 @@ fun ProfileScreen(
     userSession: UserSession,
     userRepository: UserRepository,
     statsRepository: StatsRepository,
-    userViewModel: UserViewModel =
-        viewModel(factory = UserViewModel.factory(userSession, userRepository)),
-    statsViewModel: StatsViewModel =
-        viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
 ) {
+  val userViewModel: UserViewModel =
+      viewModel(factory = UserViewModel.factory(userSession, userRepository))
+  val statsViewModel: StatsViewModel =
+      viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
+
   MainScreenScaffold(
       navigationActions = navigationActions,
       testTagColumn = "ProfileScreen",

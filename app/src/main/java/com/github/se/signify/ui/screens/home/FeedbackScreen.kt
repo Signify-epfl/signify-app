@@ -6,9 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,7 +21,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -41,108 +38,82 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.model.auth.UserSession
+import com.github.se.signify.model.feedback.FeedbackOption
 import com.github.se.signify.model.feedback.FeedbackRepository
 import com.github.se.signify.model.feedback.FeedbackViewModel
-import com.github.se.signify.ui.BackButton
+import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.UtilTextButton
-import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.navigation.Screen
 
 @Composable
 fun FeedbackScreen(
     navigationActions: NavigationActions,
     userSession: UserSession,
-    feedbackRepository: FeedbackRepository,
-    feedbackViewModel: FeedbackViewModel =
-        viewModel(factory = FeedbackViewModel.factory(userSession, feedbackRepository))
+    feedbackRepository: FeedbackRepository
 ) {
+  val feedbackViewModel: FeedbackViewModel =
+      viewModel(factory = FeedbackViewModel.factory(userSession, feedbackRepository))
   val context = LocalContext.current
 
-  val feedbackOptions = listOf("Bug Report", "Feature Suggestion", "Question", "Other")
-  var selectedFeedbackType by remember { mutableStateOf(feedbackOptions[0]) }
+  var selectedFeedbackType by remember { mutableStateOf(FeedbackOption.BUG_REPORT.category) }
   var feedbackTitle by remember { mutableStateOf(TextFieldValue("")) }
   var feedbackDescription by remember { mutableStateOf(TextFieldValue("")) }
   var selectedRating by remember { mutableIntStateOf(0) }
   var isLoading by remember { mutableStateOf(false) }
 
-  Scaffold(
-      topBar = {
-        Column {
-          Box(
-              modifier =
-                  Modifier.fillMaxWidth()
-                      .height(4.dp)
-                      .background(MaterialTheme.colorScheme.background)
-                      .testTag("TopBlueBar"))
-          BackButton { navigationActions.goBack() }
-        }
-      },
-      content = { padding ->
-        Column(
-            modifier =
-                Modifier.fillMaxSize()
-                    .padding(padding)
-                    .padding(16.dp)
-                    .testTag("FeedbackScreenContent"),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top) {
-              FeedbackDropdown(
-                  selectedFeedbackType = selectedFeedbackType,
-                  onFeedbackTypeSelected = { selectedFeedbackType = it },
-                  feedbackOptions = feedbackOptions)
+  AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = "FeedbackScreen") {
+    FeedbackDropdown(
+        selectedFeedbackType = selectedFeedbackType,
+        onFeedbackTypeSelected = { selectedFeedbackType = it })
 
-              FeedbackInputField(
-                  value = feedbackTitle,
-                  onValueChange = { feedbackTitle = it },
-                  label = "Feedback Title",
-                  modifier =
-                      Modifier.fillMaxWidth().padding(bottom = 16.dp).testTag("FeedbackTitleInput"))
+    FeedbackInputField(
+        value = feedbackTitle,
+        onValueChange = { feedbackTitle = it },
+        label = "Feedback Title",
+        modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp).testTag("FeedbackTitleInput"))
 
-              FeedbackInputField(
-                  value = feedbackDescription,
-                  onValueChange = { feedbackDescription = it },
-                  label = "Feedback Description",
-                  modifier =
-                      Modifier.fillMaxWidth()
-                          .height(150.dp)
-                          .padding(bottom = 16.dp)
-                          .testTag("FeedbackDescriptionInput"))
+    FeedbackInputField(
+        value = feedbackDescription,
+        onValueChange = { feedbackDescription = it },
+        label = "Feedback Description",
+        modifier =
+            Modifier.fillMaxWidth()
+                .height(150.dp)
+                .padding(bottom = 16.dp)
+                .testTag("FeedbackDescriptionInput"))
 
-              RatingSection(
-                  selectedRating = selectedRating, onRatingSelected = { selectedRating = it })
+    RatingSection(selectedRating = selectedRating, onRatingSelected = { selectedRating = it })
 
-              UtilTextButton(
-                  onClickAction = {
-                    if (feedbackTitle.text.isNotEmpty() && feedbackDescription.text.isNotEmpty()) {
-                      isLoading = true
-                      feedbackViewModel.saveFeedback(
-                          type = selectedFeedbackType,
-                          title = feedbackTitle.text,
-                          description = feedbackDescription.text,
-                          rating = selectedRating)
-                      isLoading = false
-                      Toast.makeText(context, "Review sent", Toast.LENGTH_LONG).show()
-                      navigationActions.navigateTo(Screen.HOME)
-                    } else {
-                      Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT)
-                          .show()
-                    }
-                  },
-                  testTag = "SendFeedbackButton",
-                  text = "Send Feedback",
-                  backgroundColor = MaterialTheme.colorScheme.primary,
-                  textColor = MaterialTheme.colorScheme.onPrimary)
+    UtilTextButton(
+        onClickAction = {
+          if (feedbackTitle.text.isNotEmpty() && feedbackDescription.text.isNotEmpty()) {
+            isLoading = true
+            feedbackViewModel.saveFeedback(
+                type = selectedFeedbackType,
+                title = feedbackTitle.text,
+                description = feedbackDescription.text,
+                rating = selectedRating)
+            isLoading = false
+            Toast.makeText(context, "Review sent", Toast.LENGTH_LONG).show()
+            navigationActions.navigateTo(Screen.HOME)
+          } else {
+            Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT).show()
+          }
+        },
+        testTag = "SendFeedbackButton",
+        text = "Send Feedback",
+        backgroundColor = MaterialTheme.colorScheme.primary,
+        textColor = MaterialTheme.colorScheme.onPrimary)
 
-              LoadingIndicator(isLoading = isLoading)
-            }
-      })
+    LoadingIndicator(isLoading = isLoading)
+  }
 }
 
 @Composable
 private fun FeedbackDropdown(
     selectedFeedbackType: String,
-    onFeedbackTypeSelected: (String) -> Unit,
-    feedbackOptions: List<String>
+    onFeedbackTypeSelected: (String) -> Unit
 ) {
   var expanded by remember { mutableStateOf(false) }
   Box(
@@ -162,14 +133,16 @@ private fun FeedbackDropdown(
                 Modifier.fillMaxWidth()
                     .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
                     .testTag("DropdownMenu")) {
-              feedbackOptions.forEach { option ->
+              FeedbackOption.entries.forEach { option ->
                 DropdownMenuItem(
-                    text = { Text(text = option, color = MaterialTheme.colorScheme.onPrimary) },
+                    text = {
+                      Text(text = option.category, color = MaterialTheme.colorScheme.onPrimary)
+                    },
                     onClick = {
-                      onFeedbackTypeSelected(option)
+                      onFeedbackTypeSelected(option.category)
                       expanded = false
                     },
-                    modifier = Modifier.testTag("DropdownMenuItem_$option"))
+                    modifier = Modifier.testTag("DropdownMenuItem_${option.category}"))
               }
             }
       }

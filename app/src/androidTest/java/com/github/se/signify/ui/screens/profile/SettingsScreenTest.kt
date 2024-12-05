@@ -7,10 +7,10 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.net.toUri
 import com.github.se.signify.model.auth.MockUserSession
 import com.github.se.signify.model.auth.UserSession
+import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.ProfilePicture
-import com.github.se.signify.ui.navigation.NavigationActions
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

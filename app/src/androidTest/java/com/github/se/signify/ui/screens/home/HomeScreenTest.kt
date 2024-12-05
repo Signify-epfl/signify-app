@@ -11,8 +11,8 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.github.se.signify.model.exercise.ExerciseLevel
-import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.navigation.Screen
+import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.navigation.Screen
 import kotlinx.coroutines.CoroutineScope
 import org.junit.Before
 import org.junit.Rule
@@ -98,7 +98,7 @@ class HomeScreenTest {
 
     exercises.forEach { exercise ->
       composeTestRule
-          .onNodeWithTag("${exercise.levelName}ExerciseButton")
+          .onNodeWithTag("${exercise.id}ExerciseButton")
           .performScrollTo()
           .assertIsDisplayed()
     }
@@ -112,10 +112,10 @@ class HomeScreenTest {
 
     exercises.forEach { exercise ->
       composeTestRule
-          .onNodeWithTag("${exercise.levelName}ExerciseButtonText", useUnmergedTree = true)
+          .onNodeWithTag("${exercise.id}ExerciseButtonText", useUnmergedTree = true)
           .performScrollTo()
           .assertIsDisplayed()
-          .assertTextEquals(exercise.levelName)
+          .assertTextEquals(exercise.id)
     }
   }
 
@@ -126,13 +126,10 @@ class HomeScreenTest {
     composeTestRule.setContent { ExerciseList(exercises, navigationActions) }
 
     exercises.forEach { exercise ->
-      composeTestRule
-          .onNodeWithTag("${exercise.levelName}ExerciseButton")
-          .performScrollTo()
-          .performClick()
+      composeTestRule.onNodeWithTag("${exercise.id}ExerciseButton").performScrollTo().performClick()
 
       verify(navigationActions)
-          .navigateTo(exercise.levelScreen) // Verify onClick was called with the exercise
+          .navigateTo(exercise.screen) // Verify onClick was called with the exercise
     }
   }
 
