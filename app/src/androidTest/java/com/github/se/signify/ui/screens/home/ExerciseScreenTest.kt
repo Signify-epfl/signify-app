@@ -8,10 +8,13 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
+import com.github.se.signify.model.auth.MockUserSession
+import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.di.AppDependencyProvider
 import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.stats.StatsRepository
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -30,6 +33,8 @@ class ExerciseScreenTest {
 
   private lateinit var mockNavigationActions: NavigationActions
   private lateinit var handLandMarkViewModel: HandLandMarkViewModel
+  private lateinit var userSession: UserSession
+  private lateinit var statsRepository: StatsRepository
 
   @Before
   fun setup() {
@@ -37,6 +42,8 @@ class ExerciseScreenTest {
     val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
     handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
     mockNavigationActions = mock(NavigationActions::class.java)
+    userSession = MockUserSession()
+    statsRepository = mock(StatsRepository::class.java)
   }
 
   @Test
@@ -45,6 +52,8 @@ class ExerciseScreenTest {
       ExerciseScreen(
           navigationActions = mockNavigationActions,
           handLandMarkViewModel = handLandMarkViewModel,
+          userSession = userSession,
+          statsRepository = statsRepository,
           exerciseLevel = ExerciseLevel.Easy)
     }
     composeTestRule.onNodeWithTag("sentenceLayer").assertIsDisplayed()
@@ -57,6 +66,8 @@ class ExerciseScreenTest {
       ExerciseScreen(
           navigationActions = mockNavigationActions,
           handLandMarkViewModel = handLandMarkViewModel,
+          userSession = userSession,
+          statsRepository = statsRepository,
           exerciseLevel = ExerciseLevel.Easy)
     }
 

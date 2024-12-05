@@ -2,14 +2,18 @@ package com.github.se.signify
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -42,13 +46,36 @@ import com.github.se.signify.ui.screens.profile.SettingsScreen
 import com.github.se.signify.ui.theme.SignifyTheme
 
 class MainActivity : ComponentActivity() {
+
+  private lateinit var sharedPreferences: SharedPreferences
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
+    // Load string resources for preference name and key
+    val prefName = getString(R.string.pref_name)
+    val prefKeyIsDarkTheme = getString(R.string.pref_key_is_dark_theme)
+
+    // Initialize SharedPreferences
+    sharedPreferences = getSharedPreferences(prefName, Context.MODE_PRIVATE)
+
+    // Load the saved theme state (default is false for light mode)
+    val savedTheme = sharedPreferences.getBoolean(prefKeyIsDarkTheme, false)
+
     setContent {
-      SignifyTheme {
+      var isDarkTheme by remember { mutableStateOf(savedTheme) }
+
+      SignifyTheme(darkTheme = isDarkTheme) {
         Surface(modifier = Modifier.fillMaxSize()) {
-          val context = LocalContext.current
-          SignifyAppPreview(context, AppDependencyProvider)
+          SignifyAppPreview(
+              context = this,
+              dependencyProvider = AppDependencyProvider,
+              isDarkTheme = isDarkTheme,
+              onThemeChange = { isDark ->
+                isDarkTheme = isDark
+                // Save theme preference
+                sharedPreferences.edit().putBoolean(prefKeyIsDarkTheme, isDark).apply()
+              })
         }
       }
     }
@@ -60,6 +87,8 @@ class MainActivity : ComponentActivity() {
 fun SignifyAppPreview(
     context: Context,
     dependencyProvider: DependencyProvider,
+    isDarkTheme: Boolean,
+    onThemeChange: (Boolean) -> Unit
 ) {
   val navController = rememberNavController()
   val navigationActions = NavigationActions(navController, dependencyProvider.userSession())
@@ -116,8 +145,13 @@ fun SignifyAppPreview(
       composable(Screen.HOME.route) { HomeScreen(navigationActions) }
       composable(Screen.PRACTICE.route) { ASLRecognition(handLandMarkViewModel, navigationActions) }
       ExerciseLevel.entries.forEach { exerciseLevel ->
-        composable(exerciseLevel.levelScreen.route) {
-          ExerciseScreen(navigationActions, handLandMarkViewModel, exerciseLevel)
+        composable(exerciseLevel.screen.route) {
+          ExerciseScreen(
+              navigationActions,
+              handLandMarkViewModel,
+              dependencyProvider.userSession(),
+              dependencyProvider.statsRepository(),
+              exerciseLevel)
         }
       }
       composable(Screen.FEEDBACK.route) {
@@ -169,7 +203,9 @@ fun SignifyAppPreview(
         SettingsScreen(
             navigationActions,
             dependencyProvider.userSession(),
-            dependencyProvider.userRepository())
+            dependencyProvider.userRepository(),
+            isDarkTheme = isDarkTheme,
+            onThemeChange = onThemeChange)
       }
     }
   }

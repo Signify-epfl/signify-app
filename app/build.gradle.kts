@@ -218,6 +218,9 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.test.core.ktx)
 
+    // For InstantTaskExecutorRule
+    testImplementation(libs.androidx.core.testing)
+
     androidTestImplementation(libs.mockk)
     androidTestImplementation(libs.mockk.android)
     androidTestImplementation(libs.mockk.agent)
@@ -246,6 +249,8 @@ dependencies {
     // Test Jetpack Compose UI
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
 
 }
 

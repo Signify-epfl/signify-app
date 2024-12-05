@@ -48,6 +48,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
@@ -87,6 +88,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
         FloatingActionButton(
             onClick = { coroutineScope.launch { scrollState.animateScrollToItem(0) } },
             containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.testTag("ScrollToTopButton")) {
               Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Scroll to Top")
             }
@@ -144,8 +146,9 @@ fun HomeScreen(navigationActions: NavigationActions) {
               items(('A'..'Z').toList()) { letter ->
                 Text(
                     text = "Letter $letter",
+                    fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(vertical = 8.dp).testTag("LetterTextDict_$letter"))
                 SignTipBox(letter = letter)
                 Spacer(modifier = Modifier.height(16.dp))
@@ -167,7 +170,7 @@ fun CameraFeedbackButton(onClick: () -> Unit = {}) {
       testTag = "CameraFeedbackButton",
       text = "Try hand signs here !",
       backgroundColor = MaterialTheme.colorScheme.primary,
-  )
+      textColor = MaterialTheme.colorScheme.onPrimary)
 }
 /**
  * Composable function that displays a horizontally arranged letter navigator. Users can scroll
@@ -201,7 +204,7 @@ fun LetterDictionary(
         modifier = Modifier.align(Alignment.CenterStart).testTag("LetterDictionaryBack")) {
           Icon(
               Icons.AutoMirrored.Outlined.ArrowBack,
-              tint = MaterialTheme.colorScheme.onBackground,
+              tint = MaterialTheme.colorScheme.primary,
               contentDescription = "Back")
         }
 
@@ -231,7 +234,7 @@ fun LetterDictionary(
                       horizontalArrangement = Arrangement.Center) {
                         Text(
                             text = "${currentLetter.uppercaseChar()} =",
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = MaterialTheme.colorScheme.onPrimary,
                             fontSize = 32.sp,
                             modifier =
                                 Modifier.testTag("LetterText_${currentLetter.uppercaseChar()}"))
@@ -239,7 +242,7 @@ fun LetterDictionary(
                         Icon(
                             painter = painterResource(id = getLetterIconResId(currentLetter)),
                             contentDescription = "Letter gesture",
-                            tint = MaterialTheme.colorScheme.onSurface,
+                            tint = MaterialTheme.colorScheme.onPrimary,
                             modifier =
                                 Modifier.size(32.dp)
                                     .testTag("LetterIcon_${currentLetter.uppercaseChar()}"))
@@ -258,7 +261,7 @@ fun LetterDictionary(
         modifier = Modifier.align(Alignment.CenterEnd).testTag("LetterDictionaryForward")) {
           Icon(
               Icons.AutoMirrored.Outlined.ArrowForward,
-              tint = MaterialTheme.colorScheme.onBackground,
+              tint = MaterialTheme.colorScheme.primary,
               contentDescription = "Forward")
         }
   }
@@ -293,8 +296,8 @@ fun ExerciseList(exercises: List<ExerciseLevel>, navigationActions: NavigationAc
                             .clip(RoundedCornerShape(8.dp))
                             .background(MaterialTheme.colorScheme.primary)
                             .border(
-                                1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
-                            .testTag("${exercises[page].levelName}ExerciseBox")) {
+                                1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
+                            .testTag("${exercises[page].id}ExerciseBox")) {
                       Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                         ExerciseButton(
                             exercise = exercises[page], navigationActions = navigationActions)
@@ -316,7 +319,7 @@ fun ExerciseList(exercises: List<ExerciseLevel>, navigationActions: NavigationAc
                             color =
                                 if (pagerState.currentPage == index)
                                     MaterialTheme.colorScheme.primary
-                                else MaterialTheme.colorScheme.surface,
+                                else MaterialTheme.colorScheme.primary.copy(alpha = .5f),
                             shape = RoundedCornerShape(50)))
           }
         }
@@ -334,19 +337,17 @@ fun ExerciseList(exercises: List<ExerciseLevel>, navigationActions: NavigationAc
 @Composable
 fun ExerciseButton(exercise: ExerciseLevel, navigationActions: NavigationActions) {
   Button(
-      onClick = { navigationActions.navigateTo(exercise.levelScreen) },
+      onClick = { navigationActions.navigateTo(exercise.screen) },
       modifier =
           Modifier.aspectRatio(2f)
               .fillMaxWidth()
-              .border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
-              .testTag("${exercise.levelName}ExerciseButton"),
+              .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
+              .testTag("${exercise.id}ExerciseButton"),
       shape = RoundedCornerShape(8.dp),
       colors =
           ButtonDefaults.buttonColors(
               MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.onPrimary)) {
-        Text(
-            exercise.levelName,
-            modifier = Modifier.testTag("${exercise.levelName}ExerciseButtonText"))
+        Text(exercise.id, modifier = Modifier.testTag("${exercise.id}ExerciseButtonText"))
       }
 }
 /**

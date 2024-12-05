@@ -177,4 +177,103 @@ class MockChallengeRepositoryTest {
     assertEquals("challenge1", deleteCalls[0])
     assertEquals("challenge2", deleteCalls[1])
   }
+
+  @Test
+  fun `getChallengeById succeeds when challenge exists`() {
+    mockRepository.sendChallengeRequest(player1Id, player2Id, mode, challengeId, {}, {})
+    mockRepository.getChallengeById(
+        challengeId = challengeId,
+        onSuccess = { challenge ->
+          assertNotNull(challenge)
+          assertEquals(challengeId, challenge.challengeId)
+        },
+        onFailure = { fail("onFailure should not be called") })
+  }
+
+  @Test
+  fun `getChallengeById fails when challenge does not exist`() {
+    mockRepository.getChallengeById(
+        challengeId = "nonExistentChallenge",
+        onSuccess = { fail("onSuccess should not be called") },
+        onFailure = { exception ->
+          assertEquals("Challenge with ID nonExistentChallenge not found", exception.message)
+        })
+  }
+
+  @Test
+  fun `updateChallenge succeeds when challenge exists`() {
+    mockRepository.sendChallengeRequest(player1Id, player2Id, mode, challengeId, {}, {})
+    val updatedChallenge =
+        Challenge(
+            challengeId = challengeId,
+            player1 = player1Id,
+            player2 = player2Id,
+            mode = "Sprint",
+            status = "completed")
+
+    mockRepository.updateChallenge(
+        updatedChallenge = updatedChallenge,
+        onSuccess = {
+          val retrievedChallenge = mockRepository.getChallenge(challengeId)
+          assertNotNull(retrievedChallenge)
+          assertEquals("completed", retrievedChallenge?.status)
+        },
+        onFailure = { fail("onFailure should not be called") })
+  }
+
+  @Test
+  fun `updateChallenge fails when challenge does not exist`() {
+    val updatedChallenge =
+        Challenge(
+            challengeId = "nonExistentChallenge",
+            player1 = player1Id,
+            player2 = player2Id,
+            mode = "Sprint",
+            status = "completed")
+
+    mockRepository.updateChallenge(
+        updatedChallenge = updatedChallenge,
+        onSuccess = { fail("onSuccess should not be called") },
+        onFailure = { exception ->
+          assertEquals("Challenge with ID nonExistentChallenge not found", exception.message)
+        })
+  }
+
+  @Test
+  fun `recordPlayerTime succeeds when challenge and player exist`() {
+    mockRepository.sendChallengeRequest(player1Id, player2Id, mode, challengeId, {}, {})
+    mockRepository.recordPlayerTime(
+        challengeId = challengeId,
+        playerId = player1Id,
+        timeTaken = 5000L,
+        onSuccess = {
+          val challenge = mockRepository.getChallenge(challengeId)
+          assertNotNull(challenge)
+          assertTrue(challenge!!.player1Times.contains(5000L))
+        },
+        onFailure = { fail("onFailure should not be called") })
+  }
+
+  @Test
+  fun `recordPlayerTime fails when challenge does not exist`() {
+    mockRepository.recordPlayerTime(
+        challengeId = "nonExistentChallenge",
+        playerId = player1Id,
+        timeTaken = 5000L,
+        onSuccess = { fail("onSuccess should not be called") },
+        onFailure = { exception ->
+          assertEquals("Challenge with ID nonExistentChallenge not found", exception.message)
+        })
+  }
+
+  @Test
+  fun `recordPlayerTime fails when player ID is invalid`() {
+    mockRepository.sendChallengeRequest(player1Id, player2Id, mode, challengeId, {}, {})
+    mockRepository.recordPlayerTime(
+        challengeId = challengeId,
+        playerId = "invalidPlayer",
+        timeTaken = 5000L,
+        onSuccess = { fail("onSuccess should not be called") },
+        onFailure = { exception -> assertEquals("Invalid player ID", exception.message) })
+  }
 }

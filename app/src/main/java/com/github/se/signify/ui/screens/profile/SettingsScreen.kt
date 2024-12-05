@@ -55,6 +55,8 @@ fun SettingsScreen(
     navigationActions: NavigationActions,
     userSession: UserSession,
     userRepository: UserRepository,
+    isDarkTheme: Boolean,
+    onThemeChange: (Boolean) -> Unit
 ) {
   val userViewModel: UserViewModel =
       viewModel(factory = UserViewModel.factory(userSession, userRepository))
@@ -83,6 +85,17 @@ fun SettingsScreen(
       }
 
   AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = "SettingsScreen") {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(16.dp).clickable { onThemeChange(!isDarkTheme) },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween) {
+          Text(
+              text = if (isDarkTheme) "Dark Mode" else "Light Mode",
+              style = MaterialTheme.typography.bodyLarge,
+              color = MaterialTheme.colorScheme.onBackground)
+          androidx.compose.material3.Switch(
+              checked = isDarkTheme, onCheckedChange = { onThemeChange(it) })
+        }
     // Editable Profile Picture
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
       Row(

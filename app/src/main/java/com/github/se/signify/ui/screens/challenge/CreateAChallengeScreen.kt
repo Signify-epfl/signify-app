@@ -26,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -68,6 +67,7 @@ fun CreateAChallengeScreen(
     Text(
         text = "Select a Friend to Challenge",
         fontSize = 24.sp,
+        color = MaterialTheme.colorScheme.onBackground,
         modifier = Modifier.testTag("ChallengeTitle"))
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -77,7 +77,7 @@ fun CreateAChallengeScreen(
       Text(
           text = "No friends available",
           fontSize = 18.sp,
-          color = Color.Gray,
+          color = MaterialTheme.colorScheme.error,
           modifier = Modifier.testTag("NoFriendsText"))
     } else {
       // List of Friends
@@ -95,7 +95,7 @@ fun CreateAChallengeScreen(
                     testTag = "ChallengeButton_$friendId",
                     text = "Challenge",
                     backgroundColor = MaterialTheme.colorScheme.primary,
-                )
+                    textColor = MaterialTheme.colorScheme.onPrimary)
               }
             }
           }
@@ -119,7 +119,7 @@ fun FriendCard(friendId: String, content: @Composable () -> Unit) {
       modifier =
           Modifier.fillMaxWidth()
               .padding(8.dp)
-              .border(1.dp, Color.Gray, RoundedCornerShape(16.dp))
+              .border(1.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(16.dp))
               .testTag("FriendCard_$friendId"), // Add test tag for each friend card
       shape = RoundedCornerShape(16.dp),
   ) {
@@ -131,7 +131,7 @@ fun FriendCard(friendId: String, content: @Composable () -> Unit) {
           Text(
               text = friendId,
               fontSize = 20.sp,
-              color = Color.Black,
+              color = MaterialTheme.colorScheme.primary,
               modifier = Modifier.testTag("FriendName_$friendId"))
 
           Spacer(modifier = Modifier.width(16.dp))
@@ -173,7 +173,7 @@ fun ChallengeModeAlertDialog(
             text = "Send Challenge",
             backgroundColor = MaterialTheme.colorScheme.primary,
             enabled = selectedMode.value != null,
-        )
+            textColor = MaterialTheme.colorScheme.onPrimary)
       },
       dismissButton = {
         UtilTextButton(
@@ -181,7 +181,7 @@ fun ChallengeModeAlertDialog(
             testTag = "CancelButton",
             text = "Cancel",
             backgroundColor = MaterialTheme.colorScheme.surface,
-        )
+            textColor = MaterialTheme.colorScheme.onSurface)
       },
       title = {
         Text(text = "Pick a Mode", modifier = Modifier.fillMaxWidth().testTag("DialogTitle"))
@@ -201,7 +201,7 @@ fun ChallengeModeAlertDialog(
           }
         }
       },
-      containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+      containerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.5f),
   )
 }
 
@@ -217,5 +217,7 @@ fun ModeButton(
       backgroundColor =
           if (selectedMode.value == mode) MaterialTheme.colorScheme.primary
           else MaterialTheme.colorScheme.surface,
-  )
+      textColor =
+          if (selectedMode.value == mode) MaterialTheme.colorScheme.onPrimary
+          else MaterialTheme.colorScheme.onSurface)
 }

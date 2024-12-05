@@ -83,5 +83,7 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <integer name="scroll_offset">8</integer>"
     <string name="friends_requests">Requests</string>
     <string name="friends">Friends</string>
+    <string name="pref_name">theme_prefs</string>
+    <string name="pref_key_is_dark_theme">is_dark_theme</string>
 
 </resources>

@@ -41,6 +41,11 @@ fun MyStatsScreen(
     userViewModel.getProfilePictureUrl()
     userViewModel.updateStreak()
     userViewModel.getStreak()
+    statsViewModel.getEasyExerciseStats()
+    statsViewModel.getMediumExerciseStats()
+    statsViewModel.getHardExerciseStats()
+    statsViewModel.getDailyQuestStats()
+    statsViewModel.getWeeklyQuestStats()
   }
 
   val userName = userViewModel.userName.collectAsState()
