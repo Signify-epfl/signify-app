@@ -223,7 +223,14 @@ fun ActionButtons(onClickAction: () -> Unit, color: Color, text: String, modifie
             text = text, color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Bold)
       }
 }
-
+/**
+ * A composable function that provides a toggle to switch between French (FR) and English (EN).
+ *
+ * @param isFrench A Boolean value representing the current language setting. `true` indicates
+ *   French, and `false` indicates English.
+ * @param onLanguageChange A callback function invoked when the language switch is toggled. The
+ *   callback receives a Boolean value indicating the new language state.
+ */
 @Composable
 fun LanguageSwitch(isFrench: Boolean, onLanguageChange: (Boolean) -> Unit) {
   Row(
