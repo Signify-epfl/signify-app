@@ -31,7 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.github.se.signify.R
-import com.github.se.signify.ui.getLetterIconResId
+import com.github.se.signify.model.getLetterIconResId
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.BackButton
 import com.github.se.signify.ui.CameraPlaceholder

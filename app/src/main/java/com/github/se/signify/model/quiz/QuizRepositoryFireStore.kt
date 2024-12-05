@@ -1,7 +1,7 @@
 package com.github.se.signify.model.quiz
 
 import android.util.Log
-import com.github.se.signify.ui.getLetterIconResId
+import com.github.se.signify.model.getLetterIconResId
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.DocumentSnapshot

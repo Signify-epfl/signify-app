@@ -16,6 +16,9 @@ import androidx.compose.ui.unit.dp
 import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.R
 import com.github.se.signify.model.di.AppDependencyProvider
+import com.github.se.signify.model.getIconResId
+import com.github.se.signify.model.getImageResId
+import com.github.se.signify.model.getTipResId
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.AccountInformation
 import com.github.se.signify.ui.AnnexScreenScaffold
@@ -35,9 +38,6 @@ import com.github.se.signify.ui.TopBar
 import com.github.se.signify.ui.UtilButton
 import com.github.se.signify.ui.UtilIconButton
 import com.github.se.signify.ui.UtilTextButton
-import com.github.se.signify.ui.getIconResId
-import com.github.se.signify.ui.getImageResId
-import com.github.se.signify.ui.getTipResId
 import com.github.se.signify.ui.navigation.NavigationActions
 import junit.framework.TestCase.assertEquals
 import org.junit.Rule
