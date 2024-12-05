@@ -19,7 +19,7 @@ class StatsViewModelTest(
     private val updateAction: () -> Unit,
     private val expectedValueGet: Int,
     private val expectedValueUpdate: Int,
-    private val stateFlowValue: () -> Int,
+    private val stateFlowValue: () -> Int
 ) {
   companion object {
     private lateinit var mockUserSession: UserSession
