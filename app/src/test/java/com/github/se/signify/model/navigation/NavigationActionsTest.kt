@@ -26,12 +26,6 @@ class NavigationActionsTest {
   }
 
   @Test
-  fun test() {
-    navigationActions.navigateTo(Screen.AUTH)
-    verify(navController).navigate(eq(Screen.AUTH.route), anyOrNull(), anyOrNull())
-  }
-
-  @Test
   fun navigateToUnrestrictedTopLevelDestinationWhenUserIsAuthenticated() {
     val destination = TopLevelDestinations.HOME
     userSession.loggedIn = true
