@@ -20,7 +20,7 @@ class QuestViewModel(
     fetchAllQuests()
   }
 
-  private fun fetchAllQuests() {
+  fun fetchAllQuests() {
     CoroutineScope(Dispatchers.IO).launch {
       repository.getQuests(
           onSuccess = { quests -> quest_.value = quests },

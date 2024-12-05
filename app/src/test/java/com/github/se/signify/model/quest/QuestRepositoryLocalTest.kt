@@ -43,7 +43,7 @@ class QuestRepositoryLocalTest {
   }
 
   @Test
-  fun `getQuests should call onFailure when an exception is thrown`() {
+  fun getQuests_should_call_onFailure_when_an_exception_is_thrown() {
     // Arrange
     `when`(context.assets).thenReturn(assetManager)
     `when`(assetManager.open("quests.json")).thenThrow(IOException("File not found"))
@@ -63,7 +63,7 @@ class QuestRepositoryLocalTest {
   }
 
   @Test
-  fun `getQuests should call onFailure for invalid JSON`() {
+  fun getQuests_should_call_onFailure_for_invalid_JSON() {
     // Arrange
     val invalidJson = "{ invalid json }"
     val inputStream = ByteArrayInputStream(invalidJson.toByteArray())
