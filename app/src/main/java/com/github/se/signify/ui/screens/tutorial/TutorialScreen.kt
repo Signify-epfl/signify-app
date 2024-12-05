@@ -27,6 +27,9 @@ import com.github.se.signify.ui.theme.Primary
 fun TutorialScreen(navigationActions: NavigationActions, onFinish: () -> Unit) {
   var step by remember { mutableIntStateOf(0) }
 
+  // Activate tutorial blocking during the tutorial
+  LaunchedEffect(Unit) { navigationActions.tutorialActive = true }
+
   Box(modifier = Modifier.fillMaxSize()) {
     // Display the HomeScreen in the background
     HomeScreen(navigationActions)
