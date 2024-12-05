@@ -21,6 +21,9 @@ import com.github.se.signify.R
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.screens.home.HomeScreen
 
+private val overlayColor
+  @Composable get() = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8F)
+
 @Composable
 fun TutorialScreen(navigationActions: NavigationActions, onFinish: () -> Unit) {
   var step by remember { mutableIntStateOf(0) }
@@ -103,7 +106,7 @@ fun TutorialOverlay(text: String, highlightArea: @Composable () -> Unit, onNext:
 @Composable
 fun HighlightedBox(xOffset: Dp, yOffset: Dp, highlightWidth: Dp, highlightHeight: Dp) {
   // Fixed colors for overlay and border
-  val overlayColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8F)
+
   val borderColor = MaterialTheme.colorScheme.tertiary
 
   Box(modifier = Modifier.fillMaxSize()) {
@@ -151,8 +154,7 @@ fun HighlightedBox(xOffset: Dp, yOffset: Dp, highlightWidth: Dp, highlightHeight
 
 @Composable
 fun FullScreenSemiTransparentOverlay(
-    color: Color =
-        MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8F) // Default semi-transparent black
+    color: Color = overlayColor // Default semi-transparent black
 ) {
   Box(modifier = Modifier.fillMaxSize().background(color))
 }
