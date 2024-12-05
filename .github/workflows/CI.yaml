@@ -30,10 +30,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          lfs: true
+          lfs: true  # Enables LFS file download
           submodules: recursive
           fetch-depth: 0
-
+      # Check if the File is in the build with correct size
       - name: Verify LFS Download
         run: |
           ls -lh app/src/main/assets/RFC_model_ir9_opset19.onnx
@@ -51,7 +51,7 @@ jobs:
           distribution: "temurin"
           java-version: "17"
 
-      - name: Retrieve Gradle Cache
+      - name: Retrieve gradle cache
         uses: actions/cache@v3
         with:
           path: |
@@ -74,48 +74,40 @@ jobs:
       - name: Assemble
         run: ./gradlew assembleDebug lint --parallel --build-cache
 
-      - name: Run Unit Tests
+      - name: Run tests
         run: ./gradlew check --parallel --build-cache
 
-      - name: Start Emulator and Run Instrumentation Tests
+      - name: Run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 30
+          api-level: 34
           target: google_apis
           arch: x86_64
           avd-name: github
           force-avd-creation: true
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -skin 1080x1920 -debug all
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -skin 1080x1920 -feature -Vulkan
           disable-animations: true
-          script: |
-            adb wait-for-device
-            adb shell settings put global window_animation_scale 0
-            adb shell settings put global transition_animation_scale 0
-            adb shell settings put global animator_duration_scale 0
-            ./gradlew connectedDebugAndroidTest --info --build-cache
+          script: ./gradlew connectedCheck --parallel --build-cache
 
-      - name: Capture Emulator Logs
-        if: failure()
-        run: |
-          adb logcat -d > emulator_logs.txt
-          cat emulator_logs.txt
-
-      - name: Generate Coverage Report
+      - name: Generate coverage
         run: ./gradlew jacocoTestReport
 
-      - name: Upload Coverage Report
+      - name: Upload coverage
         uses: actions/upload-artifact@v4
         with:
           name: Coverage report
           path: app/build/reports/jacoco/jacocoTestReport
 
-      - name: Run SonarQube Analysis
+
+      - name: Run SonarQube analysis
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew sonar --info
 
-      - name: Decode Keystore
+      # New Steps: Building the Signed APK
+
+      - name: Decode the base64-encoded keystore
         run: echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > ./keystore.jks
 
       - name: Build Signed APK
@@ -130,16 +122,13 @@ jobs:
           -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD \
           -Pandroid.injected.signing.key.alias=$KEY_ALIAS \
           -Pandroid.injected.signing.key.password=$KEY_PASSWORD
-
       - name: Upload Signed APK
         uses: actions/upload-artifact@v4
         with:
           name: release apk
           path: app/build/outputs/apk/release/app-release.apk
-
       - name: Verify APK Contents
         run: |
           unzip -l app/build/outputs/apk/release/app-release.apk | grep -E "RFC_model_ir9_opset19.onnx|hand_landmarker.task"
-
       - name: List Assets Directory Contents
         run: ls -la app/src/main/assets
