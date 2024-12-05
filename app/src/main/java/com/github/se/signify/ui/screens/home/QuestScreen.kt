@@ -50,7 +50,6 @@ import com.github.se.signify.model.quest.QuestRepository
 import com.github.se.signify.model.quest.QuestViewModel
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
-import com.github.se.signify.ui.getLetterIconResId
 
 @Composable
 fun QuestScreen(
