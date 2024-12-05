@@ -3,6 +3,7 @@ package com.github.se.signify.model.navigation
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
 import com.github.se.signify.model.auth.MockUserSession
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.any
@@ -10,6 +11,7 @@ import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 
 class NavigationActionsTest {
@@ -41,6 +43,27 @@ class NavigationActionsTest {
 
     navigationActions.navigateTo(destination)
     verify(navController).navigate(eq(""), anyOrNull<NavOptionsBuilder.() -> Unit>())
+  }
+
+  @Test
+  fun navigateToRestrictedTopLevelDestinationWhenUserIsAuthenticated() {
+    val destination = TopLevelDestinations.PROFILE
+    userSession.loggedIn = true
+
+    navigationActions.navigateTo(destination)
+    verify(navController).navigate(eq(Route.PROFILE), any<NavOptionsBuilder.() -> Unit>())
+  }
+
+  @Test
+  fun navigateToRestrictedTopLevelDestinationWhenUserIsUnauthenticated() {
+    val destination = TopLevelDestinations.PROFILE
+    userSession.loggedIn = false
+
+    navigationActions.navigateTo(destination)
+    verify(navController, never())
+        .navigate(eq(Route.PROFILE), anyOrNull<NavOptionsBuilder.() -> Unit>())
+    verify(navController)
+        .navigate(eq(Screen.UNAUTHENTICATED.route), anyOrNull<NavOptionsBuilder.() -> Unit>())
   }
 
   @Test
@@ -77,8 +100,8 @@ class NavigationActionsTest {
     userSession.loggedIn = false
 
     navigationActions.navigateTo(screen)
-
     verify(navController, never()).navigate(eq(screen.route), anyOrNull(), anyOrNull())
+    verify(navController).navigate(eq(Screen.UNAUTHENTICATED.route), anyOrNull(), anyOrNull())
   }
 
   @Test
@@ -86,5 +109,14 @@ class NavigationActionsTest {
     navigationActions.goBack()
 
     verify(navController).popBackStack()
+  }
+
+  @Test
+  fun currentRoute() {
+    assertNull(navigationActions.currentRoute())
+    navigationActions.navigateTo(Screen.DO_NOT_REQUIRE_AUTH)
+    assertNull(navigationActions.currentRoute())
+
+    verify(navController, times(2)).currentDestination
   }
 }
