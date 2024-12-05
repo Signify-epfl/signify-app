@@ -36,7 +36,7 @@ class ChronoChallengeGameScreenTest {
   @Before
   fun setup() {
     val context = mock(Context::class.java)
-    val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
+    val handLandMarkImplementation = AppDependencyProvider().handLandMarkRepository()
     handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
     mockNavigationActions = mock(NavigationActions::class.java)
 
