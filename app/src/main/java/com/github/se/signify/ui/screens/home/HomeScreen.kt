@@ -53,6 +53,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.model.exercise.ExerciseLevel
+import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.UtilButton
 import com.github.se.signify.ui.UtilTextButton
@@ -60,8 +62,6 @@ import com.github.se.signify.ui.getIconResId
 import com.github.se.signify.ui.getImageResId
 import com.github.se.signify.ui.getLetterIconResId
 import com.github.se.signify.ui.getTipResId
-import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.navigation.Screen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

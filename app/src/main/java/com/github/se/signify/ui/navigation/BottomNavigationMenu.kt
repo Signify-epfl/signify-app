@@ -16,12 +16,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.model.navigation.TopLevelDestination
 
 @Composable
 fun BottomNavigationMenu(
     onTabSelect: (TopLevelDestination) -> Unit,
     tabList: List<TopLevelDestination>,
-    selectedItem: String = Screen.HOME.route, // Provide a default value
+    selectedItem: String? = Screen.HOME.route, // Provide a default value
 ) {
   Box(
       modifier =

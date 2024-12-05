@@ -9,7 +9,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.se.signify.model.auth.MockUserSession
 import com.github.se.signify.model.feedback.FeedbackRepository
-import com.github.se.signify.ui.navigation.NavigationActions
+import com.github.se.signify.model.navigation.NavigationActions
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

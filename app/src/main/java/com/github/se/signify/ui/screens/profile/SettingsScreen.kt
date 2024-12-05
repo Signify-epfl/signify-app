@@ -43,12 +43,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.model.auth.UserSession
+import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.NotImplementedYet
 import com.github.se.signify.ui.ProfilePicture
-import com.github.se.signify.ui.navigation.NavigationActions
 
 @Composable
 fun SettingsScreen(

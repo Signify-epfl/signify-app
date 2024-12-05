@@ -32,12 +32,12 @@ import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.challenge.Challenge
 import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.challenge.ChallengeViewModel
+import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.UtilTextButton
-import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.navigation.Screen
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable

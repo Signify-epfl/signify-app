@@ -32,12 +32,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.github.se.signify.R
 import com.github.se.signify.model.hand.HandLandMarkViewModel
+import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.ui.BackButton
 import com.github.se.signify.ui.CameraPlaceholder
 import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.UtilTextButton
 import com.github.se.signify.ui.gestureImageMap
-import com.github.se.signify.ui.navigation.NavigationActions
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 
 /**

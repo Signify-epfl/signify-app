@@ -13,8 +13,8 @@ import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.di.AppDependencyProvider
 import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.model.hand.HandLandMarkViewModel
+import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.stats.StatsRepository
-import com.github.se.signify.ui.navigation.NavigationActions
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
