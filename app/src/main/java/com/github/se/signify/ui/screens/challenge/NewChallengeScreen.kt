@@ -66,7 +66,8 @@ fun NewChallengeScreen(
         testTag = "MyFriendsButton",
         text = "My Friends",
         backgroundColor = MaterialTheme.colorScheme.primary,
-        textColor = MaterialTheme.colorScheme.onPrimary)
+        textColor = MaterialTheme.colorScheme.onPrimary,
+        modifier = Modifier)
 
     Spacer(modifier = Modifier.height(32.dp))
 
@@ -76,7 +77,8 @@ fun NewChallengeScreen(
         testTag = "CreateChallengeButton",
         text = "Create a Challenge",
         backgroundColor = MaterialTheme.colorScheme.primary,
-        textColor = MaterialTheme.colorScheme.onPrimary)
+        textColor = MaterialTheme.colorScheme.onPrimary,
+        modifier = Modifier)
 
     Spacer(modifier = Modifier.height(32.dp))
 

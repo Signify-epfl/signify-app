@@ -1,6 +1,7 @@
 package com.github.se.signify.ui.screens.challenge
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -158,8 +159,7 @@ fun ChallengeModeAlertDialog(
             text = "Send Challenge",
             backgroundColor = MaterialTheme.colorScheme.primary,
             textColor = MaterialTheme.colorScheme.onPrimary,
-            enabled = selectedMode.value != null,
-        )
+            modifier = Modifier.clickable(selectedMode.value != null) {})
       },
       dismissButton = {
         TextButton(

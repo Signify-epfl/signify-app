@@ -20,9 +20,11 @@ import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.ui.AccountInformation
 import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.BackButton
+import com.github.se.signify.ui.BasicButton
 import com.github.se.signify.ui.CameraPlaceholder
 import com.github.se.signify.ui.InfoPopup
 import com.github.se.signify.ui.LearnedLetterList
+import com.github.se.signify.ui.LetterList
 import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.NotImplementedYet
 import com.github.se.signify.ui.ProfilePicture
@@ -30,10 +32,8 @@ import com.github.se.signify.ui.ScreenColumn
 import com.github.se.signify.ui.SquareButton
 import com.github.se.signify.ui.StatisticsList
 import com.github.se.signify.ui.StreakCounter
-import com.github.se.signify.ui.TopBar
-import com.github.se.signify.ui.BasicButton
-import com.github.se.signify.ui.HorizontalLetterList
 import com.github.se.signify.ui.TextButton
+import com.github.se.signify.ui.TopBar
 import com.github.se.signify.ui.navigation.NavigationActions
 import org.junit.Rule
 import org.junit.Test
@@ -61,7 +61,8 @@ class UtilsTest {
           testTag = textTag,
           text = buttonText,
           backgroundColor = Color.Blue,
-          textColor = MaterialTheme.colorScheme.onPrimary)
+          textColor = MaterialTheme.colorScheme.onPrimary,
+          modifier = Modifier)
     }
 
     // Assert the button is displayed
@@ -84,7 +85,8 @@ class UtilsTest {
           testTag = textTag,
           text = buttonText,
           backgroundColor = Color.Blue,
-          textColor = MaterialTheme.colorScheme.onPrimary)
+          textColor = MaterialTheme.colorScheme.onPrimary,
+          modifier = Modifier)
     }
 
     // Perform a click action on the button
@@ -318,7 +320,7 @@ class UtilsTest {
   @Test
   fun horizontalLetterListIsDisplayedAndScrollable() {
     val lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F')
-    composeTestRule.setContent { HorizontalLetterList(lettersLearned) }
+    composeTestRule.setContent { LetterList(lettersLearned) }
 
     composeTestRule.onNodeWithTag("LettersList").assertIsDisplayed()
     val scrollableList = composeTestRule.onNodeWithTag("LettersList")

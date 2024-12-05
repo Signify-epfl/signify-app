@@ -69,7 +69,8 @@ fun UnauthenticatedScreen(navigationActions: NavigationActions) {
                   testTag = "logInButton",
                   text = "Log In",
                   backgroundColor = MaterialTheme.colorScheme.primary,
-                  textColor = MaterialTheme.colorScheme.onPrimary)
+                  textColor = MaterialTheme.colorScheme.onPrimary,
+                  modifier = Modifier)
             }
       }
 }

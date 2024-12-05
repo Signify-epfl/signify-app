@@ -87,7 +87,8 @@ fun ASLRecognition(
                   testTag = "practiceButton",
                   text = "More on ASL Alphabet",
                   backgroundColor = MaterialTheme.colorScheme.primary,
-                  textColor = MaterialTheme.colorScheme.onPrimary)
+                  textColor = MaterialTheme.colorScheme.onPrimary,
+                  modifier = Modifier)
             }
       }
 }

@@ -1,7 +1,6 @@
 package com.github.se.signify.ui
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.util.Log
@@ -89,7 +88,7 @@ import com.github.se.signify.ui.navigation.NavigationActions
  * @param testTag A string used for testing, which serves as the tag for the button.
  * @param text The text to be displayed inside the button.
  * @param backgroundColor The background color of the button.
- * @param enabled A boolean value indicating whether the button is enabled.
+ * @param modifier Modifier to be applied to the button. This should be avoided.
  */
 @Composable
 fun TextButton(
@@ -98,7 +97,7 @@ fun TextButton(
     text: String,
     backgroundColor: Color,
     textColor: Color,
-    enabled: Boolean = true,
+    modifier: Modifier = Modifier,
 ) {
   OutlinedButton(
       onClick = onClickAction,
@@ -106,8 +105,7 @@ fun TextButton(
           ButtonDefaults.outlinedButtonBorder.copy(
               width = 2.dp, brush = SolidColor(MaterialTheme.colorScheme.background)),
       colors = ButtonDefaults.buttonColors(backgroundColor),
-      modifier = Modifier.fillMaxWidth().height(40.dp).testTag(testTag),
-      enabled = enabled,
+      modifier = modifier.fillMaxWidth().height(40.dp).testTag(testTag),
   ) {
     Text(
         text,
@@ -126,6 +124,7 @@ fun TextButton(
  * @param label The text for the button.
  * @param onClick A lambda function to execute when the button is clicked.
  * @param size The size of the button. It will be used to scale the other elements of the button.
+ * @param modifier Modifier to be applied to the button. This should be avoided.
  */
 @Composable
 fun SquareButton(
@@ -133,7 +132,7 @@ fun SquareButton(
     label: String,
     onClick: () -> Unit,
     size: Int,
-    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
   Column(
       horizontalAlignment = Alignment.CenterHorizontally,
@@ -168,6 +167,7 @@ fun SquareButton(
  * @param iconTestTag The testTag of the icon.
  * @param icon The icon to display.
  * @param contentDescription The description text of the icon.
+ * @param modifier Modifier to be applied to the button. This should be avoided.
  */
 @Composable
 fun BasicButton(
@@ -175,7 +175,8 @@ fun BasicButton(
     buttonTestTag: String,
     iconTestTag: String,
     icon: ImageVector,
-    contentDescription: String
+    contentDescription: String,
+    modifier: Modifier = Modifier,
 ) {
   Box(
       modifier =
@@ -475,7 +476,7 @@ fun StatisticsList(
  * @param lettersLearned The list of character already learned.
  */
 @Composable
-fun HorizontalLetterList(lettersLearned: List<Char>) {
+fun LetterList(lettersLearned: List<Char>) {
   val allLetters = ('A'..'Z').toList() // All capital letters from A to Z
   val scrollState = rememberScrollState()
 
@@ -514,7 +515,7 @@ fun LearnedLetterList(lettersLearned: List<Char>) {
               .clip(RoundedCornerShape(8.dp))
               .padding(12.dp)
               .testTag("LettersBox")) {
-        HorizontalLetterList(lettersLearned)
+        LetterList(lettersLearned)
       }
 }
 
@@ -639,10 +640,9 @@ fun NotImplementedYet(testTag: String, text: String) {
  * camera permission and displays the camera preview if permission is granted.
  *
  * @param handLandMarkViewModel The ViewModel responsible for managing hand landmark detection.
- * @param modifier Modifier to be applied to the camera placeholder.
  */
 @Composable
-fun CameraPlaceholder(handLandMarkViewModel: HandLandMarkViewModel, modifier: Modifier = Modifier) {
+fun CameraPlaceholder(handLandMarkViewModel: HandLandMarkViewModel, testTag: String = "") {
   val context = LocalContext.current
   val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
   val previewView = remember { PreviewView(context) }
@@ -672,8 +672,7 @@ fun CameraPlaceholder(handLandMarkViewModel: HandLandMarkViewModel, modifier: Mo
   if (permissionGranted) {
     Box(
         modifier =
-            modifier
-                .fillMaxWidth()
+            Modifier.fillMaxWidth()
                 .padding(16.dp)
                 .height(350.dp)
                 .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp))
@@ -723,8 +722,7 @@ fun CameraPlaceholder(handLandMarkViewModel: HandLandMarkViewModel, modifier: Mo
   } else {
     Box(
         modifier =
-            modifier
-                .fillMaxWidth()
+            Modifier.fillMaxWidth()
                 .padding(16.dp)
                 .height(350.dp)
                 .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp))

@@ -56,8 +56,8 @@ import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.model.getIconResId
 import com.github.se.signify.model.getImageResId
 import com.github.se.signify.model.getTipResId
-import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.BasicButton
+import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.TextButton
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
@@ -169,7 +169,8 @@ fun CameraFeedbackButton(onClick: () -> Unit = {}) {
       testTag = "CameraFeedbackButton",
       text = "Try hand signs here !",
       backgroundColor = MaterialTheme.colorScheme.primary,
-      textColor = MaterialTheme.colorScheme.onPrimary)
+      textColor = MaterialTheme.colorScheme.onPrimary,
+      modifier = Modifier)
 }
 /**
  * Composable function that displays a horizontally arranged letter navigator. Users can scroll

@@ -24,10 +24,10 @@ import com.github.se.signify.model.stats.StatsViewModel
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.AccountInformation
+import com.github.se.signify.ui.BasicButton
 import com.github.se.signify.ui.LearnedLetterList
 import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.SquareButton
-import com.github.se.signify.ui.BasicButton
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 import com.google.firebase.auth.FirebaseAuth

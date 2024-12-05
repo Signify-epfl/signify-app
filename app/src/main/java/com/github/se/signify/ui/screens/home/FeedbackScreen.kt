@@ -104,7 +104,8 @@ fun FeedbackScreen(
         testTag = "SendFeedbackButton",
         text = "Send Feedback",
         backgroundColor = MaterialTheme.colorScheme.primary,
-        textColor = MaterialTheme.colorScheme.onPrimary)
+        textColor = MaterialTheme.colorScheme.onPrimary,
+        modifier = Modifier)
 
     LoadingIndicator(isLoading = isLoading)
   }
