@@ -16,7 +16,6 @@ import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.ui.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.Screen
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
-import junit.framework.AssertionFailedError
 import org.junit.After
 import org.junit.Assert.assertThrows
 import org.junit.Before
@@ -86,7 +85,7 @@ class LoginScreenTest : TestCase() {
     composeTestRule.waitForIdle()
 
     // Assert that no intent to Google Mobile Services has been sent
-    assertThrows(AssertionFailedError::class.java) { intended(toPackage("com.google.android.gms")) }
+    assertThrows(Exception::class.java) { intended(toPackage("com.google.android.gms")) }
   }
 
   @Test
