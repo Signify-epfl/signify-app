@@ -84,8 +84,6 @@ import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.model.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.BottomNavigationMenu
-import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
-import com.github.se.signify.ui.navigation.NavigationActions
 import java.util.Locale
 
 // Map to associate each letter with its corresponding drawable resource for ASL gestures
