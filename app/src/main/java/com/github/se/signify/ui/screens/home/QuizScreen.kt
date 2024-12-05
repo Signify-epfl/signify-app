@@ -68,7 +68,7 @@ fun QuizScreen(navigationActions: NavigationActions, quizRepository: QuizReposit
     if (currentQuiz != null) {
       val shuffledOptions =
           remember(currentQuiz) {
-            currentQuiz!!.confusers.plus(currentQuiz!!.correctWord).shuffled()
+            currentQuiz.confusers.plus(currentQuiz.correctWord).shuffled()
           }
 
       QuizContent(
