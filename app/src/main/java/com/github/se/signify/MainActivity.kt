@@ -15,23 +15,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.github.se.signify.model.di.AppDependencyProvider
 import com.github.se.signify.model.di.DependencyProvider
 import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.model.hand.HandLandMarkViewModel
-import com.github.se.signify.model.quest.QuestRepositoryLocal
-import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.navigation.Route
-import com.github.se.signify.ui.navigation.Screen
+import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.navigation.Route
+import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.screens.WelcomeScreen
 import com.github.se.signify.ui.screens.auth.LoginScreen
 import com.github.se.signify.ui.screens.auth.UnauthenticatedScreen
 import com.github.se.signify.ui.screens.challenge.ChallengeHistoryScreen
 import com.github.se.signify.ui.screens.challenge.ChallengeScreen
+import com.github.se.signify.ui.screens.challenge.ChronoChallengeGameScreen
 import com.github.se.signify.ui.screens.challenge.CreateAChallengeScreen
 import com.github.se.signify.ui.screens.challenge.NewChallengeScreen
 import com.github.se.signify.ui.screens.home.ASLRecognition
@@ -92,8 +94,7 @@ fun SignifyAppPreview(
     onThemeChange: (Boolean) -> Unit
 ) {
   val navController = rememberNavController()
-  val navigationActions =
-      NavigationActions(context, navController, dependencyProvider.userSession())
+  val navigationActions = NavigationActions(navController, dependencyProvider.userSession())
   val handLandMarkImplementation = dependencyProvider.handLandMarkRepository()
   val handLandMarkViewModel: HandLandMarkViewModel =
       viewModel(factory = HandLandMarkViewModel.provideFactory(context, handLandMarkImplementation))
@@ -125,6 +126,22 @@ fun SignifyAppPreview(
             dependencyProvider.userRepository(),
             dependencyProvider.challengeRepository())
       }
+
+      composable(
+          route = Screen.CHRONO_CHALLENGE.route, // Define the base route with `{challengeId}`
+          arguments = listOf(navArgument("challengeId") { type = NavType.StringType })) {
+              backStackEntry ->
+            val challengeId =
+                backStackEntry.arguments?.getString("challengeId") ?: return@composable
+
+            // Pass all dependencies
+            ChronoChallengeGameScreen(
+                navigationActions = navigationActions,
+                userSession = dependencyProvider.userSession(),
+                challengeRepository = dependencyProvider.challengeRepository(),
+                handLandMarkViewModel = handLandMarkViewModel,
+                challengeId = challengeId)
+          }
       composable(Screen.CREATE_CHALLENGE.route) {
         CreateAChallengeScreen(
             navigationActions,
@@ -147,8 +164,13 @@ fun SignifyAppPreview(
       composable(Screen.HOME.route) { HomeScreen(navigationActions) }
       composable(Screen.PRACTICE.route) { ASLRecognition(handLandMarkViewModel, navigationActions) }
       ExerciseLevel.entries.forEach { exerciseLevel ->
-        composable(exerciseLevel.levelScreen.route) {
-          ExerciseScreen(navigationActions, handLandMarkViewModel, exerciseLevel)
+        composable(exerciseLevel.screen.route) {
+          ExerciseScreen(
+              navigationActions,
+              handLandMarkViewModel,
+              dependencyProvider.userSession(),
+              dependencyProvider.statsRepository(),
+              exerciseLevel)
         }
       }
       composable(Screen.FEEDBACK.route) {
@@ -161,7 +183,7 @@ fun SignifyAppPreview(
         QuestScreen(
             navigationActions,
             dependencyProvider.userSession(),
-            questRepository = QuestRepositoryLocal(context),
+            dependencyProvider.questRepository(),
             dependencyProvider.userRepository())
       }
       composable(Screen.QUIZ.route) {
