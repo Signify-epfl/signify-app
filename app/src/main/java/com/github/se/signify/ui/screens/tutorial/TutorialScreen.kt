@@ -2,6 +2,8 @@ package com.github.se.signify.ui.screens.tutorial
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -33,6 +35,16 @@ fun TutorialScreen(navigationActions: NavigationActions, onFinish: () -> Unit) {
   Box(modifier = Modifier.fillMaxSize()) {
     // Display the HomeScreen in the background
     HomeScreen(navigationActions)
+
+    // Add an overlay to block input and gestures
+    Box(
+        modifier =
+            Modifier.fillMaxSize().background(Color.Transparent).clickable(
+                indication = null,
+                interactionSource =
+                    remember {
+                      MutableInteractionSource()
+                    }) { /* Block all interactions, including scrolling */})
 
     // Overlay for tutorial steps
     when (step) {
