@@ -36,7 +36,8 @@ class QuestRepositoryFireStore(private val db: FirebaseFirestore) : QuestReposit
       val title = document.getString("title") ?: return null
       val description = document.getString("description") ?: return null
       val index = document.getString("index") ?: return null
-      Quest(index = index, title = title, description = description)
+      val videoPath = "android.resource://com.github.se.signify/raw/$title"
+      Quest(index = index, title = title, description = description, videoPath = videoPath)
     } catch (e: Exception) {
       null
     }
