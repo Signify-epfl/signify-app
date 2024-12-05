@@ -60,9 +60,6 @@ class ExerciseEnd2endTest {
     composeTestRule.waitForIdle()
     // Advance by 7 seconds, at this point the user finished the Hard exercise
     composeTestRule.onNodeWithTag("BackButton").performClick()
-
-    composeTestRule.waitForIdle()
-    // The user finished his exercises
   }
 
   @Test
@@ -97,7 +94,5 @@ class ExerciseEnd2endTest {
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FeedbackButton").performClick()
     composeTestRule.onNodeWithTag("FeedbackScreenContent").assertIsDisplayed()
-
-    // The user finished 'playing' with the HomeScreen features.
   }
 }

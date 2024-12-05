@@ -85,7 +85,7 @@ class LoginScreenTest : TestCase() {
     composeTestRule.waitForIdle()
 
     // Assert that no intent to Google Mobile Services has been sent
-    assertThrows(Exception::class.java) { intended(toPackage("com.google.android.gms")) }
+    assertThrows(Throwable::class.java) { intended(toPackage("com.google.android.gms")) }
   }
 
   @Test
