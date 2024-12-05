@@ -62,7 +62,6 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -666,7 +665,7 @@ fun NotImplementedYet(testTag: String, text: String) {
 @Composable
 fun CameraPlaceholder(handLandMarkViewModel: HandLandMarkViewModel, modifier: Modifier = Modifier) {
   val context = LocalContext.current
-  val lifecycleOwner = LocalLifecycleOwner.current
+  val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
   val previewView = remember { PreviewView(context) }
   var permissionGranted by remember { mutableStateOf(false) }
 
