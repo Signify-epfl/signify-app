@@ -1,16 +1,10 @@
 package com.github.se.signify.ui.navigation
 
-import android.content.Context
-import android.os.Handler
-import android.os.Looper
-import android.widget.Toast
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import com.github.se.signify.R
 import com.github.se.signify.model.auth.UserSession
 
 open class NavigationActions(
-    private val context: Context,
     private val navController: NavHostController,
     private val userSession: UserSession
 ) {
@@ -67,10 +61,6 @@ open class NavigationActions(
   }
 
   private fun onUnauthenticated() {
-    // TODO: Display a popup dialog to prompt the user to log in
-    Handler(Looper.getMainLooper()).post {
-      Toast.makeText(context, context.getString(R.string.unauthenticated_error), Toast.LENGTH_SHORT)
-          .show()
-    }
+    navigateTo(Screen.UNAUTHENTICATED)
   }
 }
