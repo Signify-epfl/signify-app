@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -59,12 +58,10 @@ fun QuestScreen(
     questRepository: QuestRepository,
     userRepository: UserRepository,
 ) {
-  // ViewModels
   val questViewModel: QuestViewModel = viewModel(factory = QuestViewModel.factory(questRepository))
   val userViewModel: UserViewModel =
       viewModel(factory = UserViewModel.factory(userSession, userRepository))
 
-  // Collect quest data
   val quests = questViewModel.quest.collectAsState()
   val unlockedQuests = 20
   // by userViewModel.unlockedQuests.collectAsState()
