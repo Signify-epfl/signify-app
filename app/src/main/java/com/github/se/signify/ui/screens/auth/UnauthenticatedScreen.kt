@@ -19,17 +19,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
+import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.MainScreenScaffold
 import com.github.se.signify.ui.TextButton
-import com.github.se.signify.ui.navigation.NavigationActions
-import com.github.se.signify.ui.navigation.Screen
 
 /**
  * A composable function that displays a screen for offline mode.
  *
  * This screen informs the user that they are offline and provides a "Log In" button to navigate to
  * the authentication screen (Screen.AUTH). The screen utilizes a scaffold with a bottom navigation
- * menu and a consistent design from utility components.
+ * menu and a consistent design from utility components. j
  *
  * @param navigationActions An instance of [NavigationActions] used for navigation within the app.
  */

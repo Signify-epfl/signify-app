@@ -41,11 +41,11 @@ import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.exercise.ExerciseLevel
 import com.github.se.signify.model.exercise.ExerciseLevelName
 import com.github.se.signify.model.hand.HandLandMarkViewModel
+import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.stats.StatsViewModel
 import com.github.se.signify.ui.AnnexScreenScaffold
 import com.github.se.signify.ui.CameraBox
-import com.github.se.signify.ui.navigation.NavigationActions
 
 /**
  * Composable function for a common exercise screen layout, handling gesture detection, sentence
