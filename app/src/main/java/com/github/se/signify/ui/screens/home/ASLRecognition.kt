@@ -58,7 +58,7 @@ fun ASLRecognition(
                   .height(252.dp)
                   .padding(horizontal = 16.dp)
                   .background(MaterialTheme.colorScheme.background)) {
-            CameraBox(handLandMarkViewModel)
+            CameraBox(handLandMarkViewModel, "cameraPreview")
           }
 
       Spacer(modifier = Modifier.height(30.dp))

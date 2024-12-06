@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.screens
+package com.github.se.signify.ui
 
 import android.Manifest
 import android.content.Context
@@ -26,23 +26,6 @@ import com.github.se.signify.R
 import com.github.se.signify.model.di.AppDependencyProvider
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
-import com.github.se.signify.ui.AccountInformation
-import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.BackButton
-import com.github.se.signify.ui.BasicButton
-import com.github.se.signify.ui.CameraBox
-import com.github.se.signify.ui.InfoPopup
-import com.github.se.signify.ui.LearnedLetterList
-import com.github.se.signify.ui.LetterList
-import com.github.se.signify.ui.MainScreenScaffold
-import com.github.se.signify.ui.NotImplementedYet
-import com.github.se.signify.ui.ProfilePicture
-import com.github.se.signify.ui.ScreenColumn
-import com.github.se.signify.ui.SquareButton
-import com.github.se.signify.ui.StatisticsTable
-import com.github.se.signify.ui.StreakCounter
-import com.github.se.signify.ui.TextButton
-import com.github.se.signify.ui.TopBar
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.mock
@@ -400,7 +383,7 @@ class UtilsTest {
     val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
     val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
 
-    composeTestRule.setContent { CameraBox(handLandMarkViewModel) }
+    composeTestRule.setContent { CameraBox(handLandMarkViewModel, "cameraPreview") }
     composeTestRule.onNodeWithTag("cameraPreview").assertIsDisplayed()
   }
 }

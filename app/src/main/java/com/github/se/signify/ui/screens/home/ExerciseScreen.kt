@@ -149,7 +149,7 @@ fun ExerciseScreen(
     )
 
     // Camera placeholder/composable
-    CameraBox(handLandMarkViewModel)
+    CameraBox(handLandMarkViewModel, "cameraPreview")
   }
 }
 
