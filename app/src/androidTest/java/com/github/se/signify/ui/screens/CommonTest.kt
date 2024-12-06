@@ -30,7 +30,7 @@ import com.github.se.signify.ui.NotImplementedYet
 import com.github.se.signify.ui.ProfilePicture
 import com.github.se.signify.ui.ScreenColumn
 import com.github.se.signify.ui.SquareButton
-import com.github.se.signify.ui.StatisticsList
+import com.github.se.signify.ui.StatisticsTable
 import com.github.se.signify.ui.StreakCounter
 import com.github.se.signify.ui.TextButton
 import com.github.se.signify.ui.TopBar
@@ -297,7 +297,7 @@ class UtilsTest {
     val statsTextList = listOf("test1", "test2")
     val statsNumberList = listOf("1", "2")
     composeTestRule.setContent {
-      StatisticsList(
+      StatisticsTable(
           lineText = lineText,
           statsTexts = statsTextList,
           statsNumberList = statsNumberList,

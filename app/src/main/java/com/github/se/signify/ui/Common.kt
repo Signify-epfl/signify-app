@@ -84,12 +84,14 @@ import com.github.se.signify.ui.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.ui.navigation.NavigationActions
 
 /**
- * A reusable composable function that creates an outlined button with customizable text.
+ * An outlined button with text.
  *
- * @param onClick A lambda function to execute when the button is clicked.
- * @param testTag A string used for testing, which serves as the tag for the button.
+ * @param onClick A unit to be executed when the button is clicked.
+ * @param testTag The test tag of the button.
  * @param text The text to be displayed inside the button.
  * @param backgroundColor The background color of the button.
+ * @param textColor The text color of the button.
+ * @param enabled The state of the button. If false, the button is disabled.
  * @param modifier Modifier to be applied to the button. This should be avoided.
  */
 @Composable
@@ -121,12 +123,12 @@ fun TextButton(
 }
 
 /**
- * A reusable composable function that creates a square button with customizable text above the
- * icon.
+ * A square button with an icon and text.
  *
  * @param iconId The icon for the button.
+ * @param onClick A unit to be executed when the button is clicked.
  * @param text The text for the button.
- * @param onClick A lambda function to execute when the button is clicked.
+ * @param testTag The test tag of the button.
  * @param size The size of the button. It will be used to scale the other elements of the button.
  * @param modifier Modifier to be applied to the button. This should be avoided.
  */
@@ -165,12 +167,12 @@ fun SquareButton(
 }
 
 /**
- * A reusable composable function that creates an icon button.
+ * A button with an icon.
  *
- * @param onClick A lambda function to execute when the button is clicked.
+ * @param onClick A unit to be executed when the button is clicked.
+ * @param icon The icon to display.
  * @param buttonTestTag The testTag of the button.
  * @param iconTestTag The testTag of the icon.
- * @param icon The icon to display.
  * @param contentDescription The description text of the icon.
  * @param modifier Modifier to be applied to the button. This should be avoided.
  */
@@ -199,7 +201,6 @@ fun BasicButton(
       }
 }
 
-/** A reusable composable function that creates the top bar. */
 @Composable
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun TopBar() {
@@ -211,11 +212,6 @@ fun TopBar() {
               .testTag("TopBar"))
 }
 
-/**
- * A reusable composable function that creates the bottom navigation menu.
- *
- * @param navigationActions The navigationActions of the bottom navigation menu.
- */
 @Composable
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun BottomBar(navigationActions: NavigationActions) {
@@ -225,11 +221,6 @@ fun BottomBar(navigationActions: NavigationActions) {
       selectedItem = navigationActions.currentRoute())
 }
 
-/**
- * A reusable composable function that creates the back button.
- *
- * @param onClick A lambda function to execute when the button is clicked.
- */
 @Composable
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun BackButton(onClick: () -> Unit) {
@@ -246,8 +237,8 @@ fun BackButton(onClick: () -> Unit) {
 }
 
 /**
- * A reusable composable function that creates a basic column for all screens. It is a helper
- * function for ScaffoldMainScreen() and ScaffoldAnnexeScreen().
+ * The basic column for all screens. This is a helper function for `MainScreenScaffold()` and
+ * `AnnexScreenScaffold()`.
  *
  * @param padding The default padding value of the column.
  * @param testTag The test tag of the column (test tag of the screen).
@@ -274,7 +265,7 @@ fun ScreenColumn(
 }
 
 /**
- * A reusable composable function that creates a basic scaffold for all the main screens.
+ * The scaffold for all main screens.
  *
  * @param navigationActions The navigationActions of the bottom navigation menu.
  * @param testTag The test tag of the column (test tag of the screen).
@@ -321,7 +312,7 @@ fun MainScreenScaffold(
 }
 
 /**
- * A reusable composable function that creates a basic scaffold for all the annexe screens.
+ * The scaffold for all annex screens.
  *
  * @param navigationActions The navigationActions of the bottom navigation menu.
  * @param testTag The test tag of the column (test tag of the screen).
@@ -344,7 +335,7 @@ fun AnnexScreenScaffold(
 }
 
 /**
- * A reusable composable function that creates the info popup for help.
+ * The info popup for main screens.
  *
  * @param onDismiss A lambda function to execute when the button or outside the box or is clicked.
  * @param helpTitle The title of the info popup.
@@ -406,7 +397,7 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
 }
 
 /**
- * A reusable composable function that creates a row for statistics.
+ * A table of user statistics.
  *
  * Important to note that the lists must have the same size.
  *
@@ -418,7 +409,7 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
  * @param statsNumberList The list of number for stats to display.
  */
 @Composable
-fun StatisticsList(
+fun StatisticsTable(
     lineText: String,
     statsTexts: List<String>,
     statsNumberList: List<String>,
@@ -477,14 +468,6 @@ fun StatisticsList(
       }
 }
 
-/**
- * A reusable composable function that creates the scrollable letter list. The letter already
- * learned are highlighted and the others are in a secondary color.
- *
- * Important to note that it is helper function to AllLetterLearned()
- *
- * @param learnedLetters The list of character already learned.
- */
 @Composable
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun LetterList(learnedLetters: List<Char>) {
@@ -507,7 +490,7 @@ fun LetterList(learnedLetters: List<Char>) {
 }
 
 /**
- * A reusable composable function that creates the text and the scrollable letter list.
+ * A scrollable list of letters. The letters learned by a user are highlighted.
  *
  * @param lettersLearned The list of character already learned.
  */
@@ -531,7 +514,7 @@ fun LearnedLetterList(lettersLearned: List<Char>) {
 }
 
 /**
- * A reusable composable function that creates the streak counter.
+ * A streak counter that displays a user's streak in days.
  *
  * @param days A long value for the number of days (streak).
  */
@@ -556,7 +539,7 @@ fun StreakCounter(days: Long) {
 }
 
 /**
- * A reusable composable function that creates the profile picture.
+ * An image of a profile picture. If the URL is null, a default icon is displayed.
  *
  * @param profilePictureUrl A string for the URL of the picture.
  */
@@ -583,7 +566,7 @@ fun ProfilePicture(profilePictureUrl: String?) {
 }
 
 /**
- * A reusable composable function that creates the profile information.
+ * A recap of a user's account information.
  *
  * @param userId A string for the user id.
  * @param userName A string for the personalized user name.
@@ -621,8 +604,7 @@ fun AccountInformation(userId: String, userName: String, profilePictureUrl: Stri
 }
 
 /**
- * A reusable composable function that creates an outlined box with customizable text. It takes
- * place where we don't have an implementation yet for elements.
+ * A placeholder box for a feature that has not been implemented yet.
  *
  * @param testTag A string for the test tag.
  * @param text The text to be displayed inside the box.
@@ -647,8 +629,8 @@ fun NotImplementedYet(text: String, testTag: String) {
 }
 
 /**
- * Composable function that serves as a placeholder for the camera preview. This function requests
- * camera permission and displays the camera preview if permission is granted.
+ * The camera preview box. This function requests camera permission and displays the camera preview
+ * if permission is granted.
  *
  * @param handLandMarkViewModel The ViewModel responsible for managing hand landmark detection.
  */
