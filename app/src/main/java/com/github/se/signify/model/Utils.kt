@@ -1,6 +1,9 @@
 package com.github.se.signify.model
 
+import android.content.Context
+import android.content.res.Configuration
 import com.github.se.signify.R
+import java.util.Locale
 
 /**
  * Retrieves the drawable resource ID for a letter's image.
@@ -35,4 +38,32 @@ fun getIconResId(letter: Char): Int {
  */
 fun getTipResId(letter: Char): Int {
   return R.string::class.java.getDeclaredField("tip_${letter.lowercaseChar()}").getInt(null)
+}
+
+/**
+ * Updates the application's language dynamically by changing the locale.
+ *
+ * This function sets the application's locale to the specified language code and updates the
+ * configuration for the application's resources to reflect the language change.
+ *
+ * @param context The context of the application or activity. This is required to access the
+ *   application's resources and configuration.
+ * @param languageCode The language code for the desired language (e.g., "en" for English, "fr" for
+ *   French). This should be a valid ISO 639-1 language code.
+ *
+ * Usage Example:
+ * ```
+ * updateLanguage(context, "fr") // Switches the application language to French
+ * updateLanguage(context, "en") // Switches the application language to English
+ * *
+ */
+fun updateLanguage(context: Context, languageCode: String) {
+  if (!listOf("en", "fr").contains(languageCode)) {
+    throw IllegalArgumentException("Unsupported language code: $languageCode")
+  }
+  val locale = Locale(languageCode)
+  Locale.setDefault(locale)
+  val config = Configuration()
+  config.locale = locale
+  context.resources.updateConfiguration(config, context.resources.displayMetrics)
 }

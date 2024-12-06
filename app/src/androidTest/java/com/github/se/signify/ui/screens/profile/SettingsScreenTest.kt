@@ -50,7 +50,7 @@ class SettingsScreenTest {
     val picturePath = "file:///path/to/profile/picture.jpg"
 
     composeTestRule.setContent {
-      SettingsScreen(navigationActions, userSession, userRepository, false, {})
+      SettingsScreen(navigationActions, userSession, userRepository, false, {}, false, {})
       ProfilePicture(picturePath)
     }
 
@@ -188,5 +188,10 @@ class SettingsScreenTest {
 
     // Verify that the AsyncImage is displayed with the mock profile picture
     composeTestRule.onNodeWithTag("ProfilePicture").assertExists()
+  }
+
+  @Test
+  fun testLanguageSwitch() {
+    composeTestRule.onNodeWithTag("LanguageSwitch").assertIsDisplayed().performClick()
   }
 }

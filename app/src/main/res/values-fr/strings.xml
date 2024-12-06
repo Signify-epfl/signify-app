@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">signify</string>
+    <string name="default_web_client_id">480370863906-8deqtn8nq63qk01efb5pudici2c805ek.apps.googleusercontent.com</string>
+    <string name="help_home_screen">Ici, vous pouvez pratiquer la langue des signes, avec des retours en temps réel via votre caméra. Assurez-vous de vérifier votre quête quotidienne pour apprendre une nouvelle lettre chaque jour. Vous trouverez également des exercices en bas pour vous challenger à différents niveaux de difficulté.</string>
+    <string name="help_profile_screen">Ici, vous pouvez modifier vos paramètres et personnaliser votre profil. Vous pourrez également ajouter vos amis pour apprendre ensemble. Vous trouverez un récapitulatif de vos progrès dans le tableau de statistiques.</string>
+    <string name="description_challenge">Ici, vous pouvez défier vos amis à des face-à-face en langue des signes.</string>
+    <string name="graphs_history">Graphiques et statistiques des défis</string>
+    <string name="button_uri_string">https://nerdish.io/topics/what-you-should-know-about-sign-language/</string>
+    <string name="help_asl_recognition">Pratiquez vos gestes de la langue des signes avec la caméra et voyez les retours en temps réel.</string>
+    <string name="help_offline_mode">Vous êtes actuellement hors ligne. Utilisez le bouton de connexion pour revenir en ligne.</string>
+    <string-array name="real_words">
+        <item>chat</item>
+        <item>chien</item>
+        <item>chauve-souris</item>
+        <item>chapeau</item>
+        <item>rat</item>
+        <item>soleil</item>
+        <item>ventilateur</item>
+        <item>courir</item>
+        <item>tasse</item>
+        <item>stylo</item>
+    </string-array>
+    <string-array name="real_words_hard">
+        <item>pomme</item>
+        <item>raisins</item>
+        <item>banane</item>
+        <item>orange</item>
+        <item>crayon</item>
+        <item>guitare</item>
+        <item>fleur</item>
+        <item>fenêtre</item>
+        <item>cheval</item>
+        <item>planète</item>
+        <item>pont</item>
+        <item>échelle</item>
+        <item>lapin</item>
+        <item>jardin</item>
+        <item>bouton</item>
+        <item>argent</item>
+        <item>oreiller</item>
+    </string-array>
+    <string-array name="real_sentences">
+        <item>Le chat est sur le tapis</item>
+        <item>Les oiseaux volent à travers le ciel</item>
+        <item>Elle marche vers le parc</item>
+        <item>Il pleut pendant les jours d été</item>
+        <item>Les étoiles brillent la nuit</item>
+        <item>Les chiens aboient dans le jardin</item>
+        <item>Le soleil se lève chaque jour</item>
+        <item>Un enfant joue avec des jouets</item>
+    </string-array>
+    <string name="tip_a">Conseils : Fermez votre main, placez votre pouce à gauche, et orientez-le vers la gauche.</string>
+    <string name="tip_b">Conseils : Étendez tous les doigts vers le haut. Placez votre pouce à travers la paume. Les doigts sont droits et proches les uns des autres.</string>
+    <string name="tip_c">Conseils : Les doigts et le pouce sont courbés pour former une forme en C.</string>
+    <string name="tip_d">Conseils : Étendez votre index vers le haut tout en touchant votre pouce au bout de votre majeur. Les autres doigts sont légèrement courbés.</string>
+    <string name="tip_e">Conseils : Courbez vos doigts vers le bas sur votre pouce, formant une forme en E avec les doigts près du pouce.</string>
+    <string name="tip_f">Conseils : Touchez le bout de votre pouce au bout de votre index pour former une forme en O. Les autres doigts sont étendus et écartés.</string>
+    <string name="tip_g">Conseils : Tenez votre pouce et votre index parallèles et proches l’un de l’autre, tandis que les autres doigts sont repliés vers le bas.</string>
+    <string name="tip_h">Conseils : Étendez votre index et votre majeur, les maintenant ensemble. Les autres doigts sont repliés vers le bas.</string>
+    <string name="tip_i">Conseils : Levez votre petit doigt, en gardant tous les autres doigts repliés, y compris le pouce.</string>
+    <string name="tip_j">Conseils : Déplacez votre petit doigt vers le bas dans une légère courbe, comme si vous dessiniez la lettre J dans l’air.</string>
+    <string name="tip_k">Conseils : Étendez votre index et votre majeur, avec votre pouce touchant le majeur. Les autres doigts sont repliés vers le bas.</string>
+    <string name="tip_l">Conseils : Formez une forme en L en étendant votre index vers le haut et votre pouce vers l’extérieur, en maintenant les autres doigts repliés vers le bas.</string>
+    <string name="tip_m">Conseils : Rentrez votre pouce sous votre index, majeur et annulaire, en laissant le petit doigt visible à l’extérieur.</string>
+    <string name="tip_n">Conseils : Rentrez votre pouce sous votre index et majeur, tandis que les autres doigts reposent vers le bas.</string>
+    <string name="tip_o">Conseils : Courbez tous les doigts et le pouce pour former une forme en O.</string>
+    <string name="tip_p">Conseils : Dirigez votre index et majeur vers le bas, les séparant, avec le pouce les soutenant. Les autres doigts sont repliés vers le bas.</string>
+    <string name="tip_q">Conseils : Dirigez votre pouce et votre index vers le bas en forme de L. Les autres doigts sont repliés vers le bas.</string>
+    <string name="tip_r">Conseils : Croisez votre index et votre majeur, les maintenant ensemble, tandis que les autres doigts sont repliés vers le bas.</string>
+    <string name="tip_s">Conseils : Faites un poing avec votre pouce reposant sur les autres doigts.</string>
+    <string name="tip_t">Conseils : Faites un poing avec votre pouce coincé entre votre index et votre majeur.</string>
+    <string name="tip_u">Conseils : Tenez votre index et majeur vers le haut et proches l’un de l’autre, tandis que les autres doigts sont repliés vers le bas.</string>
+    <string name="tip_v">Conseils : Tenez votre index et majeur vers le haut et séparés en forme de V, tandis que les autres doigts sont repliés vers le bas.</string>
+    <string name="tip_w">Conseils : Tenez votre index, majeur et annulaire vers le haut, les écartant, tandis que les autres doigts sont repliés vers le bas.</string>
+    <string name="tip_x">Conseils : Courbez votre index, en le pointant vers le haut, tandis que les autres doigts sont repliés vers le bas. Votre pouce repose près de l’index.</string>
+    <string name="tip_y">Conseils : Étendez votre petit doigt et pouce vers l’extérieur, tandis que les autres doigts sont repliés vers le bas.</string>
+    <string name="tip_z">Conseils : Déplacez votre index pour tracer une forme en Z dans l’air.</string>
+    <string name="unauthenticated_error">Vous devez être connecté pour accéder à cette fonctionnalité</string>
+    <integer name="scroll_offset">8</integer>
+    <string name="friends_requests">Demandes</string>
+    <string name="friends">Amis</string>
+    <string name="pref_name">theme_prefs</string>
+    <string name="pref_key_is_dark_theme">is_dark_theme</string>
+    <string name="pref_name_language">en</string>
+    <string name="pref_key_is_french">is_french</string>
+    <string name="quest_screen_title">Un jour, Un mot</string>
+</resources>
