@@ -85,6 +85,7 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="friends">Friends</string>
     <string name="pref_name">theme_prefs</string>
     <string name="pref_key_is_dark_theme">is_dark_theme</string>
+    <string name="quest_screen_title">One day, One word</string>
     <string name="pref_key_tutorial_completed">tutorial_completed</string>
     <string name="pref_key_tutorial_version">pref_key_tutorial_version</string>
     <string name="tutorial_screen1">Welcome to Signify!
