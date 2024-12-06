@@ -71,27 +71,26 @@ class MainActivity : ComponentActivity() {
     sharedPreferencesLanguage = getSharedPreferences(prefNameLanguage, Context.MODE_PRIVATE)
 
     // Load the saved theme state (default is false for light mode)
-    val savedTheme = sharedPreferences.getBoolean(prefKeyIsDarkTheme, false)
+    val savedTheme = sharedPreferencesTheme.getBoolean(prefKeyIsDarkTheme, false)
     val savedLanguage = sharedPreferencesLanguage.getBoolean(prefKeyLanguage, false)
 
     // Tutorial versioning logic
     val currentTutorialVersion = 1 // Update this when the tutorial changes
-    val savedTutorialVersion = sharedPreferences.getInt(prefKeyTutorialVersion, 0)
+    val savedTutorialVersion = sharedPreferencesTheme.getInt(prefKeyTutorialVersion, 0)
 
     val isTutorialCompleted =
-        sharedPreferences.getBoolean(prefKeyTutorialCompleted, false) &&
+        sharedPreferencesTheme.getBoolean(prefKeyTutorialCompleted, false) &&
             savedTutorialVersion == currentTutorialVersion
 
     // Update tutorial version if outdated
     if (savedTutorialVersion != currentTutorialVersion) {
-      sharedPreferences.edit().putInt(prefKeyTutorialVersion, currentTutorialVersion).apply()
+      sharedPreferencesTheme.edit().putInt(prefKeyTutorialVersion, currentTutorialVersion).apply()
     }
 
     setContent {
       var isDarkTheme by remember { mutableStateOf(savedTheme) }
       var tutorialCompleted by remember { mutableStateOf(isTutorialCompleted) }
       var isFrenchLanguage by remember { mutableStateOf(savedLanguage) }
-
 
       SignifyTheme(darkTheme = isDarkTheme) {
         Surface(modifier = Modifier.fillMaxSize()) {
@@ -102,12 +101,12 @@ class MainActivity : ComponentActivity() {
               onThemeChange = { isDark ->
                 isDarkTheme = isDark
                 // Save theme preference
-                sharedPreferences.edit().putBoolean(prefKeyIsDarkTheme, isDark).apply()
+                sharedPreferencesTheme.edit().putBoolean(prefKeyIsDarkTheme, isDark).apply()
               },
               tutorialCompleted = tutorialCompleted,
               onTutorialComplete = {
                 tutorialCompleted = true
-                sharedPreferences.edit().putBoolean(prefKeyTutorialCompleted, true).apply()
+                sharedPreferencesTheme.edit().putBoolean(prefKeyTutorialCompleted, true).apply()
               },
               isFrenchLanguage = isFrenchLanguage,
               onLanguageChange = { isFrench ->
@@ -129,7 +128,7 @@ fun SignifyAppPreview(
     isDarkTheme: Boolean,
     onThemeChange: (Boolean) -> Unit,
     tutorialCompleted: Boolean,
-    onTutorialComplete: () -> Unit
+    onTutorialComplete: () -> Unit,
     isFrenchLanguage: Boolean,
     onLanguageChange: (Boolean) -> Unit
 ) {
