@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">signify</string>
     <string name="default_web_client_id">480370863906-8deqtn8nq63qk01efb5pudici2c805ek.apps.googleusercontent.com</string>
     <string name="help_home_screen">Ici, vous pouvez pratiquer la langue des signes, avec des retours en temps réel via votre caméra. Assurez-vous de vérifier votre quête quotidienne pour apprendre une nouvelle lettre chaque jour. Vous trouverez également des exercices en bas pour vous challenger à différents niveaux de difficulté.</string>
@@ -84,5 +84,11 @@
     <string name="pref_key_is_dark_theme">is_dark_theme</string>
     <string name="pref_name_language">en</string>
     <string name="pref_key_is_french">is_french</string>
+    <string name="pref_key_tutorial_completed">tutorial_completed</string>
+    <string name="pref_key_tutorial_version">pref_key_tutorial_version</string>
+    <string name="tutorial_screen1">Bienvenue chez Signify !
+Faisons un rapide tour d’horizon pour vous aider à démarrer l’apprentissage de la langue des signes sans effort.</string>
+    <string name="tutorial_screen2">Faites glisser votre doigt vers la droite pour afficher les exercices par niveau de difficulté.</string>
+    <string name="tutorial_last_screen" tools:ignore="StringEscaping">Vous êtes prêt à commencer! Profitez de l'apprentissage de la langue des signes.</string>
     <string name="quest_screen_title">Un jour, Un mot</string>
 </resources>
