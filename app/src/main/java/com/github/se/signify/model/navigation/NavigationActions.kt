@@ -6,7 +6,7 @@ import com.github.se.signify.model.auth.UserSession
 
 open class NavigationActions(
     private val navController: NavHostController,
-    private val userSession: UserSession
+    private val userSession: UserSession,
 ) {
   /**
    * Navigate to the specified top level destination.
@@ -20,6 +20,7 @@ open class NavigationActions(
         } else {
           destination.route
         }
+
     navController.navigate(route) {
       // Pop up to the start destination of the graph to
       // avoid building up a large stack of destinations
@@ -35,7 +36,6 @@ open class NavigationActions(
       // if (destination.route != Route.AUTH) {
       //  restoreState = true
       // }
-
     }
   }
 
@@ -49,19 +49,7 @@ open class NavigationActions(
       onUnauthenticated()
       return
     }
-
-    val route =
-        if (params != null) {
-          var routeWithParams = screen.route
-          params.forEach { (key, value) ->
-            routeWithParams = routeWithParams.replace("{$key}", value)
-          }
-          routeWithParams
-        } else {
-          screen.route
-        }
-
-    navController.navigate(route)
+    navController.navigate(screen.route)
   }
 
   open fun goBack() {

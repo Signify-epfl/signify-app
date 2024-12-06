@@ -48,7 +48,7 @@ class LoginScreenTest : TestCase() {
   @Test
   fun titleAndButtonAreCorrectlyDisplayed() {
 
-    composeTestRule.setContent { LoginScreen(navigationActions) }
+    composeTestRule.setContent { LoginScreen(navigationActions, {}) }
 
     composeTestRule.onNodeWithTag("IntroMessage").assertIsDisplayed()
     composeTestRule
@@ -63,7 +63,7 @@ class LoginScreenTest : TestCase() {
   @Test
   fun googleSignInReturnsValidActivityResult() {
 
-    composeTestRule.setContent { LoginScreen(navigationActions) }
+    composeTestRule.setContent { LoginScreen(navigationActions, {}) }
 
     composeTestRule.onNodeWithTag("loginButton").performClick()
     composeTestRule.waitForIdle()
@@ -73,7 +73,7 @@ class LoginScreenTest : TestCase() {
 
   @Test
   fun offlineModeHelpsToConnect() {
-    composeTestRule.setContent { LoginScreen(navigationActions) }
+    composeTestRule.setContent { LoginScreen(navigationActions, {}) }
     composeTestRule.onNodeWithTag("skipLoginButton").assertIsDisplayed().performClick()
   }
 }

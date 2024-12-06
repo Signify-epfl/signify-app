@@ -46,6 +46,7 @@ import com.github.se.signify.ui.screens.profile.FriendsListScreen
 import com.github.se.signify.ui.screens.profile.MyStatsScreen
 import com.github.se.signify.ui.screens.profile.ProfileScreen
 import com.github.se.signify.ui.screens.profile.SettingsScreen
+import com.github.se.signify.ui.screens.tutorial.TutorialScreen
 import com.github.se.signify.ui.theme.SignifyTheme
 import com.github.se.signify.ui.updateLanguage
 
@@ -60,8 +61,11 @@ class MainActivity : ComponentActivity() {
     // Load string resources for preference name and key
     val prefName = getString(R.string.pref_name)
     val prefKeyIsDarkTheme = getString(R.string.pref_key_is_dark_theme)
+    val prefKeyTutorialCompleted = getString(R.string.pref_key_tutorial_completed)
+    val prefKeyTutorialVersion = getString(R.string.pref_key_tutorial_version)
     val prefNameLanguage = getString(R.string.pref_name_language)
     val prefKeyLanguage = getString(R.string.pref_key_is_french)
+
     // Initialize SharedPreferences
     sharedPreferencesTheme = getSharedPreferences(prefName, Context.MODE_PRIVATE)
     sharedPreferencesLanguage = getSharedPreferences(prefNameLanguage, Context.MODE_PRIVATE)
@@ -69,9 +73,25 @@ class MainActivity : ComponentActivity() {
     // Load the saved theme state (default is false for light mode)
     val savedTheme = sharedPreferencesTheme.getBoolean(prefKeyIsDarkTheme, false)
     val savedLanguage = sharedPreferencesLanguage.getBoolean(prefKeyLanguage, false)
+
+    // Tutorial versioning logic
+    val currentTutorialVersion = 1 // Update this when the tutorial changes
+    val savedTutorialVersion = sharedPreferencesTheme.getInt(prefKeyTutorialVersion, 0)
+
+    val isTutorialCompleted =
+        sharedPreferencesTheme.getBoolean(prefKeyTutorialCompleted, false) &&
+            savedTutorialVersion == currentTutorialVersion
+
+    // Update tutorial version if outdated
+    if (savedTutorialVersion != currentTutorialVersion) {
+      sharedPreferencesTheme.edit().putInt(prefKeyTutorialVersion, currentTutorialVersion).apply()
+    }
+
     setContent {
       var isDarkTheme by remember { mutableStateOf(savedTheme) }
+      var tutorialCompleted by remember { mutableStateOf(isTutorialCompleted) }
       var isFrenchLanguage by remember { mutableStateOf(savedLanguage) }
+
       SignifyTheme(darkTheme = isDarkTheme) {
         Surface(modifier = Modifier.fillMaxSize()) {
           SignifyAppPreview(
@@ -82,6 +102,11 @@ class MainActivity : ComponentActivity() {
                 isDarkTheme = isDark
                 // Save theme preference
                 sharedPreferencesTheme.edit().putBoolean(prefKeyIsDarkTheme, isDark).apply()
+              },
+              tutorialCompleted = tutorialCompleted,
+              onTutorialComplete = {
+                tutorialCompleted = true
+                sharedPreferencesTheme.edit().putBoolean(prefKeyTutorialCompleted, true).apply()
               },
               isFrenchLanguage = isFrenchLanguage,
               onLanguageChange = { isFrench ->
@@ -102,6 +127,8 @@ fun SignifyAppPreview(
     dependencyProvider: DependencyProvider,
     isDarkTheme: Boolean,
     onThemeChange: (Boolean) -> Unit,
+    tutorialCompleted: Boolean,
+    onTutorialComplete: () -> Unit,
     isFrenchLanguage: Boolean,
     onLanguageChange: (Boolean) -> Unit
 ) {
@@ -122,7 +149,18 @@ fun SignifyAppPreview(
         startDestination = Screen.AUTH.route,
         route = Route.AUTH,
     ) {
-      composable(Screen.AUTH.route) { LoginScreen(navigationActions) }
+      composable(Screen.AUTH.route) {
+        LoginScreen(
+            navigationActions,
+            showTutorial = {
+              // Navigate to Tutorial or Home depending on completion
+              if (tutorialCompleted) {
+                navigationActions.navigateTo(Screen.HOME)
+              } else {
+                navigationActions.navigateTo(Screen.TUTORIAL)
+              }
+            })
+      }
       composable(Screen.UNAUTHENTICATED.route) { UnauthenticatedScreen(navigationActions) }
     }
 
@@ -166,6 +204,15 @@ fun SignifyAppPreview(
             navigationActions,
             dependencyProvider.userSession(),
             dependencyProvider.statsRepository())
+      }
+    }
+
+    navigation(
+        startDestination = Screen.TUTORIAL.route,
+        route = Route.TUTORIAL,
+    ) {
+      composable(Screen.TUTORIAL.route) {
+        TutorialScreen(navigationActions = navigationActions, onFinish = onTutorialComplete)
       }
     }
 

@@ -60,7 +60,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 @Composable
-fun LoginScreen(navigationActions: NavigationActions) {
+fun LoginScreen(navigationActions: NavigationActions, showTutorial: () -> Unit) {
   val context = LocalContext.current
 
   val launcher =
@@ -68,7 +68,10 @@ fun LoginScreen(navigationActions: NavigationActions) {
           onAuthComplete = { result ->
             Log.d("SignInScreen", "User signed in: ${result.user?.displayName}")
             Toast.makeText(context, "Login successful!", Toast.LENGTH_LONG).show()
+            saveUserToFireStore()
+            saveStatsToFirestore()
             navigationActions.navigateTo(Screen.HOME)
+            showTutorial()
           },
           onAuthError = {
             Log.e("SignInScreen", "Failed to sign in: ${it.statusCode}")
@@ -145,6 +148,7 @@ fun LoginScreen(navigationActions: NavigationActions) {
           SkipLoginButton {
             Log.d("LoginScreen", "Proceeding in offline state.")
             Toast.makeText(context, "You are not logged in.", Toast.LENGTH_LONG).show()
+            showTutorial()
             navigationActions.navigateTo(Screen.HOME)
           }
         }
@@ -205,8 +209,6 @@ fun rememberFirebaseAuthLauncher(
       scope.launch {
         val authResult = Firebase.auth.signInWithCredential(credential).await()
         onAuthComplete(authResult)
-        saveUserToFireStore()
-        saveStatsToFirestore()
       }
     } catch (e: ApiException) {
       onAuthError(e)
