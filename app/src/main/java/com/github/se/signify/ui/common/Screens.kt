@@ -49,70 +49,6 @@ import com.github.se.signify.model.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.BottomNavigationMenu
 
-/** The decorative line at the top of screens. */
-@Composable
-@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-fun TopBar() {
-  Box(
-      modifier =
-          Modifier.fillMaxWidth()
-              .height(5.dp)
-              .background(MaterialTheme.colorScheme.primary)
-              .testTag("TopBar"))
-}
-
-@Composable
-@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-fun BottomBar(navigationActions: NavigationActions) {
-  BottomNavigationMenu(
-      onTabSelect = { route -> navigationActions.navigateTo(route) },
-      tabList = LIST_TOP_LEVEL_DESTINATION,
-      selectedItem = navigationActions.currentRoute())
-}
-
-@Composable
-@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-fun BackButton(onClick: () -> Unit) {
-  Row(
-      modifier = Modifier.fillMaxWidth().padding(16.dp),
-      horizontalArrangement = Arrangement.Start) {
-        IconButton(onClick = { onClick() }, modifier = Modifier.testTag("BackButton")) {
-          Icon(
-              imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-              contentDescription = "BackButton",
-              tint = MaterialTheme.colorScheme.primary)
-        }
-      }
-}
-
-/**
- * The basic column for all screens. This is a helper function for `MainScreenScaffold()` and
- * `AnnexScreenScaffold()`.
- *
- * @param padding The default padding value of the column.
- * @param testTag The test tag of the column (test tag of the screen).
- * @param content A lambda function for the content of the column.
- */
-@Composable
-@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-fun ScreenColumn(
-    padding: PaddingValues,
-    testTag: String,
-    content: @Composable ColumnScope.() -> Unit
-) {
-  Column(
-      modifier =
-          Modifier.fillMaxSize()
-              .padding(padding)
-              .padding(16.dp)
-              .verticalScroll(rememberScrollState())
-              .background(MaterialTheme.colorScheme.background)
-              .testTag(testTag),
-      horizontalAlignment = Alignment.CenterHorizontally) {
-        content()
-      }
-}
-
 /**
  * The scaffold for all main screens.
  *
@@ -184,6 +120,46 @@ fun AnnexScreenScaffold(
 }
 
 /**
+ * The basic column for all screens. This is a helper function for `MainScreenScaffold()` and
+ * `AnnexScreenScaffold()`.
+ *
+ * @param padding The default padding value of the column.
+ * @param testTag The test tag of the column (test tag of the screen).
+ * @param content A lambda function for the content of the column.
+ */
+@Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun ScreenColumn(
+    padding: PaddingValues,
+    testTag: String,
+    content: @Composable ColumnScope.() -> Unit
+) {
+  Column(
+      modifier =
+          Modifier.fillMaxSize()
+              .padding(padding)
+              .padding(16.dp)
+              .verticalScroll(rememberScrollState())
+              .background(MaterialTheme.colorScheme.background)
+              .testTag(testTag),
+      horizontalAlignment = Alignment.CenterHorizontally) {
+        content()
+      }
+}
+
+/** The decorative line at the top of screens. */
+@Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun TopBar() {
+  Box(
+      modifier =
+          Modifier.fillMaxWidth()
+              .height(5.dp)
+              .background(MaterialTheme.colorScheme.primary)
+              .testTag("TopBar"))
+}
+
+/**
  * The info popup for main screens.
  *
  * @param onDismiss A lambda function to execute when the button or outside the box or is clicked.
@@ -194,6 +170,44 @@ fun AnnexScreenScaffold(
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
   Dialog(onDismissRequest = { onDismiss() }) {
+    Column(
+        modifier = Modifier.padding(16.dp).fillMaxWidth().testTag("InfoPopupContent"),
+        horizontalAlignment = Alignment.CenterHorizontally) {
+          // Title centered and underlined
+          Text(
+              text =
+                  buildAnnotatedString {
+                    withStyle(
+                        style =
+                            SpanStyle(
+                                fontWeight = FontWeight.Bold,
+                                textDecoration = TextDecoration.Underline)) {
+                          append(helpTitle)
+                        }
+                  },
+              fontSize = 20.sp,
+              color = MaterialTheme.colorScheme.primary,
+              textAlign = TextAlign.Center,
+              modifier = Modifier.testTag("InfoPopupTitle"))
+          Spacer(modifier = Modifier.height(8.dp))
+
+          // Body text centered under the title
+          Text(
+              text = helpText,
+              fontSize = 16.sp,
+              color = MaterialTheme.colorScheme.primary,
+              textAlign = TextAlign.Center,
+              modifier = Modifier.testTag("InfoPopupBody"))
+          Spacer(modifier = Modifier.height(16.dp))
+
+          // Close button for the popup
+          Button(
+              onClick = { onDismiss() },
+              colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
+              modifier = Modifier.testTag("InfoPopupCloseButton")) {
+                Text(text = "Close", color = MaterialTheme.colorScheme.onPrimary)
+              }
+        }
     Surface(
         shape = RoundedCornerShape(12.dp),
         color = MaterialTheme.colorScheme.background, // Background for the popup
@@ -202,45 +216,30 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
                     3.dp,
                     MaterialTheme.colorScheme.primary,
                     RoundedCornerShape(12.dp)) // Ensure the border wraps the popup
-                .testTag("InfoPopup")) {
-          Column(
-              modifier = Modifier.padding(16.dp).fillMaxWidth().testTag("InfoPopupContent"),
-              horizontalAlignment = Alignment.CenterHorizontally) {
-                // Title centered and underlined
-                Text(
-                    text =
-                        buildAnnotatedString {
-                          withStyle(
-                              style =
-                                  SpanStyle(
-                                      fontWeight = FontWeight.Bold,
-                                      textDecoration = TextDecoration.Underline)) {
-                                append(helpTitle)
-                              }
-                        },
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.testTag("InfoPopupTitle"))
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // Body text centered under the title
-                Text(
-                    text = helpText,
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.testTag("InfoPopupBody"))
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Close button for the popup
-                Button(
-                    onClick = { onDismiss() },
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-                    modifier = Modifier.testTag("InfoPopupCloseButton")) {
-                      Text(text = "Close", color = MaterialTheme.colorScheme.onPrimary)
-                    }
-              }
-        }
+                .testTag("InfoPopup")) {}
   }
+}
+
+@Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun BackButton(onClick: () -> Unit) {
+  Row(
+      modifier = Modifier.fillMaxWidth().padding(16.dp),
+      horizontalArrangement = Arrangement.Start) {
+        IconButton(onClick = { onClick() }, modifier = Modifier.testTag("BackButton")) {
+          Icon(
+              imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+              contentDescription = "BackButton",
+              tint = MaterialTheme.colorScheme.primary)
+        }
+      }
+}
+
+@Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun BottomBar(navigationActions: NavigationActions) {
+  BottomNavigationMenu(
+      onTabSelect = { route -> navigationActions.navigateTo(route) },
+      tabList = LIST_TOP_LEVEL_DESTINATION,
+      selectedItem = navigationActions.currentRoute())
 }
