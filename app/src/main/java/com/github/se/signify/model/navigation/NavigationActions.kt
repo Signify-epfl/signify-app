@@ -7,7 +7,6 @@ import com.github.se.signify.model.auth.UserSession
 open class NavigationActions(
     private val navController: NavHostController,
     private val userSession: UserSession,
-    var tutorialActive: Boolean = false
 ) {
   /**
    * Navigate to the specified top level destination.
@@ -22,23 +21,21 @@ open class NavigationActions(
           destination.route
         }
 
-    if (!tutorialActive) { // Block navigation if tutorial is active
-      navController.navigate(route) {
-        // Pop up to the start destination of the graph to
-        // avoid building up a large stack of destinations
-        popUpTo(navController.graph.findStartDestination().id) {
-          saveState = true
-          inclusive = true
-        }
-
-        // Avoid multiple copies of the same destination when reselecting same item
-        launchSingleTop = true
-
-        // Restore state when reselecting a previously selected item
-        // if (destination.route != Route.AUTH) {
-        //  restoreState = true
-        // }
+    navController.navigate(route) {
+      // Pop up to the start destination of the graph to
+      // avoid building up a large stack of destinations
+      popUpTo(navController.graph.findStartDestination().id) {
+        saveState = true
+        inclusive = true
       }
+
+      // Avoid multiple copies of the same destination when reselecting same item
+      launchSingleTop = true
+
+      // Restore state when reselecting a previously selected item
+      // if (destination.route != Route.AUTH) {
+      //  restoreState = true
+      // }
     }
   }
 
@@ -52,9 +49,7 @@ open class NavigationActions(
       onUnauthenticated()
       return
     }
-    if (!tutorialActive) { // Block navigation if tutorial is active
-      navController.navigate(screen.route)
-    }
+    navController.navigate(screen.route)
   }
 
   open fun goBack() {

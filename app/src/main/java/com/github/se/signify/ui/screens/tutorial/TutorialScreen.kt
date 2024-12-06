@@ -29,9 +29,6 @@ private val overlayColor
 fun TutorialScreen(navigationActions: NavigationActions, onFinish: () -> Unit) {
   var step by remember { mutableIntStateOf(0) }
 
-  // Activate tutorial blocking during the tutorial
-  LaunchedEffect(Unit) { navigationActions.tutorialActive = true }
-
   Box(modifier = Modifier.fillMaxSize()) {
     // Display the HomeScreen in the background
     HomeScreen(navigationActions)
@@ -71,7 +68,6 @@ fun TutorialScreen(navigationActions: NavigationActions, onFinish: () -> Unit) {
               text = stringResource(R.string.tutorial_last_screen),
               highlightArea = { FullScreenSemiTransparentOverlay() },
               onNext = {
-                navigationActions.tutorialActive = false
                 navigationActions.navigateTo(Screen.HOME)
                 onFinish()
               },
