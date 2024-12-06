@@ -160,7 +160,7 @@ fun ChronoChallengeContent(
 
         CurrentLetterDisplay(currentWord, currentLetterIndex)
         SentenceLayerDisplay(currentWord, currentLetterIndex)
-        CameraBox(handLandMarkViewModel, "CameraPlaceholder")
+        CameraBox(handLandMarkViewModel = handLandMarkViewModel, testTag = "CameraPlaceholder")
       }
 }
 

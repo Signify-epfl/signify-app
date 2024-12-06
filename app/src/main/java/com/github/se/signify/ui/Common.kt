@@ -132,6 +132,7 @@ fun TextButton(
  * @param size The size of the button. It will be used to scale the other elements of the button.
  * @param modifier Modifier to be applied to the button. This should be avoided.
  */
+@Suppress("UNUSED_PARAMETER")
 @Composable
 fun SquareButton(
     @DrawableRes iconId: Int,
@@ -176,6 +177,7 @@ fun SquareButton(
  * @param contentDescription The description text of the icon.
  * @param modifier Modifier to be applied to the button. This should be avoided.
  */
+@Suppress("UNUSED_PARAMETER")
 @Composable
 fun BasicButton(
     onClick: () -> Unit,
@@ -670,15 +672,12 @@ fun CameraBox(handLandMarkViewModel: HandLandMarkViewModel, testTag: String = ""
                 .height(350.dp)
                 .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp))
                 .border(
-                    2.dp, MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp)),
+                    2.dp, MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp))
+                .testTag(testTag),
         contentAlignment = Alignment.Center) {
           AndroidView(
               factory = { previewView },
-              modifier =
-                  Modifier.fillMaxWidth()
-                      .fillMaxHeight()
-                      .clip(RoundedCornerShape(16.dp))
-                      .testTag("cameraPreview"))
+              modifier = Modifier.fillMaxWidth().fillMaxHeight().clip(RoundedCornerShape(16.dp)))
 
           // Set up the camera preview
           LaunchedEffect(Unit) {
@@ -720,7 +719,8 @@ fun CameraBox(handLandMarkViewModel: HandLandMarkViewModel, testTag: String = ""
                 .height(350.dp)
                 .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp))
                 .border(
-                    2.dp, MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp)),
+                    2.dp, MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp))
+                .testTag(testTag),
         contentAlignment = Alignment.Center) {
           Text("Camera permission required", color = MaterialTheme.colorScheme.errorContainer)
         }
