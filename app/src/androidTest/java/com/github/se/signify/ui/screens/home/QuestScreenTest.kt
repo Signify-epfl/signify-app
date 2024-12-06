@@ -30,7 +30,11 @@ class QuestScreenTest {
   private lateinit var navigationActions: NavigationActions
 
   private val sampleQuest =
-      Quest(index = "1", title = "Sample Quest", description = "This is a sample quest description")
+      Quest(
+          index = "1",
+          title = "Sample Quest",
+          description = "This is a sample quest description",
+          videoPath = "")
 
   @get:Rule val composeTestRule = createComposeRule()
 
@@ -89,7 +93,7 @@ class QuestScreenTest {
     composeTestRule.onNodeWithContentDescription("Back").assertIsDisplayed()
 
     // Check that the title is displayed
-    composeTestRule.onNodeWithText("Your daily quests").assertIsDisplayed()
+    composeTestRule.onNodeWithText("One day, One word").assertIsDisplayed()
   }
 
   @Test
@@ -119,9 +123,7 @@ class QuestScreenTest {
     composeTestRule.onNodeWithTag("QuestActionButton").performClick()
 
     // Check if dialog components are displayed
-    composeTestRule
-        .onNodeWithText("Quest: Learn about letter ${sampleQuest.title}")
-        .assertIsDisplayed()
+    composeTestRule.onNodeWithText(sampleQuest.title).assertIsDisplayed()
     composeTestRule.onNodeWithText(sampleQuest.description).assertIsDisplayed()
   }
 
@@ -130,9 +132,7 @@ class QuestScreenTest {
     composeTestRule.setContent { QuestDescriptionDialog(quest = sampleQuest, onDismiss = {}) }
 
     // Assert dialog title and description are displayed
-    composeTestRule
-        .onNodeWithText("Quest: Learn about letter ${sampleQuest.title}")
-        .assertIsDisplayed()
+    composeTestRule.onNodeWithText(sampleQuest.title + " in sign language").assertIsDisplayed()
     composeTestRule.onNodeWithText(sampleQuest.description).assertIsDisplayed()
 
     // Check the "Close" button
@@ -155,16 +155,6 @@ class QuestScreenTest {
 
     // Verify that navigationActions.goBack() was called
     verify(navigationActions).goBack()
-  }
-
-  @Test
-  fun questDescriptionDialog_displaysImageForQuest() {
-    composeTestRule.setContent { QuestDescriptionDialog(quest = sampleQuest, onDismiss = {}) }
-
-    // Check if the Image for the quest is displayed
-    composeTestRule
-        .onNodeWithContentDescription("Image for letter ${sampleQuest.title}")
-        .assertIsDisplayed()
   }
 
   @Test
