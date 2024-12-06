@@ -2,7 +2,7 @@ package com.github.se.signify.ui.screens.tutorial
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
-import com.github.se.signify.ui.navigation.NavigationActions
+import com.github.se.signify.model.navigation.NavigationActions
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
