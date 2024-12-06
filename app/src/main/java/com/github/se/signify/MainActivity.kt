@@ -47,10 +47,12 @@ import com.github.se.signify.ui.screens.profile.MyStatsScreen
 import com.github.se.signify.ui.screens.profile.ProfileScreen
 import com.github.se.signify.ui.screens.profile.SettingsScreen
 import com.github.se.signify.ui.theme.SignifyTheme
+import com.github.se.signify.ui.updateLanguage
 
 class MainActivity : ComponentActivity() {
 
-  private lateinit var sharedPreferences: SharedPreferences
+  private lateinit var sharedPreferencesTheme: SharedPreferences
+  private lateinit var sharedPreferencesLanguage: SharedPreferences
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -58,16 +60,18 @@ class MainActivity : ComponentActivity() {
     // Load string resources for preference name and key
     val prefName = getString(R.string.pref_name)
     val prefKeyIsDarkTheme = getString(R.string.pref_key_is_dark_theme)
-
+    val prefNameLanguage = getString(R.string.pref_name_language)
+    val prefKeyLanguage = getString(R.string.pref_key_is_french)
     // Initialize SharedPreferences
-    sharedPreferences = getSharedPreferences(prefName, Context.MODE_PRIVATE)
+    sharedPreferencesTheme = getSharedPreferences(prefName, Context.MODE_PRIVATE)
+    sharedPreferencesLanguage = getSharedPreferences(prefNameLanguage, Context.MODE_PRIVATE)
 
     // Load the saved theme state (default is false for light mode)
-    val savedTheme = sharedPreferences.getBoolean(prefKeyIsDarkTheme, false)
-
+    val savedTheme = sharedPreferencesTheme.getBoolean(prefKeyIsDarkTheme, false)
+    val savedLanguage = sharedPreferencesLanguage.getBoolean(prefKeyLanguage, false)
     setContent {
       var isDarkTheme by remember { mutableStateOf(savedTheme) }
-
+      var isFrenchLanguage by remember { mutableStateOf(savedLanguage) }
       SignifyTheme(darkTheme = isDarkTheme) {
         Surface(modifier = Modifier.fillMaxSize()) {
           SignifyAppPreview(
@@ -77,7 +81,13 @@ class MainActivity : ComponentActivity() {
               onThemeChange = { isDark ->
                 isDarkTheme = isDark
                 // Save theme preference
-                sharedPreferences.edit().putBoolean(prefKeyIsDarkTheme, isDark).apply()
+                sharedPreferencesTheme.edit().putBoolean(prefKeyIsDarkTheme, isDark).apply()
+              },
+              isFrenchLanguage = isFrenchLanguage,
+              onLanguageChange = { isFrench ->
+                isFrenchLanguage = isFrench
+                sharedPreferencesLanguage.edit().putBoolean(prefNameLanguage, isFrench).apply()
+                updateLanguage(this, if (isFrench) "fr" else "en")
               })
         }
       }
@@ -91,7 +101,9 @@ fun SignifyAppPreview(
     context: Context,
     dependencyProvider: DependencyProvider,
     isDarkTheme: Boolean,
-    onThemeChange: (Boolean) -> Unit
+    onThemeChange: (Boolean) -> Unit,
+    isFrenchLanguage: Boolean,
+    onLanguageChange: (Boolean) -> Unit
 ) {
   val navController = rememberNavController()
   val navigationActions = NavigationActions(navController, dependencyProvider.userSession())
@@ -224,6 +236,8 @@ fun SignifyAppPreview(
             dependencyProvider.userSession(),
             dependencyProvider.userRepository(),
             isDarkTheme = isDarkTheme,
+            isFrench = isFrenchLanguage,
+            onLanguageChange = onLanguageChange,
             onThemeChange = onThemeChange)
       }
     }

@@ -2,7 +2,9 @@ package com.github.se.signify.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
@@ -82,6 +84,7 @@ import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.model.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.BottomNavigationMenu
+import java.util.Locale
 
 // Map to associate each letter with its corresponding drawable resource for ASL gestures
 val gestureImageMap =
@@ -823,6 +826,33 @@ fun CameraPlaceholder(handLandMarkViewModel: HandLandMarkViewModel, modifier: Mo
           Text("Camera permission required", color = MaterialTheme.colorScheme.errorContainer)
         }
   }
+}
+/**
+ * Updates the application's language dynamically by changing the locale.
+ *
+ * This function sets the application's locale to the specified language code and updates the
+ * configuration for the application's resources to reflect the language change.
+ *
+ * @param context The context of the application or activity. This is required to access the
+ *   application's resources and configuration.
+ * @param languageCode The language code for the desired language (e.g., "en" for English, "fr" for
+ *   French). This should be a valid ISO 639-1 language code.
+ *
+ * Usage Example:
+ * ```
+ * updateLanguage(context, "fr") // Switches the application language to French
+ * updateLanguage(context, "en") // Switches the application language to English
+ * *
+ */
+fun updateLanguage(context: Context, languageCode: String) {
+  if (!listOf("en", "fr").contains(languageCode)) {
+    throw IllegalArgumentException("Unsupported language code: $languageCode")
+  }
+  val locale = Locale(languageCode)
+  Locale.setDefault(locale)
+  val config = Configuration()
+  config.locale = locale
+  context.resources.updateConfiguration(config, context.resources.displayMetrics)
 }
 
 /**

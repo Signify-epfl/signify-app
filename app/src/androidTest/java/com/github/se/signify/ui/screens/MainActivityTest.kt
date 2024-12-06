@@ -24,7 +24,7 @@ class MainActivityTest {
 
     composeTestRule.setContent {
       // Set the content with the mocked context
-      SignifyAppPreview(context, AppDependencyProvider, false, {})
+      SignifyAppPreview(context, AppDependencyProvider, false, {}, false, {})
     }
   }
 
