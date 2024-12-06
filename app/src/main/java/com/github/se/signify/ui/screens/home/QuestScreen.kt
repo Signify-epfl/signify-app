@@ -1,5 +1,6 @@
 package com.github.se.signify.ui.screens.home
 
+import android.widget.VideoView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,12 +36,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.R
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.quest.Quest
@@ -49,7 +51,6 @@ import com.github.se.signify.model.quest.QuestRepository
 import com.github.se.signify.model.quest.QuestViewModel
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
-import com.github.se.signify.ui.getLetterIconResId
 
 @Composable
 fun QuestScreen(
@@ -85,7 +86,7 @@ fun QuestScreen(
             }
             Spacer(modifier = Modifier.width(20.dp))
             Text(
-                text = "Your daily quests",
+                text = stringResource(R.string.quest_screen_title),
                 fontWeight = FontWeight.Bold,
                 fontSize = 25.sp,
                 color = MaterialTheme.colorScheme.primary)
@@ -113,7 +114,7 @@ fun QuestBox(quest: Quest, isUnlocked: Boolean) {
       colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primary)) {
         Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
           Text(
-              text = "Learn letter" + " " + quest.title,
+              text = quest.title,
               color = MaterialTheme.colorScheme.onPrimary,
               fontWeight = FontWeight.Bold,
               fontSize = 20.sp,
@@ -147,27 +148,27 @@ fun QuestDescriptionDialog(quest: Quest, onDismiss: () -> Unit) {
       containerColor = MaterialTheme.colorScheme.background,
       title = {
         Text(
-            text = "Quest: Learn about letter " + quest.title,
+            text = quest.title + " in sign language",
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
             color = MaterialTheme.colorScheme.primary)
       },
       text = {
         Column(modifier = Modifier.wrapContentSize().padding(8.dp)) {
+          // Display the video using VideoView
+          AndroidView(
+              factory = { context ->
+                VideoView(context).apply {
+                  setVideoPath(quest.videoPath) // Set video path (local or remote)
 
-          // Retrieve and display the image for the corresponding letter
-          val letter =
-              'a' +
-                  (quest.index.toInt() -
-                      1) // Convert index to letter, e.g., 1 -> 'a', 2 -> 'b', etc.
-          val imageResId = getLetterIconResId(letter)
-
-          Icon(
-              painter = painterResource(id = imageResId),
-              contentDescription = "Image for letter ${quest.title}",
-              tint = MaterialTheme.colorScheme.primary,
-              modifier =
-                  Modifier.size(150.dp).padding(bottom = 8.dp).align(Alignment.CenterHorizontally))
+                  // Prepare the video and start playback
+                  setOnPreparedListener { mediaPlayer ->
+                    mediaPlayer.isLooping = true // Loop video automatically
+                    start()
+                  }
+                }
+              },
+              modifier = Modifier.fillMaxWidth().height(200.dp).align(Alignment.CenterHorizontally))
 
           Spacer(modifier = Modifier.height(20.dp))
 
