@@ -2,7 +2,6 @@ package com.github.se.signify.model.user
 
 import android.os.Looper
 import androidx.test.core.app.ApplicationProvider
-import com.github.se.signify.ui.navigation.NavigationActions
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.FirebaseApp
@@ -39,8 +38,6 @@ class SaveUserToFireStoreTest {
   @Mock private lateinit var mockDocumentSnapshot: DocumentSnapshot
   @Mock private lateinit var mockGetTask: Task<DocumentSnapshot>
 
-  private lateinit var navigationActions: NavigationActions
-
   @Before
   fun setUp() {
     MockitoAnnotations.openMocks(this)
@@ -48,8 +45,6 @@ class SaveUserToFireStoreTest {
     if (FirebaseApp.getApps(ApplicationProvider.getApplicationContext()).isEmpty()) {
       FirebaseApp.initializeApp(ApplicationProvider.getApplicationContext())
     }
-
-    navigationActions = mock(NavigationActions::class.java)
 
     // Mock FirebaseAuth and FirebaseFireStore initialization
     mockAuth = mock(FirebaseAuth::class.java)
