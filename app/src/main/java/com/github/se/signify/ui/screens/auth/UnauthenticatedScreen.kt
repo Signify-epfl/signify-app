@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.ui.MainScreenScaffold
-import com.github.se.signify.ui.TextButton
+import com.github.se.signify.ui.common.MainScreenScaffold
+import com.github.se.signify.ui.common.TextButton
 
 /**
  * A composable function that displays a screen for offline mode.

@@ -33,9 +33,9 @@ import com.github.se.signify.R
 import com.github.se.signify.model.getIconResId
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
-import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.CameraBox
-import com.github.se.signify.ui.TextButton
+import com.github.se.signify.ui.common.AnnexScreenScaffold
+import com.github.se.signify.ui.common.CameraBox
+import com.github.se.signify.ui.common.TextButton
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 
 /**

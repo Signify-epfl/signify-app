@@ -24,6 +24,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -47,9 +48,9 @@ import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
-import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.NotImplementedYet
-import com.github.se.signify.ui.ProfilePicture
+import com.github.se.signify.ui.common.AnnexScreenScaffold
+import com.github.se.signify.ui.common.NotImplementedYet
+import com.github.se.signify.ui.common.ProfilePicture
 
 @Composable
 fun SettingsScreen(
@@ -96,8 +97,7 @@ fun SettingsScreen(
               text = if (isDarkTheme) "Dark Mode" else "Light Mode",
               style = MaterialTheme.typography.bodyLarge,
               color = MaterialTheme.colorScheme.onBackground)
-          androidx.compose.material3.Switch(
-              checked = isDarkTheme, onCheckedChange = { onThemeChange(it) })
+          Switch(checked = isDarkTheme, onCheckedChange = { onThemeChange(it) })
         }
     // Switch between English and French
     LanguageSwitch(isFrench, onLanguageChange)

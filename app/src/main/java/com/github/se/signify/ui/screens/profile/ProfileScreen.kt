@@ -25,11 +25,11 @@ import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.stats.StatsViewModel
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
-import com.github.se.signify.ui.AccountInformation
-import com.github.se.signify.ui.BasicButton
-import com.github.se.signify.ui.LearnedLetterList
-import com.github.se.signify.ui.MainScreenScaffold
-import com.github.se.signify.ui.SquareButton
+import com.github.se.signify.ui.common.AccountInformation
+import com.github.se.signify.ui.common.BasicButton
+import com.github.se.signify.ui.common.LearnedLetterList
+import com.github.se.signify.ui.common.MainScreenScaffold
+import com.github.se.signify.ui.common.SquareButton
 import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")

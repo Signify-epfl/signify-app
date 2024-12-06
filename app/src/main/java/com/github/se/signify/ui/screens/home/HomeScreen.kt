@@ -58,9 +58,9 @@ import com.github.se.signify.model.getImageResId
 import com.github.se.signify.model.getTipResId
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.ui.BasicButton
-import com.github.se.signify.ui.MainScreenScaffold
-import com.github.se.signify.ui.TextButton
+import com.github.se.signify.ui.common.BasicButton
+import com.github.se.signify.ui.common.MainScreenScaffold
+import com.github.se.signify.ui.common.TextButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

@@ -48,8 +48,8 @@ import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.CameraBox
+import com.github.se.signify.ui.common.AnnexScreenScaffold
+import com.github.se.signify.ui.common.CameraBox
 import kotlinx.coroutines.delay
 
 @Composable

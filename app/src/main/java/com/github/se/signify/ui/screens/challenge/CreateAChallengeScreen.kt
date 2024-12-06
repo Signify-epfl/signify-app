@@ -38,8 +38,8 @@ import com.github.se.signify.model.challenge.ChallengeViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
-import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.TextButton
+import com.github.se.signify.ui.common.AnnexScreenScaffold
+import com.github.se.signify.ui.common.TextButton
 
 @Composable
 fun CreateAChallengeScreen(

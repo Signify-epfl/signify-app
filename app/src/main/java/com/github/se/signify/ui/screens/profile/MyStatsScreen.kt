@@ -18,11 +18,11 @@ import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.stats.StatsViewModel
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
-import com.github.se.signify.ui.AccountInformation
-import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.LearnedLetterList
-import com.github.se.signify.ui.NotImplementedYet
-import com.github.se.signify.ui.StatisticsTable
+import com.github.se.signify.ui.common.AccountInformation
+import com.github.se.signify.ui.common.AnnexScreenScaffold
+import com.github.se.signify.ui.common.LearnedLetterList
+import com.github.se.signify.ui.common.NotImplementedYet
+import com.github.se.signify.ui.common.StatisticsTable
 
 @Composable
 fun MyStatsScreen(
