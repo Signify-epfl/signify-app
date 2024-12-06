@@ -36,6 +36,9 @@ class QuestRepositoryFireStore(private val db: FirebaseFirestore) : QuestReposit
       val title = document.getString("title") ?: return null
       val description = document.getString("description") ?: return null
       val index = document.getString("index") ?: return null
+
+      // This video path will change once all the videos are ready, for now all words points to the
+      // same video
       val videoPath = "android.resource://com.github.se.signify/raw/thankyou"
       Quest(index = index, title = title, description = description, videoPath = videoPath)
     } catch (e: Exception) {
