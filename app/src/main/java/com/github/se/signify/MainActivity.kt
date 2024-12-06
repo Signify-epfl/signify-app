@@ -48,10 +48,12 @@ import com.github.se.signify.ui.screens.profile.ProfileScreen
 import com.github.se.signify.ui.screens.profile.SettingsScreen
 import com.github.se.signify.ui.screens.tutorial.TutorialScreen
 import com.github.se.signify.ui.theme.SignifyTheme
+import com.github.se.signify.ui.updateLanguage
 
 class MainActivity : ComponentActivity() {
 
-  private lateinit var sharedPreferences: SharedPreferences
+  private lateinit var sharedPreferencesTheme: SharedPreferences
+  private lateinit var sharedPreferencesLanguage: SharedPreferences
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -61,12 +63,16 @@ class MainActivity : ComponentActivity() {
     val prefKeyIsDarkTheme = getString(R.string.pref_key_is_dark_theme)
     val prefKeyTutorialCompleted = getString(R.string.pref_key_tutorial_completed)
     val prefKeyTutorialVersion = getString(R.string.pref_key_tutorial_version)
+    val prefNameLanguage = getString(R.string.pref_name_language)
+    val prefKeyLanguage = getString(R.string.pref_key_is_french)
 
     // Initialize SharedPreferences
-    sharedPreferences = getSharedPreferences(prefName, Context.MODE_PRIVATE)
+    sharedPreferencesTheme = getSharedPreferences(prefName, Context.MODE_PRIVATE)
+    sharedPreferencesLanguage = getSharedPreferences(prefNameLanguage, Context.MODE_PRIVATE)
 
     // Load the saved theme state (default is false for light mode)
     val savedTheme = sharedPreferences.getBoolean(prefKeyIsDarkTheme, false)
+    val savedLanguage = sharedPreferencesLanguage.getBoolean(prefKeyLanguage, false)
 
     // Tutorial versioning logic
     val currentTutorialVersion = 1 // Update this when the tutorial changes
@@ -84,6 +90,8 @@ class MainActivity : ComponentActivity() {
     setContent {
       var isDarkTheme by remember { mutableStateOf(savedTheme) }
       var tutorialCompleted by remember { mutableStateOf(isTutorialCompleted) }
+      var isFrenchLanguage by remember { mutableStateOf(savedLanguage) }
+
 
       SignifyTheme(darkTheme = isDarkTheme) {
         Surface(modifier = Modifier.fillMaxSize()) {
@@ -100,6 +108,12 @@ class MainActivity : ComponentActivity() {
               onTutorialComplete = {
                 tutorialCompleted = true
                 sharedPreferences.edit().putBoolean(prefKeyTutorialCompleted, true).apply()
+              },
+              isFrenchLanguage = isFrenchLanguage,
+              onLanguageChange = { isFrench ->
+                isFrenchLanguage = isFrench
+                sharedPreferencesLanguage.edit().putBoolean(prefNameLanguage, isFrench).apply()
+                updateLanguage(this, if (isFrench) "fr" else "en")
               })
         }
       }
@@ -116,6 +130,8 @@ fun SignifyAppPreview(
     onThemeChange: (Boolean) -> Unit,
     tutorialCompleted: Boolean,
     onTutorialComplete: () -> Unit
+    isFrenchLanguage: Boolean,
+    onLanguageChange: (Boolean) -> Unit
 ) {
   val navController = rememberNavController()
   val navigationActions = NavigationActions(navController, dependencyProvider.userSession())
@@ -268,6 +284,8 @@ fun SignifyAppPreview(
             dependencyProvider.userSession(),
             dependencyProvider.userRepository(),
             isDarkTheme = isDarkTheme,
+            isFrench = isFrenchLanguage,
+            onLanguageChange = onLanguageChange,
             onThemeChange = onThemeChange)
       }
     }
