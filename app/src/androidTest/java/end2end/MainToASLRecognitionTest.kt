@@ -1,6 +1,7 @@
 package end2end
 
 import android.Manifest
+import android.content.Context
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -27,6 +28,11 @@ class MainToASLRecognitionTest {
 
     // Simulate the Google sign-in process
     composeTestRule.onNodeWithTag("skipLoginButton").performClick()
+
+    /// Mock the tutorial completion state
+    val context = composeTestRule.activity.applicationContext
+    val sharedPreferences = context.getSharedPreferences("YOUR_PREF_NAME", Context.MODE_PRIVATE)
+    sharedPreferences.edit().putBoolean("prefKeyTutorialCompleted", true).apply()
 
     // Wait for navigation to Home Screen
     composeTestRule.waitForIdle()

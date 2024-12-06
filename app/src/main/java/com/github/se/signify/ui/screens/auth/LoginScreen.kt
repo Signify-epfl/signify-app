@@ -148,8 +148,8 @@ fun LoginScreen(navigationActions: NavigationActions, showTutorial: () -> Unit) 
           SkipLoginButton {
             Log.d("LoginScreen", "Proceeding in offline state.")
             Toast.makeText(context, "You are not logged in.", Toast.LENGTH_LONG).show()
-            navigationActions.navigateTo(Screen.HOME)
             showTutorial()
+            navigationActions.navigateTo(Screen.HOME)
           }
         }
       })
