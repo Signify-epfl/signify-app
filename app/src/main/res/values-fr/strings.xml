@@ -89,6 +89,6 @@
     <string name="tutorial_screen1">Bienvenue chez Signify !
 Faisons un rapide tour d’horizon pour vous aider à démarrer l’apprentissage de la langue des signes sans effort.</string>
     <string name="tutorial_screen2">Faites glisser votre doigt vers la droite pour afficher les exercices par niveau de difficulté.</string>
-    <string name="tutorial_last_screen" tools:ignore="StringEscaping">Vous êtes prêt à commencer! Profitez de l'apprentissage de la langue des signes.</string>
+    <string name="tutorial_last_screen">Vous êtes prêt à commencer! Profitez de l\'apprentissage de la langue des signes.</string>
     <string name="quest_screen_title">Un jour, Un mot</string>
 </resources>
