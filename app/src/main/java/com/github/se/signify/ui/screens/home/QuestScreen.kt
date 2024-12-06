@@ -27,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -63,14 +64,14 @@ fun QuestScreen(
       viewModel(factory = UserViewModel.factory(userSession, userRepository))
 
   val quests = questViewModel.quest.collectAsState()
-  val unlockedQuests = 20
-  // by userViewModel.unlockedQuests.collectAsState()
+  LaunchedEffect(userSession.getUserId()) { userViewModel.checkAndUnlockNextQuest() }
+
+  val unlockedQuests by userViewModel.unlockedQuests.collectAsState()
 
   Scaffold(
       modifier = Modifier.fillMaxSize().testTag("QuestScreen"),
   ) { padding ->
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-      // Header Row
       Row(
           verticalAlignment = Alignment.CenterVertically,
           modifier =
@@ -91,13 +92,12 @@ fun QuestScreen(
                 color = MaterialTheme.colorScheme.primary)
           }
 
-      // Quests List
       LazyColumn(
           contentPadding = PaddingValues(vertical = 8.dp),
           modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(padding)) {
             items(quests.value.size) { index ->
               val isUnlocked = index < unlockedQuests.toInt()
-              QuestBox(quest = quests.value[index], isUnlocked = isUnlocked)
+              QuestBox(quest = quests.value[index], isUnlocked)
             }
           }
     }
