@@ -7,13 +7,19 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.AuthResult
 
 interface AuthService {
-    suspend fun signInWithGoogle(idToken: String): Boolean
+  suspend fun signInWithGoogle(idToken: String): Boolean
 
-    suspend fun signOut(): Boolean
+  suspend fun signOut(): Boolean
 
-    fun getCurrentUser(): String?
+  fun getCurrentUser(): String?
 
-    fun handleAuthResult(result: ActivityResult, onAuthComplete: (AuthResult) -> Unit, onAuthError: (ApiException) -> Unit)
-    fun getSignInIntent(context: Context, token: String): Intent
-    fun isMocked(): Boolean
+  fun handleAuthResult(
+      result: ActivityResult,
+      onAuthComplete: (AuthResult) -> Unit,
+      onAuthError: (ApiException) -> Unit
+  )
+
+  fun getSignInIntent(context: Context, token: String): Intent
+
+  fun isMocked(): Boolean
 }

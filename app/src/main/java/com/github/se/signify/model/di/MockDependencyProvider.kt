@@ -23,7 +23,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 
 private val appHandLandMarkConfig =
-  HandLandMarkConfig("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
+    HandLandMarkConfig("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
 
 object MockDependencyProvider : DependencyProvider {
   override fun challengeRepository(): ChallengeRepository {

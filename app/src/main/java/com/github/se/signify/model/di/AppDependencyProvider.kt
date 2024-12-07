@@ -58,7 +58,8 @@ object AppDependencyProvider : DependencyProvider {
   override fun userSession(): UserSession {
     return FirebaseUserSession(provideAuthService())
   }
-  override fun provideAuthService(): AuthService  {
+
+  override fun provideAuthService(): AuthService {
     return FirebaseAuthService()
   }
 }

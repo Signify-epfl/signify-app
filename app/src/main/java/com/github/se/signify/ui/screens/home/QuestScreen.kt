@@ -78,12 +78,14 @@ fun QuestScreen(
               Modifier.fillMaxWidth()
                   .background(MaterialTheme.colorScheme.background)
                   .padding(horizontal = 16.dp, vertical = 8.dp)) {
-            IconButton(onClick = { navigationActions.goBack() }, modifier = Modifier.testTag("BackButton")) {
-              Icon(
-                  imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                  contentDescription = "Back",
-                  tint = MaterialTheme.colorScheme.primary)
-            }
+            IconButton(
+                onClick = { navigationActions.goBack() },
+                modifier = Modifier.testTag("BackButton")) {
+                  Icon(
+                      imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                      contentDescription = "Back",
+                      tint = MaterialTheme.colorScheme.primary)
+                }
             Spacer(modifier = Modifier.width(20.dp))
             Text(
                 text = stringResource(R.string.quest_screen_title),

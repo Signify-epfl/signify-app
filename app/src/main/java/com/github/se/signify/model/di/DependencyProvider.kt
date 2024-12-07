@@ -26,5 +26,6 @@ interface DependencyProvider {
   fun feedbackRepository(): FeedbackRepository
 
   fun userSession(): UserSession
+
   fun provideAuthService(): AuthService
 }

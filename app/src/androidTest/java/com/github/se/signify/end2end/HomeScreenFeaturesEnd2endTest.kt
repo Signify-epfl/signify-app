@@ -15,13 +15,13 @@ import org.junit.Rule
 import org.junit.Test
 
 class HomeScreenFeaturesEnd2endTest {
-  @get:Rule
-  val composeTestRule = createAndroidComposeRule<MainActivity>()
+  @get:Rule val composeTestRule = createAndroidComposeRule<MainActivity>()
 
   @get:Rule
   val cameraAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
   @get:Rule
-  val bluetoothAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.BLUETOOTH)
+  val bluetoothAccess: GrantPermissionRule =
+      GrantPermissionRule.grant(Manifest.permission.BLUETOOTH)
 
   @Before
   fun setup() {
@@ -63,8 +63,8 @@ class HomeScreenFeaturesEnd2endTest {
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FeedbackButton").performClick()
     composeTestRule.onNodeWithTag("FeedbackScreen").assertIsDisplayed()
-
   }
+
   @Test
   fun navigateToASLRecognitionScreen() {
     // Simulate the Google sign-in process
@@ -98,6 +98,7 @@ class HomeScreenFeaturesEnd2endTest {
     composeTestRule.onNodeWithTag("gestureOverlayView").assertIsDisplayed()
     composeTestRule.waitForIdle()
   }
+
   @Test
   fun exerciseFeatureTest() {
     // Simulate the Google sign-in process
@@ -113,31 +114,31 @@ class HomeScreenFeaturesEnd2endTest {
     composeTestRule.mainClock.advanceTimeBy(7_000)
     composeTestRule.onNodeWithTag("BackButton").performClick()
     composeTestRule
-      .onNodeWithTag("MediumExerciseButtonText", useUnmergedTree = true)
-      .performScrollTo()
-      .performClick()
+        .onNodeWithTag("MediumExerciseButtonText", useUnmergedTree = true)
+        .performScrollTo()
+        .performClick()
     composeTestRule
-      .onNodeWithTag("ExerciseScreenMedium", useUnmergedTree = true)
-      .assertIsDisplayed()
+        .onNodeWithTag("ExerciseScreenMedium", useUnmergedTree = true)
+        .assertIsDisplayed()
     composeTestRule.mainClock.advanceTimeBy(7_000)
     // Advance by 7 seconds, at this point the user finished the medium exercise
     composeTestRule.onNodeWithTag("BackButton").performClick()
 
     composeTestRule
-      .onNodeWithTag("HardExerciseButtonText", useUnmergedTree = true)
-      .performScrollTo()
-      .performClick()
+        .onNodeWithTag("HardExerciseButtonText", useUnmergedTree = true)
+        .performScrollTo()
+        .performClick()
     composeTestRule.onNodeWithTag("ExerciseScreenHard", useUnmergedTree = true).assertIsDisplayed()
     composeTestRule.mainClock.advanceTimeBy(7_000)
     composeTestRule.waitForIdle()
     // Advance by 7 seconds, at this point the user finished the Hard exercise
     composeTestRule.onNodeWithTag("BackButton").performClick()
   }
+
   @After
   fun tearDown() {
     composeTestRule.activity.resources.assets.close()
     composeTestRule.activity.cacheDir.delete()
     composeTestRule.activityRule.scenario.close()
   }
-
 }

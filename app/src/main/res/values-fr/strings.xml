@@ -9,6 +9,7 @@
     <string name="button_uri_string">https://nerdish.io/topics/what-you-should-know-about-sign-language/</string>
     <string name="help_asl_recognition">Pratiquez vos gestes de la langue des signes avec la caméra et voyez les retours en temps réel.</string>
     <string name="help_offline_mode">Vous êtes actuellement hors ligne. Utilisez le bouton de connexion pour revenir en ligne.</string>
+    <string name="welcome_text">"Bienvenu(e) sur Signify"</string>
     <string-array name="real_words">
         <item>chat</item>
         <item>chien</item>
