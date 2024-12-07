@@ -54,6 +54,7 @@ class MainActivity : ComponentActivity() {
 
   private lateinit var sharedPreferencesTheme: SharedPreferences
   private lateinit var sharedPreferencesLanguage: SharedPreferences
+  private val dependencyProvider by lazy { (application as BaseApplication).dependencyProvider }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -96,7 +97,7 @@ class MainActivity : ComponentActivity() {
         Surface(modifier = Modifier.fillMaxSize()) {
           SignifyAppPreview(
               context = this,
-              dependencyProvider = AppDependencyProvider,
+              dependencyProvider = dependencyProvider,
               isDarkTheme = isDarkTheme,
               onThemeChange = { isDark ->
                 isDarkTheme = isDark
@@ -159,7 +160,8 @@ fun SignifyAppPreview(
               } else {
                 navigationActions.navigateTo(Screen.TUTORIAL)
               }
-            })
+            },
+            authService = dependencyProvider.provideAuthService())
       }
       composable(Screen.UNAUTHENTICATED.route) { UnauthenticatedScreen(navigationActions) }
     }

@@ -10,6 +10,8 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.toPackage
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.github.se.signify.model.auth.FirebaseAuthService
+import com.github.se.signify.model.auth.MockAuthService
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
@@ -48,7 +50,7 @@ class LoginScreenTest : TestCase() {
   @Test
   fun titleAndButtonAreCorrectlyDisplayed() {
 
-    composeTestRule.setContent { LoginScreen(navigationActions, {}) }
+    composeTestRule.setContent { LoginScreen(navigationActions, {}, FirebaseAuthService()) }
 
     composeTestRule.onNodeWithTag("IntroMessage").assertIsDisplayed()
     composeTestRule
@@ -63,7 +65,7 @@ class LoginScreenTest : TestCase() {
   @Test
   fun googleSignInReturnsValidActivityResult() {
 
-    composeTestRule.setContent { LoginScreen(navigationActions, {}) }
+    composeTestRule.setContent { LoginScreen(navigationActions, {}, FirebaseAuthService()) }
 
     composeTestRule.onNodeWithTag("loginButton").performClick()
     composeTestRule.waitForIdle()
@@ -73,7 +75,7 @@ class LoginScreenTest : TestCase() {
 
   @Test
   fun offlineModeHelpsToConnect() {
-    composeTestRule.setContent { LoginScreen(navigationActions, {}) }
+    composeTestRule.setContent { LoginScreen(navigationActions, {}, FirebaseAuthService()) }
     composeTestRule.onNodeWithTag("skipLoginButton").assertIsDisplayed().performClick()
   }
 }

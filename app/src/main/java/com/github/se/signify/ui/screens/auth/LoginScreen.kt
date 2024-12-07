@@ -45,6 +45,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
+import com.github.se.signify.model.auth.AuthService
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.model.stats.saveStatsToFirestore
@@ -60,24 +61,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 @Composable
-fun LoginScreen(navigationActions: NavigationActions, showTutorial: () -> Unit) {
+fun LoginScreen(navigationActions: NavigationActions, showTutorial: () -> Unit,
+                authService: AuthService) {
   val context = LocalContext.current
-
-  val launcher =
-      rememberFirebaseAuthLauncher(
-          onAuthComplete = { result ->
-            Log.d("SignInScreen", "User signed in: ${result.user?.displayName}")
-            Toast.makeText(context, "Login successful!", Toast.LENGTH_LONG).show()
-            saveUserToFireStore()
-            saveStatsToFirestore()
-            navigationActions.navigateTo(Screen.HOME)
-            showTutorial()
-          },
-          onAuthError = {
-            Log.e("SignInScreen", "Failed to sign in: ${it.statusCode}")
-            Toast.makeText(context, "Login Failed!", Toast.LENGTH_LONG).show()
-          })
-
+val scope = rememberCoroutineScope()
   val token = stringResource(id = R.string.default_web_client_id)
 
   // Gradient brush for background
@@ -95,10 +82,11 @@ fun LoginScreen(navigationActions: NavigationActions, showTutorial: () -> Unit) 
       content = { padding ->
         Column(
             modifier =
-                Modifier.fillMaxSize()
-                    .padding(padding)
-                    .background(brush = gradient)
-                    .testTag("LoginScreen"),
+            Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .background(brush = gradient)
+                .testTag("LoginScreen"),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
@@ -108,18 +96,23 @@ fun LoginScreen(navigationActions: NavigationActions, showTutorial: () -> Unit) 
               contentDescription = "icon description",
               tint = MaterialTheme.colorScheme.primary,
               modifier =
-                  Modifier.padding(3.dp)
-                      .width(139.dp)
-                      .height(81.dp)
-                      .background(
-                          color = MaterialTheme.colorScheme.background) // Primary background
+              Modifier
+                  .padding(3.dp)
+                  .width(139.dp)
+                  .height(81.dp)
+                  .background(
+                      color = MaterialTheme.colorScheme.background
+                  ) // Primary background
               )
 
           Spacer(modifier = Modifier.height(70.dp))
 
           // Welcome Text
           Text(
-              modifier = Modifier.width(250.dp).height(200.dp).testTag("IntroMessage"),
+              modifier = Modifier
+                  .width(250.dp)
+                  .height(200.dp)
+                  .testTag("IntroMessage"),
               text = "Signify is what you need to communicate with deaf and hard of hearing people",
               style =
                   TextStyle(
@@ -134,15 +127,30 @@ fun LoginScreen(navigationActions: NavigationActions, showTutorial: () -> Unit) 
           Spacer(modifier = Modifier.height(120.dp))
 
           // Authenticate With Google Button
+            val authLauncher = rememberAuthLauncher(
+                onAuthComplete = { result ->
+                Log.d("SignInScreen", "User signed in: ${result.user?.displayName}")
+                Toast.makeText(context, "Login successful!", Toast.LENGTH_LONG).show()
+                saveUserToFireStore()
+                saveStatsToFirestore()
+                navigationActions.navigateTo(Screen.HOME)
+                showTutorial()
+            },
+                onAuthError = {
+                    Log.e("SignInScreen", "Failed to sign in: ${it.statusCode}")
+                    Toast.makeText(context, "Login Failed!", Toast.LENGTH_LONG).show()},
+                authService = authService)
+
           GoogleSignInButton(
               onSignInClick = {
-                val gso =
-                    GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(token)
-                        .requestEmail()
-                        .build()
-                val googleSignInClient = GoogleSignIn.getClient(context, gso)
-                launcher.launch(googleSignInClient.signInIntent)
+                  if (authService.isMocked()) {
+                      Log.d("MockedSignInScreen", "User signed in: mocked-user")
+                      Toast.makeText(context, "Mocked Login successful!", Toast.LENGTH_LONG).show()
+                      navigationActions.navigateTo(Screen.HOME)
+                  }
+                  else {
+                      authLauncher.launch(authService.getSignInIntent(context,token))
+                  }
               })
 
           SkipLoginButton {
@@ -158,7 +166,10 @@ fun LoginScreen(navigationActions: NavigationActions, showTutorial: () -> Unit) 
 @Composable
 fun GoogleSignInButton(onSignInClick: () -> Unit) {
   Button(
-      modifier = Modifier.padding(8.dp).height(48.dp).testTag("loginButton"),
+      modifier = Modifier
+          .padding(8.dp)
+          .height(48.dp)
+          .testTag("loginButton"),
       onClick = onSignInClick,
       colors =
           ButtonDefaults.buttonColors(
@@ -175,8 +186,9 @@ fun GoogleSignInButton(onSignInClick: () -> Unit) {
               painter = painterResource(id = R.drawable.google_logo),
               contentDescription = "Google Logo",
               modifier =
-                  Modifier.size(30.dp) // Size of the Google logo
-                      .padding(end = 8.dp))
+              Modifier
+                  .size(30.dp) // Size of the Google logo
+                  .padding(end = 8.dp))
 
           // Text for the button
           Text(
@@ -215,11 +227,26 @@ fun rememberFirebaseAuthLauncher(
     }
   }
 }
+@Composable
+fun rememberAuthLauncher(
+    onAuthComplete: (AuthResult) -> Unit,
+    onAuthError: (ApiException) -> Unit,
+    authService: AuthService
+): ManagedActivityResultLauncher<Intent, ActivityResult> {
+    return rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        authService.handleAuthResult(result, onAuthComplete, onAuthError)
+    }
+}
 
 @Composable
 fun SkipLoginButton(onOfflineClick: () -> Unit) {
   Button(
-      modifier = Modifier.padding(8.dp).height(48.dp).testTag("skipLoginButton"),
+      modifier = Modifier
+          .padding(8.dp)
+          .height(48.dp)
+          .testTag("skipLoginButton"),
       onClick = onOfflineClick,
       colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.background),
       shape = RoundedCornerShape(50),
@@ -227,11 +254,15 @@ fun SkipLoginButton(onOfflineClick: () -> Unit) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.width(200.dp).testTag("skipLoginButton")) {
+            modifier = Modifier
+                .width(200.dp)
+                .testTag("skipLoginButton")) {
               Icon(
                   imageVector = Icons.Default.Home,
                   contentDescription = "Offline Mode Icon",
-                  modifier = Modifier.size(30.dp).padding(end = 8.dp),
+                  modifier = Modifier
+                      .size(30.dp)
+                      .padding(end = 8.dp),
                   tint = MaterialTheme.colorScheme.primary)
 
               // Text for the button

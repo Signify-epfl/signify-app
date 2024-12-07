@@ -78,7 +78,7 @@ fun QuestScreen(
               Modifier.fillMaxWidth()
                   .background(MaterialTheme.colorScheme.background)
                   .padding(horizontal = 16.dp, vertical = 8.dp)) {
-            IconButton(onClick = { navigationActions.goBack() }) {
+            IconButton(onClick = { navigationActions.goBack() }, modifier = Modifier.testTag("BackButton")) {
               Icon(
                   imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                   contentDescription = "Back",

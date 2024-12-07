@@ -1,46 +1,64 @@
 package com.github.se.signify.model.di
 
+import com.github.se.signify.model.auth.AuthService
+import com.github.se.signify.model.auth.MockAuthService
 import com.github.se.signify.model.auth.MockUserSession
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.challenge.ChallengeRepository
+import com.github.se.signify.model.challenge.MockChallengeRepository
 import com.github.se.signify.model.feedback.FeedbackRepository
+import com.github.se.signify.model.feedback.FeedbackRepositoryFireStore
+import com.github.se.signify.model.hand.HandLandMarkConfig
+import com.github.se.signify.model.hand.HandLandMarkImplementation
 import com.github.se.signify.model.hand.HandLandMarkRepository
 import com.github.se.signify.model.quest.QuestRepository
+import com.github.se.signify.model.quest.QuestRepositoryFireStore
 import com.github.se.signify.model.quiz.QuizRepository
+import com.github.se.signify.model.quiz.QuizRepositoryFireStore
+import com.github.se.signify.model.stats.MockStatsRepository
 import com.github.se.signify.model.stats.StatsRepository
+import com.github.se.signify.model.user.MockUserRepository
 import com.github.se.signify.model.user.UserRepository
-import org.mockito.Mockito.mock
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
+
+private val appHandLandMarkConfig =
+  HandLandMarkConfig("hand_landmarker.task", "RFC_model_ir9_opset19.onnx")
 
 object MockDependencyProvider : DependencyProvider {
   override fun challengeRepository(): ChallengeRepository {
-    return mock(ChallengeRepository::class.java)
+    return MockChallengeRepository()
   }
 
   override fun handLandMarkRepository(): HandLandMarkRepository {
-    return mock(HandLandMarkRepository::class.java)
+    return HandLandMarkImplementation(appHandLandMarkConfig)
   }
 
   override fun questRepository(): QuestRepository {
-    return mock(QuestRepository::class.java)
+    return QuestRepositoryFireStore(Firebase.firestore) // TO BE REPLACED BY THE ACTUAL MOCK
   }
 
   override fun statsRepository(): StatsRepository {
-    return mock(StatsRepository::class.java)
+    return MockStatsRepository()
   }
 
   override fun userRepository(): UserRepository {
-    return mock(UserRepository::class.java)
+    return MockUserRepository()
   }
 
   override fun quizRepository(): QuizRepository {
-    return mock(QuizRepository::class.java)
+    return QuizRepositoryFireStore(Firebase.firestore) // TO BE REPLACED BY THE ACTUAL MOCK
   }
 
   override fun feedbackRepository(): FeedbackRepository {
-    return mock(FeedbackRepository::class.java)
+    return FeedbackRepositoryFireStore(Firebase.firestore) // TO BE REPLACED BY THE ACTUAL MOCK
   }
 
   override fun userSession(): UserSession {
     return MockUserSession()
+  }
+
+  override fun provideAuthService(): AuthService {
+    return MockAuthService()
   }
 }
