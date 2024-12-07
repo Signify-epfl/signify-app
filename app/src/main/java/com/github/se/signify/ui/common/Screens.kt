@@ -167,47 +167,8 @@ fun TopBar() {
  * @param helpText The text of the info popup.
  */
 @Composable
-@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
   Dialog(onDismissRequest = { onDismiss() }) {
-    Column(
-        modifier = Modifier.padding(16.dp).fillMaxWidth().testTag("InfoPopupContent"),
-        horizontalAlignment = Alignment.CenterHorizontally) {
-          // Title centered and underlined
-          Text(
-              text =
-                  buildAnnotatedString {
-                    withStyle(
-                        style =
-                            SpanStyle(
-                                fontWeight = FontWeight.Bold,
-                                textDecoration = TextDecoration.Underline)) {
-                          append(helpTitle)
-                        }
-                  },
-              fontSize = 20.sp,
-              color = MaterialTheme.colorScheme.primary,
-              textAlign = TextAlign.Center,
-              modifier = Modifier.testTag("InfoPopupTitle"))
-          Spacer(modifier = Modifier.height(8.dp))
-
-          // Body text centered under the title
-          Text(
-              text = helpText,
-              fontSize = 16.sp,
-              color = MaterialTheme.colorScheme.primary,
-              textAlign = TextAlign.Center,
-              modifier = Modifier.testTag("InfoPopupBody"))
-          Spacer(modifier = Modifier.height(16.dp))
-
-          // Close button for the popup
-          Button(
-              onClick = { onDismiss() },
-              colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-              modifier = Modifier.testTag("InfoPopupCloseButton")) {
-                Text(text = "Close", color = MaterialTheme.colorScheme.onPrimary)
-              }
-        }
     Surface(
         shape = RoundedCornerShape(12.dp),
         color = MaterialTheme.colorScheme.background, // Background for the popup
@@ -216,7 +177,46 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
                     3.dp,
                     MaterialTheme.colorScheme.primary,
                     RoundedCornerShape(12.dp)) // Ensure the border wraps the popup
-                .testTag("InfoPopup")) {}
+                .testTag("InfoPopup")) {
+          Column(
+              modifier = Modifier.padding(16.dp).fillMaxWidth().testTag("InfoPopupContent"),
+              horizontalAlignment = Alignment.CenterHorizontally) {
+                // Title centered and underlined
+                Text(
+                    text =
+                        buildAnnotatedString {
+                          withStyle(
+                              style =
+                                  SpanStyle(
+                                      fontWeight = FontWeight.Bold,
+                                      textDecoration = TextDecoration.Underline)) {
+                                append(helpTitle)
+                              }
+                        },
+                    fontSize = 20.sp,
+                    color = MaterialTheme.colorScheme.primary,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.testTag("InfoPopupTitle"))
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Body text centered under the title
+                Text(
+                    text = helpText,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.primary,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.testTag("InfoPopupBody"))
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Close button for the popup
+                Button(
+                    onClick = { onDismiss() },
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
+                    modifier = Modifier.testTag("InfoPopupCloseButton")) {
+                      Text(text = "Close", color = MaterialTheme.colorScheme.onPrimary)
+                    }
+              }
+        }
   }
 }
 
