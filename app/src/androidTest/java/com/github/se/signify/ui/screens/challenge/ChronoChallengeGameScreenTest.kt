@@ -79,7 +79,7 @@ class ChronoChallengeGameScreenTest {
     composeTestRule.onNodeWithTag("ElapsedTimeText").assertIsDisplayed()
     composeTestRule.onNodeWithTag("CurrentLetterBox").assertIsDisplayed()
     composeTestRule.onNodeWithTag("SentenceLayerBox").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("giCameraPlaceholder").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("CameraBox").assertIsDisplayed()
   }
 
   @Test
