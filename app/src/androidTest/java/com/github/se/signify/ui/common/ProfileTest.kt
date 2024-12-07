@@ -10,7 +10,7 @@ import org.junit.Test
 class ProfileTest {
   @get:Rule val composeTestRule = createComposeRule()
 
-  val picturePath = "picturePath.jpg"
+  private val picturePath = "picturePath.jpg"
 
   @Test
   fun profilePictureIsDisplayed() {

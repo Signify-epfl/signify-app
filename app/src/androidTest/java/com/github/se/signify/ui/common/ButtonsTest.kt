@@ -17,7 +17,44 @@ import org.junit.Rule
 import org.junit.Test
 
 class ButtonsTest {
+  @Test
+  fun basicButtonIsDisplayed() {
+    composeTestRule.setContent {
+      BasicButton(
+          onClick = {},
+          icon = Icons.Outlined.Info,
+          buttonTestTag = "UtilButton",
+          iconTestTag = "UtilIcon",
+          contentDescription = "Info")
+    }
+
+    // Assert that the button is displayed
+    composeTestRule.onNodeWithTag("UtilButton").assertIsDisplayed()
+  }
+
   @get:Rule val composeTestRule = createComposeRule()
+
+  @Test
+  fun basicButtonPerformsClick() {
+    var clicked = false
+    composeTestRule.setContent {
+      BasicButton(
+          onClick = { clicked = true },
+          icon = Icons.Outlined.Info,
+          buttonTestTag = "UtilButton",
+          iconTestTag = "UtilIcon",
+          contentDescription = "Info")
+    }
+
+    // Assert that the button has a click action
+    composeTestRule.onNodeWithTag("UtilButton").assertHasClickAction()
+
+    // Perform click action on the button
+    composeTestRule.onNodeWithTag("UtilButton").performClick()
+
+    // Assert that the click action was triggered
+    assert(clicked)
+  }
 
   @Test
   fun textButtonDisplaysCorrectly() {
@@ -67,7 +104,7 @@ class ButtonsTest {
   }
 
   @Test
-  fun squareButtonIsDisplayedAndClickable() {
+  fun squareButtonIsDisplayed() {
     val label = "Test Button"
     composeTestRule.setContent {
       SquareButton(
@@ -81,9 +118,6 @@ class ButtonsTest {
 
     // Assert that the button is displayed
     composeTestRule.onNodeWithText(label).assertIsDisplayed()
-
-    // Assert that the button has a click action
-    composeTestRule.onNodeWithText(label).assertHasClickAction()
   }
 
   @Test
@@ -100,46 +134,11 @@ class ButtonsTest {
       )
     }
 
+    // Assert that the button has a click action
+    composeTestRule.onNodeWithText(label).assertHasClickAction()
+
     // Perform click action on the button
     composeTestRule.onNodeWithText(label).performClick()
-
-    // Assert that the click action was triggered
-    assert(clicked)
-  }
-
-  // Test for UtilButton
-  @Test
-  fun basicButtonIsDisplayedAndClickable() {
-    composeTestRule.setContent {
-      BasicButton(
-          onClick = {},
-          icon = Icons.Outlined.Info,
-          buttonTestTag = "UtilButton",
-          iconTestTag = "UtilIcon",
-          contentDescription = "Info")
-    }
-
-    // Assert that the button is displayed
-    composeTestRule.onNodeWithTag("UtilButton").assertIsDisplayed()
-
-    // Assert that the button has a click action
-    composeTestRule.onNodeWithTag("UtilButton").assertHasClickAction()
-  }
-
-  @Test
-  fun basicButtonPerformsClick() {
-    var clicked = false
-    composeTestRule.setContent {
-      BasicButton(
-          onClick = { clicked = true },
-          icon = Icons.Outlined.Info,
-          buttonTestTag = "UtilButton",
-          iconTestTag = "UtilIcon",
-          contentDescription = "Info")
-    }
-
-    // Perform click action on the button
-    composeTestRule.onNodeWithTag("UtilButton").performClick()
 
     // Assert that the click action was triggered
     assert(clicked)

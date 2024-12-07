@@ -9,7 +9,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class NotImplementedYetTest {
-
   @get:Rule val composeTestRule = createComposeRule()
 
   @Test

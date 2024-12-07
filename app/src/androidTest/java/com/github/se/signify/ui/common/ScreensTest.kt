@@ -17,55 +17,6 @@ import org.junit.Test
 import org.mockito.Mockito.mock
 
 class ScreensTest {
-  @get:Rule val composeTestRule = createComposeRule()
-
-  // Test for BackButton
-  @Test
-  fun backButtonIsDisplayedAndClickable() {
-    composeTestRule.setContent { BackButton(onClick = {}) }
-
-    // Assert that the back button is displayed
-    composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
-
-    // Assert that the back button has a click action
-    composeTestRule.onNodeWithTag("BackButton").assertHasClickAction()
-  }
-
-  @Test
-  fun backButtonPerformsClick() {
-    var clicked = false
-    composeTestRule.setContent { BackButton(onClick = { clicked = true }) }
-
-    // Perform click action on the back button
-    composeTestRule.onNodeWithTag("BackButton").performClick()
-
-    // Assert that the click action was triggered
-    assert(clicked)
-  }
-
-  @Test
-  fun topBarIsDisplayed() {
-    composeTestRule.setContent { TopBar() }
-
-    // Assert that the top bar is displayed
-    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
-  }
-
-  @Test
-  fun screenColumnDisplaysCorrectInformation() {
-    composeTestRule.setContent {
-      ScreenColumn(
-          padding = PaddingValues(16.dp),
-          testTag = "ColumnScreen",
-      ) {
-        Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
-      }
-    }
-
-    composeTestRule.onNodeWithTag("ColumnScreen").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("Text").assertIsDisplayed()
-  }
-
   @Test
   fun mainScreenScaffoldDisplaysCorrectInformation() {
     composeTestRule.setContent {
@@ -87,6 +38,19 @@ class ScreensTest {
     composeTestRule.onNodeWithTag("Text").assertIsDisplayed()
   }
 
+  @get:Rule val composeTestRule = createComposeRule()
+
+  @Test
+  fun backButtonIsDisplayedAndClickable() {
+    composeTestRule.setContent { BackButton(onClick = {}) }
+
+    // Assert that the back button is displayed
+    composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
+
+    // Assert that the back button has a click action
+    composeTestRule.onNodeWithTag("BackButton").assertHasClickAction()
+  }
+
   @Test
   fun annexScreenScaffoldDisplaysCorrectInformation() {
     val navigationActions = mock(NavigationActions::class.java)
@@ -101,6 +65,29 @@ class ScreensTest {
     composeTestRule.onNodeWithTag("ScaffoldAnnexeScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("Text").assertIsDisplayed()
+  }
+
+  @Test
+  fun screenColumnDisplaysCorrectInformation() {
+    composeTestRule.setContent {
+      ScreenColumn(
+          padding = PaddingValues(16.dp),
+          testTag = "ColumnScreen",
+      ) {
+        Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
+      }
+    }
+
+    composeTestRule.onNodeWithTag("ColumnScreen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Text").assertIsDisplayed()
+  }
+
+  @Test
+  fun topBarIsDisplayed() {
+    composeTestRule.setContent { TopBar() }
+
+    // Assert that the top bar is displayed
+    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
   }
 
   @Test
@@ -131,6 +118,18 @@ class ScreensTest {
     }
 
     composeTestRule.onNodeWithTag("InfoPopupCloseButton").performClick()
+    assert(clicked)
+  }
+
+  @Test
+  fun backButtonPerformsClick() {
+    var clicked = false
+    composeTestRule.setContent { BackButton(onClick = { clicked = true }) }
+
+    // Perform click action on the back button
+    composeTestRule.onNodeWithTag("BackButton").performClick()
+
+    // Assert that the click action was triggered
     assert(clicked)
   }
 }
