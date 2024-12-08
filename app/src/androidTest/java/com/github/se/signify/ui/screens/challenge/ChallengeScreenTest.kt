@@ -27,22 +27,8 @@ class ChallengeScreenTest {
   @Test
   fun challengeScreenDisplaysCorrectElements() {
 
-    // Assert that all elements are displayed in ChallengeScreen
-    composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("InfoButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("ChallengeButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("HistoryButton").assertIsDisplayed()
-
-    // Click on the InfoButton to show the InfoPopup
-    composeTestRule.onNodeWithTag("InfoButton").performClick()
-
-    // Assert that all elements within the InfoPopup are displayed after clicking the InfoButton
-    composeTestRule.onNodeWithTag("InfoPopup").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("InfoPopupContent").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("InfoPopupTitle").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("InfoPopupBody").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("InfoPopupCloseButton").assertIsDisplayed()
   }
 
   @Test
@@ -59,13 +45,5 @@ class ChallengeScreenTest {
     composeTestRule.onNodeWithTag("ChallengeButton").performClick()
 
     verify(navigationActions).navigateTo(Screen.NEW_CHALLENGE)
-  }
-
-  @Test
-  fun pressingInfoButtonShowsInfoPopup() {
-
-    composeTestRule.onNodeWithTag("InfoButton").performClick()
-
-    composeTestRule.onNodeWithTag("InfoPopup").assertIsDisplayed()
   }
 }

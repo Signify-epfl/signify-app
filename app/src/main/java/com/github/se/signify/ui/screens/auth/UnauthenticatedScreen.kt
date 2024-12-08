@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.ui.MainScreenScaffold
-import com.github.se.signify.ui.UtilTextButton
+import com.github.se.signify.ui.common.MainScreenScaffold
+import com.github.se.signify.ui.common.TextButton
 
 /**
  * A composable function that displays a screen for offline mode.
@@ -37,7 +37,7 @@ import com.github.se.signify.ui.UtilTextButton
 fun UnauthenticatedScreen(navigationActions: NavigationActions) {
   MainScreenScaffold(
       navigationActions = navigationActions,
-      testTagColumn = "UnauthenticatedScreen",
+      testTag = "UnauthenticatedScreen",
       helpTitle = "Offline Mode",
       helpText = stringResource(R.string.help_offline_mode)) {
         Column(
@@ -62,14 +62,15 @@ fun UnauthenticatedScreen(navigationActions: NavigationActions) {
                   )
 
               // "Log In" button using UtilTextButton
-              UtilTextButton(
-                  onClickAction = {
+              TextButton(
+                  onClick = {
                     navigationActions.navigateTo(Screen.AUTH)
                   }, // Navigate to Screen.AUTH
                   testTag = "logInButton",
                   text = "Log In",
                   backgroundColor = MaterialTheme.colorScheme.primary,
-                  textColor = MaterialTheme.colorScheme.onPrimary)
+                  textColor = MaterialTheme.colorScheme.onPrimary,
+                  modifier = Modifier)
             }
       }
 }

@@ -44,8 +44,8 @@ import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.stats.StatsViewModel
-import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.CameraPlaceholder
+import com.github.se.signify.ui.common.AnnexScreenScaffold
+import com.github.se.signify.ui.common.CameraBox
 
 /**
  * Composable function for a common exercise screen layout, handling gesture detection, sentence
@@ -114,47 +114,43 @@ fun ExerciseScreen(
         })
   }
 
-  AnnexScreenScaffold(
-      navigationActions = navigationActions, testTagColumn = exerciseLevel.screenTag) {
+  AnnexScreenScaffold(navigationActions = navigationActions, testTag = exerciseLevel.screenTag) {
 
-        // Display sign image for the current letter
-        val imageName = "letter_${currentLetter.lowercase()}"
-        val imageResId = context.resources.getIdentifier(imageName, "drawable", context.packageName)
+    // Display sign image for the current letter
+    val imageName = "letter_${currentLetter.lowercase()}"
+    val imageResId = context.resources.getIdentifier(imageName, "drawable", context.packageName)
 
-        if (imageResId != 0) {
-          Box(
-              modifier =
-                  Modifier.fillMaxWidth()
-                      .padding(horizontal = 16.dp)
-                      .height(150.dp)
-                      .background(
-                          MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
-                      .border(
-                          2.dp,
-                          MaterialTheme.colorScheme.outline,
-                          shape = RoundedCornerShape(16.dp)),
-              contentAlignment = Alignment.Center) {
-                Icon(
-                    painter = painterResource(id = imageResId),
-                    contentDescription = "Sign image",
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.size(120.dp))
-              }
+    if (imageResId != 0) {
+      Box(
+          modifier =
+              Modifier.fillMaxWidth()
+                  .padding(horizontal = 16.dp)
+                  .height(150.dp)
+                  .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
+                  .border(
+                      2.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(16.dp)),
+          contentAlignment = Alignment.Center) {
+            Icon(
+                painter = painterResource(id = imageResId),
+                contentDescription = "Sign image",
+                tint = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.size(120.dp))
+          }
 
-          Spacer(modifier = Modifier.height(16.dp))
-        }
+      Spacer(modifier = Modifier.height(16.dp))
+    }
 
-        // Sentence layer display
-        SentenceLayer(
-            sentencesList,
-            currentLetterIndex,
-            currentWordIndex,
-            currentSentenceIndex,
-        )
+    // Sentence layer display
+    SentenceLayer(
+        sentencesList,
+        currentLetterIndex,
+        currentWordIndex,
+        currentSentenceIndex,
+    )
 
-        // Camera placeholder/composable
-        CameraPlaceholder(handLandMarkViewModel)
-      }
+    // Camera placeholder/composable
+    CameraBox(handLandMarkViewModel, "cameraPreview")
+  }
 }
 
 /**

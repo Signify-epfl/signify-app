@@ -6,11 +6,30 @@ import android.os.SystemClock
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,8 +48,8 @@ import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.CameraPlaceholder
+import com.github.se.signify.ui.common.AnnexScreenScaffold
+import com.github.se.signify.ui.common.CameraBox
 import kotlinx.coroutines.delay
 
 @Composable
@@ -129,22 +148,19 @@ fun ChronoChallengeGameScreen(
   }
 
   // Render the challenge screen
-  AnnexScreenScaffold(
-      navigationActions = navigationActions, testTagColumn = "ChronoChallengeScreen") {
-        if (currentWord.isNotEmpty()) {
-          ChronoChallengeContent(
-              elapsedTime = elapsedTime,
-              currentWord = currentWord,
-              currentLetterIndex = currentLetterIndex,
-              handLandMarkViewModel = handLandMarkViewModel,
-          )
-        } else {
-          // If no words are available, show appropriate message
-          Text(
-              "No word available for this round.",
-              modifier = Modifier.testTag("NoWordAvailableText"))
-        }
-      }
+  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "ChronoChallengeScreen") {
+    if (currentWord.isNotEmpty()) {
+      ChronoChallengeContent(
+          elapsedTime = elapsedTime,
+          currentWord = currentWord,
+          currentLetterIndex = currentLetterIndex,
+          handLandMarkViewModel = handLandMarkViewModel,
+      )
+    } else {
+      // If no words are available, show appropriate message
+      Text("No word available for this round.", modifier = Modifier.testTag("NoWordAvailableText"))
+    }
+  }
 }
 
 @Composable
@@ -163,7 +179,7 @@ fun ChronoChallengeContent(
 
         CurrentLetterDisplay(currentWord, currentLetterIndex)
         SentenceLayerDisplay(currentWord, currentLetterIndex)
-        CameraPlaceholder(handLandMarkViewModel, Modifier.testTag("CameraPlaceholder"))
+        CameraBox(handLandMarkViewModel = handLandMarkViewModel, testTag = "CameraBox")
       }
 }
 

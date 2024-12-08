@@ -28,6 +28,7 @@ import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Route
 import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.model.updateLanguage
 import com.github.se.signify.ui.screens.WelcomeScreen
 import com.github.se.signify.ui.screens.auth.LoginScreen
 import com.github.se.signify.ui.screens.auth.UnauthenticatedScreen
@@ -48,7 +49,6 @@ import com.github.se.signify.ui.screens.profile.ProfileScreen
 import com.github.se.signify.ui.screens.profile.SettingsScreen
 import com.github.se.signify.ui.screens.tutorial.TutorialScreen
 import com.github.se.signify.ui.theme.SignifyTheme
-import com.github.se.signify.ui.updateLanguage
 
 class MainActivity : ComponentActivity() {
 
