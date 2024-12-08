@@ -50,32 +50,32 @@ fun ASLRecognition(
   val context = LocalContext.current
 
   AnnexScreenScaffold(navigationActions = navigationActions, testTag = "ASLRecognitionScreen") {
-      Box(
-          modifier =
-              Modifier.fillMaxWidth()
-                  .height(252.dp)
-                  .padding(horizontal = 16.dp)
-                  .background(MaterialTheme.colorScheme.background)) {
-            CameraBox(handLandMarkViewModel, "cameraPreview")
-          }
+    Box(
+        modifier =
+            Modifier.fillMaxWidth()
+                .height(252.dp)
+                .padding(horizontal = 16.dp)
+                .background(MaterialTheme.colorScheme.background)) {
+          CameraBox(handLandMarkViewModel, "cameraPreview")
+        }
 
-      Spacer(modifier = Modifier.height(30.dp))
+    Spacer(modifier = Modifier.height(30.dp))
 
-      GestureOverlayView(handLandMarkViewModel)
+    GestureOverlayView(handLandMarkViewModel)
 
-      Spacer(modifier = Modifier.height(20.dp))
+    Spacer(modifier = Modifier.height(20.dp))
 
-      // Button: "More on ASL Alphabet"
-      TextButton(
-          onClick = {
-            val intent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(buttonUriString) }
-            context.startActivity(intent)
-          },
-          testTag = "practiceButton",
-          text = "More on ASL Alphabet",
-          backgroundColor = MaterialTheme.colorScheme.primary,
-          textColor = MaterialTheme.colorScheme.onPrimary,
-          modifier = Modifier)
+    // Button: "More on ASL Alphabet"
+    TextButton(
+        onClick = {
+          val intent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(buttonUriString) }
+          context.startActivity(intent)
+        },
+        testTag = "practiceButton",
+        text = "More on ASL Alphabet",
+        backgroundColor = MaterialTheme.colorScheme.primary,
+        textColor = MaterialTheme.colorScheme.onPrimary,
+        modifier = Modifier)
   }
 }
 

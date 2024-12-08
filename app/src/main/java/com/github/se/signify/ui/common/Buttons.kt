@@ -84,8 +84,8 @@ fun TextButton(
     text: String,
     backgroundColor: Color,
     textColor: Color,
-    enabled: Boolean = true,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
   OutlinedButton(
       onClick = onClick,
@@ -121,7 +121,7 @@ fun SquareButton(
     @DrawableRes iconId: Int,
     onClick: () -> Unit,
     text: String,
-    testTag: String = "",
+    testTag: String,
     size: Int,
     modifier: Modifier = Modifier,
 ) {
