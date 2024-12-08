@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.se.signify.R
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.challenge.Challenge
 import com.github.se.signify.model.challenge.ChallengeRepository
@@ -52,7 +54,8 @@ fun ChronoChallengeGameScreen(
   var currentLetterIndex by rememberSaveable { mutableIntStateOf(0) }
   var typedWord by rememberSaveable { mutableStateOf("") }
   var isGameActive by remember { mutableStateOf(false) }
-
+  val invalidChallengeText = stringResource(R.string.invalid_challenge_string)
+  val failedFetchText = stringResource(R.string.failed_fetch_text)
   // Fetch the current challenge
   LaunchedEffect(challengeId) {
     challengeRepository.getChallengeById(
@@ -68,13 +71,10 @@ fun ChronoChallengeGameScreen(
             isGameActive = true
             startTime = SystemClock.elapsedRealtime()
           } else {
-            Toast.makeText(context, "Invalid round information in challenge", Toast.LENGTH_SHORT)
-                .show()
+            Toast.makeText(context, invalidChallengeText, Toast.LENGTH_SHORT).show()
           }
         },
-        onFailure = {
-          Toast.makeText(context, "Failed to fetch challenge", Toast.LENGTH_SHORT).show()
-        })
+        onFailure = { Toast.makeText(context, failedFetchText, Toast.LENGTH_SHORT).show() })
   }
 
   // Real-time update of the elapsed time when the game is active
@@ -90,6 +90,8 @@ fun ChronoChallengeGameScreen(
   // Gesture Recognition Updates
   val landmarksState by handLandMarkViewModel.landMarks().collectAsState()
   val detectedGesture = handLandMarkViewModel.getSolution()
+  val scoreSavedText = stringResource(R.string.score_saved_text)
+  val scoreFailedText = stringResource(R.string.score_failed_text)
 
   LaunchedEffect(landmarksState) {
     if (!landmarksState.isNullOrEmpty() && isGameActive) {
@@ -100,7 +102,6 @@ fun ChronoChallengeGameScreen(
         if (currentLetterIndex <= currentWord.length) {
           typedWord += currentLetter
         }
-
         if (typedWord.length == currentWord.length) {
           isGameActive = false
           elapsedTime = SystemClock.elapsedRealtime() - startTime
@@ -110,7 +111,9 @@ fun ChronoChallengeGameScreen(
               challengeRepository,
               currentChallenge,
               elapsedTime,
-              navigationActions)
+              navigationActions,
+              scoreSavedText,
+              scoreFailedText)
         }
       }
     }
@@ -140,9 +143,8 @@ fun ChronoChallengeGameScreen(
           )
         } else {
           // If no words are available, show appropriate message
-          Text(
-              "No word available for this round.",
-              modifier = Modifier.testTag("NoWordAvailableText"))
+          val noWordAvailableText = stringResource(R.string.no_word_available_text)
+          Text(noWordAvailableText, modifier = Modifier.testTag("NoWordAvailableText"))
         }
       }
 }
@@ -172,8 +174,9 @@ fun Chronometer(elapsedTime: Long) {
   Row(
       modifier = Modifier.fillMaxWidth().testTag("ChronometerRow"),
       horizontalArrangement = Arrangement.End) {
+        val timeText = stringResource(R.string.time_text)
         Text(
-            text = "Time: ${elapsedTime / 1000}s",
+            text = "$timeText ${elapsedTime / 1000}s",
             fontSize = 20.sp,
             modifier = Modifier.padding(8.dp).testTag("ElapsedTimeText"))
       }
@@ -227,14 +230,14 @@ fun SentenceLayerDisplay(currentWord: String, currentLetterIndex: Int) {
 
 @Composable
 fun DisplayLoadingText() {
-  Text("Loading challenge...", modifier = Modifier.testTag("LoadingChallengeText"))
+  val loadingText = stringResource(R.string.loading_text)
+  Text(loadingText, modifier = Modifier.testTag("LoadingChallengeText"))
 }
 
 @Composable
 fun DisplayChallengeCompletedText() {
-  Text(
-      "Challenge Completed! Go to History to see the results.",
-      modifier = Modifier.testTag("ChallengeCompletedText"))
+  val challengeDoneText = stringResource(R.string.challenge_done_text)
+  Text(challengeDoneText, modifier = Modifier.testTag("ChallengeCompletedText"))
 }
 
 @Composable
@@ -265,7 +268,9 @@ fun onWordCompletion(
     challengeRepository: ChallengeRepository,
     challenge: Challenge?,
     elapsedTime: Long,
-    navigationActions: NavigationActions
+    navigationActions: NavigationActions,
+    scoreSavedText: String = "",
+    scoreFailedText: String = ""
 ) {
   challenge?.let {
     val updatedChallenge =
@@ -291,9 +296,9 @@ fun onWordCompletion(
     challengeRepository.updateChallenge(
         updatedChallenge = updatedChallenge,
         onSuccess = {
-          Toast.makeText(context, "Score saved successfully", Toast.LENGTH_SHORT).show()
+          Toast.makeText(context, scoreSavedText, Toast.LENGTH_SHORT).show()
           navigationActions.navigateTo(Screen.CHALLENGE)
         },
-        onFailure = { Toast.makeText(context, "Failed to save score", Toast.LENGTH_SHORT).show() })
+        onFailure = { Toast.makeText(context, scoreFailedText, Toast.LENGTH_SHORT).show() })
   }
 }

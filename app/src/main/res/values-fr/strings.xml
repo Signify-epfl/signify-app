@@ -2,6 +2,92 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">signify</string>
     <string name="default_web_client_id">480370863906-8deqtn8nq63qk01efb5pudici2c805ek.apps.googleusercontent.com</string>
+    <string name="close_text">Fermer</string>
+    <string name="all_letters_text">Lettres apprises</string>
+    <string name="camera_permission_required_text">Permission de la caméra requise</string>
+    <string name="welcome_text">Bienvenu(e) sur Signify</string>
+    <string name="dark_mode_text">Mode Sombre</string>
+    <string name="light_mode_text">Mode Clair</string>
+    <string name="saved_text">Modifications enregistrées</string>
+    <string name="save_text">Ok</string>
+    <string name="cancel_text">Annuler</string>
+    <string name="unknown_text">Inconnue</string>
+    <string name="my_friends_text">Mes Amis</string>
+    <string name="my_stats_text">Mes Stats</string>
+    <string name="exercises_text">Nombre d’exercices réalisés</string>
+    <string name="quests_text">Nombre de quêtes réalisées</string>
+    <string name="easy_exercises_text">Facile</string>
+    <string name="medium_exercises_text">Intermédiaire</string>
+    <string name="hard_exercises_text">Difficile</string>
+    <string name="daily_quests_text">Quotidienne</string>
+    <string name="weekly_quests_text">Hebdomadaire</string>
+    <string name="graphs_and_stats_text">Graphiques and Statistiques</string>
+    <string name="no_friend_text">Pas d’ami(e)s</string>
+    <string name="request_friends_text">Demandes d’Ami(e)s</string>
+    <string name="no_new_friend_text">Pas de nouveaux amis</string>
+    <string name="request_sent_text">Demande envoyée</string>
+    <string name="add_friend_text">Ajouter un(e) ami(e)</string>
+
+    <string name="remove_friend_text">Supprimer un(e) ami(e)</string>
+    <string name="my_profile_text">Mon profil</string>
+    <string name="search_by_user_ID_text">Rechercher par ID utilisateur</string>
+    <string name="no_item_available_text">Aucun élément disponible</string>
+    <string name="remove_text">Supprimer</string>
+    <string name="accept_text">Accepter</string>
+    <string name="decline_text">Décliner</string>
+    <string name="confirming_removal_friend_text">Êtes-vous sûr de vouloir supprimer cet ami ?</string>
+    <string name="removed_friend_text">Ami(e) supprimé(e)</string>
+    <string name="yes_text">Oui</string>
+    <string name="no_text">Non</string>
+    <string name="quiz_time_text">L’heure du quiz!</string>
+    <string name="correct_answer_text">Réponse correcte!</string>
+    <string name="incorrect_answer_text">Réponse incorrecte, rééssayez.</string>
+    <string name="choose_correct_answer">Choisir la bonne réponse:</string>
+    <string name="submit_text">Soumettre</string>
+    <string name="lets_go_text">C’est parti!</string>
+    <string name="locked_text">Verrouillé</string>
+    <string name="in_sign_language_text"> dans le language des signes ASL</string>
+    <string name="letter_text">Lettre</string>
+    <string name="try_text">Essayez la langue des signes ici!</string>
+    <string name="feedback_title_text">Titre de l’évaluation</string>
+    <string name="feedback_description_text">Description de l’évaluation</string>
+    <string name="review_sent_text">Avis envoyé</string>
+    <string name="fill_all_fields">Veuillez remplir tous les champs</string>
+    <string name="give_valuable_rating">Donnez-nous votre précieuse évaluation!</string>
+    <string name="star_text">Étoile</string>
+    <string name="exo_completed_text">Exercice terminé!</string>
+    <string name="more_on_asl_alphabet_text">Plus sur l’ASL</string>
+    <string name="make_a_sign_text">Faites un signe</string>
+    <string name="send_feedback_text">Envoyer votre évaluation</string>
+    <string name="asl_recognition_text">ASL Reconnaissance</string>
+    <string name="bug_report_text">Rapport de bug</string>
+    <string name="feature_suggestion_text">Suggestion de fonctionnalité</string>
+    <string name="question_text">Question</string>
+    <string name="other_text">Autre</string>
+    <string name="create_a_challenge_text">Créer un défi</string>
+    <string name="my_ongoing_challenges_text">Mes défis en cours</string>
+    <string name="opponent_text">Adversaire</string>
+    <string name="total_time_text">Votre temps total :</string>
+    <string name="challenge_completed_text">Défi déjà terminé, veuillez attendre le résultat</string>
+    <string name="challenge_title_text">Sélectionnez un ami à défier</string>
+    <string name="challenge_text">Défi</string>
+    <string name="send_challenge_text">Envoyer un Défi</string>
+    <string name="pick_a_mode_string">Choisir un mode</string>
+    <string name="invalid_challenge_string">Chaîne de défi invalide</string>
+    <string name="failed_fetch_text">Échec de la récupération du défi</string>
+    <string name="no_word_available_text">Aucun mot disponible pour ce tour.</string>
+    <string name="time_text">Temps:</string>
+    <string name="loading_text">Chargement du défi…</string>
+    <string name="challenge_done_text">Défi terminé ! Allez dans l’historique pour voir les résultats.</string>
+    <string name="score_saved_text">Score enregistré avec succès</string>
+    <string name="score_failed_text">Échec de l’enregistrement du score</string>
+    <string name="history_text">Historique</string>
+    <string name="number_challenges_text">Nombres de défis</string>
+
+    <string name="completed_challenge_text">Complété</string>
+    <string name="created_challenge_text">Crée</string>
+    <string name="won_challenge_text">Gagné</string>
+
     <string name="help_home_screen">Ici, vous pouvez pratiquer la langue des signes, avec des retours en temps réel via votre caméra. Assurez-vous de vérifier votre quête quotidienne pour apprendre une nouvelle lettre chaque jour. Vous trouverez également des exercices en bas pour vous challenger à différents niveaux de difficulté.</string>
     <string name="help_profile_screen">Ici, vous pouvez modifier vos paramètres et personnaliser votre profil. Vous pourrez également ajouter vos amis pour apprendre ensemble. Vous trouverez un récapitulatif de vos progrès dans le tableau de statistiques.</string>
     <string name="description_challenge">Ici, vous pouvez défier vos amis à des face-à-face en langue des signes.</string>
@@ -10,45 +96,45 @@
     <string name="help_asl_recognition">Pratiquez vos gestes de la langue des signes avec la caméra et voyez les retours en temps réel.</string>
     <string name="help_offline_mode">Vous êtes actuellement hors ligne. Utilisez le bouton de connexion pour revenir en ligne.</string>
     <string-array name="real_words">
-        <item>chat</item>
-        <item>chien</item>
-        <item>chauve-souris</item>
-        <item>chapeau</item>
+        <item>cat</item>
+        <item>dog</item>
+        <item>bat</item>
+        <item>hat</item>
         <item>rat</item>
-        <item>soleil</item>
-        <item>ventilateur</item>
-        <item>courir</item>
-        <item>tasse</item>
-        <item>stylo</item>
+        <item>sun</item>
+        <item>fan</item>
+        <item>run</item>
+        <item>cup</item>
+        <item>pen</item>
     </string-array>
     <string-array name="real_words_hard">
-        <item>pomme</item>
-        <item>raisins</item>
-        <item>banane</item>
+        <item>apple</item>
+        <item>grapes</item>
+        <item>banana</item>
         <item>orange</item>
-        <item>crayon</item>
-        <item>guitare</item>
-        <item>fleur</item>
-        <item>fenêtre</item>
-        <item>cheval</item>
-        <item>planète</item>
-        <item>pont</item>
-        <item>échelle</item>
-        <item>lapin</item>
-        <item>jardin</item>
-        <item>bouton</item>
-        <item>argent</item>
-        <item>oreiller</item>
+        <item>pencil</item>
+        <item>guitar</item>
+        <item>flower</item>
+        <item>window</item>
+        <item>horse</item>
+        <item>planet</item>
+        <item>bridge</item>
+        <item>ladder</item>
+        <item>rabbit</item>
+        <item>garden</item>
+        <item>button</item>
+        <item>silver</item>
+        <item>pillow</item>
     </string-array>
     <string-array name="real_sentences">
-        <item>Le chat est sur le tapis</item>
-        <item>Les oiseaux volent à travers le ciel</item>
-        <item>Elle marche vers le parc</item>
-        <item>Il pleut pendant les jours d été</item>
-        <item>Les étoiles brillent la nuit</item>
-        <item>Les chiens aboient dans le jardin</item>
-        <item>Le soleil se lève chaque jour</item>
-        <item>Un enfant joue avec des jouets</item>
+        <item>The cat sits on the mat</item>
+        <item>Birds fly across the sky</item>
+        <item>She walks to the park</item>
+        <item>It rains on summer days</item>
+        <item>The stars shine at night</item>
+        <item>Dogs bark in the yard</item>
+        <item>The sun rises every day</item>
+        <item>A child plays with toys</item>
     </string-array>
     <string name="tip_a">Conseils : Fermez votre main, placez votre pouce à gauche, et orientez-le vers la gauche.</string>
     <string name="tip_b">Conseils : Étendez tous les doigts vers le haut. Placez votre pouce à travers la paume. Les doigts sont droits et proches les uns des autres.</string>

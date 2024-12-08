@@ -132,7 +132,7 @@ class QuestScreenTest {
     composeTestRule.setContent { QuestDescriptionDialog(quest = sampleQuest, onDismiss = {}) }
 
     // Assert dialog title and description are displayed
-    composeTestRule.onNodeWithText(sampleQuest.title + " in sign language").assertIsDisplayed()
+    composeTestRule.onNodeWithText(sampleQuest.title + " in ASL sign language").assertIsDisplayed()
     composeTestRule.onNodeWithText(sampleQuest.description).assertIsDisplayed()
 
     // Check the "Close" button
