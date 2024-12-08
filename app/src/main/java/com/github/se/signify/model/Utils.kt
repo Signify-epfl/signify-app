@@ -58,9 +58,8 @@ fun getTipResId(letter: Char): Int {
  * *
  */
 fun updateLanguage(context: Context, languageCode: String) {
-  if (!listOf("en", "fr").contains(languageCode)) {
-    throw IllegalArgumentException("Unsupported language code: $languageCode")
-  }
+  require(listOf("en", "fr").contains(languageCode)) { "Unsupported language code: $languageCode" }
+
   val locale = Locale(languageCode)
   Locale.setDefault(locale)
   val config = Configuration()
