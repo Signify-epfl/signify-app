@@ -41,17 +41,6 @@ class ScreensTest {
   @get:Rule val composeTestRule = createComposeRule()
 
   @Test
-  fun backButtonIsDisplayedAndClickable() {
-    composeTestRule.setContent { BackButton(onClick = {}) }
-
-    // Assert that the back button is displayed
-    composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
-
-    // Assert that the back button has a click action
-    composeTestRule.onNodeWithTag("BackButton").assertHasClickAction()
-  }
-
-  @Test
   fun annexScreenScaffoldDisplaysCorrectInformation() {
     val navigationActions = mock(NavigationActions::class.java)
 
@@ -122,9 +111,20 @@ class ScreensTest {
   }
 
   @Test
+  fun backButtonIsDisplayed() {
+    composeTestRule.setContent { BackButton(onClick = {}) }
+
+    // Assert that the back button is displayed
+    composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
+  }
+
+  @Test
   fun backButtonPerformsClick() {
     var clicked = false
     composeTestRule.setContent { BackButton(onClick = { clicked = true }) }
+
+    // Assert that the back button has a click action
+    composeTestRule.onNodeWithTag("BackButton").assertHasClickAction()
 
     // Perform click action on the back button
     composeTestRule.onNodeWithTag("BackButton").performClick()
