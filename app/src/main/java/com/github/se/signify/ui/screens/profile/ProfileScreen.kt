@@ -73,10 +73,10 @@ fun ProfileScreen(
         icon = Icons.Outlined.Settings,
         contentDescription = "Settings")
     Spacer(modifier = Modifier.height(32.dp))
-
+    val unknownText = stringResource(R.string.unknown_text)
     // Top information
     AccountInformation(
-        userId = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0) ?: "unknown",
+        userId = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0) ?: unknownText,
         userName = userName.value,
         profilePictureUrl = updatedProfilePicture,
         days = streak.value)
@@ -88,18 +88,20 @@ fun ProfileScreen(
     Spacer(modifier = Modifier.height(32.dp))
 
     // Friends List button
+    val myFriendsText = stringResource(R.string.my_friends_text)
     SquareButton(
         iconRes = R.drawable.friendsicon,
-        label = "My Friends",
+        label = myFriendsText,
         onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
         size = 200,
         modifier = Modifier.testTag("MyFriendsButton"))
     Spacer(modifier = Modifier.height(32.dp))
 
     // Statistics Button
+    val myStatsText = stringResource(R.string.my_stats_text)
     SquareButton(
         iconRes = R.drawable.statisticsicon,
-        label = "My Stats",
+        label = myStatsText,
         onClick = { navigationActions.navigateTo(Screen.STATS) },
         size = 200,
         modifier = Modifier.testTag("MyStatsButton"))

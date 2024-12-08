@@ -40,9 +40,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.R
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.user.UserRepository
@@ -92,8 +94,11 @@ fun SettingsScreen(
         modifier = Modifier.fillMaxWidth().padding(16.dp).clickable { onThemeChange(!isDarkTheme) },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween) {
+          val modeText =
+              if (isDarkTheme) stringResource(R.string.dark_mode_text)
+              else stringResource(R.string.light_mode_text)
           Text(
-              text = if (isDarkTheme) "Dark Mode" else "Light Mode",
+              text = modeText,
               style = MaterialTheme.typography.bodyLarge,
               color = MaterialTheme.colorScheme.onBackground)
           androidx.compose.material3.Switch(
@@ -179,10 +184,12 @@ fun SettingsScreen(
     }
     Spacer(modifier = Modifier.height(32.dp))
 
-    // Other Settings Section
+    // Other Settings Section To be removed after all settings are completed !
     NotImplementedYet(testTag = "OtherSettings", text = "Other settings:\nLanguage,\nTheme,\n...")
     Spacer(modifier = Modifier.height(32.dp))
-
+    val savedText = stringResource(R.string.saved_text)
+    val saveText = stringResource(R.string.save_text)
+    val cancelText = stringResource(R.string.cancel_text)
     // Cancel and Save Buttons
     Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
       ActionButtons(
@@ -192,7 +199,7 @@ fun SettingsScreen(
             selectedImageUrl = profilePictureUrl.value
           },
           MaterialTheme.colorScheme.error,
-          "Cancel",
+          cancelText,
           Modifier.weight(1f))
 
       ActionButtons(
@@ -204,10 +211,10 @@ fun SettingsScreen(
             // Upload image and save URL
             userViewModel.updateProfilePictureUrl(selectedUri)
 
-            Toast.makeText(context, "Changes saved.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, savedText, Toast.LENGTH_SHORT).show()
           },
           MaterialTheme.colorScheme.primary,
-          "Save",
+          saveText,
           Modifier.weight(1f))
     }
   }

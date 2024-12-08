@@ -67,6 +67,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -438,11 +439,12 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Close button for the popup
+                val close_text = stringResource(R.string.close_text)
                 Button(
                     onClick = { onDismiss() },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
                     modifier = Modifier.testTag("InfoPopupCloseButton")) {
-                      Text(text = "Close", color = MaterialTheme.colorScheme.onPrimary)
+                      Text(text = close_text, color = MaterialTheme.colorScheme.onPrimary)
                     }
               }
         }
@@ -556,8 +558,9 @@ fun HorizontalLetterList(lettersLearned: List<Char>) {
  */
 @Composable
 fun LearnedLetterList(lettersLearned: List<Char>) {
+  val allLettersText = stringResource(R.string.all_letters_text)
   Text(
-      text = "All letters learned",
+      text = allLettersText,
       fontWeight = FontWeight.Bold,
       fontSize = 16.sp,
       color = MaterialTheme.colorScheme.onBackground,
@@ -823,7 +826,8 @@ fun CameraPlaceholder(handLandMarkViewModel: HandLandMarkViewModel, modifier: Mo
                 .border(
                     2.dp, MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp)),
         contentAlignment = Alignment.Center) {
-          Text("Camera permission required", color = MaterialTheme.colorScheme.errorContainer)
+          val cameraText = stringResource(R.string.camera_permission_required_text)
+          Text(cameraText, color = MaterialTheme.colorScheme.errorContainer)
         }
   }
 }
