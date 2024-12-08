@@ -6,7 +6,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -51,7 +50,6 @@ fun ASLRecognition(
   val context = LocalContext.current
 
   AnnexScreenScaffold(navigationActions = navigationActions, testTag = "ASLRecognitionScreen") {
-    Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
       Box(
           modifier =
               Modifier.fillMaxWidth()
@@ -78,7 +76,6 @@ fun ASLRecognition(
           backgroundColor = MaterialTheme.colorScheme.primary,
           textColor = MaterialTheme.colorScheme.onPrimary,
           modifier = Modifier)
-    }
   }
 }
 
