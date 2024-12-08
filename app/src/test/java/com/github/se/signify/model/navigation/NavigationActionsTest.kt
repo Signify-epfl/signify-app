@@ -99,8 +99,9 @@ class NavigationActionsTest {
     userSession.loggedIn = false
 
     navigationActions.navigateTo(screen)
-    verify(navController, never()).navigate(eq(screen.route), anyOrNull(), anyOrNull())
-    verify(navController).navigate(eq(Screen.UNAUTHENTICATED.route), anyOrNull(), anyOrNull())
+    verify(navController).navigate(eq(screen.route), anyOrNull(), anyOrNull())
+    verify(navController, never())
+        .navigate(eq(Screen.UNAUTHENTICATED.route), anyOrNull(), anyOrNull())
   }
 
   @Test
