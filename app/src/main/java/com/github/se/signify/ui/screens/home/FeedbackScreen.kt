@@ -33,10 +33,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.R
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.feedback.FeedbackOption
 import com.github.se.signify.model.feedback.FeedbackRepository
@@ -55,8 +57,8 @@ fun FeedbackScreen(
   val feedbackViewModel: FeedbackViewModel =
       viewModel(factory = FeedbackViewModel.factory(userSession, feedbackRepository))
   val context = LocalContext.current
-
-  var selectedFeedbackType by remember { mutableStateOf(FeedbackOption.BUG_REPORT.category) }
+  val firstViewableText = stringResource(id = R.string.bug_report_text)
+  var selectedFeedbackType by remember { mutableStateOf(firstViewableText) }
   var feedbackTitle by remember { mutableStateOf(TextFieldValue("")) }
   var feedbackDescription by remember { mutableStateOf(TextFieldValue("")) }
   var selectedRating by remember { mutableIntStateOf(0) }
@@ -66,17 +68,17 @@ fun FeedbackScreen(
     FeedbackDropdown(
         selectedFeedbackType = selectedFeedbackType,
         onFeedbackTypeSelected = { selectedFeedbackType = it })
-
+    val feedbackTitleText = stringResource(R.string.feedback_title_text)
     FeedbackInputField(
         value = feedbackTitle,
         onValueChange = { feedbackTitle = it },
-        label = "Feedback Title",
+        label = feedbackTitleText,
         modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp).testTag("FeedbackTitleInput"))
-
+    val feedbackDescriptionText = stringResource(R.string.feedback_description_text)
     FeedbackInputField(
         value = feedbackDescription,
         onValueChange = { feedbackDescription = it },
-        label = "Feedback Description",
+        label = feedbackDescriptionText,
         modifier =
             Modifier.fillMaxWidth()
                 .height(150.dp)
@@ -84,7 +86,9 @@ fun FeedbackScreen(
                 .testTag("FeedbackDescriptionInput"))
 
     RatingSection(selectedRating = selectedRating, onRatingSelected = { selectedRating = it })
-
+    val reviewSentText = stringResource(R.string.review_sent_text)
+    val fillAllFieldsText = stringResource(R.string.fill_all_fields)
+    val sendFeedbackButtonText = stringResource(R.string.send_feedback_text)
     UtilTextButton(
         onClickAction = {
           if (feedbackTitle.text.isNotEmpty() && feedbackDescription.text.isNotEmpty()) {
@@ -95,14 +99,14 @@ fun FeedbackScreen(
                 description = feedbackDescription.text,
                 rating = selectedRating)
             isLoading = false
-            Toast.makeText(context, "Review sent", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, reviewSentText, Toast.LENGTH_LONG).show()
             navigationActions.navigateTo(Screen.HOME)
           } else {
-            Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, fillAllFieldsText, Toast.LENGTH_SHORT).show()
           }
         },
         testTag = "SendFeedbackButton",
-        text = "Send Feedback",
+        text = sendFeedbackButtonText,
         backgroundColor = MaterialTheme.colorScheme.primary,
         textColor = MaterialTheme.colorScheme.onPrimary)
 
@@ -134,15 +138,21 @@ private fun FeedbackDropdown(
                     .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
                     .testTag("DropdownMenu")) {
               FeedbackOption.entries.forEach { option ->
+                val textItem =
+                    when (option) {
+                      FeedbackOption.BUG_REPORT -> stringResource(id = R.string.bug_report_text)
+                      FeedbackOption.FEATURE_SUGGESTION ->
+                          stringResource(id = R.string.feature_suggestion_text)
+                      FeedbackOption.QUESTION -> stringResource(id = R.string.question_text)
+                      FeedbackOption.OTHER -> stringResource(id = R.string.other_text)
+                    }
                 DropdownMenuItem(
-                    text = {
-                      Text(text = option.category, color = MaterialTheme.colorScheme.onPrimary)
-                    },
+                    text = { Text(text = textItem, color = MaterialTheme.colorScheme.onPrimary) },
                     onClick = {
-                      onFeedbackTypeSelected(option.category)
+                      onFeedbackTypeSelected(textItem)
                       expanded = false
                     },
-                    modifier = Modifier.testTag("DropdownMenuItem_${option.category}"))
+                    modifier = Modifier.testTag("DropdownMenuItem_${textItem}"))
               }
             }
       }
@@ -165,8 +175,10 @@ private fun FeedbackInputField(
 
 @Composable
 private fun RatingSection(selectedRating: Int, onRatingSelected: (Int) -> Unit) {
+  val giveValuableRatingText = stringResource(R.string.give_valuable_rating)
+  val starText = stringResource(R.string.star_text)
   Text(
-      text = "Give us your valuable rating!",
+      text = giveValuableRatingText,
       fontSize = 18.sp,
       color = MaterialTheme.colorScheme.onBackground,
       modifier = Modifier.padding(bottom = 8.dp).testTag("RatingTitle"))
@@ -178,7 +190,7 @@ private fun RatingSection(selectedRating: Int, onRatingSelected: (Int) -> Unit) 
         for (i in 1..5) {
           Icon(
               imageVector = Icons.Outlined.Star,
-              contentDescription = "Star $i",
+              contentDescription = "$starText $i",
               tint =
                   if (i <= selectedRating) MaterialTheme.colorScheme.primary
                   else MaterialTheme.colorScheme.onBackground,

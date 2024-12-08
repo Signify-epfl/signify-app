@@ -53,11 +53,11 @@ fun ASLRecognition(
   val buttonUriString = stringResource(id = R.string.button_uri_string)
   val helpText = stringResource(id = R.string.help_asl_recognition)
   val context = LocalContext.current
-
+  val aslRecognitionText = stringResource(id = R.string.asl_recognition_text)
   MainScreenScaffold(
       navigationActions = navigationActions,
       testTagColumn = "ASLRecognitionScreen",
-      helpTitle = "ASL Recognition",
+      helpTitle = aslRecognitionText,
       helpText = helpText) {
         Column(
             modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -78,6 +78,7 @@ fun ASLRecognition(
               Spacer(modifier = Modifier.height(20.dp))
 
               // Button: "More on ASL Alphabet"
+              val moreOnASLAlphabetText = stringResource(id = R.string.more_on_asl_alphabet_text)
               UtilTextButton(
                   onClickAction = {
                     val intent =
@@ -85,7 +86,7 @@ fun ASLRecognition(
                     context.startActivity(intent)
                   },
                   testTag = "practiceButton",
-                  text = "More on ASL Alphabet",
+                  text = moreOnASLAlphabetText,
                   backgroundColor = MaterialTheme.colorScheme.primary,
                   textColor = MaterialTheme.colorScheme.onPrimary)
             }
@@ -131,7 +132,8 @@ fun HandGestureImage(gesture: String) {
 /** Draws the output text or the prompt to "Make a sign" on the screen. */
 @Composable
 fun DrawnOutPut(landmarks: List<NormalizedLandmark>?, text: String) {
-  val displayText = if (landmarks.isNullOrEmpty()) "Make a sign" else text
+  val makeASignText = stringResource(id = R.string.make_a_sign_text)
+  val displayText = if (landmarks.isNullOrEmpty()) makeASignText else text
   val paintColor = MaterialTheme.colorScheme.background
   Box(
       modifier =

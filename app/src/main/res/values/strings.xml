@@ -42,7 +42,32 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="removed_friend_text">Friend removed</string>
     <string name="yes_text">Yes</string>
     <string name="no_text">No</string>
+    <string name="quiz_time_text">Quiz Time !</string>
+    <string name="correct_answer_text">Correct answer!</string>
+    <string name="incorrect_answer_text">Incorrect answer, try again.</string>
+    <string name="choose_correct_answer">Choose the correct answer:</string>
+    <string name="submit_text">Submit</string>
+    <string name="lets_go_text">Let’s Go!</string>
+    <string name="locked_text">Locked</string>
+    <string name="in_sign_language_text"> in ASL sign language</string>
+    <string name="letter_text">Letter</string>
+    <string name="try_text">Try hand signs here !</string>
+    <string name="feedback_title_text">Feedback Title</string>
+    <string name="feedback_description_text">Feedback Description</string>
+    <string name="review_sent_text">Review sent</string>
+    <string name="fill_all_fields">Please fill all the fields</string>
+    <string name="give_valuable_rating">Give us your valuable rating!</string>
+    <string name="star_text">Star</string>
+    <string name="exo_completed_text">Exercise completed!</string>
+    <string name="more_on_asl_alphabet_text">More on ASL Alphabet</string>
+    <string name="make_a_sign_text">Make a sign</string>
+    <string name="send_feedback_text">Send Feedback</string>
+    <string name="asl_recognition_text">ASL Recognition</string>
 
+    <string name="bug_report_text">Bug Report</string>
+    <string name="feature_suggestion_text">Feature Suggestion</string>
+    <string name="question_text">Question</string>
+    <string name="other_text">Other</string>
 
     <string name="help_profile_screen">Here, you can change your settings and customize your profile. You’ll also get to add your friends to learn together. You’ll find a recap of your progress in the statistics board.</string>
     <string name="description_challenge">Here you can challenge your friends to sign language face-offs.</string>

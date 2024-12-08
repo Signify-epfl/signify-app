@@ -41,6 +41,32 @@
     <string name="removed_friend_text">Ami(e) supprimé(e)</string>
     <string name="yes_text">Oui</string>
     <string name="no_text">Non</string>
+    <string name="quiz_time_text">L’heure du quiz!</string>
+    <string name="correct_answer_text">Réponse correcte!</string>
+    <string name="incorrect_answer_text">Réponse incorrecte, rééssayez.</string>
+    <string name="choose_correct_answer">Choisir la bonne réponse:</string>
+    <string name="submit_text">Soumettre</string>
+    <string name="lets_go_text">C’est parti!</string>
+    <string name="locked_text">Verrouillé</string>
+    <string name="in_sign_language_text"> dans le language des signes ASL</string>
+    <string name="letter_text">Lettre</string>
+    <string name="try_text">Essayez la langue des signes ici!</string>
+    <string name="feedback_title_text">Titre de l’évaluation</string>
+    <string name="feedback_description_text">Description de l’évaluation</string>
+    <string name="review_sent_text">Avis envoyé</string>
+    <string name="fill_all_fields">Veuillez remplir tous les champs</string>
+    <string name="give_valuable_rating">Donnez-nous votre précieuse évaluation!</string>
+    <string name="star_text">Étoile</string>
+    <string name="exo_completed_text">Exercice terminé!</string>
+    <string name="more_on_asl_alphabet_text">Plus sur l’ASL</string>
+    <string name="make_a_sign_text">Faites un signe</string>
+    <string name="send_feedback_text">Envoyer votre évaluation</string>
+    <string name="asl_recognition_text">ASL Reconnaissance</string>
+    <string name="bug_report_text">Rapport de bug</string>
+    <string name="feature_suggestion_text">Suggestion de fonctionnalité</string>
+    <string name="question_text">Question</string>
+    <string name="other_text">Autre</string>
+
 
     <string name="help_home_screen">Ici, vous pouvez pratiquer la langue des signes, avec des retours en temps réel via votre caméra. Assurez-vous de vérifier votre quête quotidienne pour apprendre une nouvelle lettre chaque jour. Vous trouverez également des exercices en bas pour vous challenger à différents niveaux de difficulté.</string>
     <string name="help_profile_screen">Ici, vous pouvez modifier vos paramètres et personnaliser votre profil. Vous pourrez également ajouter vos amis pour apprendre ensemble. Vous trouverez un récapitulatif de vos progrès dans le tableau de statistiques.</string>
@@ -50,45 +76,45 @@
     <string name="help_asl_recognition">Pratiquez vos gestes de la langue des signes avec la caméra et voyez les retours en temps réel.</string>
     <string name="help_offline_mode">Vous êtes actuellement hors ligne. Utilisez le bouton de connexion pour revenir en ligne.</string>
     <string-array name="real_words">
-        <item>chat</item>
-        <item>chien</item>
-        <item>chauve-souris</item>
-        <item>chapeau</item>
+        <item>cat</item>
+        <item>dog</item>
+        <item>bat</item>
+        <item>hat</item>
         <item>rat</item>
-        <item>soleil</item>
-        <item>ventilateur</item>
-        <item>courir</item>
-        <item>tasse</item>
-        <item>stylo</item>
+        <item>sun</item>
+        <item>fan</item>
+        <item>run</item>
+        <item>cup</item>
+        <item>pen</item>
     </string-array>
     <string-array name="real_words_hard">
-        <item>pomme</item>
-        <item>raisins</item>
-        <item>banane</item>
+        <item>apple</item>
+        <item>grapes</item>
+        <item>banana</item>
         <item>orange</item>
-        <item>crayon</item>
-        <item>guitare</item>
-        <item>fleur</item>
-        <item>fenêtre</item>
-        <item>cheval</item>
-        <item>planète</item>
-        <item>pont</item>
-        <item>échelle</item>
-        <item>lapin</item>
-        <item>jardin</item>
-        <item>bouton</item>
-        <item>argent</item>
-        <item>oreiller</item>
+        <item>pencil</item>
+        <item>guitar</item>
+        <item>flower</item>
+        <item>window</item>
+        <item>horse</item>
+        <item>planet</item>
+        <item>bridge</item>
+        <item>ladder</item>
+        <item>rabbit</item>
+        <item>garden</item>
+        <item>button</item>
+        <item>silver</item>
+        <item>pillow</item>
     </string-array>
     <string-array name="real_sentences">
-        <item>Le chat est sur le tapis</item>
-        <item>Les oiseaux volent à travers le ciel</item>
-        <item>Elle marche vers le parc</item>
-        <item>Il pleut pendant les jours d été</item>
-        <item>Les étoiles brillent la nuit</item>
-        <item>Les chiens aboient dans le jardin</item>
-        <item>Le soleil se lève chaque jour</item>
-        <item>Un enfant joue avec des jouets</item>
+        <item>The cat sits on the mat</item>
+        <item>Birds fly across the sky</item>
+        <item>She walks to the park</item>
+        <item>It rains on summer days</item>
+        <item>The stars shine at night</item>
+        <item>Dogs bark in the yard</item>
+        <item>The sun rises every day</item>
+        <item>A child plays with toys</item>
     </string-array>
     <string name="tip_a">Conseils : Fermez votre main, placez votre pouce à gauche, et orientez-le vers la gauche.</string>
     <string name="tip_b">Conseils : Étendez tous les doigts vers le haut. Placez votre pouce à travers la paume. Les doigts sont droits et proches les uns des autres.</string>

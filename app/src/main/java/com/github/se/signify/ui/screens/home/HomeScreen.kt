@@ -78,7 +78,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
 
   val scrollState = rememberLazyListState()
   val coroutineScope = rememberCoroutineScope()
-
+  val letterText = stringResource(id = R.string.letter_text)
   MainScreenScaffold(
       navigationActions = navigationActions,
       testTagColumn = "HomeScreen",
@@ -142,10 +142,9 @@ fun HomeScreen(navigationActions: NavigationActions) {
               item { ExerciseList(defaultExercises, navigationActions) }
 
               item { Spacer(modifier = Modifier.height(32.dp)) }
-
               items(('A'..'Z').toList()) { letter ->
                 Text(
-                    text = "Letter $letter",
+                    text = "$letterText $letter",
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.primary,
@@ -165,10 +164,11 @@ fun HomeScreen(navigationActions: NavigationActions) {
  */
 @Composable
 fun CameraFeedbackButton(onClick: () -> Unit = {}) {
+  val tryText = stringResource(id = R.string.try_text)
   UtilTextButton(
       onClickAction = onClick,
       testTag = "CameraFeedbackButton",
-      text = "Try hand signs here !",
+      text = tryText,
       backgroundColor = MaterialTheme.colorScheme.primary,
       textColor = MaterialTheme.colorScheme.onPrimary)
 }
@@ -347,7 +347,14 @@ fun ExerciseButton(exercise: ExerciseLevel, navigationActions: NavigationActions
       colors =
           ButtonDefaults.buttonColors(
               MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.onPrimary)) {
-        Text(exercise.id, modifier = Modifier.testTag("${exercise.id}ExerciseButtonText"))
+        val exerciseText =
+            when (exercise.id) {
+              "Easy" -> stringResource(id = R.string.easy_exercises_text)
+              "Medium" -> stringResource(id = R.string.medium_exercises_text)
+              "Hard" -> stringResource(id = R.string.hard_exercises_text)
+              else -> exercise.id
+            }
+        Text(exerciseText, modifier = Modifier.testTag("${exercise.id}ExerciseButtonText"))
       }
 }
 /**
