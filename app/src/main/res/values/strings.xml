@@ -24,8 +24,6 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="daily_quests_text">Daily</string>
     <string name="weekly_quests_text">Weekly</string>
     <string name="graphs_and_stats_text">Graphs and Stats</string>
-    <string name="my_text">My</string>
-    <string name="list_text">list</string>
     <string name="no_friend_text">No Friends</string>
     <string name="request_friends_text">Friend Requests</string>
     <string name="no_new_friend_text">You have no new friends</string>
