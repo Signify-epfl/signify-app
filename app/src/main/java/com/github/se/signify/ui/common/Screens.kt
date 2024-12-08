@@ -81,9 +81,10 @@ fun MainScreenScaffold(
           BasicButton(
               onClick = { isHelpBoxVisible = !isHelpBoxVisible },
               icon = Icons.Outlined.Info,
-              buttonTestTag = "InfoButton",
               iconTestTag = "InfoIcon",
-              contentDescription = "Help")
+              contentDescription = "Help",
+              modifier = Modifier.testTag("InfoButton"),
+          )
           content()
           // Show popup when the info button is clicked
           if (isHelpBoxVisible) {

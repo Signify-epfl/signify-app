@@ -69,9 +69,10 @@ fun ProfileScreen(
     BasicButton(
         onClick = { navigationActions.navigateTo(Screen.SETTINGS) },
         icon = Icons.Outlined.Settings,
-        buttonTestTag = "SettingsButton",
         iconTestTag = "SettingsIcon",
-        contentDescription = "Settings")
+        contentDescription = "Settings",
+        modifier = Modifier.testTag("SettingsButton"),
+    )
     Spacer(modifier = Modifier.height(32.dp))
 
     // Top information

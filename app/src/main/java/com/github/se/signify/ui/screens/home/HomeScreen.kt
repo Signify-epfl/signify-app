@@ -103,21 +103,24 @@ fun HomeScreen(navigationActions: NavigationActions) {
                       BasicButton(
                           onClick = { navigationActions.navigateTo(Screen.FEEDBACK) },
                           icon = Icons.Outlined.Email,
-                          buttonTestTag = "FeedbackButton",
                           iconTestTag = "FeedbackIcon",
-                          contentDescription = "Feedback")
+                          contentDescription = "Feedback",
+                          modifier = Modifier.testTag("FeedbackButton"),
+                      )
                       BasicButton(
                           onClick = { navigationActions.navigateTo(Screen.QUIZ) },
                           icon = Icons.Outlined.Star,
-                          buttonTestTag = "QuizButton",
                           iconTestTag = "QuizIcon",
-                          contentDescription = "Quizzes")
+                          contentDescription = "Quizzes",
+                          modifier = Modifier.testTag("QuizButton"),
+                      )
                       BasicButton(
                           onClick = { navigationActions.navigateTo(Screen.QUEST) },
                           icon = Icons.Outlined.DateRange,
-                          buttonTestTag = "QuestsButton",
                           iconTestTag = "QuestIcon",
-                          contentDescription = "Quests")
+                          contentDescription = "Quests",
+                          modifier = Modifier.testTag("QuestsButton"),
+                      )
                     }
               }
 

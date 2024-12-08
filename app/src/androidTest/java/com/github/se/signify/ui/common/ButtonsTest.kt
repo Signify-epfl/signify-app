@@ -23,9 +23,10 @@ class ButtonsTest {
       BasicButton(
           onClick = {},
           icon = Icons.Outlined.Info,
-          buttonTestTag = "UtilButton",
           iconTestTag = "UtilIcon",
-          contentDescription = "Info")
+          contentDescription = "Info",
+          modifier = Modifier.testTag("UtilButton"),
+      )
     }
 
     // Assert that the button is displayed
@@ -41,9 +42,9 @@ class ButtonsTest {
       BasicButton(
           onClick = { clicked = true },
           icon = Icons.Outlined.Info,
-          buttonTestTag = "UtilButton",
           iconTestTag = "UtilIcon",
-          contentDescription = "Info")
+          contentDescription = "Info",
+          modifier = Modifier.testTag("UtilButton"))
     }
 
     // Assert that the button has a click action

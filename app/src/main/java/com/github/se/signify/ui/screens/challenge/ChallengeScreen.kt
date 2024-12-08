@@ -29,9 +29,8 @@ fun ChallengeScreen(navigationActions: NavigationActions) {
             iconId = R.drawable.battleicon,
             onClick = { navigationActions.navigateTo(Screen.NEW_CHALLENGE) },
             text = "Challenge",
-            testTag = "ChallengeButton",
             size = 240,
-        )
+            modifier = Modifier.testTag("ChallengeButton"))
         Spacer(modifier = Modifier.height(32.dp))
 
         // History square button
@@ -39,8 +38,7 @@ fun ChallengeScreen(navigationActions: NavigationActions) {
             iconId = R.drawable.historyicon,
             onClick = { navigationActions.navigateTo(Screen.CHALLENGE_HISTORY) },
             text = "History",
-            testTag = "HistoryButton",
             size = 240,
-        )
+            modifier = Modifier.testTag("HistoryButton"))
       }
 }

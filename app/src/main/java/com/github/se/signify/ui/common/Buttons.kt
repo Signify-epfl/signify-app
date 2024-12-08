@@ -35,28 +35,25 @@ import androidx.compose.ui.unit.sp
  *
  * @param onClick A unit to be executed when the button is clicked.
  * @param icon The icon to display.
- * @param buttonTestTag The testTag of the button.
  * @param iconTestTag The testTag of the icon.
  * @param contentDescription The description text of the icon.
  * @param modifier Modifier to be applied to the button. This should be avoided.
  */
-@Suppress("UNUSED_PARAMETER")
 @Composable
 fun BasicButton(
     onClick: () -> Unit,
     icon: ImageVector,
-    buttonTestTag: String,
     iconTestTag: String,
     contentDescription: String,
     modifier: Modifier = Modifier,
 ) {
   Box(
       modifier =
-          Modifier.size(30.dp)
+          modifier
+              .size(30.dp)
               .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(30))
               .border(2.dp, MaterialTheme.colorScheme.background, shape = RoundedCornerShape(30))
-              .clickable { onClick() }
-              .testTag(buttonTestTag),
+              .clickable { onClick() },
       contentAlignment = Alignment.Center) {
         Icon(
             icon,
@@ -111,17 +108,14 @@ fun TextButton(
  * @param iconId The icon for the button.
  * @param onClick A unit to be executed when the button is clicked.
  * @param text The text for the button.
- * @param testTag The test tag of the button.
  * @param size The size of the button. It will be used to scale the other elements of the button.
  * @param modifier Modifier to be applied to the button. This should be avoided.
  */
-@Suppress("UNUSED_PARAMETER")
 @Composable
 fun SquareButton(
     @DrawableRes iconId: Int,
     onClick: () -> Unit,
     text: String,
-    testTag: String,
     size: Int,
     modifier: Modifier = Modifier,
 ) {
