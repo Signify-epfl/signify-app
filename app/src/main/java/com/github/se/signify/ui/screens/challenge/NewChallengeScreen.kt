@@ -73,7 +73,7 @@ fun NewChallengeScreen(
     Spacer(modifier = Modifier.height(32.dp))
 
     // Create a challenge button
-      val createAChallengeText = stringResource(R.string.create_a_challenge_text)
+    val createAChallengeText = stringResource(R.string.create_a_challenge_text)
     UtilTextButton(
         onClickAction = { navigationActions.navigateTo(Screen.CREATE_CHALLENGE) },
         testTag = "CreateChallengeButton",
@@ -94,7 +94,7 @@ fun NewChallengeScreen(
           Column(
               horizontalAlignment = Alignment.CenterHorizontally,
               modifier = Modifier.testTag("OngoingChallengesContent")) {
-              val myOnGoingChallengeText = stringResource(R.string.my_ongoing_challenges_text)
+                val myOnGoingChallengeText = stringResource(R.string.my_ongoing_challenges_text)
                 Text(
                     text = myOnGoingChallengeText,
                     fontSize = 20.sp,
@@ -194,7 +194,7 @@ fun OngoingChallengeCard(
                 } else {
                   challenge.player1
                 }
-              val opponentText = stringResource(R.string.opponent_text)
+            val opponentText = stringResource(R.string.opponent_text)
             Text(
                 text = "$opponentText $opponentName",
                 fontSize = 18.sp,
@@ -205,7 +205,7 @@ fun OngoingChallengeCard(
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSurface)
             if (isChallengeCompleted) {
-                val totalTimeText = stringResource(R.string.total_time_text)
+              val totalTimeText = stringResource(R.string.total_time_text)
               Text(
                   text = "$totalTimeText ${totalTime}s",
                   fontSize = 14.sp,
@@ -219,14 +219,12 @@ fun OngoingChallengeCard(
                   Modifier.padding(start = 8.dp)
                       .size(48.dp) // Set size to ensure consistency between buttons
               ) {
-              val challengeAlreadyCompletedText = stringResource(R.string.challenge_completed_text)
+                val challengeAlreadyCompletedText =
+                    stringResource(R.string.challenge_completed_text)
                 IconButton(
                     onClick = {
                       if (isChallengeCompleted) {
-                        Toast.makeText(
-                                context,
-                                challengeAlreadyCompletedText,
-                                Toast.LENGTH_SHORT)
+                        Toast.makeText(context, challengeAlreadyCompletedText, Toast.LENGTH_SHORT)
                             .show()
                       } else {
                         onPlayClick()

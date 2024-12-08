@@ -52,11 +52,8 @@ fun CreateAChallengeScreen(
       testTagColumn = "CreateAChallengeContent",
   ) {
     // Title
-      val challengeTitleText = stringResource(R.string.challenge_title_text)
-    Text(
-        text = challengeTitleText,
-        fontSize = 24.sp,
-        modifier = Modifier.testTag("ChallengeTitle"))
+    val challengeTitleText = stringResource(R.string.challenge_title_text)
+    Text(text = challengeTitleText, fontSize = 24.sp, modifier = Modifier.testTag("ChallengeTitle"))
 
     Spacer(modifier = Modifier.height(16.dp))
 
@@ -69,7 +66,7 @@ fun CreateAChallengeScreen(
           modifier = Modifier.testTag("NoFriendsText"))
     } else {
       // List of Friends
-        val challengeText = stringResource(R.string.challenge_text)
+      val challengeText = stringResource(R.string.challenge_text)
       LazyColumn(
           modifier = Modifier.fillMaxSize().weight(1f).testTag("FriendsList"),
           verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -174,7 +171,9 @@ fun ChallengeModeAlertDialog(
             textColor = MaterialTheme.colorScheme.onSurface)
       },
       title = {
-        Text(text = stringResource(R.string.pick_a_mode_string), modifier = Modifier.fillMaxWidth().testTag("DialogTitle"))
+        Text(
+            text = stringResource(R.string.pick_a_mode_string),
+            modifier = Modifier.fillMaxWidth().testTag("DialogTitle"))
       },
       text = {
         Row(

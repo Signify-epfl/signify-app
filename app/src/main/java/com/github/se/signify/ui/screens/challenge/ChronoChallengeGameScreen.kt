@@ -54,8 +54,8 @@ fun ChronoChallengeGameScreen(
   var currentLetterIndex by rememberSaveable { mutableIntStateOf(0) }
   var typedWord by rememberSaveable { mutableStateOf("") }
   var isGameActive by remember { mutableStateOf(false) }
-    val invalidChallengeText = stringResource(R.string.invalid_challenge_string)
-    val failedFetchText = stringResource(R.string.failed_fetch_text)
+  val invalidChallengeText = stringResource(R.string.invalid_challenge_string)
+  val failedFetchText = stringResource(R.string.failed_fetch_text)
   // Fetch the current challenge
   LaunchedEffect(challengeId) {
     challengeRepository.getChallengeById(
@@ -71,13 +71,10 @@ fun ChronoChallengeGameScreen(
             isGameActive = true
             startTime = SystemClock.elapsedRealtime()
           } else {
-            Toast.makeText(context, invalidChallengeText, Toast.LENGTH_SHORT)
-                .show()
+            Toast.makeText(context, invalidChallengeText, Toast.LENGTH_SHORT).show()
           }
         },
-        onFailure = {
-          Toast.makeText(context, failedFetchText, Toast.LENGTH_SHORT).show()
-        })
+        onFailure = { Toast.makeText(context, failedFetchText, Toast.LENGTH_SHORT).show() })
   }
 
   // Real-time update of the elapsed time when the game is active
@@ -93,10 +90,10 @@ fun ChronoChallengeGameScreen(
   // Gesture Recognition Updates
   val landmarksState by handLandMarkViewModel.landMarks().collectAsState()
   val detectedGesture = handLandMarkViewModel.getSolution()
-    val scoreSavedText = stringResource(R.string.score_saved_text)
-    val scoreFailedText = stringResource(R.string.score_failed_text)
+  val scoreSavedText = stringResource(R.string.score_saved_text)
+  val scoreFailedText = stringResource(R.string.score_failed_text)
 
-    LaunchedEffect(landmarksState) {
+  LaunchedEffect(landmarksState) {
     if (!landmarksState.isNullOrEmpty() && isGameActive) {
       val currentLetter = currentWord.getOrNull(currentLetterIndex)?.uppercaseChar()
       if (currentLetter != null &&
@@ -116,8 +113,7 @@ fun ChronoChallengeGameScreen(
               elapsedTime,
               navigationActions,
               scoreSavedText,
-              scoreFailedText
-              )
+              scoreFailedText)
         }
       }
     }
@@ -147,10 +143,8 @@ fun ChronoChallengeGameScreen(
           )
         } else {
           // If no words are available, show appropriate message
-            val noWordAvailableText = stringResource(R.string.no_word_available_text)
-          Text(
-              noWordAvailableText,
-              modifier = Modifier.testTag("NoWordAvailableText"))
+          val noWordAvailableText = stringResource(R.string.no_word_available_text)
+          Text(noWordAvailableText, modifier = Modifier.testTag("NoWordAvailableText"))
         }
       }
 }
@@ -180,7 +174,7 @@ fun Chronometer(elapsedTime: Long) {
   Row(
       modifier = Modifier.fillMaxWidth().testTag("ChronometerRow"),
       horizontalArrangement = Arrangement.End) {
-      val timeText = stringResource(R.string.time_text)
+        val timeText = stringResource(R.string.time_text)
         Text(
             text = "$timeText ${elapsedTime / 1000}s",
             fontSize = 20.sp,
@@ -235,17 +229,15 @@ fun SentenceLayerDisplay(currentWord: String, currentLetterIndex: Int) {
 }
 
 @Composable
-fun DisplayLoadingText(){
-    val loadingText = stringResource(R.string.loading_text)
+fun DisplayLoadingText() {
+  val loadingText = stringResource(R.string.loading_text)
   Text(loadingText, modifier = Modifier.testTag("LoadingChallengeText"))
 }
 
 @Composable
 fun DisplayChallengeCompletedText() {
-    val challengeDoneText = stringResource(R.string.challenge_done_text)
-  Text(
-      challengeDoneText,
-      modifier = Modifier.testTag("ChallengeCompletedText"))
+  val challengeDoneText = stringResource(R.string.challenge_done_text)
+  Text(challengeDoneText, modifier = Modifier.testTag("ChallengeCompletedText"))
 }
 
 @Composable
@@ -307,6 +299,6 @@ fun onWordCompletion(
           Toast.makeText(context, scoreSavedText, Toast.LENGTH_SHORT).show()
           navigationActions.navigateTo(Screen.CHALLENGE)
         },
-        onFailure = { Toast.makeText(context, scoreFailedText, Toast.LENGTH_SHORT).show()})
+        onFailure = { Toast.makeText(context, scoreFailedText, Toast.LENGTH_SHORT).show() })
   }
 }

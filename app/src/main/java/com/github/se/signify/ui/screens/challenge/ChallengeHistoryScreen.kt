@@ -32,16 +32,15 @@ fun ChallengeHistoryScreen(
   val challengesCreated = statsViewModel.created.collectAsState()
   val challengesWon = statsViewModel.won.collectAsState()
 
-
   AnnexScreenScaffold(
       navigationActions = navigationActions,
       testTagColumn = "ChallengeHistoryScreen",
   ) {
-      val challengeCategories = listOf(
-          stringResource(R.string.completed_challenge_text),
-          stringResource(R.string.created_challenge_text),
-          stringResource(R.string.won_challenge_text)
-      )
+    val challengeCategories =
+        listOf(
+            stringResource(R.string.completed_challenge_text),
+            stringResource(R.string.created_challenge_text),
+            stringResource(R.string.won_challenge_text))
     // Challenge's statistics
     StatisticsColumnRow(
         columnTestTag = "ChallengesColumn",
@@ -57,6 +56,7 @@ fun ChallengeHistoryScreen(
     Spacer(modifier = Modifier.height(32.dp))
 
     // Graphs and Stats
-    NotImplementedYet(testTag = "GraphsAndStats", text = stringResource(R.string.graphs_and_stats_text))
+    NotImplementedYet(
+        testTag = "GraphsAndStats", text = stringResource(R.string.graphs_and_stats_text))
   }
 }
