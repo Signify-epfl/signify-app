@@ -36,7 +36,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.github.se.signify.CustomTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -245,10 +245,11 @@ dependencies {
     androidTestImplementation(libs.kaspresso.compose.support) {
         exclude(group = "com.google.protobuf")
     }
-
     // Test Jetpack Compose UI
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    debugImplementation ("com.squareup.leakcanary:leakcanary-android:2.10")
+
 
 
 

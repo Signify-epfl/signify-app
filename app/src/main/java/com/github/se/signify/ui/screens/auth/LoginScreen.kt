@@ -45,12 +45,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
+import com.github.se.signify.model.auth.AuthService
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.model.stats.saveStatsToFirestore
 import com.github.se.signify.model.user.saveUserToFireStore
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.Firebase
 import com.google.firebase.auth.AuthResult
@@ -60,24 +60,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 @Composable
-fun LoginScreen(navigationActions: NavigationActions, showTutorial: () -> Unit) {
+fun LoginScreen(
+    navigationActions: NavigationActions,
+    showTutorial: () -> Unit,
+    authService: AuthService
+) {
   val context = LocalContext.current
-
-  val launcher =
-      rememberFirebaseAuthLauncher(
-          onAuthComplete = { result ->
-            Log.d("SignInScreen", "User signed in: ${result.user?.displayName}")
-            Toast.makeText(context, "Login successful!", Toast.LENGTH_LONG).show()
-            saveUserToFireStore()
-            saveStatsToFirestore()
-            navigationActions.navigateTo(Screen.HOME)
-            showTutorial()
-          },
-          onAuthError = {
-            Log.e("SignInScreen", "Failed to sign in: ${it.statusCode}")
-            Toast.makeText(context, "Login Failed!", Toast.LENGTH_LONG).show()
-          })
-
+  val scope = rememberCoroutineScope()
   val token = stringResource(id = R.string.default_web_client_id)
 
   // Gradient brush for background
@@ -134,15 +123,31 @@ fun LoginScreen(navigationActions: NavigationActions, showTutorial: () -> Unit) 
           Spacer(modifier = Modifier.height(120.dp))
 
           // Authenticate With Google Button
+          val authLauncher =
+              rememberAuthLauncher(
+                  onAuthComplete = { result ->
+                    Log.d("SignInScreen", "User signed in: ${result.user?.displayName}")
+                    Toast.makeText(context, "Login successful!", Toast.LENGTH_LONG).show()
+                    saveUserToFireStore()
+                    saveStatsToFirestore()
+                    navigationActions.navigateTo(Screen.HOME)
+                    showTutorial()
+                  },
+                  onAuthError = {
+                    Log.e("SignInScreen", "Failed to sign in: ${it.statusCode}")
+                    Toast.makeText(context, "Login Failed!", Toast.LENGTH_LONG).show()
+                  },
+                  authService = authService)
+
           GoogleSignInButton(
               onSignInClick = {
-                val gso =
-                    GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(token)
-                        .requestEmail()
-                        .build()
-                val googleSignInClient = GoogleSignIn.getClient(context, gso)
-                launcher.launch(googleSignInClient.signInIntent)
+                if (authService.isMocked()) {
+                  Log.d("MockedSignInScreen", "User signed in: mocked-user")
+                  Toast.makeText(context, "Mocked Login successful!", Toast.LENGTH_LONG).show()
+                  navigationActions.navigateTo(Screen.HOME)
+                } else {
+                  authLauncher.launch(authService.getSignInIntent(context, token))
+                }
               })
 
           SkipLoginButton {
@@ -214,6 +219,18 @@ fun rememberFirebaseAuthLauncher(
       onAuthError(e)
     }
   }
+}
+
+@Composable
+fun rememberAuthLauncher(
+    onAuthComplete: (AuthResult) -> Unit,
+    onAuthError: (ApiException) -> Unit,
+    authService: AuthService
+): ManagedActivityResultLauncher<Intent, ActivityResult> {
+  return rememberLauncherForActivityResult(
+      contract = ActivityResultContracts.StartActivityForResult()) { result ->
+        authService.handleAuthResult(result, onAuthComplete, onAuthError)
+      }
 }
 
 @Composable

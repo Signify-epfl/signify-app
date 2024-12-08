@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -48,7 +49,7 @@ fun WelcomeScreen(navigationActions: NavigationActions) {
           R.drawable.letter_y)
 
   // Welcome text to display
-  val welcomeText = "Welcome to Signify"
+  val welcomeText = stringResource(R.string.welcome_text)
 
   // Indexes of the letters to highlight
   val highlightIndices = listOf(11, 12, 13, 14, 15, 16, 17)
