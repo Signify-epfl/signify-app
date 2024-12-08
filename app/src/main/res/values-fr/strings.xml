@@ -66,7 +66,29 @@
     <string name="feature_suggestion_text">Suggestion de fonctionnalité</string>
     <string name="question_text">Question</string>
     <string name="other_text">Autre</string>
+    <string name="create_a_challenge_text">Créer un défi</string>
+    <string name="my_ongoing_challenges_text">Mes défis en cours</string>
+    <string name="opponent_text">Adversaire</string>
+    <string name="total_time_text">Votre temps total :</string>
+    <string name="challenge_completed_text">Défi déjà terminé, veuillez attendre le résultat</string>
+    <string name="challenge_title_text">Sélectionnez un ami à défier</string>
+    <string name="challenge_text">Défi</string>
+    <string name="send_challenge_text">Envoyer un Défi</string>
+    <string name="pick_a_mode_string">Choisir un mode</string>
+    <string name="invalid_challenge_string">Chaîne de défi invalide</string>
+    <string name="failed_fetch_text">Échec de la récupération du défi</string>
+    <string name="no_word_available_text">Aucun mot disponible pour ce tour.</string>
+    <string name="time_text">Temps:</string>
+    <string name="loading_text">Chargement du défi…</string>
+    <string name="challenge_done_text">Défi terminé ! Allez dans l’historique pour voir les résultats.</string>
+    <string name="score_saved_text">Score enregistré avec succès</string>
+    <string name="score_failed_text">Échec de l’enregistrement du score</string>
+    <string name="history_text">Historique</string>
+    <string name="number_challenges_text">Nombres de défis</string>
 
+    <string name="completed_challenge_text">Complété</string>
+    <string name="created_challenge_text">Crée</string>
+    <string name="won_challenge_text">Gagné</string>
 
     <string name="help_home_screen">Ici, vous pouvez pratiquer la langue des signes, avec des retours en temps réel via votre caméra. Assurez-vous de vérifier votre quête quotidienne pour apprendre une nouvelle lettre chaque jour. Vous trouverez également des exercices en bas pour vous challenger à différents niveaux de difficulté.</string>
     <string name="help_profile_screen">Ici, vous pouvez modifier vos paramètres et personnaliser votre profil. Vous pourrez également ajouter vos amis pour apprendre ensemble. Vous trouverez un récapitulatif de vos progrès dans le tableau de statistiques.</string>

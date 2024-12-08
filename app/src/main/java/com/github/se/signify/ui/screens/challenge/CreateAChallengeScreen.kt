@@ -13,9 +13,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.R
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.challenge.ChallengeMode
 import com.github.se.signify.model.challenge.ChallengeRepository
@@ -50,8 +52,9 @@ fun CreateAChallengeScreen(
       testTagColumn = "CreateAChallengeContent",
   ) {
     // Title
+      val challengeTitleText = stringResource(R.string.challenge_title_text)
     Text(
-        text = "Select a Friend to Challenge",
+        text = challengeTitleText,
         fontSize = 24.sp,
         modifier = Modifier.testTag("ChallengeTitle"))
 
@@ -60,12 +63,13 @@ fun CreateAChallengeScreen(
     // Conditional display for friends list
     if (friends.isEmpty()) {
       Text(
-          text = "No friends available",
+          text = stringResource(R.string.no_friend_text),
           fontSize = 18.sp,
           color = Color.Gray,
           modifier = Modifier.testTag("NoFriendsText"))
     } else {
       // List of Friends
+        val challengeText = stringResource(R.string.challenge_text)
       LazyColumn(
           modifier = Modifier.fillMaxSize().weight(1f).testTag("FriendsList"),
           verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -78,7 +82,7 @@ fun CreateAChallengeScreen(
                       showDialog = true
                     },
                     testTag = "ChallengeButton_$friendId",
-                    text = "Challenge",
+                    text = challengeText,
                     backgroundColor = MaterialTheme.colorScheme.primary,
                     textColor = MaterialTheme.colorScheme.onPrimary)
               }
@@ -155,7 +159,7 @@ fun ChallengeModeAlertDialog(
               }
             },
             testTag = "SendChallengeButton",
-            text = "Send Challenge",
+            text = stringResource(R.string.send_challenge_text),
             backgroundColor = MaterialTheme.colorScheme.primary,
             textColor = MaterialTheme.colorScheme.onPrimary,
             enabled = selectedMode.value != null,
@@ -165,12 +169,12 @@ fun ChallengeModeAlertDialog(
         UtilTextButton(
             onClickAction = onDismiss,
             testTag = "CancelButton",
-            text = "Cancel",
+            text = stringResource(R.string.cancel_text),
             backgroundColor = MaterialTheme.colorScheme.surface,
             textColor = MaterialTheme.colorScheme.onSurface)
       },
       title = {
-        Text(text = "Pick a Mode", modifier = Modifier.fillMaxWidth().testTag("DialogTitle"))
+        Text(text = stringResource(R.string.pick_a_mode_string), modifier = Modifier.fillMaxWidth().testTag("DialogTitle"))
       },
       text = {
         Row(

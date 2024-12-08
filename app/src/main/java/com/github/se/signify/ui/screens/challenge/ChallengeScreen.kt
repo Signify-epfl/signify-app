@@ -20,24 +20,25 @@ fun ChallengeScreen(navigationActions: NavigationActions) {
   MainScreenScaffold(
       navigationActions = navigationActions,
       testTagColumn = "ChallengeScreen",
-      helpTitle = "Challenge",
+      helpTitle = stringResource(R.string.challenge_text),
       helpText = stringResource(R.string.description_challenge)) {
         Spacer(modifier = Modifier.height(64.dp))
 
         // Challenge square button
         SquareButton(
             iconRes = R.drawable.battleicon,
-            label = "Challenge",
+            label =stringResource(R.string.challenge_text),
             onClick = { navigationActions.navigateTo(Screen.NEW_CHALLENGE) },
             size = 240,
             modifier = Modifier.testTag("ChallengeButton"))
         Spacer(modifier = Modifier.height(32.dp))
 
         // History square button
+      val historyText = stringResource(R.string.history_text)
         SquareButton(
             iconRes = R.drawable.historyicon,
-            label = "History",
-            onClick = { navigationActions.navigateTo(Screen.CHALLENGE_HISTORY) },
+            label = historyText,
+            onClick = { navigationActions.navigateTo(Screen.CHALLENGE_HISTORY)},
             size = 240,
             modifier = Modifier.testTag("HistoryButton"))
       }
