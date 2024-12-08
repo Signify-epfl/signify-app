@@ -29,7 +29,7 @@ import com.github.se.signify.ui.common.TextButton
  *
  * This screen informs the user that they are offline and provides a "Log In" button to navigate to
  * the authentication screen (Screen.AUTH). The screen utilizes a scaffold with a bottom navigation
- * menu and a consistent design from utility components. j
+ * menu and a consistent design from utility components.
  *
  * @param navigationActions An instance of [NavigationActions] used for navigation within the app.
  */
