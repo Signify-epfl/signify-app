@@ -33,9 +33,9 @@ class QuestScreenTest {
   private lateinit var navigationActions: NavigationActions
 
   val context: Context = ApplicationProvider.getApplicationContext()
-  val quest_title: String = context.getString(R.string.quest_screen_title)
-  val open_button: String = context.getString(R.string.open_quest_button)
-  val closed_button: String = context.getString(R.string.closed_quest_button)
+  val quest_title: String = context.getString(R.string.quest_screen_title_text)
+  val open_button: String = context.getString(R.string.open_quest_button_text)
+  val closed_button: String = context.getString(R.string.closed_quest_button_text)
 
   private val sampleQuest =
       Quest(
