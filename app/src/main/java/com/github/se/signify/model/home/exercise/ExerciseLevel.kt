@@ -1,5 +1,6 @@
 package com.github.se.signify.model.home.exercise
 
+import android.content.Context
 import com.github.se.signify.R
 import com.github.se.signify.model.navigation.Screen
 
@@ -44,4 +45,12 @@ object ExerciseLevelName {
   const val EASY = "Easy"
   const val MEDIUM = "Medium"
   const val HARD = "Hard"
+
+  fun getLevelName(context: Context, level: ExerciseLevel): String {
+    return when (level) {
+      ExerciseLevel.Easy -> context.getString(R.string.easy_exercises_text)
+      ExerciseLevel.Medium -> context.getString(R.string.medium_exercises_text)
+      ExerciseLevel.Hard -> context.getString(R.string.hard_exercises_text)
+    }
+  }
 }

@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -37,6 +38,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.R
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.home.exercise.ExerciseLevel
 import com.github.se.signify.model.home.exercise.ExerciseLevelName
@@ -87,7 +89,7 @@ fun ExerciseScreen(
 
   val landmarksState = handLandMarkViewModel.landMarks().collectAsState()
   val detectedGesture = handLandMarkViewModel.getSolution()
-
+  val exoCompletedText = stringResource(R.string.exercise_completed_text)
   if (!landmarksState.value.isNullOrEmpty()) {
     handleGestureMatching(
         detectedGesture = detectedGesture,
@@ -106,7 +108,7 @@ fun ExerciseScreen(
             ExerciseLevelName.MEDIUM -> statsViewModel.updateMediumExerciseStats()
             ExerciseLevelName.HARD -> statsViewModel.updateHardExerciseStats()
           }
-          Toast.makeText(context, "Exercise completed!", Toast.LENGTH_SHORT).show()
+          Toast.makeText(context, exoCompletedText, Toast.LENGTH_SHORT).show()
           // Reload or reset sentencesList, or handle end of exercise as needed
           currentSentenceIndex = 0
           currentWordIndex = 0
@@ -149,7 +151,7 @@ fun ExerciseScreen(
     )
 
     // Camera placeholder/composable
-    CameraBox(handLandMarkViewModel, "cameraPreview")
+    CameraBox(handLandMarkViewModel)
   }
 }
 

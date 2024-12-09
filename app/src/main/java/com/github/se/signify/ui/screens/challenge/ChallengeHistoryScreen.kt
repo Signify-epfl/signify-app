@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.R
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.profile.stats.StatsRepository
@@ -34,10 +36,15 @@ fun ChallengeHistoryScreen(
       navigationActions = navigationActions,
       testTag = "ChallengeHistoryScreen",
   ) {
+    val challengeCategories =
+        listOf(
+            stringResource(R.string.completed_challenge_text),
+            stringResource(R.string.created_challenge_text),
+            stringResource(R.string.won_challenge_text))
     // Challenge's statistics
     StatisticsTable(
-        lineText = "Number of challenges :",
-        statsTexts = listOf("Completed", "Created", "Won"),
+        lineText = stringResource(id = R.string.number_challenges_text),
+        statsTexts = challengeCategories,
         statsNumberList =
             listOf(
                 "${challengesCompleted.value}",
@@ -49,6 +56,7 @@ fun ChallengeHistoryScreen(
     Spacer(modifier = Modifier.height(32.dp))
 
     // Graphs and Stats
-    NotImplementedYet(text = "Graphs and Stats", testTag = "GraphsAndStats")
+    NotImplementedYet(
+        testTag = "GraphsAndStats", text = stringResource(R.string.graphs_and_stats_text))
   }
 }

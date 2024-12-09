@@ -53,7 +53,7 @@ class LoginScreenTest : TestCase() {
     composeTestRule
         .onNodeWithTag("IntroMessage")
         .assertTextEquals(
-            "Signify is what you need to communicate with deaf and hard of hearing people")
+            "Signify is what you need to start communicating with deaf and hard of hearing people")
 
     composeTestRule.onNodeWithTag("loginButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("loginButton").assertHasClickAction()

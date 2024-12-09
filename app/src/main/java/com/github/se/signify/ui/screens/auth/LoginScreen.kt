@@ -62,12 +62,14 @@ import kotlinx.coroutines.tasks.await
 @Composable
 fun LoginScreen(navigationActions: NavigationActions, showTutorial: () -> Unit) {
   val context = LocalContext.current
+  val loginSuccessfulText = stringResource(R.string.login_successful_text)
+  val loginFailedText = stringResource(R.string.login_successful_text)
 
   val launcher =
       rememberFirebaseAuthLauncher(
           onAuthComplete = { result ->
             Log.d("SignInScreen", "User signed in: ${result.user?.displayName}")
-            Toast.makeText(context, "Login successful!", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, loginSuccessfulText, Toast.LENGTH_LONG).show()
             saveUserToFirestore()
             saveStatsToFirestore()
             navigationActions.navigateTo(Screen.HOME)
@@ -75,7 +77,7 @@ fun LoginScreen(navigationActions: NavigationActions, showTutorial: () -> Unit) 
           },
           onAuthError = {
             Log.e("SignInScreen", "Failed to sign in: ${it.statusCode}")
-            Toast.makeText(context, "Login Failed!", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, loginFailedText, Toast.LENGTH_LONG).show()
           })
 
   val token = stringResource(id = R.string.default_web_client_id)
@@ -120,7 +122,7 @@ fun LoginScreen(navigationActions: NavigationActions, showTutorial: () -> Unit) 
           // Welcome Text
           Text(
               modifier = Modifier.width(250.dp).height(200.dp).testTag("IntroMessage"),
-              text = "Signify is what you need to communicate with deaf and hard of hearing people",
+              text = stringResource(R.string.signify_welcome_text),
               style =
                   TextStyle(
                       fontSize = 32.sp,
@@ -144,10 +146,10 @@ fun LoginScreen(navigationActions: NavigationActions, showTutorial: () -> Unit) 
                 val googleSignInClient = GoogleSignIn.getClient(context, gso)
                 launcher.launch(googleSignInClient.signInIntent)
               })
-
+          val offlineModeText = stringResource(R.string.offline_mode_text)
           SkipLoginButton {
             Log.d("LoginScreen", "Proceeding in offline state.")
-            Toast.makeText(context, "You are not logged in.", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, offlineModeText, Toast.LENGTH_LONG).show()
             showTutorial()
             navigationActions.navigateTo(Screen.HOME)
           }
@@ -179,8 +181,9 @@ fun GoogleSignInButton(onSignInClick: () -> Unit) {
                       .padding(end = 8.dp))
 
           // Text for the button
+          val signInText = stringResource(R.string.sign_in_text)
           Text(
-              text = "Sign in with Google",
+              text = signInText,
               style =
                   TextStyle(
                       fontSize = 14.sp,
@@ -235,8 +238,9 @@ fun SkipLoginButton(onOfflineClick: () -> Unit) {
                   tint = MaterialTheme.colorScheme.primary)
 
               // Text for the button
+              val skipLoginText = stringResource(R.string.skip_login_text)
               Text(
-                  text = "Skip Login",
+                  text = skipLoginText,
                   style =
                       TextStyle(
                           fontSize = 14.sp,

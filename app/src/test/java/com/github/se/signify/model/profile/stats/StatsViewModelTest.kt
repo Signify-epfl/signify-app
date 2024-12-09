@@ -3,6 +3,7 @@ package com.github.se.signify.model.profile.stats
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.dependencyInjection.MockDependencyProvider
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.BeforeClass
@@ -20,7 +21,6 @@ class StatsViewModelTest(
     private val expectedValueUpdate: Int,
     private val stateFlowValue: () -> Int
 ) {
-
   companion object {
     private lateinit var mockUserSession: UserSession
     private lateinit var statsViewModel: StatsViewModel
@@ -132,14 +132,14 @@ class StatsViewModelTest(
   }
 
   @Test
-  fun `getIntFunctions should handle success correctly`() {
+  fun getIntFunctionsShouldHandleSuccessCorrectly() {
     getAction()
     assertTrue(mockStatsRepository.wasMethodCalled(getStatName))
     assertEquals(expectedValueGet, stateFlowValue())
   }
 
   @Test
-  fun `getIntFunctions should handle failure correctly`() {
+  fun getIntFunctionsShouldHandleFailureCorrectly() {
     mockStatsRepository.shouldSucceed = false
     getAction()
     assertTrue(mockStatsRepository.wasMethodCalled(getStatName))
@@ -147,7 +147,43 @@ class StatsViewModelTest(
   }
 
   @Test
-  fun `updateIntFunctions should handle success correctly`() {
+  fun resetUpdateStatsEventShouldSetStateToIdle() {
+    updateAction()
+
+    assertNotEquals(StatsViewModel.UpdateStatsEvent.Idle, statsViewModel.updateStatsEvent.value)
+
+    statsViewModel.resetUpdateStatsEvent()
+
+    assertEquals(StatsViewModel.UpdateStatsEvent.Idle, statsViewModel.updateStatsEvent.value)
+  }
+
+  @Test
+  fun updateStateShouldTransitionFromIdleToSuccessOnUpdateFunctionCall() {
+    val initialState = statsViewModel.updateStatsEvent.value
+
+    assertEquals(StatsViewModel.UpdateStatsEvent.Idle, initialState)
+
+    updateAction()
+
+    val finalState = statsViewModel.updateStatsEvent.value
+    assertEquals(StatsViewModel.UpdateStatsEvent.Success, finalState)
+  }
+
+  @Test
+  fun updateStateShouldTransitionFromIdleToFailureOnUpdateFunctionCall() {
+    mockStatsRepository.shouldSucceed = false
+
+    val initialState = statsViewModel.updateStatsEvent.value
+    assertEquals(StatsViewModel.UpdateStatsEvent.Idle, initialState)
+
+    updateAction()
+
+    val finalState = statsViewModel.updateStatsEvent.value
+    assertTrue(finalState is StatsViewModel.UpdateStatsEvent.Failure)
+  }
+
+  @Test
+  fun updateIntFunctionsShouldHandleSuccessCorrectly() {
     updateAction()
 
     assertTrue(mockStatsRepository.wasMethodCalled(updateStatName))
@@ -158,7 +194,7 @@ class StatsViewModelTest(
   }
 
   @Test
-  fun `updateIntFunctions should handle failure correctly`() {
+  fun updateIntFunctionsShouldHandleFailureCorrectly() {
     mockStatsRepository.shouldSucceed = false
 
     updateAction()

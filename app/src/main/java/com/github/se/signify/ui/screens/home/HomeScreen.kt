@@ -44,6 +44,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.painterResource
@@ -77,12 +78,12 @@ fun HomeScreen(navigationActions: NavigationActions) {
 
   val scrollState = rememberLazyListState()
   val coroutineScope = rememberCoroutineScope()
-
+  val letterText = stringResource(id = R.string.letter_text)
   MainScreenScaffold(
       navigationActions = navigationActions,
       testTag = "HomeScreen",
-      helpTitle = "Home",
-      helpText = stringResource(R.string.help_home_screen),
+      helpTitle = stringResource(R.string.home_text),
+      helpText = stringResource(R.string.help_home_screen_text),
       floatingActionButton = {
         FloatingActionButton(
             onClick = { coroutineScope.launch { scrollState.animateScrollToItem(0) } },
@@ -102,25 +103,22 @@ fun HomeScreen(navigationActions: NavigationActions) {
                     horizontalArrangement = Arrangement.SpaceBetween) {
                       BasicButton(
                           onClick = { navigationActions.navigateTo(Screen.FEEDBACK) },
-                          icon = Icons.Outlined.Email,
                           iconTestTag = "FeedbackIcon",
+                          icon = Icons.Outlined.Email,
                           contentDescription = "Feedback",
-                          modifier = Modifier.testTag("FeedbackButton"),
-                      )
+                          modifier = Modifier.testTag("FeedbackButton"))
                       BasicButton(
                           onClick = { navigationActions.navigateTo(Screen.QUIZ) },
-                          icon = Icons.Outlined.Star,
                           iconTestTag = "QuizIcon",
+                          icon = Icons.Outlined.Star,
                           contentDescription = "Quizzes",
-                          modifier = Modifier.testTag("QuizButton"),
-                      )
+                          modifier = Modifier.testTag("QuizButton"))
                       BasicButton(
                           onClick = { navigationActions.navigateTo(Screen.QUEST) },
-                          icon = Icons.Outlined.DateRange,
                           iconTestTag = "QuestIcon",
+                          icon = Icons.Outlined.DateRange,
                           contentDescription = "Quests",
-                          modifier = Modifier.testTag("QuestsButton"),
-                      )
+                          modifier = Modifier.testTag("QuestsButton"))
                     }
               }
 
@@ -144,10 +142,9 @@ fun HomeScreen(navigationActions: NavigationActions) {
               item { ExerciseList(defaultExercises, navigationActions) }
 
               item { Spacer(modifier = Modifier.height(32.dp)) }
-
               items(('A'..'Z').toList()) { letter ->
                 Text(
-                    text = "Letter $letter",
+                    text = "$letterText $letter",
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.primary,
@@ -167,13 +164,13 @@ fun HomeScreen(navigationActions: NavigationActions) {
  */
 @Composable
 fun CameraFeedbackButton(onClick: () -> Unit = {}) {
+  val tryText = stringResource(id = R.string.try_text)
   TextButton(
       onClick = onClick,
       testTag = "CameraFeedbackButton",
-      text = "Try hand signs here !",
+      text = tryText,
       backgroundColor = MaterialTheme.colorScheme.primary,
-      textColor = MaterialTheme.colorScheme.onPrimary,
-      modifier = Modifier)
+      textColor = MaterialTheme.colorScheme.onPrimary)
 }
 /**
  * Composable function that displays a horizontally arranged letter navigator. Users can scroll
@@ -350,7 +347,9 @@ fun ExerciseButton(exercise: ExerciseLevel, navigationActions: NavigationActions
       colors =
           ButtonDefaults.buttonColors(
               MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.onPrimary)) {
-        Text(exercise.id, modifier = Modifier.testTag("${exercise.id}ExerciseButtonText"))
+        val context = LocalContext.current
+        val exerciseText = ExerciseLevelName.getLevelName(context, exercise)
+        Text(exerciseText, modifier = Modifier.testTag("${exercise.id}ExerciseButtonText"))
       }
 }
 /**

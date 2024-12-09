@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -41,14 +42,14 @@ import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
  * Composable that handles ASL recognition. It checks for camera permissions, launches the camera
  * preview, and displays recognized gestures and images.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ASLRecognition(
     handLandMarkViewModel: HandLandmarkViewModel,
     navigationActions: NavigationActions
 ) {
-  val buttonUriString = stringResource(id = R.string.button_uri_string)
+  val buttonUriString = stringResource(id = R.string.button_uri_string_text)
   val context = LocalContext.current
-
   AnnexScreenScaffold(navigationActions = navigationActions, testTag = "ASLRecognitionScreen") {
     Box(
         modifier =
@@ -64,18 +65,16 @@ fun ASLRecognition(
     GestureOverlayView(handLandMarkViewModel)
 
     Spacer(modifier = Modifier.height(20.dp))
-
-    // Button: "More on ASL Alphabet"
+    val moreOnASLAlphabetText = stringResource(id = R.string.more_on_asl_alphabet_text)
     TextButton(
         onClick = {
           val intent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(buttonUriString) }
           context.startActivity(intent)
         },
         testTag = "practiceButton",
-        text = "More on ASL Alphabet",
+        text = moreOnASLAlphabetText,
         backgroundColor = MaterialTheme.colorScheme.primary,
-        textColor = MaterialTheme.colorScheme.onPrimary,
-        modifier = Modifier)
+        textColor = MaterialTheme.colorScheme.onPrimary)
   }
 }
 
@@ -96,7 +95,6 @@ fun GestureOverlayView(handLandMarkViewModel: HandLandmarkViewModel) {
 @Composable
 fun HandGestureImage(gesture: String) {
   val imageResource = if (gesture.isEmpty()) R.drawable.vector else getIconResId(gesture.first())
-
   Box(
       modifier =
           Modifier.width(336.dp)
@@ -119,7 +117,8 @@ fun HandGestureImage(gesture: String) {
 /** Draws the output text or the prompt to "Make a sign" on the screen. */
 @Composable
 fun DrawnOutPut(landmarks: List<NormalizedLandmark>?, text: String) {
-  val displayText = if (landmarks.isNullOrEmpty()) "Make a sign" else text
+  val makeASignText = stringResource(id = R.string.make_a_sign_text)
+  val displayText = if (landmarks.isNullOrEmpty()) makeASignText else text
   val paintColor = MaterialTheme.colorScheme.background
   Box(
       modifier =

@@ -5,16 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -34,9 +25,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.R
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.challenge.Challenge
 import com.github.se.signify.model.challenge.ChallengeRepository
@@ -48,7 +41,7 @@ import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.TextButton
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "SuspiciousIndentation")
 @Composable
 fun NewChallengeScreen(
     navigationActions: NavigationActions,
@@ -73,21 +66,20 @@ fun NewChallengeScreen(
     TextButton(
         onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
         testTag = "MyFriendsButton",
-        text = "My Friends",
+        text = stringResource(R.string.my_friends_text),
         backgroundColor = MaterialTheme.colorScheme.primary,
-        textColor = MaterialTheme.colorScheme.onPrimary,
-        modifier = Modifier)
+        textColor = MaterialTheme.colorScheme.onPrimary)
 
     Spacer(modifier = Modifier.height(32.dp))
 
     // Create a challenge button
+    val createAChallengeText = stringResource(R.string.create_a_challenge_text)
     TextButton(
         onClick = { navigationActions.navigateTo(Screen.CREATE_CHALLENGE) },
         testTag = "CreateChallengeButton",
-        text = "Create a Challenge",
+        text = createAChallengeText,
         backgroundColor = MaterialTheme.colorScheme.primary,
-        textColor = MaterialTheme.colorScheme.onPrimary,
-        modifier = Modifier)
+        textColor = MaterialTheme.colorScheme.onPrimary)
 
     Spacer(modifier = Modifier.height(32.dp))
 
@@ -102,8 +94,9 @@ fun NewChallengeScreen(
           Column(
               horizontalAlignment = Alignment.CenterHorizontally,
               modifier = Modifier.testTag("OngoingChallengesContent")) {
+                val myOnGoingChallengeText = stringResource(R.string.my_ongoing_challenges_text)
                 Text(
-                    text = "My Ongoing Challenges",
+                    text = myOnGoingChallengeText,
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.testTag("OngoingChallengesTitle"))
@@ -201,18 +194,20 @@ fun OngoingChallengeCard(
                 } else {
                   challenge.player1
                 }
+            val opponentText = stringResource(R.string.opponent_text)
             Text(
-                text = "Opponent: $opponentName",
+                text = "$opponentText $opponentName",
                 fontSize = 18.sp,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
             Text(
-                text = "Mode: ${challenge.mode}",
+                text = "${stringResource(R.string.mode_text)}: ${challenge.mode}",
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSurface)
             if (isChallengeCompleted) {
+              val totalTimeText = stringResource(R.string.total_time_text)
               Text(
-                  text = "Your Total Time: ${totalTime}s",
+                  text = "$totalTimeText ${totalTime}s",
                   fontSize = 14.sp,
                   color = MaterialTheme.colorScheme.onSurface)
             }
@@ -224,13 +219,12 @@ fun OngoingChallengeCard(
                   Modifier.padding(start = 8.dp)
                       .size(48.dp) // Set size to ensure consistency between buttons
               ) {
+                val challengeAlreadyCompletedText =
+                    stringResource(R.string.challenge_completed_text)
                 IconButton(
                     onClick = {
                       if (isChallengeCompleted) {
-                        Toast.makeText(
-                                context,
-                                "Challenge already completed, wait for result",
-                                Toast.LENGTH_SHORT)
+                        Toast.makeText(context, challengeAlreadyCompletedText, Toast.LENGTH_SHORT)
                             .show()
                       } else {
                         onPlayClick()

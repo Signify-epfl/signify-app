@@ -22,7 +22,6 @@ class ScreensTest {
   fun mainScreenScaffoldDisplaysCorrectInformation() {
     composeTestRule.setContent {
       val navigationActions = mock(NavigationActions::class.java)
-
       MainScreenScaffold(
           navigationActions = navigationActions,
           testTag = "ScaffoldMainScreen",
@@ -31,7 +30,6 @@ class ScreensTest {
             Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
           }
     }
-
     composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
     composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
     composeTestRule.onNodeWithTag("ScaffoldMainScreen").assertIsDisplayed()
@@ -44,13 +42,11 @@ class ScreensTest {
   @Test
   fun annexScreenScaffoldDisplaysCorrectInformation() {
     val navigationActions = mock(NavigationActions::class.java)
-
     composeTestRule.setContent {
       AnnexScreenScaffold(navigationActions = navigationActions, testTag = "ScaffoldAnnexeScreen") {
         Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
       }
     }
-
     composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
     composeTestRule.onNodeWithTag("ScaffoldAnnexeScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
@@ -67,7 +63,6 @@ class ScreensTest {
         Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
       }
     }
-
     composeTestRule.onNodeWithTag("ColumnScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("Text").assertIsDisplayed()
   }
@@ -75,7 +70,6 @@ class ScreensTest {
   @Test
   fun topBarIsDisplayed() {
     composeTestRule.setContent { TopBar() }
-
     // Assert that the top bar is displayed
     composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
   }
@@ -87,7 +81,6 @@ class ScreensTest {
     composeTestRule.setContent {
       InfoPopup(onDismiss = {}, helpTitle = helpTitle, helpText = helpText)
     }
-
     composeTestRule.onNodeWithTag("InfoPopup").assertIsDisplayed()
     composeTestRule.onNodeWithTag("InfoPopupContent").assertIsDisplayed()
     composeTestRule.onNodeWithTag("InfoPopupTitle").assertIsDisplayed()
@@ -106,7 +99,6 @@ class ScreensTest {
     composeTestRule.setContent {
       InfoPopup(onDismiss = { clicked = true }, helpTitle = helpTitle, helpText = helpText)
     }
-
     composeTestRule.onNodeWithTag("InfoPopupCloseButton").performClick()
     assert(clicked)
   }
@@ -114,7 +106,6 @@ class ScreensTest {
   @Test
   fun backButtonIsDisplayed() {
     composeTestRule.setContent { BackButton(onClick = {}) }
-
     // Assert that the back button is displayed
     composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
   }
@@ -123,13 +114,10 @@ class ScreensTest {
   fun backButtonPerformsClick() {
     var clicked = false
     composeTestRule.setContent { BackButton(onClick = { clicked = true }) }
-
     // Assert that the back button has a click action
     composeTestRule.onNodeWithTag("BackButton").assertHasClickAction()
-
     // Perform click action on the back button
     composeTestRule.onNodeWithTag("BackButton").performClick()
-
     // Assert that the click action was triggered
     assert(clicked)
   }

@@ -34,11 +34,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.R
 import com.github.se.signify.model.home.quiz.QuizQuestion
 import com.github.se.signify.model.home.quiz.QuizRepository
 import com.github.se.signify.model.home.quiz.QuizViewModel
@@ -55,8 +57,9 @@ fun QuizScreen(navigationActions: NavigationActions, quizRepository: QuizReposit
   val context = LocalContext.current
 
   AnnexScreenScaffold(navigationActions = navigationActions, testTag = "QuizScreen") {
+    val quizTimeText = stringResource(R.string.quiz_time_text)
     Text(
-        text = "Quiz Time !",
+        text = quizTimeText,
         fontWeight = FontWeight.Bold,
         fontSize = 30.sp,
         color = MaterialTheme.colorScheme.primary,
@@ -70,7 +73,8 @@ fun QuizScreen(navigationActions: NavigationActions, quizRepository: QuizReposit
           remember(currentQuiz) {
             currentQuiz!!.confusers.plus(currentQuiz!!.correctWord).shuffled()
           }
-
+      val correctAnswerText = stringResource(R.string.correct_answer_text)
+      val incorrectAnswerText = stringResource(R.string.incorrect_answer_text)
       QuizContent(
           currentQuiz = currentQuiz!!,
           shuffledOptions = shuffledOptions,
@@ -80,10 +84,10 @@ fun QuizScreen(navigationActions: NavigationActions, quizRepository: QuizReposit
             quizViewModel.submitAnswer(
                 selectedOption = it,
                 onCorrect = {
-                  Toast.makeText(context, "Correct answer!", Toast.LENGTH_SHORT).show()
+                  Toast.makeText(context, correctAnswerText, Toast.LENGTH_SHORT).show()
                 },
                 onIncorrect = {
-                  Toast.makeText(context, "Incorrect answer, try again.", Toast.LENGTH_SHORT).show()
+                  Toast.makeText(context, incorrectAnswerText, Toast.LENGTH_SHORT).show()
                 })
             selectedOption = null
           })
@@ -116,9 +120,9 @@ fun QuizContent(
                       .testTag("SignImage"))
         }
       }
-
+  val chooseCorrectAnswer = stringResource(R.string.choose_correct_answer_text)
   Text(
-      text = "Choose the correct answer:",
+      text = chooseCorrectAnswer,
       fontWeight = FontWeight.Bold,
       color = MaterialTheme.colorScheme.onBackground,
       modifier = Modifier.padding(bottom = 12.dp).testTag("QuizPrompt"))
@@ -167,18 +171,20 @@ fun QuizContent(
       modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).testTag("SubmitButton"),
       shape = RoundedCornerShape(50),
   ) {
-    Text(text = "Submit")
+    val submitText = stringResource(R.string.submit_text)
+    Text(text = submitText)
   }
 }
 
 @Composable
 fun NoQuizAvailable() {
+  val noQuizAvailableText = stringResource(R.string.no_quiz_available)
   Column(
       modifier = Modifier.fillMaxSize().testTag("NoQuizContainer"),
       verticalArrangement = Arrangement.Center,
       horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            text = "No quizzes available.",
+            text = noQuizAvailableText,
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onBackground, // Updated from onSurface
             modifier = Modifier.padding(bottom = 16.dp).testTag("NoQuizzesText"))
