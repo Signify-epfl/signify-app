@@ -25,7 +25,7 @@ import org.mockito.kotlin.eq
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class StatsRepositoryFirestoreTest {
+class FirestoreStatsRepositoryTest {
   @Mock private lateinit var mockAuth: FirebaseAuth
   @Mock private lateinit var mockCurrentUser: FirebaseUser
   @Mock private lateinit var mockFirestore: FirebaseFirestore
@@ -33,7 +33,7 @@ class StatsRepositoryFirestoreTest {
   @Mock private lateinit var mockUserDocument: DocumentReference
   @Mock private lateinit var mockDocumentSnapshot: DocumentSnapshot
 
-  private lateinit var statsRepositoryFirestore: StatsRepositoryFirestore
+  private lateinit var firestoreStatsRepository: FirestoreStatsRepository
 
   private val userId = "testUser"
 
@@ -51,7 +51,7 @@ class StatsRepositoryFirestoreTest {
     mockCollectionReference = mock(CollectionReference::class.java)
     mockUserDocument = mock(DocumentReference::class.java)
 
-    statsRepositoryFirestore = StatsRepositoryFirestore(mockFirestore)
+    firestoreStatsRepository = FirestoreStatsRepository(mockFirestore)
     `when`(mockFirestore.collection("stats")).thenReturn(mockCollectionReference)
     `when`(mockCollectionReference.document(userId)).thenReturn(mockUserDocument)
     `when`(mockFirestore.collection("stats").document(userId)).thenReturn(mockUserDocument)
@@ -63,7 +63,7 @@ class StatsRepositoryFirestoreTest {
     `when`(documentSnapshot.get("lettersLearned")).thenReturn(listOf('A', 'B', 'C'))
     `when`(mockUserDocument.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot))
 
-    statsRepositoryFirestore.getLettersLearned(
+    firestoreStatsRepository.getLettersLearned(
         userId,
         onSuccess = { letters -> assertEquals(listOf('A', 'B', 'C'), letters) },
         onFailure = { fail("onFailure should not be called") })
@@ -75,7 +75,7 @@ class StatsRepositoryFirestoreTest {
     `when`(documentSnapshot.get("lettersLearned")).thenReturn(null)
     `when`(mockUserDocument.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot))
 
-    statsRepositoryFirestore.getLettersLearned(
+    firestoreStatsRepository.getLettersLearned(
         userId,
         onSuccess = { letters -> assertEquals(emptyList<Char>(), letters) },
         onFailure = { fail("onFailure should not be called") })
@@ -87,7 +87,7 @@ class StatsRepositoryFirestoreTest {
     `when`(documentSnapshot.getLong("easyExercise")).thenReturn(10L)
     `when`(mockUserDocument.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot))
 
-    statsRepositoryFirestore.getEasyExerciseStats(
+    firestoreStatsRepository.getEasyExerciseStats(
         userId,
         onSuccess = { easyCount -> assertEquals(10, easyCount) },
         onFailure = { fail("onFailure should not be called") })
@@ -99,7 +99,7 @@ class StatsRepositoryFirestoreTest {
     `when`(documentSnapshot.getLong("mediumExercise")).thenReturn(10L)
     `when`(mockUserDocument.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot))
 
-    statsRepositoryFirestore.getMediumExerciseStats(
+    firestoreStatsRepository.getMediumExerciseStats(
         userId,
         onSuccess = { mediumCount -> assertEquals(10, mediumCount) },
         onFailure = { fail("onFailure should not be called") })
@@ -111,7 +111,7 @@ class StatsRepositoryFirestoreTest {
     `when`(documentSnapshot.getLong("hardExercise")).thenReturn(10L)
     `when`(mockUserDocument.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot))
 
-    statsRepositoryFirestore.getHardExerciseStats(
+    firestoreStatsRepository.getHardExerciseStats(
         userId,
         onSuccess = { hardCount -> assertEquals(10, hardCount) },
         onFailure = { fail("onFailure should not be called") })
@@ -123,7 +123,7 @@ class StatsRepositoryFirestoreTest {
     `when`(documentSnapshot.getLong("dailyQuest")).thenReturn(10L)
     `when`(mockUserDocument.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot))
 
-    statsRepositoryFirestore.getDailyQuestStats(
+    firestoreStatsRepository.getDailyQuestStats(
         userId,
         onSuccess = { dailyCount -> assertEquals(10, dailyCount) },
         onFailure = { fail("onFailure should not be called") })
@@ -135,7 +135,7 @@ class StatsRepositoryFirestoreTest {
     `when`(documentSnapshot.getLong("weeklyQuest")).thenReturn(10L)
     `when`(mockUserDocument.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot))
 
-    statsRepositoryFirestore.getWeeklyQuestStats(
+    firestoreStatsRepository.getWeeklyQuestStats(
         userId,
         onSuccess = { weeklyCount -> assertEquals(10, weeklyCount) },
         onFailure = { fail("onFailure should not be called") })
@@ -147,7 +147,7 @@ class StatsRepositoryFirestoreTest {
     `when`(documentSnapshot.getLong("completedChallenge")).thenReturn(10L)
     `when`(mockUserDocument.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot))
 
-    statsRepositoryFirestore.getCompletedChallengeStats(
+    firestoreStatsRepository.getCompletedChallengeStats(
         userId,
         onSuccess = { completedCount -> assertEquals(10, completedCount) },
         onFailure = { fail("onFailure should not be called") })
@@ -159,7 +159,7 @@ class StatsRepositoryFirestoreTest {
     `when`(documentSnapshot.getLong("createdChallenge")).thenReturn(10L)
     `when`(mockUserDocument.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot))
 
-    statsRepositoryFirestore.getCreatedChallengeStats(
+    firestoreStatsRepository.getCreatedChallengeStats(
         userId,
         onSuccess = { createdCount -> assertEquals(10, createdCount) },
         onFailure = { fail("onFailure should not be called") })
@@ -171,7 +171,7 @@ class StatsRepositoryFirestoreTest {
     `when`(documentSnapshot.getLong("wonChallenge")).thenReturn(10L)
     `when`(mockUserDocument.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot))
 
-    statsRepositoryFirestore.getWonChallengeStats(
+    firestoreStatsRepository.getWonChallengeStats(
         userId,
         onSuccess = { wonCount -> assertEquals(10, wonCount) },
         onFailure = { fail("onFailure should not be called") })
@@ -182,7 +182,7 @@ class StatsRepositoryFirestoreTest {
     val newLetter = 'D'
     `when`(mockUserDocument.update(eq("lettersLearned"), any())).thenReturn(Tasks.forResult(null))
 
-    statsRepositoryFirestore.updateLettersLearned(
+    firestoreStatsRepository.updateLettersLearned(
         userId,
         newLetter,
         onSuccess = {
@@ -196,7 +196,7 @@ class StatsRepositoryFirestoreTest {
   fun updateEasyExerciseStatsShouldIncrementEasyExerciseCount() {
     `when`(mockUserDocument.update(eq("easyExercise"), any())).thenReturn(Tasks.forResult(null))
 
-    statsRepositoryFirestore.updateEasyExerciseStats(
+    firestoreStatsRepository.updateEasyExerciseStats(
         userId,
         onSuccess = { verify(mockUserDocument).update("easyExercise", FieldValue.increment(1)) },
         onFailure = { fail("onFailure should not be called") })
@@ -206,7 +206,7 @@ class StatsRepositoryFirestoreTest {
   fun updateMediumExerciseStatsShouldIncrementMediumExerciseCount() {
     `when`(mockUserDocument.update(eq("mediumExercise"), any())).thenReturn(Tasks.forResult(null))
 
-    statsRepositoryFirestore.updateMediumExerciseStats(
+    firestoreStatsRepository.updateMediumExerciseStats(
         userId,
         onSuccess = { verify(mockUserDocument).update("mediumExercise", FieldValue.increment(1)) },
         onFailure = { fail("onFailure should not be called") })
@@ -216,7 +216,7 @@ class StatsRepositoryFirestoreTest {
   fun updateHardExerciseStatsShouldIncrementHardExerciseCount() {
     `when`(mockUserDocument.update(eq("hardExercise"), any())).thenReturn(Tasks.forResult(null))
 
-    statsRepositoryFirestore.updateHardExerciseStats(
+    firestoreStatsRepository.updateHardExerciseStats(
         userId,
         onSuccess = { verify(mockUserDocument).update("hardExercise", FieldValue.increment(1)) },
         onFailure = { fail("onFailure should not be called") })
@@ -226,7 +226,7 @@ class StatsRepositoryFirestoreTest {
   fun updateDailyQuestStatsShouldIncrementDailyQuestCount() {
     `when`(mockUserDocument.update(eq("dailyQuest"), any())).thenReturn(Tasks.forResult(null))
 
-    statsRepositoryFirestore.updateDailyQuestStats(
+    firestoreStatsRepository.updateDailyQuestStats(
         userId,
         onSuccess = { verify(mockUserDocument).update("dailyQuest", FieldValue.increment(1)) },
         onFailure = { fail("onFailure should not be called") })
@@ -236,7 +236,7 @@ class StatsRepositoryFirestoreTest {
   fun updateWeeklyQuestStatsShouldIncrementWeeklyQuestCount() {
     `when`(mockUserDocument.update(eq("weeklyQuest"), any())).thenReturn(Tasks.forResult(null))
 
-    statsRepositoryFirestore.updateWeeklyQuestStats(
+    firestoreStatsRepository.updateWeeklyQuestStats(
         userId,
         onSuccess = { verify(mockUserDocument).update("weeklyQuest", FieldValue.increment(1)) },
         onFailure = { fail("onFailure should not be called") })
@@ -247,7 +247,7 @@ class StatsRepositoryFirestoreTest {
     `when`(mockUserDocument.update(eq("completedChallenge"), any()))
         .thenReturn(Tasks.forResult(null))
 
-    statsRepositoryFirestore.updateCompletedChallengeStats(
+    firestoreStatsRepository.updateCompletedChallengeStats(
         userId,
         onSuccess = {
           verify(mockUserDocument).update("completedChallenge", FieldValue.increment(1))
@@ -259,7 +259,7 @@ class StatsRepositoryFirestoreTest {
   fun updateCreatedChallengeStatsShouldIncrementCreatedChallengeCount() {
     `when`(mockUserDocument.update(eq("createdChallenge"), any())).thenReturn(Tasks.forResult(null))
 
-    statsRepositoryFirestore.updateCreatedChallengeStats(
+    firestoreStatsRepository.updateCreatedChallengeStats(
         userId,
         onSuccess = {
           verify(mockUserDocument).update("createdChallenge", FieldValue.increment(1))
@@ -271,7 +271,7 @@ class StatsRepositoryFirestoreTest {
   fun updateWonChallengeStatsShouldIncrementWonChallengeCount() {
     `when`(mockUserDocument.update(eq("wonChallenge"), any())).thenReturn(Tasks.forResult(null))
 
-    statsRepositoryFirestore.updateWonChallengeStats(
+    firestoreStatsRepository.updateWonChallengeStats(
         userId,
         onSuccess = { verify(mockUserDocument).update("wonChallenge", FieldValue.increment(1)) },
         onFailure = { fail("onFailure should not be called") })

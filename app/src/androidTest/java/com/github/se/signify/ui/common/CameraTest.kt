@@ -7,7 +7,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.model.dependencyInjection.AppDependencyProvider
-import com.github.se.signify.model.home.hand.HandLandMarkViewModel
+import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.mock
@@ -22,7 +22,7 @@ class CameraTest {
   fun cameraPreview_isDisplayed() {
     val context = mock(Context::class.java)
     val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
-    val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
+    val handLandMarkViewModel = HandLandmarkViewModel(handLandMarkImplementation, context)
 
     composeTestRule.setContent { CameraBox(handLandMarkViewModel, "cameraPreview") }
     composeTestRule.onNodeWithTag("cameraPreview").assertIsDisplayed()

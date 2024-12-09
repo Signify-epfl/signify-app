@@ -6,7 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import java.time.LocalDate
 
-fun saveUserToFireStore() {
+fun saveUserToFirestore() {
   val auth = FirebaseAuth.getInstance()
   val db = FirebaseFirestore.getInstance()
   val collectionPath = "users"

@@ -13,7 +13,7 @@ import androidx.test.annotation.UiThreadTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.model.dependencyInjection.AppDependencyProvider
-import com.github.se.signify.model.home.hand.HandLandMarkViewModel
+import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import org.junit.Before
@@ -32,7 +32,7 @@ class ASLRecognitionTest : LifecycleOwner {
   @get:Rule val composeTestRule = createComposeRule()
 
   private lateinit var navigationActions: NavigationActions
-  private lateinit var handLandMarkViewModel: HandLandMarkViewModel
+  private lateinit var handLandMarkViewModel: HandLandmarkViewModel
   private lateinit var lifecycleRegistry: LifecycleRegistry
 
   @Before
@@ -48,7 +48,7 @@ class ASLRecognitionTest : LifecycleOwner {
 
     navigationActions = mock(NavigationActions::class.java)
     val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
-    handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
+    handLandMarkViewModel = HandLandmarkViewModel(handLandMarkImplementation, context)
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.PRACTICE.route)
 

@@ -35,7 +35,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import com.github.se.signify.model.home.hand.HandLandMarkViewModel
+import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 
 /**
  * The camera preview box. This function requests camera permission and displays the camera preview
@@ -44,7 +44,7 @@ import com.github.se.signify.model.home.hand.HandLandMarkViewModel
  * @param handLandMarkViewModel The ViewModel responsible for managing hand landmark detection.
  */
 @Composable
-fun CameraBox(handLandMarkViewModel: HandLandMarkViewModel, testTag: String = "") {
+fun CameraBox(handLandMarkViewModel: HandLandmarkViewModel, testTag: String = "") {
   val context = LocalContext.current
   val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
   val previewView = remember { PreviewView(context) }

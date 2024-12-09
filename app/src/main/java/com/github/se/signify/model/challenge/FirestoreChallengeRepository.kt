@@ -3,7 +3,7 @@ package com.github.se.signify.model.challenge
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 
-class ChallengeRepositoryFireStore(private val db: FirebaseFirestore) : ChallengeRepository {
+class FirestoreChallengeRepository(private val db: FirebaseFirestore) : ChallengeRepository {
   private val collectionPath = "challenges"
 
   override fun sendChallengeRequest(

@@ -18,7 +18,7 @@ import java.nio.FloatBuffer
 import java.util.Collections
 import java.util.concurrent.Executors
 
-data class HandLandMarkConfig(val taskFile: String, val modelFile: String)
+data class HandLandmarkConfig(val taskFile: String, val modelFile: String)
 
 /**
  * Implementation of the HandLandMarkRepository interface using MediaPipe's HandLandmarker and ONNX
@@ -29,7 +29,7 @@ data class HandLandMarkConfig(val taskFile: String, val modelFile: String)
  * @param config Configuration object containing the file paths to the hand detection model and the
  *   ONNX model.
  */
-class HandLandMarkImplementation(private val config: HandLandMarkConfig) : HandLandMarkRepository {
+class HandLandmarkImplementation(private val config: HandLandmarkConfig) : HandLandmarkRepository {
 
   // HandLandmarker instance for detecting hand landmarks
   private var handLandmarker: HandLandmarker? = null

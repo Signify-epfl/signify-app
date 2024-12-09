@@ -5,7 +5,7 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
-class QuestRepositoryFireStore(private val db: FirebaseFirestore) : QuestRepository {
+class FirestoreQuestRepository(private val db: FirebaseFirestore) : QuestRepository {
 
   private val collectionPath = "quests"
 

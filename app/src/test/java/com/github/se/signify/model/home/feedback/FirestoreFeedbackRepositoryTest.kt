@@ -24,13 +24,13 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 
 @RunWith(RobolectricTestRunner::class)
-class FeedbackRepositoryFireStoreTest {
+class FirestoreFeedbackRepositoryTest {
 
   @Mock private lateinit var mockFirestore: FirebaseFirestore
   @Mock private lateinit var mockFeedbackCollection: CollectionReference
   @Mock private lateinit var mockFeedbackDocRef: DocumentReference
 
-  private lateinit var feedbackRepositoryFireStore: FeedbackRepositoryFireStore
+  private lateinit var firestoreFeedbackRepository: FirestoreFeedbackRepository
 
   private val feedback =
       Feedback(
@@ -53,7 +53,7 @@ class FeedbackRepositoryFireStoreTest {
     `when`(mockFirestore.collection("feedback")).thenReturn(mockFeedbackCollection)
     `when`(mockFeedbackCollection.document(eq(feedback.title))).thenReturn(mockFeedbackDocRef)
 
-    feedbackRepositoryFireStore = FeedbackRepositoryFireStore(mockFirestore)
+    firestoreFeedbackRepository = FirestoreFeedbackRepository(mockFirestore)
   }
 
   @Test
@@ -73,7 +73,7 @@ class FeedbackRepositoryFireStoreTest {
 
     // Act
     var successCalled = false
-    feedbackRepositoryFireStore.saveFeedback(
+    firestoreFeedbackRepository.saveFeedback(
         feedback.uid,
         feedback.type,
         feedback.title,
@@ -99,7 +99,7 @@ class FeedbackRepositoryFireStoreTest {
 
     // Act
     var failureCalled = false
-    feedbackRepositoryFireStore.saveFeedback(
+    firestoreFeedbackRepository.saveFeedback(
         feedback.uid,
         feedback.type,
         feedback.title,

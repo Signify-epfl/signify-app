@@ -45,7 +45,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
-import com.github.se.signify.model.common.user.saveUserToFireStore
+import com.github.se.signify.model.common.user.saveUserToFirestore
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.model.profile.stats.saveStatsToFirestore
@@ -68,7 +68,7 @@ fun LoginScreen(navigationActions: NavigationActions, showTutorial: () -> Unit) 
           onAuthComplete = { result ->
             Log.d("SignInScreen", "User signed in: ${result.user?.displayName}")
             Toast.makeText(context, "Login successful!", Toast.LENGTH_LONG).show()
-            saveUserToFireStore()
+            saveUserToFirestore()
             saveStatsToFirestore()
             navigationActions.navigateTo(Screen.HOME)
             showTutorial()

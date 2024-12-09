@@ -12,7 +12,7 @@ import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.challenge.Challenge
 import com.github.se.signify.model.challenge.MockChallengeRepository
 import com.github.se.signify.model.dependencyInjection.AppDependencyProvider
-import com.github.se.signify.model.home.hand.HandLandMarkViewModel
+import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import org.junit.Before
 import org.junit.Rule
@@ -29,7 +29,7 @@ class ChronoChallengeGameScreenTest {
   val cameraAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
 
   private lateinit var mockNavigationActions: NavigationActions
-  private lateinit var handLandMarkViewModel: HandLandMarkViewModel
+  private lateinit var handLandMarkViewModel: HandLandmarkViewModel
   private lateinit var challengeRepository: MockChallengeRepository
   private val challengeId = "challenge123"
 
@@ -37,7 +37,7 @@ class ChronoChallengeGameScreenTest {
   fun setup() {
     val context = mock(Context::class.java)
     val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
-    handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
+    handLandMarkViewModel = HandLandmarkViewModel(handLandMarkImplementation, context)
     mockNavigationActions = mock(NavigationActions::class.java)
 
     // Set up a mock challenge repository with test challenge data

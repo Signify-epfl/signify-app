@@ -1,7 +1,7 @@
 import android.content.Context
 import androidx.camera.core.ImageProxy
-import com.github.se.signify.model.home.hand.HandLandMarkRepository
-import com.github.se.signify.model.home.hand.HandLandMarkViewModel
+import com.github.se.signify.model.home.hand.HandLandmarkRepository
+import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarkerResult
 import junit.framework.TestCase.assertEquals
@@ -9,21 +9,28 @@ import junit.framework.TestCase.assertNotNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.doAnswer
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.`when`
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argumentCaptor
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class HandLandMarkViewModelTest {
+class HandLandmarkViewModelTest {
 
   private val testDispatcher = UnconfinedTestDispatcher()
-  @Mock private lateinit var mockRepository: HandLandMarkRepository
+  @Mock private lateinit var mockRepository: HandLandmarkRepository
 
   @Mock private lateinit var mockContext: Context
 
@@ -31,16 +38,16 @@ class HandLandMarkViewModelTest {
 
   @Mock private lateinit var mockHandLandmarkerResult: HandLandmarkerResult
 
-  private lateinit var viewModel: HandLandMarkViewModel
+  private lateinit var viewModel: HandLandmarkViewModel
 
   @Before
   fun setup() {
     Dispatchers.setMain(testDispatcher)
-    mockRepository = mock(HandLandMarkRepository::class.java)
+    mockRepository = mock(HandLandmarkRepository::class.java)
     mockContext = mock(Context::class.java)
     mockHandLandmarkerResult = mock(HandLandmarkerResult::class.java)
     mockImageProxy = mock(ImageProxy::class.java)
-    viewModel = HandLandMarkViewModel(mockRepository, mockContext)
+    viewModel = HandLandmarkViewModel(mockRepository, mockContext)
   }
 
   @Test

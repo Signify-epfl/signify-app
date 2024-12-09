@@ -26,7 +26,7 @@ import org.mockito.kotlin.any
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class FireBaseStorageTest {
+class FirebaseStorageTest {
 
   @Mock lateinit var mockFireStore: FirebaseFirestore
 
@@ -36,7 +36,7 @@ class FireBaseStorageTest {
 
   @Mock lateinit var mockDocumentReference: DocumentReference
 
-  private lateinit var repository: UserRepositoryFireStore
+  private lateinit var repository: FirestoreUserRepository
   private val users = "users"
   private val currentUserId = "currentUserId"
 
@@ -58,7 +58,7 @@ class FireBaseStorageTest {
     `when`(mockFireStore.collection(users).document(anyString())).thenReturn(mockDocumentReference)
 
     // Create repository
-    repository = UserRepositoryFireStore(mockFireStore, mockStorage)
+    repository = FirestoreUserRepository(mockFireStore, mockStorage)
   }
 
   @Suppress("UNCHECKED_CAST")

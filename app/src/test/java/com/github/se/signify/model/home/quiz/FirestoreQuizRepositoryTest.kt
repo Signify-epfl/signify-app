@@ -20,13 +20,18 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentCaptor
 import org.mockito.Captor
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.any
+import org.mockito.Mockito.doNothing
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.mockStatic
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.argumentCaptor
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class QuizRepositoryFireStoreTest {
+class FirestoreQuizRepositoryTest {
 
   @Mock private lateinit var mockFirestore: FirebaseFirestore
   @Mock private lateinit var mockCollectionReference: CollectionReference
@@ -35,7 +40,7 @@ class QuizRepositoryFireStoreTest {
   @Mock private lateinit var mockTask: Task<QuerySnapshot>
   @Captor private lateinit var captor: ArgumentCaptor<OnCompleteListener<QuerySnapshot>>
 
-  private lateinit var quizRepositoryFireStore: QuizRepositoryFireStore
+  private lateinit var firestoreQuizRepository: FirestoreQuizRepository
   private lateinit var mockAuth: FirebaseAuth
   private lateinit var mockUser: FirebaseUser
 
@@ -49,7 +54,7 @@ class QuizRepositoryFireStoreTest {
     }
 
     // Instantiate the QuizRepositoryFireStore
-    quizRepositoryFireStore = QuizRepositoryFireStore(mockFirestore)
+    firestoreQuizRepository = FirestoreQuizRepository(mockFirestore)
 
     // Mock Firestore interactions
     `when`(mockFirestore.collection(any())).thenReturn(mockCollectionReference)
@@ -78,7 +83,7 @@ class QuizRepositoryFireStoreTest {
 
       // Act & Assert
       var callbackTriggered = false
-      quizRepositoryFireStore.init {
+      firestoreQuizRepository.init {
         callbackTriggered = true // Set flag if onSuccess is triggered
       }
 
@@ -97,7 +102,7 @@ class QuizRepositoryFireStoreTest {
       `when`(mockAuth.currentUser).thenReturn(null) // No user logged in
 
       var callbackTriggered = false
-      quizRepositoryFireStore.init { callbackTriggered = true }
+      firestoreQuizRepository.init { callbackTriggered = true }
 
       verify(mockAuth).addAuthStateListener(any())
       assert(!callbackTriggered) {
@@ -113,7 +118,7 @@ class QuizRepositoryFireStoreTest {
     `when`(mockTask.exception).thenReturn(exception)
     `when`(mockCollectionReference.get()).thenReturn(mockTask)
 
-    quizRepositoryFireStore.getQuizQuestions(
+    firestoreQuizRepository.getQuizQuestions(
         onSuccess = { fail("onSuccess should not be called.") },
         onFailure = { error -> assertEquals("Firestore error", error.message) })
 
@@ -126,7 +131,7 @@ class QuizRepositoryFireStoreTest {
     `when`(mockDocumentSnapshot.getString("word")).thenReturn("car")
     `when`(mockDocumentSnapshot.get("confusers")).thenReturn(listOf("cat", "cup"))
 
-    val quiz = quizRepositoryFireStore.documentToQuiz(mockDocumentSnapshot)
+    val quiz = firestoreQuizRepository.documentToQuiz(mockDocumentSnapshot)
 
     assertEquals("car", quiz?.correctWord)
     assertEquals(listOf("cat", "cup"), quiz?.confusers)
@@ -136,7 +141,7 @@ class QuizRepositoryFireStoreTest {
   fun documentToQuiz_withMissingWord_returnsNull() {
     `when`(mockDocumentSnapshot.getString("word")).thenReturn(null)
 
-    val quiz = quizRepositoryFireStore.documentToQuiz(mockDocumentSnapshot)
+    val quiz = firestoreQuizRepository.documentToQuiz(mockDocumentSnapshot)
 
     assertNull(quiz)
   }
@@ -146,7 +151,7 @@ class QuizRepositoryFireStoreTest {
     `when`(mockDocumentSnapshot.getString("word")).thenReturn("Apple")
     `when`(mockDocumentSnapshot.get("confusers")).thenReturn("Invalid Data")
 
-    val quiz = quizRepositoryFireStore.documentToQuiz(mockDocumentSnapshot)
+    val quiz = firestoreQuizRepository.documentToQuiz(mockDocumentSnapshot)
 
     assertNull(quiz)
   }
@@ -155,7 +160,7 @@ class QuizRepositoryFireStoreTest {
   fun documentToQuiz_withException_logsErrorAndReturnsNull() {
     `when`(mockDocumentSnapshot.getString("word")).thenThrow(RuntimeException("Test Exception"))
 
-    val quiz = quizRepositoryFireStore.documentToQuiz(mockDocumentSnapshot)
+    val quiz = firestoreQuizRepository.documentToQuiz(mockDocumentSnapshot)
 
     assertNull(quiz)
   }

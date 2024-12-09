@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.sp
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.challenge.Challenge
 import com.github.se.signify.model.challenge.ChallengeRepository
-import com.github.se.signify.model.home.hand.HandLandMarkViewModel
+import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.common.AnnexScreenScaffold
@@ -57,7 +57,7 @@ fun ChronoChallengeGameScreen(
     navigationActions: NavigationActions,
     userSession: UserSession,
     challengeRepository: ChallengeRepository,
-    handLandMarkViewModel: HandLandMarkViewModel,
+    handLandMarkViewModel: HandLandmarkViewModel,
     challengeId: String
 ) {
   val context = LocalContext.current
@@ -168,7 +168,7 @@ fun ChronoChallengeContent(
     elapsedTime: Long,
     currentWord: String,
     currentLetterIndex: Int,
-    handLandMarkViewModel: HandLandMarkViewModel
+    handLandMarkViewModel: HandLandmarkViewModel
 ) {
   Column(
       modifier = Modifier.fillMaxSize().padding(16.dp).testTag("ChronoChallengeContent"),

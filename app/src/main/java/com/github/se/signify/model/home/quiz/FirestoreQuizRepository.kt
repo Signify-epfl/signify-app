@@ -7,7 +7,7 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
-class QuizRepositoryFireStore(private val db: FirebaseFirestore) : QuizRepository {
+class FirestoreQuizRepository(private val db: FirebaseFirestore) : QuizRepository {
 
   private val collectionPath = "quizzes"
 

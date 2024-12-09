@@ -34,7 +34,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 
 @RunWith(RobolectricTestRunner::class)
-class UserRepositoryFireStoreTest {
+class FirestoreUserRepositoryTest {
 
   @Mock private lateinit var mockFireStore: FirebaseFirestore
   @Mock private lateinit var mockChallengeDocRef: DocumentReference // Mock for challenge
@@ -44,7 +44,7 @@ class UserRepositoryFireStoreTest {
   @Mock private lateinit var mockUserDocumentSnapshot: DocumentSnapshot
   @Mock private lateinit var mockToDoQuerySnapshot: QuerySnapshot
 
-  private lateinit var userRepositoryFireStore: UserRepositoryFireStore
+  private lateinit var firestoreUserRepository: FirestoreUserRepository
 
   // Arrange
   private val currentUserId = "currentUserId"
@@ -73,7 +73,7 @@ class UserRepositoryFireStoreTest {
       FirebaseApp.initializeApp(ApplicationProvider.getApplicationContext())
     }
 
-    userRepositoryFireStore = UserRepositoryFireStore(mockFireStore)
+    firestoreUserRepository = FirestoreUserRepository(mockFireStore)
 
     `when`(mockFireStore.collection(any())).thenReturn(mockCollectionReference)
 
@@ -98,7 +98,7 @@ class UserRepositoryFireStoreTest {
     `when`(mockToDoQuerySnapshot.documents).thenReturn(listOf())
 
     // Call the method under test
-    userRepositoryFireStore.getFriendsList(
+    firestoreUserRepository.getFriendsList(
         currentUserId,
         onSuccess = {
           // Do nothing; we just want to verify that the 'documents' field was accessed
@@ -118,7 +118,7 @@ class UserRepositoryFireStoreTest {
     `when`(mockToDoQuerySnapshot.documents).thenReturn(listOf())
 
     // Call the method under test
-    userRepositoryFireStore.getRequestsFriendsList(
+    firestoreUserRepository.getRequestsFriendsList(
         currentUserId,
         onSuccess = {
           // Do nothing; we just want to verify that the 'documents' field was accessed
@@ -138,7 +138,7 @@ class UserRepositoryFireStoreTest {
     `when`(mockToDoQuerySnapshot.documents).thenReturn(listOf())
 
     // Call the method under test
-    userRepositoryFireStore.getUserName(
+    firestoreUserRepository.getUserName(
         currentUserId,
         onSuccess = {
           // Do nothing; we just want to verify that the 'documents' field was accessed
@@ -158,7 +158,7 @@ class UserRepositoryFireStoreTest {
     `when`(mockToDoQuerySnapshot.documents).thenReturn(listOf())
 
     // Call the method under test
-    userRepositoryFireStore.getProfilePictureUrl(
+    firestoreUserRepository.getProfilePictureUrl(
         currentUserId,
         onSuccess = {
           // Do nothing; we just want to verify that the 'documents' field was accessed
@@ -179,7 +179,7 @@ class UserRepositoryFireStoreTest {
     val onSuccess: () -> Unit = { successCallbackCalled = true }
 
     // Act
-    userRepositoryFireStore.updateUserName(
+    firestoreUserRepository.updateUserName(
         currentUserId, newName, onSuccess, onFailure = { fail(noFailure) })
 
     // Idle the main looper to process the tasks
@@ -208,7 +208,7 @@ class UserRepositoryFireStoreTest {
     }
 
     // Act
-    userRepositoryFireStore.updateUserName(
+    firestoreUserRepository.updateUserName(
         currentUserId, newName, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
 
     // Idle the main looper to process the tasks
@@ -252,7 +252,7 @@ class UserRepositoryFireStoreTest {
     }
 
     // Act
-    userRepositoryFireStore.getUserById(
+    firestoreUserRepository.getUserById(
         currentUserId, onSuccess = onSuccess, onFailure = { fail(noFailure) })
 
     // Idle the main looper to process the tasks
@@ -284,7 +284,7 @@ class UserRepositoryFireStoreTest {
     }
 
     // Act
-    userRepositoryFireStore.getUserById(
+    firestoreUserRepository.getUserById(
         currentUserId, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
 
     // Idle the main looper to process the tasks
@@ -312,7 +312,7 @@ class UserRepositoryFireStoreTest {
     }
 
     // Act
-    userRepositoryFireStore.getUserById(
+    firestoreUserRepository.getUserById(
         currentUserId, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
 
     // Idle the main looper to process the tasks
@@ -333,7 +333,7 @@ class UserRepositoryFireStoreTest {
         .thenReturn(Tasks.forResult(null)) // Simulate success for updates
 
     // Act
-    userRepositoryFireStore.sendFriendRequest(
+    firestoreUserRepository.sendFriendRequest(
         currentUserId, friendUserId, onSuccess = {}, onFailure = {})
 
     // Idle the main looper to process the tasks
@@ -360,7 +360,7 @@ class UserRepositoryFireStoreTest {
     }
 
     // Act
-    userRepositoryFireStore.sendFriendRequest(
+    firestoreUserRepository.sendFriendRequest(
         currentUserId, friendUserId, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
 
     // Idle the main looper to process the tasks
@@ -384,7 +384,7 @@ class UserRepositoryFireStoreTest {
         .thenReturn(Tasks.forResult(null)) // Simulate success for updates
 
     // Act
-    userRepositoryFireStore.acceptFriendRequest(
+    firestoreUserRepository.acceptFriendRequest(
         currentUserId, friendUserId, onSuccess = {}, onFailure = {})
 
     // Idle the main looper to process the tasks
@@ -419,7 +419,7 @@ class UserRepositoryFireStoreTest {
     }
 
     // Act
-    userRepositoryFireStore.acceptFriendRequest(
+    firestoreUserRepository.acceptFriendRequest(
         currentUserId, friendUserId, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
 
     // Idle the main looper to process the tasks
@@ -448,7 +448,7 @@ class UserRepositoryFireStoreTest {
         .thenReturn(Tasks.forResult(null)) // Simulate success for updates
 
     // Act
-    userRepositoryFireStore.declineFriendRequest(
+    firestoreUserRepository.declineFriendRequest(
         currentUserId, friendUserId, onSuccess = {}, onFailure = {})
 
     // Idle the main looper to process the tasks
@@ -475,7 +475,7 @@ class UserRepositoryFireStoreTest {
     }
 
     // Act
-    userRepositoryFireStore.declineFriendRequest(
+    firestoreUserRepository.declineFriendRequest(
         currentUserId, friendUserId, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
 
     // Idle the main looper to process the tasks
@@ -499,7 +499,7 @@ class UserRepositoryFireStoreTest {
         .thenReturn(Tasks.forResult(null)) // Simulate success for updates
 
     // Act
-    userRepositoryFireStore.removeFriend(
+    firestoreUserRepository.removeFriend(
         currentUserId, friendUserId, onSuccess = {}, onFailure = {})
 
     // Idle the main looper to process the tasks
@@ -531,7 +531,7 @@ class UserRepositoryFireStoreTest {
     }
 
     // Act
-    userRepositoryFireStore.removeFriend(
+    firestoreUserRepository.removeFriend(
         currentUserId, friendUserId, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
 
     // Idle the main looper to process the tasks
@@ -550,7 +550,7 @@ class UserRepositoryFireStoreTest {
   @Test
   fun addOngoingChallenge_shouldUpdateFireStoreDocuments() {
     // Act
-    userRepositoryFireStore.addOngoingChallenge(
+    firestoreUserRepository.addOngoingChallenge(
         currentUserId, challengeId1, onSuccess = {}, onFailure = { fail(noFailure) })
 
     // Idle the main looper to process the tasks
@@ -577,7 +577,7 @@ class UserRepositoryFireStoreTest {
     }
 
     // Act
-    userRepositoryFireStore.addOngoingChallenge(
+    firestoreUserRepository.addOngoingChallenge(
         currentUserId, challengeId1, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
 
     // Idle the main looper to process the tasks
@@ -590,7 +590,7 @@ class UserRepositoryFireStoreTest {
   @Test
   fun removeOngoingChallenge_shouldUpdateFireStoreDocuments() {
     // Act
-    userRepositoryFireStore.removeOngoingChallenge(
+    firestoreUserRepository.removeOngoingChallenge(
         currentUserId, challengeId1, onSuccess = {}, onFailure = { fail(noFailure) })
 
     // Idle the main looper to process the tasks
@@ -617,7 +617,7 @@ class UserRepositoryFireStoreTest {
     }
 
     // Act
-    userRepositoryFireStore.removeOngoingChallenge(
+    firestoreUserRepository.removeOngoingChallenge(
         currentUserId, challengeId1, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
 
     // Idle the main looper to process the tasks
@@ -641,7 +641,7 @@ class UserRepositoryFireStoreTest {
     }
 
     // Act
-    userRepositoryFireStore.getOngoingChallenges(
+    firestoreUserRepository.getOngoingChallenges(
         currentUserId, onSuccess, onFailure = { fail(noFailure) })
 
     // Idle the main looper to process the tasks
@@ -669,7 +669,7 @@ class UserRepositoryFireStoreTest {
     }
 
     // Act
-    userRepositoryFireStore.getOngoingChallenges(
+    firestoreUserRepository.getOngoingChallenges(
         currentUserId, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
 
     // Idle the main looper to process the tasks
@@ -688,7 +688,7 @@ class UserRepositoryFireStoreTest {
     `when`(mockToDoQuerySnapshot.documents).thenReturn(listOf())
 
     // Call the method under test
-    userRepositoryFireStore.getStreak(
+    firestoreUserRepository.getStreak(
         currentUserId,
         onSuccess = {
           // Do nothing; we just want to verify that the 'documents' field was accessed
@@ -717,7 +717,7 @@ class UserRepositoryFireStoreTest {
     val onSuccess: () -> Unit = { successCallbackCalled = true }
 
     // Act: Call the method under test
-    userRepositoryFireStore.updateStreak(
+    firestoreUserRepository.updateStreak(
         currentUserId, onSuccess = onSuccess, onFailure = { fail(noFailure) })
 
     // Idle the main looper to process the tasks
@@ -758,7 +758,7 @@ class UserRepositoryFireStoreTest {
     val onSuccess: () -> Unit = { successCallbackCalled = true }
 
     // Act: Call the method under test
-    userRepositoryFireStore.updateStreak(
+    firestoreUserRepository.updateStreak(
         currentUserId, onSuccess = onSuccess, onFailure = { fail(noFailure) })
 
     // Idle the main looper to process the tasks
@@ -792,7 +792,7 @@ class UserRepositoryFireStoreTest {
     val onSuccess: () -> Unit = { successCallbackCalled = true }
 
     // Act: Call the method under test
-    userRepositoryFireStore.updateStreak(
+    firestoreUserRepository.updateStreak(
         currentUserId, onSuccess = onSuccess, onFailure = { fail(noFailure) })
 
     // Idle the main looper to process the tasks
@@ -821,7 +821,7 @@ class UserRepositoryFireStoreTest {
     }
 
     // Act
-    userRepositoryFireStore.getOngoingChallenges(
+    firestoreUserRepository.getOngoingChallenges(
         currentUserId, onSuccess = onSuccess, onFailure = { fail(noFailure) })
 
     // Idle the main looper
@@ -847,7 +847,7 @@ class UserRepositoryFireStoreTest {
     }
 
     // Act
-    userRepositoryFireStore.getOngoingChallenges(
+    firestoreUserRepository.getOngoingChallenges(
         currentUserId, onSuccess = onSuccess, onFailure = { fail(noFailure) })
 
     // Idle the main looper
@@ -872,7 +872,7 @@ class UserRepositoryFireStoreTest {
     val onSuccess: () -> Unit = { successCallbackCalled = true }
 
     // Act
-    userRepositoryFireStore.setInitialQuestAccessDate(
+    firestoreUserRepository.setInitialQuestAccessDate(
         currentUserId, date, onSuccess = onSuccess, onFailure = { fail(noFailure) })
 
     // Idle the main looper
@@ -904,7 +904,7 @@ class UserRepositoryFireStoreTest {
     }
 
     // Act
-    userRepositoryFireStore.setInitialQuestAccessDate(
+    firestoreUserRepository.setInitialQuestAccessDate(
         currentUserId, date, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
 
     // Idle the main looper
@@ -931,7 +931,7 @@ class UserRepositoryFireStoreTest {
     }
 
     // Act
-    userRepositoryFireStore.updateStreak(
+    firestoreUserRepository.updateStreak(
         currentUserId, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
 
     // Idle the main looper
@@ -969,7 +969,7 @@ class UserRepositoryFireStoreTest {
     }
 
     // Act
-    userRepositoryFireStore.updateStreak(
+    firestoreUserRepository.updateStreak(
         currentUserId, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
 
     // Idle the main looper

@@ -30,7 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.github.se.signify.R
 import com.github.se.signify.model.common.getIconResId
-import com.github.se.signify.model.home.hand.HandLandMarkViewModel
+import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.CameraBox
@@ -43,7 +43,7 @@ import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
  */
 @Composable
 fun ASLRecognition(
-    handLandMarkViewModel: HandLandMarkViewModel,
+    handLandMarkViewModel: HandLandmarkViewModel,
     navigationActions: NavigationActions
 ) {
   val buttonUriString = stringResource(id = R.string.button_uri_string)
@@ -84,7 +84,7 @@ fun ASLRecognition(
  * gesture image.
  */
 @Composable
-fun GestureOverlayView(handLandMarkViewModel: HandLandMarkViewModel) {
+fun GestureOverlayView(handLandMarkViewModel: HandLandmarkViewModel) {
   val landmarksState = handLandMarkViewModel.landMarks().collectAsState()
   val detectedGesture = handLandMarkViewModel.getSolution()
 

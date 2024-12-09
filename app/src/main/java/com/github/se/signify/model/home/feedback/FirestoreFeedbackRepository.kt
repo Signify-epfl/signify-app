@@ -3,7 +3,7 @@ package com.github.se.signify.model.home.feedback
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 
-class FeedbackRepositoryFireStore(private val db: FirebaseFirestore) : FeedbackRepository {
+class FirestoreFeedbackRepository(private val db: FirebaseFirestore) : FeedbackRepository {
 
   private val collectionPath = "feedback"
 

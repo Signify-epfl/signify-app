@@ -12,7 +12,7 @@ import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.dependencyInjection.AppDependencyProvider
 import com.github.se.signify.model.home.exercise.ExerciseLevel
-import com.github.se.signify.model.home.hand.HandLandMarkViewModel
+import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.profile.stats.StatsRepository
 import org.junit.Before
@@ -32,7 +32,7 @@ class ExerciseScreenTest {
   val cameraAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
 
   private lateinit var mockNavigationActions: NavigationActions
-  private lateinit var handLandMarkViewModel: HandLandMarkViewModel
+  private lateinit var handLandMarkViewModel: HandLandmarkViewModel
   private lateinit var userSession: UserSession
   private lateinit var statsRepository: StatsRepository
 
@@ -40,7 +40,7 @@ class ExerciseScreenTest {
   fun setup() {
     val context = mock(Context::class.java)
     val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
-    handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
+    handLandMarkViewModel = HandLandmarkViewModel(handLandMarkImplementation, context)
     mockNavigationActions = mock(NavigationActions::class.java)
     userSession = MockUserSession()
     statsRepository = mock(StatsRepository::class.java)

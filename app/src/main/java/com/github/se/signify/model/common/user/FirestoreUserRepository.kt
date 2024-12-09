@@ -10,7 +10,7 @@ import com.google.firebase.storage.FirebaseStorage
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
-class UserRepositoryFireStore(
+class FirestoreUserRepository(
     private val db: FirebaseFirestore,
     store: FirebaseStorage = FirebaseStorage.getInstance()
 ) : UserRepository {

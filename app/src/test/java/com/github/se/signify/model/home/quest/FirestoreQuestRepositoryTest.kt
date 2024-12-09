@@ -32,7 +32,7 @@ import org.mockito.kotlin.argumentCaptor
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class QuestRepositoryFirestoreTest {
+class FirestoreQuestRepositoryTest {
   @Mock private lateinit var mockFirestore: FirebaseFirestore
   @Mock private lateinit var mockDocumentReference: DocumentReference
   @Mock private lateinit var mockCollectionReference: CollectionReference
@@ -43,7 +43,7 @@ class QuestRepositoryFirestoreTest {
   private lateinit var mockAuth: FirebaseAuth
   private lateinit var mockUser: FirebaseUser
 
-  private lateinit var questRepositoryFirestore: QuestRepositoryFireStore
+  private lateinit var firestoreQuestRepositoryFirestore: FirestoreQuestRepository
   @Captor private lateinit var captor: ArgumentCaptor<OnCompleteListener<QuerySnapshot>>
 
   @Before
@@ -55,7 +55,7 @@ class QuestRepositoryFirestoreTest {
       FirebaseApp.initializeApp(ApplicationProvider.getApplicationContext())
     }
 
-    questRepositoryFirestore = QuestRepositoryFireStore(mockFirestore)
+    firestoreQuestRepositoryFirestore = FirestoreQuestRepository(mockFirestore)
 
     `when`(mockFirestore.collection(any())).thenReturn(mockCollectionReference)
     `when`(mockCollectionReference.document(any())).thenReturn(mockDocumentReference)
@@ -82,7 +82,7 @@ class QuestRepositoryFirestoreTest {
 
       // Act & Assert
       var callbackTriggered = false
-      questRepositoryFirestore.init {
+      firestoreQuestRepositoryFirestore.init {
         callbackTriggered = true // Set flag if onSuccess is triggered
       }
 
@@ -107,7 +107,7 @@ class QuestRepositoryFirestoreTest {
 
       // Act & Assert
       var callbackTriggered = false
-      questRepositoryFirestore.init {
+      firestoreQuestRepositoryFirestore.init {
         callbackTriggered = true // Set flag if onSuccess is triggered
       }
 
@@ -129,7 +129,7 @@ class QuestRepositoryFirestoreTest {
     `when`(mockDocument.getString("description")).thenReturn("Quest Description")
     `when`(mockDocument.getString("index")).thenReturn("1")
 
-    val quest = questRepositoryFirestore.documentToQuest(mockDocument)
+    val quest = firestoreQuestRepositoryFirestore.documentToQuest(mockDocument)
 
     assertEquals("Quest Title", quest?.title)
     assertEquals("Quest Description", quest?.description)
@@ -143,7 +143,7 @@ class QuestRepositoryFirestoreTest {
     `when`(mockDocument.getString("description")).thenReturn("Quest Description")
     `when`(mockDocument.getString("index")).thenReturn("1")
 
-    val quest = questRepositoryFirestore.documentToQuest(mockDocument)
+    val quest = firestoreQuestRepositoryFirestore.documentToQuest(mockDocument)
 
     assertNull(quest)
   }
@@ -155,7 +155,7 @@ class QuestRepositoryFirestoreTest {
     `when`(mockDocument.getString("description")).thenReturn("Quest Description")
     `when`(mockDocument.getString("index")).thenReturn(null) // Missing index
 
-    val quest = questRepositoryFirestore.documentToQuest(mockDocument)
+    val quest = firestoreQuestRepositoryFirestore.documentToQuest(mockDocument)
 
     assertNull(quest)
   }
@@ -167,7 +167,7 @@ class QuestRepositoryFirestoreTest {
     `when`(mockDocument.getString("description")).thenReturn(null) // Missing description
     `when`(mockDocument.getString("index")).thenReturn("1")
 
-    val quest = questRepositoryFirestore.documentToQuest(mockDocument)
+    val quest = firestoreQuestRepositoryFirestore.documentToQuest(mockDocument)
 
     assertNull(quest)
   }
@@ -179,7 +179,7 @@ class QuestRepositoryFirestoreTest {
     `when`(mockDocument.getString(any())).thenThrow(RuntimeException("Test Exception"))
 
     // Act
-    val quest = questRepositoryFirestore.documentToQuest(mockDocument)
+    val quest = firestoreQuestRepositoryFirestore.documentToQuest(mockDocument)
 
     // Assert
     assertNull(quest)
@@ -208,7 +208,7 @@ class QuestRepositoryFirestoreTest {
     `when`(mockCollectionReference.get()).thenReturn(Tasks.forResult(mockQuestQuerySnapshot))
 
     // Act & Assert
-    questRepositoryFirestore.getDailyQuest(
+    firestoreQuestRepositoryFirestore.getDailyQuest(
         onSuccess = { quests ->
           // Assert: Verify that quests are sorted by index
           assertEquals(3, quests.size)
@@ -226,7 +226,7 @@ class QuestRepositoryFirestoreTest {
     `when`(mockCollectionReference.get()).thenReturn(Tasks.forResult(mockQuestQuerySnapshot))
 
     // Act & Assert
-    questRepositoryFirestore.getDailyQuest(
+    firestoreQuestRepositoryFirestore.getDailyQuest(
         onSuccess = { quests ->
           // Assert: Verify that an empty list is returned
           assertEquals(0, quests.size)
@@ -240,7 +240,7 @@ class QuestRepositoryFirestoreTest {
     `when`(mockCollectionReference.get()).thenReturn(Tasks.forResult(null))
 
     // Act & Assert
-    questRepositoryFirestore.getDailyQuest(
+    firestoreQuestRepositoryFirestore.getDailyQuest(
         onSuccess = { quests ->
           // Assert: Verify that an empty list is returned when task result is null
           assertEquals(0, quests.size)
@@ -258,7 +258,7 @@ class QuestRepositoryFirestoreTest {
     `when`(mockQuestQuerySnapshot.documents).thenReturn(listOf())
 
     // Act
-    questRepositoryFirestore.getDailyQuest(
+    firestoreQuestRepositoryFirestore.getDailyQuest(
         onSuccess = { quests ->
           // Assert: Verify quests are sorted by index
           assertEquals(0, quests.size)
@@ -277,7 +277,7 @@ class QuestRepositoryFirestoreTest {
     `when`(mockTask.isSuccessful).thenReturn(false)
     `when`(mockTask.exception).thenReturn(Exception("Firestore error"))
 
-    questRepositoryFirestore.getDailyQuest(
+    firestoreQuestRepositoryFirestore.getDailyQuest(
         onSuccess = { fail("Expected failure but got success.") },
         onFailure = { error -> assertEquals("Firestore error", error.message) })
 

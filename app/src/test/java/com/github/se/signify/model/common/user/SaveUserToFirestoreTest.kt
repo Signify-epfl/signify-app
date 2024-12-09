@@ -28,7 +28,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 
 @RunWith(RobolectricTestRunner::class)
-class SaveUserToFireStoreTest {
+class SaveUserToFirestoreTest {
 
   @Mock private lateinit var mockAuth: FirebaseAuth
   @Mock private lateinit var mockCurrentUser: FirebaseUser
@@ -82,7 +82,7 @@ class SaveUserToFireStoreTest {
     `when`(mockDocumentReference.set(any(), eq(SetOptions.merge()))).thenReturn(mockSetTask)
 
     // Act
-    saveUserToFireStore()
+    saveUserToFirestore()
 
     // Idle the main looper to process tasks
     shadowOf(Looper.getMainLooper()).idle()
@@ -104,7 +104,7 @@ class SaveUserToFireStoreTest {
     `when`(mockGetTask.result).thenReturn(mockDocumentSnapshot)
 
     // Act
-    saveUserToFireStore()
+    saveUserToFirestore()
 
     // Idle the main looper to process tasks
     shadowOf(Looper.getMainLooper()).idle()
@@ -119,7 +119,7 @@ class SaveUserToFireStoreTest {
     `when`(mockAuth.currentUser).thenReturn(null) // Simulate no user logged in
 
     // Act
-    saveUserToFireStore()
+    saveUserToFirestore()
 
     // Verify that the error is logged
     // (Since we cannot easily verify logs, we focus on ensuring no Firestore interaction occurs)

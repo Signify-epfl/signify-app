@@ -5,7 +5,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
-class StatsRepositoryFirestore(private val db: FirebaseFirestore) : StatsRepository {
+class FirestoreStatsRepository(private val db: FirebaseFirestore) : StatsRepository {
 
   private val collectionPath = "stats"
 

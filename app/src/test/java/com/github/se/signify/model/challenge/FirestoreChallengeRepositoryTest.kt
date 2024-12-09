@@ -4,7 +4,12 @@ import android.os.Looper
 import androidx.test.core.app.ApplicationProvider
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.FirebaseApp
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.WriteBatch
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import junit.framework.TestCase.fail
@@ -22,7 +27,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 
 @RunWith(RobolectricTestRunner::class)
-class ChallengeRepositoryFireStoreTest {
+class FirestoreChallengeRepositoryTest {
 
   @Mock private lateinit var mockFirestore: FirebaseFirestore
 
@@ -32,7 +37,7 @@ class ChallengeRepositoryFireStoreTest {
 
   @Mock private lateinit var mockBatch: WriteBatch
 
-  private lateinit var challengeRepositoryFireStore: ChallengeRepositoryFireStore
+  private lateinit var firestoreChallengeRepository: FirestoreChallengeRepository
 
   private val challengeId = "challengeId"
 
@@ -69,7 +74,7 @@ class ChallengeRepositoryFireStoreTest {
     `when`(mockBatch.set(eq(mockPlayer2DocRef), any<Challenge>(), any<SetOptions>()))
         .thenReturn(mockBatch)
 
-    challengeRepositoryFireStore = ChallengeRepositoryFireStore(mockFirestore)
+    firestoreChallengeRepository = FirestoreChallengeRepository(mockFirestore)
   }
 
   @Test
@@ -77,7 +82,7 @@ class ChallengeRepositoryFireStoreTest {
     `when`(mockChallengeDocRef.delete()).thenReturn(Tasks.forResult(null))
 
     var successCalled = false
-    challengeRepositoryFireStore.deleteChallenge(
+    firestoreChallengeRepository.deleteChallenge(
         challengeId = challengeId,
         onSuccess = { successCalled = true },
         onFailure = { fail("Failure callback should not be called") })
@@ -94,7 +99,7 @@ class ChallengeRepositoryFireStoreTest {
     `when`(mockChallengeDocRef.delete()).thenReturn(Tasks.forException(exception))
 
     var failureCalled = false
-    challengeRepositoryFireStore.deleteChallenge(
+    firestoreChallengeRepository.deleteChallenge(
         challengeId = challengeId,
         onSuccess = { fail("Success callback should not be called") },
         onFailure = {
@@ -117,7 +122,7 @@ class ChallengeRepositoryFireStoreTest {
     `when`(mockBatch.commit()).thenReturn(mockTask)
 
     var failureCalled = false
-    challengeRepositoryFireStore.sendChallengeRequest(
+    firestoreChallengeRepository.sendChallengeRequest(
         player1Id = "player1",
         player2Id = "player2",
         mode = ChallengeMode.CHRONO,
@@ -143,7 +148,7 @@ class ChallengeRepositoryFireStoreTest {
     `when`(mockChallengeDocRef.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot))
 
     var successChallenge: Challenge? = null
-    challengeRepositoryFireStore.getChallengeById(
+    firestoreChallengeRepository.getChallengeById(
         challengeId = challengeId,
         onSuccess = { successChallenge = it },
         onFailure = { fail("Failure callback should not be called") })
@@ -160,7 +165,7 @@ class ChallengeRepositoryFireStoreTest {
     `when`(mockChallengeDocRef.get()).thenReturn(Tasks.forException(exception))
 
     var failureCalled = false
-    challengeRepositoryFireStore.getChallengeById(
+    firestoreChallengeRepository.getChallengeById(
         challengeId = challengeId,
         onSuccess = { fail("Success callback should not be called") },
         onFailure = {
@@ -180,7 +185,7 @@ class ChallengeRepositoryFireStoreTest {
     `when`(mockChallengeDocRef.set(updatedChallenge)).thenReturn(Tasks.forResult(null))
 
     var successCalled = false
-    challengeRepositoryFireStore.updateChallenge(
+    firestoreChallengeRepository.updateChallenge(
         updatedChallenge = updatedChallenge,
         onSuccess = { successCalled = true },
         onFailure = { fail("Failure callback should not be called") })
@@ -198,7 +203,7 @@ class ChallengeRepositoryFireStoreTest {
     `when`(mockChallengeDocRef.set(updatedChallenge)).thenReturn(Tasks.forException(exception))
 
     var failureCalled = false
-    challengeRepositoryFireStore.updateChallenge(
+    firestoreChallengeRepository.updateChallenge(
         updatedChallenge = updatedChallenge,
         onSuccess = { fail("Success callback should not be called") },
         onFailure = {
@@ -219,7 +224,7 @@ class ChallengeRepositoryFireStoreTest {
     `when`(mockChallengeDocRef.update("playerTime", timeTaken)).thenReturn(Tasks.forResult(null))
 
     var successCalled = false
-    challengeRepositoryFireStore.recordPlayerTime(
+    firestoreChallengeRepository.recordPlayerTime(
         challengeId = challengeId,
         playerId = playerId,
         timeTaken = timeTaken,
@@ -241,7 +246,7 @@ class ChallengeRepositoryFireStoreTest {
         .thenReturn(Tasks.forException(exception))
 
     var failureCalled = false
-    challengeRepositoryFireStore.recordPlayerTime(
+    firestoreChallengeRepository.recordPlayerTime(
         challengeId = challengeId,
         playerId = playerId,
         timeTaken = timeTaken,

@@ -11,7 +11,7 @@ import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarkerResult
  * landmark processing and gesture recognition, exposing methods to process images and obtain
  * results.
  */
-interface HandLandMarkRepository {
+interface HandLandmarkRepository {
 
   /**
    * Initializes the HandLandmarker with the provided context. Handles success and failure callbacks

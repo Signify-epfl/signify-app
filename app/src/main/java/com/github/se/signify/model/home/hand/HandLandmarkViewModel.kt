@@ -21,8 +21,8 @@ import kotlinx.coroutines.launch
  * @property context The application context used to initialize the repository.
  */
 @Suppress("KDocUnresolvedReference")
-class HandLandMarkViewModel(
-    private val handLandMarkRepository: HandLandMarkRepository,
+class HandLandmarkViewModel(
+    private val handLandMarkRepository: HandLandmarkRepository,
     context: Context
 ) : ViewModel() {
 
@@ -79,26 +79,26 @@ class HandLandMarkViewModel(
   fun landMarks(): StateFlow<List<NormalizedLandmark>?> = handLandmarks
 
   /**
-   * Provides a factory for creating instances of [HandLandMarkViewModel].
+   * Provides a factory for creating instances of [HandLandmarkViewModel].
    *
    * This function returns a [ViewModelProvider.Factory] object which is used to create instances of
-   * the [HandLandMarkViewModel] class, injecting the required dependencies.
+   * the [HandLandmarkViewModel] class, injecting the required dependencies.
    *
    * @param context The [Context] required by the ViewModel, used for accessing resources and other
    *   application-specific functionality.
    * @param handLandMarkRepository The repository for accessing hand landmark data, used by the
    *   ViewModel to interact with data sources.
-   * @return A [ViewModelProvider.Factory] object to create the [HandLandMarkViewModel] instances.
+   * @return A [ViewModelProvider.Factory] object to create the [HandLandmarkViewModel] instances.
    */
   companion object {
     fun provideFactory(
         context: Context,
-        handLandMarkRepository: HandLandMarkRepository
+        handLandMarkRepository: HandLandmarkRepository
     ): ViewModelProvider.Factory =
         object : ViewModelProvider.Factory {
           @Suppress("UNCHECKED_CAST")
           override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return HandLandMarkViewModel(handLandMarkRepository, context) as T
+            return HandLandmarkViewModel(handLandMarkRepository, context) as T
           }
         }
   }

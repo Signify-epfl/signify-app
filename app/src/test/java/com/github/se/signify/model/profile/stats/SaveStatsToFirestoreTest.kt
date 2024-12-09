@@ -25,7 +25,7 @@ import org.mockito.kotlin.verify
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class SaveStatsToFireStoreTest {
+class SaveStatsToFirestoreTest {
 
   @Mock private lateinit var mockAuth: FirebaseAuth
   @Mock private lateinit var mockCurrentUser: FirebaseUser
