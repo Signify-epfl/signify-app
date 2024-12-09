@@ -106,8 +106,8 @@ fun QuestBox(quest: Quest, isUnlocked: Boolean) {
               shape = RoundedCornerShape(50),
               enabled = isUnlocked) {
                 Text(
-                    if (isUnlocked) stringResource(R.string.open_quest_button)
-                    else stringResource(R.string.closed_quest_button))
+                    if (isUnlocked) stringResource(R.string.open_quest_button_text)
+                    else stringResource(R.string.closed_quest_button_text))
               }
         }
       }
@@ -178,7 +178,7 @@ fun QuestTitle() {
               .background(MaterialTheme.colorScheme.background)
               .padding(horizontal = 16.dp, vertical = 8.dp)) {
         Text(
-            text = stringResource(R.string.quest_screen_title),
+            text = stringResource(R.string.quest_screen_title_text),
             fontWeight = FontWeight.Bold,
             fontSize = 25.sp,
             color = MaterialTheme.colorScheme.primary)
