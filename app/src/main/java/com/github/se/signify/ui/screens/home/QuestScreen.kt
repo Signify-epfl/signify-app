@@ -152,7 +152,7 @@ fun QuestDescriptionDialog(quest: Quest, onDismiss: () -> Unit) {
       containerColor = MaterialTheme.colorScheme.background,
       title = {
         Text(
-            text = "$quest.title $inSignLanguageText",
+            text = "${quest.title} $inSignLanguageText",
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
             color = MaterialTheme.colorScheme.primary)
