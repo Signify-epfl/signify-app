@@ -36,32 +36,44 @@ class MockChallengeRepository : ChallengeRepository {
     challenges.clear()
   }
 
-  override fun sendChallengeRequest(
-      player1Id: String,
-      player2Id: String,
-      mode: ChallengeMode,
-      challengeId: String,
-      onSuccess: () -> Unit,
-      onFailure: (Exception) -> Unit
-  ) {
-    val newChallenge =
-        Challenge(
+    override fun sendChallengeRequest(
+        player1Id: String,
+        player2Id: String,
+        mode: ChallengeMode,
+        challengeId: String,
+        roundWords: List<String>,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+
+
+        val newChallenge = Challenge(
             challengeId = challengeId,
             player1 = player1Id,
             player2 = player2Id,
             mode = mode.name,
-            status = "pending")
-    // track all calls, even unsuccessful ones
-    sendChallengeCalls.add(newChallenge)
-    if (!shouldSucceed) {
-      onFailure(exceptionToThrow)
-    } else {
-      challenges[challengeId] = newChallenge
-      onSuccess()
-    }
-  }
+            status = "pending",
+            round = 1,
+            roundWords = roundWords,
+            player1Times = mutableListOf(),
+            player2Times = mutableListOf(),
+            player1RoundCompleted = MutableList(3) { false }, // 3 rounds, all uncompleted initially
+            player2RoundCompleted = MutableList(3) { false },
+            gameStatus = "not_started"
+        )
 
-  override fun deleteChallenge(
+        // Track all calls, even unsuccessful ones
+        sendChallengeCalls.add(newChallenge)
+        if (!shouldSucceed) {
+            onFailure(exceptionToThrow)
+        } else {
+            challenges[challengeId] = newChallenge
+            onSuccess()
+        }
+    }
+
+
+    override fun deleteChallenge(
       challengeId: String,
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit

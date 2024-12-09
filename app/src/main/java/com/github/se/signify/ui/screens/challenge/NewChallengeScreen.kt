@@ -132,13 +132,14 @@ fun NewChallengeScreen(
                                     challengeViewModel.deleteChallenge(challenge.challengeId)
                                   },
                                   onPlayClick = {
-                                    Log.d(
-                                        "Navigation",
-                                        "Navigating with challengeId: ${challenge.challengeId}")
-                                    navigationActions.navigateTo(
-                                        Screen.CHRONO_CHALLENGE,
-                                        params = mapOf("challengeId" to challenge.challengeId))
-                                  },
+                                      val destination = when (challenge.mode) {
+                                          "CHRONO" -> Screen.CHRONO_CHALLENGE
+                                          else -> Screen.SPRINT_CHALLENGE
+                                      }
+                                      navigationActions.navigateTo(destination, params = mapOf("challengeId" to challenge.challengeId))
+                                  }
+
+                                  ,
                                   userSession = userSession,
                                   modifier = Modifier.testTag("OngoingChallengeCard$index"))
                             }

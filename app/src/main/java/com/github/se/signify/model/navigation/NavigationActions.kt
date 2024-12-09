@@ -1,5 +1,6 @@
 package com.github.se.signify.model.navigation
 
+import android.util.Log
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.github.se.signify.model.auth.UserSession
@@ -44,13 +45,18 @@ open class NavigationActions(
    *
    * @param screen The screen to navigate to.
    */
-  open fun navigateTo(screen: Screen, params: Map<String, String>? = null) {
-    if (screen.requiresAuth && !userSession.isLoggedIn()) {
-      onUnauthenticated()
-      return
+  fun navigateTo(screen: Screen, params: Map<String, String>? = null) {
+    val route = if (params != null) {
+      // Replace placeholders in the route with actual values
+      params.entries.fold(screen.route) { acc, entry ->
+        acc.replace("{${entry.key}}", entry.value)
+      }
+    } else {
+      screen.route
     }
-    navController.navigate(screen.route)
+    navController.navigate(route)
   }
+
 
   open fun goBack() {
     navController.popBackStack()

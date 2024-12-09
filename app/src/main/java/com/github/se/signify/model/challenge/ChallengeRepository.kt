@@ -1,11 +1,14 @@
 package com.github.se.signify.model.challenge
 
+import androidx.compose.runtime.Composable
+
 interface ChallengeRepository {
   fun sendChallengeRequest(
       player1Id: String,
       player2Id: String,
       mode: ChallengeMode,
       challengeId: String,
+      roundWords: List<String>,
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   )

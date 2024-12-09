@@ -1,5 +1,7 @@
 package com.github.se.signify.ui.screens.challenge
 
+import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,10 +29,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.se.signify.R
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.challenge.ChallengeMode
 import com.github.se.signify.model.challenge.ChallengeRepository
@@ -143,6 +147,15 @@ fun FriendCard(friendId: String, content: @Composable () -> Unit) {
   }
 }
 
+fun getWordsForMode(context: Context, mode: ChallengeMode): List<String> {
+    val allWords = context.resources.getStringArray(R.array.challenge_word_list).toList()
+    return when (mode) {
+        ChallengeMode.CHRONO -> allWords.shuffled().take(3)
+        ChallengeMode.SPRINT -> allWords.shuffled().take(25)
+    }
+}
+
+
 @Composable
 fun ChallengeModeAlertDialog(
     friendId: String,
@@ -151,62 +164,67 @@ fun ChallengeModeAlertDialog(
     userViewModel: UserViewModel,
     challengeViewModel: ChallengeViewModel
 ) {
-  val selectedMode = remember { mutableStateOf<ChallengeMode?>(null) }
-  val challengeId = remember { "${selectedMode.value ?: "challenge"}${System.currentTimeMillis()}" }
+    val context = LocalContext.current
+    val selectedMode = remember { mutableStateOf<ChallengeMode?>(null) }
+    val challengeId = remember { "${selectedMode.value ?: "challenge"}${System.currentTimeMillis()}" }
 
-  AlertDialog(
-      onDismissRequest = onDismiss,
-      confirmButton = {
-        TextButton(
-            onClick = {
-              if (selectedMode.value != null) {
-                // Create the challenge in the challenges collection
-                challengeViewModel.sendChallengeRequest(friendId, selectedMode.value!!, challengeId)
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    if (selectedMode.value != null) {
+                        val words = getWordsForMode(context, selectedMode.value!!)
+                        challengeViewModel.sendChallengeRequest(
+                            friendId = friendId,
+                            mode = selectedMode.value!!,
+                            challengeId = challengeId,
+                            roundWords = words
+                        )
+                        userViewModel.addOngoingChallenge(userSession.getUserId()!!, challengeId)
+                        userViewModel.addOngoingChallenge(friendId, challengeId)
+                        onDismiss()
+                    }
+                },
+                testTag = "SendChallengeButton",
+                text = "Send Challenge",
+                backgroundColor = MaterialTheme.colorScheme.primary,
+                textColor = MaterialTheme.colorScheme.onPrimary,
+                enabled = selectedMode.value != null,
+            )
 
-                // Add the challenge to the users' ongoing challenges
-                userViewModel.addOngoingChallenge(userSession.getUserId()!!, challengeId)
-                userViewModel.addOngoingChallenge(friendId, challengeId)
-
-                onDismiss() // Close the dialog after creating the challenge
-              }
-            },
-            testTag = "SendChallengeButton",
-            text = "Send Challenge",
-            backgroundColor = MaterialTheme.colorScheme.primary,
-            textColor = MaterialTheme.colorScheme.onPrimary,
-            enabled = selectedMode.value != null,
-        )
-      },
-      dismissButton = {
-        TextButton(
-            onClick = onDismiss,
-            testTag = "CancelButton",
-            text = "Cancel",
-            backgroundColor = MaterialTheme.colorScheme.surface,
-            textColor = MaterialTheme.colorScheme.onSurface,
-        )
-      },
-      title = {
-        Text(text = "Pick a Mode", modifier = Modifier.fillMaxWidth().testTag("DialogTitle"))
-      },
-      text = {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-          ChallengeMode.entries.forEach { mode ->
-            Box(Modifier.weight(1f)) {
-              ModeButton(
-                  mode = mode,
-                  selectedMode = selectedMode,
-              )
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismiss,
+                testTag = "CancelButton",
+                text = "Cancel",
+                backgroundColor = MaterialTheme.colorScheme.surface,
+                textColor = MaterialTheme.colorScheme.onSurface,
+            )
+        },
+        title = {
+            Text(text = "Pick a Mode", modifier = Modifier.fillMaxWidth().testTag("DialogTitle"))
+        },
+        text = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                ChallengeMode.entries.forEach { mode ->
+                    Box(Modifier.weight(1f)) {
+                        ModeButton(
+                            mode = mode,
+                            selectedMode = selectedMode,
+                        )
+                    }
+                }
             }
-          }
-        }
-      },
-      containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
-  )
+        },
+        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+    )
 }
+
 
 @Composable
 fun ModeButton(

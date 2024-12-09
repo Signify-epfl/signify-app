@@ -37,6 +37,7 @@ import com.github.se.signify.ui.screens.challenge.ChallengeScreen
 import com.github.se.signify.ui.screens.challenge.ChronoChallengeGameScreen
 import com.github.se.signify.ui.screens.challenge.CreateAChallengeScreen
 import com.github.se.signify.ui.screens.challenge.NewChallengeScreen
+import com.github.se.signify.ui.screens.challenge.SprintChallengeGameScreen
 import com.github.se.signify.ui.screens.home.ASLRecognition
 import com.github.se.signify.ui.screens.home.ExerciseScreen
 import com.github.se.signify.ui.screens.home.FeedbackScreen
@@ -177,22 +178,38 @@ fun SignifyAppPreview(
             dependencyProvider.challengeRepository())
       }
 
-      composable(
-          route = Screen.CHRONO_CHALLENGE.route, // Define the base route with `{challengeId}`
-          arguments = listOf(navArgument("challengeId") { type = NavType.StringType })) {
-              backStackEntry ->
-            val challengeId =
-                backStackEntry.arguments?.getString("challengeId") ?: return@composable
-
-            // Pass all dependencies
+        composable(
+            route = Screen.CHRONO_CHALLENGE.route,
+            arguments = listOf(navArgument("challengeId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val challengeId = backStackEntry.arguments?.getString("challengeId") ?: return@composable
             ChronoChallengeGameScreen(
                 navigationActions = navigationActions,
                 userSession = dependencyProvider.userSession(),
                 challengeRepository = dependencyProvider.challengeRepository(),
                 handLandMarkViewModel = handLandMarkViewModel,
-                challengeId = challengeId)
-          }
-      composable(Screen.CREATE_CHALLENGE.route) {
+                challengeId = challengeId
+            )
+        }
+
+
+        composable(
+            route = Screen.SPRINT_CHALLENGE.route,
+            arguments = listOf(navArgument("challengeId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val challengeId = backStackEntry.arguments?.getString("challengeId") ?: return@composable
+            SprintChallengeGameScreen(
+                navigationActions = navigationActions,
+                userSession = dependencyProvider.userSession(),
+                challengeRepository = dependencyProvider.challengeRepository(),
+                handLandMarkViewModel = handLandMarkViewModel,
+                challengeId = challengeId
+            )
+        }
+
+
+
+        composable(Screen.CREATE_CHALLENGE.route) {
         CreateAChallengeScreen(
             navigationActions,
             dependencyProvider.userSession(),
