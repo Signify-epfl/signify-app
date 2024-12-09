@@ -9,13 +9,11 @@ import org.junit.Test
 
 class ProfileTest {
   @get:Rule val composeTestRule = createComposeRule()
-
   private val picturePath = "picturePath.jpg"
 
   @Test
   fun profilePictureIsDisplayed() {
     composeTestRule.setContent { ProfilePicture(picturePath) }
-
     composeTestRule.onNodeWithTag("ProfilePicture").assertExists()
   }
 
@@ -24,7 +22,6 @@ class ProfileTest {
     val userId = "userId"
     val userName = "userName"
     composeTestRule.setContent { AccountInformation(userId, userName, picturePath, 10) }
-
     composeTestRule.onNodeWithTag("UserInfo").assertIsDisplayed()
     composeTestRule.onNodeWithTag("UserId").assertIsDisplayed()
     composeTestRule.onNodeWithTag("UserId").assertTextEquals(userId)

@@ -35,21 +35,20 @@ import com.github.se.signify.ui.common.TextButton
  */
 @Composable
 fun UnauthenticatedScreen(navigationActions: NavigationActions) {
+  val offlineModeText = stringResource(R.string.offline_mode_text)
+  val offModeText = stringResource(R.string.off_mode_text)
+
   MainScreenScaffold(
       navigationActions = navigationActions,
       testTag = "UnauthenticatedScreen",
-      helpTitle = "Offline Mode",
-      helpText = stringResource(R.string.help_offline_mode)) {
+      helpTitle = offModeText,
+      helpText = stringResource(R.string.help_offline_mode_text)) {
         Column(
-            modifier =
-                Modifier.fillMaxSize()
-                    .background(Color.White) // White background
-                    .padding(16.dp),
+            modifier = Modifier.fillMaxSize().background(Color.White).padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center) {
-              // "You are offline" text
               Text(
-                  text = "You are not logged in",
+                  text = offlineModeText,
                   style =
                       TextStyle(
                           fontSize = 24.sp,
@@ -67,7 +66,7 @@ fun UnauthenticatedScreen(navigationActions: NavigationActions) {
                     navigationActions.navigateTo(Screen.AUTH)
                   }, // Navigate to Screen.AUTH
                   testTag = "logInButton",
-                  text = "Log In",
+                  text = stringResource(R.string.log_in_text),
                   backgroundColor = MaterialTheme.colorScheme.primary,
                   textColor = MaterialTheme.colorScheme.onPrimary,
                   modifier = Modifier)

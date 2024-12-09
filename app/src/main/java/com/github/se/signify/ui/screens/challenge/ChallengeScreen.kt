@@ -21,23 +21,24 @@ fun ChallengeScreen(navigationActions: NavigationActions) {
       navigationActions = navigationActions,
       testTag = "ChallengeScreen",
       helpTitle = "Challenge",
-      helpText = stringResource(R.string.description_challenge)) {
+      helpText = stringResource(R.string.description_challenge_text)) {
         Spacer(modifier = Modifier.height(64.dp))
 
         // Challenge square button
         SquareButton(
             iconId = R.drawable.battleicon,
+            text = stringResource(R.string.challenge_text),
             onClick = { navigationActions.navigateTo(Screen.NEW_CHALLENGE) },
-            text = "Challenge",
             size = 240,
             modifier = Modifier.testTag("ChallengeButton"))
         Spacer(modifier = Modifier.height(32.dp))
 
         // History square button
+        val historyText = stringResource(R.string.history_text)
         SquareButton(
             iconId = R.drawable.historyicon,
             onClick = { navigationActions.navigateTo(Screen.CHALLENGE_HISTORY) },
-            text = "History",
+            text = historyText,
             size = 240,
             modifier = Modifier.testTag("HistoryButton"))
       }
