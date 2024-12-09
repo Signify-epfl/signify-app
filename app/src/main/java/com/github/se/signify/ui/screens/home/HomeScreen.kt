@@ -349,12 +349,7 @@ fun ExerciseButton(exercise: ExerciseLevel, navigationActions: NavigationActions
           ButtonDefaults.buttonColors(
               MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.onPrimary)) {
         val context = LocalContext.current
-        val exerciseText =
-            when (exercise) {
-              ExerciseLevel.Easy -> ExerciseLevelName.getLevelName(context, ExerciseLevel.Easy)
-              ExerciseLevel.Medium -> ExerciseLevelName.getLevelName(context, ExerciseLevel.Medium)
-              ExerciseLevel.Hard -> ExerciseLevelName.getLevelName(context, ExerciseLevel.Hard)
-            }
+        val exerciseText = ExerciseLevelName.getLevelName(context, exercise)
         Text(exerciseText, modifier = Modifier.testTag("${exercise.id}ExerciseButtonText"))
       }
 }
