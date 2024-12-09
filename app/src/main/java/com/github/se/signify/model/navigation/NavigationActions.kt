@@ -2,7 +2,7 @@ package com.github.se.signify.model.navigation
 
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import com.github.se.signify.model.auth.UserSession
+import com.github.se.signify.model.authentication.UserSession
 
 open class NavigationActions(
     private val navController: NavHostController,

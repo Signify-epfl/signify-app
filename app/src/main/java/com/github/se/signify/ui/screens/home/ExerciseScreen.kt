@@ -39,13 +39,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
-import com.github.se.signify.model.auth.UserSession
-import com.github.se.signify.model.exercise.ExerciseLevel
-import com.github.se.signify.model.exercise.ExerciseLevelName
-import com.github.se.signify.model.hand.HandLandMarkViewModel
+import com.github.se.signify.model.authentication.UserSession
+import com.github.se.signify.model.home.exercise.ExerciseLevel
+import com.github.se.signify.model.home.exercise.ExerciseLevelName
+import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
-import com.github.se.signify.model.stats.StatsRepository
-import com.github.se.signify.model.stats.StatsViewModel
+import com.github.se.signify.model.profile.stats.StatsRepository
+import com.github.se.signify.model.profile.stats.StatsViewModel
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.CameraBox
 
@@ -65,7 +65,7 @@ import com.github.se.signify.ui.common.CameraBox
 @Composable
 fun ExerciseScreen(
     navigationActions: NavigationActions,
-    handLandMarkViewModel: HandLandMarkViewModel,
+    handLandMarkViewModel: HandLandmarkViewModel,
     userSession: UserSession,
     statsRepository: StatsRepository,
     exerciseLevel: ExerciseLevel

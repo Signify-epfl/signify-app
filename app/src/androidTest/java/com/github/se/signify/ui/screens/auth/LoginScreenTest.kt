@@ -8,7 +8,7 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.toPackage
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.github.se.signify.model.auth.UserSession
+import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase

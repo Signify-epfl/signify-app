@@ -10,7 +10,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import com.github.se.signify.model.exercise.ExerciseLevel
+import com.github.se.signify.model.home.exercise.ExerciseLevel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import kotlinx.coroutines.CoroutineScope

@@ -7,8 +7,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.github.se.signify.model.auth.MockUserSession
-import com.github.se.signify.model.feedback.FeedbackRepository
+import com.github.se.signify.model.authentication.MockUserSession
+import com.github.se.signify.model.home.feedback.FeedbackRepository
 import com.github.se.signify.model.navigation.NavigationActions
 import org.junit.Rule
 import org.junit.Test
