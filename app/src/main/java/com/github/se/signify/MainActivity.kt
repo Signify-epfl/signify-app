@@ -21,6 +21,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.github.se.signify.model.common.updateLanguage
 import com.github.se.signify.model.dependencyInjection.AppDependencyProvider
 import com.github.se.signify.model.dependencyInjection.DependencyProvider
 import com.github.se.signify.model.home.exercise.ExerciseLevel
@@ -28,8 +29,6 @@ import com.github.se.signify.model.home.hand.HandLandMarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Route
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.model.common.updateLanguage
-import com.github.se.signify.ui.screens.welcome.WelcomeScreen
 import com.github.se.signify.ui.screens.auth.LoginScreen
 import com.github.se.signify.ui.screens.auth.UnauthenticatedScreen
 import com.github.se.signify.ui.screens.challenge.ChallengeHistoryScreen
@@ -48,6 +47,7 @@ import com.github.se.signify.ui.screens.profile.MyStatsScreen
 import com.github.se.signify.ui.screens.profile.ProfileScreen
 import com.github.se.signify.ui.screens.profile.SettingsScreen
 import com.github.se.signify.ui.screens.tutorial.TutorialScreen
+import com.github.se.signify.ui.screens.welcome.WelcomeScreen
 import com.github.se.signify.ui.theme.SignifyTheme
 
 class MainActivity : ComponentActivity() {

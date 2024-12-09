@@ -19,12 +19,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
 import com.github.se.signify.model.authentication.UserSession
+import com.github.se.signify.model.common.user.UserRepository
+import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.model.profile.stats.StatsRepository
 import com.github.se.signify.model.profile.stats.StatsViewModel
-import com.github.se.signify.model.common.user.UserRepository
-import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.ui.common.AccountInformation
 import com.github.se.signify.ui.common.BasicButton
 import com.github.se.signify.ui.common.LearnedLetterList

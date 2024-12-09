@@ -12,8 +12,7 @@ import org.mockito.Mockito
 
 class WelcomeScreenTest {
 
-  @get:Rule
-  val composeTestRule = createComposeRule()
+  @get:Rule val composeTestRule = createComposeRule()
 
   private lateinit var navigationActions: NavigationActions
 

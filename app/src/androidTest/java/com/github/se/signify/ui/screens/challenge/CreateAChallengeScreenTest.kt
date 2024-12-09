@@ -13,8 +13,8 @@ import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.challenge.ChallengeMode
 import com.github.se.signify.model.challenge.MockChallengeRepository
-import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.common.user.UserRepository
+import com.github.se.signify.model.navigation.NavigationActions
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before

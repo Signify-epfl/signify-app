@@ -13,11 +13,11 @@ import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTextInput
 import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
-import com.github.se.signify.model.navigation.NavigationActions
-import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.model.common.user.User
 import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.common.user.UserViewModel
+import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.navigation.Screen
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule

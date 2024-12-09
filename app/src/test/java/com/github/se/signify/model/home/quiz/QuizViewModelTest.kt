@@ -33,8 +33,7 @@ class QuizViewModelTest {
     val mockQuizzes =
         listOf(
             QuizQuestion("Apple", listOf(1, 2, 3), listOf("Banana", "Orange")),
-            QuizQuestion("Car", listOf(4, 5, 6), listOf("Bike", "Bus"))
-        )
+            QuizQuestion("Car", listOf(4, 5, 6), listOf("Bike", "Bus")))
     doAnswer {
           val onSuccess = it.arguments[0] as (List<QuizQuestion>) -> Unit
           onSuccess(mockQuizzes)
@@ -105,8 +104,7 @@ class QuizViewModelTest {
     val mockQuizzes =
         listOf(
             QuizQuestion("Apple", listOf(1, 2, 3), listOf("Banana", "Orange")),
-            QuizQuestion("Car", listOf(4, 5, 6), listOf("Bike", "Bus"))
-        )
+            QuizQuestion("Car", listOf(4, 5, 6), listOf("Bike", "Bus")))
     quizViewModel.quizzesTesting.value = mockQuizzes
     quizViewModel.currentQuizTesting.value = mockQuizzes[0]
 

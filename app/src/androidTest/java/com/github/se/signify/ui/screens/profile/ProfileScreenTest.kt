@@ -11,12 +11,12 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
+import com.github.se.signify.model.common.user.UserRepository
+import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.model.profile.stats.StatsRepository
 import com.github.se.signify.model.profile.stats.StatsViewModel
-import com.github.se.signify.model.common.user.UserRepository
-import com.github.se.signify.model.common.user.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 import org.junit.Before
 import org.junit.Rule

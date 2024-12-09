@@ -13,9 +13,9 @@ import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
-import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.common.user.UserViewModel
+import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.ui.common.ProfilePicture
 import org.junit.Before
 import org.junit.Rule

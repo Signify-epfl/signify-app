@@ -53,7 +53,6 @@ import com.github.se.signify.model.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.model.navigation.TopLevelDestination
-import com.github.se.signify.ui.common.BottomNavigationMenu
 
 /**
  * The scaffold for all main screens.
@@ -258,30 +257,27 @@ fun BottomNavigationMenu(
     tabList: List<TopLevelDestination>,
     selectedItem: String? = Screen.HOME.route, // Provide a default value
 ) {
-    Box(
-        modifier =
-        Modifier.border(2.dp, MaterialTheme.colorScheme.outlineVariant) // Top blue line
-            .padding(bottom = 2.dp)
-            .testTag("BottomNavigationMenu")
-    ) {
+  Box(
+      modifier =
+          Modifier.border(2.dp, MaterialTheme.colorScheme.outlineVariant) // Top blue line
+              .padding(bottom = 2.dp)
+              .testTag("BottomNavigationMenu")) {
         NavigationBar(
             modifier = Modifier.fillMaxWidth().height(60.dp),
             containerColor = MaterialTheme.colorScheme.background // Set background to white
-        ) {
-            tabList.forEach { tab ->
+            ) {
+              tabList.forEach { tab ->
                 NavigationBarItem(
                     icon = {
-                        Icon(
-                            painterResource(id = tab.icon),
-                            contentDescription = null,
-                            modifier = Modifier.testTag("TabIcon_${tab.route}")
-                        )
+                      Icon(
+                          painterResource(id = tab.icon),
+                          contentDescription = null,
+                          modifier = Modifier.testTag("TabIcon_${tab.route}"))
                     }, // Load the drawable icons
                     selected = tab.route == selectedItem,
                     onClick = { onTabSelect(tab) },
-                    modifier = Modifier.clip(RoundedCornerShape(50.dp))
-                )
+                    modifier = Modifier.clip(RoundedCornerShape(50.dp)))
+              }
             }
-        }
-    }
+      }
 }

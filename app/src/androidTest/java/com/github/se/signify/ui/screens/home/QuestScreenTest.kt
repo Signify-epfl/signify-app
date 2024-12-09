@@ -10,11 +10,11 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
-import com.github.se.signify.model.navigation.NavigationActions
-import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.home.quest.Quest
 import com.github.se.signify.model.home.quest.QuestRepository
-import com.github.se.signify.model.common.user.UserRepository
+import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.navigation.Screen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
