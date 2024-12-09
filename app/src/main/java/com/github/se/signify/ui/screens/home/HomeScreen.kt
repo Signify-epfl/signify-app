@@ -53,15 +53,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.model.exercise.ExerciseLevel
+import com.github.se.signify.model.getIconResId
+import com.github.se.signify.model.getImageResId
+import com.github.se.signify.model.getTipResId
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.ui.MainScreenScaffold
-import com.github.se.signify.ui.UtilButton
-import com.github.se.signify.ui.UtilTextButton
-import com.github.se.signify.ui.getIconResId
-import com.github.se.signify.ui.getImageResId
-import com.github.se.signify.ui.getLetterIconResId
-import com.github.se.signify.ui.getTipResId
+import com.github.se.signify.ui.common.BasicButton
+import com.github.se.signify.ui.common.MainScreenScaffold
+import com.github.se.signify.ui.common.TextButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -81,7 +80,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
 
   MainScreenScaffold(
       navigationActions = navigationActions,
-      testTagColumn = "HomeScreen",
+      testTag = "HomeScreen",
       helpTitle = "Home",
       helpText = stringResource(R.string.help_home_screen),
       floatingActionButton = {
@@ -101,24 +100,27 @@ fun HomeScreen(navigationActions: NavigationActions) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween) {
-                      UtilButton(
+                      BasicButton(
                           onClick = { navigationActions.navigateTo(Screen.FEEDBACK) },
-                          buttonTestTag = "FeedbackButton",
-                          iconTestTag = "FeedbackIcon",
                           icon = Icons.Outlined.Email,
-                          contentDescription = "Feedback")
-                      UtilButton(
+                          iconTestTag = "FeedbackIcon",
+                          contentDescription = "Feedback",
+                          modifier = Modifier.testTag("FeedbackButton"),
+                      )
+                      BasicButton(
                           onClick = { navigationActions.navigateTo(Screen.QUIZ) },
-                          buttonTestTag = "QuizButton",
-                          iconTestTag = "QuizIcon",
                           icon = Icons.Outlined.Star,
-                          contentDescription = "Quizzes")
-                      UtilButton(
+                          iconTestTag = "QuizIcon",
+                          contentDescription = "Quizzes",
+                          modifier = Modifier.testTag("QuizButton"),
+                      )
+                      BasicButton(
                           onClick = { navigationActions.navigateTo(Screen.QUEST) },
-                          buttonTestTag = "QuestsButton",
-                          iconTestTag = "QuestIcon",
                           icon = Icons.Outlined.DateRange,
-                          contentDescription = "Quests")
+                          iconTestTag = "QuestIcon",
+                          contentDescription = "Quests",
+                          modifier = Modifier.testTag("QuestsButton"),
+                      )
                     }
               }
 
@@ -165,12 +167,13 @@ fun HomeScreen(navigationActions: NavigationActions) {
  */
 @Composable
 fun CameraFeedbackButton(onClick: () -> Unit = {}) {
-  UtilTextButton(
-      onClickAction = onClick,
+  TextButton(
+      onClick = onClick,
       testTag = "CameraFeedbackButton",
       text = "Try hand signs here !",
       backgroundColor = MaterialTheme.colorScheme.primary,
-      textColor = MaterialTheme.colorScheme.onPrimary)
+      textColor = MaterialTheme.colorScheme.onPrimary,
+      modifier = Modifier)
 }
 /**
  * Composable function that displays a horizontally arranged letter navigator. Users can scroll
@@ -240,7 +243,7 @@ fun LetterDictionary(
                                 Modifier.testTag("LetterText_${currentLetter.uppercaseChar()}"))
                         Spacer(modifier = Modifier.width(8.dp))
                         Icon(
-                            painter = painterResource(id = getLetterIconResId(currentLetter)),
+                            painter = painterResource(id = getIconResId(currentLetter)),
                             contentDescription = "Letter gesture",
                             tint = MaterialTheme.colorScheme.onPrimary,
                             modifier =

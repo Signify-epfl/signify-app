@@ -5,7 +5,16 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -36,8 +45,8 @@ import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
-import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.UtilTextButton
+import com.github.se.signify.ui.common.AnnexScreenScaffold
+import com.github.se.signify.ui.common.TextButton
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -59,24 +68,26 @@ fun NewChallengeScreen(
 
   val ongoingChallenges by userViewModel.ongoingChallenges.collectAsState()
 
-  AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = "NewChallengeScreen") {
+  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "NewChallengeScreen") {
     // My Friends button
-    UtilTextButton(
-        onClickAction = { navigationActions.navigateTo(Screen.FRIENDS) },
+    TextButton(
+        onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
         testTag = "MyFriendsButton",
         text = "My Friends",
         backgroundColor = MaterialTheme.colorScheme.primary,
-        textColor = MaterialTheme.colorScheme.onPrimary)
+        textColor = MaterialTheme.colorScheme.onPrimary,
+        modifier = Modifier)
 
     Spacer(modifier = Modifier.height(32.dp))
 
     // Create a challenge button
-    UtilTextButton(
-        onClickAction = { navigationActions.navigateTo(Screen.CREATE_CHALLENGE) },
+    TextButton(
+        onClick = { navigationActions.navigateTo(Screen.CREATE_CHALLENGE) },
         testTag = "CreateChallengeButton",
         text = "Create a Challenge",
         backgroundColor = MaterialTheme.colorScheme.primary,
-        textColor = MaterialTheme.colorScheme.onPrimary)
+        textColor = MaterialTheme.colorScheme.onPrimary,
+        modifier = Modifier)
 
     Spacer(modifier = Modifier.height(32.dp))
 

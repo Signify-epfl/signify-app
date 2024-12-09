@@ -61,8 +61,8 @@ import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
-import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.ProfilePicture
+import com.github.se.signify.ui.common.AnnexScreenScaffold
+import com.github.se.signify.ui.common.ProfilePicture
 import kotlinx.coroutines.delay
 
 @Composable
@@ -80,7 +80,7 @@ fun FriendsListScreen(
   var errorMessage by remember { mutableStateOf("") }
   var selectedList by remember { mutableStateOf(friendsString) }
 
-  AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = "FriendsListScreen") {
+  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "FriendsListScreen") {
     LaunchedEffect(Unit) {
       userViewModel.getFriendsList()
       userViewModel.getRequestsFriendsList()

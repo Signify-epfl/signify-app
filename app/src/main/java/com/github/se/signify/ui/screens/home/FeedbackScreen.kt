@@ -43,8 +43,8 @@ import com.github.se.signify.model.feedback.FeedbackRepository
 import com.github.se.signify.model.feedback.FeedbackViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.UtilTextButton
+import com.github.se.signify.ui.common.AnnexScreenScaffold
+import com.github.se.signify.ui.common.TextButton
 
 @Composable
 fun FeedbackScreen(
@@ -62,7 +62,7 @@ fun FeedbackScreen(
   var selectedRating by remember { mutableIntStateOf(0) }
   var isLoading by remember { mutableStateOf(false) }
 
-  AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = "FeedbackScreen") {
+  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "FeedbackScreen") {
     FeedbackDropdown(
         selectedFeedbackType = selectedFeedbackType,
         onFeedbackTypeSelected = { selectedFeedbackType = it })
@@ -85,8 +85,8 @@ fun FeedbackScreen(
 
     RatingSection(selectedRating = selectedRating, onRatingSelected = { selectedRating = it })
 
-    UtilTextButton(
-        onClickAction = {
+    TextButton(
+        onClick = {
           if (feedbackTitle.text.isNotEmpty() && feedbackDescription.text.isNotEmpty()) {
             isLoading = true
             feedbackViewModel.saveFeedback(
@@ -104,7 +104,8 @@ fun FeedbackScreen(
         testTag = "SendFeedbackButton",
         text = "Send Feedback",
         backgroundColor = MaterialTheme.colorScheme.primary,
-        textColor = MaterialTheme.colorScheme.onPrimary)
+        textColor = MaterialTheme.colorScheme.onPrimary,
+        modifier = Modifier)
 
     LoadingIndicator(isLoading = isLoading)
   }

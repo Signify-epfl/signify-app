@@ -11,33 +11,33 @@ import androidx.compose.ui.unit.dp
 import com.github.se.signify.R
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.ui.MainScreenScaffold
-import com.github.se.signify.ui.SquareButton
+import com.github.se.signify.ui.common.MainScreenScaffold
+import com.github.se.signify.ui.common.SquareButton
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ChallengeScreen(navigationActions: NavigationActions) {
   MainScreenScaffold(
       navigationActions = navigationActions,
-      testTagColumn = "ChallengeScreen",
+      testTag = "ChallengeScreen",
       helpTitle = "Challenge",
       helpText = stringResource(R.string.description_challenge)) {
         Spacer(modifier = Modifier.height(64.dp))
 
         // Challenge square button
         SquareButton(
-            iconRes = R.drawable.battleicon,
-            label = "Challenge",
+            iconId = R.drawable.battleicon,
             onClick = { navigationActions.navigateTo(Screen.NEW_CHALLENGE) },
+            text = "Challenge",
             size = 240,
             modifier = Modifier.testTag("ChallengeButton"))
         Spacer(modifier = Modifier.height(32.dp))
 
         // History square button
         SquareButton(
-            iconRes = R.drawable.historyicon,
-            label = "History",
+            iconId = R.drawable.historyicon,
             onClick = { navigationActions.navigateTo(Screen.CHALLENGE_HISTORY) },
+            text = "History",
             size = 240,
             modifier = Modifier.testTag("HistoryButton"))
       }

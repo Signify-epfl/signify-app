@@ -18,11 +18,11 @@ import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.stats.StatsViewModel
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
-import com.github.se.signify.ui.AccountInformation
-import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.LearnedLetterList
-import com.github.se.signify.ui.NotImplementedYet
-import com.github.se.signify.ui.StatisticsColumnRow
+import com.github.se.signify.ui.common.AccountInformation
+import com.github.se.signify.ui.common.AnnexScreenScaffold
+import com.github.se.signify.ui.common.LearnedLetterList
+import com.github.se.signify.ui.common.NotImplementedYet
+import com.github.se.signify.ui.common.StatisticsTable
 
 @Composable
 fun MyStatsScreen(
@@ -63,7 +63,7 @@ fun MyStatsScreen(
 
   AnnexScreenScaffold(
       navigationActions = navigationActions,
-      testTagColumn = "MyStatsScreen",
+      testTag = "MyStatsScreen",
   ) {
 
     // Top information
@@ -71,7 +71,7 @@ fun MyStatsScreen(
         userId = userSession.getUserId()!!,
         userName = userName.value,
         profilePictureUrl = updatedProfilePicture,
-        days = streak.value)
+        streak = streak.value)
     Spacer(modifier = Modifier.height(32.dp))
 
     // Letters learned
@@ -79,26 +79,26 @@ fun MyStatsScreen(
     Spacer(modifier = Modifier.height(64.dp))
 
     // Number of exercises achieved
-    StatisticsColumnRow(
+    StatisticsTable(
+        lineText = "Number of exercises achieved :",
+        statsTexts = listOf("Easy", "Medium", "Hard"),
+        statsNumberList = listOf("${easy.value}", "${medium.value}", "${hard.value}"),
         columnTestTag = "ExercisesColumn",
         rowTestTag = "ExercisesRow",
-        lineText = "Number of exercises achieved :",
-        lineTextTag = "ExercisesText",
-        statsTextList = listOf("Easy", "Medium", "Hard"),
-        statsNumberList = listOf("${easy.value}", "${medium.value}", "${hard.value}"))
+        lineTextTestTag = "ExercisesText")
     Spacer(modifier = Modifier.height(32.dp))
 
     // Number of quests achieved
-    StatisticsColumnRow(
+    StatisticsTable(
+        lineText = "Number of quests achieved :",
+        statsTexts = listOf("Daily", "Weekly"),
+        statsNumberList = listOf("${daily.value}", "${weekly.value}"),
         columnTestTag = "QuestsColumn",
         rowTestTag = "QuestsRow",
-        lineText = "Number of quests achieved :",
-        lineTextTag = "QuestsText",
-        statsTextList = listOf("Daily", "Weekly"),
-        statsNumberList = listOf("${daily.value}", "${weekly.value}"))
+        lineTextTestTag = "QuestsText")
     Spacer(modifier = Modifier.height(64.dp))
 
     // Graphs and Stats
-    NotImplementedYet(testTag = "GraphsAndStats", text = "Graphs and Stats")
+    NotImplementedYet(text = "Graphs and Stats", testTag = "GraphsAndStats")
   }
 }

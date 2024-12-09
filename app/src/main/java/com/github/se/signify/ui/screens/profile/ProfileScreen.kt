@@ -25,11 +25,11 @@ import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.stats.StatsViewModel
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
-import com.github.se.signify.ui.AccountInformation
-import com.github.se.signify.ui.LearnedLetterList
-import com.github.se.signify.ui.MainScreenScaffold
-import com.github.se.signify.ui.SquareButton
-import com.github.se.signify.ui.UtilButton
+import com.github.se.signify.ui.common.AccountInformation
+import com.github.se.signify.ui.common.BasicButton
+import com.github.se.signify.ui.common.LearnedLetterList
+import com.github.se.signify.ui.common.MainScreenScaffold
+import com.github.se.signify.ui.common.SquareButton
 import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -47,7 +47,7 @@ fun ProfileScreen(
 
   MainScreenScaffold(
       navigationActions = navigationActions,
-      testTagColumn = "ProfileScreen",
+      testTag = "ProfileScreen",
       helpTitle = "Profile",
       helpText = stringResource(R.string.help_profile_screen),
   ) {
@@ -66,12 +66,13 @@ fun ProfileScreen(
     LaunchedEffect(profilePictureUrl.value) { updatedProfilePicture = profilePictureUrl.value }
 
     // Settings button
-    UtilButton(
+    BasicButton(
         onClick = { navigationActions.navigateTo(Screen.SETTINGS) },
-        buttonTestTag = "SettingsButton",
-        iconTestTag = "SettingsIcon",
         icon = Icons.Outlined.Settings,
-        contentDescription = "Settings")
+        iconTestTag = "SettingsIcon",
+        contentDescription = "Settings",
+        modifier = Modifier.testTag("SettingsButton"),
+    )
     Spacer(modifier = Modifier.height(32.dp))
 
     // Top information
@@ -79,7 +80,7 @@ fun ProfileScreen(
         userId = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0) ?: "unknown",
         userName = userName.value,
         profilePictureUrl = updatedProfilePicture,
-        days = streak.value)
+        streak = streak.value)
 
     Spacer(modifier = Modifier.height(32.dp))
 
@@ -89,19 +90,21 @@ fun ProfileScreen(
 
     // Friends List button
     SquareButton(
-        iconRes = R.drawable.friendsicon,
-        label = "My Friends",
+        iconId = R.drawable.friendsicon,
         onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
+        text = "My Friends",
         size = 200,
-        modifier = Modifier.testTag("MyFriendsButton"))
+        modifier = Modifier.testTag("MyFriendsButton"),
+    )
     Spacer(modifier = Modifier.height(32.dp))
 
     // Statistics Button
     SquareButton(
-        iconRes = R.drawable.statisticsicon,
-        label = "My Stats",
+        iconId = R.drawable.statisticsicon,
         onClick = { navigationActions.navigateTo(Screen.STATS) },
+        text = "My Stats",
         size = 200,
-        modifier = Modifier.testTag("MyStatsButton"))
+        modifier = Modifier.testTag("MyStatsButton"),
+    )
   }
 }

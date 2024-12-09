@@ -12,9 +12,9 @@ import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.stats.StatsViewModel
-import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.NotImplementedYet
-import com.github.se.signify.ui.StatisticsColumnRow
+import com.github.se.signify.ui.common.AnnexScreenScaffold
+import com.github.se.signify.ui.common.NotImplementedYet
+import com.github.se.signify.ui.common.StatisticsTable
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -32,23 +32,23 @@ fun ChallengeHistoryScreen(
 
   AnnexScreenScaffold(
       navigationActions = navigationActions,
-      testTagColumn = "ChallengeHistoryScreen",
+      testTag = "ChallengeHistoryScreen",
   ) {
     // Challenge's statistics
-    StatisticsColumnRow(
-        columnTestTag = "ChallengesColumn",
-        rowTestTag = "ChallengesRow",
+    StatisticsTable(
         lineText = "Number of challenges :",
-        lineTextTag = "ChallengesText",
-        statsTextList = listOf("Completed", "Created", "Won"),
+        statsTexts = listOf("Completed", "Created", "Won"),
         statsNumberList =
             listOf(
                 "${challengesCompleted.value}",
                 "${challengesCreated.value}",
-                "${challengesWon.value}"))
+                "${challengesWon.value}"),
+        columnTestTag = "ChallengesColumn",
+        rowTestTag = "ChallengesRow",
+        lineTextTestTag = "ChallengesText")
     Spacer(modifier = Modifier.height(32.dp))
 
     // Graphs and Stats
-    NotImplementedYet(testTag = "GraphsAndStats", text = "Graphs and Stats")
+    NotImplementedYet(text = "Graphs and Stats", testTag = "GraphsAndStats")
   }
 }
