@@ -2,8 +2,14 @@ package com.github.se.signify.ui.screens.profile
 
 import android.content.ContentResolver
 import android.content.Context
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextClearance
+import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.github.se.signify.model.auth.MockUserSession
 import com.github.se.signify.model.auth.UserSession

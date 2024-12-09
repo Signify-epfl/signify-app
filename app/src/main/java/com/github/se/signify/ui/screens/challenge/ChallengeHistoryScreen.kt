@@ -43,16 +43,16 @@ fun ChallengeHistoryScreen(
             stringResource(R.string.won_challenge_text))
     // Challenge's statistics
     StatisticsTable(
-        columnTestTag = "ChallengesColumn",
-        rowTestTag = "ChallengesRow",
         lineText = stringResource(id = R.string.number_challenges_text),
-        lineTextTestTag = "ChallengesText",
         statsTexts = challengeCategories,
         statsNumberList =
-            listOf(
-                "${challengesCompleted.value}",
-                "${challengesCreated.value}",
-                "${challengesWon.value}"))
+        listOf(
+            "${challengesCompleted.value}",
+            "${challengesCreated.value}",
+            "${challengesWon.value}"),
+        columnTestTag = "ChallengesColumn",
+        rowTestTag = "ChallengesRow",
+        lineTextTestTag = "ChallengesText")
     Spacer(modifier = Modifier.height(32.dp))
 
     // Graphs and Stats
