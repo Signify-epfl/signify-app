@@ -46,10 +46,10 @@ fun ChallengeHistoryScreen(
         lineText = stringResource(id = R.string.number_challenges_text),
         statsTexts = challengeCategories,
         statsNumberList =
-        listOf(
-            "${challengesCompleted.value}",
-            "${challengesCreated.value}",
-            "${challengesWon.value}"),
+            listOf(
+                "${challengesCompleted.value}",
+                "${challengesCreated.value}",
+                "${challengesWon.value}"),
         columnTestTag = "ChallengesColumn",
         rowTestTag = "ChallengesRow",
         lineTextTestTag = "ChallengesText")
