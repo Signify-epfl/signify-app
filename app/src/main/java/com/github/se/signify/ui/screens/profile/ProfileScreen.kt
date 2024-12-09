@@ -48,8 +48,8 @@ fun ProfileScreen(
   MainScreenScaffold(
       navigationActions = navigationActions,
       testTag = "ProfileScreen",
-      helpTitle = "Profile",
-      helpText = stringResource(R.string.help_profile_screen),
+      helpTitle = stringResource(R.string.profile_text),
+      helpText = stringResource(R.string.help_profile_screen_text),
   ) {
     LaunchedEffect(Unit) {
       userViewModel.getUserName()
@@ -68,16 +68,15 @@ fun ProfileScreen(
     // Settings button
     BasicButton(
         onClick = { navigationActions.navigateTo(Screen.SETTINGS) },
-        icon = Icons.Outlined.Settings,
         iconTestTag = "SettingsIcon",
+        icon = Icons.Outlined.Settings,
         contentDescription = "Settings",
-        modifier = Modifier.testTag("SettingsButton"),
-    )
+        modifier = Modifier.testTag("SettingsButton"))
     Spacer(modifier = Modifier.height(32.dp))
-
+    val unknownText = stringResource(R.string.unknown_text)
     // Top information
     AccountInformation(
-        userId = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0) ?: "unknown",
+        userId = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0) ?: unknownText,
         userName = userName.value,
         profilePictureUrl = updatedProfilePicture,
         streak = streak.value)
@@ -89,22 +88,22 @@ fun ProfileScreen(
     Spacer(modifier = Modifier.height(32.dp))
 
     // Friends List button
+    val myFriendsText = stringResource(R.string.my_friends_text)
     SquareButton(
         iconId = R.drawable.friendsicon,
+        text = myFriendsText,
         onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
-        text = "My Friends",
         size = 200,
-        modifier = Modifier.testTag("MyFriendsButton"),
-    )
+        modifier = Modifier.testTag("MyFriendsButton"))
     Spacer(modifier = Modifier.height(32.dp))
 
     // Statistics Button
+    val myStatsText = stringResource(R.string.my_stats_text)
     SquareButton(
         iconId = R.drawable.statisticsicon,
+        text = myStatsText,
         onClick = { navigationActions.navigateTo(Screen.STATS) },
-        text = "My Stats",
         size = 200,
-        modifier = Modifier.testTag("MyStatsButton"),
-    )
+        modifier = Modifier.testTag("MyStatsButton"))
   }
 }

@@ -29,7 +29,6 @@ class StatisticsTest {
           rowTestTag = rowTestTag,
           lineTextTestTag = lineTextTag)
     }
-
     composeTestRule.onNodeWithTag(columnTestTag).assertIsDisplayed()
     composeTestRule.onNodeWithTag(rowTestTag).assertIsDisplayed()
     composeTestRule.onNodeWithTag(lineTextTag).assertIsDisplayed()
@@ -46,7 +45,6 @@ class StatisticsTest {
   fun horizontalLetterListIsDisplayedAndScrollable() {
     val lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F')
     composeTestRule.setContent { LetterList(lettersLearned) }
-
     composeTestRule.onNodeWithTag("LettersList").assertIsDisplayed()
     val scrollableList = composeTestRule.onNodeWithTag("LettersList")
     for (letter in 'A'..'Z') {
@@ -61,7 +59,6 @@ class StatisticsTest {
   fun learnedLetterListIsDisplayed() {
     val lettersLearned = listOf('A', 'B', 'C', 'D', 'E', 'F')
     composeTestRule.setContent { LearnedLetterList(lettersLearned) }
-
     composeTestRule.onNodeWithTag("AllLetterLearned").assertIsDisplayed()
     composeTestRule.onNodeWithTag("LettersBox").assertIsDisplayed()
     composeTestRule.onNodeWithTag("LettersList").assertIsDisplayed()
@@ -70,7 +67,6 @@ class StatisticsTest {
   @Test
   fun streakCounterIsDisplayed() {
     composeTestRule.setContent { StreakCounter(10) }
-
     composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
     composeTestRule.onNodeWithTag("NumberOfDays").assertTextEquals("10")

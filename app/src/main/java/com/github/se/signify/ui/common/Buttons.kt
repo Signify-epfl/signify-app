@@ -62,7 +62,6 @@ fun BasicButton(
             modifier = Modifier.size(30.dp).testTag(iconTestTag))
       }
 }
-
 /**
  * An outlined button with text.
  *
@@ -101,7 +100,6 @@ fun TextButton(
         textAlign = TextAlign.Center)
   }
 }
-
 /**
  * A square button with an icon and text.
  *

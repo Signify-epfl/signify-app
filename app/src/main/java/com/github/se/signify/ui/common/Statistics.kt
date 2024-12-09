@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,7 +39,7 @@ import com.github.se.signify.R
 @Composable
 fun LearnedLetterList(lettersLearned: List<Char>) {
   Text(
-      text = "All letters learned",
+      text = stringResource(R.string.letters_learned_text),
       fontWeight = FontWeight.Bold,
       fontSize = 16.sp,
       color = MaterialTheme.colorScheme.onBackground,
@@ -53,7 +54,6 @@ fun LearnedLetterList(lettersLearned: List<Char>) {
         LetterList(lettersLearned)
       }
 }
-
 /**
  * A table of user statistics.
  *
@@ -131,7 +131,6 @@ fun StatisticsTable(
 fun LetterList(learnedLetters: List<Char>) {
   val allLetters = ('A'..'Z').toList() // All capital letters from A to Z
   val scrollState = rememberScrollState()
-
   Row(modifier = Modifier.fillMaxWidth().horizontalScroll(scrollState).testTag("LettersList")) {
     allLetters.forEach { letter ->
       val isLearned = letter in learnedLetters
@@ -146,7 +145,6 @@ fun LetterList(learnedLetters: List<Char>) {
     }
   }
 }
-
 /**
  * A streak counter that displays a user's streak in days.
  *

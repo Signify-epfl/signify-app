@@ -1,5 +1,8 @@
 package com.github.se.signify.model.feedback
 
+import android.content.Context
+import com.github.se.signify.R
+
 data class Feedback(
     val uid: String = "",
     val type: String = "",
@@ -12,5 +15,14 @@ enum class FeedbackOption(val category: String) {
   BUG_REPORT("Bug Report"),
   FEATURE_SUGGESTION("Feature Suggestion"),
   QUESTION("Question"),
-  OTHER("Other")
+  OTHER("Other");
+
+  fun getText(context: Context): String {
+    return when (this) {
+      BUG_REPORT -> context.getString(R.string.bug_report_text)
+      FEATURE_SUGGESTION -> context.getString(R.string.feature_suggestion_text)
+      QUESTION -> context.getString(R.string.question_text)
+      OTHER -> context.getString(R.string.other_text)
+    }
+  }
 }

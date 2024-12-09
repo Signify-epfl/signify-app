@@ -32,9 +32,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import com.github.se.signify.R
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 
 /**
@@ -44,23 +46,22 @@ import com.github.se.signify.model.hand.HandLandMarkViewModel
  * @param handLandMarkViewModel The ViewModel responsible for managing hand landmark detection.
  */
 @Composable
-fun CameraBox(handLandMarkViewModel: HandLandMarkViewModel, testTag: String = "") {
+fun CameraBox(handLandMarkViewModel: HandLandMarkViewModel, testTag: String = "cameraPreview") {
   val context = LocalContext.current
   val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
   val previewView = remember { PreviewView(context) }
   var permissionGranted by remember { mutableStateOf(false) }
-
   // Permission launcher to request camera permission
+  val cameraPermissionDeniedText = stringResource(R.string.camera_permission_denied_text)
   val permissionLauncher =
       rememberLauncherForActivityResult(
           contract = ActivityResultContracts.RequestPermission(),
           onResult = { isGranted ->
             permissionGranted = isGranted
             if (!isGranted) {
-              Toast.makeText(context, "Camera permission denied", Toast.LENGTH_SHORT).show()
+              Toast.makeText(context, cameraPermissionDeniedText, Toast.LENGTH_SHORT).show()
             }
           })
-
   // Check for permission on load
   LaunchedEffect(Unit) {
     permissionGranted =
@@ -70,7 +71,6 @@ fun CameraBox(handLandMarkViewModel: HandLandMarkViewModel, testTag: String = ""
       permissionLauncher.launch(Manifest.permission.CAMERA)
     }
   }
-
   if (permissionGranted) {
     Box(
         modifier =
@@ -85,7 +85,6 @@ fun CameraBox(handLandMarkViewModel: HandLandMarkViewModel, testTag: String = ""
           AndroidView(
               factory = { previewView },
               modifier = Modifier.fillMaxWidth().fillMaxHeight().clip(RoundedCornerShape(16.dp)))
-
           // Set up the camera preview
           LaunchedEffect(Unit) {
             val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
@@ -93,7 +92,6 @@ fun CameraBox(handLandMarkViewModel: HandLandMarkViewModel, testTag: String = ""
                 {
                   val cameraProvider = cameraProviderFuture.get()
                   val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-
                   val preview =
                       Preview.Builder().build().also {
                         it.setSurfaceProvider(previewView.surfaceProvider)
@@ -106,7 +104,6 @@ fun CameraBox(handLandMarkViewModel: HandLandMarkViewModel, testTag: String = ""
                   imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(context)) { imageProxy ->
                     handLandMarkViewModel.processImageProxyThrottled(imageProxy)
                   }
-
                   try {
                     cameraProvider.unbindAll()
                     cameraProvider.bindToLifecycle(
@@ -129,7 +126,9 @@ fun CameraBox(handLandMarkViewModel: HandLandMarkViewModel, testTag: String = ""
                     2.dp, MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp))
                 .testTag(testTag),
         contentAlignment = Alignment.Center) {
-          Text("Camera permission required", color = MaterialTheme.colorScheme.errorContainer)
+          Text(
+              stringResource(R.string.camera_permission_required_text),
+              color = MaterialTheme.colorScheme.errorContainer)
         }
   }
 }
