@@ -66,21 +66,7 @@ fun QuestScreen(
     LazyColumn(
         modifier = Modifier.weight(1f),
     ) {
-      item {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier =
-                Modifier.fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(horizontal = 16.dp, vertical = 8.dp)) {
-              Text(
-                  text = stringResource(R.string.quest_screen_title),
-                  fontWeight = FontWeight.Bold,
-                  fontSize = 25.sp,
-                  color = MaterialTheme.colorScheme.primary)
-            }
-      }
+      item { QuestTitle() }
       items(quests.value.size) { index ->
         val isUnlocked = index < unlockedQuests.toInt()
         QuestBox(quest = quests.value[index], isUnlocked)
@@ -176,4 +162,21 @@ fun QuestDescriptionDialog(quest: Quest, onDismiss: () -> Unit) {
       },
       shape = RoundedCornerShape(16.dp),
       modifier = Modifier.padding(16.dp))
+}
+
+@Composable
+fun QuestTitle() {
+  Row(
+      verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.Center,
+      modifier =
+          Modifier.fillMaxWidth()
+              .background(MaterialTheme.colorScheme.background)
+              .padding(horizontal = 16.dp, vertical = 8.dp)) {
+        Text(
+            text = stringResource(R.string.quest_screen_title),
+            fontWeight = FontWeight.Bold,
+            fontSize = 25.sp,
+            color = MaterialTheme.colorScheme.primary)
+      }
 }
