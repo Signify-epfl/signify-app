@@ -75,7 +75,6 @@ fun CameraBox(handLandMarkViewModel: HandLandMarkViewModel, testTag: String = "c
     Box(
         modifier =
             Modifier.fillMaxWidth()
-                .padding(16.dp)
                 .height(350.dp)
                 .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp))
                 .border(

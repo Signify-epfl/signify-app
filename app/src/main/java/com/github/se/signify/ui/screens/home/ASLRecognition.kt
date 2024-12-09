@@ -12,9 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -42,7 +40,6 @@ import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
  * Composable that handles ASL recognition. It checks for camera permissions, launches the camera
  * preview, and displays recognized gestures and images.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ASLRecognition(
     handLandMarkViewModel: HandLandMarkViewModel,
@@ -55,24 +52,22 @@ fun ASLRecognition(
         modifier =
             Modifier.fillMaxWidth()
                 .height(252.dp)
-                .padding(horizontal = 16.dp)
                 .background(MaterialTheme.colorScheme.background)) {
           CameraBox(handLandMarkViewModel, "cameraPreview")
         }
 
-    Spacer(modifier = Modifier.height(30.dp))
+    Spacer(modifier = Modifier.height(16.dp))
 
     GestureOverlayView(handLandMarkViewModel)
 
-    Spacer(modifier = Modifier.height(20.dp))
-    val moreOnASLAlphabetText = stringResource(id = R.string.more_on_asl_alphabet_text)
+    Spacer(modifier = Modifier.height(16.dp))
     TextButton(
         onClick = {
           val intent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(buttonUriString) }
           context.startActivity(intent)
         },
         testTag = "practiceButton",
-        text = moreOnASLAlphabetText,
+        text = stringResource(id = R.string.more_on_asl_alphabet_text),
         backgroundColor = MaterialTheme.colorScheme.primary,
         textColor = MaterialTheme.colorScheme.onPrimary)
   }
@@ -88,16 +83,17 @@ fun GestureOverlayView(handLandMarkViewModel: HandLandMarkViewModel) {
   val detectedGesture = handLandMarkViewModel.getSolution()
 
   DrawnOutPut(landmarks = landmarksState.value, text = detectedGesture)
-  Spacer(modifier = Modifier.height(30.dp))
-  HandGestureImage(gesture = detectedGesture)
+  Spacer(modifier = Modifier.height(16.dp))
+  HandGestureImage(landmarks = landmarksState.value, gesture = detectedGesture)
 }
 /** Displays the image associated with the detected ASL hand gesture. */
 @Composable
-fun HandGestureImage(gesture: String) {
-  val imageResource = if (gesture.isEmpty()) R.drawable.vector else getIconResId(gesture.first())
+fun HandGestureImage(landmarks: List<NormalizedLandmark>?, gesture: String) {
+  val imageResource =
+      if (landmarks.isNullOrEmpty()) R.drawable.vector else getIconResId(gesture.first())
   Box(
       modifier =
-          Modifier.width(336.dp)
+          Modifier.fillMaxWidth()
               .height(200.dp)
               .clip(RoundedCornerShape(size = 10.dp))
               .background(MaterialTheme.colorScheme.primary)
@@ -122,9 +118,9 @@ fun DrawnOutPut(landmarks: List<NormalizedLandmark>?, text: String) {
   val paintColor = MaterialTheme.colorScheme.background
   Box(
       modifier =
-          Modifier.width(336.dp)
+          Modifier.fillMaxWidth()
               .height(70.dp)
-              .clip(RoundedCornerShape(10.dp)) // Rounds corners to match button style
+              .clip(RoundedCornerShape(10.dp))
               .background(MaterialTheme.colorScheme.primary)
               .border(
                   width = 2.dp,
