@@ -121,7 +121,7 @@ fun LoginScreen(navigationActions: NavigationActions, showTutorial: () -> Unit) 
 
           // Welcome Text
           Text(
-              modifier = Modifier.width(250.dp).height(200.dp).testTag("IntroMessage"),
+              modifier = Modifier.width(250.dp).height(300.dp).testTag("IntroMessage"),
               text = stringResource(R.string.signify_welcome_text),
               style =
                   TextStyle(
