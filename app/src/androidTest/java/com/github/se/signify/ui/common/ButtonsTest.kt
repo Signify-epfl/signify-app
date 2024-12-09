@@ -28,7 +28,6 @@ class ButtonsTest {
           modifier = Modifier.testTag("UtilButton"),
       )
     }
-
     // Assert that the button is displayed
     composeTestRule.onNodeWithTag("UtilButton").assertIsDisplayed()
   }
@@ -46,13 +45,10 @@ class ButtonsTest {
           contentDescription = "Info",
           modifier = Modifier.testTag("UtilButton"))
     }
-
     // Assert that the button has a click action
     composeTestRule.onNodeWithTag("UtilButton").assertHasClickAction()
-
     // Perform click action on the button
     composeTestRule.onNodeWithTag("UtilButton").performClick()
-
     // Assert that the click action was triggered
     assert(clicked)
   }
@@ -61,7 +57,6 @@ class ButtonsTest {
   fun textButtonDisplaysCorrectly() {
     val textTag = "TestButton"
     val buttonText = "Click Me"
-
     // Set the content for the test
     composeTestRule.setContent {
       TextButton(
@@ -72,10 +67,8 @@ class ButtonsTest {
           textColor = MaterialTheme.colorScheme.onPrimary,
           modifier = Modifier)
     }
-
     // Assert the button is displayed
     composeTestRule.onNodeWithTag(textTag).assertIsDisplayed()
-
     // Assert the button contains the correct text
     composeTestRule.onNodeWithText(buttonText).assertExists()
   }
@@ -85,7 +78,6 @@ class ButtonsTest {
     var clickCounter = 0
     val textTag = "TestButton"
     val buttonText = "Click Me"
-
     // Set the content for the test with a click listener that increments the counter
     composeTestRule.setContent {
       TextButton(
@@ -96,10 +88,8 @@ class ButtonsTest {
           textColor = MaterialTheme.colorScheme.onPrimary,
           modifier = Modifier)
     }
-
     // Perform a click action on the button
     composeTestRule.onNodeWithTag(textTag).performClick()
-
     // Assert the click listener was triggered
     assert(clickCounter == 1)
   }
@@ -116,7 +106,6 @@ class ButtonsTest {
           modifier = Modifier.testTag(label),
       )
     }
-
     // Assert that the button is displayed
     composeTestRule.onNodeWithText(label).assertIsDisplayed()
   }
@@ -134,13 +123,10 @@ class ButtonsTest {
           modifier = Modifier.testTag(label),
       )
     }
-
     // Assert that the button has a click action
     composeTestRule.onNodeWithText(label).assertHasClickAction()
-
     // Perform click action on the button
     composeTestRule.onNodeWithText(label).performClick()
-
     // Assert that the click action was triggered
     assert(clicked)
   }

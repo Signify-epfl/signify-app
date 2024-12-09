@@ -58,7 +58,7 @@ class MyStatsScreenTest {
 
     // Verify letters learned section displays correctly
     composeTestRule.onNodeWithTag("AllLetterLearned").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("AllLetterLearned").assertTextEquals("All letters learned")
+    composeTestRule.onNodeWithTag("AllLetterLearned").assertTextEquals("Letters learned")
     composeTestRule.onNodeWithTag("LettersBox").assertIsDisplayed()
 
     // Verify exercises achieved section is displayed

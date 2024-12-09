@@ -49,7 +49,6 @@ fun ProfilePicture(profilePictureUrl: String?) {
         tint = MaterialTheme.colorScheme.onBackground)
   }
 }
-
 /**
  * A recap of a user's account information.
  *
@@ -79,10 +78,8 @@ fun AccountInformation(userId: String, userName: String, profilePictureUrl: Stri
               color = MaterialTheme.colorScheme.onBackground,
               modifier = Modifier.testTag("UserName"))
         }
-
         // Profile Picture
         ProfilePicture(profilePictureUrl)
-
         // Number of days
         StreakCounter(streak)
       }

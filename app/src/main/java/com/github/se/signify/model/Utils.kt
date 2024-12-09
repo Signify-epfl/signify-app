@@ -16,7 +16,6 @@ fun getImageResId(letter: Char): Int {
   val resName = "pic_${letter.lowercaseChar()}"
   return R.drawable::class.java.getDeclaredField(resName).getInt(null)
 }
-
 /**
  * Retrieves the drawable resource ID for a letter's icon.
  *
@@ -28,7 +27,6 @@ fun getIconResId(letter: Char): Int {
   val resName = "letter_${letter.lowercaseChar()}"
   return R.drawable::class.java.getDeclaredField(resName).getInt(null)
 }
-
 /**
  * Retrieves the string resource ID for the tip associated with a letter.
  *
@@ -39,7 +37,6 @@ fun getIconResId(letter: Char): Int {
 fun getTipResId(letter: Char): Int {
   return R.string::class.java.getDeclaredField("tip_${letter.lowercaseChar()}").getInt(null)
 }
-
 /**
  * Updates the application's language dynamically by changing the locale.
  *
@@ -59,7 +56,6 @@ fun getTipResId(letter: Char): Int {
  */
 fun updateLanguage(context: Context, languageCode: String) {
   require(listOf("en", "fr").contains(languageCode)) { "Unsupported language code: $languageCode" }
-
   val locale = Locale(languageCode)
   Locale.setDefault(locale)
   val config = Configuration()

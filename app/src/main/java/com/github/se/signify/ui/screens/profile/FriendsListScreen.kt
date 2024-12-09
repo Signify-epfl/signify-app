@@ -74,8 +74,8 @@ fun FriendsListScreen(
         viewModel(factory = UserViewModel.factory(userSession, userRepository))
 ) {
 
-  val friendsString = stringResource(R.string.friends)
-  val friendsRequestsString = stringResource(R.string.friends_requests)
+  val friendsString = stringResource(R.string.friends_text)
+  val friendsRequestsString = stringResource(R.string.friends_requests_text)
 
   var errorMessage by remember { mutableStateOf("") }
   var selectedList by remember { mutableStateOf(friendsString) }
@@ -90,23 +90,23 @@ fun FriendsListScreen(
     val friendsRequests = userViewModel.friendsRequests.collectAsState()
     val searchResult = userViewModel.searchResult.collectAsState()
     val errorState = userViewModel.errorState.collectAsState()
-
+    val userNotFoundText = stringResource(R.string.user_not_found_text)
     SearchBar { searchQuery ->
       if (searchQuery.isNotEmpty()) {
         try {
           userViewModel.getUserById(searchQuery)
         } catch (e: Exception) {
-          errorMessage = "Error : ${e.message}"
+          errorMessage = userNotFoundText
         }
       }
     }
 
     errorMessage.let { message ->
       if (errorState.value != null) {
-        errorMessage = errorState.value!!
+        errorMessage = userNotFoundText
       }
       if (errorMessage.isNotEmpty()) {
-        ErrorMessage(message)
+        ErrorMessage(userNotFoundText)
         // Dismiss the message
         LaunchedEffect(message) {
           delay(3000)
@@ -146,8 +146,9 @@ fun FriendsListScreen(
                     }
 
                     // Close button
+                    val closeText = stringResource(R.string.close_text)
                     TextButton(onClick = { userViewModel.setSearchResult(null) }) {
-                      Text("Close", color = MaterialTheme.colorScheme.onSurface)
+                      Text(closeText, color = MaterialTheme.colorScheme.onSurface)
                     }
                   }
             }
@@ -164,7 +165,8 @@ fun FriendsListScreen(
     Row(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceEvenly) {
-          val numberFriends = if (friends.value.size > 1) friendsString else "Friend"
+          val numberFriends =
+              if (friends.value.size > 1) friendsString else stringResource(R.string.friends_text)
 
           TextButton(
               { selectedList = friendsString },
@@ -176,7 +178,8 @@ fun FriendsListScreen(
               "${friendsString}Button")
 
           val numberRequests =
-              if (friendsRequests.value.size > 1) friendsRequestsString else "Request"
+              if (friendsRequests.value.size > 1) friendsRequestsString
+              else stringResource(R.string.friends_text)
 
           TextButton(
               { selectedList = friendsRequestsString },
@@ -196,23 +199,29 @@ fun FriendsListScreen(
 
     // Display the corresponding list based on the selected button
     when (selectedList) {
+
       // case Friends list
-      friendsString ->
-          FriendListCard(
-              title = "My $friendsString list",
-              items = friends.value,
-              emptyMessage = "You have no $friendsString") { friendName ->
-                FriendItem(friendName, userViewModel)
-              }
+      friendsString -> {
+        FriendListCard(
+            title = stringResource(R.string.my_friends_text),
+            items = friends.value,
+            emptyMessage = stringResource(R.string.no_friend_text)) { friendName ->
+              FriendItem(friendName, userViewModel)
+            }
+      }
 
       // case Friends Requests list
-      friendsRequestsString ->
-          FriendListCard(
-              title = "New $friendsString $friendsRequestsString",
-              items = friendsRequests.value,
-              emptyMessage = "No new friend $friendsRequestsString") { friendName ->
-                FriendRequestItem(friendName, userViewModel)
-              }
+
+      friendsRequestsString -> {
+        val requestFriendsText = stringResource(R.string.request_friends_text)
+        val noNewFriendText = stringResource(R.string.no_new_friend_text)
+        FriendListCard(
+            title = requestFriendsText,
+            items = friendsRequests.value,
+            emptyMessage = noNewFriendText) { friendName ->
+              FriendRequestItem(friendName, userViewModel)
+            }
+      }
     }
   }
 }
@@ -220,18 +229,20 @@ fun FriendsListScreen(
 @Composable
 fun AddFriendButton(userViewModel: UserViewModel) {
   val context = LocalContext.current
+  val requestSentText = stringResource(R.string.request_sent_text)
   Button(
       onClick = {
         userViewModel.sendFriendRequest(userViewModel.searchResult.value!!.uid)
         userViewModel.setSearchResult(null)
-        Toast.makeText(context, "Request sent.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, requestSentText, Toast.LENGTH_SHORT).show()
       },
       colors =
           ButtonDefaults.buttonColors(
               containerColor = MaterialTheme.colorScheme.primary,
               contentColor = MaterialTheme.colorScheme.onPrimary),
       modifier = Modifier.fillMaxWidth()) {
-        Text("Add Friend")
+        val addFriendText = stringResource(R.string.add_friend_text)
+        Text(addFriendText)
       }
 }
 
@@ -247,7 +258,8 @@ fun RemoveFriendButton(userViewModel: UserViewModel) {
               containerColor = MaterialTheme.colorScheme.error,
               contentColor = MaterialTheme.colorScheme.onError),
       modifier = Modifier.fillMaxWidth()) {
-        Text("Remove Friend")
+        val removeFriendText = stringResource(R.string.remove_friend_text)
+        Text(removeFriendText)
       }
 
   ConfirmationDialog(showDialog) {
@@ -268,7 +280,8 @@ fun MyProfileButton(userViewModel: UserViewModel, navigationActions: NavigationA
               containerColor = MaterialTheme.colorScheme.primary,
               contentColor = MaterialTheme.colorScheme.onPrimary),
       modifier = Modifier.fillMaxWidth()) {
-        Text("My Profile")
+        val myProfileText = stringResource(R.string.my_profile_text)
+        Text(myProfileText)
       }
 }
 
@@ -286,7 +299,7 @@ fun SearchBar(
     onSearch: (String) -> Unit,
 ) {
   var searchQuery by remember { mutableStateOf("") }
-
+  val searchByUserIdText = stringResource(R.string.search_by_user_ID_text)
   TextField(
       value = searchQuery,
       onValueChange = { searchQuery = it },
@@ -298,7 +311,7 @@ fun SearchBar(
                   BorderStroke(2.dp, MaterialTheme.colorScheme.onBackground),
                   RoundedCornerShape(16.dp))
               .testTag("SearchBar"),
-      placeholder = { Text("Search by user ID", color = MaterialTheme.colorScheme.onBackground) },
+      placeholder = { Text(searchByUserIdText, color = MaterialTheme.colorScheme.onBackground) },
       colors =
           TextFieldDefaults.colors(
               focusedContainerColor = MaterialTheme.colorScheme.background,
@@ -322,7 +335,7 @@ fun SearchBar(
 fun FriendListCard(
     title: String,
     items: List<String>,
-    emptyMessage: String = "No items available",
+    emptyMessage: String = stringResource(R.string.no_item_available_text),
     content: @Composable (String) -> Unit
 ) {
   Card(
@@ -383,13 +396,13 @@ fun FriendItem(friendName: String, userViewModel: UserViewModel) {
   val showDialog = mutableStateOf(false) // State to control dialog visibility
 
   FriendCard(friendName) {
-
+    val removeText = stringResource(R.string.remove_text)
     // Button "Remove"
     ActionButton(
         { showDialog.value = true },
         Icons.Default.Delete,
         MaterialTheme.colorScheme.error,
-        "Remove")
+        removeText)
 
     ConfirmationDialog(showDialog) { userViewModel.removeFriend(friendName) }
   }
@@ -408,14 +421,14 @@ fun FriendRequestItem(friendRequestName: String, userViewModel: UserViewModel) {
               { userViewModel.acceptFriendRequest(friendRequestName) },
               Icons.Default.AddCircle,
               MaterialTheme.colorScheme.primary,
-              "Accept")
+              stringResource(R.string.accept_text))
 
           // Button "Decline"
           ActionButton(
               { userViewModel.declineFriendRequest(friendRequestName) },
               Icons.Default.Delete,
               MaterialTheme.colorScheme.error,
-              "Decline")
+              stringResource(R.string.decline_text))
         }
   }
 }
@@ -454,6 +467,7 @@ fun TextButton(onClickAction: () -> Unit, text: String, color: ButtonColors, tes
   }
 }
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun ConfirmationDialog(showDialog: MutableState<Boolean>, onClickAction: () -> Unit) {
   if (showDialog.value) {
@@ -467,25 +481,30 @@ fun ConfirmationDialog(showDialog: MutableState<Boolean>, onClickAction: () -> U
             Column(
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally) {
+                  val confirmingRemovalFriendText =
+                      stringResource(R.string.confirm_friend_removal_text)
                   Text(
-                      text = "Are you sure you want to remove this friend?",
+                      text = confirmingRemovalFriendText,
                       fontWeight = FontWeight.Bold,
                       color = MaterialTheme.colorScheme.onSurface,
                       modifier = Modifier.padding(bottom = 16.dp))
                   Row(
                       horizontalArrangement = Arrangement.SpaceEvenly,
                       modifier = Modifier.fillMaxWidth()) {
+                        val removedFriendText = stringResource(R.string.removed_friend_text)
+                        val yesText = stringResource(R.string.yes_button_text)
+                        val noText = stringResource(R.string.no_button_text)
                         Button(
                             onClick = {
                               onClickAction()
-                              Toast.makeText(context, "Friend removed.", Toast.LENGTH_SHORT).show()
+                              Toast.makeText(context, removedFriendText, Toast.LENGTH_SHORT).show()
                               showDialog.value = false // Close the dialog
                             },
                             colors =
                                 ButtonDefaults.buttonColors(
                                     containerColor = MaterialTheme.colorScheme.error,
                                     contentColor = MaterialTheme.colorScheme.onError)) {
-                              Text("Yes")
+                              Text(yesText)
                             }
                         Button(
                             onClick = { showDialog.value = false }, // Close the dialog
@@ -493,7 +512,7 @@ fun ConfirmationDialog(showDialog: MutableState<Boolean>, onClickAction: () -> U
                                 ButtonDefaults.buttonColors(
                                     containerColor = MaterialTheme.colorScheme.primary,
                                     contentColor = MaterialTheme.colorScheme.onPrimary)) {
-                              Text("No")
+                              Text(noText)
                             }
                       }
                 }

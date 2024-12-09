@@ -16,7 +16,6 @@ class NotImplementedYetTest {
     val testTag = "Tag"
     val text = "Nothing for now"
     composeTestRule.setContent { NotImplementedYet(text, testTag) }
-
     composeTestRule.onNodeWithTag(testTag).onChild().assertIsDisplayed()
     composeTestRule.onNodeWithTag(testTag).onChild().assertTextEquals(text)
   }

@@ -47,13 +47,13 @@ fun TutorialScreen(navigationActions: NavigationActions, onFinish: () -> Unit) {
     when (step) {
       0 ->
           TutorialOverlay(
-              text = stringResource(R.string.tutorial_screen1),
+              text = stringResource(R.string.tutorial_screen1_text),
               highlightArea = { FullScreenSemiTransparentOverlay() },
               onNext = { step++ },
               textTag = "WelcomeTextTag")
       1 ->
           TutorialOverlay(
-              text = stringResource(R.string.tutorial_screen2),
+              text = stringResource(R.string.tutorial_screen2_text),
               highlightArea = {
                 HighlightedBox(
                     xOffset = 90.dp,
@@ -65,7 +65,7 @@ fun TutorialScreen(navigationActions: NavigationActions, onFinish: () -> Unit) {
               textTag = "ExerciseTextTag")
       2 ->
           TutorialOverlay(
-              text = stringResource(R.string.tutorial_last_screen),
+              text = stringResource(R.string.tutorial_last_screen_text),
               highlightArea = { FullScreenSemiTransparentOverlay() },
               onNext = {
                 navigationActions.navigateTo(Screen.HOME)
@@ -107,7 +107,7 @@ fun TutorialOverlay(
           onClick = onNext,
           modifier = Modifier.testTag("nextButton"),
           colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)) {
-            Text("Next", color = MaterialTheme.colorScheme.onPrimary)
+            Text(stringResource(R.string.next_text), color = MaterialTheme.colorScheme.onPrimary)
           }
     }
   }
