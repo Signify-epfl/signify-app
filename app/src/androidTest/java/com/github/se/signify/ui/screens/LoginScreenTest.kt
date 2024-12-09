@@ -35,9 +35,7 @@ class LoginScreenTest : TestCase() {
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.AUTH.route)
     Intents.init()
-    composeTestRule.setContent {
-      LoginScreen(navigationActions, {}) // Set up the SignInScreen directly
-    }
+    composeTestRule.setContent { LoginScreen(navigationActions, {}) }
   }
 
   @After
