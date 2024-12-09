@@ -91,4 +91,6 @@ Faisons un rapide tour d’horizon pour vous aider à démarrer l’apprentissag
     <string name="tutorial_screen2">Faites glisser votre doigt vers la droite pour afficher les exercices par niveau de difficulté.</string>
     <string name="tutorial_last_screen">Vous êtes prêt à commencer! Profitez de l\'apprentissage de la langue des signes.</string>
     <string name="quest_screen_title">Un jour, Un mot</string>
+    <string name="open_quest_button">Apprendre</string>
+    <string name="closed_quest_button">Verrouillé</string>
 </resources>
