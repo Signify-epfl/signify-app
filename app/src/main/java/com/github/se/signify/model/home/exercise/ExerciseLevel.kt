@@ -1,4 +1,4 @@
-package com.github.se.signify.model.exercise
+package com.github.se.signify.model.home.exercise
 
 import com.github.se.signify.R
 import com.github.se.signify.model.navigation.Screen

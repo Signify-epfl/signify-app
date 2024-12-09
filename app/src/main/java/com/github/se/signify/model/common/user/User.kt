@@ -1,4 +1,4 @@
-package com.github.se.signify.model.user
+package com.github.se.signify.model.common.user
 
 data class User(
     val uid: String = "",

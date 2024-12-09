@@ -1,4 +1,4 @@
-package com.github.se.signify.model.stats
+package com.github.se.signify.model.profile.stats
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth

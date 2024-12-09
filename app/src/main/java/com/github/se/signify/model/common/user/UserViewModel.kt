@@ -1,10 +1,10 @@
-package com.github.se.signify.model.user
+package com.github.se.signify.model.common.user
 
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.github.se.signify.model.auth.UserSession
+import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.challenge.Challenge
 import java.text.SimpleDateFormat
 import java.util.Date

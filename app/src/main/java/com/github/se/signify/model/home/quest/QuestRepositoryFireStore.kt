@@ -1,4 +1,4 @@
-package com.github.se.signify.model.quest
+package com.github.se.signify.model.home.quest
 
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth

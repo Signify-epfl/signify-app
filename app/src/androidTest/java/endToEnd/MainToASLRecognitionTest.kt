@@ -1,4 +1,4 @@
-package end2end
+package endToEnd
 
 import android.Manifest
 import android.content.Context

@@ -2,6 +2,7 @@ package com.github.se.signify.model.user
 
 import android.os.Looper
 import androidx.test.core.app.ApplicationProvider
+import com.github.se.signify.model.common.user.saveUserToFireStore
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.FirebaseApp

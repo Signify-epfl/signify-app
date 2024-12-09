@@ -2,7 +2,7 @@ package com.github.se.signify.ui.language
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import com.github.se.signify.model.updateLanguage
+import com.github.se.signify.model.common.updateLanguage
 import java.util.Locale
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows

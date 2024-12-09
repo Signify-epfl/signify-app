@@ -29,8 +29,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.github.se.signify.R
-import com.github.se.signify.model.getIconResId
-import com.github.se.signify.model.hand.HandLandMarkViewModel
+import com.github.se.signify.model.common.getIconResId
+import com.github.se.signify.model.home.hand.HandLandMarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.CameraBox

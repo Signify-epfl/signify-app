@@ -1,4 +1,4 @@
-package com.github.se.signify.model
+package com.github.se.signify.model.common
 
 import android.content.Context
 import android.content.res.Configuration

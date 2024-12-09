@@ -52,10 +52,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
-import com.github.se.signify.model.exercise.ExerciseLevel
-import com.github.se.signify.model.getIconResId
-import com.github.se.signify.model.getImageResId
-import com.github.se.signify.model.getTipResId
+import com.github.se.signify.model.home.exercise.ExerciseLevel
+import com.github.se.signify.model.common.getIconResId
+import com.github.se.signify.model.common.getImageResId
+import com.github.se.signify.model.common.getTipResId
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.common.BasicButton

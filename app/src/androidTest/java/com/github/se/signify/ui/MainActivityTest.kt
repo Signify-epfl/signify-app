@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.screens
+package com.github.se.signify.ui
 
 import android.Manifest
 import android.content.Context
@@ -7,7 +7,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.SignifyAppPreview
-import com.github.se.signify.model.di.AppDependencyProvider
+import com.github.se.signify.model.dependencyInjection.AppDependencyProvider
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

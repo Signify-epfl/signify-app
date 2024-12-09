@@ -1,7 +1,10 @@
 package com.github.se.signify.model.stats
 
-import com.github.se.signify.model.auth.UserSession
-import com.github.se.signify.model.di.MockDependencyProvider
+import com.github.se.signify.model.authentication.UserSession
+import com.github.se.signify.model.dependencyInjection.MockDependencyProvider
+import com.github.se.signify.model.profile.stats.MockStatsRepository
+import com.github.se.signify.model.profile.stats.Stats
+import com.github.se.signify.model.profile.stats.StatsViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before

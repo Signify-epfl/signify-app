@@ -1,4 +1,4 @@
-package com.github.se.signify.model.quiz
+package com.github.se.signify.model.home.quiz
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

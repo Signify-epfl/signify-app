@@ -1,7 +1,7 @@
 import android.content.Context
 import androidx.camera.core.ImageProxy
-import com.github.se.signify.model.hand.HandLandMarkRepository
-import com.github.se.signify.model.hand.HandLandMarkViewModel
+import com.github.se.signify.model.home.hand.HandLandMarkRepository
+import com.github.se.signify.model.home.hand.HandLandMarkViewModel
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarkerResult
 import junit.framework.TestCase.assertEquals

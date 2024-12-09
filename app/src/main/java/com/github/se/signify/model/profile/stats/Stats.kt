@@ -1,4 +1,4 @@
-package com.github.se.signify.model.stats
+package com.github.se.signify.model.profile.stats
 
 data class Stats(
     val lettersLearned: List<Char> = emptyList(),

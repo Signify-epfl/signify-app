@@ -1,4 +1,4 @@
-package com.github.se.signify.model.stats
+package com.github.se.signify.model.profile.stats
 
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FieldValue

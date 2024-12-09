@@ -1,4 +1,4 @@
-package com.github.se.signify.model.user
+package com.github.se.signify.model.common.user
 
 import android.net.Uri
 import com.github.se.signify.model.challenge.Challenge

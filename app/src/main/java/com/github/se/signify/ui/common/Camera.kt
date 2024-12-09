@@ -35,7 +35,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import com.github.se.signify.model.hand.HandLandMarkViewModel
+import com.github.se.signify.model.home.hand.HandLandMarkViewModel
 
 /**
  * The camera preview box. This function requests camera permission and displays the camera preview

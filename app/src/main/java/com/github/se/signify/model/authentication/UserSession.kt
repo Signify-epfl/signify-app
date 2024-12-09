@@ -1,4 +1,4 @@
-package com.github.se.signify.model.auth
+package com.github.se.signify.model.authentication
 
 interface UserSession {
   fun getUserId(): String?

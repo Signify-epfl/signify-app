@@ -1,6 +1,9 @@
 package com.github.se.signify.model
 
 import com.github.se.signify.R
+import com.github.se.signify.model.common.getIconResId
+import com.github.se.signify.model.common.getImageResId
+import com.github.se.signify.model.common.getTipResId
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 

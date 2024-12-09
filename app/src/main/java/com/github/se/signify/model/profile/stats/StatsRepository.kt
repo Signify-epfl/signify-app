@@ -1,4 +1,4 @@
-package com.github.se.signify.model.stats
+package com.github.se.signify.model.profile.stats
 
 interface StatsRepository {
   fun init(onSuccess: () -> Unit)

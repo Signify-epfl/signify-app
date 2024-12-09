@@ -1,5 +1,6 @@
 package com.github.se.signify.model.stats
 
+import com.github.se.signify.model.profile.stats.Stats
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

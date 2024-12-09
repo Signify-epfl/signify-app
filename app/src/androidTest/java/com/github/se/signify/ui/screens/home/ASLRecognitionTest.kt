@@ -12,8 +12,8 @@ import androidx.lifecycle.LifecycleRegistry
 import androidx.test.annotation.UiThreadTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
-import com.github.se.signify.model.di.AppDependencyProvider
-import com.github.se.signify.model.hand.HandLandMarkViewModel
+import com.github.se.signify.model.dependencyInjection.AppDependencyProvider
+import com.github.se.signify.model.home.hand.HandLandMarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import org.junit.Before

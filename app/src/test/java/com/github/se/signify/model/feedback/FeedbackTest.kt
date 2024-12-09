@@ -1,5 +1,6 @@
 package com.github.se.signify.model.feedback
 
+import com.github.se.signify.model.home.feedback.Feedback
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Test

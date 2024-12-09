@@ -5,8 +5,8 @@ import android.graphics.Bitmap
 import android.util.Log
 import androidx.camera.core.ImageProxy
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.github.se.signify.model.hand.HandLandMarkConfig
-import com.github.se.signify.model.hand.HandLandMarkImplementation
+import com.github.se.signify.model.home.hand.HandLandMarkConfig
+import com.github.se.signify.model.home.hand.HandLandMarkImplementation
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test

@@ -1,4 +1,4 @@
-package com.github.se.signify.model.feedback
+package com.github.se.signify.model.home.feedback
 
 interface FeedbackRepository {
   fun saveFeedback(

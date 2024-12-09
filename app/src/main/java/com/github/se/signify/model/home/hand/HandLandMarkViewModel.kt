@@ -1,4 +1,4 @@
-package com.github.se.signify.model.hand
+package com.github.se.signify.model.home.hand
 
 import android.content.Context
 import android.util.Log

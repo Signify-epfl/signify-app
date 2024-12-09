@@ -1,4 +1,4 @@
-package com.github.se.signify.model.auth
+package com.github.se.signify.model.authentication
 
 class MockUserSession : UserSession {
   var loggedIn = true

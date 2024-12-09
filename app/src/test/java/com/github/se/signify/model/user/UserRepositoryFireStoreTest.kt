@@ -3,6 +3,8 @@ package com.github.se.signify.model.user
 import android.os.Looper
 import androidx.test.core.app.ApplicationProvider
 import com.github.se.signify.model.challenge.Challenge
+import com.github.se.signify.model.common.user.User
+import com.github.se.signify.model.common.user.UserRepositoryFireStore
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference

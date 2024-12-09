@@ -1,6 +1,7 @@
 package com.github.se.signify.model.quiz
 
 import androidx.test.core.app.ApplicationProvider
+import com.github.se.signify.model.home.quiz.QuizRepositoryFireStore
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp

@@ -6,13 +6,13 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import com.github.se.signify.model.auth.MockUserSession
-import com.github.se.signify.model.auth.UserSession
+import com.github.se.signify.model.authentication.MockUserSession
+import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.challenge.Challenge
 import com.github.se.signify.model.challenge.MockChallengeRepository
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.model.user.UserRepository
+import com.github.se.signify.model.common.user.UserRepository
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

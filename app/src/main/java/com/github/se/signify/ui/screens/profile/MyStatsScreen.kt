@@ -12,12 +12,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.github.se.signify.model.auth.UserSession
+import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.navigation.NavigationActions
-import com.github.se.signify.model.stats.StatsRepository
-import com.github.se.signify.model.stats.StatsViewModel
-import com.github.se.signify.model.user.UserRepository
-import com.github.se.signify.model.user.UserViewModel
+import com.github.se.signify.model.profile.stats.StatsRepository
+import com.github.se.signify.model.profile.stats.StatsViewModel
+import com.github.se.signify.model.common.user.UserRepository
+import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.ui.common.AccountInformation
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.LearnedLetterList

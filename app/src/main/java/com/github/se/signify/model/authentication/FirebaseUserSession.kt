@@ -1,4 +1,4 @@
-package com.github.se.signify.model.auth
+package com.github.se.signify.model.authentication
 
 import com.google.firebase.auth.FirebaseAuth
 

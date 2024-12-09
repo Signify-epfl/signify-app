@@ -1,5 +1,8 @@
 package com.github.se.signify.model.quiz
 
+import com.github.se.signify.model.home.quiz.QuizQuestion
+import com.github.se.signify.model.home.quiz.QuizRepository
+import com.github.se.signify.model.home.quiz.QuizViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -33,7 +36,8 @@ class QuizViewModelTest {
     val mockQuizzes =
         listOf(
             QuizQuestion("Apple", listOf(1, 2, 3), listOf("Banana", "Orange")),
-            QuizQuestion("Car", listOf(4, 5, 6), listOf("Bike", "Bus")))
+            QuizQuestion("Car", listOf(4, 5, 6), listOf("Bike", "Bus"))
+        )
     doAnswer {
           val onSuccess = it.arguments[0] as (List<QuizQuestion>) -> Unit
           onSuccess(mockQuizzes)
@@ -104,7 +108,8 @@ class QuizViewModelTest {
     val mockQuizzes =
         listOf(
             QuizQuestion("Apple", listOf(1, 2, 3), listOf("Banana", "Orange")),
-            QuizQuestion("Car", listOf(4, 5, 6), listOf("Bike", "Bus")))
+            QuizQuestion("Car", listOf(4, 5, 6), listOf("Bike", "Bus"))
+        )
     quizViewModel.quizzesTesting.value = mockQuizzes
     quizViewModel.currentQuizTesting.value = mockQuizzes[0]
 

@@ -1,4 +1,4 @@
-package com.github.se.signify.model.quest
+package com.github.se.signify.model.home.quest
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

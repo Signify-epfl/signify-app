@@ -1,4 +1,4 @@
-package com.github.se.signify.model.quest
+package com.github.se.signify.model.home.quest
 
 data class Quest(
     val index: String, // This will contain the index of the quest
