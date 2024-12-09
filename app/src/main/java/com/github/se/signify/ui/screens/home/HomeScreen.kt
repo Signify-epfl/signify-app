@@ -57,6 +57,7 @@ import com.github.se.signify.model.common.getIconResId
 import com.github.se.signify.model.common.getImageResId
 import com.github.se.signify.model.common.getTipResId
 import com.github.se.signify.model.home.exercise.ExerciseLevel
+import com.github.se.signify.model.home.exercise.ExerciseLevelName
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.common.BasicButton
