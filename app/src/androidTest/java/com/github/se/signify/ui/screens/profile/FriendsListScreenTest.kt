@@ -42,8 +42,8 @@ class FriendsListScreenTest {
           currentStreak = 0L,
           highestStreak = 0L) // Test user data
   private val searchBar = "SearchBar"
-  private val friendsList = "My Friends list"
-  private val friendsDemands = "New Friends Requests"
+  private val friendsList = "My Friends"
+  private val friendsDemands = "Friend Requests"
   private val search = "Search"
   private val friendsButton = "FriendsButton"
   private val requestsButton = "RequestsButton"
@@ -137,7 +137,7 @@ class FriendsListScreenTest {
     composeTestRule.waitForIdle()
 
     // Verify empty message is displayed
-    composeTestRule.onNodeWithText("You have no Friends").assertIsDisplayed()
+    composeTestRule.onNodeWithText("No Friends").assertIsDisplayed()
   }
 
   @Test
@@ -148,7 +148,7 @@ class FriendsListScreenTest {
     friendRequests.clear()
     composeTestRule.waitForIdle()
     // Verify empty message is displayed for friend requests
-    composeTestRule.onNodeWithText("No new friend Requests").assertIsDisplayed()
+    composeTestRule.onNodeWithText("You have no new friends").assertIsDisplayed()
   }
 
   @Test

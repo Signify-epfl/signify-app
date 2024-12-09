@@ -9,9 +9,7 @@ class UtilsTest {
   fun getImageResId_returnsCorrectDrawableResource() {
     val letter = 'A'
     val expectedResId = R.drawable.pic_a
-
     val actualResId = getImageResId(letter)
-
     assertEquals(
         "getImageResId should return the correct drawable resource ID for 'A'",
         expectedResId,
@@ -20,12 +18,9 @@ class UtilsTest {
 
   @Test
   fun getIconResId_returnsCorrectDrawableResource() {
-
     val letter = 'A'
     val expectedResId = R.drawable.letter_a
-
     val actualResId = getIconResId(letter)
-
     assertEquals(
         "getIconResId should return the correct drawable resource ID for 'A'",
         expectedResId,
@@ -62,7 +57,6 @@ class UtilsTest {
             'X' to R.string.tip_x,
             'Y' to R.string.tip_y,
             'Z' to R.string.tip_z)
-
     expectedResourceMap.forEach { (letter, expectedResId) ->
       val actualResId = getTipResId(letter)
       assertEquals(

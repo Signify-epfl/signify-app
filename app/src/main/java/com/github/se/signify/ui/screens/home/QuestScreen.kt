@@ -93,6 +93,9 @@ fun QuestBox(quest: Quest, isUnlocked: Boolean) {
               textAlign = TextAlign.Left)
 
           Spacer(modifier = Modifier.height(20.dp))
+          val letsGoTextOrLockedText =
+              if (isUnlocked) stringResource(R.string.lets_go_text)
+              else stringResource(R.string.locked_text)
           Button(
               modifier = Modifier.fillMaxWidth().testTag("QuestActionButton"),
               onClick = { if (isUnlocked) isDialogVisible = true },
@@ -117,12 +120,13 @@ fun QuestBox(quest: Quest, isUnlocked: Boolean) {
 @Composable
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun QuestDescriptionDialog(quest: Quest, onDismiss: () -> Unit) {
+  val inSignLanguageText = stringResource(R.string.in_sign_language_text)
   AlertDialog(
       onDismissRequest = { onDismiss() },
       containerColor = MaterialTheme.colorScheme.background,
       title = {
         Text(
-            text = quest.title + " in sign language",
+            text = "${quest.title} $inSignLanguageText",
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
             color = MaterialTheme.colorScheme.primary)
@@ -157,7 +161,7 @@ fun QuestDescriptionDialog(quest: Quest, onDismiss: () -> Unit) {
                 ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary)) {
-              Text("Close")
+              Text(stringResource(R.string.close_text))
             }
       },
       shape = RoundedCornerShape(16.dp),

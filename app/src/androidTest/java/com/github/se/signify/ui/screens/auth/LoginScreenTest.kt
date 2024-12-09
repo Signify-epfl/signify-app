@@ -1,4 +1,4 @@
-package com.github.se.signify.ui.screens
+package com.github.se.signify.ui.screens.auth
 
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
@@ -13,7 +13,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.ui.screens.auth.LoginScreen
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
 import org.junit.After
 import org.junit.Before
@@ -54,7 +53,7 @@ class LoginScreenTest : TestCase() {
     composeTestRule
         .onNodeWithTag("IntroMessage")
         .assertTextEquals(
-            "Signify is what you need to communicate with deaf and hard of hearing people")
+            "Signify is what you need to start communicating with deaf and hard of hearing people")
 
     composeTestRule.onNodeWithTag("loginButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("loginButton").assertHasClickAction()

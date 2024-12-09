@@ -14,7 +14,6 @@ import org.mockito.Mockito.mock
 
 class CameraTest {
   @get:Rule val composeTestRule = createComposeRule()
-
   @get:Rule
   val cameraAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
 
@@ -23,7 +22,6 @@ class CameraTest {
     val context = mock(Context::class.java)
     val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
     val handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
-
     composeTestRule.setContent { CameraBox(handLandMarkViewModel, "cameraPreview") }
     composeTestRule.onNodeWithTag("cameraPreview").assertIsDisplayed()
   }
