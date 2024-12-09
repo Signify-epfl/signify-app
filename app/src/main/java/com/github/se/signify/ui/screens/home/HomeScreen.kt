@@ -53,15 +53,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.model.exercise.ExerciseLevel
+import com.github.se.signify.model.getIconResId
+import com.github.se.signify.model.getImageResId
+import com.github.se.signify.model.getTipResId
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.ui.MainScreenScaffold
-import com.github.se.signify.ui.UtilButton
-import com.github.se.signify.ui.UtilTextButton
-import com.github.se.signify.ui.getIconResId
-import com.github.se.signify.ui.getImageResId
-import com.github.se.signify.ui.getLetterIconResId
-import com.github.se.signify.ui.getTipResId
+import com.github.se.signify.ui.common.BasicButton
+import com.github.se.signify.ui.common.MainScreenScaffold
+import com.github.se.signify.ui.common.TextButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -81,7 +80,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
   val letterText = stringResource(id = R.string.letter_text)
   MainScreenScaffold(
       navigationActions = navigationActions,
-      testTagColumn = "HomeScreen",
+      testTag = "HomeScreen",
       helpTitle = "Home",
       helpText = stringResource(R.string.help_home_screen),
       floatingActionButton = {
@@ -101,24 +100,24 @@ fun HomeScreen(navigationActions: NavigationActions) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween) {
-                      UtilButton(
+                      BasicButton(
                           onClick = { navigationActions.navigateTo(Screen.FEEDBACK) },
-                          buttonTestTag = "FeedbackButton",
                           iconTestTag = "FeedbackIcon",
                           icon = Icons.Outlined.Email,
-                          contentDescription = "Feedback")
-                      UtilButton(
+                          contentDescription = "Feedback",
+                          modifier = Modifier.testTag("FeedbackButton"))
+                      BasicButton(
                           onClick = { navigationActions.navigateTo(Screen.QUIZ) },
-                          buttonTestTag = "QuizButton",
                           iconTestTag = "QuizIcon",
                           icon = Icons.Outlined.Star,
-                          contentDescription = "Quizzes")
-                      UtilButton(
+                          contentDescription = "Quizzes",
+                          modifier = Modifier.testTag("QuizButton"))
+                      BasicButton(
                           onClick = { navigationActions.navigateTo(Screen.QUEST) },
-                          buttonTestTag = "QuestsButton",
                           iconTestTag = "QuestIcon",
                           icon = Icons.Outlined.DateRange,
-                          contentDescription = "Quests")
+                          contentDescription = "Quests",
+                          modifier = Modifier.testTag("QuestsButton"))
                     }
               }
 
@@ -165,8 +164,8 @@ fun HomeScreen(navigationActions: NavigationActions) {
 @Composable
 fun CameraFeedbackButton(onClick: () -> Unit = {}) {
   val tryText = stringResource(id = R.string.try_text)
-  UtilTextButton(
-      onClickAction = onClick,
+  TextButton(
+      onClick = onClick,
       testTag = "CameraFeedbackButton",
       text = tryText,
       backgroundColor = MaterialTheme.colorScheme.primary,
@@ -240,7 +239,7 @@ fun LetterDictionary(
                                 Modifier.testTag("LetterText_${currentLetter.uppercaseChar()}"))
                         Spacer(modifier = Modifier.width(8.dp))
                         Icon(
-                            painter = painterResource(id = getLetterIconResId(currentLetter)),
+                            painter = painterResource(id = getIconResId(currentLetter)),
                             contentDescription = "Letter gesture",
                             tint = MaterialTheme.colorScheme.onPrimary,
                             modifier =

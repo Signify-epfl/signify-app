@@ -45,7 +45,7 @@ import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.quiz.QuizQuestion
 import com.github.se.signify.model.quiz.QuizRepository
 import com.github.se.signify.model.quiz.QuizViewModel
-import com.github.se.signify.ui.AnnexScreenScaffold
+import com.github.se.signify.ui.common.AnnexScreenScaffold
 
 @Composable
 fun QuizScreen(navigationActions: NavigationActions, quizRepository: QuizRepository) {
@@ -56,7 +56,7 @@ fun QuizScreen(navigationActions: NavigationActions, quizRepository: QuizReposit
 
   val context = LocalContext.current
 
-  AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = "QuizScreen") {
+  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "QuizScreen") {
     val quizTimeText = stringResource(R.string.quiz_time_text)
     Text(
         text = quizTimeText,

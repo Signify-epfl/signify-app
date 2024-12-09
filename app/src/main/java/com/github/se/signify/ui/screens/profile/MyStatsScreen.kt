@@ -20,11 +20,11 @@ import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.stats.StatsViewModel
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
-import com.github.se.signify.ui.AccountInformation
-import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.LearnedLetterList
-import com.github.se.signify.ui.NotImplementedYet
-import com.github.se.signify.ui.StatisticsColumnRow
+import com.github.se.signify.ui.common.AccountInformation
+import com.github.se.signify.ui.common.AnnexScreenScaffold
+import com.github.se.signify.ui.common.LearnedLetterList
+import com.github.se.signify.ui.common.NotImplementedYet
+import com.github.se.signify.ui.common.StatisticsTable
 
 @Composable
 fun MyStatsScreen(
@@ -65,7 +65,7 @@ fun MyStatsScreen(
 
   AnnexScreenScaffold(
       navigationActions = navigationActions,
-      testTagColumn = "MyStatsScreen",
+      testTag = "MyStatsScreen",
   ) {
 
     // Top information
@@ -73,7 +73,7 @@ fun MyStatsScreen(
         userId = userSession.getUserId()!!,
         userName = userName.value,
         profilePictureUrl = updatedProfilePicture,
-        days = streak.value)
+        streak = streak.value)
     Spacer(modifier = Modifier.height(32.dp))
 
     // Letters learned
@@ -85,26 +85,26 @@ fun MyStatsScreen(
     val easyExercisesText = stringResource(R.string.easy_exercises_text)
     val mediumExercisesText = stringResource(R.string.medium_exercises_text)
     val hardExercisesText = stringResource(R.string.hard_exercises_text)
-    StatisticsColumnRow(
+    StatisticsTable(
         columnTestTag = "ExercisesColumn",
         rowTestTag = "ExercisesRow",
         lineText = exercisesText,
-        lineTextTag = "ExercisesText",
-        statsTextList = listOf(easyExercisesText, mediumExercisesText, hardExercisesText),
-        statsNumberList = listOf("${easy.value}", "${medium.value}", "${hard.value}"))
+        statsTexts = listOf(easyExercisesText, mediumExercisesText, hardExercisesText),
+        statsNumberList = listOf("${easy.value}", "${medium.value}", "${hard.value}"),
+        lineTextTestTag = "ExercisesText")
     Spacer(modifier = Modifier.height(32.dp))
 
     // Number of quests achieved
     val questsText = stringResource(R.string.quests_text)
     val dailyQuestsText = stringResource(R.string.daily_quests_text)
     val weeklyQuestsText = stringResource(R.string.weekly_quests_text)
-    StatisticsColumnRow(
+    StatisticsTable(
         columnTestTag = "QuestsColumn",
         rowTestTag = "QuestsRow",
         lineText = questsText,
-        lineTextTag = "QuestsText",
-        statsTextList = listOf(dailyQuestsText, weeklyQuestsText),
-        statsNumberList = listOf("${daily.value}", "${weekly.value}"))
+        statsTexts = listOf(dailyQuestsText, weeklyQuestsText),
+        statsNumberList = listOf("${daily.value}", "${weekly.value}"),
+        lineTextTestTag = "QuestsText")
     Spacer(modifier = Modifier.height(64.dp))
     val graphsAndStatsText = stringResource(R.string.graphs_and_stats_text)
     // Graphs and Stats

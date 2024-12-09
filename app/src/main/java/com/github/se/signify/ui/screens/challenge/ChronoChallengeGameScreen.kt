@@ -31,8 +31,8 @@ import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.CameraPlaceholder
+import com.github.se.signify.ui.common.AnnexScreenScaffold
+import com.github.se.signify.ui.common.CameraBox
 import kotlinx.coroutines.delay
 
 @Composable
@@ -132,21 +132,20 @@ fun ChronoChallengeGameScreen(
   }
 
   // Render the challenge screen
-  AnnexScreenScaffold(
-      navigationActions = navigationActions, testTagColumn = "ChronoChallengeScreen") {
-        if (currentWord.isNotEmpty()) {
-          ChronoChallengeContent(
-              elapsedTime = elapsedTime,
-              currentWord = currentWord,
-              currentLetterIndex = currentLetterIndex,
-              handLandMarkViewModel = handLandMarkViewModel,
-          )
-        } else {
-          // If no words are available, show appropriate message
-          val noWordAvailableText = stringResource(R.string.no_word_available_text)
-          Text(noWordAvailableText, modifier = Modifier.testTag("NoWordAvailableText"))
-        }
-      }
+  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "ChronoChallengeScreen") {
+    if (currentWord.isNotEmpty()) {
+      ChronoChallengeContent(
+          elapsedTime = elapsedTime,
+          currentWord = currentWord,
+          currentLetterIndex = currentLetterIndex,
+          handLandMarkViewModel = handLandMarkViewModel,
+      )
+    } else {
+      // If no words are available, show appropriate message
+      val noWordAvailableText = stringResource(R.string.no_word_available_text)
+      Text(noWordAvailableText, modifier = Modifier.testTag("NoWordAvailableText"))
+    }
+  }
 }
 
 @Composable
@@ -165,7 +164,7 @@ fun ChronoChallengeContent(
 
         CurrentLetterDisplay(currentWord, currentLetterIndex)
         SentenceLayerDisplay(currentWord, currentLetterIndex)
-        CameraPlaceholder(handLandMarkViewModel, Modifier.testTag("CameraPlaceholder"))
+        CameraBox(handLandMarkViewModel = handLandMarkViewModel, testTag = "CameraBox")
       }
 }
 

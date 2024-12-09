@@ -11,23 +11,23 @@ import androidx.compose.ui.unit.dp
 import com.github.se.signify.R
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.ui.MainScreenScaffold
-import com.github.se.signify.ui.SquareButton
+import com.github.se.signify.ui.common.MainScreenScaffold
+import com.github.se.signify.ui.common.SquareButton
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ChallengeScreen(navigationActions: NavigationActions) {
   MainScreenScaffold(
       navigationActions = navigationActions,
-      testTagColumn = "ChallengeScreen",
+      testTag = "ChallengeScreen",
       helpTitle = stringResource(R.string.challenge_text),
       helpText = stringResource(R.string.description_challenge)) {
         Spacer(modifier = Modifier.height(64.dp))
 
         // Challenge square button
         SquareButton(
-            iconRes = R.drawable.battleicon,
-            label = stringResource(R.string.challenge_text),
+            iconId = R.drawable.battleicon,
+            text = stringResource(R.string.challenge_text),
             onClick = { navigationActions.navigateTo(Screen.NEW_CHALLENGE) },
             size = 240,
             modifier = Modifier.testTag("ChallengeButton"))
@@ -36,8 +36,8 @@ fun ChallengeScreen(navigationActions: NavigationActions) {
         // History square button
         val historyText = stringResource(R.string.history_text)
         SquareButton(
-            iconRes = R.drawable.historyicon,
-            label = historyText,
+            iconId = R.drawable.historyicon,
+            text = historyText,
             onClick = { navigationActions.navigateTo(Screen.CHALLENGE_HISTORY) },
             size = 240,
             modifier = Modifier.testTag("HistoryButton"))

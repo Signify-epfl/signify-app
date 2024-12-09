@@ -6,7 +6,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,13 +30,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.github.se.signify.R
+import com.github.se.signify.model.getIconResId
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
-import com.github.se.signify.ui.BackButton
-import com.github.se.signify.ui.CameraPlaceholder
-import com.github.se.signify.ui.MainScreenScaffold
-import com.github.se.signify.ui.UtilTextButton
-import com.github.se.signify.ui.gestureImageMap
+import com.github.se.signify.ui.common.AnnexScreenScaffold
+import com.github.se.signify.ui.common.CameraBox
+import com.github.se.signify.ui.common.TextButton
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 
 /**
@@ -51,46 +49,37 @@ fun ASLRecognition(
     navigationActions: NavigationActions
 ) {
   val buttonUriString = stringResource(id = R.string.button_uri_string)
-  val helpText = stringResource(id = R.string.help_asl_recognition)
+  // val helpText = stringResource(id = R.string.help_asl_recognition)
   val context = LocalContext.current
-  val aslRecognitionText = stringResource(id = R.string.asl_recognition_text)
-  MainScreenScaffold(
-      navigationActions = navigationActions,
-      testTagColumn = "ASLRecognitionScreen",
-      helpTitle = aslRecognitionText,
-      helpText = helpText) {
-        Column(
-            modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-              BackButton { navigationActions.goBack() }
-              Box(
-                  modifier =
-                      Modifier.fillMaxWidth()
-                          .height(252.dp)
-                          .padding(horizontal = 16.dp)
-                          .background(MaterialTheme.colorScheme.background)) {
-                    CameraPlaceholder(handLandMarkViewModel)
-                  }
+  // val aslRecognitionText = stringResource(id = R.string.asl_recognition_text)
+  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "ASLRecognitionScreen") {
+    Box(
+        modifier =
+            Modifier.fillMaxWidth()
+                .height(252.dp)
+                .padding(horizontal = 16.dp)
+                .background(MaterialTheme.colorScheme.background)) {
+          CameraBox(handLandMarkViewModel, "cameraPreview")
+        }
 
-              Spacer(modifier = Modifier.height(30.dp))
+    Spacer(modifier = Modifier.height(30.dp))
 
-              GestureOverlayView(handLandMarkViewModel)
+    GestureOverlayView(handLandMarkViewModel)
 
-              Spacer(modifier = Modifier.height(20.dp))
+    Spacer(modifier = Modifier.height(20.dp))
 
-              // Button: "More on ASL Alphabet"
-              val moreOnASLAlphabetText = stringResource(id = R.string.more_on_asl_alphabet_text)
-              UtilTextButton(
-                  onClickAction = {
-                    val intent =
-                        Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(buttonUriString) }
-                    context.startActivity(intent)
-                  },
-                  testTag = "practiceButton",
-                  text = moreOnASLAlphabetText,
-                  backgroundColor = MaterialTheme.colorScheme.primary,
-                  textColor = MaterialTheme.colorScheme.onPrimary)
-            }
-      }
+    // Button: "More on ASL Alphabet"
+    val moreOnASLAlphabetText = stringResource(id = R.string.more_on_asl_alphabet_text)
+    TextButton(
+        onClick = {
+          val intent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(buttonUriString) }
+          context.startActivity(intent)
+        },
+        testTag = "practiceButton",
+        text = moreOnASLAlphabetText,
+        backgroundColor = MaterialTheme.colorScheme.primary,
+        textColor = MaterialTheme.colorScheme.onPrimary)
+  }
 }
 
 /**
@@ -109,7 +98,7 @@ fun GestureOverlayView(handLandMarkViewModel: HandLandMarkViewModel) {
 /** Displays the image associated with the detected ASL hand gesture. */
 @Composable
 fun HandGestureImage(gesture: String) {
-  val imageResource = gestureImageMap[gesture] ?: R.drawable.vector
+  val imageResource = if (gesture.isEmpty()) R.drawable.vector else getIconResId(gesture.first())
   Box(
       modifier =
           Modifier.width(336.dp)

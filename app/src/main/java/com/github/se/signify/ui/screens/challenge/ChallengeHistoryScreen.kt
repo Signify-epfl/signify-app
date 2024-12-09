@@ -14,9 +14,9 @@ import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.stats.StatsRepository
 import com.github.se.signify.model.stats.StatsViewModel
-import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.NotImplementedYet
-import com.github.se.signify.ui.StatisticsColumnRow
+import com.github.se.signify.ui.common.AnnexScreenScaffold
+import com.github.se.signify.ui.common.NotImplementedYet
+import com.github.se.signify.ui.common.StatisticsTable
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -34,7 +34,7 @@ fun ChallengeHistoryScreen(
 
   AnnexScreenScaffold(
       navigationActions = navigationActions,
-      testTagColumn = "ChallengeHistoryScreen",
+      testTag = "ChallengeHistoryScreen",
   ) {
     val challengeCategories =
         listOf(
@@ -42,12 +42,12 @@ fun ChallengeHistoryScreen(
             stringResource(R.string.created_challenge_text),
             stringResource(R.string.won_challenge_text))
     // Challenge's statistics
-    StatisticsColumnRow(
+    StatisticsTable(
         columnTestTag = "ChallengesColumn",
         rowTestTag = "ChallengesRow",
         lineText = stringResource(id = R.string.number_challenges_text),
-        lineTextTag = "ChallengesText",
-        statsTextList = challengeCategories,
+        lineTextTestTag = "ChallengesText",
+        statsTexts = challengeCategories,
         statsNumberList =
             listOf(
                 "${challengesCompleted.value}",

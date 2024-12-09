@@ -1,7 +1,7 @@
 package com.github.se.signify.model.quiz
 
 import android.util.Log
-import com.github.se.signify.ui.getLetterIconResId
+import com.github.se.signify.model.getIconResId
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -46,6 +46,6 @@ class QuizRepositoryFireStore(private val db: FirebaseFirestore) : QuizRepositor
   }
 
   internal fun getSignsForWord(word: String): List<Int> {
-    return word.lowercase().map { char -> getLetterIconResId(char) }
+    return word.lowercase().map { char -> getIconResId(char) }
   }
 }

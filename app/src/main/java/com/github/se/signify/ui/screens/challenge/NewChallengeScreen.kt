@@ -38,8 +38,8 @@ import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
-import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.UtilTextButton
+import com.github.se.signify.ui.common.AnnexScreenScaffold
+import com.github.se.signify.ui.common.TextButton
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "SuspiciousIndentation")
 @Composable
@@ -61,10 +61,10 @@ fun NewChallengeScreen(
 
   val ongoingChallenges by userViewModel.ongoingChallenges.collectAsState()
 
-  AnnexScreenScaffold(navigationActions = navigationActions, testTagColumn = "NewChallengeScreen") {
+  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "NewChallengeScreen") {
     // My Friends button
-    UtilTextButton(
-        onClickAction = { navigationActions.navigateTo(Screen.FRIENDS) },
+    TextButton(
+        onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
         testTag = "MyFriendsButton",
         text = stringResource(R.string.my_friends_text),
         backgroundColor = MaterialTheme.colorScheme.primary,
@@ -74,8 +74,8 @@ fun NewChallengeScreen(
 
     // Create a challenge button
     val createAChallengeText = stringResource(R.string.create_a_challenge_text)
-    UtilTextButton(
-        onClickAction = { navigationActions.navigateTo(Screen.CREATE_CHALLENGE) },
+    TextButton(
+        onClick = { navigationActions.navigateTo(Screen.CREATE_CHALLENGE) },
         testTag = "CreateChallengeButton",
         text = createAChallengeText,
         backgroundColor = MaterialTheme.colorScheme.primary,

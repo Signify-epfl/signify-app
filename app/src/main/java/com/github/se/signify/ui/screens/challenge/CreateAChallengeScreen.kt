@@ -25,8 +25,8 @@ import com.github.se.signify.model.challenge.ChallengeViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
-import com.github.se.signify.ui.AnnexScreenScaffold
-import com.github.se.signify.ui.UtilTextButton
+import com.github.se.signify.ui.common.AnnexScreenScaffold
+import com.github.se.signify.ui.common.TextButton
 
 @Composable
 fun CreateAChallengeScreen(
@@ -49,7 +49,7 @@ fun CreateAChallengeScreen(
 
   AnnexScreenScaffold(
       navigationActions = navigationActions,
-      testTagColumn = "CreateAChallengeContent",
+      testTag = "CreateAChallengeContent",
   ) {
     // Title
     val challengeTitleText = stringResource(R.string.challenge_title_text)
@@ -73,8 +73,8 @@ fun CreateAChallengeScreen(
             items(friends.size) { index ->
               val friendId = friends[index]
               FriendCard(friendId = friendId) {
-                UtilTextButton(
-                    onClickAction = {
+                TextButton(
+                    onClick = {
                       selectedFriendId = friendId
                       showDialog = true
                     },
@@ -142,8 +142,8 @@ fun ChallengeModeAlertDialog(
   AlertDialog(
       onDismissRequest = onDismiss,
       confirmButton = {
-        UtilTextButton(
-            onClickAction = {
+        TextButton(
+            onClick = {
               if (selectedMode.value != null) {
                 // Create the challenge in the challenges collection
                 challengeViewModel.sendChallengeRequest(friendId, selectedMode.value!!, challengeId)
@@ -163,8 +163,8 @@ fun ChallengeModeAlertDialog(
         )
       },
       dismissButton = {
-        UtilTextButton(
-            onClickAction = onDismiss,
+        TextButton(
+            onClick = onDismiss,
             testTag = "CancelButton",
             text = stringResource(R.string.cancel_text),
             backgroundColor = MaterialTheme.colorScheme.surface,
@@ -199,8 +199,8 @@ fun ModeButton(
     mode: ChallengeMode,
     selectedMode: MutableState<ChallengeMode?>,
 ) {
-  UtilTextButton(
-      onClickAction = { selectedMode.value = mode },
+  TextButton(
+      onClick = { selectedMode.value = mode },
       testTag = "${mode.modeName}ModeButton",
       text = mode.modeName,
       backgroundColor =
