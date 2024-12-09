@@ -1,5 +1,6 @@
 package com.github.se.signify.ui.screens.home
 
+import android.content.Context
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -8,6 +9,8 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.test.core.app.ApplicationProvider
+import com.github.se.signify.R
 import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.common.user.UserRepository
@@ -28,6 +31,11 @@ class QuestScreenTest {
   private lateinit var questRepository: QuestRepository
   private lateinit var userRepository: UserRepository
   private lateinit var navigationActions: NavigationActions
+
+  val context: Context = ApplicationProvider.getApplicationContext()
+  val quest_title: String = context.getString(R.string.quest_screen_title_text)
+  val open_button: String = context.getString(R.string.open_quest_button_text)
+  val closed_button: String = context.getString(R.string.closed_quest_button_text)
 
   private val sampleQuest =
       Quest(
@@ -90,10 +98,10 @@ class QuestScreenTest {
     }
 
     // Check that the back button is displayed
-    composeTestRule.onNodeWithContentDescription("Back").assertIsDisplayed()
+    composeTestRule.onNodeWithContentDescription("BackButton").assertIsDisplayed()
 
     // Check that the title is displayed
-    composeTestRule.onNodeWithText("One day, One word").assertIsDisplayed()
+    composeTestRule.onNodeWithText(quest_title).assertIsDisplayed()
   }
 
   @Test
@@ -103,7 +111,7 @@ class QuestScreenTest {
     // Assert that the QuestBox is displayed with the correct content
     composeTestRule.onNodeWithTag("QuestCard").assertIsDisplayed()
     composeTestRule.onNodeWithTag("QuestHeader").assertIsDisplayed()
-    composeTestRule.onNodeWithText("Let’s Go!").assertIsDisplayed()
+    composeTestRule.onNodeWithText(open_button).assertIsDisplayed()
   }
 
   @Test
@@ -111,7 +119,7 @@ class QuestScreenTest {
     composeTestRule.setContent { QuestBox(quest = sampleQuest, isUnlocked = false) }
 
     // Assert that the button shows "Locked" when the quest is not unlocked
-    composeTestRule.onNodeWithText("Locked").assertIsDisplayed()
+    composeTestRule.onNodeWithText(closed_button).assertIsDisplayed()
     composeTestRule.onNodeWithTag("QuestActionButton").assertIsNotEnabled()
   }
 
@@ -151,7 +159,7 @@ class QuestScreenTest {
     }
 
     // Click the back button
-    composeTestRule.onNodeWithContentDescription("Back").performClick()
+    composeTestRule.onNodeWithContentDescription("BackButton").performClick()
 
     // Verify that navigationActions.goBack() was called
     verify(navigationActions).goBack()
