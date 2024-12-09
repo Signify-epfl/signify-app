@@ -1,13 +1,10 @@
-package com.github.se.signify.model.user
+package com.github.se.signify.model.common.user
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.core.net.toUri
 import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.challenge.Challenge
-import com.github.se.signify.model.common.user.User
-import com.github.se.signify.model.common.user.UserRepository
-import com.github.se.signify.model.common.user.UserViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher

@@ -1,7 +1,6 @@
-package com.github.se.signify.model.stats
+package com.github.se.signify.model.profile.stats
 
 import androidx.test.core.app.ApplicationProvider
-import com.github.se.signify.model.profile.stats.saveStatsToFirestore
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth

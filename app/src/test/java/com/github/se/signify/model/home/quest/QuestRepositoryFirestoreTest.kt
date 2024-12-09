@@ -1,7 +1,6 @@
-package com.github.se.signify.model.quest
+package com.github.se.signify.model.home.quest
 
 import androidx.test.core.app.ApplicationProvider
-import com.github.se.signify.model.home.quest.QuestRepositoryFireStore
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks

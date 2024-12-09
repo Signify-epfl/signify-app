@@ -1,9 +1,7 @@
-package com.github.se.signify.model.user
+package com.github.se.signify.model.common.user
 
 import android.net.Uri
 import android.os.Looper
-import com.github.se.signify.model.common.user.MockUserRepository
-import com.github.se.signify.model.common.user.User
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull

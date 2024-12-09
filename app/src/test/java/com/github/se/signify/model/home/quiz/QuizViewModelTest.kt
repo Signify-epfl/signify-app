@@ -1,8 +1,5 @@
-package com.github.se.signify.model.quiz
+package com.github.se.signify.model.home.quiz
 
-import com.github.se.signify.model.home.quiz.QuizQuestion
-import com.github.se.signify.model.home.quiz.QuizRepository
-import com.github.se.signify.model.home.quiz.QuizViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Before

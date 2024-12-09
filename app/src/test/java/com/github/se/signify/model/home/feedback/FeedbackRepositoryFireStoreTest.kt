@@ -1,9 +1,7 @@
-package com.github.se.signify.model.feedback
+package com.github.se.signify.model.home.feedback
 
 import android.os.Looper
 import androidx.test.core.app.ApplicationProvider
-import com.github.se.signify.model.home.feedback.Feedback
-import com.github.se.signify.model.home.feedback.FeedbackRepositoryFireStore
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference

@@ -1,4 +1,4 @@
-package com.github.se.signify.model.stats
+package com.github.se.signify.model.profile.stats
 
 import com.github.se.signify.model.profile.stats.Stats
 import org.junit.Assert.assertEquals

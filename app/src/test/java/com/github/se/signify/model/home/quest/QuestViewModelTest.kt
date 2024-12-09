@@ -1,7 +1,5 @@
-package com.github.se.signify.model.quest
+package com.github.se.signify.model.home.quest
 
-import com.github.se.signify.model.home.quest.QuestRepository
-import com.github.se.signify.model.home.quest.QuestViewModel
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock

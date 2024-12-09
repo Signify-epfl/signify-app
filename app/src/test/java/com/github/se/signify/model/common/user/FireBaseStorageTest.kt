@@ -1,8 +1,7 @@
-package com.github.se.signify.model.user
+package com.github.se.signify.model.common.user
 
 import android.net.Uri
 import androidx.test.core.app.ApplicationProvider
-import com.github.se.signify.model.common.user.UserRepositoryFireStore
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task

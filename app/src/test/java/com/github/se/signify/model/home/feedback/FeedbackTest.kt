@@ -1,4 +1,4 @@
-package com.github.se.signify.model.feedback
+package com.github.se.signify.model.home.feedback
 
 import com.github.se.signify.model.home.feedback.Feedback
 import org.junit.Assert.assertEquals

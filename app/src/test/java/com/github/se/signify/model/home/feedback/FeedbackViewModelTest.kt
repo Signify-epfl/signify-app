@@ -1,10 +1,7 @@
-package com.github.se.signify.model.feedback
+package com.github.se.signify.model.home.feedback
 
 import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
-import com.github.se.signify.model.home.feedback.Feedback
-import com.github.se.signify.model.home.feedback.FeedbackRepository
-import com.github.se.signify.model.home.feedback.FeedbackViewModel
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
