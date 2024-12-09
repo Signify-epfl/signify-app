@@ -185,6 +185,7 @@ class StatsViewModel(
 
   fun getCreatedChallengeStats() {
     _updateStatsEvent.value = UpdateStatsEvent.Loading
+
     repository.getCreatedChallengeStats(
         userSession.getUserId()!!,
         onSuccess = { createdChallenge ->
@@ -198,6 +199,8 @@ class StatsViewModel(
   }
 
   fun getWonChallengeStats() {
+    _updateStatsEvent.value = UpdateStatsEvent.Loading
+
     repository.getWonChallengeStats(
         userSession.getUserId()!!,
         onSuccess = { wonChallenge ->
