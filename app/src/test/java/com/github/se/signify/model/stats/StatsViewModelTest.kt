@@ -132,14 +132,14 @@ class StatsViewModelTest(
   }
 
   @Test
-  fun `getIntFunctions should handle success correctly`() {
+  fun getIntFunctionsShouldHandleSuccessCorrectly() {
     getAction()
     assertTrue(mockStatsRepository.wasMethodCalled(getStatName))
     assertEquals(expectedValueGet, stateFlowValue())
   }
 
   @Test
-  fun `getIntFunctions should handle failure correctly`() {
+  fun getIntFunctionsShouldHandleFailureCorrectly() {
     mockStatsRepository.shouldSucceed = false
     getAction()
     assertTrue(mockStatsRepository.wasMethodCalled(getStatName))
@@ -147,7 +147,7 @@ class StatsViewModelTest(
   }
 
   @Test
-  fun `resetUpdateStatsEvent should set state to Idle`() {
+  fun resetUpdateStatsEventShouldSetStateToIdle() {
     updateAction()
 
     assertNotEquals(StatsViewModel.UpdateStatsEvent.Idle, statsViewModel.updateStatsEvent.value)
@@ -158,7 +158,7 @@ class StatsViewModelTest(
   }
 
   @Test
-  fun `update state should transition from Idle to Success on update function call`() {
+  fun updateStateShouldTransitionFromIdleToSuccessOnUpdateFunctionCall() {
     val initialState = statsViewModel.updateStatsEvent.value
 
     assertEquals(StatsViewModel.UpdateStatsEvent.Idle, initialState)
@@ -170,7 +170,7 @@ class StatsViewModelTest(
   }
 
   @Test
-  fun `update state should transition from Idle to Failure on update function call`() {
+  fun updateStateShouldTransitionFromIdleToFailureOnUpdateFunctionCall() {
     mockStatsRepository.shouldSucceed = false
 
     val initialState = statsViewModel.updateStatsEvent.value
@@ -183,7 +183,7 @@ class StatsViewModelTest(
   }
 
   @Test
-  fun `updateIntFunctions should handle success correctly`() {
+  fun updateIntFunctionsShouldHandleSuccessCorrectly() {
     updateAction()
 
     assertTrue(mockStatsRepository.wasMethodCalled(updateStatName))
@@ -194,7 +194,7 @@ class StatsViewModelTest(
   }
 
   @Test
-  fun `updateIntFunctions should handle failure correctly`() {
+  fun updateIntFunctionsShouldHandleFailureCorrectly() {
     mockStatsRepository.shouldSucceed = false
 
     updateAction()
