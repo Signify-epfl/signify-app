@@ -81,7 +81,7 @@ fun MyStatsScreen(
     Spacer(modifier = Modifier.height(64.dp))
 
     // Number of exercises achieved
-    val exercisesText = stringResource(R.string.exercises_text)
+    val exercisesText = stringResource(R.string.completed_exercise_count_text)
     val easyExercisesText = stringResource(R.string.easy_exercises_text)
     val mediumExercisesText = stringResource(R.string.medium_exercises_text)
     val hardExercisesText = stringResource(R.string.hard_exercises_text)
@@ -95,7 +95,7 @@ fun MyStatsScreen(
     Spacer(modifier = Modifier.height(32.dp))
 
     // Number of quests achieved
-    val questsText = stringResource(R.string.quests_text)
+    val questsText = stringResource(R.string.completed_quest_count_text)
     val dailyQuestsText = stringResource(R.string.daily_quests_text)
     val weeklyQuestsText = stringResource(R.string.weekly_quests_text)
     StatisticsTable(

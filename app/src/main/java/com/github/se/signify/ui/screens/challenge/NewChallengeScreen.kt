@@ -201,7 +201,7 @@ fun OngoingChallengeCard(
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
             Text(
-                text = "Mode: ${challenge.mode}",
+                text = "${stringResource(R.string.mode_text)}: ${challenge.mode}",
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSurface)
             if (isChallengeCompleted) {

@@ -48,7 +48,7 @@ fun ASLRecognition(
     handLandMarkViewModel: HandLandMarkViewModel,
     navigationActions: NavigationActions
 ) {
-  val buttonUriString = stringResource(id = R.string.button_uri_string)
+  val buttonUriString = stringResource(id = R.string.button_uri_string_text)
   val context = LocalContext.current
   AnnexScreenScaffold(navigationActions = navigationActions, testTag = "ASLRecognitionScreen") {
     Box(
@@ -65,8 +65,6 @@ fun ASLRecognition(
     GestureOverlayView(handLandMarkViewModel)
 
     Spacer(modifier = Modifier.height(20.dp))
-
-    // Button: "More on ASL Alphabet"
     val moreOnASLAlphabetText = stringResource(id = R.string.more_on_asl_alphabet_text)
     TextButton(
         onClick = {

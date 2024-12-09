@@ -1,11 +1,30 @@
 <resources>
     <string name="app_name">signify</string>
-    <string name="default_web_client_id">480370863906-8deqtn8nq63qk01efb5pudici2c805ek.apps.googleusercontent.com</string>
-    <string name="help_home_screen">Here you can practice your sign language, with feedback through your camera.
+    <string name="default_web_client_id_text">480370863906-8deqtn8nq63qk01efb5pudici2c805ek.apps.googleusercontent.com</string>
+    <string name="signify_welcome_text">Signify is what you need to start communicating with deaf and hard of hearing people</string>
+    <string name="login_successful_text">Login Successful !</string>
+    <string name="login_failed_text">Login Failed !</string>
+    <string name="offline_mode_text">You are not logged in.</string>
+    <string name="sign_in_text">Sign in with Google</string>
+    <string name="skip_login_text">Skip Login</string>
+    <string name="log_in_text">Log In</string>
+    <string name="off_mode_text">Offline Mode</string>
+    <string name="no_quiz_available">No quizzes available.</string>
+    <string name="home_text">Home</string>
+    <string name="mode_text">Mode</string>
+    <string name="profile_text">Profile</string>
+    <string name="next_text">Next</string>
+    <string name="days_text">Mode</string>
+
+
+
+    <string name="help_home_screen_text">Here you can practice your sign language, with feedback through your camera.
 Make sure to check your daily quest to learn a new letter every day.
 You’ll also find exercises at the bottom to challenge yourself at varying levels of difficulty.</string>
     <string name="close_text">Close</string>
-    <string name="all_letters_text">All letters learned</string>
+    <string name="letters_learned_text">Letters learned</string>
+    <string name="not_an_exercise_text">Not an exercise</string>
+
     <string name="camera_permission_required_text">Camera permission required</string>
     <string name="welcome_text">Welcome to Signify</string>
     <string name="dark_mode_text">Dark Mode</string>
@@ -16,8 +35,8 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="unknown_text">unknown</string>
     <string name="my_friends_text">My Friends</string>
     <string name="my_stats_text">My Stats</string>
-    <string name="exercises_text">Number of exercises achieved :</string>
-    <string name="quests_text">Number of quests achieved :</string>
+    <string name="completed_exercise_count_text">Number of exercises achieved :</string>
+    <string name="completed_quest_count_text">Number of quests achieved :</string>
     <string name="easy_exercises_text">Easy</string>
     <string name="medium_exercises_text">Medium</string>
     <string name="hard_exercises_text">Hard</string>
@@ -40,14 +59,14 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="remove_text">Remove</string>
     <string name="accept_text">Accept</string>
     <string name="decline_text">Decline</string>
-    <string name="confirming_removal_friend_text">Are you sure you want to remove this friend?</string>
+    <string name="confirm_friend_removal_text">Are you sure you want to remove this friend?</string>
     <string name="removed_friend_text">Friend removed</string>
-    <string name="yes_text">Yes</string>
-    <string name="no_text">No</string>
+    <string name="yes_button_text">Yes</string>
+    <string name="no_button_text">No</string>
     <string name="quiz_time_text">Quiz Time !</string>
     <string name="correct_answer_text">Correct answer!</string>
     <string name="incorrect_answer_text">Incorrect answer, try again.</string>
-    <string name="choose_correct_answer">Choose the correct answer:</string>
+    <string name="choose_correct_answer_text">Choose the correct answer:</string>
     <string name="submit_text">Submit</string>
     <string name="lets_go_text">Let’s Go!</string>
     <string name="locked_text">Locked</string>
@@ -57,10 +76,10 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="feedback_title_text">Feedback Title</string>
     <string name="feedback_description_text">Feedback Description</string>
     <string name="review_sent_text">Review sent</string>
-    <string name="fill_all_fields">Please fill all the fields</string>
-    <string name="give_valuable_rating">Give us your valuable rating!</string>
+    <string name="fill_all_fields_text">Please fill all the fields</string>
+    <string name="rating_text">Give us your valuable rating!</string>
     <string name="star_text">Star</string>
-    <string name="exo_completed_text">Exercise completed!</string>
+    <string name="exercise_completed_text">Exercise completed!</string>
     <string name="more_on_asl_alphabet_text">More on ASL Alphabet</string>
     <string name="make_a_sign_text">Make a sign</string>
     <string name="send_feedback_text">Send Feedback</string>
@@ -73,7 +92,7 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="challenge_text">Challenge</string>
     <string name="send_challenge_text">Send Challenge</string>
     <string name="pick_a_mode_string">Pick a Mode</string>
-    <string name="invalid_challenge_string">Invalid challenge string</string>
+    <string name="invalid_challenge_text">Invalid challenge string</string>
     <string name="failed_fetch_text">Failed to fetch challenge</string>
     <string name="no_word_available_text">No word available for this round.</string>
     <string name="time_text">Time:</string>
@@ -92,14 +111,14 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="question_text">Question</string>
     <string name="other_text">Other</string>
 
-    <string name="help_profile_screen">Here, you can change your settings and customize your profile. You’ll also get to add your friends to learn together. You’ll find a recap of your progress in the statistics board.</string>
-    <string name="description_challenge">Here you can challenge your friends to sign language face-offs.</string>
-    <string name="graphs_history">Graphs and statistics for the challenges</string>
-    <string name="button_uri_string">
+    <string name="help_profile_screen_text">Here, you can change your settings and customize your profile. You’ll also get to add your friends to learn together. You’ll find a recap of your progress in the statistics board.</string>
+    <string name="description_challenge_text">Here you can challenge your friends to sign language face-offs.</string>
+    <string name="graphs_history_text">Graphs and statistics for the challenges</string>
+    <string name="button_uri_string_text">
         https://nerdish.io/topics/what-you-should-know-about-sign-language/
     </string>
-    <string name="help_asl_recognition">Practice your ASL hand gestures using the camera and see real-time feedback.</string>
-    <string name="help_offline_mode">You are currently offline. Use the login button to return online.</string>
+    <string name="help_asl_recognition_text">Practice your ASL hand gestures using the camera and see real-time feedback.</string>
+    <string name="help_offline_mode_text">You are currently offline. Use the login button to return online.</string>
     <string-array name="real_words">
         <item>cat</item>
         <item>dog</item>
@@ -167,20 +186,20 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="tip_x">Tips: Curl your index finger, pointing it up, while the other fingers are folded down. Your thumb rests near the index finger.</string>
     <string name="tip_y">Tips: Extend your pinky and thumb out to the sides, with the other fingers folded down.</string>
     <string name="tip_z">Tips: Move your index finger to trace a Z shape in the air.</string>
-    <string name="unauthenticated_error">You must be logged in to access this feature</string>
+    <string name="unauthenticated_error_text">You must be logged in to access this feature</string>
     <integer name="scroll_offset">8</integer>"
-    <string name="friends_requests">Requests</string>
-    <string name="friends">Friends</string>
+    <string name="friends_requests_text">Requests</string>
+    <string name="friends_text">Friends</string>
     <string name="pref_name">theme_prefs</string>
     <string name="pref_key_is_dark_theme">is_dark_theme</string>
     <string name="pref_name_language">en</string>
     <string name="pref_key_is_french">is_french</string>
-    <string name="quest_screen_title">One day, One word</string>
+    <string name="quest_screen_title_text">One day, One word</string>
     <string name="pref_key_tutorial_completed">tutorial_completed</string>
     <string name="pref_key_tutorial_version">pref_key_tutorial_version</string>
-    <string name="tutorial_screen1">Welcome to Signify!
+    <string name="tutorial_screen1_text">Welcome to Signify!
 Let’s take a quick tour to help you get started with learning sign language effortlessly.</string>
-    <string name="tutorial_screen2">Swipe to the right to view exercises by difficulty level.</string>
-    <string name="tutorial_last_screen">You\'re ready to start! Enjoy learning sign language.</string>
+    <string name="tutorial_screen2_text">Swipe to the right to view exercises by difficulty level.</string>
+    <string name="tutorial_last_screen_text">You\'re ready to start! Enjoy learning sign language.</string>
 
 </resources>

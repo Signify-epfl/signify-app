@@ -74,8 +74,8 @@ fun FriendsListScreen(
         viewModel(factory = UserViewModel.factory(userSession, userRepository))
 ) {
 
-  val friendsString = stringResource(R.string.friends)
-  val friendsRequestsString = stringResource(R.string.friends_requests)
+  val friendsString = stringResource(R.string.friends_text)
+  val friendsRequestsString = stringResource(R.string.friends_requests_text)
 
   var errorMessage by remember { mutableStateOf("") }
   var selectedList by remember { mutableStateOf(friendsString) }
@@ -106,7 +106,7 @@ fun FriendsListScreen(
         errorMessage = userNotFoundText
       }
       if (errorMessage.isNotEmpty()) {
-        ErrorMessage(message)
+        ErrorMessage(userNotFoundText)
         // Dismiss the message
         LaunchedEffect(message) {
           delay(3000)
@@ -166,7 +166,7 @@ fun FriendsListScreen(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceEvenly) {
           val numberFriends =
-              if (friends.value.size > 1) friendsString else stringResource(R.string.friends)
+              if (friends.value.size > 1) friendsString else stringResource(R.string.friends_text)
 
           TextButton(
               { selectedList = friendsString },
@@ -179,7 +179,7 @@ fun FriendsListScreen(
 
           val numberRequests =
               if (friendsRequests.value.size > 1) friendsRequestsString
-              else stringResource(R.string.friends)
+              else stringResource(R.string.friends_text)
 
           TextButton(
               { selectedList = friendsRequestsString },
@@ -213,8 +213,8 @@ fun FriendsListScreen(
       // case Friends Requests list
 
       friendsRequestsString -> {
-        val requestFriendsText = stringResource(R.string.request_friends_text) // == New
-        val noNewFriendText = stringResource(R.string.no_new_friend_text) // == You have no
+        val requestFriendsText = stringResource(R.string.request_friends_text)
+        val noNewFriendText = stringResource(R.string.no_new_friend_text)
         FriendListCard(
             title = requestFriendsText,
             items = friendsRequests.value,
@@ -482,7 +482,7 @@ fun ConfirmationDialog(showDialog: MutableState<Boolean>, onClickAction: () -> U
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally) {
                   val confirmingRemovalFriendText =
-                      stringResource(R.string.confirming_removal_friend_text)
+                      stringResource(R.string.confirm_friend_removal_text)
                   Text(
                       text = confirmingRemovalFriendText,
                       fontWeight = FontWeight.Bold,
@@ -492,8 +492,8 @@ fun ConfirmationDialog(showDialog: MutableState<Boolean>, onClickAction: () -> U
                       horizontalArrangement = Arrangement.SpaceEvenly,
                       modifier = Modifier.fillMaxWidth()) {
                         val removedFriendText = stringResource(R.string.removed_friend_text)
-                        val yesText = stringResource(R.string.yes_text)
-                        val noText = stringResource(R.string.no_text)
+                        val yesText = stringResource(R.string.yes_button_text)
+                        val noText = stringResource(R.string.no_button_text)
                         Button(
                             onClick = {
                               onClickAction()

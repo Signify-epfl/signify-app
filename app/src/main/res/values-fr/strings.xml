@@ -1,9 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">signify</string>
-    <string name="default_web_client_id">480370863906-8deqtn8nq63qk01efb5pudici2c805ek.apps.googleusercontent.com</string>
+    <string name="default_web_client_id_text">480370863906-8deqtn8nq63qk01efb5pudici2c805ek.apps.googleusercontent.com</string>
+    <string name="signify_welcome_text">Signify est ce dont vous avez besoin pour commencer à communiquer avec les personnes sourdes et malentendantes</string>
+    <string name="login_successful_text">Login Successful !</string>
+    <string name="login_failed_text">Login Failed !</string>
+    <string name="offline_mode_text">Vous n’êtes pas connecté.</string>
+    <string name="sign_in_text">Se connecter avec Google</string>
+    <string name="skip_login_text">Skip Login</string>
+    <string name="log_in_text">Se connecter</string>
+    <string name="off_mode_text">Mode hors ligne</string>
+    <string name="no_quiz_available">Aucun quiz disponible.</string>
+    <string name="home_text">Accueil</string>
+    <string name="mode_text">Mode</string>
+    <string name="profile_text">Profile</string>
+    <string name="next_text">Suivant</string>
+    <string name="days_text">Mode</string>
+    <string name="not_an_exercise_text">Pas un exercise</string>
+
+
     <string name="close_text">Fermer</string>
-    <string name="all_letters_text">Lettres apprises</string>
+    <string name="letters_learned_text">Lettres apprises</string>
     <string name="camera_permission_required_text">Permission de la caméra requise</string>
     <string name="welcome_text">Bienvenu(e) sur Signify</string>
     <string name="dark_mode_text">Mode Sombre</string>
@@ -14,8 +31,8 @@
     <string name="unknown_text">Inconnue</string>
     <string name="my_friends_text">Mes Amis</string>
     <string name="my_stats_text">Mes Stats</string>
-    <string name="exercises_text">Nombre d’exercices réalisés</string>
-    <string name="quests_text">Nombre de quêtes réalisées</string>
+    <string name="completed_exercise_count_text">Nombre d’exercices réalisés</string>
+    <string name="completed_quest_count_text">Nombre de quêtes réalisées</string>
     <string name="easy_exercises_text">Facile</string>
     <string name="medium_exercises_text">Intermédiaire</string>
     <string name="hard_exercises_text">Difficile</string>
@@ -32,20 +49,20 @@
 
 
     <string name="remove_friend_text">Supprimer un(e) ami(e)</string>
-    <string name="my_profile_text">Mon profil</string>
-    <string name="search_by_user_ID_text">Rechercher par ID utilisateur</string>
+    <string name="my_profile_text">Mon profile</string>
+    <string name="search_by_user_ID_text">Rechercher un(e) utilisateur(rice)</string>
     <string name="no_item_available_text">Aucun élément disponible</string>
     <string name="remove_text">Supprimer</string>
     <string name="accept_text">Accepter</string>
     <string name="decline_text">Décliner</string>
-    <string name="confirming_removal_friend_text">Êtes-vous sûr de vouloir supprimer cet ami ?</string>
+    <string name="confirm_friend_removal_text">Êtes-vous sûr de vouloir supprimer cet ami ?</string>
     <string name="removed_friend_text">Ami(e) supprimé(e)</string>
-    <string name="yes_text">Oui</string>
-    <string name="no_text">Non</string>
+    <string name="yes_button_text">Oui</string>
+    <string name="no_button_text">Non</string>
     <string name="quiz_time_text">L’heure du quiz!</string>
     <string name="correct_answer_text">Réponse correcte!</string>
     <string name="incorrect_answer_text">Réponse incorrecte, rééssayez.</string>
-    <string name="choose_correct_answer">Choisir la bonne réponse:</string>
+    <string name="choose_correct_answer_text">Choisir la bonne réponse:</string>
     <string name="submit_text">Soumettre</string>
     <string name="lets_go_text">C’est parti!</string>
     <string name="locked_text">Verrouillé</string>
@@ -55,10 +72,10 @@
     <string name="feedback_title_text">Titre de l’évaluation</string>
     <string name="feedback_description_text">Description de l’évaluation</string>
     <string name="review_sent_text">Avis envoyé</string>
-    <string name="fill_all_fields">Veuillez remplir tous les champs</string>
-    <string name="give_valuable_rating">Donnez-nous votre précieuse évaluation!</string>
+    <string name="fill_all_fields_text">Veuillez remplir tous les champs</string>
+    <string name="rating_text">Donnez-nous votre précieuse évaluation!</string>
     <string name="star_text">Étoile</string>
-    <string name="exo_completed_text">Exercice terminé!</string>
+    <string name="exercise_completed_text">Exercice terminé!</string>
     <string name="more_on_asl_alphabet_text">Plus sur l’ASL</string>
     <string name="make_a_sign_text">Faites un signe</string>
     <string name="send_feedback_text">Envoyer votre évaluation</string>
@@ -75,7 +92,7 @@
     <string name="challenge_text">Défi</string>
     <string name="send_challenge_text">Envoyer un Défi</string>
     <string name="pick_a_mode_string">Choisir un mode</string>
-    <string name="invalid_challenge_string">Chaîne de défi invalide</string>
+    <string name="invalid_challenge_text">Chaîne de défi invalide</string>
     <string name="failed_fetch_text">Échec de la récupération du défi</string>
     <string name="no_word_available_text">Aucun mot disponible pour ce tour.</string>
     <string name="time_text">Temps:</string>
@@ -90,13 +107,13 @@
     <string name="created_challenge_text">Crée</string>
     <string name="won_challenge_text">Gagné</string>
 
-    <string name="help_home_screen">Ici, vous pouvez pratiquer la langue des signes, avec des retours en temps réel via votre caméra. Assurez-vous de vérifier votre quête quotidienne pour apprendre une nouvelle lettre chaque jour. Vous trouverez également des exercices en bas pour vous challenger à différents niveaux de difficulté.</string>
-    <string name="help_profile_screen">Ici, vous pouvez modifier vos paramètres et personnaliser votre profil. Vous pourrez également ajouter vos amis pour apprendre ensemble. Vous trouverez un récapitulatif de vos progrès dans le tableau de statistiques.</string>
-    <string name="description_challenge">Ici, vous pouvez défier vos amis à des face-à-face en langue des signes.</string>
-    <string name="graphs_history">Graphiques et statistiques des défis</string>
-    <string name="button_uri_string">https://nerdish.io/topics/what-you-should-know-about-sign-language/</string>
-    <string name="help_asl_recognition">Pratiquez vos gestes de la langue des signes avec la caméra et voyez les retours en temps réel.</string>
-    <string name="help_offline_mode">Vous êtes actuellement hors ligne. Utilisez le bouton de connexion pour revenir en ligne.</string>
+    <string name="help_home_screen_text">Ici, vous pouvez pratiquer la langue des signes, avec des retours en temps réel via votre caméra. Assurez-vous de vérifier votre quête quotidienne pour apprendre une nouvelle lettre chaque jour. Vous trouverez également des exercices en bas pour vous challenger à différents niveaux de difficulté.</string>
+    <string name="help_profile_screen_text">Ici, vous pouvez modifier vos paramètres et personnaliser votre profil. Vous pourrez également ajouter vos amis pour apprendre ensemble. Vous trouverez un récapitulatif de vos progrès dans le tableau de statistiques.</string>
+    <string name="description_challenge_text">Ici, vous pouvez défier vos amis à des face-à-face en langue des signes.</string>
+    <string name="graphs_history_text">Graphiques et statistiques des défis</string>
+    <string name="button_uri_string_text">https://nerdish.io/topics/what-you-should-know-about-sign-language/</string>
+    <string name="help_asl_recognition_text">Pratiquez vos gestes de la langue des signes avec la caméra et voyez les retours en temps réel.</string>
+    <string name="help_offline_mode_text">Vous êtes actuellement hors ligne. Utilisez le bouton de connexion pour revenir en ligne.</string>
     <string-array name="real_words">
         <item>cat</item>
         <item>dog</item>
@@ -164,19 +181,19 @@
     <string name="tip_x">Conseils : Courbez votre index, en le pointant vers le haut, tandis que les autres doigts sont repliés vers le bas. Votre pouce repose près de l’index.</string>
     <string name="tip_y">Conseils : Étendez votre petit doigt et pouce vers l’extérieur, tandis que les autres doigts sont repliés vers le bas.</string>
     <string name="tip_z">Conseils : Déplacez votre index pour tracer une forme en Z dans l’air.</string>
-    <string name="unauthenticated_error">Vous devez être connecté pour accéder à cette fonctionnalité</string>
+    <string name="unauthenticated_error_text">Vous devez être connecté pour accéder à cette fonctionnalité</string>
     <integer name="scroll_offset">8</integer>
-    <string name="friends_requests">Demandes</string>
-    <string name="friends">Amis</string>
+    <string name="friends_requests_text">Demandes</string>
+    <string name="friends_text">Amis</string>
     <string name="pref_name">theme_prefs</string>
     <string name="pref_key_is_dark_theme">is_dark_theme</string>
     <string name="pref_name_language">en</string>
     <string name="pref_key_is_french">is_french</string>
     <string name="pref_key_tutorial_completed">tutorial_completed</string>
     <string name="pref_key_tutorial_version">pref_key_tutorial_version</string>
-    <string name="tutorial_screen1">Bienvenue chez Signify !
+    <string name="tutorial_screen1_text">Bienvenue chez Signify !
 Faisons un rapide tour d’horizon pour vous aider à démarrer l’apprentissage de la langue des signes sans effort.</string>
-    <string name="tutorial_screen2">Faites glisser votre doigt vers la droite pour afficher les exercices par niveau de difficulté.</string>
-    <string name="tutorial_last_screen">Vous êtes prêt à commencer! Profitez de l\'apprentissage de la langue des signes.</string>
-    <string name="quest_screen_title">Un jour, Un mot</string>
+    <string name="tutorial_screen2_text">Faites glisser votre doigt vers la droite pour afficher les exercices par niveau de difficulté.</string>
+    <string name="tutorial_last_screen_text">Vous êtes prêt à commencer! Profitez de l\'apprentissage de la langue des signes.</string>
+    <string name="quest_screen_title_text">Un jour, Un mot</string>
 </resources>

@@ -87,7 +87,7 @@ fun FeedbackScreen(
 
     RatingSection(selectedRating = selectedRating, onRatingSelected = { selectedRating = it })
     val reviewSentText = stringResource(R.string.review_sent_text)
-    val fillAllFieldsText = stringResource(R.string.fill_all_fields)
+    val fillAllFieldsText = stringResource(R.string.fill_all_fields_text)
     val sendFeedbackButtonText = stringResource(R.string.send_feedback_text)
     TextButton(
         onClick = {
@@ -138,14 +138,7 @@ private fun FeedbackDropdown(
                     .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
                     .testTag("DropdownMenu")) {
               FeedbackOption.entries.forEach { option ->
-                val textItem =
-                    when (option) {
-                      FeedbackOption.BUG_REPORT -> stringResource(id = R.string.bug_report_text)
-                      FeedbackOption.FEATURE_SUGGESTION ->
-                          stringResource(id = R.string.feature_suggestion_text)
-                      FeedbackOption.QUESTION -> stringResource(id = R.string.question_text)
-                      FeedbackOption.OTHER -> stringResource(id = R.string.other_text)
-                    }
+                val textItem = option.getText(LocalContext.current)
                 DropdownMenuItem(
                     text = { Text(text = textItem, color = MaterialTheme.colorScheme.onPrimary) },
                     onClick = {
@@ -175,7 +168,7 @@ private fun FeedbackInputField(
 
 @Composable
 private fun RatingSection(selectedRating: Int, onRatingSelected: (Int) -> Unit) {
-  val giveValuableRatingText = stringResource(R.string.give_valuable_rating)
+  val giveValuableRatingText = stringResource(R.string.rating_text)
   val starText = stringResource(R.string.star_text)
   Text(
       text = giveValuableRatingText,

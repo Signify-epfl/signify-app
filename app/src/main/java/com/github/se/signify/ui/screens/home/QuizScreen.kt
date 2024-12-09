@@ -120,7 +120,7 @@ fun QuizContent(
                       .testTag("SignImage"))
         }
       }
-  val chooseCorrectAnswer = stringResource(R.string.choose_correct_answer)
+  val chooseCorrectAnswer = stringResource(R.string.choose_correct_answer_text)
   Text(
       text = chooseCorrectAnswer,
       fontWeight = FontWeight.Bold,
@@ -178,12 +178,13 @@ fun QuizContent(
 
 @Composable
 fun NoQuizAvailable() {
+  val noQuizAvailableText = stringResource(R.string.no_quiz_available)
   Column(
       modifier = Modifier.fillMaxSize().testTag("NoQuizContainer"),
       verticalArrangement = Arrangement.Center,
       horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            text = "No quizzes available.",
+            text = noQuizAvailableText,
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onBackground, // Updated from onSurface
             modifier = Modifier.padding(bottom = 16.dp).testTag("NoQuizzesText"))

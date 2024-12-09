@@ -89,7 +89,7 @@ fun ExerciseScreen(
 
   val landmarksState = handLandMarkViewModel.landMarks().collectAsState()
   val detectedGesture = handLandMarkViewModel.getSolution()
-  val exoCompletedText = stringResource(R.string.exo_completed_text)
+  val exoCompletedText = stringResource(R.string.exercise_completed_text)
   if (!landmarksState.value.isNullOrEmpty()) {
     handleGestureMatching(
         detectedGesture = detectedGesture,

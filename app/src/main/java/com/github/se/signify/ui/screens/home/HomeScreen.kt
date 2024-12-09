@@ -44,6 +44,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.painterResource
@@ -53,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.model.exercise.ExerciseLevel
+import com.github.se.signify.model.exercise.ExerciseLevelName
 import com.github.se.signify.model.getIconResId
 import com.github.se.signify.model.getImageResId
 import com.github.se.signify.model.getTipResId
@@ -81,8 +83,8 @@ fun HomeScreen(navigationActions: NavigationActions) {
   MainScreenScaffold(
       navigationActions = navigationActions,
       testTag = "HomeScreen",
-      helpTitle = "Home",
-      helpText = stringResource(R.string.help_home_screen),
+      helpTitle = stringResource(R.string.home_text),
+      helpText = stringResource(R.string.help_home_screen_text),
       floatingActionButton = {
         FloatingActionButton(
             onClick = { coroutineScope.launch { scrollState.animateScrollToItem(0) } },
@@ -346,12 +348,13 @@ fun ExerciseButton(exercise: ExerciseLevel, navigationActions: NavigationActions
       colors =
           ButtonDefaults.buttonColors(
               MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.onPrimary)) {
+        val context = LocalContext.current
         val exerciseText =
             when (exercise.id) {
-              "Easy" -> stringResource(id = R.string.easy_exercises_text)
-              "Medium" -> stringResource(id = R.string.medium_exercises_text)
-              "Hard" -> stringResource(id = R.string.hard_exercises_text)
-              else -> exercise.id
+              "Easy" -> ExerciseLevelName.getLevelName(context, ExerciseLevel.Easy)
+              "Medium" -> ExerciseLevelName.getLevelName(context, ExerciseLevel.Medium)
+              "Hard" -> ExerciseLevelName.getLevelName(context, ExerciseLevel.Hard)
+              else -> stringResource(R.string.not_an_exercise_text)
             }
         Text(exerciseText, modifier = Modifier.testTag("${exercise.id}ExerciseButtonText"))
       }

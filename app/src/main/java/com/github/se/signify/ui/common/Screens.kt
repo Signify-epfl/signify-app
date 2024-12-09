@@ -36,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -45,6 +46,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.github.se.signify.R
 import com.github.se.signify.model.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.BottomNavigationMenu
@@ -208,7 +210,9 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
                     onClick = { onDismiss() },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
                     modifier = Modifier.testTag("InfoPopupCloseButton")) {
-                      Text(text = "Close", color = MaterialTheme.colorScheme.onPrimary)
+                      Text(
+                          text = stringResource(R.string.close_text),
+                          color = MaterialTheme.colorScheme.onPrimary)
                     }
               }
         }

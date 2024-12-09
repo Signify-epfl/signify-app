@@ -86,7 +86,7 @@ fun QuestScreen(
             }
             Spacer(modifier = Modifier.width(20.dp))
             Text(
-                text = stringResource(R.string.quest_screen_title),
+                text = stringResource(R.string.quest_screen_title_text),
                 fontWeight = FontWeight.Bold,
                 fontSize = 25.sp,
                 color = MaterialTheme.colorScheme.primary)
@@ -122,7 +122,7 @@ fun QuestBox(quest: Quest, isUnlocked: Boolean) {
               textAlign = TextAlign.Left)
 
           Spacer(modifier = Modifier.height(20.dp))
-          val fullText =
+          val letsGoTextOrLockedText =
               if (isUnlocked) stringResource(R.string.lets_go_text)
               else stringResource(R.string.locked_text)
           Button(
@@ -134,7 +134,7 @@ fun QuestBox(quest: Quest, isUnlocked: Boolean) {
                       contentColor = MaterialTheme.colorScheme.primary),
               shape = RoundedCornerShape(50),
               enabled = isUnlocked) {
-                Text(fullText)
+                Text(letsGoTextOrLockedText)
               }
         }
       }
@@ -152,7 +152,7 @@ fun QuestDescriptionDialog(quest: Quest, onDismiss: () -> Unit) {
       containerColor = MaterialTheme.colorScheme.background,
       title = {
         Text(
-            text = quest.title + " " + inSignLanguageText,
+            text = "$quest.title $inSignLanguageText",
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
             color = MaterialTheme.colorScheme.primary)

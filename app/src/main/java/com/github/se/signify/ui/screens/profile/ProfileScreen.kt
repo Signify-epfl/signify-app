@@ -48,8 +48,8 @@ fun ProfileScreen(
   MainScreenScaffold(
       navigationActions = navigationActions,
       testTag = "ProfileScreen",
-      helpTitle = "Profile",
-      helpText = stringResource(R.string.help_profile_screen),
+      helpTitle = stringResource(R.string.profile_text),
+      helpText = stringResource(R.string.help_profile_screen_text),
   ) {
     LaunchedEffect(Unit) {
       userViewModel.getUserName()

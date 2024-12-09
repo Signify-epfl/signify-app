@@ -39,7 +39,7 @@ import com.github.se.signify.R
 @Composable
 fun LearnedLetterList(lettersLearned: List<Char>) {
   Text(
-      text = stringResource(R.string.all_letters_text),
+      text = stringResource(R.string.letters_learned_text),
       fontWeight = FontWeight.Bold,
       fontSize = 16.sp,
       color = MaterialTheme.colorScheme.onBackground,

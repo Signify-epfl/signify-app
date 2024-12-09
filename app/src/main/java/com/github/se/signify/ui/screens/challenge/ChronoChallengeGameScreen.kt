@@ -54,7 +54,7 @@ fun ChronoChallengeGameScreen(
   var currentLetterIndex by rememberSaveable { mutableIntStateOf(0) }
   var typedWord by rememberSaveable { mutableStateOf("") }
   var isGameActive by remember { mutableStateOf(false) }
-  val invalidChallengeText = stringResource(R.string.invalid_challenge_string)
+  val invalidChallengeText = stringResource(R.string.invalid_challenge_text)
   val failedFetchText = stringResource(R.string.failed_fetch_text)
   // Fetch the current challenge
   LaunchedEffect(challengeId) {
