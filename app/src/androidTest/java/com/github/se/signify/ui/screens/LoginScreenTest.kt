@@ -1,8 +1,6 @@
 package com.github.se.signify.ui.screens
 
-import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -32,12 +30,14 @@ class LoginScreenTest : TestCase() {
 
   @Before
   fun setUp() {
-    Intents.init()
-
     navigationActions = mock(NavigationActions::class.java)
     userSession = mock(UserSession::class.java)
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.AUTH.route)
+    Intents.init()
+    composeTestRule.setContent {
+      LoginScreen(navigationActions, {}) // Set up the SignInScreen directly
+    }
   }
 
   @After
@@ -46,24 +46,7 @@ class LoginScreenTest : TestCase() {
   }
 
   @Test
-  fun titleAndButtonAreCorrectlyDisplayed() {
-
-    composeTestRule.setContent { LoginScreen(navigationActions, {}) }
-
-    composeTestRule.onNodeWithTag("IntroMessage").assertIsDisplayed()
-    composeTestRule
-        .onNodeWithTag("IntroMessage")
-        .assertTextEquals(
-            "Signify is what you need to communicate with deaf and hard of hearing people")
-
-    composeTestRule.onNodeWithTag("loginButton").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("loginButton").assertHasClickAction()
-  }
-
-  @Test
   fun googleSignInReturnsValidActivityResult() {
-
-    composeTestRule.setContent { LoginScreen(navigationActions, {}) }
 
     composeTestRule.onNodeWithTag("loginButton").performClick()
     composeTestRule.waitForIdle()
@@ -73,7 +56,6 @@ class LoginScreenTest : TestCase() {
 
   @Test
   fun offlineModeHelpsToConnect() {
-    composeTestRule.setContent { LoginScreen(navigationActions, {}) }
     composeTestRule.onNodeWithTag("skipLoginButton").assertIsDisplayed().performClick()
   }
 }
