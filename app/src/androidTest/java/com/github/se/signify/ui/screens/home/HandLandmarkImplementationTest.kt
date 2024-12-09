@@ -5,8 +5,8 @@ import android.graphics.Bitmap
 import android.util.Log
 import androidx.camera.core.ImageProxy
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.github.se.signify.model.home.hand.HandLandMarkImplementation
 import com.github.se.signify.model.home.hand.HandLandmarkConfig
+import com.github.se.signify.model.home.hand.HandLandmarkImplementation
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -17,7 +17,7 @@ import org.mockito.Mockito.`when`
 @RunWith(AndroidJUnit4::class)
 class HandLandmarkImplementationTest {
 
-  private lateinit var handLandMarkImplementation: HandLandMarkImplementation
+  private lateinit var handLandMarkImplementation: HandLandmarkImplementation
   private lateinit var context: Context
   private val config =
       HandLandmarkConfig(
@@ -26,7 +26,7 @@ class HandLandmarkImplementationTest {
   @Before
   fun setUp() {
     context = mock(Context::class.java)
-    handLandMarkImplementation = HandLandMarkImplementation(config)
+    handLandMarkImplementation = HandLandmarkImplementation(config)
   }
 
   @Test
@@ -38,8 +38,8 @@ class HandLandmarkImplementationTest {
   @Test
   fun test_init_failure() {
     val invalidConfig = HandLandmarkConfig("invalid_task", "invalid_model")
-    val invalidHandLandMarkImplementation = HandLandMarkImplementation(invalidConfig)
-    invalidHandLandMarkImplementation.init(context, { assert(false) }, { assert(true) })
+    val invalidHandLandmarkImplementation = HandLandmarkImplementation(invalidConfig)
+    invalidHandLandmarkImplementation.init(context, { assert(false) }, { assert(true) })
   }
 
   @Test
