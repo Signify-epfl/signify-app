@@ -1,30 +1,25 @@
 package com.github.se.signify.ui.screens.home
 
 import android.widget.VideoView
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -51,6 +46,7 @@ import com.github.se.signify.model.quest.QuestRepository
 import com.github.se.signify.model.quest.QuestViewModel
 import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
+import com.github.se.signify.ui.common.AnnexScreenScaffold
 
 @Composable
 fun QuestScreen(
@@ -59,6 +55,7 @@ fun QuestScreen(
     questRepository: QuestRepository,
     userRepository: UserRepository,
 ) {
+  val scrollState = rememberLazyListState()
   val questViewModel: QuestViewModel = viewModel(factory = QuestViewModel.factory(questRepository))
   val userViewModel: UserViewModel =
       viewModel(factory = UserViewModel.factory(userSession, userRepository))
@@ -67,46 +64,36 @@ fun QuestScreen(
   LaunchedEffect(userSession.getUserId()) { userViewModel.checkAndUnlockNextQuest() }
 
   val unlockedQuests by userViewModel.unlockedQuests.collectAsState()
-
-  Scaffold(
-      modifier = Modifier.fillMaxSize().testTag("QuestScreen"),
-  ) { padding ->
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-      Row(
-          verticalAlignment = Alignment.CenterVertically,
-          modifier =
-              Modifier.fillMaxWidth()
-                  .background(MaterialTheme.colorScheme.background)
-                  .padding(horizontal = 16.dp, vertical = 8.dp)) {
-            IconButton(onClick = { navigationActions.goBack() }) {
-              Icon(
-                  imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                  contentDescription = "Back",
-                  tint = MaterialTheme.colorScheme.primary)
+  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "QuestScreen") {
+    LazyColumn(
+        modifier = Modifier.weight(1f),
+    ) {
+      item {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier =
+                Modifier.fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(horizontal = 16.dp, vertical = 8.dp)) {
+              Text(
+                  text = stringResource(R.string.quest_screen_title),
+                  fontWeight = FontWeight.Bold,
+                  fontSize = 25.sp,
+                  color = MaterialTheme.colorScheme.primary)
             }
-            Spacer(modifier = Modifier.width(20.dp))
-            Text(
-                text = stringResource(R.string.quest_screen_title),
-                fontWeight = FontWeight.Bold,
-                fontSize = 25.sp,
-                color = MaterialTheme.colorScheme.primary)
-          }
-
-      LazyColumn(
-          contentPadding = PaddingValues(vertical = 8.dp),
-          modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(padding)) {
-            items(quests.value.size) { index ->
-              val isUnlocked = index < unlockedQuests.toInt()
-              QuestBox(quest = quests.value[index], isUnlocked)
-            }
-          }
+      }
+      items(quests.value.size) { index ->
+        val isUnlocked = index < unlockedQuests.toInt()
+        QuestBox(quest = quests.value[index], isUnlocked)
+      }
     }
   }
 }
 
 @Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun QuestBox(quest: Quest, isUnlocked: Boolean) {
-  // State to manage dialog visibility
   var isDialogVisible by remember { mutableStateOf(false) }
   Card(
       modifier = Modifier.fillMaxWidth().padding(16.dp).testTag("QuestCard"),
@@ -131,7 +118,9 @@ fun QuestBox(quest: Quest, isUnlocked: Boolean) {
                       contentColor = MaterialTheme.colorScheme.primary),
               shape = RoundedCornerShape(50),
               enabled = isUnlocked) {
-                Text(if (isUnlocked) "Let’s Go!" else "Locked")
+                Text(
+                    if (isUnlocked) stringResource(R.string.open_quest_button)
+                    else stringResource(R.string.closed_quest_button))
               }
         }
       }
@@ -142,6 +131,7 @@ fun QuestBox(quest: Quest, isUnlocked: Boolean) {
 }
 
 @Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun QuestDescriptionDialog(quest: Quest, onDismiss: () -> Unit) {
   AlertDialog(
       onDismissRequest = { onDismiss() },
