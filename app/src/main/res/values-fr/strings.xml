@@ -21,12 +21,15 @@
     <string name="hard_exercises_text">Difficile</string>
     <string name="daily_quests_text">Quotidienne</string>
     <string name="weekly_quests_text">Hebdomadaire</string>
-    <string name="graphs_and_stats_text">Graphiques and Statistiques</string>
+    <string name="graphs_and_stats_text">Graphiques Et Statistiques</string>
     <string name="no_friend_text">Pas d’ami(e)s</string>
     <string name="request_friends_text">Demandes d’Ami(e)s</string>
     <string name="no_new_friend_text">Pas de nouveaux amis</string>
     <string name="request_sent_text">Demande envoyée</string>
     <string name="add_friend_text">Ajouter un(e) ami(e)</string>
+    <string name="user_not_found_text">Utilisateur pas trouvé(e)</string>
+    <string name="camera_permission_denied_text">Permission de la caméra refusée</string>
+
 
     <string name="remove_friend_text">Supprimer un(e) ami(e)</string>
     <string name="my_profile_text">Mon profil</string>

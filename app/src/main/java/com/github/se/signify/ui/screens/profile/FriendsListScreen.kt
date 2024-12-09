@@ -90,20 +90,20 @@ fun FriendsListScreen(
     val friendsRequests = userViewModel.friendsRequests.collectAsState()
     val searchResult = userViewModel.searchResult.collectAsState()
     val errorState = userViewModel.errorState.collectAsState()
-
+    val userNotFoundText = stringResource(R.string.user_not_found_text)
     SearchBar { searchQuery ->
       if (searchQuery.isNotEmpty()) {
         try {
           userViewModel.getUserById(searchQuery)
         } catch (e: Exception) {
-          errorMessage = "Error : ${e.message}"
+          errorMessage = userNotFoundText
         }
       }
     }
 
     errorMessage.let { message ->
       if (errorState.value != null) {
-        errorMessage = errorState.value!!
+        errorMessage = userNotFoundText
       }
       if (errorMessage.isNotEmpty()) {
         ErrorMessage(message)
