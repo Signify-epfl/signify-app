@@ -49,9 +49,7 @@ fun ASLRecognition(
     navigationActions: NavigationActions
 ) {
   val buttonUriString = stringResource(id = R.string.button_uri_string)
-  // val helpText = stringResource(id = R.string.help_asl_recognition)
   val context = LocalContext.current
-  // val aslRecognitionText = stringResource(id = R.string.asl_recognition_text)
   AnnexScreenScaffold(navigationActions = navigationActions, testTag = "ASLRecognitionScreen") {
     Box(
         modifier =
