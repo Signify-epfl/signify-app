@@ -23,8 +23,6 @@ Make sure to check your daily quest to learn a new letter every day.
 You’ll also find exercises at the bottom to challenge yourself at varying levels of difficulty.</string>
     <string name="close_text">Close</string>
     <string name="letters_learned_text">Letters learned</string>
-    <string name="not_an_exercise_text">Not an exercise</string>
-
     <string name="camera_permission_required_text">Camera permission required</string>
     <string name="welcome_text">Welcome to Signify</string>
     <string name="dark_mode_text">Dark Mode</string>
