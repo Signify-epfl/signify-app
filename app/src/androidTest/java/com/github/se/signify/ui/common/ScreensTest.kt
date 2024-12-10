@@ -68,7 +68,7 @@ class ScreensTest {
 
   @Test
   fun topBarIsDisplayed() {
-    composeTestRule.setContent { TopBar() }
+    composeTestRule.setContent { TopLine() }
     // Assert that the top bar is displayed
     composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
   }

@@ -73,7 +73,7 @@ fun MainScreenScaffold(
   var isHelpBoxVisible by remember { mutableStateOf(false) }
   Scaffold(
       floatingActionButton = { floatingActionButton() },
-      topBar = { TopBar() },
+      topBar = { TopLine() },
       bottomBar = { BottomBar(navigationActions) },
       content = { padding ->
         ScreenColumn(
@@ -112,7 +112,7 @@ fun AnnexScreenScaffold(
     content: @Composable ColumnScope.() -> Unit
 ) {
   Scaffold(
-      topBar = { TopBar() },
+      topBar = { TopLine() },
       content = { padding ->
         ScreenColumn(padding, testTag) {
           BackButton { navigationActions.goBack() }
@@ -150,7 +150,7 @@ fun ScreenColumn(
 /** The decorative line at the top of screens. */
 @Composable
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-fun TopBar() {
+fun TopLine() {
   Box(
       modifier =
           Modifier.fillMaxWidth()
