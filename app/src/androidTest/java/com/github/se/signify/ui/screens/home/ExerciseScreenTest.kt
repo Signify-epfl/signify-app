@@ -32,7 +32,7 @@ class ExerciseScreenTest {
   val cameraAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
 
   private lateinit var mockNavigationActions: NavigationActions
-  private lateinit var handLandMarkViewModel: HandLandmarkViewModel
+  private lateinit var handLandmarkViewModel: HandLandmarkViewModel
   private lateinit var userSession: UserSession
   private lateinit var statsRepository: StatsRepository
 
@@ -40,7 +40,7 @@ class ExerciseScreenTest {
   fun setup() {
     val context = mock(Context::class.java)
     val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
-    handLandMarkViewModel = HandLandmarkViewModel(handLandMarkImplementation, context)
+    handLandmarkViewModel = HandLandmarkViewModel(handLandMarkImplementation, context)
     mockNavigationActions = mock(NavigationActions::class.java)
     userSession = MockUserSession()
     statsRepository = mock(StatsRepository::class.java)
@@ -51,7 +51,7 @@ class ExerciseScreenTest {
     composeTestRule.setContent {
       ExerciseScreen(
           navigationActions = mockNavigationActions,
-          handLandMarkViewModel = handLandMarkViewModel,
+          handLandmarkViewModel = handLandmarkViewModel,
           userSession = userSession,
           statsRepository = statsRepository,
           exerciseLevel = ExerciseLevel.Easy)
@@ -65,7 +65,7 @@ class ExerciseScreenTest {
     composeTestRule.setContent {
       ExerciseScreen(
           navigationActions = mockNavigationActions,
-          handLandMarkViewModel = handLandMarkViewModel,
+          handLandmarkViewModel = handLandmarkViewModel,
           userSession = userSession,
           statsRepository = statsRepository,
           exerciseLevel = ExerciseLevel.Easy)

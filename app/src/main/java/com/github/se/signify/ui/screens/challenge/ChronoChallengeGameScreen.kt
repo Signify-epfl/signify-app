@@ -59,7 +59,7 @@ fun ChronoChallengeGameScreen(
     navigationActions: NavigationActions,
     userSession: UserSession,
     challengeRepository: ChallengeRepository,
-    handLandMarkViewModel: HandLandmarkViewModel,
+    handLandmarkViewModel: HandLandmarkViewModel,
     challengeId: String
 ) {
   val context = LocalContext.current
@@ -107,8 +107,8 @@ fun ChronoChallengeGameScreen(
   }
 
   // Gesture Recognition Updates
-  val landmarksState by handLandMarkViewModel.landMarks().collectAsState()
-  val detectedGesture = handLandMarkViewModel.getSolution()
+  val landmarksState by handLandmarkViewModel.landMarks().collectAsState()
+  val detectedGesture = handLandmarkViewModel.getSolution()
   val scoreSavedText = stringResource(R.string.score_saved_text)
   val scoreFailedText = stringResource(R.string.score_failed_text)
 
@@ -157,7 +157,7 @@ fun ChronoChallengeGameScreen(
           elapsedTime = elapsedTime,
           currentWord = currentWord,
           currentLetterIndex = currentLetterIndex,
-          handLandMarkViewModel = handLandMarkViewModel,
+          handLandmarkViewModel = handLandmarkViewModel,
       )
     } else {
       // If no words are available, show appropriate message
@@ -172,7 +172,7 @@ fun ChronoChallengeContent(
     elapsedTime: Long,
     currentWord: String,
     currentLetterIndex: Int,
-    handLandMarkViewModel: HandLandmarkViewModel
+    handLandmarkViewModel: HandLandmarkViewModel
 ) {
   Column(
       modifier = Modifier.fillMaxSize().padding(16.dp).testTag("ChronoChallengeContent"),
@@ -183,7 +183,7 @@ fun ChronoChallengeContent(
 
         CurrentLetterDisplay(currentWord, currentLetterIndex)
         SentenceLayerDisplay(currentWord, currentLetterIndex)
-        CameraBox(handLandMarkViewModel = handLandMarkViewModel, testTag = "CameraBox")
+        CameraBox(handLandmarkViewModel = handLandmarkViewModel, testTag = "CameraBox")
       }
 }
 

@@ -36,9 +36,9 @@ class HandLandmarkViewModel(
   init {
     handLandMarkRepository.init(
         context = context,
-        onSuccess = { Log.d("HandLandMarkViewModel", "HandLandMarkRepository initialized") },
+        onSuccess = { Log.d("HandLandmarkViewModel", "HandLandMarkRepository initialized") },
         onFailure = {
-          Log.e("HandLandMarkViewModel", "HandLandMarkRepository initialization failed")
+          Log.e("HandLandmarkViewModel", "HandLandMarkRepository initialization failed")
         })
   }
 
@@ -60,7 +60,7 @@ class HandLandmarkViewModel(
           }
         },
         onFailure = { exception ->
-          Log.e("HandLandMarkViewModel", "Error processing image", exception)
+          Log.e("HandLandmarkViewModel", "Error processing image", exception)
         })
   }
 

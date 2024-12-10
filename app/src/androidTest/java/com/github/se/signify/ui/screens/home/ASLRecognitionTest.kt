@@ -32,7 +32,7 @@ class ASLRecognitionTest : LifecycleOwner {
   @get:Rule val composeTestRule = createComposeRule()
 
   private lateinit var navigationActions: NavigationActions
-  private lateinit var handLandMarkViewModel: HandLandmarkViewModel
+  private lateinit var handLandmarkViewModel: HandLandmarkViewModel
   private lateinit var lifecycleRegistry: LifecycleRegistry
 
   @Before
@@ -48,13 +48,13 @@ class ASLRecognitionTest : LifecycleOwner {
 
     navigationActions = mock(NavigationActions::class.java)
     val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
-    handLandMarkViewModel = HandLandmarkViewModel(handLandMarkImplementation, context)
+    handLandmarkViewModel = HandLandmarkViewModel(handLandMarkImplementation, context)
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.PRACTICE.route)
 
     composeTestRule.setContent {
       ASLRecognition(
-          handLandMarkViewModel = handLandMarkViewModel, navigationActions = navigationActions)
+          handLandmarkViewModel = handLandmarkViewModel, navigationActions = navigationActions)
     }
   }
 

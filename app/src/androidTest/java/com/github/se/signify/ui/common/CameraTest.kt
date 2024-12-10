@@ -21,8 +21,8 @@ class CameraTest {
   fun cameraPreview_isDisplayed() {
     val context = mock(Context::class.java)
     val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
-    val handLandMarkViewModel = HandLandmarkViewModel(handLandMarkImplementation, context)
-    composeTestRule.setContent { CameraBox(handLandMarkViewModel, "cameraPreview") }
+    val handLandmarkViewModel = HandLandmarkViewModel(handLandMarkImplementation, context)
+    composeTestRule.setContent { CameraBox(handLandmarkViewModel, "cameraPreview") }
     composeTestRule.onNodeWithTag("cameraPreview").assertIsDisplayed()
   }
 }

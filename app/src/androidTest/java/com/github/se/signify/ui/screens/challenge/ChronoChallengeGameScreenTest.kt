@@ -29,7 +29,7 @@ class ChronoChallengeGameScreenTest {
   val cameraAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
 
   private lateinit var mockNavigationActions: NavigationActions
-  private lateinit var handLandMarkViewModel: HandLandmarkViewModel
+  private lateinit var handLandmarkViewModel: HandLandmarkViewModel
   private lateinit var challengeRepository: MockChallengeRepository
   private val challengeId = "challenge123"
 
@@ -37,7 +37,7 @@ class ChronoChallengeGameScreenTest {
   fun setup() {
     val context = mock(Context::class.java)
     val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
-    handLandMarkViewModel = HandLandmarkViewModel(handLandMarkImplementation, context)
+    handLandmarkViewModel = HandLandmarkViewModel(handLandMarkImplementation, context)
     mockNavigationActions = mock(NavigationActions::class.java)
 
     // Set up a mock challenge repository with test challenge data
@@ -68,7 +68,7 @@ class ChronoChallengeGameScreenTest {
           navigationActions = mockNavigationActions,
           userSession = MockUserSession(),
           challengeRepository = challengeRepository,
-          handLandMarkViewModel = handLandMarkViewModel,
+          handLandmarkViewModel = handLandmarkViewModel,
           challengeId = challengeId)
     }
 
@@ -89,7 +89,7 @@ class ChronoChallengeGameScreenTest {
           navigationActions = mockNavigationActions,
           userSession = MockUserSession(),
           challengeRepository = challengeRepository,
-          handLandMarkViewModel = handLandMarkViewModel,
+          handLandmarkViewModel = handLandmarkViewModel,
           challengeId = challengeId)
     }
 
@@ -125,7 +125,7 @@ class ChronoChallengeGameScreenTest {
           navigationActions = mockNavigationActions,
           userSession = MockUserSession(),
           challengeRepository = challengeRepository,
-          handLandMarkViewModel = handLandMarkViewModel,
+          handLandmarkViewModel = handLandmarkViewModel,
           challengeId = challengeId)
     }
 
@@ -156,7 +156,7 @@ class ChronoChallengeGameScreenTest {
           navigationActions = mockNavigationActions,
           userSession = MockUserSession(),
           challengeRepository = challengeRepository,
-          handLandMarkViewModel = handLandMarkViewModel,
+          handLandmarkViewModel = handLandmarkViewModel,
           challengeId = challengeId)
     }
 
@@ -171,7 +171,7 @@ class ChronoChallengeGameScreenTest {
           navigationActions = mockNavigationActions,
           userSession = MockUserSession(),
           challengeRepository = challengeRepository,
-          handLandMarkViewModel = handLandMarkViewModel,
+          handLandmarkViewModel = handLandmarkViewModel,
           challengeId = challengeId)
     }
 

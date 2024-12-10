@@ -43,10 +43,10 @@ import com.github.se.signify.model.home.hand.HandLandmarkViewModel
  * The camera preview box. This function requests camera permission and displays the camera preview
  * if permission is granted.
  *
- * @param handLandMarkViewModel The ViewModel responsible for managing hand landmark detection.
+ * @param handLandmarkViewModel The ViewModel responsible for managing hand landmark detection.
  */
 @Composable
-fun CameraBox(handLandMarkViewModel: HandLandmarkViewModel, testTag: String = "cameraPreview") {
+fun CameraBox(handLandmarkViewModel: HandLandmarkViewModel, testTag: String = "cameraPreview") {
   val context = LocalContext.current
   val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
   val previewView = remember { PreviewView(context) }
@@ -102,7 +102,7 @@ fun CameraBox(handLandMarkViewModel: HandLandmarkViewModel, testTag: String = "c
                           .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
                           .build()
                   imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(context)) { imageProxy ->
-                    handLandMarkViewModel.processImageProxyThrottled(imageProxy)
+                    handLandmarkViewModel.processImageProxyThrottled(imageProxy)
                   }
                   try {
                     cameraProvider.unbindAll()
