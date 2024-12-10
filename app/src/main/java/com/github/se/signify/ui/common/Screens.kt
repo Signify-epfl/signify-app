@@ -21,7 +21,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -83,7 +82,10 @@ fun MainScreenScaffold(
         )
       },
       bottomBar = { BottomBar(navigationActions) },
-      content = { padding -> ScreenColumn(padding, testTag, content) })
+      content = { padding ->
+        Spacer(modifier = Modifier.height(16.dp))
+        ScreenColumn(padding, testTag, content)
+      })
 }
 
 /**
@@ -165,9 +167,9 @@ fun ScreenColumn(
               .background(MaterialTheme.colorScheme.background)
               .testTag(testTag),
       horizontalAlignment = Alignment.CenterHorizontally) {
-        Spacer(modifier = Modifier.height(16.dp))
-
+        Spacer(modifier = Modifier.height(32.dp))
         content()
+        Spacer(modifier = Modifier.height(16.dp))
       }
 }
 
@@ -268,12 +270,13 @@ fun HelpPopup(onDismiss: () -> Unit, helpText: HelpText) {
 @Composable
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun BackButton(navigationActions: NavigationActions) {
-  IconButton(onClick = { navigationActions.goBack() }, modifier = Modifier.testTag("BackButton")) {
-    Icon(
-        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-        contentDescription = "BackButton",
-        tint = MaterialTheme.colorScheme.primary)
-  }
+  BasicButton(
+      onClick = { navigationActions.goBack() },
+      icon = Icons.AutoMirrored.Filled.ArrowBack,
+      iconTestTag = "BackIcon",
+      contentDescription = "Back",
+      modifier = Modifier.testTag("BackButton"),
+  )
 }
 
 @Composable

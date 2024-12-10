@@ -24,8 +24,6 @@ fun ChallengeScreen(navigationActions: NavigationActions) {
       helpText =
           HelpText(title = "Challenge", text = stringResource(R.string.description_challenge_text)),
       content = {
-        Spacer(modifier = Modifier.height(64.dp))
-
         // Challenge square button
         SquareButton(
             iconId = R.drawable.battleicon,
