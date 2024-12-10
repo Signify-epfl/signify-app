@@ -43,7 +43,7 @@ fun UnauthenticatedScreen(navigationActions: NavigationActions) {
       navigationActions = navigationActions,
       testTag = "UnauthenticatedScreen",
       helpText =
-          HelpText(title = offModeText, text = stringResource(R.string.help_offline_mode_text)),
+          HelpText(title = offModeText, content = stringResource(R.string.help_offline_mode_text)),
       content = {
         Column(
             modifier = Modifier.fillMaxSize().background(Color.White).padding(16.dp),

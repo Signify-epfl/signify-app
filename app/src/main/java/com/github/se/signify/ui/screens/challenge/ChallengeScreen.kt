@@ -22,7 +22,8 @@ fun ChallengeScreen(navigationActions: NavigationActions) {
       navigationActions = navigationActions,
       testTag = "ChallengeScreen",
       helpText =
-          HelpText(title = "Challenge", text = stringResource(R.string.description_challenge_text)),
+          HelpText(
+              title = "Challenge", content = stringResource(R.string.description_challenge_text)),
       content = {
         // Challenge square button
         SquareButton(

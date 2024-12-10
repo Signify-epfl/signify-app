@@ -88,7 +88,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
       helpText =
           HelpText(
               title = stringResource(R.string.home_text),
-              text = stringResource(R.string.help_home_screen_text)),
+              content = stringResource(R.string.help_home_screen_text)),
       topBarButtons =
           listOf<@Composable () -> Unit>(
               { FeedbackButton(navigationActions) },

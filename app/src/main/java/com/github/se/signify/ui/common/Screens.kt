@@ -50,7 +50,7 @@ import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.model.navigation.TopLevelDestination
 
-data class HelpText(val title: String, val text: String)
+data class HelpText(val title: String, val content: String)
 
 /**
  * The scaffold for all main screens.
@@ -119,11 +119,11 @@ fun AnnexScreenScaffold(
 @Composable
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun TopBar(buttons: List<@Composable () -> Unit>, helpText: HelpText?) {
-  Column {
+  Column(modifier = Modifier.testTag("TopBar")) {
     TopLine()
 
     Row(
-        modifier = Modifier.fillMaxWidth().padding(12.dp).testTag("TopBarRow"),
+        modifier = Modifier.fillMaxWidth().padding(12.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -256,7 +256,7 @@ fun HelpPopup(onDismiss: () -> Unit, helpText: HelpText) {
 
                 // Body
                 Text(
-                    text = helpText.text,
+                    text = helpText.content,
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Justify,

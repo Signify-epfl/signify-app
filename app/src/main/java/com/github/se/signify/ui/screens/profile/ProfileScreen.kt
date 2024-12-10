@@ -53,7 +53,7 @@ fun ProfileScreen(
       helpText =
           HelpText(
               title = stringResource(R.string.profile_text),
-              text = stringResource(R.string.help_profile_screen_text)),
+              content = stringResource(R.string.help_profile_screen_text)),
       topBarButtons = listOf { SettingsButton(navigationActions) },
       content = {
         LaunchedEffect(Unit) {
