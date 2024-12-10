@@ -1,7 +1,7 @@
 package com.github.se.signify.model.challenge
 
-import com.github.se.signify.model.auth.UserSession
-import com.github.se.signify.model.di.MockDependencyProvider
+import com.github.se.signify.model.authentication.UserSession
+import com.github.se.signify.model.dependencyInjection.MockDependencyProvider
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue

@@ -11,6 +11,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
+import com.github.se.signify.model.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.model.navigation.NavigationActions
 import org.junit.Rule
 import org.junit.Test
@@ -119,5 +120,19 @@ class ScreensTest {
     composeTestRule.onNodeWithTag("BackButton").performClick()
     // Assert that the click action was triggered
     assert(clicked)
+  }
+
+  @Test
+  fun bottomNavigationBarIsDisplayedCorrectly() {
+    val navigationActions = mock(NavigationActions::class.java)
+
+    composeTestRule.setContent {
+      BottomNavigationMenu(
+          onTabSelect = { navigationActions.navigateTo(it) },
+          tabList = LIST_TOP_LEVEL_DESTINATION,
+          selectedItem = LIST_TOP_LEVEL_DESTINATION.first().route)
+    }
+
+    composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
   }
 }

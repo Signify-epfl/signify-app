@@ -25,6 +25,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -35,7 +37,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -49,7 +53,8 @@ import androidx.compose.ui.window.Dialog
 import com.github.se.signify.R
 import com.github.se.signify.model.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.model.navigation.NavigationActions
-import com.github.se.signify.ui.navigation.BottomNavigationMenu
+import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.model.navigation.TopLevelDestination
 
 data class HelpPopup(val title: String, val text: String)
 
@@ -240,4 +245,36 @@ fun BottomBar(navigationActions: NavigationActions) {
       onTabSelect = { route -> navigationActions.navigateTo(route) },
       tabList = LIST_TOP_LEVEL_DESTINATION,
       selectedItem = navigationActions.currentRoute())
+}
+
+@Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun BottomNavigationMenu(
+    onTabSelect: (TopLevelDestination) -> Unit,
+    tabList: List<TopLevelDestination>,
+    selectedItem: String? = Screen.HOME.route, // Provide a default value
+) {
+  Box(
+      modifier =
+          Modifier.border(2.dp, MaterialTheme.colorScheme.outlineVariant) // Top blue line
+              .padding(bottom = 2.dp)
+              .testTag("BottomNavigationMenu")) {
+        NavigationBar(
+            modifier = Modifier.fillMaxWidth().height(60.dp),
+            containerColor = MaterialTheme.colorScheme.background // Set background to white
+            ) {
+              tabList.forEach { tab ->
+                NavigationBarItem(
+                    icon = {
+                      Icon(
+                          painterResource(id = tab.icon),
+                          contentDescription = null,
+                          modifier = Modifier.testTag("TabIcon_${tab.route}"))
+                    }, // Load the drawable icons
+                    selected = tab.route == selectedItem,
+                    onClick = { onTabSelect(tab) },
+                    modifier = Modifier.clip(RoundedCornerShape(50.dp)))
+              }
+            }
+      }
 }

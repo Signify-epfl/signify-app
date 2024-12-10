@@ -21,15 +21,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.github.se.signify.model.di.AppDependencyProvider
-import com.github.se.signify.model.di.DependencyProvider
-import com.github.se.signify.model.exercise.ExerciseLevel
-import com.github.se.signify.model.hand.HandLandMarkViewModel
+import com.github.se.signify.model.common.updateLanguage
+import com.github.se.signify.model.dependencyInjection.AppDependencyProvider
+import com.github.se.signify.model.dependencyInjection.DependencyProvider
+import com.github.se.signify.model.home.exercise.ExerciseLevel
+import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Route
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.model.updateLanguage
-import com.github.se.signify.ui.screens.WelcomeScreen
 import com.github.se.signify.ui.screens.auth.LoginScreen
 import com.github.se.signify.ui.screens.auth.UnauthenticatedScreen
 import com.github.se.signify.ui.screens.challenge.ChallengeHistoryScreen
@@ -48,6 +47,7 @@ import com.github.se.signify.ui.screens.profile.MyStatsScreen
 import com.github.se.signify.ui.screens.profile.ProfileScreen
 import com.github.se.signify.ui.screens.profile.SettingsScreen
 import com.github.se.signify.ui.screens.tutorial.TutorialScreen
+import com.github.se.signify.ui.screens.welcome.WelcomeScreen
 import com.github.se.signify.ui.theme.SignifyTheme
 
 class MainActivity : ComponentActivity() {
@@ -135,8 +135,8 @@ fun SignifyAppPreview(
   val navController = rememberNavController()
   val navigationActions = NavigationActions(navController, dependencyProvider.userSession())
   val handLandMarkImplementation = dependencyProvider.handLandMarkRepository()
-  val handLandMarkViewModel: HandLandMarkViewModel =
-      viewModel(factory = HandLandMarkViewModel.provideFactory(context, handLandMarkImplementation))
+  val handLandmarkViewModel: HandLandmarkViewModel =
+      viewModel(factory = HandLandmarkViewModel.provideFactory(context, handLandMarkImplementation))
   NavHost(navController = navController, startDestination = Route.WELCOME) {
     navigation(
         startDestination = Screen.WELCOME.route,
@@ -189,7 +189,7 @@ fun SignifyAppPreview(
                 navigationActions = navigationActions,
                 userSession = dependencyProvider.userSession(),
                 challengeRepository = dependencyProvider.challengeRepository(),
-                handLandMarkViewModel = handLandMarkViewModel,
+                handLandmarkViewModel = handLandmarkViewModel,
                 challengeId = challengeId)
           }
       composable(Screen.CREATE_CHALLENGE.route) {
@@ -221,12 +221,12 @@ fun SignifyAppPreview(
         route = Route.HOME,
     ) {
       composable(Screen.HOME.route) { HomeScreen(navigationActions) }
-      composable(Screen.PRACTICE.route) { ASLRecognition(handLandMarkViewModel, navigationActions) }
+      composable(Screen.PRACTICE.route) { ASLRecognition(handLandmarkViewModel, navigationActions) }
       ExerciseLevel.entries.forEach { exerciseLevel ->
         composable(exerciseLevel.screen.route) {
           ExerciseScreen(
               navigationActions,
-              handLandMarkViewModel,
+              handLandmarkViewModel,
               dependencyProvider.userSession(),
               dependencyProvider.statsRepository(),
               exerciseLevel)
