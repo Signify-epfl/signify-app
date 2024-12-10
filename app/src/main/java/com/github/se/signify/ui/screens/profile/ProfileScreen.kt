@@ -1,6 +1,7 @@
 package com.github.se.signify.ui.screens.profile
 
 import android.annotation.SuppressLint
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
@@ -53,6 +54,7 @@ fun ProfileScreen(
           HelpText(
               title = stringResource(R.string.profile_text),
               text = stringResource(R.string.help_profile_screen_text)),
+      topBarButtons = listOf { SettingsButton(navigationActions) },
       content = {
         LaunchedEffect(Unit) {
           userViewModel.getUserName()
@@ -68,13 +70,6 @@ fun ProfileScreen(
 
         LaunchedEffect(profilePictureUrl.value) { updatedProfilePicture = profilePictureUrl.value }
 
-        // Settings button
-        BasicButton(
-            onClick = { navigationActions.navigateTo(Screen.SETTINGS) },
-            iconTestTag = "SettingsIcon",
-            icon = Icons.Outlined.Settings,
-            contentDescription = "Settings",
-            modifier = Modifier.testTag("SettingsButton"))
         Spacer(modifier = Modifier.height(32.dp))
         val unknownText = stringResource(R.string.unknown_text)
         // Top information
@@ -111,4 +106,15 @@ fun ProfileScreen(
             modifier = Modifier.testTag("MyStatsButton"))
       },
   )
+}
+
+@Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun SettingsButton(navigationActions: NavigationActions) {
+  BasicButton(
+      onClick = { navigationActions.navigateTo(Screen.SETTINGS) },
+      iconTestTag = "SettingsIcon",
+      icon = Icons.Outlined.Settings,
+      contentDescription = "Settings",
+      modifier = Modifier.testTag("SettingsButton"))
 }
