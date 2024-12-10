@@ -1,7 +1,10 @@
 package com.github.se.signify.ui.common
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assertHasClickAction
@@ -138,5 +141,38 @@ class ScreensTest {
     }
 
     composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
+  }
+
+  @Test
+  fun topBarElementsAreDisplayed() {
+    val helpText = HelpText("Help Title", "Help content")
+    val buttons = listOf<@Composable () -> Unit>(
+      {
+        BasicButton(
+          onClick = {},
+          iconTestTag = "ButtonIcon1",
+          icon = Icons.Outlined.Email,
+          contentDescription = "Button 1",
+          modifier = Modifier.testTag("Button1")
+        )
+      },
+      {
+        BasicButton(
+          onClick = {},
+          iconTestTag = "ButtonIcon2",
+          icon = Icons.Outlined.Email,
+          contentDescription = "Button 2",
+          modifier = Modifier.testTag("Button2")
+        )
+      }
+    )
+
+    composeTestRule.setContent {
+      TopBar(buttons = buttons, helpText = helpText)
+    }
+
+    composeTestRule.onNodeWithTag("Button1").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Button2").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpButton").assertIsDisplayed()
   }
 }
