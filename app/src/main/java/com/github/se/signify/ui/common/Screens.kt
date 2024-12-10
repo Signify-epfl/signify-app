@@ -74,34 +74,31 @@ data class HelpText(val title: String, val text: String)
 fun MainScreenScaffold(
     navigationActions: NavigationActions,
     testTag: String,
-    helpText: HelpText?,
+    helpText: HelpText? = null,
     topBarButtons: List<@Composable () -> Unit> = emptyList(),
     floatingActionButton: @Composable () -> Unit = {},
     content: @Composable (ColumnScope.() -> Unit)
 ) {
   Scaffold(
       floatingActionButton = { floatingActionButton() },
-      topBar = { TopLine() },
+      topBar = { TopBar(buttons = topBarButtons, helpText = helpText) },
       bottomBar = { BottomBar(navigationActions) },
       content = { padding ->
         ScreenColumn(
             padding,
             testTag,
-        ) {
-            if (helpText != null) {
-                HelpButton(helpText)
-            }
-          content()
-
-        }
+            content,
+        )
       })
 }
+
 /**
  * The scaffold for all annex screens.
  *
  * @param navigationActions The navigationActions of the bottom navigation menu.
  * @param testTag The test tag of the column (test tag of the screen).
- * @param topBarButtons A list of optional buttons to display in the top bar. They should be `Buttons.BasicButton()`s.
+ * @param topBarButtons A list of optional buttons to display in the top bar. They should be
+ *   `Buttons.BasicButton()`s.
  * @param content A lambda function for the content of the column.
  */
 @Composable
@@ -120,6 +117,29 @@ fun AnnexScreenScaffold(
         }
       })
 }
+
+@Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun TopBar(buttons: List<() -> Unit>, helpText: HelpText?) {
+  Column {
+    TopLine()
+
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+      Spacer(modifier = Modifier.weight(1f))
+      buttons.forEach { button -> button() }
+      if (helpText != null) {
+        HelpButton(helpText)
+      }
+    }
+
+    SeparatorLine()
+  }
+}
+
 /**
  * The basic column for all screens. This is a helper function for `MainScreenScaffold()` and
  * `AnnexScreenScaffold()`.
@@ -139,7 +159,7 @@ fun ScreenColumn(
       modifier =
           Modifier.fillMaxSize()
               .padding(padding)
-              .padding(16.dp)
+              .padding(horizontal = 16.dp)
               .verticalScroll(rememberScrollState())
               .background(MaterialTheme.colorScheme.background)
               .testTag(testTag),
@@ -162,23 +182,34 @@ fun TopLine() {
 
 @Composable
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-fun HelpButton(helpText: HelpText) {
-    var isHelpBoxVisible by remember { mutableStateOf(false) }
-    BasicButton(
-        onClick = { isHelpBoxVisible = !isHelpBoxVisible },
-        icon = Icons.Outlined.Info,
-        iconTestTag = "InfoIcon",
-        contentDescription = "Help",
-        modifier = Modifier.testTag("InfoButton"),
-    )
+fun SeparatorLine() {
+  Box(
+      modifier =
+          Modifier.fillMaxWidth()
+              .height(1.dp)
+              .background(MaterialTheme.colorScheme.outline)
+              .testTag("ThinBorderLine"))
+}
 
-    // Show popup when the info button is clicked
-    if (isHelpBoxVisible) {
-        HelpPopup(
-            onDismiss = { isHelpBoxVisible = false },
-            helpText,
-        )
-    }
+@Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun HelpButton(helpText: HelpText) {
+  var isHelpBoxVisible by remember { mutableStateOf(false) }
+  BasicButton(
+      onClick = { isHelpBoxVisible = !isHelpBoxVisible },
+      icon = Icons.Outlined.Info,
+      iconTestTag = "InfoIcon",
+      contentDescription = "Help",
+      modifier = Modifier.testTag("InfoButton"),
+  )
+
+  // Show popup when the info button is clicked
+  if (isHelpBoxVisible) {
+    HelpPopup(
+        onDismiss = { isHelpBoxVisible = false },
+        helpText,
+    )
+  }
 }
 
 /**
