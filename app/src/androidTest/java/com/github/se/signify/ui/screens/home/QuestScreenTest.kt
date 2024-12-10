@@ -1,5 +1,6 @@
 package com.github.se.signify.ui.screens.home
 
+import android.Manifest
 import android.content.Context
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
@@ -10,9 +11,12 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.R
 import com.github.se.signify.model.auth.MockUserSession
 import com.github.se.signify.model.auth.UserSession
+import com.github.se.signify.model.di.AppDependencyProvider
+import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.model.quest.Quest
@@ -31,6 +35,7 @@ class QuestScreenTest {
   private lateinit var questRepository: QuestRepository
   private lateinit var userRepository: UserRepository
   private lateinit var navigationActions: NavigationActions
+  private lateinit var handLandMarkViewModel: HandLandMarkViewModel
 
   val context: Context = ApplicationProvider.getApplicationContext()
   val quest_title: String = context.getString(R.string.quest_screen_title_text)
@@ -45,13 +50,18 @@ class QuestScreenTest {
           videoPath = "")
 
   @get:Rule val composeTestRule = createComposeRule()
+  @get:Rule
+  val cameraAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
 
   @Before
   fun setUp() {
+    val context = mock(Context::class.java)
+    val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
     userSession = MockUserSession()
     questRepository = mock(QuestRepository::class.java)
     userRepository = mock(UserRepository::class.java)
     navigationActions = mock(NavigationActions::class.java)
+    handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.QUEST.route)
   }
@@ -64,6 +74,7 @@ class QuestScreenTest {
           navigationActions = navigationActions,
           userRepository = userRepository,
           questRepository = questRepository,
+          handLandMarkViewModel = handLandMarkViewModel,
       )
     }
 
@@ -72,7 +83,13 @@ class QuestScreenTest {
 
   @Test
   fun questBoxDisplaysCorrectInformation() {
-    composeTestRule.setContent { QuestBox(quest = sampleQuest, isUnlocked = true) }
+    composeTestRule.setContent {
+      QuestBox(
+          quest = sampleQuest,
+          isUnlocked = true,
+          handLandMarkViewModel = handLandMarkViewModel,
+      )
+    }
 
     composeTestRule.onNodeWithTag("QuestCard").assertIsDisplayed()
     composeTestRule.onNodeWithTag("QuestHeader").assertIsDisplayed()
@@ -81,7 +98,13 @@ class QuestScreenTest {
 
   @Test
   fun questActionButtonHasClickAction() {
-    composeTestRule.setContent { QuestBox(quest = sampleQuest, isUnlocked = true) }
+    composeTestRule.setContent {
+      QuestBox(
+          quest = sampleQuest,
+          isUnlocked = true,
+          handLandMarkViewModel = handLandMarkViewModel,
+      )
+    }
 
     composeTestRule.onNodeWithTag("QuestActionButton").assertHasClickAction()
   }
@@ -94,6 +117,7 @@ class QuestScreenTest {
           navigationActions = navigationActions,
           questRepository = questRepository,
           userRepository = userRepository,
+          handLandMarkViewModel = handLandMarkViewModel,
       )
     }
 
@@ -106,7 +130,13 @@ class QuestScreenTest {
 
   @Test
   fun questBox_displaysCorrectInformationForUnlockedState() {
-    composeTestRule.setContent { QuestBox(quest = sampleQuest, isUnlocked = true) }
+    composeTestRule.setContent {
+      QuestBox(
+          quest = sampleQuest,
+          isUnlocked = true,
+          handLandMarkViewModel = handLandMarkViewModel,
+      )
+    }
 
     // Assert that the QuestBox is displayed with the correct content
     composeTestRule.onNodeWithTag("QuestCard").assertIsDisplayed()
@@ -116,7 +146,13 @@ class QuestScreenTest {
 
   @Test
   fun questBox_displaysLockedButtonWhenLocked() {
-    composeTestRule.setContent { QuestBox(quest = sampleQuest, isUnlocked = false) }
+    composeTestRule.setContent {
+      QuestBox(
+          quest = sampleQuest,
+          isUnlocked = false,
+          handLandMarkViewModel = handLandMarkViewModel,
+      )
+    }
 
     // Assert that the button shows "Locked" when the quest is not unlocked
     composeTestRule.onNodeWithText(closed_button).assertIsDisplayed()
@@ -125,7 +161,13 @@ class QuestScreenTest {
 
   @Test
   fun questBox_opensDialogWhenButtonClickedIfUnlocked() {
-    composeTestRule.setContent { QuestBox(quest = sampleQuest, isUnlocked = true) }
+    composeTestRule.setContent {
+      QuestBox(
+          quest = sampleQuest,
+          isUnlocked = true,
+          handLandMarkViewModel = handLandMarkViewModel,
+      )
+    }
 
     // Click the button to open the dialog
     composeTestRule.onNodeWithTag("QuestActionButton").performClick()
@@ -137,7 +179,13 @@ class QuestScreenTest {
 
   @Test
   fun questDescriptionDialog_displaysContentAndCloseButton() {
-    composeTestRule.setContent { QuestDescriptionDialog(quest = sampleQuest, onDismiss = {}) }
+    composeTestRule.setContent {
+      QuestDescriptionDialog(
+          quest = sampleQuest,
+          onDismiss = {},
+          handLandMarkViewModel = handLandMarkViewModel,
+      )
+    }
 
     // Assert dialog title and description are displayed
     composeTestRule.onNodeWithText(sampleQuest.title + " in ASL sign language").assertIsDisplayed()
@@ -155,6 +203,7 @@ class QuestScreenTest {
           navigationActions = navigationActions,
           questRepository = questRepository,
           userRepository = userRepository,
+          handLandMarkViewModel = handLandMarkViewModel,
       )
     }
 
@@ -167,7 +216,13 @@ class QuestScreenTest {
 
   @Test
   fun questBox_doesNotOpenDialogWhenLocked() {
-    composeTestRule.setContent { QuestBox(quest = sampleQuest, isUnlocked = false) }
+    composeTestRule.setContent {
+      QuestBox(
+          quest = sampleQuest,
+          isUnlocked = false,
+          handLandMarkViewModel = handLandMarkViewModel,
+      )
+    }
 
     // Try to click the button when it's locked
     composeTestRule.onNodeWithTag("QuestActionButton").performClick()
@@ -183,7 +238,11 @@ class QuestScreenTest {
     var dismissCalled = false
 
     composeTestRule.setContent {
-      QuestDescriptionDialog(quest = sampleQuest, onDismiss = { dismissCalled = true })
+      QuestDescriptionDialog(
+          quest = sampleQuest,
+          onDismiss = { dismissCalled = true },
+          handLandMarkViewModel = handLandMarkViewModel,
+      )
     }
 
     // Click the "Close" button
