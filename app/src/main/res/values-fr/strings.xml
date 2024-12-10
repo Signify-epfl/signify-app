@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">signify</string>
     <string name="default_web_client_id_text">480370863906-8deqtn8nq63qk01efb5pudici2c805ek.apps.googleusercontent.com</string>
     <string name="signify_welcome_text">Signify est ce dont vous avez besoin pour commencer à communiquer avec les personnes sourdes et malentendantes</string>
