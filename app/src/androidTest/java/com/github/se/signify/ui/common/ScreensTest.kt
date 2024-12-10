@@ -31,10 +31,10 @@ class ScreensTest {
             Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
           })
     }
-    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("TopLine").assertIsDisplayed()
     composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
     composeTestRule.onNodeWithTag("ScaffoldMainScreen").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("InfoButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("Text").assertIsDisplayed()
   }
 
@@ -51,7 +51,7 @@ class ScreensTest {
         Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
       }
     }
-    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("TopLine").assertIsDisplayed()
     composeTestRule.onNodeWithTag("ScaffoldAnnexeScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("Text").assertIsDisplayed()
@@ -72,10 +72,10 @@ class ScreensTest {
   }
 
   @Test
-  fun topBarIsDisplayed() {
+  fun topLineIsDisplayed() {
     composeTestRule.setContent { TopLine() }
     // Assert that the top bar is displayed
-    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("TopLine").assertIsDisplayed()
   }
 
   @Test
@@ -85,14 +85,14 @@ class ScreensTest {
     composeTestRule.setContent {
       HelpPopup(onDismiss = {}, HelpText(title = helpTitle, text = helpText))
     }
-    composeTestRule.onNodeWithTag("InfoPopup").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("InfoPopupContent").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("InfoPopupTitle").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("InfoPopupTitle").assertTextEquals(helpTitle)
-    composeTestRule.onNodeWithTag("InfoPopupBody").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("InfoPopupBody").assertTextEquals(helpText)
-    composeTestRule.onNodeWithTag("InfoPopupCloseButton").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("InfoPopupCloseButton").assertHasClickAction()
+    composeTestRule.onNodeWithTag("HelpPopup").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpPopupContent").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpPopupTitle").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpPopupTitle").assertTextEquals(helpTitle)
+    composeTestRule.onNodeWithTag("HelpPopupBody").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpPopupBody").assertTextEquals(helpText)
+    composeTestRule.onNodeWithTag("HelpPopupCloseButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpPopupCloseButton").assertHasClickAction()
   }
 
   @Test
@@ -103,7 +103,7 @@ class ScreensTest {
     composeTestRule.setContent {
       HelpPopup(onDismiss = { clicked = true }, HelpText(title = helpTitle, text = helpText))
     }
-    composeTestRule.onNodeWithTag("InfoPopupCloseButton").performClick()
+    composeTestRule.onNodeWithTag("HelpPopupCloseButton").performClick()
     assert(clicked)
   }
 

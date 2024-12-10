@@ -123,7 +123,7 @@ fun TopBar(buttons: List<@Composable () -> Unit>, helpText: HelpText?) {
     TopLine()
 
     Row(
-        modifier = Modifier.fillMaxWidth().padding(12.dp),
+        modifier = Modifier.fillMaxWidth().padding(12.dp).testTag("TopBarRow"),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -182,7 +182,7 @@ fun TopLine() {
           Modifier.fillMaxWidth()
               .height(5.dp)
               .background(MaterialTheme.colorScheme.primary)
-              .testTag("TopBar"))
+              .testTag("TopLine"))
 }
 
 @Composable
@@ -193,7 +193,7 @@ fun SeparatorLine() {
           Modifier.fillMaxWidth()
               .height(1.dp)
               .background(MaterialTheme.colorScheme.outline)
-              .testTag("ThinBorderLine"))
+              .testTag("SeparatorLine"))
 }
 
 @Composable
@@ -203,9 +203,9 @@ fun HelpButton(helpText: HelpText) {
   BasicButton(
       onClick = { isHelpBoxVisible = !isHelpBoxVisible },
       icon = Icons.Outlined.Info,
-      iconTestTag = "InfoIcon",
+      iconTestTag = "HelpIcon",
       contentDescription = "Help",
-      modifier = Modifier.testTag("InfoButton"),
+      modifier = Modifier.testTag("HelpButton"),
   )
 
   // Show popup when the help button is clicked
@@ -235,9 +235,9 @@ fun HelpPopup(onDismiss: () -> Unit, helpText: HelpText) {
                     3.dp,
                     MaterialTheme.colorScheme.outline,
                     RoundedCornerShape(12.dp)) // Ensure the border wraps the popup
-                .testTag("InfoPopup")) {
+                .testTag("HelpPopup")) {
           Column(
-              modifier = Modifier.padding(16.dp).fillMaxWidth().testTag("InfoPopupContent"),
+              modifier = Modifier.padding(16.dp).fillMaxWidth().testTag("HelpPopupContent"),
               horizontalAlignment = Alignment.CenterHorizontally) {
                 // Title
                 Text(
@@ -250,7 +250,7 @@ fun HelpPopup(onDismiss: () -> Unit, helpText: HelpText) {
                     fontSize = 24.sp, // Increased font size
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Left,
-                    modifier = Modifier.testTag("InfoPopupTitle"))
+                    modifier = Modifier.testTag("HelpPopupTitle"))
 
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -260,7 +260,7 @@ fun HelpPopup(onDismiss: () -> Unit, helpText: HelpText) {
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Justify,
-                    modifier = Modifier.testTag("InfoPopupBody"))
+                    modifier = Modifier.testTag("HelpPopupBody"))
                 Spacer(modifier = Modifier.height(16.dp))
               }
         }
