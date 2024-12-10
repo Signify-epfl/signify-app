@@ -1,20 +1,19 @@
 package com.github.se.signify.model.auth
 
-class MockUserSession : UserSession {
+class MockUserSession(private val authService: AuthService = MockAuthService()) : UserSession {
   var loggedIn = true
-  private var userId: String = "mockUserId"
 
   override fun getUserId(): String? {
-    return if (loggedIn) userId else null
+    return if (loggedIn) authService.getCurrentUser()?.split("@")?.get(0) else null
   }
 
   override suspend fun login(): Boolean {
-    loggedIn = true
-    return true
+    return loggedIn
   }
 
   override suspend fun logout() {
     loggedIn = false
+    authService.signOut()
   }
 
   override fun isLoggedIn(): Boolean {
