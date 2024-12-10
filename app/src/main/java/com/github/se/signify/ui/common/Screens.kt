@@ -20,8 +20,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -40,7 +38,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -50,7 +47,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.github.se.signify.R
 import com.github.se.signify.model.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
@@ -211,7 +207,7 @@ fun HelpButton(helpText: HelpText) {
       modifier = Modifier.testTag("InfoButton"),
   )
 
-  // Show popup when the info button is clicked
+  // Show popup when the help button is clicked
   if (isHelpBoxVisible) {
     HelpPopup(
         onDismiss = { isHelpBoxVisible = false },
@@ -242,7 +238,7 @@ fun HelpPopup(onDismiss: () -> Unit, helpText: HelpText) {
           Column(
               modifier = Modifier.padding(16.dp).fillMaxWidth().testTag("InfoPopupContent"),
               horizontalAlignment = Alignment.CenterHorizontally) {
-                // Title centered and underlined
+                // Title
                 Text(
                     text =
                         buildAnnotatedString {
@@ -258,8 +254,10 @@ fun HelpPopup(onDismiss: () -> Unit, helpText: HelpText) {
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.testTag("InfoPopupTitle"))
+
                 Spacer(modifier = Modifier.height(8.dp))
-                // Body text centered under the title
+
+                // Body
                 Text(
                     text = helpText.text,
                     fontSize = 16.sp,
@@ -267,15 +265,6 @@ fun HelpPopup(onDismiss: () -> Unit, helpText: HelpText) {
                     textAlign = TextAlign.Center,
                     modifier = Modifier.testTag("InfoPopupBody"))
                 Spacer(modifier = Modifier.height(16.dp))
-                // Close button for the popup
-                Button(
-                    onClick = { onDismiss() },
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-                    modifier = Modifier.testTag("InfoPopupCloseButton")) {
-                      Text(
-                          text = stringResource(R.string.close_text),
-                          color = MaterialTheme.colorScheme.onPrimary)
-                    }
               }
         }
   }
