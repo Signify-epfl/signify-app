@@ -2,7 +2,6 @@ package com.github.se.signify.model.auth
 
 import android.content.Context
 import android.content.Intent
-import androidx.activity.result.ActivityResult
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.AuthResult
 
@@ -14,7 +13,7 @@ interface AuthService {
   fun getCurrentUser(): String?
 
   fun handleAuthResult(
-      result: ActivityResult,
+      result: FirebaseAuthService.ActivityResultWrapper,
       onAuthComplete: (AuthResult) -> Unit,
       onAuthError: (ApiException) -> Unit
   )

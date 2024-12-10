@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.model.auth.AuthService
+import com.github.se.signify.model.auth.FirebaseAuthService
 import com.github.se.signify.model.auth.MockAuthService
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
@@ -53,7 +54,6 @@ import com.github.se.signify.model.stats.saveStatsToFirestore
 import com.github.se.signify.model.user.saveUserToFireStore
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.AuthResult
-import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -205,7 +205,9 @@ fun rememberAuthLauncher(
 ): ManagedActivityResultLauncher<Intent, ActivityResult> {
   return rememberLauncherForActivityResult(
       contract = ActivityResultContracts.StartActivityForResult()) { result ->
-        authService.handleAuthResult(result, onAuthComplete, onAuthError)
+        val activityResultWrapper =
+            FirebaseAuthService.ActivityResultWrapper(result.resultCode, result.data)
+        authService.handleAuthResult(activityResultWrapper, onAuthComplete, onAuthError)
       }
 }
 
