@@ -2,6 +2,7 @@ package com.github.se.signify.model.common
 
 import com.github.se.signify.R
 import junit.framework.TestCase.assertEquals
+import org.junit.Assert.assertThrows
 import org.junit.Test
 
 class UtilsTest {
@@ -65,4 +66,11 @@ class UtilsTest {
           actualResId)
     }
   }
+
+    @Test
+    fun timeConversionHasCorrectBehaviour() {
+        assertEquals(5.0, timeConversion(5000L))
+        assertEquals(0.01, timeConversion(10L))
+        assertThrows(IllegalArgumentException::class.java) { timeConversion(-1000L) }
+    }
 }
