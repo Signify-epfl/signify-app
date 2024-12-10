@@ -64,7 +64,10 @@ fun FeedbackScreen(
   var selectedRating by remember { mutableIntStateOf(0) }
   var isLoading by remember { mutableStateOf(false) }
 
-  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "FeedbackScreen") {
+  AnnexScreenScaffold(
+      navigationActions = navigationActions,
+      testTag = "FeedbackScreen",
+  ) {
     FeedbackDropdown(
         selectedFeedbackType = selectedFeedbackType,
         onFeedbackTypeSelected = { selectedFeedbackType = it })

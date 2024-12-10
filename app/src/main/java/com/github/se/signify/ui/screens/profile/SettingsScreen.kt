@@ -90,7 +90,10 @@ fun SettingsScreen(
         }
       }
 
-  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "SettingsScreen") {
+  AnnexScreenScaffold(
+      navigationActions = navigationActions,
+      testTag = "SettingsScreen",
+  ) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(16.dp).clickable { onThemeChange(!isDarkTheme) },
         verticalAlignment = Alignment.CenterVertically,

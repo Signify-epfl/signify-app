@@ -16,6 +16,7 @@ import com.github.se.signify.model.navigation.NavigationActions
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
 
 class ScreensTest {
   @Test
@@ -43,7 +44,10 @@ class ScreensTest {
   fun annexScreenScaffoldDisplaysCorrectInformation() {
     val navigationActions = mock(NavigationActions::class.java)
     composeTestRule.setContent {
-      AnnexScreenScaffold(navigationActions = navigationActions, testTag = "ScaffoldAnnexeScreen") {
+      AnnexScreenScaffold(
+          navigationActions = navigationActions,
+          testTag = "ScaffoldAnnexeScreen",
+      ) {
         Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
       }
     }
@@ -105,21 +109,21 @@ class ScreensTest {
 
   @Test
   fun backButtonIsDisplayed() {
-    composeTestRule.setContent { BackButton(onClick = {}) }
+    composeTestRule.setContent { BackButton(mock(NavigationActions::class.java)) }
     // Assert that the back button is displayed
     composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
   }
 
   @Test
   fun backButtonPerformsClick() {
-    var clicked = false
-    composeTestRule.setContent { BackButton(onClick = { clicked = true }) }
+    val navigationActions = mock(NavigationActions::class.java)
+    composeTestRule.setContent { BackButton(navigationActions) }
     // Assert that the back button has a click action
     composeTestRule.onNodeWithTag("BackButton").assertHasClickAction()
     // Perform click action on the back button
     composeTestRule.onNodeWithTag("BackButton").performClick()
     // Assert that the click action was triggered
-    assert(clicked)
+    verify(navigationActions).goBack()
   }
 
   @Test

@@ -50,7 +50,10 @@ fun ASLRecognition(
 ) {
   val buttonUriString = stringResource(id = R.string.button_uri_string_text)
   val context = LocalContext.current
-  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "ASLRecognitionScreen") {
+  AnnexScreenScaffold(
+      navigationActions = navigationActions,
+      testTag = "ASLRecognitionScreen",
+  ) {
     Box(
         modifier =
             Modifier.fillMaxWidth()

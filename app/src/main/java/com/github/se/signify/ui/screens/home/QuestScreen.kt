@@ -62,7 +62,10 @@ fun QuestScreen(
   LaunchedEffect(userSession.getUserId()) { userViewModel.checkAndUnlockNextQuest() }
 
   val unlockedQuests by userViewModel.unlockedQuests.collectAsState()
-  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "QuestScreen") {
+  AnnexScreenScaffold(
+      navigationActions = navigationActions,
+      testTag = "QuestScreen",
+  ) {
     LazyColumn(
         modifier = Modifier.weight(1f),
     ) {

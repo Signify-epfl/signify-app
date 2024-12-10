@@ -116,7 +116,10 @@ fun ExerciseScreen(
         })
   }
 
-  AnnexScreenScaffold(navigationActions = navigationActions, testTag = exerciseLevel.screenTag) {
+  AnnexScreenScaffold(
+      navigationActions = navigationActions,
+      testTag = exerciseLevel.screenTag,
+  ) {
 
     // Display sign image for the current letter
     val imageName = "letter_${currentLetter.lowercase()}"

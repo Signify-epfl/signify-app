@@ -70,7 +70,10 @@ fun NewChallengeScreen(
 
   val ongoingChallenges by userViewModel.ongoingChallenges.collectAsState()
 
-  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "NewChallengeScreen") {
+  AnnexScreenScaffold(
+      navigationActions = navigationActions,
+      testTag = "NewChallengeScreen",
+  ) {
     // My Friends button
     TextButton(
         onClick = { navigationActions.navigateTo(Screen.FRIENDS) },

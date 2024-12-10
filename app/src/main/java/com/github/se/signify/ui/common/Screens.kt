@@ -81,15 +81,14 @@ fun MainScreenScaffold(
 ) {
   Scaffold(
       floatingActionButton = { floatingActionButton() },
-      topBar = { TopBar(buttons = topBarButtons, helpText = helpText) },
-      bottomBar = { BottomBar(navigationActions) },
-      content = { padding ->
-        ScreenColumn(
-            padding,
-            testTag,
-            content,
+      topBar = {
+        TopBar(
+            buttons = topBarButtons,
+            helpText = helpText,
         )
-      })
+      },
+      bottomBar = { BottomBar(navigationActions) },
+      content = { padding -> ScreenColumn(padding, testTag, content) })
 }
 
 /**
@@ -105,22 +104,24 @@ fun MainScreenScaffold(
 fun AnnexScreenScaffold(
     navigationActions: NavigationActions,
     testTag: String,
+    helpText: HelpText? = null,
     topBarButtons: List<@Composable () -> Unit> = emptyList(),
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable (ColumnScope.() -> Unit)
 ) {
   Scaffold(
-      topBar = { TopLine() },
-      content = { padding ->
-        ScreenColumn(padding, testTag) {
-          BackButton { navigationActions.goBack() }
-          content()
-        }
-      })
+      topBar = {
+        TopBar(
+            buttons =
+                listOf<@Composable () -> Unit> { BackButton(navigationActions) } + topBarButtons,
+            helpText = helpText,
+        )
+      },
+      content = { padding -> ScreenColumn(padding, testTag, content) })
 }
 
 @Composable
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-fun TopBar(buttons: List<() -> Unit>, helpText: HelpText?) {
+fun TopBar(buttons: List<@Composable () -> Unit>, helpText: HelpText?) {
   Column {
     TopLine()
 
@@ -129,8 +130,11 @@ fun TopBar(buttons: List<() -> Unit>, helpText: HelpText?) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
+      buttons.forEach { it() }
+
+      // Align the help button to the right
       Spacer(modifier = Modifier.weight(1f))
-      buttons.forEach { button -> button() }
+
       if (helpText != null) {
         HelpButton(helpText)
       }
@@ -275,17 +279,13 @@ fun HelpPopup(onDismiss: () -> Unit, helpText: HelpText) {
 
 @Composable
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-fun BackButton(onClick: () -> Unit) {
-  Row(
-      modifier = Modifier.fillMaxWidth().padding(16.dp),
-      horizontalArrangement = Arrangement.Start) {
-        IconButton(onClick = { onClick() }, modifier = Modifier.testTag("BackButton")) {
-          Icon(
-              imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-              contentDescription = "BackButton",
-              tint = MaterialTheme.colorScheme.primary)
-        }
-      }
+fun BackButton(navigationActions: NavigationActions) {
+  IconButton(onClick = { navigationActions.goBack() }, modifier = Modifier.testTag("BackButton")) {
+    Icon(
+        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+        contentDescription = "BackButton",
+        tint = MaterialTheme.colorScheme.primary)
+  }
 }
 
 @Composable
