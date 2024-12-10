@@ -42,7 +42,6 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -242,15 +241,11 @@ fun HelpPopup(onDismiss: () -> Unit, helpText: HelpText) {
                 Text(
                     text =
                         buildAnnotatedString {
-                          withStyle(
-                              style =
-                                  SpanStyle(
-                                      fontWeight = FontWeight.Bold,
-                                      textDecoration = TextDecoration.Underline)) {
-                                append(helpText.title)
-                              }
+                          withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append(helpText.title)
+                          }
                         },
-                    fontSize = 20.sp,
+                    fontSize = 24.sp, // Increased font size
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.testTag("InfoPopupTitle"))
@@ -262,7 +257,7 @@ fun HelpPopup(onDismiss: () -> Unit, helpText: HelpText) {
                     text = helpText.text,
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.primary,
-                    textAlign = TextAlign.Center,
+                    textAlign = TextAlign.Justify,
                     modifier = Modifier.testTag("InfoPopupBody"))
                 Spacer(modifier = Modifier.height(16.dp))
               }
