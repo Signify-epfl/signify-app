@@ -126,14 +126,16 @@ fun TopBar(buttons: List<@Composable () -> Unit>, helpText: HelpText?) {
     TopLine()
 
     Row(
-        modifier = Modifier.fillMaxWidth().padding(8.dp),
+        modifier = Modifier.fillMaxWidth().padding(12.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
       buttons.forEach { it() }
 
       // Align the help button to the right
-      Spacer(modifier = Modifier.weight(1f))
+      if (buttons.isEmpty()) {
+        Spacer(modifier = Modifier.weight(1f))
+      }
 
       if (helpText != null) {
         HelpButton(helpText)
