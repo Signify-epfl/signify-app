@@ -64,6 +64,8 @@ class ASLRecognitionTest : LifecycleOwner {
     composeTestRule.onNodeWithTag("practiceButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("cameraPreview").assertIsDisplayed()
     composeTestRule.onNodeWithTag("gestureOverlayView").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("handGestureImage").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("LetterDictionary").assertIsDisplayed()
   }
 
   @Test
