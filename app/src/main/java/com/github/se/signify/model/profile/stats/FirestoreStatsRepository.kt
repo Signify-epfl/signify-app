@@ -155,7 +155,7 @@ class FirestoreStatsRepository(private val db: FirebaseFirestore) : StatsReposit
     getDocument(userId)
         .get()
         .addOnSuccessListener { document ->
-          val timePerLetter = document.get("timePerLetter") as? List<*>
+          val timePerLetter = document["timePerLetter"] as? List<*>
           // Convert to List<Long> if the list is not null and contains valid Long elements
           val longList = timePerLetter?.filterIsInstance<Long>() ?: emptyList()
           onSuccess(longList)
