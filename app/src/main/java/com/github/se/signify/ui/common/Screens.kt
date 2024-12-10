@@ -75,10 +75,10 @@ fun MainScreenScaffold(
     navigationActions: NavigationActions,
     testTag: String,
     helpText: HelpText?,
+    topBarButtons: List<@Composable () -> Unit> = emptyList(),
     floatingActionButton: @Composable () -> Unit = {},
-    content: @Composable() (ColumnScope.() -> Unit)
+    content: @Composable (ColumnScope.() -> Unit)
 ) {
-  var isHelpBoxVisible by remember { mutableStateOf(false) }
   Scaffold(
       floatingActionButton = { floatingActionButton() },
       topBar = { TopLine() },
@@ -88,21 +88,11 @@ fun MainScreenScaffold(
             padding,
             testTag,
         ) {
-          BasicButton(
-              onClick = { isHelpBoxVisible = !isHelpBoxVisible },
-              icon = Icons.Outlined.Info,
-              iconTestTag = "InfoIcon",
-              contentDescription = "Help",
-              modifier = Modifier.testTag("InfoButton"),
-          )
+            if (helpText != null) {
+                HelpButton(helpText)
+            }
           content()
-          // Show popup when the info button is clicked
-          if (isHelpBoxVisible) {
-            HelpPopup(
-                onDismiss = { isHelpBoxVisible = false },
-                helpText!!,
-            )
-          }
+
         }
       })
 }
@@ -111,12 +101,14 @@ fun MainScreenScaffold(
  *
  * @param navigationActions The navigationActions of the bottom navigation menu.
  * @param testTag The test tag of the column (test tag of the screen).
+ * @param topBarButtons A list of optional buttons to display in the top bar. They should be `Buttons.BasicButton()`s.
  * @param content A lambda function for the content of the column.
  */
 @Composable
 fun AnnexScreenScaffold(
     navigationActions: NavigationActions,
     testTag: String,
+    topBarButtons: List<@Composable () -> Unit> = emptyList(),
     content: @Composable ColumnScope.() -> Unit
 ) {
   Scaffold(
@@ -155,6 +147,7 @@ fun ScreenColumn(
         content()
       }
 }
+
 /** The decorative line at the top of screens. */
 @Composable
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
@@ -166,6 +159,28 @@ fun TopLine() {
               .background(MaterialTheme.colorScheme.primary)
               .testTag("TopBar"))
 }
+
+@Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun HelpButton(helpText: HelpText) {
+    var isHelpBoxVisible by remember { mutableStateOf(false) }
+    BasicButton(
+        onClick = { isHelpBoxVisible = !isHelpBoxVisible },
+        icon = Icons.Outlined.Info,
+        iconTestTag = "InfoIcon",
+        contentDescription = "Help",
+        modifier = Modifier.testTag("InfoButton"),
+    )
+
+    // Show popup when the info button is clicked
+    if (isHelpBoxVisible) {
+        HelpPopup(
+            onDismiss = { isHelpBoxVisible = false },
+            helpText,
+        )
+    }
+}
+
 /**
  * The info popup for main screens.
  *

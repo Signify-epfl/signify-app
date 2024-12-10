@@ -97,7 +97,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
               Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Scroll to Top")
             }
       },
-      {
+      content = {
         LazyColumn(
             state = scrollState, modifier = Modifier.weight(1f)
             // Ensures LazyColumn takes up the remaining space without infinite height constraints
