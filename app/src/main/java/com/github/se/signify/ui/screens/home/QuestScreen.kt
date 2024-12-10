@@ -49,10 +49,10 @@ import com.github.se.signify.R
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.common.user.UserViewModel
+import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.home.quest.Quest
 import com.github.se.signify.model.home.quest.QuestRepository
 import com.github.se.signify.model.home.quest.QuestViewModel
-import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.CameraBox
@@ -63,7 +63,7 @@ fun QuestScreen(
     userSession: UserSession,
     questRepository: QuestRepository,
     userRepository: UserRepository,
-    handLandMarkViewModel: HandLandMarkViewModel
+    handLandMarkViewModel: HandLandmarkViewModel
 ) {
   val questViewModel: QuestViewModel = viewModel(factory = QuestViewModel.factory(questRepository))
   val userViewModel: UserViewModel =
@@ -89,7 +89,7 @@ fun QuestScreen(
 
 @Composable
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-fun QuestBox(quest: Quest, isUnlocked: Boolean, handLandMarkViewModel: HandLandMarkViewModel) {
+fun QuestBox(quest: Quest, isUnlocked: Boolean, handLandMarkViewModel: HandLandmarkViewModel) {
   var isDialogVisible by remember { mutableStateOf(false) }
   Card(
       modifier = Modifier.fillMaxWidth().padding(16.dp).testTag("QuestCard"),
@@ -137,7 +137,7 @@ fun QuestBox(quest: Quest, isUnlocked: Boolean, handLandMarkViewModel: HandLandM
 fun QuestDescriptionDialog(
     quest: Quest,
     onDismiss: () -> Unit,
-    handLandMarkViewModel: HandLandMarkViewModel
+    handLandMarkViewModel: HandLandmarkViewModel
 ) {
   val inSignLanguageText = stringResource(R.string.in_sign_language_text)
   var isFingerspellVisible by remember { mutableStateOf(false) }
@@ -235,7 +235,7 @@ fun QuestTitle() {
 fun FingerSpellDialog(
     word: String,
     onDismiss: () -> Unit,
-    handLandMarkViewModel: HandLandMarkViewModel
+    handLandMarkViewModel: HandLandmarkViewModel
 ) {
   val context = LocalContext.current
   var currentLetterIndex by rememberSaveable { mutableIntStateOf(0) }

@@ -13,13 +13,11 @@ import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.R
-import com.github.se.signify.model.auth.MockUserSession
-import com.github.se.signify.model.auth.UserSession
-import com.github.se.signify.model.di.AppDependencyProvider
-import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.common.user.UserRepository
+import com.github.se.signify.model.dependencyInjection.AppDependencyProvider
+import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.home.quest.Quest
 import com.github.se.signify.model.home.quest.QuestRepository
 import com.github.se.signify.model.navigation.NavigationActions
@@ -37,7 +35,7 @@ class QuestScreenTest {
   private lateinit var questRepository: QuestRepository
   private lateinit var userRepository: UserRepository
   private lateinit var navigationActions: NavigationActions
-  private lateinit var handLandMarkViewModel: HandLandMarkViewModel
+  private lateinit var handLandmarkViewModel: HandLandmarkViewModel
 
   val context: Context = ApplicationProvider.getApplicationContext()
   val quest_title: String = context.getString(R.string.quest_screen_title_text)
@@ -63,7 +61,7 @@ class QuestScreenTest {
     questRepository = mock(QuestRepository::class.java)
     userRepository = mock(UserRepository::class.java)
     navigationActions = mock(NavigationActions::class.java)
-    handLandMarkViewModel = HandLandMarkViewModel(handLandMarkImplementation, context)
+    handLandmarkViewModel = HandLandmarkViewModel(handLandMarkImplementation, context)
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.QUEST.route)
   }
@@ -76,7 +74,7 @@ class QuestScreenTest {
           navigationActions = navigationActions,
           userRepository = userRepository,
           questRepository = questRepository,
-          handLandMarkViewModel = handLandMarkViewModel,
+          handLandMarkViewModel = handLandmarkViewModel,
       )
     }
 
@@ -89,7 +87,7 @@ class QuestScreenTest {
       QuestBox(
           quest = sampleQuest,
           isUnlocked = true,
-          handLandMarkViewModel = handLandMarkViewModel,
+          handLandMarkViewModel = handLandmarkViewModel,
       )
     }
 
@@ -104,7 +102,7 @@ class QuestScreenTest {
       QuestBox(
           quest = sampleQuest,
           isUnlocked = true,
-          handLandMarkViewModel = handLandMarkViewModel,
+          handLandMarkViewModel = handLandmarkViewModel,
       )
     }
 
@@ -119,7 +117,7 @@ class QuestScreenTest {
           navigationActions = navigationActions,
           questRepository = questRepository,
           userRepository = userRepository,
-          handLandMarkViewModel = handLandMarkViewModel,
+          handLandMarkViewModel = handLandmarkViewModel,
       )
     }
 
@@ -136,7 +134,7 @@ class QuestScreenTest {
       QuestBox(
           quest = sampleQuest,
           isUnlocked = true,
-          handLandMarkViewModel = handLandMarkViewModel,
+          handLandMarkViewModel = handLandmarkViewModel,
       )
     }
 
@@ -152,7 +150,7 @@ class QuestScreenTest {
       QuestBox(
           quest = sampleQuest,
           isUnlocked = false,
-          handLandMarkViewModel = handLandMarkViewModel,
+          handLandMarkViewModel = handLandmarkViewModel,
       )
     }
 
@@ -167,7 +165,7 @@ class QuestScreenTest {
       QuestBox(
           quest = sampleQuest,
           isUnlocked = true,
-          handLandMarkViewModel = handLandMarkViewModel,
+          handLandMarkViewModel = handLandmarkViewModel,
       )
     }
 
@@ -185,7 +183,7 @@ class QuestScreenTest {
       QuestDescriptionDialog(
           quest = sampleQuest,
           onDismiss = {},
-          handLandMarkViewModel = handLandMarkViewModel,
+          handLandMarkViewModel = handLandmarkViewModel,
       )
     }
 
@@ -205,7 +203,7 @@ class QuestScreenTest {
           navigationActions = navigationActions,
           questRepository = questRepository,
           userRepository = userRepository,
-          handLandMarkViewModel = handLandMarkViewModel,
+          handLandMarkViewModel = handLandmarkViewModel,
       )
     }
 
@@ -222,7 +220,7 @@ class QuestScreenTest {
       QuestBox(
           quest = sampleQuest,
           isUnlocked = false,
-          handLandMarkViewModel = handLandMarkViewModel,
+          handLandMarkViewModel = handLandmarkViewModel,
       )
     }
 
@@ -243,7 +241,7 @@ class QuestScreenTest {
       QuestDescriptionDialog(
           quest = sampleQuest,
           onDismiss = { dismissCalled = true },
-          handLandMarkViewModel = handLandMarkViewModel,
+          handLandMarkViewModel = handLandmarkViewModel,
       )
     }
 
