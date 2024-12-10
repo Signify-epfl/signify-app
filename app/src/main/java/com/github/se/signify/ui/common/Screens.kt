@@ -168,6 +168,8 @@ fun ScreenColumn(
               .background(MaterialTheme.colorScheme.background)
               .testTag(testTag),
       horizontalAlignment = Alignment.CenterHorizontally) {
+        Spacer(modifier = Modifier.height(16.dp))
+
         content()
       }
 }
