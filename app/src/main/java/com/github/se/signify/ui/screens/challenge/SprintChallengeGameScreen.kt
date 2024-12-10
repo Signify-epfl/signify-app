@@ -1,11 +1,13 @@
 package com.github.se.signify.ui.screens.challenge
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -13,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -44,9 +47,9 @@ fun SprintChallengeGameScreen(
     // State variables
     var currentChallenge by remember { mutableStateOf<Challenge?>(null) }
     var currentWord by remember { mutableStateOf("") }
-    var currentLetterIndex by remember { mutableStateOf(0) }
-    var completedWordCount by remember { mutableStateOf(0) }
-    var timeLeft by remember { mutableStateOf(60) }
+    var currentLetterIndex by remember { mutableIntStateOf(0) }
+    var completedWordCount by remember { mutableIntStateOf(0) }
+    var timeLeft by remember { mutableIntStateOf(60) }
     var isGameActive by remember { mutableStateOf(false) }
 
     // Fetch challenge
@@ -127,6 +130,10 @@ fun SprintChallengeGameScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            CurrentGestureDisplay(currentWord, currentLetterIndex)
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             Text(
                 text = "Words Completed: $completedWordCount",
                 fontSize = 20.sp,
@@ -136,6 +143,35 @@ fun SprintChallengeGameScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             CameraBox(handLandMarkViewModel = handLandMarkViewModel, testTag = "CameraBoxSprint")
+        }
+    }
+}
+
+@SuppressLint("DiscouragedApi")
+@Composable
+fun CurrentGestureDisplay(currentWord: String, currentLetterIndex: Int) {
+    val context = LocalContext.current
+    val currentLetter = currentWord.getOrNull(currentLetterIndex)?.uppercaseChar() ?: 'A'
+    val imageName = "letter_${currentLetter.lowercase()}"
+    val imageResId = context.resources.getIdentifier(imageName, "drawable", context.packageName)
+
+    if (imageResId != 0) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .height(150.dp)
+                .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
+                .border(2.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(16.dp))
+                .testTag("CurrentGestureBox"),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(id = imageResId),
+                contentDescription = "Gesture Image",
+                tint = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.size(120.dp).testTag("CurrentGestureIcon")
+            )
         }
     }
 }
@@ -207,18 +243,19 @@ fun updateSprintChallenge(
             player2RoundCompleted = it.player2RoundCompleted.toMutableList().apply {
                 if (currentUserId == it.player2) this[it.round - 1] = true
             },
-            player1Times = if (currentUserId == it.player1) {
-                it.player1Times.toMutableList().apply { add(wordsCompleted.toLong()) }
-            } else it.player1Times,
-            player2Times = if (currentUserId == it.player2) {
-                it.player2Times.toMutableList().apply { add(wordsCompleted.toLong()) }
-            } else it.player2Times
+            player1WordsCompleted = if (currentUserId == it.player1) {
+                it.player1WordsCompleted.toMutableList().apply { add(wordsCompleted) }
+            } else it.player1WordsCompleted,
+            player2WordsCompleted = if (currentUserId == it.player2) {
+                it.player2WordsCompleted.toMutableList().apply { add(wordsCompleted) }
+            } else it.player2WordsCompleted
         )
 
         challengeRepository.updateChallenge(
             updatedChallenge = updatedChallenge,
             onSuccess = {
-                Toast.makeText(context, "Sprint score saved successfully", Toast.LENGTH_SHORT).show()
+
+                Toast.makeText(context,"Score saved successfully" , Toast.LENGTH_SHORT).show()
                 navigationActions.navigateTo(Screen.CHALLENGE)
             },
             onFailure = {
@@ -227,3 +264,6 @@ fun updateSprintChallenge(
         )
     }
 }
+
+
+

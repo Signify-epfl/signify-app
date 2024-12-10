@@ -1,7 +1,6 @@
 package com.github.se.signify.ui.screens.challenge
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -158,118 +157,139 @@ fun OngoingChallengeCard(
     userSession: UserSession,
     modifier: Modifier = Modifier
 ) {
-  val context = LocalContext.current
+    val context = LocalContext.current
 
-  // Determine if the current player has completed all rounds
-  val currentUserId = userSession.getUserId()
-  val isChallengeCompleted =
-      if (currentUserId == challenge.player1) {
-        challenge.player1RoundCompleted.all { it }
-      } else {
-        challenge.player2RoundCompleted.all { it }
-      }
-
-  // Calculate the personal total time if the challenge is completed
-  val totalTime =
-      if (isChallengeCompleted) {
+    // Determine if the current player has completed all rounds
+    val currentUserId = userSession.getUserId()
+    val isChallengeCompleted =
         if (currentUserId == challenge.player1) {
-          challenge.player1Times.sum() / 1000
+            challenge.player1RoundCompleted.all { it }
         } else {
-          challenge.player2Times.sum() / 1000
+            challenge.player2RoundCompleted.all { it }
         }
-      } else null
 
-  Card(
-      modifier =
-          modifier
-              .fillMaxWidth()
-              .padding(horizontal = 8.dp, vertical = 4.dp)
-              .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
-              .background(
-                  MaterialTheme.colorScheme
-                      .primary), // Explicitly set background color for better contrast
-      shape = RoundedCornerShape(16.dp),
-  ) {
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween) {
-          // Opponent Info Column
-          Column(verticalArrangement = Arrangement.Center, modifier = Modifier.weight(1f)) {
-            val opponentName =
-                if (currentUserId == challenge.player1) {
-                  challenge.player2
+    // Calculate the total words or total time based on the mode and completion
+    val displayText = if (isChallengeCompleted) {
+        when (challenge.mode) {
+            "SPRINT" -> {
+                val totalWords = if (currentUserId == challenge.player1) {
+                    challenge.player1WordsCompleted.sum()
                 } else {
-                  challenge.player1
+                    challenge.player2WordsCompleted.sum()
                 }
-            Text(
-                text = "Opponent: $opponentName",
-                fontSize = 18.sp,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
-            Text(
-                text = "Mode: ${challenge.mode}",
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSurface)
-            if (isChallengeCompleted) {
-              Text(
-                  text = "Your Total Time: ${totalTime}s",
-                  fontSize = 14.sp,
-                  color = MaterialTheme.colorScheme.onSurface)
+                "Your Total Words: $totalWords"
             }
-          }
+            "CHRONO" -> {
+                val totalTime = if (currentUserId == challenge.player1) {
+                    challenge.player1Times.sum() / 1000
+                } else {
+                    challenge.player2Times.sum() / 1000
+                }
+                "Your Total Time: ${totalTime}s"
+            }
+            else -> ""
+        }
+    } else {
+        null
+    }
 
-          // Play Button
-          Box(
-              modifier =
-                  Modifier.padding(start = 8.dp)
-                      .size(48.dp) // Set size to ensure consistency between buttons
-              ) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.primary), // Explicitly set background color for better contrast
+        shape = RoundedCornerShape(16.dp),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            // Opponent Info Column
+            Column(verticalArrangement = Arrangement.Center, modifier = Modifier.weight(1f)) {
+                val opponentName =
+                    if (currentUserId == challenge.player1) {
+                        challenge.player2
+                    } else {
+                        challenge.player1
+                    }
+                Text(
+                    text = "Opponent: $opponentName",
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                )
+                Text(
+                    text = "Mode: ${challenge.mode}",
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                if (displayText != null) {
+                    Text(
+                        text = displayText,
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
+
+            // Play Button
+            Box(
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .size(48.dp) // Set size to ensure consistency between buttons
+            ) {
                 IconButton(
                     onClick = {
-                      if (isChallengeCompleted) {
-                        Toast.makeText(
+                        if (isChallengeCompleted) {
+                            Toast.makeText(
                                 context,
                                 "Challenge already completed, wait for result",
-                                Toast.LENGTH_SHORT)
-                            .show()
-                      } else {
-                        onPlayClick()
-                      }
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            onPlayClick()
+                        }
                     },
-                    modifier =
-                        Modifier.fillMaxSize() // Make the button fill the Box size
-                            .testTag("PlayButton${challenge.challengeId}")) {
-                      Icon(
-                          imageVector = Icons.Default.PlayArrow,
-                          contentDescription = "Play Challenge",
-                          tint =
-                              if (isChallengeCompleted) Color.Gray
-                              else MaterialTheme.colorScheme.primary,
-                          modifier = Modifier.size(36.dp) // Icon size for better visibility
-                          )
-                    }
-              }
+                    modifier = Modifier
+                        .fillMaxSize() // Make the button fill the Box size
+                        .testTag("PlayButton${challenge.challengeId}")
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.PlayArrow,
+                        contentDescription = "Play Challenge",
+                        tint =
+                        if (isChallengeCompleted) Color.Gray
+                        else MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(36.dp) // Icon size for better visibility
+                    )
+                }
+            }
 
-          // Delete Button
-          Box(
-              modifier =
-                  Modifier.padding(start = 8.dp)
-                      .size(48.dp) // Set size to ensure consistency between buttons
-              ) {
+            // Delete Button
+            Box(
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .size(48.dp) // Set size to ensure consistency between buttons
+            ) {
                 IconButton(
                     onClick = onDeleteClick,
-                    modifier =
-                        Modifier.fillMaxSize() // Make the button fill the Box size
-                            .testTag("DeleteButton${challenge.challengeId}")) {
-                      Icon(
-                          imageVector = Icons.Default.Delete,
-                          contentDescription = "Delete Challenge",
-                          tint = Color.Gray, // Explicitly set color for visibility
-                          modifier = Modifier.size(30.dp) // Icon size for better visibility
-                          )
-                    }
-              }
+                    modifier = Modifier
+                        .fillMaxSize() // Make the button fill the Box size
+                        .testTag("DeleteButton${challenge.challengeId}")
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Delete Challenge",
+                        tint = Color.Gray, // Explicitly set color for visibility
+                        modifier = Modifier.size(30.dp) // Icon size for better visibility
+                    )
+                }
+            }
         }
-  }
+    }
 }
+
