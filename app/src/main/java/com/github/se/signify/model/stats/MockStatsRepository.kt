@@ -116,6 +116,19 @@ class MockStatsRepository : StatsRepository {
     getStat(userId, { it.wonChallenge }, "getWonChallengeStats", onSuccess, onFailure)
   }
 
+    override fun getTimePerLetter(
+        userId: String,
+        onSuccess: (List<Long>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        trackCall("getTimePerLetter")
+        if (!shouldSucceed) {
+            onFailure(exceptionToThrow)
+        } else {
+            onSuccess(stats[userId]?.timePerLetter ?: emptyList())
+        }
+    }
+
   override fun updateLettersLearned(
       userId: String,
       newLetter: Char,
@@ -233,6 +246,20 @@ class MockStatsRepository : StatsRepository {
         onSuccess,
         onFailure)
   }
+
+    override fun updateTimePerLetter(
+        userId: String,
+        newTimePerLetter: List<Long>,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        updateStat(
+            userId,
+            { it.copy(timePerLetter = newTimePerLetter) },
+            "updateTimePerLetter",
+            onSuccess,
+            onFailure)
+    }
 
   private fun getStat(
       userId: String,
