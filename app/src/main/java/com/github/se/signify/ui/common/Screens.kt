@@ -51,13 +51,14 @@ import com.github.se.signify.model.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.ui.navigation.BottomNavigationMenu
 
+data class HelpPopup(val title: String, val text: String)
+
 /**
  * The scaffold for all main screens.
  *
  * @param navigationActions The navigationActions of the bottom navigation menu.
  * @param testTag The test tag of the column (test tag of the screen).
- * @param helpTitle The title of the info popup.
- * @param helpText The text of the info popup.
+ * @param helpPopup An optional help popup for the screen.
  * @param floatingActionButton A lambda function for the floating action button.
  * @param content A lambda function for the content of the column.
  */
@@ -65,10 +66,9 @@ import com.github.se.signify.ui.navigation.BottomNavigationMenu
 fun MainScreenScaffold(
     navigationActions: NavigationActions,
     testTag: String,
-    helpTitle: String,
-    helpText: String,
+    helpPopup: HelpPopup?,
     floatingActionButton: @Composable () -> Unit = {},
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable (ColumnScope.() -> Unit)
 ) {
   var isHelpBoxVisible by remember { mutableStateOf(false) }
   Scaffold(
@@ -92,8 +92,8 @@ fun MainScreenScaffold(
           if (isHelpBoxVisible) {
             InfoPopup(
                 onDismiss = { isHelpBoxVisible = false },
-                helpTitle = helpTitle,
-                helpText = helpText)
+                helpPopup!!,
+            )
           }
         }
       })
@@ -162,11 +162,10 @@ fun TopBar() {
  * The info popup for main screens.
  *
  * @param onDismiss A lambda function to execute when the button or outside the box or is clicked.
- * @param helpTitle The title of the info popup.
- * @param helpText The text of the info popup.
+ * @param helpPopup The help popup to display.
  */
 @Composable
-fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
+fun InfoPopup(onDismiss: () -> Unit, helpPopup: HelpPopup) {
   Dialog(onDismissRequest = { onDismiss() }) {
     Surface(
         shape = RoundedCornerShape(12.dp),
@@ -189,7 +188,7 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
                                   SpanStyle(
                                       fontWeight = FontWeight.Bold,
                                       textDecoration = TextDecoration.Underline)) {
-                                append(helpTitle)
+                                append(helpPopup.title)
                               }
                         },
                     fontSize = 20.sp,
@@ -199,7 +198,7 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
                 Spacer(modifier = Modifier.height(8.dp))
                 // Body text centered under the title
                 Text(
-                    text = helpText,
+                    text = helpPopup.text,
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,

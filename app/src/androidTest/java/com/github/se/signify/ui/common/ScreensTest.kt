@@ -24,10 +24,10 @@ class ScreensTest {
       MainScreenScaffold(
           navigationActions = navigationActions,
           testTag = "ScaffoldMainScreen",
-          helpTitle = "Help",
-          helpText = "This is the help text") {
+          helpPopup = null,
+          content = {
             Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
-          }
+          })
     }
     composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
     composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()

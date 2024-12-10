@@ -61,6 +61,7 @@ import com.github.se.signify.model.getTipResId
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.common.BasicButton
+import com.github.se.signify.ui.common.HelpPopup
 import com.github.se.signify.ui.common.MainScreenScaffold
 import com.github.se.signify.ui.common.TextButton
 import kotlinx.coroutines.CoroutineScope
@@ -83,8 +84,10 @@ fun HomeScreen(navigationActions: NavigationActions) {
   MainScreenScaffold(
       navigationActions = navigationActions,
       testTag = "HomeScreen",
-      helpTitle = stringResource(R.string.home_text),
-      helpText = stringResource(R.string.help_home_screen_text),
+      helpPopup =
+          HelpPopup(
+              title = stringResource(R.string.home_text),
+              text = stringResource(R.string.help_home_screen_text)),
       floatingActionButton = {
         FloatingActionButton(
             onClick = { coroutineScope.launch { scrollState.animateScrollToItem(0) } },
@@ -93,7 +96,8 @@ fun HomeScreen(navigationActions: NavigationActions) {
             modifier = Modifier.testTag("ScrollToTopButton")) {
               Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Scroll to Top")
             }
-      }) {
+      },
+      {
         LazyColumn(
             state = scrollState, modifier = Modifier.weight(1f)
             // Ensures LazyColumn takes up the remaining space without infinite height constraints
@@ -154,7 +158,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
                 Spacer(modifier = Modifier.height(16.dp))
               }
             }
-      }
+      })
 }
 
 /**

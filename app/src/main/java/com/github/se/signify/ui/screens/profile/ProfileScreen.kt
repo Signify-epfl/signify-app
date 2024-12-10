@@ -27,6 +27,7 @@ import com.github.se.signify.model.user.UserRepository
 import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.common.AccountInformation
 import com.github.se.signify.ui.common.BasicButton
+import com.github.se.signify.ui.common.HelpPopup
 import com.github.se.signify.ui.common.LearnedLetterList
 import com.github.se.signify.ui.common.MainScreenScaffold
 import com.github.se.signify.ui.common.SquareButton
@@ -48,62 +49,66 @@ fun ProfileScreen(
   MainScreenScaffold(
       navigationActions = navigationActions,
       testTag = "ProfileScreen",
-      helpTitle = stringResource(R.string.profile_text),
-      helpText = stringResource(R.string.help_profile_screen_text),
-  ) {
-    LaunchedEffect(Unit) {
-      userViewModel.getUserName()
-      userViewModel.getProfilePictureUrl()
-      userViewModel.updateStreak()
-      userViewModel.getStreak()
-    }
-    val userName = userViewModel.userName.collectAsState()
-    val profilePictureUrl = userViewModel.profilePictureUrl.collectAsState()
-    val streak = userViewModel.streak.collectAsState()
-    val lettersLearned = statsViewModel.lettersLearned.collectAsState()
-    var updatedProfilePicture by remember { mutableStateOf(profilePictureUrl.value) }
+      helpPopup =
+          HelpPopup(
+              title = stringResource(R.string.profile_text),
+              text = stringResource(R.string.help_profile_screen_text)),
+      content = {
+        LaunchedEffect(Unit) {
+          userViewModel.getUserName()
+          userViewModel.getProfilePictureUrl()
+          userViewModel.updateStreak()
+          userViewModel.getStreak()
+        }
+        val userName = userViewModel.userName.collectAsState()
+        val profilePictureUrl = userViewModel.profilePictureUrl.collectAsState()
+        val streak = userViewModel.streak.collectAsState()
+        val lettersLearned = statsViewModel.lettersLearned.collectAsState()
+        var updatedProfilePicture by remember { mutableStateOf(profilePictureUrl.value) }
 
-    LaunchedEffect(profilePictureUrl.value) { updatedProfilePicture = profilePictureUrl.value }
+        LaunchedEffect(profilePictureUrl.value) { updatedProfilePicture = profilePictureUrl.value }
 
-    // Settings button
-    BasicButton(
-        onClick = { navigationActions.navigateTo(Screen.SETTINGS) },
-        iconTestTag = "SettingsIcon",
-        icon = Icons.Outlined.Settings,
-        contentDescription = "Settings",
-        modifier = Modifier.testTag("SettingsButton"))
-    Spacer(modifier = Modifier.height(32.dp))
-    val unknownText = stringResource(R.string.unknown_text)
-    // Top information
-    AccountInformation(
-        userId = FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0) ?: unknownText,
-        userName = userName.value,
-        profilePictureUrl = updatedProfilePicture,
-        streak = streak.value)
+        // Settings button
+        BasicButton(
+            onClick = { navigationActions.navigateTo(Screen.SETTINGS) },
+            iconTestTag = "SettingsIcon",
+            icon = Icons.Outlined.Settings,
+            contentDescription = "Settings",
+            modifier = Modifier.testTag("SettingsButton"))
+        Spacer(modifier = Modifier.height(32.dp))
+        val unknownText = stringResource(R.string.unknown_text)
+        // Top information
+        AccountInformation(
+            userId =
+                FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0) ?: unknownText,
+            userName = userName.value,
+            profilePictureUrl = updatedProfilePicture,
+            streak = streak.value)
 
-    Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
-    // Letters learned
-    LearnedLetterList(lettersLearned = lettersLearned.value)
-    Spacer(modifier = Modifier.height(32.dp))
+        // Letters learned
+        LearnedLetterList(lettersLearned = lettersLearned.value)
+        Spacer(modifier = Modifier.height(32.dp))
 
-    // Friends List button
-    val myFriendsText = stringResource(R.string.my_friends_text)
-    SquareButton(
-        iconId = R.drawable.friendsicon,
-        text = myFriendsText,
-        onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
-        size = 200,
-        modifier = Modifier.testTag("MyFriendsButton"))
-    Spacer(modifier = Modifier.height(32.dp))
+        // Friends List button
+        val myFriendsText = stringResource(R.string.my_friends_text)
+        SquareButton(
+            iconId = R.drawable.friendsicon,
+            text = myFriendsText,
+            onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
+            size = 200,
+            modifier = Modifier.testTag("MyFriendsButton"))
+        Spacer(modifier = Modifier.height(32.dp))
 
-    // Statistics Button
-    val myStatsText = stringResource(R.string.my_stats_text)
-    SquareButton(
-        iconId = R.drawable.statisticsicon,
-        text = myStatsText,
-        onClick = { navigationActions.navigateTo(Screen.STATS) },
-        size = 200,
-        modifier = Modifier.testTag("MyStatsButton"))
-  }
+        // Statistics Button
+        val myStatsText = stringResource(R.string.my_stats_text)
+        SquareButton(
+            iconId = R.drawable.statisticsicon,
+            text = myStatsText,
+            onClick = { navigationActions.navigateTo(Screen.STATS) },
+            size = 200,
+            modifier = Modifier.testTag("MyStatsButton"))
+      },
+  )
 }

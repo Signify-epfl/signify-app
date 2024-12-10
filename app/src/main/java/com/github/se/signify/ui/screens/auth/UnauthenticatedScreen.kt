@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.ui.common.HelpPopup
 import com.github.se.signify.ui.common.MainScreenScaffold
 import com.github.se.signify.ui.common.TextButton
 
@@ -41,8 +42,9 @@ fun UnauthenticatedScreen(navigationActions: NavigationActions) {
   MainScreenScaffold(
       navigationActions = navigationActions,
       testTag = "UnauthenticatedScreen",
-      helpTitle = offModeText,
-      helpText = stringResource(R.string.help_offline_mode_text)) {
+      helpPopup =
+          HelpPopup(title = offModeText, text = stringResource(R.string.help_offline_mode_text)),
+      content = {
         Column(
             modifier = Modifier.fillMaxSize().background(Color.White).padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -71,5 +73,5 @@ fun UnauthenticatedScreen(navigationActions: NavigationActions) {
                   textColor = MaterialTheme.colorScheme.onPrimary,
                   modifier = Modifier)
             }
-      }
+      })
 }
