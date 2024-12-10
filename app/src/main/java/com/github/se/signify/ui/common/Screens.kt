@@ -229,12 +229,12 @@ fun HelpPopup(onDismiss: () -> Unit, helpText: HelpText) {
   Dialog(onDismissRequest = { onDismiss() }) {
     Surface(
         shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.background, // Background for the popup
+        color = MaterialTheme.colorScheme.background,
         modifier =
             Modifier.border(
                     3.dp,
                     MaterialTheme.colorScheme.outline,
-                    RoundedCornerShape(12.dp)) // Ensure the border wraps the popup
+                    RoundedCornerShape(12.dp))
                 .testTag("HelpPopup")) {
           Column(
               modifier = Modifier.padding(16.dp).fillMaxWidth().testTag("HelpPopupContent"),
@@ -247,7 +247,7 @@ fun HelpPopup(onDismiss: () -> Unit, helpText: HelpText) {
                             append(helpText.title)
                           }
                         },
-                    fontSize = 24.sp, // Increased font size
+                    fontSize = 24.sp,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Left,
                     modifier = Modifier.testTag("HelpPopupTitle"))
