@@ -30,8 +30,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.github.se.signify.R
-import com.github.se.signify.model.getIconResId
-import com.github.se.signify.model.hand.HandLandMarkViewModel
+import com.github.se.signify.model.common.getIconResId
+import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.CameraBox
@@ -45,7 +45,7 @@ import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ASLRecognition(
-    handLandMarkViewModel: HandLandMarkViewModel,
+    handLandmarkViewModel: HandLandmarkViewModel,
     navigationActions: NavigationActions
 ) {
   val buttonUriString = stringResource(id = R.string.button_uri_string_text)
@@ -57,12 +57,12 @@ fun ASLRecognition(
                 .height(252.dp)
                 .padding(horizontal = 16.dp)
                 .background(MaterialTheme.colorScheme.background)) {
-          CameraBox(handLandMarkViewModel, "cameraPreview")
+          CameraBox(handLandmarkViewModel, "cameraPreview")
         }
 
     Spacer(modifier = Modifier.height(30.dp))
 
-    GestureOverlayView(handLandMarkViewModel)
+    GestureOverlayView(handLandmarkViewModel)
 
     Spacer(modifier = Modifier.height(20.dp))
     val moreOnASLAlphabetText = stringResource(id = R.string.more_on_asl_alphabet_text)
@@ -83,9 +83,9 @@ fun ASLRecognition(
  * gesture image.
  */
 @Composable
-fun GestureOverlayView(handLandMarkViewModel: HandLandMarkViewModel) {
-  val landmarksState = handLandMarkViewModel.landMarks().collectAsState()
-  val detectedGesture = handLandMarkViewModel.getSolution()
+fun GestureOverlayView(handLandmarkViewModel: HandLandmarkViewModel) {
+  val landmarksState = handLandmarkViewModel.landMarks().collectAsState()
+  val detectedGesture = handLandmarkViewModel.getSolution()
 
   DrawnOutPut(landmarks = landmarksState.value, text = detectedGesture)
   Spacer(modifier = Modifier.height(30.dp))
