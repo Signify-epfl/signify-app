@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
+import com.github.se.signify.model.authentication.FirebaseAuthService
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Status

@@ -45,13 +45,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
-import com.github.se.signify.model.auth.AuthService
-import com.github.se.signify.model.auth.FirebaseAuthService
-import com.github.se.signify.model.auth.MockAuthService
+import com.github.se.signify.model.authentication.AuthService
+import com.github.se.signify.model.authentication.FirebaseAuthService
+import com.github.se.signify.model.authentication.MockAuthService
+import com.github.se.signify.model.common.user.saveUserToFirestore
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.model.stats.saveStatsToFirestore
-import com.github.se.signify.model.user.saveUserToFireStore
+import com.github.se.signify.model.profile.stats.saveStatsToFirestore
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.AuthResult
 
@@ -70,7 +70,7 @@ fun LoginScreen(
       rememberAuthLauncher(
           onAuthComplete = { _ ->
             Toast.makeText(context, loginSuccessfullText, Toast.LENGTH_LONG).show()
-            saveUserToFireStore()
+            saveUserToFirestore()
             saveStatsToFirestore()
             navigationActions.navigateTo(Screen.HOME)
             showTutorial()

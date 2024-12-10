@@ -5,7 +5,16 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -30,14 +39,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
-import com.github.se.signify.model.auth.UserSession
+import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.challenge.Challenge
 import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.challenge.ChallengeViewModel
+import com.github.se.signify.model.common.user.UserRepository
+import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.model.user.UserRepository
-import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.TextButton
 
