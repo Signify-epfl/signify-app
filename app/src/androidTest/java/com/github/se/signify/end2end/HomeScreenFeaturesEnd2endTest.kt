@@ -9,8 +9,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.MainActivity
-import org.junit.After
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -23,50 +21,13 @@ class HomeScreenFeaturesEnd2endTest {
   val bluetoothAccess: GrantPermissionRule =
       GrantPermissionRule.grant(Manifest.permission.BLUETOOTH)
 
-  @Before
-  fun setup() {
+  @Test
+  fun exerciseAndPracticeHomeScreenEnd2endTest() {
     composeTestRule.onNodeWithText("Welcome to Signify").assertIsDisplayed()
     // Wait for the transition to Login Screen
     composeTestRule.mainClock.advanceTimeBy(7_000)
     composeTestRule.onNodeWithTag("LoginScreen").assertIsDisplayed()
     composeTestRule.waitForIdle()
-  }
-
-  @Test
-  fun questFeatureTest() {
-    // Simulate the Google sign-in process
-    composeTestRule.onNodeWithTag("loginButton").performClick()
-
-    // Wait for navigation to Home Screen
-    composeTestRule.waitForIdle()
-    composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("QuestsButton").performClick()
-    composeTestRule.onNodeWithTag("QuestScreen").assertIsDisplayed()
-    // After finishing the task go back
-    composeTestRule.onNodeWithTag("BackButton").performClick()
-    // The user wants to do a quiz
-    composeTestRule.waitForIdle()
-    composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("QuizButton").performClick()
-    composeTestRule.onNodeWithTag("QuizTitle").assertIsDisplayed()
-    // After finishing the task go back
-    composeTestRule.onNodeWithTag("BackButton").performClick()
-
-    composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("QuestsButton").performClick()
-    composeTestRule.onNodeWithTag("QuestScreen").assertIsDisplayed()
-    // After finishing the task go back
-    composeTestRule.onNodeWithTag("BackButton").performClick()
-
-    // The user wants to give feedback
-    composeTestRule.waitForIdle()
-    composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("FeedbackButton").performClick()
-    composeTestRule.onNodeWithTag("FeedbackScreen").assertIsDisplayed()
-  }
-
-  @Test
-  fun navigateToASLRecognitionScreen() {
     // Simulate the Google sign-in process
     composeTestRule.onNodeWithTag("skipLoginButton").performClick()
 
@@ -97,16 +58,12 @@ class HomeScreenFeaturesEnd2endTest {
     composeTestRule.onNodeWithTag("cameraPreview").assertIsDisplayed()
     composeTestRule.onNodeWithTag("gestureOverlayView").assertIsDisplayed()
     composeTestRule.waitForIdle()
-  }
 
-  @Test
-  fun exerciseFeatureTest() {
-    // Simulate the Google sign-in process
-    composeTestRule.onNodeWithTag("skipLoginButton").performClick()
-
-    // Wait for navigation to Home Screen
-    composeTestRule.waitForIdle()
+    // Go back to HomeScreen
+    // The user wants to test exercises [EASY-MEDIUM-HARD]
+    composeTestRule.onNodeWithTag("BackButton").performClick()
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
+
     // Click on the EasyExercise
     composeTestRule.onNodeWithTag("EasyExerciseButtonText", useUnmergedTree = true).performClick()
     composeTestRule.onNodeWithTag("ExerciseScreenEasy", useUnmergedTree = true).assertIsDisplayed()
@@ -135,10 +92,41 @@ class HomeScreenFeaturesEnd2endTest {
     composeTestRule.onNodeWithTag("BackButton").performClick()
   }
 
-  @After
-  fun tearDown() {
-    composeTestRule.activity.resources.assets.close()
-    composeTestRule.activity.cacheDir.delete()
-    composeTestRule.activityRule.scenario.close()
+  @Test
+  fun featuresHomeScreenEnd2endTest() {
+    composeTestRule.onNodeWithText("Welcome to Signify").assertIsDisplayed()
+    // Wait for the transition to Login Screen
+    composeTestRule.mainClock.advanceTimeBy(7_000)
+    composeTestRule.onNodeWithTag("LoginScreen").assertIsDisplayed()
+    composeTestRule.waitForIdle()
+    // Simulate the Google sign-in process
+    composeTestRule.onNodeWithTag("loginButton").performClick()
+
+    // Wait for navigation to Home Screen
+    composeTestRule.waitForIdle()
+    composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("QuestsButton").performClick()
+    composeTestRule.onNodeWithTag("QuestScreen").assertIsDisplayed()
+    // After finishing the task go back
+    composeTestRule.onNodeWithTag("BackButton").performClick()
+    // The user wants to do a quiz
+    composeTestRule.waitForIdle()
+    composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("QuizButton").performClick()
+    composeTestRule.onNodeWithTag("QuizTitle").assertIsDisplayed()
+    // After finishing the task go back
+    composeTestRule.onNodeWithTag("BackButton").performClick()
+
+    composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("QuestsButton").performClick()
+    composeTestRule.onNodeWithTag("QuestScreen").assertIsDisplayed()
+    // After finishing the task go back
+    composeTestRule.onNodeWithTag("BackButton").performClick()
+
+    // The user wants to give feedback
+    composeTestRule.waitForIdle()
+    composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("FeedbackButton").performClick()
+    composeTestRule.onNodeWithTag("FeedbackScreen").assertIsDisplayed()
   }
 }
