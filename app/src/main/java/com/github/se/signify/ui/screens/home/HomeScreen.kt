@@ -1,6 +1,7 @@
 package com.github.se.signify.ui.screens.home
 
 import android.util.Log
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -88,6 +89,11 @@ fun HomeScreen(navigationActions: NavigationActions) {
           HelpText(
               title = stringResource(R.string.home_text),
               text = stringResource(R.string.help_home_screen_text)),
+      topBarButtons =
+          listOf<@Composable () -> Unit>(
+              { FeedbackButton(navigationActions) },
+              { QuizButton(navigationActions) },
+              { QuestsButton(navigationActions) }),
       floatingActionButton = {
         FloatingActionButton(
             onClick = { coroutineScope.launch { scrollState.animateScrollToItem(0) } },
@@ -102,31 +108,6 @@ fun HomeScreen(navigationActions: NavigationActions) {
             state = scrollState, modifier = Modifier.weight(1f)
             // Ensures LazyColumn takes up the remaining space without infinite height constraints
             ) {
-              item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween) {
-                      BasicButton(
-                          onClick = { navigationActions.navigateTo(Screen.FEEDBACK) },
-                          iconTestTag = "FeedbackIcon",
-                          icon = Icons.Outlined.Email,
-                          contentDescription = "Feedback",
-                          modifier = Modifier.testTag("FeedbackButton"))
-                      BasicButton(
-                          onClick = { navigationActions.navigateTo(Screen.QUIZ) },
-                          iconTestTag = "QuizIcon",
-                          icon = Icons.Outlined.Star,
-                          contentDescription = "Quizzes",
-                          modifier = Modifier.testTag("QuizButton"))
-                      BasicButton(
-                          onClick = { navigationActions.navigateTo(Screen.QUEST) },
-                          iconTestTag = "QuestIcon",
-                          icon = Icons.Outlined.DateRange,
-                          contentDescription = "Quests",
-                          modifier = Modifier.testTag("QuestsButton"))
-                    }
-              }
-
               item { Spacer(modifier = Modifier.height(32.dp)) }
 
               item {
@@ -404,4 +385,37 @@ fun SignTipBox(letter: Char, modifier: Modifier = Modifier) {
               }
             }
       }
+}
+
+@Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun FeedbackButton(navigationActions: NavigationActions) {
+  BasicButton(
+      onClick = { navigationActions.navigateTo(Screen.FEEDBACK) },
+      iconTestTag = "FeedbackIcon",
+      icon = Icons.Outlined.Email,
+      contentDescription = "Feedback",
+      modifier = Modifier.testTag("FeedbackButton"))
+}
+
+@Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun QuizButton(navigationActions: NavigationActions) {
+  BasicButton(
+      onClick = { navigationActions.navigateTo(Screen.QUIZ) },
+      iconTestTag = "QuizIcon",
+      icon = Icons.Outlined.Star,
+      contentDescription = "Quizzes",
+      modifier = Modifier.testTag("QuizButton"))
+}
+
+@Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun QuestsButton(navigationActions: NavigationActions) {
+  BasicButton(
+      onClick = { navigationActions.navigateTo(Screen.QUEST) },
+      iconTestTag = "QuestIcon",
+      icon = Icons.Outlined.DateRange,
+      contentDescription = "Quests",
+      modifier = Modifier.testTag("QuestsButton"))
 }
