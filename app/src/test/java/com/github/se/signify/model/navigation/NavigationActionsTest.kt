@@ -2,7 +2,7 @@ package com.github.se.signify.model.navigation
 
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
-import com.github.se.signify.model.auth.MockUserSession
+import com.github.se.signify.model.authentication.MockUserSession
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test

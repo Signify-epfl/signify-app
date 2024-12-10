@@ -30,8 +30,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.github.se.signify.R
-import com.github.se.signify.model.getIconResId
-import com.github.se.signify.model.hand.HandLandMarkViewModel
+import com.github.se.signify.model.common.getIconResId
+import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.CameraBox
@@ -44,7 +44,7 @@ import com.github.se.signify.ui.common.TextButton
  */
 @Composable
 fun ASLRecognition(
-    handLandMarkViewModel: HandLandMarkViewModel,
+    handLandmarkViewModel: HandLandmarkViewModel,
     navigationActions: NavigationActions
 ) {
   val buttonUriString = stringResource(id = R.string.button_uri_string_text)
@@ -52,8 +52,8 @@ fun ASLRecognition(
 
   val coroutineScope = rememberCoroutineScope()
 
-  val landmarksState = handLandMarkViewModel.landMarks().collectAsState()
-  val detectedGesture = handLandMarkViewModel.getSolution()
+  val landmarksState = handLandmarkViewModel.landMarks().collectAsState()
+  val detectedGesture = handLandmarkViewModel.getSolution()
 
   val imageResource =
       if (landmarksState.value.isNullOrEmpty()) R.drawable.vector
@@ -66,7 +66,7 @@ fun ASLRecognition(
     Box(
         modifier =
             Modifier.fillMaxWidth().weight(1f).background(MaterialTheme.colorScheme.background)) {
-          CameraBox(handLandMarkViewModel, "cameraPreview")
+          CameraBox(handLandmarkViewModel, "cameraPreview")
         }
 
     Spacer(modifier = Modifier.height(16.dp))

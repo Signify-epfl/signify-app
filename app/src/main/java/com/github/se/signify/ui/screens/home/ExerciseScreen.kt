@@ -39,13 +39,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
-import com.github.se.signify.model.auth.UserSession
-import com.github.se.signify.model.exercise.ExerciseLevel
-import com.github.se.signify.model.exercise.ExerciseLevelName
-import com.github.se.signify.model.hand.HandLandMarkViewModel
+import com.github.se.signify.model.authentication.UserSession
+import com.github.se.signify.model.home.exercise.ExerciseLevel
+import com.github.se.signify.model.home.exercise.ExerciseLevelName
+import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
-import com.github.se.signify.model.stats.StatsRepository
-import com.github.se.signify.model.stats.StatsViewModel
+import com.github.se.signify.model.profile.stats.StatsRepository
+import com.github.se.signify.model.profile.stats.StatsViewModel
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.CameraBox
 
@@ -58,14 +58,14 @@ import com.github.se.signify.ui.common.CameraBox
  * displays a completion message.
  *
  * @param navigationActions Provides navigation actions for the screen.
- * @param handLandMarkViewModel ViewModel responsible for managing hand landmark detection and
+ * @param handLandmarkViewModel ViewModel responsible for managing hand landmark detection and
  *   gesture matching.
  * @param exerciseLevel Provides complementary information about the level.
  */
 @Composable
 fun ExerciseScreen(
     navigationActions: NavigationActions,
-    handLandMarkViewModel: HandLandMarkViewModel,
+    handLandmarkViewModel: HandLandmarkViewModel,
     userSession: UserSession,
     statsRepository: StatsRepository,
     exerciseLevel: ExerciseLevel
@@ -87,8 +87,8 @@ fun ExerciseScreen(
   val currentLetter =
       getCurrentLetter(sentencesList, currentLetterIndex, currentWordIndex, currentSentenceIndex)
 
-  val landmarksState = handLandMarkViewModel.landMarks().collectAsState()
-  val detectedGesture = handLandMarkViewModel.getSolution()
+  val landmarksState = handLandmarkViewModel.landMarks().collectAsState()
+  val detectedGesture = handLandmarkViewModel.getSolution()
   val exoCompletedText = stringResource(R.string.exercise_completed_text)
   if (!landmarksState.value.isNullOrEmpty()) {
     handleGestureMatching(
@@ -151,7 +151,7 @@ fun ExerciseScreen(
     )
 
     // Camera placeholder/composable
-    CameraBox(handLandMarkViewModel)
+    CameraBox(handLandmarkViewModel)
   }
 }
 
