@@ -62,3 +62,12 @@ fun updateLanguage(context: Context, languageCode: String) {
   config.locale = locale
   context.resources.updateConfiguration(config, context.resources.displayMetrics)
 }
+/**
+ * Convert a time in millisecond to second
+ *
+ * @param time in millisecond
+ * @return the time in second
+ */
+fun timeConversion(time: Long): Double {
+  return time / 1000.0
+}
