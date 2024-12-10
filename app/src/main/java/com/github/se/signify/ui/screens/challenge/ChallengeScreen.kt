@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.github.se.signify.R
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.ui.common.HelpPopup
+import com.github.se.signify.ui.common.HelpText
 import com.github.se.signify.ui.common.MainScreenScaffold
 import com.github.se.signify.ui.common.SquareButton
 
@@ -21,9 +21,8 @@ fun ChallengeScreen(navigationActions: NavigationActions) {
   MainScreenScaffold(
       navigationActions = navigationActions,
       testTag = "ChallengeScreen",
-      helpPopup =
-          HelpPopup(
-              title = "Challenge", text = stringResource(R.string.description_challenge_text)),
+      helpText =
+          HelpText(title = "Challenge", text = stringResource(R.string.description_challenge_text)),
       content = {
         Spacer(modifier = Modifier.height(64.dp))
 

@@ -61,7 +61,7 @@ import com.github.se.signify.model.home.exercise.ExerciseLevelName
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.common.BasicButton
-import com.github.se.signify.ui.common.HelpPopup
+import com.github.se.signify.ui.common.HelpText
 import com.github.se.signify.ui.common.MainScreenScaffold
 import com.github.se.signify.ui.common.TextButton
 import kotlinx.coroutines.CoroutineScope
@@ -84,8 +84,8 @@ fun HomeScreen(navigationActions: NavigationActions) {
   MainScreenScaffold(
       navigationActions = navigationActions,
       testTag = "HomeScreen",
-      helpPopup =
-          HelpPopup(
+      helpText =
+          HelpText(
               title = stringResource(R.string.home_text),
               text = stringResource(R.string.help_home_screen_text)),
       floatingActionButton = {

@@ -56,24 +56,27 @@ import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.model.navigation.TopLevelDestination
 
-data class HelpPopup(val title: String, val text: String)
+data class HelpText(val title: String, val text: String)
 
 /**
  * The scaffold for all main screens.
  *
  * @param navigationActions The navigationActions of the bottom navigation menu.
  * @param testTag The test tag of the column (test tag of the screen).
- * @param helpPopup An optional help popup for the screen.
- * @param floatingActionButton A lambda function for the floating action button.
+ * @param helpText The optional text for a help popup.
+ * @param topBarButtons A list of optional buttons to display in the top bar. They should be
+ *   `Buttons.BasicButton()`s.
+ * @param floatingActionButton An optional floating action button. It should be a
+ *   `Button.BasicButton()`.
  * @param content A lambda function for the content of the column.
  */
 @Composable
 fun MainScreenScaffold(
     navigationActions: NavigationActions,
     testTag: String,
-    helpPopup: HelpPopup?,
+    helpText: HelpText?,
     floatingActionButton: @Composable () -> Unit = {},
-    content: @Composable (ColumnScope.() -> Unit)
+    content: @Composable() (ColumnScope.() -> Unit)
 ) {
   var isHelpBoxVisible by remember { mutableStateOf(false) }
   Scaffold(
@@ -95,9 +98,9 @@ fun MainScreenScaffold(
           content()
           // Show popup when the info button is clicked
           if (isHelpBoxVisible) {
-            InfoPopup(
+            HelpPopup(
                 onDismiss = { isHelpBoxVisible = false },
-                helpPopup!!,
+                helpText!!,
             )
           }
         }
@@ -167,10 +170,11 @@ fun TopLine() {
  * The info popup for main screens.
  *
  * @param onDismiss A lambda function to execute when the button or outside the box or is clicked.
- * @param helpPopup The help popup to display.
+ * @param helpText The help popup to display.
  */
 @Composable
-fun InfoPopup(onDismiss: () -> Unit, helpPopup: HelpPopup) {
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun HelpPopup(onDismiss: () -> Unit, helpText: HelpText) {
   Dialog(onDismissRequest = { onDismiss() }) {
     Surface(
         shape = RoundedCornerShape(12.dp),
@@ -193,7 +197,7 @@ fun InfoPopup(onDismiss: () -> Unit, helpPopup: HelpPopup) {
                                   SpanStyle(
                                       fontWeight = FontWeight.Bold,
                                       textDecoration = TextDecoration.Underline)) {
-                                append(helpPopup.title)
+                                append(helpText.title)
                               }
                         },
                     fontSize = 20.sp,
@@ -203,7 +207,7 @@ fun InfoPopup(onDismiss: () -> Unit, helpPopup: HelpPopup) {
                 Spacer(modifier = Modifier.height(8.dp))
                 // Body text centered under the title
                 Text(
-                    text = helpPopup.text,
+                    text = helpText.text,
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,

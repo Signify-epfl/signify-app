@@ -27,7 +27,7 @@ import com.github.se.signify.model.profile.stats.StatsRepository
 import com.github.se.signify.model.profile.stats.StatsViewModel
 import com.github.se.signify.ui.common.AccountInformation
 import com.github.se.signify.ui.common.BasicButton
-import com.github.se.signify.ui.common.HelpPopup
+import com.github.se.signify.ui.common.HelpText
 import com.github.se.signify.ui.common.LearnedLetterList
 import com.github.se.signify.ui.common.MainScreenScaffold
 import com.github.se.signify.ui.common.SquareButton
@@ -49,8 +49,8 @@ fun ProfileScreen(
   MainScreenScaffold(
       navigationActions = navigationActions,
       testTag = "ProfileScreen",
-      helpPopup =
-          HelpPopup(
+      helpText =
+          HelpText(
               title = stringResource(R.string.profile_text),
               text = stringResource(R.string.help_profile_screen_text)),
       content = {
