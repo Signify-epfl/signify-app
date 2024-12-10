@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -121,12 +122,15 @@ fun LoginScreen(navigationActions: NavigationActions, showTutorial: () -> Unit) 
 
           // Welcome Text
           Text(
-              modifier = Modifier.width(250.dp).height(200.dp).testTag("IntroMessage"),
+              modifier =
+                  Modifier.fillMaxWidth(0.8f)
+                      .padding(vertical = 16.dp) // Adds spacing around the text
+                      .testTag("IntroMessage"),
               text = stringResource(R.string.signify_welcome_text),
               style =
                   TextStyle(
                       fontSize = 32.sp,
-                      lineHeight = 30.sp,
+                      lineHeight = 40.sp,
                       fontWeight = FontWeight(400),
                       color = MaterialTheme.colorScheme.primary,
                       textAlign = TextAlign.Center,

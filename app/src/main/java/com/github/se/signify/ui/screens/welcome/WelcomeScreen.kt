@@ -51,8 +51,13 @@ fun WelcomeScreen(navigationActions: NavigationActions) {
   // Welcome text to display
   val welcomeText = stringResource(R.string.welcome_text)
 
-  // Indexes of the letters to highlight
-  val highlightIndices = listOf(11, 12, 13, 14, 15, 16, 17)
+  // Dynamically calculate the indices of "Signify" in the text
+  val highlightIndices =
+      remember(welcomeText) {
+        val targetWord = "Signify"
+        val startIndex = welcomeText.indexOf(targetWord)
+        startIndex until (startIndex + targetWord.length)
+      }
 
   // State to keep track of the current image index
   var currentImage by remember { mutableIntStateOf(0) }
@@ -66,6 +71,7 @@ fun WelcomeScreen(navigationActions: NavigationActions) {
     delay(2000) // Pause after the last image
     navigationActions.navigateTo(Screen.AUTH)
   }
+
   Column(
       modifier =
           Modifier.fillMaxSize()
@@ -79,7 +85,10 @@ fun WelcomeScreen(navigationActions: NavigationActions) {
             tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.width(100.dp).height(100.dp))
         // Highlight the corresponding letter in the welcome text
-        HighlightedText(text = welcomeText, highlightIndex = highlightIndices[currentImage])
+        if (currentImage < highlightIndices.count()) {
+          HighlightedText(
+              text = welcomeText, highlightIndex = highlightIndices.elementAt(currentImage))
+        }
       }
 }
 
