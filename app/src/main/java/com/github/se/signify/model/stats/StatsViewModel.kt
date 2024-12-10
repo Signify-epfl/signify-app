@@ -58,8 +58,8 @@ class StatsViewModel(
   private val _won = MutableStateFlow(0)
   val won: StateFlow<Int> = _won
 
-    private val _timePerLetter = MutableStateFlow<List<Long>>(emptyList())
-    val timePerLetter: StateFlow<List<Long>> = _timePerLetter
+  private val _timePerLetter = MutableStateFlow<List<Long>>(emptyList())
+  val timePerLetter: StateFlow<List<Long>> = _timePerLetter
 
   private val logTag = "StatsViewModel"
 
@@ -216,20 +216,20 @@ class StatsViewModel(
         })
   }
 
-    fun getTimePerLetter() {
-        _updateStatsEvent.value = UpdateStatsEvent.Loading
+  fun getTimePerLetter() {
+    _updateStatsEvent.value = UpdateStatsEvent.Loading
 
-        repository.getTimePerLetter(
-            userSession.getUserId()!!,
-            onSuccess = { time ->
-                _timePerLetter.value = time
-                _updateStatsEvent.value = UpdateStatsEvent.Success
-            },
-            onFailure = { e ->
-                logError("Error fetching time per letter:", e)
-                _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
-            })
-    }
+    repository.getTimePerLetter(
+        userSession.getUserId()!!,
+        onSuccess = { time ->
+          _timePerLetter.value = time
+          _updateStatsEvent.value = UpdateStatsEvent.Success
+        },
+        onFailure = { e ->
+          logError("Error fetching time per letter:", e)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
+        })
+  }
 
   fun updateLettersLearned(newLetter: Char) {
     _updateStatsEvent.value = UpdateStatsEvent.Loading
@@ -367,22 +367,22 @@ class StatsViewModel(
         })
   }
 
-    fun updateTimePerLetter(newTime: Long) {
-        _updateStatsEvent.value = UpdateStatsEvent.Loading
-        getTimePerLetter()
-        val newTimePerLetter: List<Long> = _timePerLetter.value
-        newTimePerLetter.toMutableList().add(newTime)
+  fun updateTimePerLetter(newTime: Long) {
+    _updateStatsEvent.value = UpdateStatsEvent.Loading
+    getTimePerLetter()
+    val newTimePerLetter: List<Long> = _timePerLetter.value
+    newTimePerLetter.toMutableList().add(newTime)
 
-        repository.updateTimePerLetter(
-            userSession.getUserId()!!,
-            newTimePerLetter,
-            onSuccess = {
-                logSuccess("Time per letter updated successfully.")
-                _updateStatsEvent.value = UpdateStatsEvent.Success
-            },
-            onFailure = { e ->
-                logError("Error updating time per letter:", e)
-                _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
-            })
-    }
+    repository.updateTimePerLetter(
+        userSession.getUserId()!!,
+        newTimePerLetter,
+        onSuccess = {
+          logSuccess("Time per letter updated successfully.")
+          _updateStatsEvent.value = UpdateStatsEvent.Success
+        },
+        onFailure = { e ->
+          logError("Error updating time per letter:", e)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
+        })
+  }
 }
