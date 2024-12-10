@@ -1,5 +1,6 @@
 package com.github.se.signify.ui.common
 
+import android.icu.text.IDNA.Info
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
@@ -23,12 +24,15 @@ class ScreensTest {
     composeTestRule.setContent {
       val navigationActions = mock(NavigationActions::class.java)
       MainScreenScaffold(
-          navigationActions = navigationActions,
-          testTag = "ScaffoldMainScreen",
-          helpPopup = null,
-          content = {
-            Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
-          })
+        navigationActions = navigationActions,
+        testTag = "ScaffoldMainScreen",
+        helpPopup = HelpPopup(
+            title = "HelpTitle",
+            text = "HelpText"
+            ),
+        content = {
+          Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
+        })
     }
     composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
     composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
@@ -79,7 +83,7 @@ class ScreensTest {
     val helpTitle = "Help"
     val helpText = "Little text for the help"
     composeTestRule.setContent {
-      InfoPopup(onDismiss = {}, helpTitle = helpTitle, helpText = helpText)
+      InfoPopup(onDismiss = {}, HelpPopup(title = helpTitle, text = helpText))
     }
     composeTestRule.onNodeWithTag("InfoPopup").assertIsDisplayed()
     composeTestRule.onNodeWithTag("InfoPopupContent").assertIsDisplayed()
@@ -97,7 +101,7 @@ class ScreensTest {
     val helpTitle = "Help"
     val helpText = "Little text for the help"
     composeTestRule.setContent {
-      InfoPopup(onDismiss = { clicked = true }, helpTitle = helpTitle, helpText = helpText)
+      InfoPopup(onDismiss = { clicked = true }, HelpPopup(title = helpTitle, text = helpText))
     }
     composeTestRule.onNodeWithTag("InfoPopupCloseButton").performClick()
     assert(clicked)
