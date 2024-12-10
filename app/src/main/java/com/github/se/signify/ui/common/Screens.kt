@@ -231,7 +231,7 @@ fun HelpPopup(onDismiss: () -> Unit, helpText: HelpText) {
         modifier =
             Modifier.border(
                     3.dp,
-                    MaterialTheme.colorScheme.primary,
+                    MaterialTheme.colorScheme.outline,
                     RoundedCornerShape(12.dp)) // Ensure the border wraps the popup
                 .testTag("InfoPopup")) {
           Column(
@@ -246,8 +246,8 @@ fun HelpPopup(onDismiss: () -> Unit, helpText: HelpText) {
                           }
                         },
                     fontSize = 24.sp, // Increased font size
-                    color = MaterialTheme.colorScheme.primary,
-                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Left,
                     modifier = Modifier.testTag("InfoPopupTitle"))
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -256,7 +256,7 @@ fun HelpPopup(onDismiss: () -> Unit, helpText: HelpText) {
                 Text(
                     text = helpText.text,
                     fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Justify,
                     modifier = Modifier.testTag("InfoPopupBody"))
                 Spacer(modifier = Modifier.height(16.dp))
