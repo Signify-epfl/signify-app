@@ -46,14 +46,14 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
-import com.github.se.signify.model.auth.UserSession
+import com.github.se.signify.model.authentication.UserSession
+import com.github.se.signify.model.common.user.UserRepository
+import com.github.se.signify.model.common.user.UserViewModel
+import com.github.se.signify.model.home.quest.Quest
+import com.github.se.signify.model.home.quest.QuestRepository
+import com.github.se.signify.model.home.quest.QuestViewModel
 import com.github.se.signify.model.hand.HandLandMarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
-import com.github.se.signify.model.quest.Quest
-import com.github.se.signify.model.quest.QuestRepository
-import com.github.se.signify.model.quest.QuestViewModel
-import com.github.se.signify.model.user.UserRepository
-import com.github.se.signify.model.user.UserViewModel
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.CameraBox
 
@@ -65,7 +65,6 @@ fun QuestScreen(
     userRepository: UserRepository,
     handLandMarkViewModel: HandLandMarkViewModel
 ) {
-
   val questViewModel: QuestViewModel = viewModel(factory = QuestViewModel.factory(questRepository))
   val userViewModel: UserViewModel =
       viewModel(factory = UserViewModel.factory(userSession, userRepository))

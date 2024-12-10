@@ -17,11 +17,13 @@ import com.github.se.signify.model.auth.MockUserSession
 import com.github.se.signify.model.auth.UserSession
 import com.github.se.signify.model.di.AppDependencyProvider
 import com.github.se.signify.model.hand.HandLandMarkViewModel
+import com.github.se.signify.model.authentication.MockUserSession
+import com.github.se.signify.model.authentication.UserSession
+import com.github.se.signify.model.common.user.UserRepository
+import com.github.se.signify.model.home.quest.Quest
+import com.github.se.signify.model.home.quest.QuestRepository
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.model.quest.Quest
-import com.github.se.signify.model.quest.QuestRepository
-import com.github.se.signify.model.user.UserRepository
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
