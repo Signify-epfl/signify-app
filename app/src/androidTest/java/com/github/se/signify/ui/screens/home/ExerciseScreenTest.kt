@@ -15,6 +15,7 @@ import com.github.se.signify.model.home.exercise.ExerciseLevel
 import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.profile.stats.StatsRepository
+import com.github.se.signify.model.profile.stats.StatsViewModel
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -35,6 +36,7 @@ class ExerciseScreenTest {
   private lateinit var handLandmarkViewModel: HandLandmarkViewModel
   private lateinit var userSession: UserSession
   private lateinit var statsRepository: StatsRepository
+  private lateinit var statsViewModel: StatsViewModel
 
   @Before
   fun setup() {
@@ -44,6 +46,7 @@ class ExerciseScreenTest {
     mockNavigationActions = mock(NavigationActions::class.java)
     userSession = MockUserSession()
     statsRepository = mock(StatsRepository::class.java)
+    statsViewModel = StatsViewModel(userSession, statsRepository)
   }
 
   @Test
@@ -94,7 +97,9 @@ class ExerciseScreenTest {
         currentSentenceIndex = currentSentenceIndex,
         sentencesList = sentencesList,
         onProgressUpdate = mockOnProgressUpdate,
-        onAllSentencesComplete = mockOnAllSentencesComplete)
+        onAllSentencesComplete = mockOnAllSentencesComplete,
+        statsViewModel = statsViewModel,
+        startTimestamp = 0)
 
     // Verify that onProgressUpdate is called with the next letter index
     verify(mockOnProgressUpdate)
