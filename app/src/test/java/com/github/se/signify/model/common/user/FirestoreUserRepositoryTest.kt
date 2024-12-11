@@ -810,27 +810,31 @@ class FirestoreUserRepositoryTest {
 
   @Test
   fun getOngoingChallenges_shouldHandleUserDocNotExist() {
+    val setException = NoSuchElementException("User not found for ID: $currentUserId")
+
     // Arrange
     `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
     `when`(mockUserDocumentSnapshot.exists()).thenReturn(false)
 
-    var successCallbackCalled = false
-    val onSuccess: (List<Challenge>) -> Unit = { challenges ->
-      successCallbackCalled = true
-      assertTrue(challenges.isEmpty())
+    `when`(mockCurrentUserDocRef.set(any<Map<String, Any>>()))
+        .thenReturn(Tasks.forException(setException))
+
+    var failureCallbackCalled = false
+    val onFailure: (Exception) -> Unit = {
+      failureCallbackCalled = true
+      assertTrue(it is NoSuchElementException)
+      assertEquals("User not found for ID: $currentUserId", it.message) // Compare messages
     }
 
     // Act
     firestoreUserRepository.getOngoingChallenges(
-        currentUserId, onSuccess = onSuccess, onFailure = { fail(noFailure) })
+        currentUserId, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
 
     // Idle the main looper
     shadowOf(Looper.getMainLooper()).idle()
 
     // Assert
-    // Ensures the success callback is invoked and verifies the challenges list is empty when the
-    // user document does not exist
-    assertTrue(successCallbackCalled)
+    assertTrue(failureCallbackCalled)
   }
 
   @Test
