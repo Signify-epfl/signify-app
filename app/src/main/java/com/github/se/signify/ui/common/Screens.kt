@@ -82,10 +82,7 @@ fun MainScreenScaffold(
         )
       },
       bottomBar = { BottomBar(navigationActions) },
-      content = { padding ->
-        Spacer(modifier = Modifier.height(16.dp))
-        ScreenColumn(padding, testTag, content)
-      })
+      content = { padding -> ScreenColumn(padding, testTag, content) })
 }
 
 /**
@@ -167,7 +164,6 @@ fun ScreenColumn(
               .background(MaterialTheme.colorScheme.background)
               .testTag(testTag),
       horizontalAlignment = Alignment.CenterHorizontally) {
-        Spacer(modifier = Modifier.height(32.dp))
         content()
         Spacer(modifier = Modifier.height(16.dp))
       }

@@ -3,7 +3,9 @@ package com.github.se.signify.ui.screens.auth
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -45,6 +47,8 @@ fun UnauthenticatedScreen(navigationActions: NavigationActions) {
       helpText =
           HelpText(title = offModeText, content = stringResource(R.string.help_offline_mode_text)),
       content = {
+        Spacer(modifier = Modifier.height(32.dp))
+
         Column(
             modifier = Modifier.fillMaxSize().background(Color.White).padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,

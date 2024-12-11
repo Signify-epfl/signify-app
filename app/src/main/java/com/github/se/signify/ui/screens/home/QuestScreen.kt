@@ -69,6 +69,7 @@ fun QuestScreen(
     LazyColumn(
         modifier = Modifier.weight(1f),
     ) {
+      item { Spacer(modifier = Modifier.height(32.dp)) }
       item { QuestTitle() }
       items(quests.value.size) { index ->
         val isUnlocked = index < unlockedQuests.toInt()

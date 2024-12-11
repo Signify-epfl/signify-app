@@ -120,6 +120,7 @@ fun ExerciseScreen(
       navigationActions = navigationActions,
       testTag = exerciseLevel.screenTag,
   ) {
+    Spacer(modifier = Modifier.height(32.dp))
 
     // Display sign image for the current letter
     val imageName = "letter_${currentLetter.lowercase()}"

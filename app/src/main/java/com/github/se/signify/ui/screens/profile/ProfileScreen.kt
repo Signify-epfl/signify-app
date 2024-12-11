@@ -70,6 +70,8 @@ fun ProfileScreen(
 
         LaunchedEffect(profilePictureUrl.value) { updatedProfilePicture = profilePictureUrl.value }
 
+        Spacer(modifier = Modifier.height(32.dp))
+
         val unknownText = stringResource(R.string.unknown_text)
         // Top information
         AccountInformation(

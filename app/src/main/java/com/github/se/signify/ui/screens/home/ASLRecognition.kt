@@ -54,6 +54,8 @@ fun ASLRecognition(
       navigationActions = navigationActions,
       testTag = "ASLRecognitionScreen",
   ) {
+    Spacer(modifier = Modifier.height(32.dp))
+
     Box(
         modifier =
             Modifier.fillMaxWidth()

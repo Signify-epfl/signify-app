@@ -108,6 +108,8 @@ fun HomeScreen(navigationActions: NavigationActions) {
             state = scrollState, modifier = Modifier.weight(1f)
             // Ensures LazyColumn takes up the remaining space without infinite height constraints
             ) {
+              item { Spacer(modifier = Modifier.height(32.dp)) }
+
               item {
                 CameraFeedbackButton(onClick = { navigationActions.navigateTo(Screen.PRACTICE) })
               }

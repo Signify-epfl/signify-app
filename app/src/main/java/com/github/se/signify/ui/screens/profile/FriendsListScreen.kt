@@ -89,6 +89,8 @@ fun FriendsListScreen(
       userViewModel.getRequestsFriendsList()
     }
 
+    Spacer(modifier = Modifier.height(32.dp))
+
     val friends = userViewModel.friends.collectAsState()
     val friendsRequests = userViewModel.friendsRequests.collectAsState()
     val searchResult = userViewModel.searchResult.collectAsState()

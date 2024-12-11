@@ -74,6 +74,8 @@ fun NewChallengeScreen(
       navigationActions = navigationActions,
       testTag = "NewChallengeScreen",
   ) {
+    Spacer(modifier = Modifier.height(32.dp))
+
     // My Friends button
     TextButton(
         onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
