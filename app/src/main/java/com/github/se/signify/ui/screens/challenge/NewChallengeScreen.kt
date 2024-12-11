@@ -139,9 +139,14 @@ fun NewChallengeScreen(
                                     val winner = if (player1Time < player2Time) challenge.player1 else challenge.player2
 
                                     // Update the challenge in pastChallenges
-                                    userViewModel.removeOngoingChallenge(userSession.getUserId()!!, challenge.challengeId)
-                                    userViewModel.addPastChallenge(userSession.getUserId()!!, challenge.challengeId)
+                                    userViewModel.removeOngoingChallenge(challenge.player1, challenge.challengeId)
+                                    userViewModel.addPastChallenge(challenge.player1, challenge.challengeId)
+                                    userViewModel.removeOngoingChallenge(challenge.player2, challenge.challengeId)
+                                    userViewModel.addPastChallenge(challenge.player2, challenge.challengeId)
                                     userViewModel.incrementField(winner, "challengesWon")
+                                    userViewModel.incrementField(challenge.player2, "challengesWon")
+                                    userViewModel.incrementField(challenge.player1, "challengesWon")
+
                                     challengeRepository.updateWinner(challenge.challengeId, winner,{},{})
                                 }
                               OngoingChallengeCard(
