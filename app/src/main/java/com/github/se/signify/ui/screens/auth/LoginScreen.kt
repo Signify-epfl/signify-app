@@ -2,6 +2,13 @@
 
 package com.github.se.signify.ui.screens.auth
 
+/**
+ * This file contains the implementation of the `LoginScreen` and related composable functions for
+ * handling the user login process in the application. It includes:
+ * - UI components for login and offline mode.
+ * - Integration with Google Authentication via a deprecated API.
+ * - Mock authentication support for testing environments.
+ */
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
@@ -55,6 +62,13 @@ import com.github.se.signify.model.profile.stats.saveStatsToFirestore
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.AuthResult
 
+/**
+ * Composable function that represents the Login Screen.
+ *
+ * @param navigationActions Actions to navigate between app screens.
+ * @param showTutorial Callback to display the tutorial.
+ * @param authService Authentication service, defaults to `MockAuthService` for testing.
+ */
 @Composable
 fun LoginScreen(
     navigationActions: NavigationActions,
@@ -156,7 +170,11 @@ fun LoginScreen(
         }
       })
 }
-
+/**
+ * A button for Google Sign-In, styled with a Google logo and text.
+ *
+ * @param onSignInClick Callback to handle sign-in click events.
+ */
 @Composable
 fun GoogleSignInButton(onSignInClick: () -> Unit) {
   Button(
@@ -196,7 +214,13 @@ fun GoogleSignInButton(onSignInClick: () -> Unit) {
         }
   }
 }
-
+/**
+ * Remembers an authentication launcher for handling Google Sign-In results.
+ *
+ * @param onAuthComplete Callback for successful authentication.
+ * @param onAuthError Callback for authentication errors.
+ * @param authService The authentication service to handle results.
+ */
 @Composable
 fun rememberAuthLauncher(
     onAuthComplete: (AuthResult) -> Unit,
@@ -210,7 +234,11 @@ fun rememberAuthLauncher(
         authService.handleAuthResult(activityResultWrapper, onAuthComplete, onAuthError)
       }
 }
-
+/**
+ * A button for skipping the login process and proceeding in offline mode.
+ *
+ * @param onOfflineClick Callback to handle offline mode selection.
+ */
 @Composable
 fun SkipLoginButton(onOfflineClick: () -> Unit) {
   Button(

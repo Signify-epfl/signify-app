@@ -53,6 +53,8 @@ class MainActivity : ComponentActivity() {
 
   private lateinit var sharedPreferencesTheme: SharedPreferences
   private lateinit var sharedPreferencesLanguage: SharedPreferences
+  // Now when launching the MainActivity, the builder will now which dependency provider to use
+  // (Test or Base)
   private val dependencyProvider by lazy { (application as BaseApplication).dependencyProvider }
 
   override fun onCreate(savedInstanceState: Bundle?) {

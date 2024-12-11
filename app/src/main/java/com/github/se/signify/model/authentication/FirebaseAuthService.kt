@@ -19,6 +19,16 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.tasks.await
 
+/**
+ * `FirebaseAuthService` provides an implementation of the `AuthService` interface, leveraging
+ * Firebase Authentication for user sign-in and sign-out operations. It integrates with Google
+ * Sign-In for user authentication.
+ *
+ * @property firebaseAuth The FirebaseAuth instance used for authentication.
+ * @property googleSignInHelper A helper function for handling Google Sign-In results.
+ * @property credentialProvider A provider function for generating Firebase authentication
+ *   credentials.
+ */
 class FirebaseAuthService(
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance(),
     private val googleSignInHelper: (Intent) -> Task<GoogleSignInAccount> = { intent ->
@@ -28,23 +38,47 @@ class FirebaseAuthService(
       GoogleAuthProvider.getCredential(idToken, secret)
     }
 ) : AuthService {
+  /**
+   * GoogleSignInClient for managing Google Sign-In operations. It is initialized lazily via
+   * `initializeGoogleSignInClient`.
+   */
   lateinit var googleSignInClient: GoogleSignInClient
-
+  /**
+   * Signs in a user using a Google ID token.
+   *
+   * @param idToken The Google ID token for the user.
+   * @return `true` if the sign-in operation is successful, otherwise `false`.
+   * @throws Exception if the sign-in operation fails.
+   */
   override suspend fun signInWithGoogle(idToken: String): Boolean {
     val credential = credentialProvider(idToken, null)
     val authResult = firebaseAuth.signInWithCredential(credential).await()
     return authResult.user != null
   }
-
+  /**
+   * Signs out the current user.
+   *
+   * @return `true` indicating the sign-out operation was successful.
+   */
   override suspend fun signOut(): Boolean {
     firebaseAuth.signOut()
     return true
   }
-
+  /**
+   * Retrieves the email address of the currently signed-in user.
+   *
+   * @return The email of the current user, or `null` if no user is signed in.
+   */
   override fun getCurrentUser(): String? {
     return firebaseAuth.currentUser?.email
   }
-
+  /**
+   * Handles the result of a Google Sign-In activity.
+   *
+   * @param result The result of the Google Sign-In activity.
+   * @param onAuthComplete Callback invoked when authentication is successful.
+   * @param onAuthError Callback invoked when an authentication error occurs.
+   */
   override fun handleAuthResult(
       result: ActivityResultWrapper,
       onAuthComplete: (AuthResult) -> Unit,
@@ -80,14 +114,25 @@ class FirebaseAuthService(
       onAuthError(ApiException(Status.RESULT_INTERNAL_ERROR))
     }
   }
-
+  /**
+   * Returns an Intent for initiating the Google Sign-In process.
+   *
+   * @param context The context from which the Intent is requested.
+   * @param token The web client ID token used for authentication.
+   * @return The Intent for Google Sign-In.
+   */
   override fun getSignInIntent(context: Context, token: String): Intent {
     if (!this::googleSignInClient.isInitialized) {
       initializeGoogleSignInClient(context, token)
     }
     return googleSignInClient.signInIntent
   }
-
+  /**
+   * Initializes the GoogleSignInClient with the given context and token.
+   *
+   * @param context The context used to configure the GoogleSignInClient.
+   * @param token The web client ID token.
+   */
   @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
   fun initializeGoogleSignInClient(context: Context, token: String) {
     val gso =
@@ -97,8 +142,17 @@ class FirebaseAuthService(
             .build()
     googleSignInClient = GoogleSignIn.getClient(context, gso)
   }
-
+  /**
+   * Indicates whether this implementation of `AuthService` is mocked.
+   *
+   * @return `false` for `FirebaseAuthService`, as it represents a real implementation.
+   */
   override fun isMocked(): Boolean = false
-
+  /**
+   * Wrapper class for activity result data.
+   *
+   * @property resultCode The result code of the activity.
+   * @property data The Intent data returned from the activity.
+   */
   class ActivityResultWrapper(val resultCode: Int, val data: Intent?)
 }

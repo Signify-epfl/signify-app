@@ -28,7 +28,7 @@ class HomeScreenFeaturesEnd2endTest {
     composeTestRule.mainClock.advanceTimeBy(7_000)
     composeTestRule.onNodeWithTag("LoginScreen").assertIsDisplayed()
     composeTestRule.waitForIdle()
-    // Simulate the Google sign-in process
+    // Skip the login as the Practice epic does not need it
     composeTestRule.onNodeWithTag("skipLoginButton").performClick()
 
     // Wait for navigation to Home Screen
@@ -103,6 +103,8 @@ class HomeScreenFeaturesEnd2endTest {
     composeTestRule.onNodeWithTag("loginButton").performClick()
 
     // Wait for navigation to Home Screen
+    // This "Tasks" needs to be mocked before putting into the end2end. As for now there is nothing
+    // to be shown.
     composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("QuestsButton").performClick()
