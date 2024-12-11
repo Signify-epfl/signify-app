@@ -231,10 +231,7 @@ fun HelpPopup(onDismiss: () -> Unit, helpText: HelpText) {
         shape = RoundedCornerShape(12.dp),
         color = MaterialTheme.colorScheme.background,
         modifier =
-            Modifier.border(
-                    3.dp,
-                    MaterialTheme.colorScheme.outline,
-                    RoundedCornerShape(12.dp))
+            Modifier.border(3.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
                 .testTag("HelpPopup")) {
           Column(
               modifier = Modifier.padding(16.dp).fillMaxWidth().testTag("HelpPopupContent"),

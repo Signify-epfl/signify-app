@@ -85,7 +85,7 @@ class ScreensTest {
   }
 
   @Test
-  fun infoPopupIsDisplayed() {
+  fun helpPopupIsDisplayed() {
     val helpText = HelpText("Help Title", "Help content")
     composeTestRule.setContent { HelpPopup(onDismiss = {}, helpText) }
     composeTestRule.onNodeWithTag("HelpPopup").assertIsDisplayed()
@@ -159,6 +159,42 @@ class ScreensTest {
     composeTestRule.onNodeWithTag("Button1").assertIsDisplayed()
     composeTestRule.onNodeWithTag("Button2").assertIsDisplayed()
     composeTestRule.onNodeWithTag("HelpButton").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("SeparatorLine").assertHasClickAction()
+    composeTestRule.onNodeWithTag("SeparatorLine").assertIsDisplayed()
+  }
+
+  @Test
+  fun bottomBarDisplaysBottomNavigationMenu() {
+    val navigationActions = mock(NavigationActions::class.java)
+    composeTestRule.setContent { BottomBar(navigationActions = navigationActions) }
+    composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
+  }
+
+  @Test
+  fun helpButtonIsDisplayed() {
+    val helpText = HelpText("Help Title", "Help content")
+    composeTestRule.setContent { HelpButton(helpText) }
+    composeTestRule.onNodeWithTag("HelpButton").assertIsDisplayed()
+  }
+
+  @Test
+  fun separatorLineIsDisplayed() {
+    composeTestRule.setContent { SeparatorLine() }
+    composeTestRule.onNodeWithTag("SeparatorLine").assertIsDisplayed()
+  }
+
+  @Test
+  fun helpButtonClickDisplaysHelpPopup() {
+    val helpText = HelpText("Help Title", "Help content")
+    composeTestRule.setContent { HelpButton(helpText) }
+    composeTestRule.onNodeWithTag("HelpButton").assertHasClickAction()
+    composeTestRule.onNodeWithTag("HelpButton").performClick()
+
+    // Assert that the help popup and its contents are displayed
+    composeTestRule.onNodeWithTag("HelpPopup").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpPopupContent").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpPopupTitle").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpPopupTitle").assertTextEquals(helpText.title)
+    composeTestRule.onNodeWithTag("HelpPopupBody").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpPopupBody").assertTextEquals(helpText.content)
   }
 }
