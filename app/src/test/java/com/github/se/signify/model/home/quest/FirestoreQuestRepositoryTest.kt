@@ -13,7 +13,9 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertNull
+import junit.framework.TestCase.assertTrue
 import junit.framework.TestCase.fail
 import org.junit.Before
 import org.junit.Test
@@ -284,5 +286,25 @@ class FirestoreQuestRepositoryTest {
     // Capture and invoke the OnCompleteListener
     verify(mockTask).addOnCompleteListener(captor.capture())
     captor.value.onComplete(mockTask)
+  }
+
+  @Test
+  fun fetchVideo_constructsCorrectPath() {
+    val videoPath = firestoreQuestRepository.fetchVideo("Thank You")
+    assertEquals("android.resource://com.github.se.signify/raw/thankyou", videoPath)
+  }
+
+  @Test
+  fun isVideoPathValid_returnsFalseForInvalidPath() {
+    val nonExistingResourceName = "nonexistentvideo" // A resource that doesn't exist
+    val result = firestoreQuestRepository.isVideoPathValid(nonExistingResourceName)
+    assertFalse("The video path should be invalid for a non-existing resource", result)
+  }
+
+  @Test
+  fun isVideoPathValid_returns_true_for_existing_resource() {
+    val existingResourceName = "thankyou"
+    val result = firestoreQuestRepository.isVideoPathValid(existingResourceName)
+    assertTrue("The video path should be valid for an existing resource", result)
   }
 }
