@@ -159,7 +159,7 @@ class QuestScreenTest {
     }
 
     // Click the back button
-    composeTestRule.onNodeWithContentDescription("BackButton").performClick()
+    composeTestRule.onNodeWithTag("BackButton").performClick()
 
     // Verify that navigationActions.goBack() was called
     verify(navigationActions).goBack()
