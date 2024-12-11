@@ -285,4 +285,10 @@ class FirestoreQuestRepositoryTest {
     verify(mockTask).addOnCompleteListener(captor.capture())
     captor.value.onComplete(mockTask)
   }
+
+  @Test
+  fun fetchVideo_constructsCorrectPath() {
+    val videoPath = firestoreQuestRepository.fetchVideo("Thank You")
+    assertEquals("android.resource://com.github.se.signify/raw/thankyou", videoPath)
+  }
 }
