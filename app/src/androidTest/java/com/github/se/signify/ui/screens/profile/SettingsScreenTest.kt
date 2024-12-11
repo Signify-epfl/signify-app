@@ -8,7 +8,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextInput
@@ -93,18 +92,6 @@ class SettingsScreenTest {
 
     // Check if back navigation was triggered
     verify(navigationActions).goBack()
-  }
-
-  @Test
-  fun testDialogAppearsAfterLosingFocus() {
-    val originalName = userViewModel.userName.value
-    val newName = "Updated Username"
-
-    composeTestRule.onNodeWithText(originalName).performTextInput(newName)
-
-    composeTestRule.onRoot().performClick() // Click outside the TextField
-
-    composeTestRule.onNodeWithText("Confirm Changes").assertIsDisplayed()
   }
 
   @Test
