@@ -27,6 +27,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
+import org.mockito.Mockito.verifyNoInteractions
 import org.mockito.Mockito.`when`
 
 class QuestScreenTest {
@@ -250,5 +251,96 @@ class QuestScreenTest {
 
     // Verify that onDismiss was called
     assert(dismissCalled)
+  }
+
+  @Test
+  fun handleGestureMatchingForWordTest() {
+    // Mocks for callback functions
+    val mockOnProgressUpdate = mock<(Int) -> Unit>()
+    val mockOnWordComplete = mock<() -> Unit>()
+
+    // Test inputs
+    val detectedGesture = "A"
+    val currentLetterIndex = 0
+    val word = "APPLE"
+
+    handleGestureMatchingForWord(
+        detectedGesture = detectedGesture,
+        currentLetterIndex = currentLetterIndex,
+        word = word,
+        onProgressUpdate = mockOnProgressUpdate,
+        onWordComplete = mockOnWordComplete)
+
+    // Verify that onProgressUpdate is called with the next letter index
+    verify(mockOnProgressUpdate).invoke(currentLetterIndex + 1)
+
+    // Ensure onWordComplete is not invoked, as we're only moving to the next letter
+    verifyNoInteractions(mockOnWordComplete)
+  }
+
+  @Test
+  fun handleGestureMatchingForWordTest_CompleteWord() {
+    // Mocks for callback functions
+    val mockOnProgressUpdate = mock<(Int) -> Unit>()
+    val mockOnWordComplete = mock<() -> Unit>()
+
+    // Test inputs
+    val detectedGesture = "E"
+    val currentLetterIndex = 4 // Last letter of "APPLE"
+    val word = "APPLE"
+
+    handleGestureMatchingForWord(
+        detectedGesture = detectedGesture,
+        currentLetterIndex = currentLetterIndex,
+        word = word,
+        onProgressUpdate = mockOnProgressUpdate,
+        onWordComplete = mockOnWordComplete)
+
+    // Verify that onWordComplete is called as the word is completed
+    verify(mockOnWordComplete).invoke()
+
+    // Ensure onProgressUpdate is not invoked, as the word is completed
+    verifyNoInteractions(mockOnProgressUpdate)
+  }
+
+  @Test
+  fun handleGestureMatchingForWordTest_WrongGesture() {
+    // Mocks for callback functions
+    val mockOnProgressUpdate = mock<(Int) -> Unit>()
+    val mockOnWordComplete = mock<() -> Unit>()
+
+    // Test inputs
+    val detectedGesture = "B" // Wrong gesture
+    val currentLetterIndex = 0
+    val word = "APPLE"
+
+    handleGestureMatchingForWord(
+        detectedGesture = detectedGesture,
+        currentLetterIndex = currentLetterIndex,
+        word = word,
+        onProgressUpdate = mockOnProgressUpdate,
+        onWordComplete = mockOnWordComplete)
+
+    // Ensure neither onProgressUpdate nor onWordComplete is invoked
+    verifyNoInteractions(mockOnProgressUpdate)
+    verifyNoInteractions(mockOnWordComplete)
+  }
+
+  @Test
+  fun wordLayerIsCorrectlyDisplayed() {
+    // Set up test input
+    val testWord = "APPLE"
+    val currentLetterIndex = 0
+
+    // Launch the composable
+    composeTestRule.setContent {
+      WordLayer(word = testWord, currentLetterIndex = currentLetterIndex)
+    }
+
+    // Assert the Box with the "sentenceLayer" tag exists
+    composeTestRule.onNodeWithTag("sentenceLayer").assertExists()
+
+    // Assert the Text with the "CurrentWordTag" tag exists
+    composeTestRule.onNodeWithTag("CurrentWordTag").assertExists()
   }
 }
