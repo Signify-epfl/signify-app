@@ -67,6 +67,7 @@ fun MyStatsScreen(
       navigationActions = navigationActions,
       testTag = "MyStatsScreen",
   ) {
+    Spacer(modifier = Modifier.height(32.dp))
 
     // Top information
     AccountInformation(

@@ -5,7 +5,6 @@ import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -98,7 +97,7 @@ class QuestScreenTest {
     }
 
     // Check that the back button is displayed
-    composeTestRule.onNodeWithContentDescription("BackButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
 
     // Check that the title is displayed
     composeTestRule.onNodeWithText(quest_title).assertIsDisplayed()
@@ -159,7 +158,7 @@ class QuestScreenTest {
     }
 
     // Click the back button
-    composeTestRule.onNodeWithContentDescription("BackButton").performClick()
+    composeTestRule.onNodeWithTag("BackButton").performClick()
 
     // Verify that navigationActions.goBack() was called
     verify(navigationActions).goBack()

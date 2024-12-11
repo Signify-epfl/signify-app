@@ -84,9 +84,10 @@ fun SettingsScreen(
   val focusManager = LocalFocusManager.current
   Box(modifier = Modifier.fillMaxSize().clickable { focusManager.clearFocus() }) {
     AnnexScreenScaffold(navigationActions = navigationActions, testTag = "SettingsScreen") {
+      Spacer(modifier = Modifier.height(32.dp))
+
       Row(
-          modifier =
-              Modifier.fillMaxWidth().padding(16.dp).clickable { onThemeChange(!isDarkTheme) },
+          modifier = Modifier.fillMaxWidth().padding(16.dp).clickable { onThemeChange(!isDarkTheme) },
           verticalAlignment = Alignment.CenterVertically,
           horizontalArrangement = Arrangement.SpaceBetween) {
             val modeText =
@@ -100,24 +101,42 @@ fun SettingsScreen(
           }
       // Switch between English and French
       LanguageSwitch(isFrench, onLanguageChange)
+      // Editable Profile Picture
+      Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Row(
+            modifier =
+                Modifier.fillMaxWidth().padding(16.dp).clickable { onThemeChange(!isDarkTheme) },
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween) {
+              val modeText =
+                  if (isDarkTheme) stringResource(R.string.dark_mode_text)
+                  else stringResource(R.string.light_mode_text)
+              Text(
+                  text = modeText,
+                  style = MaterialTheme.typography.bodyLarge,
+                  color = MaterialTheme.colorScheme.onBackground)
+              Switch(checked = isDarkTheme, onCheckedChange = { onThemeChange(it) })
+            }
+        // Switch between English and French
+        LanguageSwitch(isFrench, onLanguageChange)
 
-      EditableProfilePicture(
-          userViewModel = userViewModel,
-          selectedImageUrl = selectedImageUrl,
-      )
+        EditableProfilePicture(
+            userViewModel = userViewModel,
+            selectedImageUrl = selectedImageUrl,
+        )
 
-      Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
-      EditableUsernameField(userViewModel, userName.value)
+        EditableUsernameField(userViewModel, userName.value)
 
-      Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
-      // Other Settings Section To be removed after all settings are completed !
-      NotImplementedYet(testTag = "OtherSettings", text = "Other settings:\nLanguage,\nTheme,\n...")
-      Spacer(modifier = Modifier.height(32.dp))
+        // Other Settings Section To be removed after all settings are completed !
+        NotImplementedYet(testTag = "OtherSettings", text = "Other settings:\nLanguage,\nTheme,\n...")
+        Spacer(modifier = Modifier.height(32.dp))
+      }
     }
   }
-}
 
 @Composable
 fun EditableProfilePicture(

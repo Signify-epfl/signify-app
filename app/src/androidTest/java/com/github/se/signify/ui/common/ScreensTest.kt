@@ -1,7 +1,10 @@
 package com.github.se.signify.ui.common
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assertHasClickAction
@@ -10,12 +13,14 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.unit.dp
 import com.github.se.signify.model.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.model.navigation.NavigationActions
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
 
 class ScreensTest {
   @Test
@@ -24,16 +29,16 @@ class ScreensTest {
       val navigationActions = mock(NavigationActions::class.java)
       MainScreenScaffold(
           navigationActions = navigationActions,
-          testTag = "ScaffoldMainScreen",
-          helpTitle = "Help",
-          helpText = "This is the help text") {
+          testTag = "MainScreenScaffold",
+          helpText = HelpText(title = "HelpTitle", content = "HelpText"),
+          content = {
             Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
-          }
+          })
     }
-    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("TopLine").assertIsDisplayed()
     composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("ScaffoldMainScreen").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("InfoButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("MainScreenScaffold").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("Text").assertIsDisplayed()
   }
 
@@ -43,14 +48,19 @@ class ScreensTest {
   fun annexScreenScaffoldDisplaysCorrectInformation() {
     val navigationActions = mock(NavigationActions::class.java)
     composeTestRule.setContent {
-      AnnexScreenScaffold(navigationActions = navigationActions, testTag = "ScaffoldAnnexeScreen") {
+      AnnexScreenScaffold(
+          navigationActions = navigationActions,
+          testTag = "AnnexScreen",
+          helpText = HelpText(title = "HelpTitle", content = "HelpText"),
+      ) {
         Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
       }
     }
     composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("ScaffoldAnnexeScreen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("AnnexScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("Text").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Text").performScrollTo().assertIsDisplayed()
   }
 
   @Test
@@ -68,58 +78,41 @@ class ScreensTest {
   }
 
   @Test
-  fun topBarIsDisplayed() {
-    composeTestRule.setContent { TopBar() }
+  fun topLineIsDisplayed() {
+    composeTestRule.setContent { TopLine() }
     // Assert that the top bar is displayed
-    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("TopLine").assertIsDisplayed()
   }
 
   @Test
-  fun infoPopupIsDisplayed() {
-    val helpTitle = "Help"
-    val helpText = "Little text for the help"
-    composeTestRule.setContent {
-      InfoPopup(onDismiss = {}, helpTitle = helpTitle, helpText = helpText)
-    }
-    composeTestRule.onNodeWithTag("InfoPopup").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("InfoPopupContent").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("InfoPopupTitle").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("InfoPopupTitle").assertTextEquals(helpTitle)
-    composeTestRule.onNodeWithTag("InfoPopupBody").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("InfoPopupBody").assertTextEquals(helpText)
-    composeTestRule.onNodeWithTag("InfoPopupCloseButton").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("InfoPopupCloseButton").assertHasClickAction()
-  }
-
-  @Test
-  fun infoPopupPerformClickOnButton() {
-    var clicked = false
-    val helpTitle = "Help"
-    val helpText = "Little text for the help"
-    composeTestRule.setContent {
-      InfoPopup(onDismiss = { clicked = true }, helpTitle = helpTitle, helpText = helpText)
-    }
-    composeTestRule.onNodeWithTag("InfoPopupCloseButton").performClick()
-    assert(clicked)
+  fun helpPopupIsDisplayed() {
+    val helpText = HelpText("Help Title", "Help content")
+    composeTestRule.setContent { HelpPopup(onDismiss = {}, helpText) }
+    composeTestRule.onNodeWithTag("HelpPopup").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpPopupContent").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpPopupTitle").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpPopupTitle").assertTextEquals(helpText.title)
+    composeTestRule.onNodeWithTag("HelpPopupBody").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpPopupBody").assertTextEquals(helpText.content)
   }
 
   @Test
   fun backButtonIsDisplayed() {
-    composeTestRule.setContent { BackButton(onClick = {}) }
+    composeTestRule.setContent { BackButton(mock(NavigationActions::class.java)) }
     // Assert that the back button is displayed
     composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
   }
 
   @Test
   fun backButtonPerformsClick() {
-    var clicked = false
-    composeTestRule.setContent { BackButton(onClick = { clicked = true }) }
+    val navigationActions = mock(NavigationActions::class.java)
+    composeTestRule.setContent { BackButton(navigationActions) }
     // Assert that the back button has a click action
     composeTestRule.onNodeWithTag("BackButton").assertHasClickAction()
     // Perform click action on the back button
     composeTestRule.onNodeWithTag("BackButton").performClick()
     // Assert that the click action was triggered
-    assert(clicked)
+    verify(navigationActions).goBack()
   }
 
   @Test
@@ -134,5 +127,74 @@ class ScreensTest {
     }
 
     composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
+  }
+
+  @Test
+  fun topBarElementsAreDisplayed() {
+    val buttons =
+        listOf<@Composable () -> Unit>(
+            {
+              BasicButton(
+                  onClick = {},
+                  iconTestTag = "ButtonIcon1",
+                  icon = Icons.Outlined.Email,
+                  contentDescription = "Button 1",
+                  modifier = Modifier.testTag("Button1"))
+            },
+            {
+              BasicButton(
+                  onClick = {},
+                  iconTestTag = "ButtonIcon2",
+                  icon = Icons.Outlined.Email,
+                  contentDescription = "Button 2",
+                  modifier = Modifier.testTag("Button2"))
+            })
+
+    composeTestRule.setContent {
+      TopBar(buttons = buttons, helpText = HelpText("Help Title", "Help content"))
+    }
+
+    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("TopLine").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Button1").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Button2").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("SeparatorLine").assertIsDisplayed()
+  }
+
+  @Test
+  fun bottomBarDisplaysBottomNavigationMenu() {
+    val navigationActions = mock(NavigationActions::class.java)
+    composeTestRule.setContent { BottomBar(navigationActions = navigationActions) }
+    composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
+  }
+
+  @Test
+  fun helpButtonIsDisplayed() {
+    val helpText = HelpText("Help Title", "Help content")
+    composeTestRule.setContent { HelpButton(helpText) }
+    composeTestRule.onNodeWithTag("HelpButton").assertIsDisplayed()
+  }
+
+  @Test
+  fun separatorLineIsDisplayed() {
+    composeTestRule.setContent { SeparatorLine() }
+    composeTestRule.onNodeWithTag("SeparatorLine").assertIsDisplayed()
+  }
+
+  @Test
+  fun helpButtonClickDisplaysHelpPopup() {
+    val helpText = HelpText("Help Title", "Help content")
+    composeTestRule.setContent { HelpButton(helpText) }
+    composeTestRule.onNodeWithTag("HelpButton").assertHasClickAction()
+    composeTestRule.onNodeWithTag("HelpButton").performClick()
+
+    // Assert that the help popup and its contents are displayed
+    composeTestRule.onNodeWithTag("HelpPopup").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpPopupContent").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpPopupTitle").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpPopupTitle").assertTextEquals(helpText.title)
+    composeTestRule.onNodeWithTag("HelpPopupBody").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpPopupBody").assertTextEquals(helpText.content)
   }
 }

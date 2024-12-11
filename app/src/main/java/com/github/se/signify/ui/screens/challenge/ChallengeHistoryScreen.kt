@@ -42,6 +42,9 @@ fun ChallengeHistoryScreen(
             stringResource(R.string.created_challenge_text),
             stringResource(R.string.won_challenge_text))
     // Challenge's statistics
+
+    Spacer(modifier = Modifier.height(32.dp))
+
     StatisticsTable(
         lineText = stringResource(id = R.string.number_challenges_text),
         statsTexts = challengeCategories,
@@ -53,6 +56,7 @@ fun ChallengeHistoryScreen(
         columnTestTag = "ChallengesColumn",
         rowTestTag = "ChallengesRow",
         lineTextTestTag = "ChallengesText")
+
     Spacer(modifier = Modifier.height(32.dp))
 
     // Graphs and Stats
