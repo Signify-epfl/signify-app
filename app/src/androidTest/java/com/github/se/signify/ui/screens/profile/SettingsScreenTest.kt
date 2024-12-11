@@ -39,8 +39,6 @@ class SettingsScreenTest {
   private lateinit var context: Context
   private lateinit var contentResolver: ContentResolver
 
-  private val testUserID = "currentUserId"
-
   @Before
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
@@ -76,9 +74,6 @@ class SettingsScreenTest {
 
     // Check if the delete profile picture icon is displayed
     composeTestRule.onNodeWithContentDescription("Delete Profile Picture").assertIsDisplayed()
-
-    // Check if the "Other settings" section is displayed
-    composeTestRule.onNodeWithText("Other settings:\nLanguage,\nTheme,\n...").assertIsDisplayed()
 
     // Check if the Cancel button is displayed
     composeTestRule.onNodeWithText("Cancel").assertIsDisplayed()

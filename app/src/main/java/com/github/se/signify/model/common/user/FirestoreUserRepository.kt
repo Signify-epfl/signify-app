@@ -50,7 +50,8 @@ class FirestoreUserRepository(
         val friends = (documentSnapshot[friendsListPath] as? List<*>)?.filterIsInstance<String>()
         onSuccess(friends ?: emptyList())
       } else {
-        onSuccess(emptyList())
+        // Call onFailure when user's document is not found
+        onFailure(NoSuchElementException("User not found for ID: $userId"))
       }
     }
   }
@@ -75,7 +76,8 @@ class FirestoreUserRepository(
             (documentSnapshot[friendRequestsListPath] as? List<*>)?.filterIsInstance<String>()
         onSuccess(friendsRequests ?: emptyList())
       } else {
-        onSuccess(emptyList())
+        // Call onFailure when user's document is not found
+        onFailure(NoSuchElementException("User not found for ID: $userId"))
       }
     }
   }
@@ -128,7 +130,8 @@ class FirestoreUserRepository(
         val userName = documentSnapshot[usernamePath] as? String
         onSuccess(userName ?: "unknown")
       } else {
-        onSuccess("unknown")
+        // Call onFailure when user's document is not found
+        onFailure(NoSuchElementException("User not found for ID: $userId"))
       }
     }
   }
@@ -174,7 +177,8 @@ class FirestoreUserRepository(
         val profilePictureUrl = documentSnapshot[profilePicturePath] as? String
         onSuccess(profilePictureUrl)
       } else {
-        onSuccess(null)
+        // Call onFailure when user's document is not found
+        onFailure(NoSuchElementException("User not found for ID: $userId"))
       }
     }
   }
@@ -340,7 +344,8 @@ class FirestoreUserRepository(
         .get()
         .addOnSuccessListener { document ->
           if (!document.exists()) {
-            onSuccess(emptyList())
+            // Call onFailure when user's document is not found
+            onFailure(NoSuchElementException("User not found for ID: $userId"))
             return@addOnSuccessListener
           }
 
@@ -418,7 +423,8 @@ class FirestoreUserRepository(
             val initialDate = document.getString("initialQuestAccessDate")
             onSuccess(initialDate) // Pass the date to the success callback
           } else {
-            onSuccess(null) // No date set yet
+            // Call onFailure when user's document is not found
+            onFailure(NoSuchElementException("User not found for ID: $userId"))
           }
         }
         .addOnFailureListener { exception ->
@@ -519,7 +525,8 @@ class FirestoreUserRepository(
         val streak = documentSnapshot["currentStreak"] as Long
         onSuccess(streak)
       } else {
-        onSuccess(0)
+        // Call onFailure when user's document is not found
+        onFailure(NoSuchElementException("User not found for ID: $userId"))
       }
     }
   }
