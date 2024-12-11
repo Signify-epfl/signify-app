@@ -204,6 +204,8 @@ Let’s take a quick tour to help you get started with learning sign language ef
     <string name="try_fingerspell_button_text" translatable="false">Try it!</string>
     <string name="fingerspell_title_text" translatable="false">Fingerspell: %1$s</string>
     <string name="try_fingerspell_text" translatable="false">Use your camera to fingerspell the word: %1$s</string>
+    <string name="word_completed_text" translatable="false">Word completed!</string>
+
 
 
 </resources>

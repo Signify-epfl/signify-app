@@ -167,7 +167,7 @@ fun QuestDescriptionDialog(
             AndroidView(
                 factory = { context ->
                   VideoView(context).apply {
-                    setVideoPath(quest.videoPath) // Set video path (local or remote)
+                    setVideoPath(quest.videoPath)
 
                     // Prepare the video and start playback
                     setOnPreparedListener { mediaPlayer ->
@@ -244,6 +244,7 @@ fun FingerSpellDialog(
   var currentLetterIndex by rememberSaveable { mutableIntStateOf(0) }
   val landmarksState = handLandMarkViewModel.landMarks().collectAsState()
   val detectedGesture = handLandMarkViewModel.getSolution()
+  val toastMessage = stringResource(R.string.word_completed_text)
 
   if (!landmarksState.value.isNullOrEmpty()) {
     // Gesture matching logic
@@ -253,7 +254,7 @@ fun FingerSpellDialog(
         word = word,
         onProgressUpdate = { newIndex -> currentLetterIndex = newIndex },
         onWordComplete = {
-          Toast.makeText(context, "Word completed!", Toast.LENGTH_SHORT).show()
+          Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show()
           onDismiss() // Close dialog when word is completed
         })
   }
@@ -261,7 +262,7 @@ fun FingerSpellDialog(
   DisposableEffect(Unit) {
     onDispose {
       val cameraProvider = ProcessCameraProvider.getInstance(context).get()
-      cameraProvider.unbindAll() // Unbind all cameras
+      cameraProvider.unbindAll() // Unbind the camera
     }
   }
 
