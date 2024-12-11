@@ -46,6 +46,10 @@
     <string name="user_not_found_text">Utilisateur pas trouvé(e)</string>
     <string name="camera_permission_denied_text">Permission de la caméra refusée</string>
 
+    <string name="confirm_changes_title">Confirmer les modifications</string>
+    <string name="confirm_changes_message">Êtes-vous sûr de vouloir enregistrer ces modifications ?</string>
+    <string name="confirm">Confirmer</string>
+    <string name="cancel">Annuler</string>
 
     <string name="remove_friend_text">Supprimer un(e) ami(e)</string>
     <string name="my_profile_text">Mon profile</string>
