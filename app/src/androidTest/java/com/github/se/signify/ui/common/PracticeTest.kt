@@ -31,7 +31,7 @@ class PracticeTest {
     lateinit var coroutineScope: CoroutineScope
     composeTestRule.setContent {
       coroutineScope = rememberCoroutineScope()
-      LetterDictionary(coroutineScope = coroutineScope, numbOfHeaders = 0, onClick = { _, _ -> })
+      LetterDictionary(coroutineScope = coroutineScope, numbOfHeaders = 0, clickable = false)
     }
     composeTestRule.onNodeWithTag("LetterBox_A").assertIsDisplayed()
   }
@@ -40,7 +40,7 @@ class PracticeTest {
   fun forwardArrowNavigatesThroughAllLettersCorrectly() {
     composeTestRule.setContent {
       val coroutineScope = rememberCoroutineScope()
-      LetterDictionary(coroutineScope = coroutineScope, numbOfHeaders = 0, onClick = { _, _ -> })
+      LetterDictionary(coroutineScope = coroutineScope, numbOfHeaders = 0, clickable = false)
     }
 
     val letters = ('A'..'Z').toList()
@@ -61,7 +61,7 @@ class PracticeTest {
   fun backArrowNavigatesThroughAllLettersCorrectly() {
     composeTestRule.setContent {
       val coroutineScope = rememberCoroutineScope()
-      LetterDictionary(coroutineScope = coroutineScope, numbOfHeaders = 0, onClick = { _, _ -> })
+      LetterDictionary(coroutineScope = coroutineScope, numbOfHeaders = 0, clickable = false)
     }
 
     val letters = ('A'..'Z').reversed().toList()

@@ -72,9 +72,7 @@ fun ASLRecognition(
     Spacer(modifier = Modifier.height(16.dp))
 
     LetterDictionary(
-        coroutineScope = coroutineScope,
-        numbOfHeaders = integerResource(R.integer.scroll_offset),
-        onClick = { _, _ -> })
+        coroutineScope = coroutineScope, numbOfHeaders = integerResource(R.integer.scroll_offset))
 
     Spacer(modifier = Modifier.height(16.dp))
 

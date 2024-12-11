@@ -128,6 +128,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
                 LetterDictionary(
                     coroutineScope = coroutineScope,
                     numbOfHeaders = integerResource(R.integer.scroll_offset),
+                    clickable = true,
                     onClick = { page, numbOfHeaders ->
                       coroutineScope.launch { scrollState.scrollToItem(page + numbOfHeaders) }
                     })

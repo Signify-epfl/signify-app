@@ -47,7 +47,8 @@ import kotlinx.coroutines.launch
 fun LetterDictionary(
     coroutineScope: CoroutineScope,
     numbOfHeaders: Int,
-    onClick: (Int, Int) -> Unit
+    clickable: Boolean = false,
+    onClick: (Int, Int) -> Unit = { _, _ -> }
 ) {
   val letters = ('a'..'z').toList()
   val pagerState = rememberPagerState(initialPage = 0, pageCount = { letters.size })
@@ -85,7 +86,10 @@ fun LetterDictionary(
                     Modifier.border(
                             2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
                         .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
-                        .clickable { onClick(page, numbOfHeaders) }
+                        .then(
+                            if (clickable) Modifier.clickable { onClick(page, numbOfHeaders) }
+                            else Modifier)
+                        // .clickable { onClick(page, numbOfHeaders) }
                         .testTag("LetterBox_${currentLetter.uppercaseChar()}")) {
                   Row(
                       verticalAlignment = Alignment.CenterVertically,
