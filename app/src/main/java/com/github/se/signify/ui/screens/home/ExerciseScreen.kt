@@ -16,9 +16,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -40,9 +42,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
 import com.github.se.signify.model.authentication.UserSession
+import com.github.se.signify.model.common.calculateTimePerLetter
 import com.github.se.signify.model.home.exercise.ExerciseLevel
 import com.github.se.signify.model.home.exercise.ExerciseLevelName
-import com.github.se.signify.model.home.exercise.ExerciseTrackTime
 import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.profile.stats.StatsRepository
@@ -81,7 +83,8 @@ fun ExerciseScreen(
         List(3) { realSentences.filter { exerciseLevel.wordFilter?.invoke(it) ?: true }.random() })
   }
 
-  val trackTime = ExerciseTrackTime(statsViewModel = statsViewModel)
+  LaunchedEffect(Unit) { statsViewModel.getTimePerLetter() }
+  var startTimestamp by rememberSaveable { mutableLongStateOf(System.currentTimeMillis()) }
 
   var currentSentenceIndex by rememberSaveable { mutableIntStateOf(0) }
   var currentWordIndex by rememberSaveable { mutableIntStateOf(0) }
@@ -94,30 +97,33 @@ fun ExerciseScreen(
   val detectedGesture = handLandmarkViewModel.getSolution()
   val exoCompletedText = stringResource(R.string.exercise_completed_text)
   if (!landmarksState.value.isNullOrEmpty()) {
-    handleGestureMatching(
-        detectedGesture = detectedGesture,
-        currentLetterIndex = currentLetterIndex,
-        currentWordIndex = currentWordIndex,
-        currentSentenceIndex = currentSentenceIndex,
-        sentencesList = sentencesList,
-        onProgressUpdate = { newLetterIndex, newWordIndex, newSentenceIndex ->
-          currentLetterIndex = newLetterIndex
-          currentWordIndex = newWordIndex
-          currentSentenceIndex = newSentenceIndex
-        },
-        onAllSentencesComplete = {
-          when (exerciseLevel.id) {
-            ExerciseLevelName.EASY -> statsViewModel.updateEasyExerciseStats()
-            ExerciseLevelName.MEDIUM -> statsViewModel.updateMediumExerciseStats()
-            ExerciseLevelName.HARD -> statsViewModel.updateHardExerciseStats()
-          }
-          Toast.makeText(context, exoCompletedText, Toast.LENGTH_SHORT).show()
-          // Reload or reset sentencesList, or handle end of exercise as needed
-          currentSentenceIndex = 0
-          currentWordIndex = 0
-          currentLetterIndex = 0
-        },
-        trackTime = trackTime)
+    val newStartTimestamp =
+        handleGestureMatching(
+            detectedGesture = detectedGesture,
+            currentLetterIndex = currentLetterIndex,
+            currentWordIndex = currentWordIndex,
+            currentSentenceIndex = currentSentenceIndex,
+            sentencesList = sentencesList,
+            onProgressUpdate = { newLetterIndex, newWordIndex, newSentenceIndex ->
+              currentLetterIndex = newLetterIndex
+              currentWordIndex = newWordIndex
+              currentSentenceIndex = newSentenceIndex
+            },
+            onAllSentencesComplete = {
+              when (exerciseLevel.id) {
+                ExerciseLevelName.EASY -> statsViewModel.updateEasyExerciseStats()
+                ExerciseLevelName.MEDIUM -> statsViewModel.updateMediumExerciseStats()
+                ExerciseLevelName.HARD -> statsViewModel.updateHardExerciseStats()
+              }
+              Toast.makeText(context, exoCompletedText, Toast.LENGTH_SHORT).show()
+              // Reload or reset sentencesList, or handle end of exercise as needed
+              currentSentenceIndex = 0
+              currentWordIndex = 0
+              currentLetterIndex = 0
+            },
+            statsViewModel = statsViewModel,
+            startTimestamp = startTimestamp)
+    startTimestamp = newStartTimestamp ?: startTimestamp
   }
 
   AnnexScreenScaffold(
@@ -186,14 +192,13 @@ fun onSuccess(
     sentences: List<String>,
     onProgressUpdate: (newLetterIndex: Int, newWordIndex: Int, newSentenceIndex: Int) -> Unit,
     onAllSentencesComplete: () -> Unit,
-    trackTime: ExerciseTrackTime
-) {
+    statsViewModel: StatsViewModel,
+    startTimestamp: Long
+): Long {
   // Retrieve the current sentence and split it into words
   val currentSentence = sentences[currentSentenceIndex]
   val words = currentSentence.split(" ")
   val currentWord = words[currentWordIndex]
-
-  trackTime.updateTrackingAndCallUpdateTimePerLetter()
 
   when {
     // Move to the next letter within the current word
@@ -216,6 +221,8 @@ fun onSuccess(
       onAllSentencesComplete()
     }
   }
+
+  return calculateTimePerLetter(statsViewModel, startTimestamp)
 }
 
 /**
@@ -415,22 +422,25 @@ fun handleGestureMatching(
     sentencesList: List<String>,
     onProgressUpdate: (newLetterIndex: Int, newWordIndex: Int, newSentenceIndex: Int) -> Unit,
     onAllSentencesComplete: () -> Unit,
-    trackTime: ExerciseTrackTime
-) {
+    statsViewModel: StatsViewModel,
+    startTimestamp: Long
+): Long? {
   val currentLetter =
       getCurrentLetter(sentencesList, currentLetterIndex, currentWordIndex, currentSentenceIndex)
   if (detectedGesture == currentLetter.uppercase()) {
-    onSuccess(
+    return onSuccess(
         currentLetterIndex = currentLetterIndex,
         currentWordIndex = currentWordIndex,
         currentSentenceIndex = currentSentenceIndex,
         sentences = sentencesList,
         onProgressUpdate = onProgressUpdate,
         onAllSentencesComplete = onAllSentencesComplete,
-        trackTime = trackTime)
+        statsViewModel = statsViewModel,
+        startTimestamp = startTimestamp)
   } else {
     Log.d(
         "ExerciseScreenEasy",
         "Detected gesture ($detectedGesture) does not match the current letter ($currentLetter)")
+    return null
   }
 }

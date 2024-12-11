@@ -3,6 +3,7 @@ package com.github.se.signify.model.common
 import android.content.Context
 import android.content.res.Configuration
 import com.github.se.signify.R
+import com.github.se.signify.model.profile.stats.StatsViewModel
 import java.util.Locale
 
 /**
@@ -72,4 +73,17 @@ fun updateLanguage(context: Context, languageCode: String) {
 fun timeConversion(time: Long): Double {
   require(time >= 0) { "Time must be >= 0" }
   return time / 1000.0
+}
+/**
+ * Function that calculate the time taken to complete an exercise and call the update for the stats
+ * repository
+ *
+ * @param statsViewModel used to update the stats repository
+ * @param startTimestamp to calculate the time taken to do the exercise
+ * @return the new startTimestamp
+ */
+fun calculateTimePerLetter(statsViewModel: StatsViewModel, startTimestamp: Long): Long {
+  val endTimestamp = System.currentTimeMillis()
+  statsViewModel.updateTimePerLetter(endTimestamp - startTimestamp)
+  return endTimestamp
 }
