@@ -50,4 +50,9 @@ class MockAuthServiceTest {
         "mock-token@example.com",
         authService.getCurrentUser())
   }
+
+  @Test
+  fun mockAuthSignOut() = runBlocking {
+    assertTrue("mockAuthSignOut should return true", authService.signOut())
+  }
 }
