@@ -197,4 +197,9 @@ Faisons un rapide tour d’horizon pour vous aider à démarrer l’apprentissag
     <string name="quest_screen_title_text">Un jour, Un mot</string>
     <string name="open_quest_button_text">Apprendre</string>
     <string name="closed_quest_button_text">Verrouillé</string>
+    <string name="try_fingerspell_button_text">Essayez-le !</string>
+    <string name="fingerspell_title_text">Épeler avec les mains : %1$s</string>
+    <string name="try_fingerspell_text">Utilisez votre caméra pour épeler ce mot avec vos gestes : %1$s</string>
+    <string name="word_completed_text">Bravo, mot réussi !</string>
+
 </resources>

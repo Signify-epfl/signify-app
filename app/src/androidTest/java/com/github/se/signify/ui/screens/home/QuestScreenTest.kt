@@ -42,6 +42,10 @@ class QuestScreenTest {
   val quest_title: String = context.getString(R.string.quest_screen_title_text)
   val open_button: String = context.getString(R.string.open_quest_button_text)
   val closed_button: String = context.getString(R.string.closed_quest_button_text)
+  val close_dialog: String = context.getString(R.string.close_text)
+  val fingerspell_the_word_hello: String =
+      context.getString(R.string.fingerspell_title_text, "hello")
+  val use_your_cam_for_hello: String = context.getString(R.string.try_fingerspell_text, "hello")
 
   private val sampleQuest =
       Quest(
@@ -247,7 +251,7 @@ class QuestScreenTest {
     }
 
     // Click the "Close" button
-    composeTestRule.onNodeWithText("Close").performClick()
+    composeTestRule.onNodeWithText(close_dialog).performClick()
 
     // Verify that onDismiss was called
     assert(dismissCalled)
@@ -352,12 +356,10 @@ class QuestScreenTest {
     }
 
     // Check if the dialog title is displayed
-    composeTestRule.onNodeWithText("Fingerspell: hello").assertIsDisplayed()
+    composeTestRule.onNodeWithText(fingerspell_the_word_hello).assertIsDisplayed()
 
     // Check if the dialog instruction text is displayed
-    composeTestRule
-        .onNodeWithText("Use your camera to fingerspell the word: hello")
-        .assertIsDisplayed()
+    composeTestRule.onNodeWithText(use_your_cam_for_hello).assertIsDisplayed()
   }
 
   @Test
@@ -371,7 +373,7 @@ class QuestScreenTest {
     }
 
     // Perform click on the "Close" button
-    composeTestRule.onNodeWithText("Close").performClick()
+    composeTestRule.onNodeWithText(close_dialog).performClick()
 
     // Verify that the dialog is dismissed
     assert(isDismissed)
