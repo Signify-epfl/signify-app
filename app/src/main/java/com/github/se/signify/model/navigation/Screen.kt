@@ -25,6 +25,5 @@ enum class Screen(val route: String, val requiresAuth: Boolean = true) {
 
   // For testing purposes
   REQUIRE_AUTH("RequireAuth", true),
-  DO_NOT_REQUIRE_AUTH("DoNotRequireAuth", false);
-  
+  DO_NOT_REQUIRE_AUTH("DoNotRequireAuth", false)
 }
