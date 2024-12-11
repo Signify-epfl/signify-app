@@ -6,6 +6,7 @@ interface ChallengeRepository {
       player2Id: String,
       mode: ChallengeMode,
       challengeId: String,
+      roundWords: List<String>,
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   )

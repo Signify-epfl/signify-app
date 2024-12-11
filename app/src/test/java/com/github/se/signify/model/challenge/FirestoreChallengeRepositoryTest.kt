@@ -127,6 +127,7 @@ class FirestoreChallengeRepositoryTest {
         player2Id = "player2",
         mode = ChallengeMode.CHRONO,
         challengeId = challengeId,
+        roundWords = listOf("A", "B", "C"),
         onSuccess = { fail("Success callback should not be called") },
         onFailure = {
           failureCalled = true

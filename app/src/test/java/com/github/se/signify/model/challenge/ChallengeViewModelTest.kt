@@ -1,5 +1,6 @@
 package com.github.se.signify.model.challenge
 
+import android.util.Log
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.dependencyInjection.MockDependencyProvider
 import org.junit.Assert.assertEquals
@@ -16,7 +17,7 @@ class ChallengeViewModelTest {
   private val challengeId = "challengeId"
   private val player1Id = "player1Id"
   private val player2Id = "player2Id"
-  private val mode = ChallengeMode.SPRINT
+  private val mode = ChallengeMode.CHRONO
 
   @Before
   fun setUp() {
@@ -27,7 +28,7 @@ class ChallengeViewModelTest {
 
   @Test
   fun `sendChallengeRequest triggers onSuccess and logs message`() {
-    challengeViewModel.sendChallengeRequest(player2Id, mode, challengeId)
+    challengeViewModel.sendChallengeRequest(player2Id, mode, challengeId, listOf("A", "B", "C"))
 
     assertTrue(mockRepository.wasSendChallengeCalled())
     assertEquals(challengeId, mockRepository.lastSentChallengeId())
@@ -37,7 +38,7 @@ class ChallengeViewModelTest {
   fun `sendChallengeRequest triggers onFailure and logs error`() {
     mockRepository.shouldSucceed = false
 
-    challengeViewModel.sendChallengeRequest(player2Id, mode, challengeId)
+    challengeViewModel.sendChallengeRequest(player2Id, mode, challengeId, listOf("A", "B", "C"))
 
     assertTrue(mockRepository.wasSendChallengeCalled())
     assertEquals(challengeId, mockRepository.lastSentChallengeId())
@@ -50,8 +51,9 @@ class ChallengeViewModelTest {
         player2Id = player2Id,
         mode = mode,
         challengeId = challengeId,
-        onSuccess = { /* Success */},
-        onFailure = { /* No-op */})
+        roundWords = listOf("A", "B", "C"),
+        onSuccess = { Log.d("deleteTest", "Challenge deleted") },
+        onFailure = { Log.d("deleteTest", "fail to delete challenge") })
 
     challengeViewModel.deleteChallenge(challengeId)
 

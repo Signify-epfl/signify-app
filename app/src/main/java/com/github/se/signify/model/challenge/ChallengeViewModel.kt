@@ -21,14 +21,20 @@ open class ChallengeViewModel(
 
   private val logTag = "ChallengeViewModel"
 
-  fun sendChallengeRequest(opponentId: String, mode: ChallengeMode, challengeId: String) {
+  fun sendChallengeRequest(
+      friendId: String,
+      mode: ChallengeMode,
+      challengeId: String,
+      roundWords: List<String>
+  ) {
     repository.sendChallengeRequest(
-        userSession.getUserId()!!,
-        opponentId,
-        mode,
-        challengeId,
-        onSuccess = { Log.d(logTag, "Challenge request sent successfully.") },
-        onFailure = { e -> Log.e(logTag, "Failed to send challenge request: ${e.message}") })
+        player1Id = userSession.getUserId()!!,
+        player2Id = friendId,
+        mode = mode,
+        challengeId = challengeId,
+        roundWords = roundWords,
+        onSuccess = { Log.d("CreateAChallenge", "Challenge created successfully") },
+        onFailure = { e -> Log.e("CreateAChallenge", "Failed to create challenge: ${e.message}") })
   }
 
   fun deleteChallenge(challengeId: String) {

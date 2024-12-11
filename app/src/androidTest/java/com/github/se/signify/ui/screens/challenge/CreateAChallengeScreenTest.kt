@@ -1,5 +1,6 @@
 package com.github.se.signify.ui.screens.challenge
 
+import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
@@ -9,12 +10,14 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
+import com.github.se.signify.R
 import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.challenge.ChallengeMode
 import com.github.se.signify.model.challenge.MockChallengeRepository
 import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.navigation.NavigationActions
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -196,5 +199,22 @@ class CreateAChallengeScreenTest {
     // Dismiss the dialog without selecting anything
     composeTestRule.onNodeWithTag("CancelButton").performClick()
     composeTestRule.onNodeWithTag("DialogTitle").assertDoesNotExist()
+  }
+
+  @Test
+  fun testGetWordsForMode() {
+    // Mock the context and resources
+    val context = mock(Context::class.java)
+    val resources = mock(android.content.res.Resources::class.java)
+    whenever(context.resources).thenReturn(resources)
+
+    // Define the mock word list
+    val mockWordList = arrayOf("apple", "banana", "cherry", "date", "elderberry", "fig", "grape")
+    whenever(resources.getStringArray(R.array.challenge_word_list)).thenReturn(mockWordList)
+
+    // Test for CHRONO mode
+    val wordsChrono = getWordsForMode(context, ChallengeMode.CHRONO)
+    assertEquals(3, wordsChrono.size)
+    assertTrue(wordsChrono.all { it in mockWordList })
   }
 }
