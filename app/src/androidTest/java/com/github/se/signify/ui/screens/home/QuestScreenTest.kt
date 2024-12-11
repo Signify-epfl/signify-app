@@ -98,7 +98,7 @@ class QuestScreenTest {
     }
 
     // Check that the back button is displayed
-    composeTestRule.onNodeWithContentDescription("BackButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
 
     // Check that the title is displayed
     composeTestRule.onNodeWithText(quest_title).assertIsDisplayed()
