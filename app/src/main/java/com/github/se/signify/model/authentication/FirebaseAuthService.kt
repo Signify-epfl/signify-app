@@ -13,6 +13,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
@@ -22,12 +23,15 @@ class FirebaseAuthService(
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance(),
     private val googleSignInHelper: (Intent) -> Task<GoogleSignInAccount> = { intent ->
       GoogleSignIn.getSignedInAccountFromIntent(intent)
+    },
+    private val credentialProvider: (String, String?) -> AuthCredential = { idToken, secret ->
+      GoogleAuthProvider.getCredential(idToken, secret)
     }
 ) : AuthService {
   lateinit var googleSignInClient: GoogleSignInClient
 
   override suspend fun signInWithGoogle(idToken: String): Boolean {
-    val credential = GoogleAuthProvider.getCredential(idToken, null)
+    val credential = credentialProvider(idToken, null)
     val authResult = firebaseAuth.signInWithCredential(credential).await()
     return authResult.user != null
   }
@@ -52,7 +56,7 @@ class FirebaseAuthService(
         val account = task.getResult(ApiException::class.java)
         val idToken = account?.idToken
         if (idToken != null) {
-          val credential = GoogleAuthProvider.getCredential(idToken, null)
+          val credential = credentialProvider(idToken, null)
           firebaseAuth
               .signInWithCredential(credential)
               .addOnSuccessListener { authResult -> onAuthComplete(authResult) }
