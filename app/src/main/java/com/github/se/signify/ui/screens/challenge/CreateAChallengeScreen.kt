@@ -66,6 +66,8 @@ fun CreateAChallengeScreen(
       navigationActions = navigationActions,
       testTag = "CreateAChallengeContent",
   ) {
+    Spacer(modifier = Modifier.height(32.dp))
+
     // Title
     val challengeTitleText = stringResource(R.string.challenge_title_text)
     Text(text = challengeTitleText, fontSize = 24.sp, modifier = Modifier.testTag("ChallengeTitle"))

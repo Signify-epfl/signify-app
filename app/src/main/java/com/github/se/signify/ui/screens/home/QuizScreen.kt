@@ -56,7 +56,12 @@ fun QuizScreen(navigationActions: NavigationActions, quizRepository: QuizReposit
 
   val context = LocalContext.current
 
-  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "QuizScreen") {
+  AnnexScreenScaffold(
+      navigationActions = navigationActions,
+      testTag = "QuizScreen",
+  ) {
+    Spacer(modifier = Modifier.height(32.dp))
+
     val quizTimeText = stringResource(R.string.quiz_time_text)
     Text(
         text = quizTimeText,

@@ -3,7 +3,9 @@ package com.github.se.signify.ui.screens.auth
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.ui.common.HelpText
 import com.github.se.signify.ui.common.MainScreenScaffold
 import com.github.se.signify.ui.common.TextButton
 
@@ -41,8 +44,11 @@ fun UnauthenticatedScreen(navigationActions: NavigationActions) {
   MainScreenScaffold(
       navigationActions = navigationActions,
       testTag = "UnauthenticatedScreen",
-      helpTitle = offModeText,
-      helpText = stringResource(R.string.help_offline_mode_text)) {
+      helpText =
+          HelpText(title = offModeText, content = stringResource(R.string.help_offline_mode_text)),
+      content = {
+        Spacer(modifier = Modifier.height(32.dp))
+
         Column(
             modifier = Modifier.fillMaxSize().background(Color.White).padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -71,5 +77,5 @@ fun UnauthenticatedScreen(navigationActions: NavigationActions) {
                   textColor = MaterialTheme.colorScheme.onPrimary,
                   modifier = Modifier)
             }
-      }
+      })
 }
