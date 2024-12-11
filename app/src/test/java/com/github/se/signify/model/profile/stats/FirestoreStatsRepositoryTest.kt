@@ -178,6 +178,30 @@ class FirestoreStatsRepositoryTest {
   }
 
   @Test
+  fun getTimePerLetterShouldReturnTimeListWhenDocumentExists() {
+    val documentSnapshot: DocumentSnapshot = mock()
+    `when`(documentSnapshot.get("timePerLetter")).thenReturn(listOf(1000L, 1024L, 777L))
+    `when`(mockUserDocument.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot))
+
+    firestoreStatsRepository.getTimePerLetter(
+        userId,
+        onSuccess = { time -> assertEquals(listOf(1000L, 1024L, 777L), time) },
+        onFailure = { fail("onFailure should not be called") })
+  }
+
+  @Test
+  fun getTimePerLetterShouldHandleEmptyOrMissingList() {
+    val documentSnapshot: DocumentSnapshot = mock()
+    `when`(documentSnapshot.get("timePerLetter")).thenReturn(null)
+    `when`(mockUserDocument.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot))
+
+    firestoreStatsRepository.getTimePerLetter(
+        userId,
+        onSuccess = { time -> assertEquals(emptyList<Long>(), time) },
+        onFailure = { fail("onFailure should not be called") })
+  }
+
+  @Test
   fun updateLettersLearnedShouldAddANewLetterToLettersLearned() {
     val newLetter = 'D'
     `when`(mockUserDocument.update(eq("lettersLearned"), any())).thenReturn(Tasks.forResult(null))
@@ -274,6 +298,21 @@ class FirestoreStatsRepositoryTest {
     firestoreStatsRepository.updateWonChallengeStats(
         userId,
         onSuccess = { verify(mockUserDocument).update("wonChallenge", FieldValue.increment(1)) },
+        onFailure = { fail("onFailure should not be called") })
+  }
+
+  @Test
+  fun updateTimePerLetterShouldReplaceOldListByNewOne() {
+    val newTimePerLetter = listOf(1000L, 1024L, 777L)
+    `when`(mockUserDocument.update(eq("timePerLetter"), any())).thenReturn(Tasks.forResult(null))
+
+    firestoreStatsRepository.updateTimePerLetter(
+        userId,
+        newTimePerLetter,
+        onSuccess = {
+          verify(mockUserDocument)
+              .update(eq("timePerLetter"), eq(FieldValue.arrayUnion(newTimePerLetter)))
+        },
         onFailure = { fail("onFailure should not be called") })
   }
 }

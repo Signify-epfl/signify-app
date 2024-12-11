@@ -67,10 +67,10 @@ class UtilsTest {
     }
   }
 
-    @Test
-    fun timeConversionHasCorrectBehaviour() {
-        assertEquals(5.0, timeConversion(5000L))
-        assertEquals(0.01, timeConversion(10L))
-        assertThrows(IllegalArgumentException::class.java) { timeConversion(-1000L) }
-    }
+  @Test
+  fun timeConversionHasCorrectBehaviour() {
+    assertEquals(5.0, timeConversion(5000L))
+    assertEquals(0.01, timeConversion(10L))
+    assertThrows(IllegalArgumentException::class.java) { timeConversion(-1000L) }
+  }
 }

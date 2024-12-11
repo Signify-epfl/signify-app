@@ -38,7 +38,8 @@ class StatsViewModelTest(
             weeklyQuest = 1,
             completedChallenge = 4,
             createdChallenge = 2,
-            wonChallenge = 3)
+            wonChallenge = 3,
+            timePerLetter = listOf(1000L, 1024L, 777L))
 
     @JvmStatic
     @BeforeClass
@@ -254,5 +255,53 @@ class StatsViewModelTest(
     statsViewModel.getLettersLearned()
 
     assertEquals(initialStats.lettersLearned, statsViewModel.lettersLearned.value)
+  }
+
+  @Test
+  fun getTimePerLetterShouldHandleSuccessCorrectly() {
+    statsViewModel.getTimePerLetter()
+
+    assertTrue(mockStatsRepository.wasMethodCalled("getTimePerLetter"))
+
+    assertEquals(initialStats.timePerLetter, statsViewModel.timePerLetter.value)
+  }
+
+  @Test
+  fun getTimePerLetterShouldHandleFailureCorrectly() {
+    mockStatsRepository.shouldSucceed = false
+
+    statsViewModel.getTimePerLetter()
+
+    assertTrue(mockStatsRepository.wasMethodCalled("getTimePerLetter"))
+
+    assertEquals(emptyList<Long>(), statsViewModel.timePerLetter.value)
+  }
+
+  @Test
+  fun updateTimePerLetterShouldHandleSuccessCorrectly() {
+    val newTime = 222L
+    statsViewModel.updateTimePerLetter(newTime)
+
+    assertTrue(mockStatsRepository.wasMethodCalled("updateTimePerLetter"))
+
+    statsViewModel.getTimePerLetter()
+
+    assertEquals(initialStats.timePerLetter + newTime, statsViewModel.timePerLetter.value)
+  }
+
+  @Test
+  fun updateTimePerLetterShouldHandleFailureCorrectly() {
+    val newTime = 222L
+
+    mockStatsRepository.shouldSucceed = false
+
+    statsViewModel.updateTimePerLetter(newTime)
+
+    assertTrue(mockStatsRepository.wasMethodCalled("updateTimePerLetter"))
+
+    mockStatsRepository.shouldSucceed = true
+    statsViewModel.getTimePerLetter()
+
+    assertEquals(initialStats.timePerLetter, statsViewModel.timePerLetter.value)
   }
 }

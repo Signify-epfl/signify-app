@@ -370,8 +370,7 @@ class StatsViewModel(
   fun updateTimePerLetter(newTime: Long) {
     _updateStatsEvent.value = UpdateStatsEvent.Loading
     getTimePerLetter()
-    val newTimePerLetter: List<Long> = _timePerLetter.value
-    newTimePerLetter.toMutableList().add(newTime)
+    val newTimePerLetter: List<Long> = _timePerLetter.value + newTime
 
     repository.updateTimePerLetter(
         userSession.getUserId()!!,
