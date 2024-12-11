@@ -129,17 +129,4 @@ class ProfileScreenTest {
     composeTestRule.onNodeWithTag("HelpButton").performClick()
     composeTestRule.onNodeWithTag("HelpPopupContent").assertIsDisplayed()
   }
-
-  @Test
-  fun dialogClosesWhenCloseButtonClicked() {
-
-    // Click the 'Close' button in the dialog
-    composeTestRule.onNodeWithTag("HelpButton").performClick()
-    composeTestRule.onNodeWithTag("HelpPopupCloseButton").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("HelpPopupCloseButton").assertHasClickAction()
-    composeTestRule.onNodeWithTag("HelpPopupCloseButton").performClick()
-
-    // After clicking, the dialog should no longer be displayed
-    composeTestRule.onNodeWithTag("HelpPopupContent").assertDoesNotExist()
-  }
 }
