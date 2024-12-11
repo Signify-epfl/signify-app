@@ -8,6 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 class FirestoreQuestRepository(private val db: FirebaseFirestore) : QuestRepository {
 
   private val collectionPath = "quests"
+  private val videoPathBase = "android.resource://com.github.se.signify/raw/"
 
   override fun init(onSuccess: () -> Unit) {
     Firebase.auth.addAuthStateListener {
@@ -45,6 +46,6 @@ class FirestoreQuestRepository(private val db: FirebaseFirestore) : QuestReposit
 
   internal fun fetchVideo(word: String): String {
     val sanitizedWord = word.replace(" ", "").lowercase() // Remove spaces and convert to lowercase
-    return "android.resource://com.github.se.signify/raw/$sanitizedWord"
+    return "$videoPathBase$sanitizedWord"
   }
 }

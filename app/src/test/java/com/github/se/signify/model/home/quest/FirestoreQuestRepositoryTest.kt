@@ -288,10 +288,7 @@ class FirestoreQuestRepositoryTest {
 
   @Test
   fun fetchVideo_constructsCorrectPath() {
-    // construct video path
     val videoPath = firestoreQuestRepository.fetchVideo("Thank You")
-
-    // Assert
     assertEquals("android.resource://com.github.se.signify/raw/thankyou", videoPath)
   }
 }
