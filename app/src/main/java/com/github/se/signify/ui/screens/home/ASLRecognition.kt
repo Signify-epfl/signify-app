@@ -21,6 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -76,7 +77,6 @@ fun ASLRecognition(
 
     Spacer(modifier = Modifier.height(16.dp))
 
-    // Draws the output text or the prompt to "Make a sign" on the screen.
     Box(
         modifier =
             Modifier.fillMaxWidth()
@@ -92,21 +92,10 @@ fun ASLRecognition(
               modifier = Modifier.fillMaxSize().padding(16.dp),
               horizontalAlignment = Alignment.CenterHorizontally) {
                 // Draws the output text or the prompt to "Make a sign" on the screen.
-                Canvas(modifier = Modifier.fillMaxSize().weight(1f).testTag("gestureOverlayView")) {
-                  val fontSize = 80f
-                  val textX = size.width * 0.5f
-                  val textY = (size.height / 2) + (fontSize / 3)
-                  drawContext.canvas.nativeCanvas.apply {
-                    val paint =
-                        android.graphics.Paint().apply {
-                          color = paintColor.toArgb()
-                          textSize = fontSize
-                          isAntiAlias = true
-                          textAlign = android.graphics.Paint.Align.CENTER
-                        }
-                    drawText(displayText, textX, textY, paint)
-                  }
-                }
+                HandGestureOverlay(
+                    modifier = Modifier.fillMaxSize().weight(1f).testTag("gestureOverlayView"),
+                    displayText = displayText,
+                    paintColor = paintColor)
                 // Displays the image associated with the detected ASL hand gesture
                 Icon(
                     painter = painterResource(id = imageResource),
@@ -126,5 +115,24 @@ fun ASLRecognition(
         text = stringResource(id = R.string.more_on_asl_alphabet_text),
         backgroundColor = MaterialTheme.colorScheme.primary,
         textColor = MaterialTheme.colorScheme.onPrimary)
+  }
+}
+
+@Composable
+fun HandGestureOverlay(modifier: Modifier, displayText: String, paintColor: Color) {
+  Canvas(modifier = modifier) {
+    val fontSize = 80f
+    val textX = size.width * 0.5f
+    val textY = (size.height / 2) + (fontSize / 3)
+    drawContext.canvas.nativeCanvas.apply {
+      val paint =
+          android.graphics.Paint().apply {
+            color = paintColor.toArgb()
+            textSize = fontSize
+            isAntiAlias = true
+            textAlign = android.graphics.Paint.Align.CENTER
+          }
+      drawText(displayText, textX, textY, paint)
+    }
   }
 }
