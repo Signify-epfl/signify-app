@@ -4,6 +4,7 @@ import android.util.Log
 import android.widget.Toast
 import android.widget.VideoView
 import androidx.annotation.VisibleForTesting
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +26,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -105,9 +107,7 @@ fun QuestBox(quest: Quest, isUnlocked: Boolean, handLandMarkViewModel: HandLandm
               textAlign = TextAlign.Left)
 
           Spacer(modifier = Modifier.height(20.dp))
-          val letsGoTextOrLockedText =
-              if (isUnlocked) stringResource(R.string.lets_go_text)
-              else stringResource(R.string.locked_text)
+
           Button(
               modifier = Modifier.fillMaxWidth().testTag("QuestActionButton"),
               onClick = { if (isUnlocked) isDialogVisible = true },
@@ -145,7 +145,10 @@ fun QuestDescriptionDialog(
   if (isFingerspellVisible) {
     FingerSpellDialog(
         word = quest.title,
-        onDismiss = { isFingerspellVisible = false },
+        onDismiss = {
+          isFingerspellVisible = false
+          onDismiss()
+        },
         handLandMarkViewModel = handLandMarkViewModel)
   } else {
     AlertDialog(
@@ -253,6 +256,13 @@ fun FingerSpellDialog(
           Toast.makeText(context, "Word completed!", Toast.LENGTH_SHORT).show()
           onDismiss() // Close dialog when word is completed
         })
+  }
+  // Ensure Camera is stopped when the dialog is dismissed
+  DisposableEffect(Unit) {
+    onDispose {
+      val cameraProvider = ProcessCameraProvider.getInstance(context).get()
+      cameraProvider.unbindAll() // Unbind all cameras
+    }
   }
 
   AlertDialog(
