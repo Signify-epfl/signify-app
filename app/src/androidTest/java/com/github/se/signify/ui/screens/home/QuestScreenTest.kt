@@ -343,4 +343,37 @@ class QuestScreenTest {
     // Assert the Text with the "CurrentWordTag" tag exists
     composeTestRule.onNodeWithTag("CurrentWordTag").assertExists()
   }
+
+  @Test
+  fun fingerSpellDialog_displaysCorrectTitleAndText() {
+    composeTestRule.setContent {
+      FingerSpellDialog(
+          word = "hello", onDismiss = {}, handLandMarkViewModel = handLandmarkViewModel)
+    }
+
+    // Check if the dialog title is displayed
+    composeTestRule.onNodeWithText("Fingerspell: hello").assertIsDisplayed()
+
+    // Check if the dialog instruction text is displayed
+    composeTestRule
+        .onNodeWithText("Use your camera to fingerspell the word: hello")
+        .assertIsDisplayed()
+  }
+
+  @Test
+  fun fingerSpellDialog_closeButtonClosesDialog() {
+    var isDismissed = false
+    composeTestRule.setContent {
+      FingerSpellDialog(
+          word = "test",
+          onDismiss = { isDismissed = true },
+          handLandMarkViewModel = handLandmarkViewModel)
+    }
+
+    // Perform click on the "Close" button
+    composeTestRule.onNodeWithText("Close").performClick()
+
+    // Verify that the dialog is dismissed
+    assert(isDismissed)
+  }
 }
