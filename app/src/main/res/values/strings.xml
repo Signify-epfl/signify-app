@@ -27,8 +27,6 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="welcome_text">Welcome to Signify</string>
     <string name="dark_mode_text">Dark Mode</string>
     <string name="light_mode_text">Light Mode</string>
-    <string name="saved_text">Changes saved</string>
-    <string name="save_text">Save</string>
     <string name="cancel_text">Cancel</string>
     <string name="unknown_text">unknown</string>
     <string name="my_friends_text">My Friends</string>

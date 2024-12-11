@@ -6,13 +6,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -45,7 +42,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -62,7 +58,6 @@ import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.NotImplementedYet
 import com.github.se.signify.ui.common.ProfilePicture
-import com.github.se.signify.ui.theme.Surface
 
 @Composable
 fun SettingsScreen(
@@ -85,51 +80,40 @@ fun SettingsScreen(
   val userName = userViewModel.userName.collectAsState()
   val profilePictureUrl = userViewModel.profilePictureUrl.collectAsState()
 
-  val focusManager = LocalFocusManager.current
-  Box(
-      modifier =
-          Modifier.fillMaxSize()
-              .clickable(
-                  onClick = { focusManager.clearFocus() },
-                  indication = null,
-                  interactionSource = remember { MutableInteractionSource() })) {
-        AnnexScreenScaffold(navigationActions = navigationActions, testTag = "SettingsScreen") {
-          Spacer(modifier = Modifier.height(32.dp))
+  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "SettingsScreen") {
+    Spacer(modifier = Modifier.height(32.dp))
 
-          Row(
-              modifier =
-                  Modifier.fillMaxWidth().padding(16.dp).clickable { onThemeChange(!isDarkTheme) },
-              verticalAlignment = Alignment.CenterVertically,
-              horizontalArrangement = Arrangement.SpaceBetween) {
-                val modeText =
-                    if (isDarkTheme) stringResource(R.string.dark_mode_text)
-                    else stringResource(R.string.light_mode_text)
-                Text(
-                    text = modeText,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground)
-                Switch(checked = isDarkTheme, onCheckedChange = { onThemeChange(it) })
-              }
-          // Switch between English and French
-          LanguageSwitch(isFrench, onLanguageChange)
-
-          EditableProfilePicture(
-              userViewModel = userViewModel,
-              profilePictureUrl = profilePictureUrl.value,
-          )
-
-          Spacer(modifier = Modifier.height(32.dp))
-
-          EditableUsernameField(userViewModel, userName.value)
-
-          Spacer(modifier = Modifier.height(32.dp))
-
-          // Other Settings Section To be removed after all settings are completed !
-          NotImplementedYet(
-              testTag = "OtherSettings", text = "Other settings:\nLanguage,\nTheme,\n...")
-          Spacer(modifier = Modifier.height(32.dp))
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(16.dp).clickable { onThemeChange(!isDarkTheme) },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween) {
+          val modeText =
+              if (isDarkTheme) stringResource(R.string.dark_mode_text)
+              else stringResource(R.string.light_mode_text)
+          Text(
+              text = modeText,
+              style = MaterialTheme.typography.bodyLarge,
+              color = MaterialTheme.colorScheme.onBackground)
+          Switch(checked = isDarkTheme, onCheckedChange = { onThemeChange(it) })
         }
-      }
+    // Switch between English and French
+    LanguageSwitch(isFrench, onLanguageChange)
+
+    EditableProfilePicture(
+        userViewModel = userViewModel,
+        profilePictureUrl = profilePictureUrl.value,
+    )
+
+    Spacer(modifier = Modifier.height(32.dp))
+
+    EditableUsernameField(userViewModel, userName.value)
+
+    Spacer(modifier = Modifier.height(32.dp))
+
+    // Other Settings Section To be removed after all settings are completed !
+    NotImplementedYet(testTag = "OtherSettings", text = "Other settings:\nLanguage,\nTheme,\n...")
+    Spacer(modifier = Modifier.height(32.dp))
+  }
 }
 
 @Composable
