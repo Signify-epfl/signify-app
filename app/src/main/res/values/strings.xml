@@ -44,6 +44,10 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="user_not_found_text">User Not Found</string>
     <string name="camera_permission_denied_text">Camera permission denied</string>
 
+    <string name="confirm_changes_title">Confirm Changes</string>
+    <string name="confirm_changes_message">Are you sure you want to save these changes?</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
 
     <string name="no_friend_text">No Friends</string>
     <string name="request_friends_text">Friend Requests</string>
