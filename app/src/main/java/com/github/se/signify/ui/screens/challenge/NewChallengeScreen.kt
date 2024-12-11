@@ -128,7 +128,22 @@ fun NewChallengeScreen(
                           modifier = Modifier.testTag("OngoingChallengesLazyColumn")) {
                             items(ongoingChallenges.size) { index ->
                               val challenge = ongoingChallenges[index]
+                                // Check if both players have completed all rounds
+                                val isBothCompleted = challenge.player1RoundCompleted.all { it } &&
+                                        challenge.player2RoundCompleted.all { it }
 
+                                if (isBothCompleted) {
+                                    // Determine the winner
+                                    val player1Time = challenge.player1Times.sum()
+                                    val player2Time = challenge.player2Times.sum()
+                                    val winner = if (player1Time < player2Time) challenge.player1 else challenge.player2
+
+                                    // Update the challenge in pastChallenges
+                                    userViewModel.removeOngoingChallenge(userSession.getUserId()!!, challenge.challengeId)
+                                    userViewModel.addPastChallenge(userSession.getUserId()!!, challenge.challengeId)
+                                    userViewModel.incrementField(winner, "challengesWon")
+                                    challengeRepository.updateWinner(challenge.challengeId, winner,{},{})
+                                }
                               OngoingChallengeCard(
                                   challenge = challenge,
                                   onDeleteClick = {

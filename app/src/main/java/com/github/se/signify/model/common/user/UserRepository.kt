@@ -111,4 +111,15 @@ interface UserRepository {
   fun updateStreak(userId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit)
 
   fun getStreak(userId: String, onSuccess: (Long) -> Unit, onFailure: (Exception) -> Unit)
+
+    fun addPastChallenge(userId: String, challengeId: String)
+    fun incrementField(userId: String, fieldName: String)
+    fun updateUserField(
+        userId: String,
+        fieldName: String,
+        value: Any,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    )
+
 }

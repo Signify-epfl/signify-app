@@ -83,8 +83,12 @@ fun ChronoChallengeGameScreen(
           currentChallenge = challenge
           if (challenge.roundWords.isNotEmpty() &&
               challenge.round > 0 &&
-              challenge.round <= challenge.roundWords.size) {
-            currentWord = challenge.roundWords[challenge.round - 1]
+              challenge.round <= 6) {
+              currentWord = if (challenge.round <= 3){
+                  challenge.roundWords[challenge.round - 1]
+              } else {
+                  challenge.roundWords[(challenge.round-1)%3]
+              }
             currentLetterIndex = 0
             typedWord = ""
             isGameActive = true
@@ -144,11 +148,7 @@ fun ChronoChallengeGameScreen(
     return
   }
 
-  // If the challenge is completed, show completed message
-  if (currentChallenge?.gameStatus == "completed") {
-    DisplayChallengeCompletedText()
-    return
-  }
+
 
   // Render the challenge screen
   AnnexScreenScaffold(
@@ -298,16 +298,21 @@ fun onWordCompletion(
   challenge?.let {
     val updatedChallenge =
         it.copy(
-            gameStatus = if (it.round == 3) "completed" else "in_progress",
+            gameStatus = if (it.round == 6) "completed" else "in_progress",
             round = it.round + 1,
-            player1RoundCompleted =
-                it.player1RoundCompleted.toMutableList().apply {
-                  if (currentUserId == it.player1) this[it.round - 1] = true
-                },
-            player2RoundCompleted =
-                it.player2RoundCompleted.toMutableList().apply {
-                  if (currentUserId == it.player2) this[it.round - 1] = true
-                },
+            player1RoundCompleted = it.player1RoundCompleted.toMutableList().apply {
+                if (currentUserId == it.player1) {
+                    val nextIndex = this.indexOfFirst { roundCompleted -> !roundCompleted }
+                    if (nextIndex != -1) this[nextIndex] = true // Mark the next incomplete round as complete
+                }
+            },
+            player2RoundCompleted = it.player2RoundCompleted.toMutableList().apply {
+                if (currentUserId == it.player2) {
+                    val nextIndex = this.indexOfFirst { roundCompleted -> !roundCompleted }
+                    if (nextIndex != -1) this[nextIndex] = true // Mark the next incomplete round as complete
+                }
+            },
+
             player1Times =
                 it.player1Times.toMutableList().apply {
                   if (currentUserId == it.player1) add(elapsedTime)

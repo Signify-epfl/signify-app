@@ -259,4 +259,44 @@ open class UserViewModel(
         onSuccess = { s -> _streak.value = s },
         onFailure = { e -> Log.e(logTag, "Failed to get user's streak: ${e.message}}") })
   }
+    fun addPastChallenge(userId: String, challengeId: String) {
+        repository.getUserById(
+            userId = userId,
+            onSuccess = { user ->
+                // Update the pastChallenges list in Firestore
+                repository.updateUserField(
+                    userId = userId,
+                    fieldName = "pastChallenges",
+                    value = user.pastChallenges + challengeId, // Add the new challengeId
+                    onSuccess = { Log.d("UserViewModel", "Challenge added to pastChallenges") },
+                    onFailure = { e -> Log.e("UserViewModel", "Failed to add past challenge: ${e.message}") }
+                )
+            },
+            onFailure = { e -> Log.e("UserViewModel", "Failed to fetch user: ${e.message}") }
+        )
+    }
+    fun incrementField(userId: String, fieldName: String) {
+        repository.getUserById(
+            userId = userId,
+            onSuccess = { user ->
+                val currentValue = when (fieldName) {
+                    "challengesCreated" -> user.challengesCreated
+                    "challengesCompleted" -> user.challengesCompleted
+                    "challengesWon" -> user.challengesWon
+                    else -> throw IllegalArgumentException("Invalid field name")
+                }
+
+                // Update the field in Firestore
+                repository.updateUserField(
+                    userId = userId,
+                    fieldName = fieldName,
+                    value = (currentValue ?: 0) + 1,
+                    onSuccess = { Log.d("UserViewModel", "Field $fieldName incremented successfully") },
+                    onFailure = { e -> Log.e("UserViewModel", "Failed to increment field: ${e.message}") }
+                )
+            },
+            onFailure = { e -> Log.e("UserViewModel", "Failed to fetch user: ${e.message}") }
+        )
+    }
+
 }

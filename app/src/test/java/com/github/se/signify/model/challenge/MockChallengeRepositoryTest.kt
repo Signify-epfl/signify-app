@@ -128,8 +128,8 @@ class MockChallengeRepositoryTest {
   fun `setChallenges correctly sets the list`() {
     val newChallenges =
         listOf(
-            Challenge("challenge1", "player1", "player2", "Sprint", "pending"),
-            Challenge("challenge2", "player3", "player4", "Chrono", "active"))
+            Challenge("challenge1", "player1", "player2", "Sprint"),
+            Challenge("challenge2", "player3", "player4", "Chrono"))
 
     mockRepository.setChallenges(newChallenges)
 
@@ -143,7 +143,7 @@ class MockChallengeRepositoryTest {
   @Test
   fun `reset clears all tracked calls and challenges`() {
     mockRepository.setChallenges(
-        listOf(Challenge("challenge1", "player1", "player2", "Sprint", "pending")))
+        listOf(Challenge("challenge1", "player1", "player2", "Sprint")))
     mockRepository.sendChallengeRequest(
         "player1", "player2", ChallengeMode.SPRINT, "challenge1", listOf("A", "B", "C"), {}, {})
     mockRepository.deleteChallenge("challenge1", {}, {})
@@ -173,8 +173,8 @@ class MockChallengeRepositoryTest {
   fun `getDeleteChallengeCalls returns all deleted challenge IDs`() {
     mockRepository.setChallenges(
         listOf(
-            Challenge("challenge1", "player1", "player2", "Sprint", "pending"),
-            Challenge("challenge2", "player3", "player4", "Chrono", "active")))
+            Challenge("challenge1", "player1", "player2", "Sprint"),
+            Challenge("challenge2", "player3", "player4", "Chrono")))
     mockRepository.deleteChallenge("challenge1", {}, {})
     mockRepository.deleteChallenge("challenge2", {}, {})
 
@@ -217,15 +217,13 @@ class MockChallengeRepositoryTest {
             challengeId = challengeId,
             player1 = player1Id,
             player2 = player2Id,
-            mode = "Sprint",
-            status = "completed")
+            mode = "Sprint")
 
     mockRepository.updateChallenge(
         updatedChallenge = updatedChallenge,
         onSuccess = {
           val retrievedChallenge = mockRepository.getChallenge(challengeId)
           assertNotNull(retrievedChallenge)
-          assertEquals("completed", retrievedChallenge?.status)
         },
         onFailure = { fail("onFailure should not be called") })
   }
@@ -237,8 +235,7 @@ class MockChallengeRepositoryTest {
             challengeId = "nonExistentChallenge",
             player1 = player1Id,
             player2 = player2Id,
-            mode = "Sprint",
-            status = "completed")
+            mode = "Sprint",)
 
     mockRepository.updateChallenge(
         updatedChallenge = updatedChallenge,

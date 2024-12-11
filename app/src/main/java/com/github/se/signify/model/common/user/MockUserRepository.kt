@@ -305,7 +305,61 @@ class MockUserRepository : UserRepository {
     onSuccess(user.currentStreak)
   }
 
-  private fun checkFailure(onFailure: (Exception) -> Unit): Boolean {
+    override fun addPastChallenge(
+        userId: String,
+        challengeId: String,
+    ) {
+        val user = users.getValue(userId)
+        users[userId] = user.copy(pastChallenges = user.pastChallenges + challengeId) // Add challenge
+    }
+
+    override fun incrementField(
+        userId: String,
+        fieldName: String,
+    ) {
+
+        val user = users.getValue(userId)
+
+        // Increment the specific field
+        val updatedUser = when (fieldName) {
+            "challengesCreated" -> user.copy(challengesCreated = (user.challengesCreated) + 1)
+            "challengesCompleted" -> user.copy(challengesCompleted = (user.challengesCompleted) + 1)
+            "challengesWon" -> user.copy(challengesWon = (user.challengesWon) + 1)
+            else -> {
+                return
+            }
+        }
+        users[userId] = updatedUser
+    }
+
+
+    override fun updateUserField(
+        userId: String,
+        fieldName: String,
+        value: Any,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val user = users[userId]
+        if (user == null) {
+            onFailure(Exception("User not found"))
+            return
+        }
+
+        val updatedUser = when (fieldName) {
+            "challengesCreated" -> user.copy(challengesCreated = value as Int)
+            "challengesCompleted" -> user.copy(challengesCompleted = value as Int)
+            "challengesWon" -> user.copy(challengesWon = value as Int)
+            "pastChallenges" -> user.copy(pastChallenges = value as List<String>)
+            else -> throw IllegalArgumentException("Invalid field name")
+        }
+
+        users[userId] = updatedUser
+        onSuccess()
+    }
+
+
+    private fun checkFailure(onFailure: (Exception) -> Unit): Boolean {
     if (shouldFail) {
       onFailure(failureException)
       return false

@@ -182,7 +182,7 @@ class FirestoreChallengeRepositoryTest {
 
   @Test
   fun updateChallenge_shouldUpdateChallengeInFirestore() {
-    val updatedChallenge = Challenge(challengeId = challengeId, status = "in_progress")
+    val updatedChallenge = Challenge(challengeId = challengeId)
     `when`(mockChallengeDocRef.set(updatedChallenge)).thenReturn(Tasks.forResult(null))
 
     var successCalled = false
@@ -199,7 +199,7 @@ class FirestoreChallengeRepositoryTest {
 
   @Test
   fun updateChallenge_shouldCallOnFailureOnFirestoreError() {
-    val updatedChallenge = Challenge(challengeId = challengeId, status = "in_progress")
+    val updatedChallenge = Challenge(challengeId = challengeId)
     val exception = Exception("Firestore error")
     `when`(mockChallengeDocRef.set(updatedChallenge)).thenReturn(Tasks.forException(exception))
 

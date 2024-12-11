@@ -523,4 +523,28 @@ class FirestoreUserRepository(
       }
     }
   }
+
+    override fun addPastChallenge(userId: String, challengeId: String) {
+        val userRef = db.collection(collectionPath).document(userId)
+        userRef.update("pastChallenges", FieldValue.arrayUnion(challengeId))
+    }
+
+    override fun incrementField(userId: String, fieldName: String) {
+        val userRef = db.collection(collectionPath).document(userId)
+        userRef.update(fieldName, FieldValue.increment(1))
+    }
+    override fun updateUserField(
+        userId: String,
+        fieldName: String,
+        value: Any,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val userRef = db.collection(collectionPath).document(userId)
+        userRef
+            .update(fieldName, value)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { e -> onFailure(e) }
+    }
+
 }
