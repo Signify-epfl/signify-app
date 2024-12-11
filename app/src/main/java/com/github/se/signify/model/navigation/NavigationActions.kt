@@ -49,7 +49,18 @@ open class NavigationActions(
       onUnauthenticated()
       return
     }
-    navController.navigate(screen.route)
+    val route =
+        if (params != null) {
+          var routeWithParams = screen.route
+          params.forEach { (key, value) ->
+            routeWithParams = routeWithParams.replace("{$key}", value)
+          }
+          routeWithParams
+        } else {
+          screen.route
+        }
+
+    navController.navigate(route)
   }
 
   open fun goBack() {

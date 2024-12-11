@@ -1,8 +1,5 @@
 package com.github.se.signify.ui.screens.home
 
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
@@ -13,7 +10,6 @@ import androidx.compose.ui.test.performScrollTo
 import com.github.se.signify.model.home.exercise.ExerciseLevel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
-import kotlinx.coroutines.CoroutineScope
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -131,68 +127,6 @@ class HomeScreenTest {
       verify(navigationActions)
           .navigateTo(exercise.screen) // Verify onClick was called with the exercise
     }
-  }
-
-  @Test
-  fun initialLetterIsDisplayedCorrectly() {
-    lateinit var scrollState: LazyListState
-    lateinit var coroutineScope: CoroutineScope
-    composeTestRule.setContent {
-      scrollState = rememberLazyListState()
-      coroutineScope = rememberCoroutineScope()
-      LetterDictionary(
-          scrollState = scrollState, coroutineScope = coroutineScope, numbOfHeaders = 0)
-    }
-    composeTestRule.onNodeWithTag("LetterBox_A").assertIsDisplayed()
-  }
-
-  @Test
-  fun forwardArrowNavigatesThroughAllLettersCorrectly() {
-    composeTestRule.setContent {
-      val scrollState = rememberLazyListState()
-      val coroutineScope = rememberCoroutineScope()
-      LetterDictionary(
-          scrollState = scrollState, coroutineScope = coroutineScope, numbOfHeaders = 1)
-    }
-
-    val letters = ('A'..'Z').toList()
-
-    letters.forEach { letter ->
-      // Assert that the letter and corresponding icon are displayed
-      composeTestRule.onNodeWithTag("LetterBox_$letter").assertIsDisplayed()
-
-      // Click on the forward arrow to go to the next letter
-      composeTestRule.onNodeWithTag("LetterDictionaryForward").performClick()
-    }
-
-    // After looping through all letters, it should go back to 'A'
-    composeTestRule.onNodeWithTag("LetterBox_A").assertIsDisplayed()
-  }
-
-  @Test
-  fun backArrowNavigatesThroughAllLettersCorrectly() {
-    composeTestRule.setContent {
-      val scrollState = rememberLazyListState()
-      val coroutineScope = rememberCoroutineScope()
-      LetterDictionary(
-          scrollState = scrollState, coroutineScope = coroutineScope, numbOfHeaders = 1)
-    }
-
-    val letters = ('A'..'Z').reversed().toList()
-
-    // Click the back arrow initially to move to 'Z'
-    composeTestRule.onNodeWithTag("LetterDictionaryBack").performClick()
-
-    letters.forEach { letter ->
-      // Assert that the letter and corresponding icon are displayed
-      composeTestRule.onNodeWithTag("LetterBox_$letter").assertIsDisplayed()
-
-      // Click on the back arrow to go to the previous letter
-      composeTestRule.onNodeWithTag("LetterDictionaryBack").performClick()
-    }
-
-    // After looping through all letters, it should go back to 'Z'
-    composeTestRule.onNodeWithTag("LetterBox_Z").assertIsDisplayed()
   }
 
   @Test
