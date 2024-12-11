@@ -35,14 +35,14 @@ class HomeScreenTest {
     composeTestRule.setContent { HomeScreen(navigationActions = navigationActions) }
 
     // Assert that all elements are displayed in ChallengeScreen
-    composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("QuestsButton").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("QuestsButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("FeedbackButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("QuizButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("CameraFeedbackButton").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("LetterDictionary").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("LetterDictionaryBack").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("LetterDictionaryForward").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("ExerciseListPager").performScrollTo().assertIsDisplayed()
-    composeTestRule.onNodeWithTag("FeedbackButton").performScrollTo().assertIsDisplayed()
   }
 
   @Test

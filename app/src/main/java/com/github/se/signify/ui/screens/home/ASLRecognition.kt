@@ -64,6 +64,7 @@ fun ASLRecognition(
   val displayText = if (landmarksState.value.isNullOrEmpty()) makeASignText else detectedGesture
   val paintColor = MaterialTheme.colorScheme.background
   AnnexScreenScaffold(navigationActions = navigationActions, testTag = "ASLRecognitionScreen") {
+    Spacer(modifier = Modifier.height(32.dp))
     Box(
         modifier =
             Modifier.fillMaxWidth().weight(1f).background(MaterialTheme.colorScheme.background)) {

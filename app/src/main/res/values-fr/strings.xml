@@ -181,7 +181,6 @@
     <string name="tip_y">Conseils : Étendez votre petit doigt et pouce vers l’extérieur, tandis que les autres doigts sont repliés vers le bas.</string>
     <string name="tip_z">Conseils : Déplacez votre index pour tracer une forme en Z dans l’air.</string>
     <string name="unauthenticated_error_text">Vous devez être connecté pour accéder à cette fonctionnalité</string>
-    <integer name="scroll_offset">8</integer>
     <string name="friends_requests_text">Demandes</string>
     <string name="friends_text">Amis</string>
     <string name="pref_name">theme_prefs</string>

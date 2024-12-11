@@ -20,10 +20,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -40,91 +37,109 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.github.se.signify.R
 import com.github.se.signify.model.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.model.navigation.TopLevelDestination
+
+data class HelpText(val title: String, val content: String)
 
 /**
  * The scaffold for all main screens.
  *
  * @param navigationActions The navigationActions of the bottom navigation menu.
  * @param testTag The test tag of the column (test tag of the screen).
- * @param helpTitle The title of the info popup.
- * @param helpText The text of the info popup.
- * @param floatingActionButton A lambda function for the floating action button.
+ * @param helpText The optional text for a help popup.
+ * @param topBarButtons A list of optional buttons to display in the top bar. They should be
+ *   `Buttons.BasicButton()`s.
+ * @param floatingActionButton An optional floating action button. It should be a
+ *   `Button.BasicButton()`.
  * @param content A lambda function for the content of the column.
  */
 @Composable
 fun MainScreenScaffold(
     navigationActions: NavigationActions,
     testTag: String,
-    helpTitle: String,
-    helpText: String,
+    helpText: HelpText? = null,
+    topBarButtons: List<@Composable () -> Unit> = emptyList(),
     floatingActionButton: @Composable () -> Unit = {},
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable (ColumnScope.() -> Unit)
 ) {
-  var isHelpBoxVisible by remember { mutableStateOf(false) }
   Scaffold(
       floatingActionButton = { floatingActionButton() },
-      topBar = { TopBar() },
+      topBar = {
+        TopBar(
+            buttons = topBarButtons,
+            helpText = helpText,
+        )
+      },
       bottomBar = { BottomBar(navigationActions) },
-      content = { padding ->
-        ScreenColumn(
-            padding,
-            testTag,
-        ) {
-          BasicButton(
-              onClick = { isHelpBoxVisible = !isHelpBoxVisible },
-              icon = Icons.Outlined.Info,
-              iconTestTag = "InfoIcon",
-              contentDescription = "Help",
-              modifier = Modifier.testTag("InfoButton"),
-          )
-          content()
-          // Show popup when the info button is clicked
-          if (isHelpBoxVisible) {
-            InfoPopup(
-                onDismiss = { isHelpBoxVisible = false },
-                helpTitle = helpTitle,
-                helpText = helpText)
-          }
-        }
-      })
+      content = { padding -> ScreenColumn(padding, testTag, content) })
 }
+
 /**
  * The scaffold for all annex screens.
  *
  * @param navigationActions The navigationActions of the bottom navigation menu.
  * @param testTag The test tag of the column (test tag of the screen).
+ * @param topBarButtons A list of optional buttons to display in the top bar. They should be
+ *   `Buttons.BasicButton()`s.
  * @param content A lambda function for the content of the column.
  */
 @Composable
 fun AnnexScreenScaffold(
     navigationActions: NavigationActions,
     testTag: String,
-    content: @Composable ColumnScope.() -> Unit
+    helpText: HelpText? = null,
+    topBarButtons: List<@Composable () -> Unit> = emptyList(),
+    content: @Composable (ColumnScope.() -> Unit)
 ) {
   Scaffold(
-      topBar = { TopBar() },
-      content = { padding ->
-        ScreenColumn(padding, testTag) {
-          BackButton { navigationActions.goBack() }
-          content()
-        }
-      })
+      topBar = {
+        TopBar(
+            buttons =
+                listOf<@Composable () -> Unit> { BackButton(navigationActions) } + topBarButtons,
+            helpText = helpText,
+        )
+      },
+      content = { padding -> ScreenColumn(padding, testTag, content) })
 }
+
+@Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun TopBar(buttons: List<@Composable () -> Unit>, helpText: HelpText?) {
+  Column(modifier = Modifier.testTag("TopBar")) {
+    TopLine()
+
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(12.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+      buttons.forEach { it() }
+
+      // Align the help button to the right
+      if (buttons.isEmpty()) {
+        Spacer(modifier = Modifier.weight(1f))
+      }
+
+      if (helpText != null) {
+        HelpButton(helpText)
+      }
+    }
+
+    SeparatorLine()
+  }
+}
+
 /**
  * The basic column for all screens. This is a helper function for `MainScreenScaffold()` and
  * `AnnexScreenScaffold()`.
@@ -144,7 +159,7 @@ fun ScreenColumn(
       modifier =
           Modifier.fillMaxSize()
               .padding(padding)
-              .padding(16.dp)
+              .padding(horizontal = 16.dp)
               .verticalScroll(rememberScrollState())
               .background(MaterialTheme.colorScheme.background)
               .testTag(testTag),
@@ -152,73 +167,93 @@ fun ScreenColumn(
         content()
       }
 }
+
 /** The decorative line at the top of screens. */
 @Composable
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-fun TopBar() {
+fun TopLine() {
   Box(
       modifier =
           Modifier.fillMaxWidth()
               .height(5.dp)
               .background(MaterialTheme.colorScheme.primary)
-              .testTag("TopBar"))
+              .testTag("TopLine"))
 }
+
+@Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun SeparatorLine() {
+  Box(
+      modifier =
+          Modifier.fillMaxWidth()
+              .height(1.dp)
+              .background(MaterialTheme.colorScheme.outline)
+              .testTag("SeparatorLine"))
+}
+
+@Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun HelpButton(helpText: HelpText) {
+  var isHelpBoxVisible by remember { mutableStateOf(false) }
+  BasicButton(
+      onClick = { isHelpBoxVisible = !isHelpBoxVisible },
+      icon = Icons.Outlined.Info,
+      iconTestTag = "HelpIcon",
+      contentDescription = "Help",
+      modifier = Modifier.testTag("HelpButton"),
+  )
+
+  // Show popup when the help button is clicked
+  if (isHelpBoxVisible) {
+    HelpPopup(
+        onDismiss = { isHelpBoxVisible = false },
+        helpText,
+    )
+  }
+}
+
 /**
  * The info popup for main screens.
  *
  * @param onDismiss A lambda function to execute when the button or outside the box or is clicked.
- * @param helpTitle The title of the info popup.
- * @param helpText The text of the info popup.
+ * @param helpText The help popup to display.
  */
 @Composable
-fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun HelpPopup(onDismiss: () -> Unit, helpText: HelpText) {
   Dialog(onDismissRequest = { onDismiss() }) {
     Surface(
         shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.background, // Background for the popup
+        color = MaterialTheme.colorScheme.background,
         modifier =
-            Modifier.border(
-                    3.dp,
-                    MaterialTheme.colorScheme.primary,
-                    RoundedCornerShape(12.dp)) // Ensure the border wraps the popup
-                .testTag("InfoPopup")) {
+            Modifier.border(3.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
+                .testTag("HelpPopup")) {
           Column(
-              modifier = Modifier.padding(16.dp).fillMaxWidth().testTag("InfoPopupContent"),
+              modifier = Modifier.padding(16.dp).fillMaxWidth().testTag("HelpPopupContent"),
               horizontalAlignment = Alignment.CenterHorizontally) {
-                // Title centered and underlined
+                // Title
                 Text(
                     text =
                         buildAnnotatedString {
-                          withStyle(
-                              style =
-                                  SpanStyle(
-                                      fontWeight = FontWeight.Bold,
-                                      textDecoration = TextDecoration.Underline)) {
-                                append(helpTitle)
-                              }
+                          withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append(helpText.title)
+                          }
                         },
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.testTag("InfoPopupTitle"))
+                    fontSize = 24.sp,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Left,
+                    modifier = Modifier.testTag("HelpPopupTitle"))
+
                 Spacer(modifier = Modifier.height(8.dp))
-                // Body text centered under the title
+
+                // Body
                 Text(
-                    text = helpText,
+                    text = helpText.content,
                     fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.testTag("InfoPopupBody"))
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Justify,
+                    modifier = Modifier.testTag("HelpPopupBody"))
                 Spacer(modifier = Modifier.height(16.dp))
-                // Close button for the popup
-                Button(
-                    onClick = { onDismiss() },
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-                    modifier = Modifier.testTag("InfoPopupCloseButton")) {
-                      Text(
-                          text = stringResource(R.string.close_text),
-                          color = MaterialTheme.colorScheme.onPrimary)
-                    }
               }
         }
   }
@@ -226,17 +261,14 @@ fun InfoPopup(onDismiss: () -> Unit, helpTitle: String, helpText: String) {
 
 @Composable
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-fun BackButton(onClick: () -> Unit) {
-  Row(
-      modifier = Modifier.fillMaxWidth().padding(16.dp),
-      horizontalArrangement = Arrangement.Start) {
-        IconButton(onClick = { onClick() }, modifier = Modifier.testTag("BackButton")) {
-          Icon(
-              imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-              contentDescription = "BackButton",
-              tint = MaterialTheme.colorScheme.primary)
-        }
-      }
+fun BackButton(navigationActions: NavigationActions) {
+  BasicButton(
+      onClick = { navigationActions.goBack() },
+      icon = Icons.AutoMirrored.Filled.ArrowBack,
+      iconTestTag = "BackIcon",
+      contentDescription = "Back",
+      modifier = Modifier.testTag("BackButton"),
+  )
 }
 
 @Composable

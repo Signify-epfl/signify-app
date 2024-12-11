@@ -1,5 +1,6 @@
 package com.github.se.signify.ui.screens.home
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -54,6 +55,7 @@ import com.github.se.signify.model.home.exercise.ExerciseLevelName
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.common.BasicButton
+import com.github.se.signify.ui.common.HelpText
 import com.github.se.signify.ui.common.LetterDictionary
 import com.github.se.signify.ui.common.MainScreenScaffold
 import com.github.se.signify.ui.common.TextButton
@@ -76,8 +78,15 @@ fun HomeScreen(navigationActions: NavigationActions) {
   MainScreenScaffold(
       navigationActions = navigationActions,
       testTag = "HomeScreen",
-      helpTitle = stringResource(R.string.home_text),
-      helpText = stringResource(R.string.help_home_screen_text),
+      helpText =
+          HelpText(
+              title = stringResource(R.string.home_text),
+              content = stringResource(R.string.help_home_screen_text)),
+      topBarButtons =
+          listOf<@Composable () -> Unit>(
+              { FeedbackButton(navigationActions) },
+              { QuizButton(navigationActions) },
+              { QuestsButton(navigationActions) }),
       floatingActionButton = {
         FloatingActionButton(
             onClick = { coroutineScope.launch { scrollState.animateScrollToItem(0) } },
@@ -86,36 +95,12 @@ fun HomeScreen(navigationActions: NavigationActions) {
             modifier = Modifier.testTag("ScrollToTopButton")) {
               Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Scroll to Top")
             }
-      }) {
+      },
+      content = {
         LazyColumn(
             state = scrollState, modifier = Modifier.weight(1f)
             // Ensures LazyColumn takes up the remaining space without infinite height constraints
             ) {
-              item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween) {
-                      BasicButton(
-                          onClick = { navigationActions.navigateTo(Screen.FEEDBACK) },
-                          iconTestTag = "FeedbackIcon",
-                          icon = Icons.Outlined.Email,
-                          contentDescription = "Feedback",
-                          modifier = Modifier.testTag("FeedbackButton"))
-                      BasicButton(
-                          onClick = { navigationActions.navigateTo(Screen.QUIZ) },
-                          iconTestTag = "QuizIcon",
-                          icon = Icons.Outlined.Star,
-                          contentDescription = "Quizzes",
-                          modifier = Modifier.testTag("QuizButton"))
-                      BasicButton(
-                          onClick = { navigationActions.navigateTo(Screen.QUEST) },
-                          iconTestTag = "QuestIcon",
-                          icon = Icons.Outlined.DateRange,
-                          contentDescription = "Quests",
-                          modifier = Modifier.testTag("QuestsButton"))
-                    }
-              }
-
               item { Spacer(modifier = Modifier.height(32.dp)) }
 
               item {
@@ -150,7 +135,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
                 Spacer(modifier = Modifier.height(16.dp))
               }
             }
-      }
+      })
 }
 
 /**
@@ -302,4 +287,37 @@ fun SignTipBox(letter: Char, modifier: Modifier = Modifier) {
               }
             }
       }
+}
+
+@Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun FeedbackButton(navigationActions: NavigationActions) {
+  BasicButton(
+      onClick = { navigationActions.navigateTo(Screen.FEEDBACK) },
+      iconTestTag = "FeedbackIcon",
+      icon = Icons.Outlined.Email,
+      contentDescription = "Feedback",
+      modifier = Modifier.testTag("FeedbackButton"))
+}
+
+@Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun QuizButton(navigationActions: NavigationActions) {
+  BasicButton(
+      onClick = { navigationActions.navigateTo(Screen.QUIZ) },
+      iconTestTag = "QuizIcon",
+      icon = Icons.Outlined.Star,
+      contentDescription = "Quizzes",
+      modifier = Modifier.testTag("QuizButton"))
+}
+
+@Composable
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun QuestsButton(navigationActions: NavigationActions) {
+  BasicButton(
+      onClick = { navigationActions.navigateTo(Screen.QUEST) },
+      iconTestTag = "QuestIcon",
+      icon = Icons.Outlined.DateRange,
+      contentDescription = "Quests",
+      modifier = Modifier.testTag("QuestsButton"))
 }
