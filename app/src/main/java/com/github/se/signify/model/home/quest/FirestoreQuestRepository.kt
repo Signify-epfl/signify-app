@@ -1,5 +1,6 @@
 package com.github.se.signify.model.home.quest
 
+import com.github.se.signify.R
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -46,6 +47,19 @@ class FirestoreQuestRepository(private val db: FirebaseFirestore) : QuestReposit
 
   internal fun fetchVideo(word: String): String {
     val sanitizedWord = word.replace(" ", "").lowercase() // Remove spaces and convert to lowercase
-    return "$videoPathBase$sanitizedWord"
+    val videoPath = "$videoPathBase$sanitizedWord"
+
+    // Check if the video path is valid
+    return if (isVideoPathValid(sanitizedWord)) videoPath else "$videoPathBase/hello"
+  }
+
+  // function to check if the video exists
+  internal fun isVideoPathValid(resourceName: String): Boolean {
+    return try {
+      val resId = R.raw::class.java.getField(resourceName).getInt(null)
+      resId != 0 // If the resource ID exists, it's valid
+    } catch (e: Exception) {
+      false // Resource not found
+    }
   }
 }
