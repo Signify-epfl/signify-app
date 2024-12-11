@@ -34,7 +34,8 @@ class MockStatsRepositoryTest(
             weeklyQuest = 1,
             completedChallenge = 4,
             createdChallenge = 2,
-            wonChallenge = 3)
+            wonChallenge = 3,
+            timePerLetter = listOf(1000L, 1024L, 777L))
 
     @JvmStatic
     @Parameterized.Parameters
@@ -249,6 +250,61 @@ class MockStatsRepositoryTest(
     mockStatsRepository.getLettersLearned(
         userId,
         onSuccess = { lettersLearned -> assertEquals(initialStats.lettersLearned, lettersLearned) },
+        onFailure = { fail("This should not fail") })
+  }
+
+  @Test
+  fun getTimePerLetterShouldReturnCorrectValueOnSuccess() {
+    mockStatsRepository.getTimePerLetter(
+        userId,
+        onSuccess = { timePerLetter -> assertEquals(initialStats.timePerLetter, timePerLetter) },
+        onFailure = { fail("This should not fail") })
+    assertTrue(mockStatsRepository.wasMethodCalled("getTimePerLetter"))
+  }
+
+  @Test
+  fun getTimePerLetterShouldFailWhenShouldSucceedIsFalse() {
+    mockStatsRepository.shouldSucceed = false
+    mockStatsRepository.getTimePerLetter(
+        userId,
+        onSuccess = { fail("This should not succeed") },
+        onFailure = { exception -> assertEquals("Simulated failure", exception.message) })
+    assertTrue(mockStatsRepository.wasMethodCalled("getTimePerLetter"))
+  }
+
+  @Test
+  fun updateTimePerLetterShouldAddANewTimeOnSuccess() {
+    val newTimePerLetter = listOf(1000L, 1024L, 777L, 222L)
+    mockStatsRepository.updateTimePerLetter(
+        userId, newTimePerLetter, onSuccess = {}, onFailure = { fail("This should not fail") })
+
+    assertTrue(mockStatsRepository.wasMethodCalled("updateTimePerLetter"))
+
+    mockStatsRepository.getTimePerLetter(
+        userId,
+        onSuccess = { timePerLetter ->
+          assertEquals(initialStats.timePerLetter + 222L, timePerLetter)
+        },
+        onFailure = { fail("This should not fail") })
+  }
+
+  @Test
+  fun updateTimePerLetterShouldNotModifyTimeOnFailure() {
+    val newTimePerLetter = listOf(1000L, 1024L, 777L, 222L)
+    mockStatsRepository.shouldSucceed = false
+
+    mockStatsRepository.updateTimePerLetter(
+        userId,
+        newTimePerLetter,
+        onSuccess = { fail("This should not succeed") },
+        onFailure = { exception -> assertEquals("Simulated failure", exception.message) })
+
+    assertTrue(mockStatsRepository.wasMethodCalled("updateTimePerLetter"))
+
+    mockStatsRepository.shouldSucceed = true
+    mockStatsRepository.getTimePerLetter(
+        userId,
+        onSuccess = { time -> assertEquals(initialStats.timePerLetter, time) },
         onFailure = { fail("This should not fail") })
   }
 }

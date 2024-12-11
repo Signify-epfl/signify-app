@@ -42,6 +42,7 @@ import com.github.se.signify.R
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.home.exercise.ExerciseLevel
 import com.github.se.signify.model.home.exercise.ExerciseLevelName
+import com.github.se.signify.model.home.exercise.ExerciseTrackTime
 import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.profile.stats.StatsRepository
@@ -80,6 +81,8 @@ fun ExerciseScreen(
         List(3) { realSentences.filter { exerciseLevel.wordFilter?.invoke(it) ?: true }.random() })
   }
 
+  val trackTime = ExerciseTrackTime(statsViewModel = statsViewModel)
+
   var currentSentenceIndex by rememberSaveable { mutableIntStateOf(0) }
   var currentWordIndex by rememberSaveable { mutableIntStateOf(0) }
   var currentLetterIndex by rememberSaveable { mutableIntStateOf(0) }
@@ -113,7 +116,8 @@ fun ExerciseScreen(
           currentSentenceIndex = 0
           currentWordIndex = 0
           currentLetterIndex = 0
-        })
+        },
+        trackTime = trackTime)
   }
 
   AnnexScreenScaffold(navigationActions = navigationActions, testTag = exerciseLevel.screenTag) {
@@ -177,12 +181,15 @@ fun onSuccess(
     currentSentenceIndex: Int,
     sentences: List<String>,
     onProgressUpdate: (newLetterIndex: Int, newWordIndex: Int, newSentenceIndex: Int) -> Unit,
-    onAllSentencesComplete: () -> Unit
+    onAllSentencesComplete: () -> Unit,
+    trackTime: ExerciseTrackTime
 ) {
   // Retrieve the current sentence and split it into words
   val currentSentence = sentences[currentSentenceIndex]
   val words = currentSentence.split(" ")
   val currentWord = words[currentWordIndex]
+
+  trackTime.updateTrackingAndCallUpdateTimePerLetter()
 
   when {
     // Move to the next letter within the current word
@@ -403,7 +410,8 @@ fun handleGestureMatching(
     currentSentenceIndex: Int,
     sentencesList: List<String>,
     onProgressUpdate: (newLetterIndex: Int, newWordIndex: Int, newSentenceIndex: Int) -> Unit,
-    onAllSentencesComplete: () -> Unit
+    onAllSentencesComplete: () -> Unit,
+    trackTime: ExerciseTrackTime
 ) {
   val currentLetter =
       getCurrentLetter(sentencesList, currentLetterIndex, currentWordIndex, currentSentenceIndex)
@@ -414,7 +422,8 @@ fun handleGestureMatching(
         currentSentenceIndex = currentSentenceIndex,
         sentences = sentencesList,
         onProgressUpdate = onProgressUpdate,
-        onAllSentencesComplete = onAllSentencesComplete)
+        onAllSentencesComplete = onAllSentencesComplete,
+        trackTime = trackTime)
   } else {
     Log.d(
         "ExerciseScreenEasy",

@@ -9,5 +9,6 @@ data class Stats(
     val weeklyQuest: Int = 0,
     val completedChallenge: Int = 0,
     val createdChallenge: Int = 0,
-    val wonChallenge: Int = 0
+    val wonChallenge: Int = 0,
+    val timePerLetter: List<Long> = emptyList()
 )
