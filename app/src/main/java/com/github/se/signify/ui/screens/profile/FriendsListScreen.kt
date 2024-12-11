@@ -80,11 +80,16 @@ fun FriendsListScreen(
   var errorMessage by remember { mutableStateOf("") }
   var selectedList by remember { mutableStateOf(friendsString) }
 
-  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "FriendsListScreen") {
+  AnnexScreenScaffold(
+      navigationActions = navigationActions,
+      testTag = "FriendsListScreen",
+  ) {
     LaunchedEffect(Unit) {
       userViewModel.getFriendsList()
       userViewModel.getRequestsFriendsList()
     }
+
+    Spacer(modifier = Modifier.height(32.dp))
 
     val friends = userViewModel.friends.collectAsState()
     val friendsRequests = userViewModel.friendsRequests.collectAsState()

@@ -151,7 +151,12 @@ fun ChronoChallengeGameScreen(
   }
 
   // Render the challenge screen
-  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "ChronoChallengeScreen") {
+  AnnexScreenScaffold(
+      navigationActions = navigationActions,
+      testTag = "ChronoChallengeScreen",
+  ) {
+    Spacer(modifier = Modifier.height(32.dp))
+
     if (currentWord.isNotEmpty()) {
       ChronoChallengeContent(
           elapsedTime = elapsedTime,

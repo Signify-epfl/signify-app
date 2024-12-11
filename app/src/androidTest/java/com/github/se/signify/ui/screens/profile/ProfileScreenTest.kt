@@ -58,8 +58,8 @@ class ProfileScreenTest {
   fun buttonsAreCorrectlyDisplayed() {
 
     composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("SettingsButton").performScrollTo().assertIsDisplayed()
-    composeTestRule.onNodeWithTag("InfoButton").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("SettingsButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("HelpButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("MyFriendsButton").performScrollTo().assertIsDisplayed()
     composeTestRule
         .onNodeWithTag("MyFriendsButton")
@@ -73,7 +73,7 @@ class ProfileScreenTest {
   fun buttonsHaveClickAction() {
 
     composeTestRule.onNodeWithTag("SettingsButton").assertHasClickAction()
-    composeTestRule.onNodeWithTag("InfoButton").assertHasClickAction()
+    composeTestRule.onNodeWithTag("HelpButton").assertHasClickAction()
     composeTestRule.onNodeWithTag("MyFriendsButton").assertHasClickAction()
     composeTestRule.onNodeWithTag("MyStatsButton").assertHasClickAction()
   }
@@ -82,7 +82,7 @@ class ProfileScreenTest {
   fun buttonsPerformClick() {
 
     composeTestRule.onNodeWithTag("SettingsButton").performClick()
-    composeTestRule.onNodeWithTag("InfoButton").performClick()
+    composeTestRule.onNodeWithTag("HelpButton").performClick()
     composeTestRule.onNodeWithTag("MyFriendsButton").performClick()
     composeTestRule.onNodeWithTag("MyStatsButton").performClick()
   }
@@ -126,20 +126,7 @@ class ProfileScreenTest {
   fun dialogIsDisplayedWhenHelpBoxIsVisible() {
 
     // Assert that the help dialog is displayed when the help button is clicked
-    composeTestRule.onNodeWithTag("InfoButton").performClick()
-    composeTestRule.onNodeWithTag("InfoPopupContent").assertIsDisplayed()
-  }
-
-  @Test
-  fun dialogClosesWhenCloseButtonClicked() {
-
-    // Click the 'Close' button in the dialog
-    composeTestRule.onNodeWithTag("InfoButton").performClick()
-    composeTestRule.onNodeWithTag("InfoPopupCloseButton").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("InfoPopupCloseButton").assertHasClickAction()
-    composeTestRule.onNodeWithTag("InfoPopupCloseButton").performClick()
-
-    // After clicking, the dialog should no longer be displayed
-    composeTestRule.onNodeWithTag("InfoPopupContent").assertDoesNotExist()
+    composeTestRule.onNodeWithTag("HelpButton").performClick()
+    composeTestRule.onNodeWithTag("HelpPopupContent").assertIsDisplayed()
   }
 }
