@@ -165,7 +165,6 @@ fun ScreenColumn(
               .testTag(testTag),
       horizontalAlignment = Alignment.CenterHorizontally) {
         content()
-        Spacer(modifier = Modifier.height(16.dp))
       }
 }
 
