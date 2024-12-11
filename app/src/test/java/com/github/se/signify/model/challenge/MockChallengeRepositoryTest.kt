@@ -28,6 +28,7 @@ class MockChallengeRepositoryTest {
         player2Id,
         mode,
         challengeId,
+        listOf("A", "B", "C"),
         onSuccess = {},
         onFailure = { fail("onFailure should not be called") })
     assertNotNull(mockRepository.getChallenge(challengeId))
@@ -41,13 +42,15 @@ class MockChallengeRepositoryTest {
         player2Id,
         mode,
         challengeId,
+        listOf("A", "B", "C"),
         onSuccess = { fail("onSuccess should not be called") },
         onFailure = { exception -> assertEquals("Simulated failure", exception.message) })
   }
 
   @Test
   fun `deleteChallenge succeeds when challenge exists`() {
-    mockRepository.sendChallengeRequest(player1Id, player2Id, mode, challengeId, {}, {})
+    mockRepository.sendChallengeRequest(
+        player1Id, player2Id, mode, challengeId, listOf("A", "B", "C"), {}, {})
     mockRepository.deleteChallenge(
         challengeId, onSuccess = {}, onFailure = { fail("onFailure should not be called") })
     assertNull(mockRepository.getChallenge(challengeId))
@@ -70,7 +73,8 @@ class MockChallengeRepositoryTest {
 
   @Test
   fun `getAllChallenges returns all stored challenges`() {
-    mockRepository.sendChallengeRequest(player1Id, player2Id, mode, challengeId, {}, {})
+    mockRepository.sendChallengeRequest(
+        player1Id, player2Id, mode, challengeId, listOf("A", "B", "C"), {}, {})
     assertEquals(1, mockRepository.getAllChallenges().size)
   }
 
@@ -81,6 +85,7 @@ class MockChallengeRepositoryTest {
         player2Id = "player2",
         mode = ChallengeMode.SPRINT,
         challengeId = "challenge123",
+        listOf("A", "B", "C"),
         onSuccess = {},
         onFailure = {})
     assertTrue(mockRepository.wasSendChallengeCalled())
@@ -99,6 +104,7 @@ class MockChallengeRepositoryTest {
         player2Id = "player2",
         mode = ChallengeMode.SPRINT,
         challengeId = "challenge123",
+        listOf("A", "B", "C"),
         onSuccess = {},
         onFailure = {})
     assertEquals("challenge123", mockRepository.lastSentChallengeId())
@@ -111,6 +117,7 @@ class MockChallengeRepositoryTest {
         player2Id = "player2",
         mode = ChallengeMode.SPRINT,
         challengeId = "challenge123",
+        listOf("A", "B", "C"),
         onSuccess = {},
         onFailure = {})
     mockRepository.deleteChallenge(challengeId = "challenge123", onSuccess = {}, onFailure = {})
@@ -138,7 +145,7 @@ class MockChallengeRepositoryTest {
     mockRepository.setChallenges(
         listOf(Challenge("challenge1", "player1", "player2", "Sprint", "pending")))
     mockRepository.sendChallengeRequest(
-        "player1", "player2", ChallengeMode.SPRINT, "challenge1", {}, {})
+        "player1", "player2", ChallengeMode.SPRINT, "challenge1", listOf("A", "B", "C"), {}, {})
     mockRepository.deleteChallenge("challenge1", {}, {})
 
     mockRepository.reset()
@@ -151,9 +158,9 @@ class MockChallengeRepositoryTest {
   @Test
   fun `getSendChallengeCalls returns all sent challenges`() {
     mockRepository.sendChallengeRequest(
-        "player1", "player2", ChallengeMode.SPRINT, "challenge1", {}, {})
+        "player1", "player2", ChallengeMode.SPRINT, "challenge1", listOf("A", "B", "C"), {}, {})
     mockRepository.sendChallengeRequest(
-        "player3", "player4", ChallengeMode.CHRONO, "challenge2", {}, {})
+        "player3", "player4", ChallengeMode.CHRONO, "challenge2", listOf("A", "B", "C"), {}, {})
 
     val sendCalls = mockRepository.getSendChallengeCalls()
 
@@ -180,7 +187,8 @@ class MockChallengeRepositoryTest {
 
   @Test
   fun `getChallengeById succeeds when challenge exists`() {
-    mockRepository.sendChallengeRequest(player1Id, player2Id, mode, challengeId, {}, {})
+    mockRepository.sendChallengeRequest(
+        player1Id, player2Id, mode, challengeId, listOf("A", "B", "C"), {}, {})
     mockRepository.getChallengeById(
         challengeId = challengeId,
         onSuccess = { challenge ->
@@ -202,7 +210,8 @@ class MockChallengeRepositoryTest {
 
   @Test
   fun `updateChallenge succeeds when challenge exists`() {
-    mockRepository.sendChallengeRequest(player1Id, player2Id, mode, challengeId, {}, {})
+    mockRepository.sendChallengeRequest(
+        player1Id, player2Id, mode, challengeId, listOf("A", "B", "C"), {}, {})
     val updatedChallenge =
         Challenge(
             challengeId = challengeId,
@@ -241,7 +250,8 @@ class MockChallengeRepositoryTest {
 
   @Test
   fun `recordPlayerTime succeeds when challenge and player exist`() {
-    mockRepository.sendChallengeRequest(player1Id, player2Id, mode, challengeId, {}, {})
+    mockRepository.sendChallengeRequest(
+        player1Id, player2Id, mode, challengeId, listOf("A", "B", "C"), {}, {})
     mockRepository.recordPlayerTime(
         challengeId = challengeId,
         playerId = player1Id,
@@ -268,7 +278,8 @@ class MockChallengeRepositoryTest {
 
   @Test
   fun `recordPlayerTime fails when player ID is invalid`() {
-    mockRepository.sendChallengeRequest(player1Id, player2Id, mode, challengeId, {}, {})
+    mockRepository.sendChallengeRequest(
+        player1Id, player2Id, mode, challengeId, listOf("A", "B", "C"), {}, {})
     mockRepository.recordPlayerTime(
         challengeId = challengeId,
         playerId = "invalidPlayer",

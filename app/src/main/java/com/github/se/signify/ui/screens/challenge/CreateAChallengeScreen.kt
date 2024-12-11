@@ -1,5 +1,6 @@
 package com.github.se.signify.ui.screens.challenge
 
+import android.content.Context
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -154,6 +156,7 @@ fun ChallengeModeAlertDialog(
     userViewModel: UserViewModel,
     challengeViewModel: ChallengeViewModel
 ) {
+  val context = LocalContext.current
   val selectedMode = remember { mutableStateOf<ChallengeMode?>(null) }
   val challengeId = remember { "${selectedMode.value ?: "challenge"}${System.currentTimeMillis()}" }
 
@@ -163,18 +166,19 @@ fun ChallengeModeAlertDialog(
         TextButton(
             onClick = {
               if (selectedMode.value != null) {
-                // Create the challenge in the challenges collection
-                challengeViewModel.sendChallengeRequest(friendId, selectedMode.value!!, challengeId)
-
-                // Add the challenge to the users' ongoing challenges
+                val words = getWordsForMode(context, selectedMode.value!!)
+                challengeViewModel.sendChallengeRequest(
+                    friendId = friendId,
+                    mode = selectedMode.value!!,
+                    challengeId = challengeId,
+                    roundWords = words)
                 userViewModel.addOngoingChallenge(userSession.getUserId()!!, challengeId)
                 userViewModel.addOngoingChallenge(friendId, challengeId)
-
-                onDismiss() // Close the dialog after creating the challenge
+                onDismiss()
               }
             },
             testTag = "SendChallengeButton",
-            text = stringResource(R.string.send_challenge_text),
+            text = "Send Challenge",
             backgroundColor = MaterialTheme.colorScheme.primary,
             textColor = MaterialTheme.colorScheme.onPrimary,
             enabled = selectedMode.value != null,
@@ -229,4 +233,12 @@ fun ModeButton(
           if (selectedMode.value == mode) MaterialTheme.colorScheme.onPrimary
           else MaterialTheme.colorScheme.onSurface,
   )
+}
+
+fun getWordsForMode(context: Context, mode: ChallengeMode): List<String> {
+  val allWords = context.resources.getStringArray(R.array.challenge_word_list).toList()
+  return when (mode) {
+    ChallengeMode.CHRONO -> allWords.shuffled().take(3)
+    ChallengeMode.SPRINT -> allWords.shuffled().take(25)
+  }
 }

@@ -11,14 +11,11 @@ class FirestoreChallengeRepository(private val db: FirebaseFirestore) : Challeng
       player2Id: String,
       mode: ChallengeMode,
       challengeId: String,
+      roundWords: List<String>,
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   ) {
-    // Generate initial words for each round
-    val roundWords =
-        listOf("apple", "banana", "cherry") // Replace with dynamic word generation if needed
 
-    // Create the challenge object
     val challenge =
         Challenge(
             challengeId = challengeId,
@@ -30,11 +27,8 @@ class FirestoreChallengeRepository(private val db: FirebaseFirestore) : Challeng
             roundWords = roundWords,
             player1Times = mutableListOf(),
             player2Times = mutableListOf(),
-            player1RoundCompleted = mutableListOf(false, false, false),
-            player2RoundCompleted = mutableListOf(false, false, false),
             gameStatus = "not_started")
 
-    // Add challenge to Firestore for both players
     val batch = db.batch()
     val challengeRef = db.collection(collectionPath).document(challengeId)
     batch.set(challengeRef, challenge, SetOptions.merge())
@@ -45,8 +39,10 @@ class FirestoreChallengeRepository(private val db: FirebaseFirestore) : Challeng
         db.collection("users").document(player2Id).collection("challenges").document(challengeId)
     batch.set(player1ChallengeRef, challenge, SetOptions.merge())
     batch.set(player2ChallengeRef, challenge, SetOptions.merge())
-
-    batch.commit().addOnSuccessListener { onSuccess() }.addOnFailureListener { onFailure(it) }
+    batch
+        .commit()
+        .addOnSuccessListener { onSuccess() }
+        .addOnFailureListener { exception -> onFailure(exception) }
   }
 
   override fun deleteChallenge(
