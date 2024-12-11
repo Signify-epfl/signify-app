@@ -63,8 +63,6 @@
     <string name="incorrect_answer_text">Réponse incorrecte, rééssayez.</string>
     <string name="choose_correct_answer_text">Choisir la bonne réponse:</string>
     <string name="submit_text">Soumettre</string>
-    <string name="lets_go_text">C’est parti!</string>
-    <string name="locked_text">Verrouillé</string>
     <string name="in_sign_language_text"> dans le language des signes ASL</string>
     <string name="letter_text">Lettre</string>
     <string name="try_text">Essayez la langue des signes ici!</string>
@@ -195,7 +193,7 @@ Faisons un rapide tour d’horizon pour vous aider à démarrer l’apprentissag
     <string name="tutorial_screen2_text">Faites glisser votre doigt vers la droite pour afficher les exercices par niveau de difficulté.</string>
     <string name="tutorial_last_screen_text">Vous êtes prêt à commencer! Profitez de l\'apprentissage de la langue des signes.</string>
     <string name="quest_screen_title_text">Un jour, Un mot</string>
-    <string name="open_quest_button_text">Apprendre</string>
+    <string name="open_quest_button_text">C’est parti!</string>
     <string name="closed_quest_button_text">Verrouillé</string>
     <string name="try_fingerspell_button_text">Essayez-le !</string>
     <string name="fingerspell_title_text">Épeler avec les mains : %1$s</string>

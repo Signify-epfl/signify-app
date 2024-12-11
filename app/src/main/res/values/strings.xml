@@ -66,8 +66,6 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="incorrect_answer_text">Incorrect answer, try again.</string>
     <string name="choose_correct_answer_text">Choose the correct answer:</string>
     <string name="submit_text">Submit</string>
-    <string name="lets_go_text">Let’s Go!</string>
-    <string name="locked_text">Locked</string>
     <string name="in_sign_language_text"> in ASL sign language</string>
     <string name="letter_text">Letter</string>
     <string name="try_text">Try hand signs here !</string>
