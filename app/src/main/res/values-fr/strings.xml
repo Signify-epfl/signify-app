@@ -24,8 +24,6 @@
     <string name="welcome_text">Bienvenu(e) sur Signify</string>
     <string name="dark_mode_text">Mode Sombre</string>
     <string name="light_mode_text">Mode Clair</string>
-    <string name="saved_text">Modifications enregistrées</string>
-    <string name="save_text">Ok</string>
     <string name="cancel_text">Annuler</string>
     <string name="unknown_text">Inconnue</string>
     <string name="my_friends_text">Mes Amis</string>
