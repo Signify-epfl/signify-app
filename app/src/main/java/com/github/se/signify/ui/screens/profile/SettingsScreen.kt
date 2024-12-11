@@ -279,63 +279,67 @@ fun ConfirmationDialog(
 ) {
   if (showDialog.value) {
 
-    Dialog(onDismissRequest = { showDialog.value = false }) {
-      Surface(
-          shape = RoundedCornerShape(16.dp),
-          color = MaterialTheme.colorScheme.surface,
-          modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-            Column(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally) {
-                  // Dialog Title
-                  Text(
-                      text = title,
-                      fontWeight = FontWeight.Bold,
-                      color = MaterialTheme.colorScheme.onSurface,
-                      modifier = Modifier.padding(bottom = 16.dp))
+    Dialog(
+        onDismissRequest = {
+          showDialog.value = false
+          onDismiss()
+        }) {
+          Surface(
+              shape = RoundedCornerShape(16.dp),
+              color = MaterialTheme.colorScheme.surface,
+              modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+                Column(
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally) {
+                      // Dialog Title
+                      Text(
+                          text = title,
+                          fontWeight = FontWeight.Bold,
+                          color = MaterialTheme.colorScheme.onSurface,
+                          modifier = Modifier.padding(bottom = 16.dp))
 
-                  // Dialog Message
-                  Text(
-                      text = message,
-                      color = MaterialTheme.colorScheme.onSurface,
-                      modifier = Modifier.padding(bottom = 16.dp))
+                      // Dialog Message
+                      Text(
+                          text = message,
+                          color = MaterialTheme.colorScheme.onSurface,
+                          modifier = Modifier.padding(bottom = 16.dp))
 
-                  // Buttons Row
-                  Row(
-                      horizontalArrangement = Arrangement.SpaceEvenly,
-                      modifier = Modifier.fillMaxWidth()) {
-                        val confirmText = stringResource(R.string.confirm)
-                        val cancelText = stringResource(R.string.cancel)
+                      // Buttons Row
+                      Row(
+                          horizontalArrangement = Arrangement.SpaceEvenly,
+                          modifier = Modifier.fillMaxWidth()) {
+                            val confirmText = stringResource(R.string.confirm)
+                            val cancelText = stringResource(R.string.cancel)
 
-                        // Confirm Button
-                        Button(
-                            onClick = {
-                              onConfirm()
-                              showDialog.value = false // Close the dialog
-                            },
-                            colors =
-                                ButtonDefaults.buttonColors(
-                                    containerColor = MaterialTheme.colorScheme.primary,
-                                    contentColor = MaterialTheme.colorScheme.onPrimary)) {
-                              Text(confirmText)
-                            }
+                            // Confirm Button
+                            Button(
+                                onClick = {
+                                  onConfirm()
+                                  showDialog.value = false // Close the dialog
+                                },
+                                colors =
+                                    ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.primary,
+                                        contentColor = MaterialTheme.colorScheme.onPrimary)) {
+                                  Text(confirmText)
+                                }
 
-                        // Cancel Button
-                        Button(
-                            onClick = {
-                              onDismiss()
-                              showDialog.value = false // Close the dialog
-                            },
-                            colors =
-                                ButtonDefaults.buttonColors(
-                                    containerColor = MaterialTheme.colorScheme.error,
-                                    contentColor = MaterialTheme.colorScheme.onError)) {
-                              Text(cancelText)
-                            }
-                      }
-                }
-          }
-    }
+                            // Cancel Button
+                            Button(
+                                onClick = {
+                                  onDismiss()
+                                  showDialog.value = false // Close the dialog
+                                },
+                                colors =
+                                    ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.error,
+                                        contentColor = MaterialTheme.colorScheme.onError)) {
+                                  Text(cancelText)
+                                }
+                          }
+                    }
+              }
+        }
   }
 }
 
