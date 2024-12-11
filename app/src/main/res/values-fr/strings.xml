@@ -176,12 +176,11 @@
     <string name="tip_t">Conseils : Faites un poing avec votre pouce coincé entre votre index et votre majeur.</string>
     <string name="tip_u">Conseils : Tenez votre index et majeur vers le haut et proches l’un de l’autre, tandis que les autres doigts sont repliés vers le bas.</string>
     <string name="tip_v">Conseils : Tenez votre index et majeur vers le haut et séparés en forme de V, tandis que les autres doigts sont repliés vers le bas.</string>
-    <string name="tip_w">Conseils : Tenez votre index, majeur et annulaire vers le haut, les écartant, tandis que les autres doigts sont repliés vers le bas.</string>
+    <string name="tip_w">Conseils : Tenez votre index, majeur et annuFlaire vers le haut, les écartant, tandis que les autres doigts sont repliés vers le bas.</string>
     <string name="tip_x">Conseils : Courbez votre index, en le pointant vers le haut, tandis que les autres doigts sont repliés vers le bas. Votre pouce repose près de l’index.</string>
     <string name="tip_y">Conseils : Étendez votre petit doigt et pouce vers l’extérieur, tandis que les autres doigts sont repliés vers le bas.</string>
     <string name="tip_z">Conseils : Déplacez votre index pour tracer une forme en Z dans l’air.</string>
     <string name="unauthenticated_error_text">Vous devez être connecté pour accéder à cette fonctionnalité</string>
-    <integer name="scroll_offset">8</integer>
     <string name="friends_requests_text">Demandes</string>
     <string name="friends_text">Amis</string>
     <string name="pref_name">theme_prefs</string>
