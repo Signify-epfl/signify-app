@@ -52,6 +52,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
 import com.github.se.signify.model.authentication.UserSession
@@ -84,10 +85,6 @@ fun SettingsScreen(
   val userName = userViewModel.userName.collectAsState()
   val profilePictureUrl = userViewModel.profilePictureUrl.collectAsState()
 
-  var selectedImageUrl by remember { mutableStateOf(profilePictureUrl.value) }
-
-  LaunchedEffect(profilePictureUrl.value) { selectedImageUrl = profilePictureUrl.value }
-
   val focusManager = LocalFocusManager.current
   Box(
       modifier =
@@ -118,7 +115,7 @@ fun SettingsScreen(
 
           EditableProfilePicture(
               userViewModel = userViewModel,
-              selectedImageUrl = selectedImageUrl,
+              profilePictureUrl = profilePictureUrl.value,
           )
 
           Spacer(modifier = Modifier.height(32.dp))
@@ -138,12 +135,12 @@ fun SettingsScreen(
 @Composable
 fun EditableProfilePicture(
     userViewModel: UserViewModel,
-    selectedImageUrl: String?,
+    profilePictureUrl: String?,
 ) {
 
   var showDeleteDialog = remember { mutableStateOf(false) }
   var showEditDialog = remember { mutableStateOf(false) }
-  var selectedUri by remember { mutableStateOf<Uri?>(null) }
+  var selectedUri by remember { mutableStateOf<Uri?>(profilePictureUrl?.toUri()) }
 
   val galleryLauncher =
       rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -181,24 +178,24 @@ fun EditableProfilePicture(
 
           Spacer(modifier = Modifier.width(8.dp))
 
-          ProfilePicture(selectedImageUrl)
+          ProfilePicture(if (selectedUri != null) selectedUri.toString() else null)
         }
   }
 
   ConfirmationDialog(
       showDeleteDialog,
-      onConfirm = { userViewModel.updateProfilePictureUrl(null) },
+      onConfirm = {
+        selectedUri = null
+        userViewModel.updateProfilePictureUrl(null)
+      },
       onDismiss = {},
       title = stringResource(R.string.confirm_changes_title),
       message = stringResource(R.string.confirm_changes_message))
 
   ConfirmationDialog(
       showEditDialog,
-      onConfirm = {
-        userViewModel.updateProfilePictureUrl(selectedUri)
-        selectedUri = null
-      },
-      onDismiss = { selectedUri = null },
+      onConfirm = { userViewModel.updateProfilePictureUrl(selectedUri) },
+      onDismiss = { selectedUri = profilePictureUrl?.toUri() },
       title = stringResource(R.string.confirm_changes_title),
       message = stringResource(R.string.confirm_changes_message))
 }
