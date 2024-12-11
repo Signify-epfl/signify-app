@@ -3,12 +3,14 @@ package com.github.se.signify.ui.screens.profile
 import android.content.ContentResolver
 import android.content.Context
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performTextClearance
+import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.github.se.signify.model.authentication.MockUserSession
@@ -80,12 +82,6 @@ class SettingsScreenTest {
     // Check if the "Other settings" section is displayed
     composeTestRule.onNodeWithText("Other settings:\nLanguage,\nTheme,\n...").assertIsDisplayed()
 
-    // Check if the Cancel button is displayed
-    composeTestRule.onNodeWithText("Cancel").assertIsDisplayed()
-
-    // Check if the Save button is displayed
-    composeTestRule.onNodeWithText("Save").assertIsDisplayed()
-
     // Check if the back button is displayed
     composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
   }
@@ -100,93 +96,99 @@ class SettingsScreenTest {
   }
 
   @Test
-  fun testUsernameTextFieldInputUpdates() {
-    // Define a new name for testing
+  fun testDialogAppearsAfterLosingFocus() {
+    val originalName = userViewModel.userName.value
     val newName = "Updated Username"
 
-    // Enter the new name into the TextField
-    composeTestRule.onNodeWithText(userViewModel.userName.value).performTextInput(newName)
+    composeTestRule.onNodeWithText(originalName).performTextInput(newName)
 
-    // Verify that the TextField now contains the new name
-    composeTestRule.onNodeWithText(newName).assertIsDisplayed()
+    composeTestRule.onRoot().performClick() // Click outside the TextField
+
+    composeTestRule.onNodeWithText("Confirm Changes").assertIsDisplayed()
   }
 
   @Test
-  fun testSaveButtonUpdatesUserNameAndProfilePicture() {
-    // Simulate entering a new name
-    val newName = "New Username"
-    composeTestRule.onNodeWithText(userViewModel.userName.value).performTextInput(newName)
+  fun testDialogAppearsAfterPressingEnter() {
+    val originalName = userViewModel.userName.value
+    val newName = "Updated Username"
 
-    // Simulate selecting a new profile picture
-    val newProfilePicturePath = "file:///path/to/new/profile/picture.jpg"
-    composeTestRule.runOnIdle {
-      userViewModel.updateProfilePictureUrl(newProfilePicturePath.toUri())
-    }
+    composeTestRule.onNodeWithText(originalName).performTextInput(newName)
 
-    // Click the Save button
-    composeTestRule.onNodeWithText("Save").performClick()
+    composeTestRule.onNodeWithText(newName).performImeAction()
 
-    // Verify that the updateUserName function in the ViewModel is called with the correct name
+    composeTestRule.onNodeWithText("Confirm Changes").assertIsDisplayed()
+  }
+
+  @Test
+  fun testPressingConfirmUpdatesName() {
+    val newName = "Updated Username"
+
+    composeTestRule.onNodeWithTag("usernameTextField").performTextInput(newName)
+
+    composeTestRule.onNodeWithTag("usernameTextField").performImeAction()
+
+    composeTestRule.onNodeWithText("Confirm").performClick()
+
+    composeTestRule.onNodeWithTag("usernameTextField").assertTextEquals(newName)
+
     verify(userRepository)
         .updateUserName(Mockito.anyString(), eq(newName), anyOrNull(), anyOrNull())
-
-    // Verify that the updateProfilePictureUrl function in the ViewModel is called with the correct
-    // path
-    verify(userRepository)
-        .updateProfilePictureUrl(
-            Mockito.anyString(), eq(newProfilePicturePath.toUri()), anyOrNull(), anyOrNull())
   }
 
   @Test
-  fun testSaveButtonDisabledWhenTextFieldIsEmpty() {
-    // Ensure the TextField is empty
-    composeTestRule.onNodeWithText(userViewModel.userName.value).performTextClearance()
+  fun testPressingCancelRevertsName() {
+    val originalName = userViewModel.userName.value
+    val newName = "Updated Username"
 
-    // Click the Save button
-    composeTestRule.onNodeWithText("Save").performClick()
+    composeTestRule.onNodeWithTag("usernameTextField").performTextInput(newName)
 
-    // Verify that updateUserName is not called since the input was empty
+    composeTestRule.onNodeWithTag("usernameTextField").performImeAction()
+
+    composeTestRule.onNodeWithText("Cancel").performClick()
+
+    composeTestRule.onNodeWithTag("usernameTextField").assertTextEquals(originalName)
+
     verify(userRepository, never())
-        .updateUserName(Mockito.anyString(), Mockito.anyString(), anyOrNull(), anyOrNull())
+        .updateUserName(Mockito.anyString(), eq(newName), anyOrNull(), anyOrNull())
   }
 
   @Test
-  fun testCancelButtonClearsInput() {
-    // Simulate entering a new name
-    val newName = "Temporary Name"
-    composeTestRule.onNodeWithText(userViewModel.userName.value).performTextInput(newName)
+  fun testDeleteProfilePictureShowsDialog() {
+    composeTestRule.onNodeWithContentDescription("Delete Profile Picture").performClick()
 
-    // Simulate selecting a new profile picture
+    composeTestRule.onNodeWithText("Confirm Changes").assertIsDisplayed()
+  }
+
+  @Test
+  fun testDeleteProfilePictureConfirm() {
     val newProfilePicturePath = "file:///path/to/new/profile/picture.jpg"
     composeTestRule.runOnIdle {
       userViewModel.updateProfilePictureUrl(newProfilePicturePath.toUri())
     }
+    composeTestRule.onNodeWithContentDescription("Delete Profile Picture").performClick()
 
-    // Click the Cancel button
-    composeTestRule.onNodeWithText("Cancel").performClick()
+    composeTestRule.onNodeWithText("Confirm").performClick()
 
-    // Verify that the TextField is cleared
-    composeTestRule.onNodeWithText("Temporary Name").assertDoesNotExist()
-
-    // Check that the original profile picture URL is restored
-    composeTestRule.runOnIdle {
-      val restoredProfilePictureUrl = userViewModel.profilePictureUrl.value
-      assert(restoredProfilePictureUrl != newProfilePicturePath) {
-        "Profile picture URL was not reset"
-      }
-    }
+    verify(userRepository)
+        .updateProfilePictureUrl(Mockito.anyString(), eq(null), anyOrNull(), anyOrNull())
   }
 
   @Test
-  fun testEditProfilePictureIconClick() {
-    // Click the Edit Profile Picture icon
-    composeTestRule.onNodeWithContentDescription("Edit Profile Picture").performClick()
+  fun testDeleteProfilePictureCancel() {
+    val newProfilePicturePath = "file:///path/to/new/profile/picture.jpg"
+    composeTestRule.runOnIdle {
+      userViewModel.updateProfilePictureUrl(newProfilePicturePath.toUri())
+    }
+    composeTestRule.onNodeWithContentDescription("Delete Profile Picture").performClick()
+
+    composeTestRule.onNodeWithText("Cancel").performClick()
+
+    verify(userRepository, never())
+        .updateProfilePictureUrl(Mockito.anyString(), eq(null), anyOrNull(), anyOrNull())
   }
 
   @Test
   fun testUserProfilePictureDisplaysImageWhenUriIsNotNull() {
-
-    // Verify that the AsyncImage is displayed with the mock profile picture
     composeTestRule.onNodeWithTag("ProfilePicture").assertExists()
   }
 
