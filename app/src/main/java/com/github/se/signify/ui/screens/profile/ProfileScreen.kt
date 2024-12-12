@@ -24,6 +24,7 @@ import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.model.navigation.TopLevelDestinations
 import com.github.se.signify.model.profile.stats.StatsRepository
 import com.github.se.signify.model.profile.stats.StatsViewModel
 import com.github.se.signify.ui.common.AccountInformation
@@ -49,6 +50,7 @@ fun ProfileScreen(
 
   MainScreenScaffold(
       navigationActions = navigationActions,
+      topLevelDestination = TopLevelDestinations.PROFILE,
       testTag = "ProfileScreen",
       helpText =
           HelpText(
