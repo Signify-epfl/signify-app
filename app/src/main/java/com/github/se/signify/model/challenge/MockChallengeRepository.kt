@@ -107,6 +107,27 @@ class MockChallengeRepository : ChallengeRepository {
     }
   }
 
+  override fun getChallenges(
+      challengeIds: List<ChallengeId>,
+      onSuccess: (List<Challenge>) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    if (!shouldSucceed) {
+      onFailure(exceptionToThrow)
+      return
+    }
+
+    val challenges =
+        challengeIds.map {
+          if (challenges[it] == null) {
+            onFailure(Exception("Challenge with ID $it not found"))
+            return
+          }
+          challenges[it]!!
+        }
+    onSuccess(challenges)
+  }
+
   override fun updateChallenge(
       updatedChallenge: Challenge,
       onSuccess: () -> Unit,

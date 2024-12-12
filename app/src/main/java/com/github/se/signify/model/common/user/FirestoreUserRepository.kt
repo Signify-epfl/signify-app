@@ -1,7 +1,6 @@
 package com.github.se.signify.model.common.user
 
 import android.net.Uri
-import com.github.se.signify.model.challenge.Challenge
 import com.github.se.signify.model.challenge.ChallengeId
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -19,7 +18,6 @@ class FirestoreUserRepository(
   private val collectionPath = "users"
   private val friendsListPath = "friends"
   private val friendRequestsListPath = "friendRequests"
-  private val challengesCollectionPath = "challenges"
   private val usernamePath = "name"
   private val profilePicturePath = "profileImageUrl"
   private val firestore = FirebaseFirestore.getInstance()
@@ -361,41 +359,6 @@ class FirestoreUserRepository(
           onSuccess(validChallengeIds)
         }
         .addOnFailureListener { e -> onFailure(e) }
-  }
-
-  private fun fetchChallengesByIds(
-      challengeIds: List<*>,
-      onSuccess: (List<Challenge>) -> Unit,
-      onFailure: (Exception) -> Unit
-  ) {
-    val challenges = mutableListOf<Challenge>()
-    val totalChallenges = challengeIds.size
-
-    for (challengeId in challengeIds) {
-      db.collection(challengesCollectionPath)
-          .document(challengeId.toString())
-          .get()
-          .addOnSuccessListener { challengeDoc ->
-            if (challengeDoc.exists()) {
-              val challenge = challengeDoc.toObject(Challenge::class.java)
-              if (challenge != null) {
-                challenges.add(challenge)
-              }
-            }
-            checkAllChallengesFetched(challenges, totalChallenges, onSuccess)
-          }
-          .addOnFailureListener { e -> onFailure(e) }
-    }
-  }
-
-  private fun checkAllChallengesFetched(
-      challenges: List<Challenge>,
-      totalChallenges: Int,
-      onSuccess: (List<Challenge>) -> Unit
-  ) {
-    if (challenges.size == totalChallenges) {
-      onSuccess(challenges)
-    }
   }
 
   override fun removeOngoingChallenge(
