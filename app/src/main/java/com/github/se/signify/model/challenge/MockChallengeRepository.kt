@@ -117,15 +117,8 @@ class MockChallengeRepository : ChallengeRepository {
       return
     }
 
-    val challenges =
-        challengeIds.map {
-          if (challenges[it] == null) {
-            onFailure(Exception("Challenge with ID $it not found"))
-            return
-          }
-          challenges[it]!!
-        }
-    onSuccess(challenges)
+    val challenges = challengeIds.map { challenges[it] }
+    onSuccess(challenges.filterNotNull())
   }
 
   override fun updateChallenge(
