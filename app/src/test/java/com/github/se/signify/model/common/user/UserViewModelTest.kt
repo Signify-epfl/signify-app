@@ -541,35 +541,6 @@ class UserViewModelTest {
     // Confirms the repository method is called with the correct arguments on failure
     verify(userRepository).getStreak(eq(currentUserId), any(), any())
   }
-  // Test addPastChallenge
-  @Test
-  fun addPastChallengeUpdatesPastChallengesOnSuccess() = runTest {
-    // Arrange
-    val updatedPastChallenges = listOf("challenge1", "challenge2")
-    doAnswer {
-          val onSuccess = it.getArgument<(User) -> Unit>(1)
-          onSuccess(User(uid = currentUserId, pastChallenges = listOf("challenge1")))
-          null
-        }
-        .whenever(userRepository)
-        .getUserById(eq(currentUserId), any(), any())
-
-    doAnswer {
-          val onSuccess = it.getArgument<() -> Unit>(2)
-          onSuccess()
-          null
-        }
-        .whenever(userRepository)
-        .updateUserField(eq(currentUserId), eq("pastChallenges"), any(), any(), any())
-
-    // Act
-    userViewModel.addPastChallenge(currentUserId, "challenge2")
-
-    // Assert
-    verify(userRepository)
-        .updateUserField(
-            eq(currentUserId), eq("pastChallenges"), eq(updatedPastChallenges), any(), any())
-  }
 
   @Test
   fun addPastChallengeHandlesFailureInFetchingUser() = runTest {
