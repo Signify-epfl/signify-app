@@ -8,10 +8,10 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextInput
-import androidx.core.net.toUri
 import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.common.user.UserRepository
@@ -48,6 +48,14 @@ class SettingsScreenTest {
     userViewModel = UserViewModel(userSession, userRepository)
     val picturePath = "file:///path/to/profile/picture.jpg"
 
+    @Suppress("UNCHECKED_CAST")
+    Mockito.doAnswer { invocation ->
+          val onSuccess = invocation.arguments[1] as (String?) -> Unit
+          onSuccess(picturePath)
+        }
+        .`when`(userRepository)
+        .getProfilePictureUrl(Mockito.anyString(), anyOrNull(), anyOrNull())
+
     composeTestRule.setContent {
       SettingsScreen(navigationActions, userSession, userRepository, false, {}, false, {})
       ProfilePicture(picturePath)
@@ -76,9 +84,6 @@ class SettingsScreenTest {
     // Check if the delete profile picture icon is displayed
     composeTestRule.onNodeWithContentDescription("Delete Profile Picture").assertIsDisplayed()
 
-    // Check if the "Other settings" section is displayed
-    composeTestRule.onNodeWithText("Other settings:\nLanguage,\nTheme,\n...").assertIsDisplayed()
-
     // Check if the back button is displayed
     composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
   }
@@ -105,6 +110,18 @@ class SettingsScreenTest {
   }
 
   @Test
+  fun testDialogAppearsAfterLosingFocus() {
+    val originalName = userViewModel.userName.value
+    val newName = "Updated Username"
+
+    composeTestRule.onNodeWithText(originalName).performTextInput(newName)
+
+    composeTestRule.onRoot().performClick()
+
+    composeTestRule.onNodeWithText("Confirm Changes").assertIsDisplayed()
+  }
+
+  @Test
   fun testPressingConfirmUpdatesName() {
     val newName = "Updated Username"
 
@@ -121,8 +138,7 @@ class SettingsScreenTest {
   }
 
   @Test
-  fun testPressingCancelRevertsName() {
-    val originalName = userViewModel.userName.value
+  fun testPressingCancelDoesntUpdateName() {
     val newName = "Updated Username"
 
     composeTestRule.onNodeWithTag("usernameTextField").performTextInput(newName)
@@ -131,14 +147,13 @@ class SettingsScreenTest {
 
     composeTestRule.onNodeWithText("Cancel").performClick()
 
-    composeTestRule.onNodeWithTag("usernameTextField").assertTextEquals(originalName)
-
     verify(userRepository, never())
         .updateUserName(Mockito.anyString(), eq(newName), anyOrNull(), anyOrNull())
   }
 
   @Test
   fun testDeleteProfilePictureShowsDialog() {
+
     composeTestRule.onNodeWithContentDescription("Delete Profile Picture").performClick()
 
     composeTestRule.onNodeWithText("Confirm Changes").assertIsDisplayed()
@@ -146,10 +161,7 @@ class SettingsScreenTest {
 
   @Test
   fun testDeleteProfilePictureConfirm() {
-    val newProfilePicturePath = "file:///path/to/new/profile/picture.jpg"
-    composeTestRule.runOnIdle {
-      userViewModel.updateProfilePictureUrl(newProfilePicturePath.toUri())
-    }
+
     composeTestRule.onNodeWithContentDescription("Delete Profile Picture").performClick()
 
     composeTestRule.onNodeWithText("Confirm").performClick()
@@ -160,10 +172,6 @@ class SettingsScreenTest {
 
   @Test
   fun testDeleteProfilePictureCancel() {
-    val newProfilePicturePath = "file:///path/to/new/profile/picture.jpg"
-    composeTestRule.runOnIdle {
-      userViewModel.updateProfilePictureUrl(newProfilePicturePath.toUri())
-    }
     composeTestRule.onNodeWithContentDescription("Delete Profile Picture").performClick()
 
     composeTestRule.onNodeWithText("Cancel").performClick()
