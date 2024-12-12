@@ -8,9 +8,9 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
+import kotlinx.coroutines.tasks.await
 
 class FirestoreUserRepository(
     private val db: FirebaseFirestore,
@@ -532,77 +532,78 @@ class FirestoreUserRepository(
       }
     }
   }
-    override fun addPastChallenge(userId: String, challengeId: String) {
-        val userRef = db.collection(collectionPath).document(userId)
-        userRef.update("pastChallenges", FieldValue.arrayUnion(challengeId))
-    }
 
-    override fun getPastChallenges(
-        userId: String,
-        onSuccess: (List<Challenge>) -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        val userDocRef = db.collection(collectionPath).document(userId)
+  override fun addPastChallenge(userId: String, challengeId: String) {
+    val userRef = db.collection(collectionPath).document(userId)
+    userRef.update("pastChallenges", FieldValue.arrayUnion(challengeId))
+  }
 
-        userDocRef
-            .get()
-            .addOnSuccessListener { document ->
-                if (!document.exists()) {
+  override fun getPastChallenges(
+      userId: String,
+      onSuccess: (List<Challenge>) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    val userDocRef = db.collection(collectionPath).document(userId)
+
+    userDocRef
+        .get()
+        .addOnSuccessListener { document ->
+          if (!document.exists()) {
+            onSuccess(emptyList())
+            return@addOnSuccessListener
+          }
+
+          val challengeIds =
+              document.get("pastChallenges") as? List<*>
+                  ?: run {
                     onSuccess(emptyList())
                     return@addOnSuccessListener
-                }
+                  }
 
-                val challengeIds =
-                    document.get("pastChallenges") as? List<*>
-                        ?: run {
-                            onSuccess(emptyList())
-                            return@addOnSuccessListener
-                        }
-
-                fetchChallengesByIds(challengeIds, onSuccess, onFailure)
-            }
-            .addOnFailureListener { e -> onFailure(e) }
-    }
-
-    override fun incrementField(userId: String, fieldName: String) {
-        val userRef = db.collection(collectionPath).document(userId)
-        userRef.update(fieldName, FieldValue.increment(1))
-    }
-
-    override fun updateUserField(
-        userId: String,
-        fieldName: String,
-        value: Any,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        val userRef = db.collection(collectionPath).document(userId)
-        userRef
-            .update(fieldName, value)
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { e -> onFailure(e) }
-    }
-
-    override suspend fun getChallengesCompleted(userId: String): Int {
-        return getUserField(userId, "challengesCompleted")
-    }
-
-    override suspend fun getChallengesCreated(userId: String): Int {
-        return getUserField(userId, "challengesCreated")
-    }
-
-    override suspend fun getChallengesWon(userId: String): Int {
-        return getUserField(userId, "challengesWon")
-    }
-
-    private suspend fun getUserField(userId: String, field: String): Int {
-        return try {
-            val document = db.collection("users").document(userId).get().await()
-            document.getLong(field)?.toInt() ?: 0
-        } catch (e: Exception) {
-            // Log the error and return 0 as fallback
-            Log.e("FirestoreUserRepository", "Error getting $field for user $userId", e)
-            0
+          fetchChallengesByIds(challengeIds, onSuccess, onFailure)
         }
+        .addOnFailureListener { e -> onFailure(e) }
+  }
+
+  override fun incrementField(userId: String, fieldName: String) {
+    val userRef = db.collection(collectionPath).document(userId)
+    userRef.update(fieldName, FieldValue.increment(1))
+  }
+
+  override fun updateUserField(
+      userId: String,
+      fieldName: String,
+      value: Any,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    val userRef = db.collection(collectionPath).document(userId)
+    userRef
+        .update(fieldName, value)
+        .addOnSuccessListener { onSuccess() }
+        .addOnFailureListener { e -> onFailure(e) }
+  }
+
+  override suspend fun getChallengesCompleted(userId: String): Int {
+    return getUserField(userId, "challengesCompleted")
+  }
+
+  override suspend fun getChallengesCreated(userId: String): Int {
+    return getUserField(userId, "challengesCreated")
+  }
+
+  override suspend fun getChallengesWon(userId: String): Int {
+    return getUserField(userId, "challengesWon")
+  }
+
+  private suspend fun getUserField(userId: String, field: String): Int {
+    return try {
+      val document = db.collection("users").document(userId).get().await()
+      document.getLong(field)?.toInt() ?: 0
+    } catch (e: Exception) {
+      // Log the error and return 0 as fallback
+      Log.e("FirestoreUserRepository", "Error getting $field for user $userId", e)
+      0
     }
+  }
 }

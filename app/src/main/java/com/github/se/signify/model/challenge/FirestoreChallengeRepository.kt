@@ -101,17 +101,18 @@ class FirestoreChallengeRepository(private val db: FirebaseFirestore) : Challeng
         .addOnSuccessListener { onSuccess() }
         .addOnFailureListener { onFailure(it) }
   }
-    override fun updateWinner(
-        challengeId: String,
-        winnerId: String,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        val challengeRef = db.collection(collectionPath).document(challengeId)
 
-        challengeRef
-            .update("winner", winnerId)
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { exception -> onFailure(exception) }
-    }
+  override fun updateWinner(
+      challengeId: String,
+      winnerId: String,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    val challengeRef = db.collection(collectionPath).document(challengeId)
+
+    challengeRef
+        .update("winner", winnerId)
+        .addOnSuccessListener { onSuccess() }
+        .addOnFailureListener { exception -> onFailure(exception) }
+  }
 }

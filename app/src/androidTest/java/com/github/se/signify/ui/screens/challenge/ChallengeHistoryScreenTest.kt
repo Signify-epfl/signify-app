@@ -41,9 +41,9 @@ class ChallengeHistoryScreenTest {
   fun challengeHistoryScreen_displaysStatisticsCorrectly(): Unit = runBlocking {
     composeTestRule.setContent {
       ChallengeHistoryScreen(
-        navigationActions = navigationActions,
-        userSession = userSession,
-        userRepository = userRepository)
+          navigationActions = navigationActions,
+          userSession = userSession,
+          userRepository = userRepository)
     }
 
     // Verify statistics are displayed correctly
@@ -57,9 +57,9 @@ class ChallengeHistoryScreenTest {
   fun challengeHistoryScreen_displaysNoPastChallengesTextWhenEmpty(): Unit = runBlocking {
     composeTestRule.setContent {
       ChallengeHistoryScreen(
-        navigationActions = navigationActions,
-        userSession = userSession,
-        userRepository = userRepository)
+          navigationActions = navigationActions,
+          userSession = userSession,
+          userRepository = userRepository)
     }
 
     // Verify the message for no past challenges is displayed
@@ -69,14 +69,14 @@ class ChallengeHistoryScreenTest {
   @Test
   fun pastChallengeCard_displaysCorrectDetails() {
     val challenge =
-      Challenge(
-        challengeId = "challenge1",
-        player1 = "testUserId",
-        player2 = "opponent1",
-        player1Times = mutableListOf(1000L, 2000L),
-        player2Times = mutableListOf(1500L, 2500L),
-        mode = "Sprint",
-        winner = "testUserId")
+        Challenge(
+            challengeId = "challenge1",
+            player1 = "testUserId",
+            player2 = "opponent1",
+            player1Times = mutableListOf(1000L, 2000L),
+            player2Times = mutableListOf(1500L, 2500L),
+            mode = "Sprint",
+            winner = "testUserId")
 
     composeTestRule.setContent {
       PastChallengeCard(challenge = challenge, userSession = userSession)

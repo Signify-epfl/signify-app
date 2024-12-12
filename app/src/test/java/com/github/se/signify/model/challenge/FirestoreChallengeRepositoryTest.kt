@@ -262,43 +262,44 @@ class FirestoreChallengeRepositoryTest {
     assertTrue(failureCalled)
     verify(mockChallengeDocRef).update("playerTime", timeTaken)
   }
-    @Test
-    fun updateWinner_shouldUpdateWinnerInFirestore() {
-        val winnerId = "winnerId"
-        `when`(mockChallengeDocRef.update("winner", winnerId)).thenReturn(Tasks.forResult(null))
 
-        var successCalled = false
-        firestoreChallengeRepository.updateWinner(
-            challengeId = challengeId,
-            winnerId = winnerId,
-            onSuccess = { successCalled = true },
-            onFailure = { fail("Failure callback should not be called") })
+  @Test
+  fun updateWinner_shouldUpdateWinnerInFirestore() {
+    val winnerId = "winnerId"
+    `when`(mockChallengeDocRef.update("winner", winnerId)).thenReturn(Tasks.forResult(null))
 
-        shadowOf(Looper.getMainLooper()).idle()
+    var successCalled = false
+    firestoreChallengeRepository.updateWinner(
+        challengeId = challengeId,
+        winnerId = winnerId,
+        onSuccess = { successCalled = true },
+        onFailure = { fail("Failure callback should not be called") })
 
-        assertTrue(successCalled)
-        verify(mockChallengeDocRef).update("winner", winnerId)
-    }
+    shadowOf(Looper.getMainLooper()).idle()
 
-    @Test
-    fun updateWinner_shouldCallOnFailureOnFirestoreError() {
-        val winnerId = "winnerId"
-        val exception = Exception("Firestore error")
-        `when`(mockChallengeDocRef.update("winner", winnerId)).thenReturn(Tasks.forException(exception))
+    assertTrue(successCalled)
+    verify(mockChallengeDocRef).update("winner", winnerId)
+  }
 
-        var failureCalled = false
-        firestoreChallengeRepository.updateWinner(
-            challengeId = challengeId,
-            winnerId = winnerId,
-            onSuccess = { fail("Success callback should not be called") },
-            onFailure = {
-                failureCalled = true
-                assertEquals(exception, it)
-            })
+  @Test
+  fun updateWinner_shouldCallOnFailureOnFirestoreError() {
+    val winnerId = "winnerId"
+    val exception = Exception("Firestore error")
+    `when`(mockChallengeDocRef.update("winner", winnerId)).thenReturn(Tasks.forException(exception))
 
-        shadowOf(Looper.getMainLooper()).idle()
+    var failureCalled = false
+    firestoreChallengeRepository.updateWinner(
+        challengeId = challengeId,
+        winnerId = winnerId,
+        onSuccess = { fail("Success callback should not be called") },
+        onFailure = {
+          failureCalled = true
+          assertEquals(exception, it)
+        })
 
-        assertTrue(failureCalled)
-        verify(mockChallengeDocRef).update("winner", winnerId)
-    }
+    shadowOf(Looper.getMainLooper()).idle()
+
+    assertTrue(failureCalled)
+    verify(mockChallengeDocRef).update("winner", winnerId)
+  }
 }

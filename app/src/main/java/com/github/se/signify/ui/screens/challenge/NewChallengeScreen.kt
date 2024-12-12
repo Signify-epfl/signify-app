@@ -128,36 +128,36 @@ fun NewChallengeScreen(
                           modifier = Modifier.testTag("OngoingChallengesLazyColumn")) {
                             items(ongoingChallenges.size) { index ->
                               val challenge = ongoingChallenges[index]
-                                val isBothCompleted =
-                                    challenge.player1RoundCompleted.all { it } &&
-                                            challenge.player2RoundCompleted.all { it }
+                              val isBothCompleted =
+                                  challenge.player1RoundCompleted.all { it } &&
+                                      challenge.player2RoundCompleted.all { it }
 
-                                if (isBothCompleted) {
-                                    // Determine the winner
-                                    val player1Time = challenge.player1Times.sum()
-                                    val player2Time = challenge.player2Times.sum()
-                                    val winner =
-                                        if (player1Time < player2Time) challenge.player1
-                                        else challenge.player2
+                              if (isBothCompleted) {
+                                // Determine the winner
+                                val player1Time = challenge.player1Times.sum()
+                                val player2Time = challenge.player2Times.sum()
+                                val winner =
+                                    if (player1Time < player2Time) challenge.player1
+                                    else challenge.player2
 
-                                    // Update the challenge in pastChallenges
-                                    userViewModel.removeOngoingChallenge(
-                                        challenge.player1, challenge.challengeId)
-                                    userViewModel.addPastChallenge(
-                                        challenge.player1, challenge.challengeId)
-                                    userViewModel.removeOngoingChallenge(
-                                        challenge.player2, challenge.challengeId)
-                                    userViewModel.addPastChallenge(
-                                        challenge.player2, challenge.challengeId)
-                                    userViewModel.incrementField(winner, "challengesWon")
-                                    userViewModel.incrementField(
-                                        challenge.player2, "challengesCompleted")
-                                    userViewModel.incrementField(
-                                        challenge.player1, "challengesCompleted")
+                                // Update the challenge in pastChallenges
+                                userViewModel.removeOngoingChallenge(
+                                    challenge.player1, challenge.challengeId)
+                                userViewModel.addPastChallenge(
+                                    challenge.player1, challenge.challengeId)
+                                userViewModel.removeOngoingChallenge(
+                                    challenge.player2, challenge.challengeId)
+                                userViewModel.addPastChallenge(
+                                    challenge.player2, challenge.challengeId)
+                                userViewModel.incrementField(winner, "challengesWon")
+                                userViewModel.incrementField(
+                                    challenge.player2, "challengesCompleted")
+                                userViewModel.incrementField(
+                                    challenge.player1, "challengesCompleted")
 
-                                    challengeRepository.updateWinner(
-                                        challenge.challengeId, winner, {}, {})
-                                }
+                                challengeRepository.updateWinner(
+                                    challenge.challengeId, winner, {}, {})
+                              }
                               OngoingChallengeCard(
                                   challenge = challenge,
                                   onDeleteClick = {

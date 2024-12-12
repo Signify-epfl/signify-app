@@ -1200,9 +1200,9 @@ class FirestoreUserRepositoryTest {
     `when`(mockUserDocumentSnapshot.exists()).thenReturn(true)
     `when`(mockUserDocumentSnapshot.get("pastChallenges")).thenReturn(listOf(challengeId))
     `when`(mockFireStore.collection("challenges").document(challengeId).get())
-      .thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
+        .thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
     `when`(mockUserDocumentSnapshot.toObject(Challenge::class.java))
-      .thenReturn(Challenge(challengeId))
+        .thenReturn(Challenge(challengeId))
 
     var successCallbackCalled = false
     val onSuccess: (List<Challenge>) -> Unit = { challenges ->
@@ -1278,5 +1278,4 @@ class FirestoreUserRepositoryTest {
     // Assert
     assertEquals(0, result)
   }
-
 }

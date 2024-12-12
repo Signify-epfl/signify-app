@@ -13,6 +13,7 @@ data class Challenge(
         mutableListOf(false, false, false), // Track if player 1 completed each round
     val player2RoundCompleted: List<Boolean> =
         mutableListOf(false, false, false), // Track if player 2 completed each round
-    var gameStatus: String = "not_started", // Possible values: "not_started", "in_progress", "completed"
+    var gameStatus: String =
+        "not_started", // Possible values: "not_started", "in_progress", "completed"
     var winner: String? = null
 )

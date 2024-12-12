@@ -449,113 +449,111 @@ class MockUserRepositoryTest {
     mockUserRepository.getStreak(
         activeUser.uid, { assertEquals(activeUser.currentStreak, it) }, doNotFail)
   }
-    @Test
-    fun addPastChallengeWorks() {
-        val challengeId = "newPastChallenge"
-        mockUserRepository.addPastChallenge(activeUser.uid, challengeId)
 
-        mockUserRepository.getUserById(
-            activeUser.uid,
-            { user -> assertTrue(user.pastChallenges.contains(challengeId)) },
-            doNotFail)
+  @Test
+  fun addPastChallengeWorks() {
+    val challengeId = "newPastChallenge"
+    mockUserRepository.addPastChallenge(activeUser.uid, challengeId)
+
+    mockUserRepository.getUserById(
+        activeUser.uid,
+        { user -> assertTrue(user.pastChallenges.contains(challengeId)) },
+        doNotFail)
+  }
+
+  @Test
+  fun incrementFieldWorksForValidFields() {
+    mockUserRepository.incrementField(activeUser.uid, "challengesCreated")
+    mockUserRepository.incrementField(activeUser.uid, "challengesCompleted")
+    mockUserRepository.incrementField(activeUser.uid, "challengesWon")
+
+    mockUserRepository.getUserById(
+        activeUser.uid,
+        {
+          assertEquals(5, it.challengesCreated)
+          assertEquals(3, it.challengesCompleted)
+          assertEquals(3, it.challengesWon)
+        },
+        doNotFail)
+  }
+
+  @Test
+  fun incrementFieldFailsForInvalidField() {
+    mockUserRepository.incrementField(activeUser.uid, "invalidField")
+
+    mockUserRepository.getUserById(
+        activeUser.uid,
+        { user ->
+          assertEquals(4, user.challengesCreated) // No change
+          assertEquals(2, user.challengesCompleted) // No change
+        },
+        doNotFail)
+  }
+
+  @Test
+  fun updateUserFieldWorksForValidField() {
+    mockUserRepository.updateUserField(
+        activeUser.uid,
+        "challengesCreated",
+        20,
+        {
+          mockUserRepository.getUserById(
+              activeUser.uid, { user -> assertEquals(20, user.challengesCreated) }, doNotFail)
+        },
+        doNotFail)
+  }
+
+  @Test
+  fun updateUserFieldFailsForInvalidField() {
+    try {
+      mockUserRepository.updateUserField(
+          activeUser.uid, "invalidField", 20, doNotSucceed, doNotFail)
+    } catch (e: IllegalArgumentException) {
+      assertEquals("Invalid field name", e.message)
     }
+  }
 
-    @Test
-    fun incrementFieldWorksForValidFields() {
-        mockUserRepository.incrementField(activeUser.uid, "challengesCreated")
-        mockUserRepository.incrementField(activeUser.uid, "challengesCompleted")
-        mockUserRepository.incrementField(activeUser.uid, "challengesWon")
-
-        mockUserRepository.getUserById(
-            activeUser.uid,
-            {
-                assertEquals(5, it.challengesCreated)
-                assertEquals(3, it.challengesCompleted)
-                assertEquals(3, it.challengesWon)
-            },
-            doNotFail)
-    }
-
-    @Test
-    fun incrementFieldFailsForInvalidField() {
-        mockUserRepository.incrementField(activeUser.uid, "invalidField")
-
-        mockUserRepository.getUserById(
-            activeUser.uid,
-            { user ->
-                assertEquals(4, user.challengesCreated) // No change
-                assertEquals(2, user.challengesCompleted) // No change
-            },
-            doNotFail)
-    }
-
-    @Test
-    fun updateUserFieldWorksForValidField() {
-        mockUserRepository.updateUserField(
-            activeUser.uid,
-            "challengesCreated",
-            20,
-            {
-                mockUserRepository.getUserById(
-                    activeUser.uid, { user -> assertEquals(20, user.challengesCreated) }, doNotFail)
-            },
-            doNotFail)
-    }
-
-    @Test
-    fun updateUserFieldFailsForInvalidField() {
-        try {
-            mockUserRepository.updateUserField(
-                activeUser.uid, "invalidField", 20, doNotSucceed, doNotFail)
-        } catch (e: IllegalArgumentException) {
-            assertEquals("Invalid field name", e.message)
+  @Test
+  fun updateUserFieldFailsForMissingUser() {
+    mockUserRepository.updateUserField(
+        "nonExistentUser", "challengesCompleted", 10, doNotSucceed) { exception ->
+          assertEquals("User not found", exception.message)
         }
-    }
+  }
 
-    @Test
-    fun updateUserFieldFailsForMissingUser() {
-        mockUserRepository.updateUserField(
-            "nonExistentUser",
-            "challengesCompleted",
-            10,
-            doNotSucceed
-        ) { exception -> assertEquals("User not found", exception.message) }
+  @Test
+  fun getPastChallengesFailsForMissingUser() {
+    mockUserRepository.getPastChallenges("nonExistentUser", doNotSucceedAny) { exception ->
+      assertEquals("User not found", exception.message)
     }
+  }
 
-    @Test
-    fun getPastChallengesFailsForMissingUser() {
-        mockUserRepository.getPastChallenges(
-            "nonExistentUser",
-            doNotSucceedAny
-        ) { exception -> assertEquals("User not found", exception.message) }
-    }
+  @Test
+  fun getChallengesCreatedReturnsCorrectValue() = runTest {
+    val challengesCreated = mockUserRepository.getChallengesCreated(activeUser.uid)
+    assertEquals(0, challengesCreated)
+  }
 
-    @Test
-    fun getChallengesCreatedReturnsCorrectValue() = runTest {
-        val challengesCreated = mockUserRepository.getChallengesCreated(activeUser.uid)
-        assertEquals(0, challengesCreated)
-    }
+  @Test
+  fun getChallengesCompletedReturnsCorrectValue() = runTest {
+    val challengesCompleted = mockUserRepository.getChallengesCompleted(activeUser.uid)
+    assertEquals(0, challengesCompleted)
+  }
 
-    @Test
-    fun getChallengesCompletedReturnsCorrectValue() = runTest {
-        val challengesCompleted = mockUserRepository.getChallengesCompleted(activeUser.uid)
-        assertEquals(0, challengesCompleted)
-    }
+  @Test
+  fun getChallengesWonReturnsCorrectValue() = runTest {
+    val challengesWon = mockUserRepository.getChallengesWon(activeUser.uid)
+    assertEquals(0, challengesWon)
+  }
 
-    @Test
-    fun getChallengesWonReturnsCorrectValue() = runTest {
-        val challengesWon = mockUserRepository.getChallengesWon(activeUser.uid)
-        assertEquals(0, challengesWon)
-    }
+  @Test
+  fun getChallengesFieldsReturnZeroForNonExistentUser() = runTest {
+    val challengesCreated = mockUserRepository.getChallengesCreated("nonExistentUser")
+    val challengesCompleted = mockUserRepository.getChallengesCompleted("nonExistentUser")
+    val challengesWon = mockUserRepository.getChallengesWon("nonExistentUser")
 
-    @Test
-    fun getChallengesFieldsReturnZeroForNonExistentUser() = runTest {
-        val challengesCreated = mockUserRepository.getChallengesCreated("nonExistentUser")
-        val challengesCompleted = mockUserRepository.getChallengesCompleted("nonExistentUser")
-        val challengesWon = mockUserRepository.getChallengesWon("nonExistentUser")
-
-        assertEquals(0, challengesCreated)
-        assertEquals(0, challengesCompleted)
-        assertEquals(0, challengesWon)
-    }
+    assertEquals(0, challengesCreated)
+    assertEquals(0, challengesCompleted)
+    assertEquals(0, challengesWon)
+  }
 }
