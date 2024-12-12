@@ -2,7 +2,7 @@ package com.github.se.signify.model.common.user
 
 import android.os.Looper
 import androidx.test.core.app.ApplicationProvider
-import com.github.se.signify.model.challenge.Challenge
+import com.github.se.signify.model.challenge.ChallengeId
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
@@ -636,9 +636,9 @@ class FirestoreUserRepositoryTest {
     `when`(mockUserDocumentSnapshot.get(ongoingChallenges)).thenReturn(null)
 
     var successCallbackCalled = false
-    val onSuccess: (List<Challenge>) -> Unit = { challenges ->
+    val onSuccess: (List<ChallengeId>) -> Unit = { challengeIds ->
       successCallbackCalled = true
-      assertTrue(challenges.isEmpty()) // Ensure the challenges list is empty
+      assertTrue(challengeIds.isEmpty()) // Ensure the challenges list is empty
     }
 
     // Act
@@ -846,9 +846,9 @@ class FirestoreUserRepositoryTest {
     `when`(mockUserDocumentSnapshot.get(ongoingChallenges)).thenReturn(null)
 
     var successCallbackCalled = false
-    val onSuccess: (List<Challenge>) -> Unit = { challenges ->
+    val onSuccess: (List<ChallengeId>) -> Unit = { challengeIds ->
       successCallbackCalled = true
-      assertTrue(challenges.isEmpty())
+      assertTrue(challengeIds.isEmpty())
     }
 
     // Act

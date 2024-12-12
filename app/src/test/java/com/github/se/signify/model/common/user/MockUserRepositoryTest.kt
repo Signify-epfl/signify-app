@@ -357,7 +357,7 @@ class MockUserRepositoryTest {
         {
           mockUserRepository.getOngoingChallenges(
               activeUser.uid,
-              { challenges -> assertTrue(challenges.any { it.challengeId == challengeId }) },
+              { challengeIds -> assertTrue(challengeIds.any { it == challengeId }) },
               doNotFail)
         },
         doNotFail)
@@ -370,8 +370,7 @@ class MockUserRepositoryTest {
     mockUserRepository.getOngoingChallenges(
         activeUser.uid,
         { challenges ->
-          assertEquals(
-              activeUser.ongoingChallenges.toSet(), challenges.map { it.challengeId }.toSet())
+          assertEquals(activeUser.ongoingChallenges.toSet(), challenges.map { it }.toSet())
         },
         doNotFail)
   }
@@ -393,7 +392,7 @@ class MockUserRepositoryTest {
         {
           mockUserRepository.getOngoingChallenges(
               user.uid,
-              { challenges -> assertFalse(challenges.any { it.challengeId == challengeId }) },
+              { challenges -> assertFalse(challenges.any { it == challengeId }) },
               doNotFail)
         },
         doNotFail)
