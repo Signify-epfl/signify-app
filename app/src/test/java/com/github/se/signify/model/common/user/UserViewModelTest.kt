@@ -409,7 +409,7 @@ class UserViewModelTest {
 
     // Assert
     // Verifies that the ongoing challenges list is updated correctly in the ViewModel
-    assertEquals(challengeIds, userViewModel.ongoingChallenges.value)
+    assertEquals(challengeIds, userViewModel.ongoingChallengeIds.value)
   }
 
   @Test

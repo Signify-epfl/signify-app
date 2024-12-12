@@ -1,6 +1,5 @@
 package com.github.se.signify.ui.screens.challenge
 
-import android.annotation.SuppressLint
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -49,8 +48,10 @@ import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.TextButton
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlinx.coroutines.suspendCancellableCoroutine
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "SuspiciousIndentation")
 @Composable
 fun NewChallengeScreen(
     navigationActions: NavigationActions,
@@ -68,7 +69,20 @@ fun NewChallengeScreen(
     userViewModel.getOngoingChallenges()
   }
 
-  val ongoingChallenges by userViewModel.ongoingChallenges.collectAsState()
+  val ongoingChallengeIds by userViewModel.ongoingChallengeIds.collectAsState()
+  var ongoingChallenges: List<Challenge> = emptyList()
+  LaunchedEffect(ongoingChallengeIds) {
+    val fetchedChallenges =
+        ongoingChallengeIds.mapNotNull { challengeId ->
+          suspendCancellableCoroutine<Challenge?> { continuation ->
+            challengeRepository.getChallengeById(
+                challengeId,
+                onSuccess = { challenge -> continuation.resume(challenge) },
+                onFailure = { exception -> continuation.resumeWithException(exception) })
+          }
+        }
+    ongoingChallenges = fetchedChallenges
+  }
 
   AnnexScreenScaffold(
       navigationActions = navigationActions,

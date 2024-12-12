@@ -36,8 +36,8 @@ open class UserViewModel(
   private val _errorState = MutableStateFlow<String?>(null)
   val errorState: StateFlow<String?> = _errorState
 
-  private val _ongoingChallenges = MutableStateFlow<List<ChallengeId>>(emptyList())
-  val ongoingChallenges: StateFlow<List<ChallengeId>> = _ongoingChallenges
+  private val _ongoingChallengeIds = MutableStateFlow<List<ChallengeId>>(emptyList())
+  val ongoingChallengeIds: StateFlow<List<ChallengeId>> = _ongoingChallengeIds
 
   private val _unlockedQuests = MutableStateFlow("1")
   val unlockedQuests: StateFlow<String> = _unlockedQuests
@@ -177,7 +177,7 @@ open class UserViewModel(
   fun getOngoingChallenges() {
     repository.getOngoingChallenges(
         userSession.getUserId()!!,
-        onSuccess = { _ongoingChallenges.value = it },
+        onSuccess = { _ongoingChallengeIds.value = it },
         onFailure = { e ->
           Log.e("UserViewModel", "Failed to fetch ongoing challenges: ${e.message}")
         })
@@ -189,7 +189,7 @@ open class UserViewModel(
         challengeId,
         onSuccess = {
           // Update ongoingChallenges after removal
-          _ongoingChallenges.value = _ongoingChallenges.value.filter { it != challengeId }
+          _ongoingChallengeIds.value = _ongoingChallengeIds.value.filter { it != challengeId }
         },
         onFailure = { e ->
           Log.e("UserViewModel", "Failed to remove challenge from ongoing: ${e.message}")
