@@ -5,6 +5,9 @@ import android.content.res.Configuration
 import com.github.se.signify.R
 import com.github.se.signify.model.profile.stats.StatsViewModel
 import java.util.Locale
+import org.jetbrains.kotlinx.dataframe.DataFrame
+import org.jetbrains.kotlinx.dataframe.api.dataFrameOf
+import org.jetbrains.kotlinx.dataframe.math.mean
 
 /**
  * Retrieves the drawable resource ID for a letter's image.
@@ -86,4 +89,18 @@ fun calculateTimePerLetter(statsViewModel: StatsViewModel, startTimestamp: Long)
   val endTimestamp = System.currentTimeMillis()
   statsViewModel.updateTimePerLetter(endTimestamp - startTimestamp)
   return endTimestamp
+}
+
+const val TimePerLetter = "TimePerLetter"
+const val TimePerLetterIndex = "TimePerLetterIndex"
+const val TimePerLetterConst = "TimePerLetterConst"
+/** @param timePerLetter */
+fun createDataFrame(timePerLetter: List<Double>): DataFrame<*> {
+  val indexList = listOf(1..timePerLetter.size)
+  var timePerLetterAverage = emptyList<Double>()
+  timePerLetter.forEach { _ -> timePerLetterAverage = timePerLetterAverage + timePerLetter.mean() }
+  return dataFrameOf(
+      TimePerLetter to timePerLetter,
+      TimePerLetterIndex to indexList,
+      TimePerLetterConst to timePerLetterAverage)
 }

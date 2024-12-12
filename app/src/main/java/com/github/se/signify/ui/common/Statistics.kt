@@ -30,6 +30,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
+import com.github.se.signify.model.common.TimePerLetter
+import com.github.se.signify.model.common.TimePerLetterConst
+import com.github.se.signify.model.common.TimePerLetterIndex
+import com.github.se.signify.model.common.createDataFrame
+import com.github.se.signify.model.common.timeConversion
+import org.jetbrains.kotlinx.dataframe.math.mean
+import org.jetbrains.kotlinx.kandy.dsl.plot
+import org.jetbrains.kotlinx.kandy.echarts.layers.bars
+import org.jetbrains.kotlinx.kandy.echarts.layers.line
+import org.jetbrains.kotlinx.kandy.letsplot.feature.layout
 
 /**
  * A scrollable list of letters. The letters learned by a user are highlighted.
@@ -167,5 +177,36 @@ fun StreakCounter(days: Long) {
             color = MaterialTheme.colorScheme.secondary,
             fontSize = 20.sp,
             modifier = Modifier.testTag("NumberOfDays"))
+      }
+}
+/**
+ * @param timePerLetter
+ * @param modifier
+ */
+@Composable
+fun CreateGraph(timePerLetter: List<Long>, modifier: Modifier) {
+  var timePerLetterDouble = emptyList<Double>()
+  timePerLetter.forEach { time -> timePerLetterDouble = timePerLetterDouble + timeConversion(time) }
+  val df = createDataFrame(timePerLetterDouble)
+  Box(
+      modifier =
+          modifier
+              .fillMaxWidth()
+              .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp))
+              .border(2.dp, MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
+              .testTag(stringResource(R.string.graph_testtag)),
+      contentAlignment = Alignment.Center) {
+        df.plot {
+          layout.title = stringResource(R.string.graph_stats_title)
+          layout.subtitle = stringResource(R.string.graph_average_text) + "${timePerLetter.mean()}"
+          bars {
+            x(TimePerLetter)
+            y(TimePerLetterIndex)
+          }
+          line {
+            x(TimePerLetterConst)
+            y(TimePerLetterIndex)
+          }
+        }
       }
 }

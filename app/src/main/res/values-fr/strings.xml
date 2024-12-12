@@ -37,6 +37,10 @@
     <string name="hard_exercises_text">Difficile</string>
     <string name="daily_quests_text">Quotidienne</string>
     <string name="weekly_quests_text">Hebdomadaire</string>
+    <string name="graph_stats_title">Temps par lettre [s]</string>
+    <string name="graph_average_text">moyenne = </string>
+    <string name="graph_testtag">graphTimePerLetter</string>
+
     <string name="graphs_and_stats_text">Graphiques Et Statistiques</string>
     <string name="no_friend_text">Pas d’ami(e)s</string>
     <string name="request_friends_text">Demandes d’Ami(e)s</string>
