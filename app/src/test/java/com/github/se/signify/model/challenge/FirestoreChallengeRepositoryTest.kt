@@ -182,7 +182,7 @@ class FirestoreChallengeRepositoryTest {
 
   @Test
   fun updateChallenge_shouldUpdateChallengeInFirestore() {
-    val updatedChallenge = Challenge(challengeId = challengeId, status = "in_progress")
+    val updatedChallenge = Challenge(challengeId = challengeId)
     `when`(mockChallengeDocRef.set(updatedChallenge)).thenReturn(Tasks.forResult(null))
 
     var successCalled = false
@@ -199,7 +199,7 @@ class FirestoreChallengeRepositoryTest {
 
   @Test
   fun updateChallenge_shouldCallOnFailureOnFirestoreError() {
-    val updatedChallenge = Challenge(challengeId = challengeId, status = "in_progress")
+    val updatedChallenge = Challenge(challengeId = challengeId)
     val exception = Exception("Firestore error")
     `when`(mockChallengeDocRef.set(updatedChallenge)).thenReturn(Tasks.forException(exception))
 
@@ -262,4 +262,43 @@ class FirestoreChallengeRepositoryTest {
     assertTrue(failureCalled)
     verify(mockChallengeDocRef).update("playerTime", timeTaken)
   }
+    @Test
+    fun updateWinner_shouldUpdateWinnerInFirestore() {
+        val winnerId = "winnerId"
+        `when`(mockChallengeDocRef.update("winner", winnerId)).thenReturn(Tasks.forResult(null))
+
+        var successCalled = false
+        firestoreChallengeRepository.updateWinner(
+            challengeId = challengeId,
+            winnerId = winnerId,
+            onSuccess = { successCalled = true },
+            onFailure = { fail("Failure callback should not be called") })
+
+        shadowOf(Looper.getMainLooper()).idle()
+
+        assertTrue(successCalled)
+        verify(mockChallengeDocRef).update("winner", winnerId)
+    }
+
+    @Test
+    fun updateWinner_shouldCallOnFailureOnFirestoreError() {
+        val winnerId = "winnerId"
+        val exception = Exception("Firestore error")
+        `when`(mockChallengeDocRef.update("winner", winnerId)).thenReturn(Tasks.forException(exception))
+
+        var failureCalled = false
+        firestoreChallengeRepository.updateWinner(
+            challengeId = challengeId,
+            winnerId = winnerId,
+            onSuccess = { fail("Success callback should not be called") },
+            onFailure = {
+                failureCalled = true
+                assertEquals(exception, it)
+            })
+
+        shadowOf(Looper.getMainLooper()).idle()
+
+        assertTrue(failureCalled)
+        verify(mockChallengeDocRef).update("winner", winnerId)
+    }
 }
