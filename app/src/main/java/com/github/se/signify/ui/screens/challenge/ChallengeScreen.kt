@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.github.se.signify.R
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.model.navigation.TopLevelDestinations
 import com.github.se.signify.ui.common.HelpText
 import com.github.se.signify.ui.common.MainScreenScaffold
 import com.github.se.signify.ui.common.SquareButton
@@ -20,6 +21,7 @@ import com.github.se.signify.ui.common.SquareButton
 fun ChallengeScreen(navigationActions: NavigationActions) {
   MainScreenScaffold(
       navigationActions = navigationActions,
+      topLevelDestination = TopLevelDestinations.CHALLENGE,
       testTag = "ChallengeScreen",
       helpText =
           HelpText(
