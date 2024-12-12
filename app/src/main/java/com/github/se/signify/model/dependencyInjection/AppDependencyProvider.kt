@@ -1,5 +1,7 @@
 package com.github.se.signify.model.dependencyInjection
 
+import com.github.se.signify.model.authentication.AuthService
+import com.github.se.signify.model.authentication.FirebaseAuthService
 import com.github.se.signify.model.authentication.FirebaseUserSession
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.challenge.ChallengeRepository
@@ -54,6 +56,10 @@ object AppDependencyProvider : DependencyProvider {
   }
 
   override fun userSession(): UserSession {
-    return FirebaseUserSession()
+    return FirebaseUserSession(provideAuthService())
+  }
+
+  override fun provideAuthService(): AuthService {
+    return FirebaseAuthService()
   }
 }

@@ -8,6 +8,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
@@ -813,27 +814,31 @@ class FirestoreUserRepositoryTest {
 
   @Test
   fun getOngoingChallenges_shouldHandleUserDocNotExist() {
+    val setException = NoSuchElementException("User not found for ID: $currentUserId")
+
     // Arrange
     `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
     `when`(mockUserDocumentSnapshot.exists()).thenReturn(false)
 
-    var successCallbackCalled = false
-    val onSuccess: (List<Challenge>) -> Unit = { challenges ->
-      successCallbackCalled = true
-      assertTrue(challenges.isEmpty())
+    `when`(mockCurrentUserDocRef.set(any<Map<String, Any>>()))
+        .thenReturn(Tasks.forException(setException))
+
+    var failureCallbackCalled = false
+    val onFailure: (Exception) -> Unit = {
+      failureCallbackCalled = true
+      assertTrue(it is NoSuchElementException)
+      assertEquals("User not found for ID: $currentUserId", it.message) // Compare messages
     }
 
     // Act
     firestoreUserRepository.getOngoingChallenges(
-        currentUserId, onSuccess = onSuccess, onFailure = { fail(noFailure) })
+        currentUserId, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
 
     // Idle the main looper
     shadowOf(Looper.getMainLooper()).idle()
 
     // Assert
-    // Ensures the success callback is invoked and verifies the challenges list is empty when the
-    // user document does not exist
-    assertTrue(successCallbackCalled)
+    assertTrue(failureCallbackCalled)
   }
 
   @Test
@@ -1046,5 +1051,184 @@ class FirestoreUserRepositoryTest {
     assertTrue(successCallbackCalled)
 
     verify(mockCurrentUserDocRef).update(eq(customField), eq("value"))
+
+    @Suppress("UNCHECKED_CAST")
+  @Test
+  fun getFriendsList_shouldHandleUserDocNotExist() {
+    val expectedException = NoSuchElementException("User not found for ID: $currentUserId")
+
+    // Arrange: Mock Firestore behavior
+    `when`(mockCollectionReference.document(currentUserId)).thenReturn(mockCurrentUserDocRef)
+    `when`(mockUserDocumentSnapshot.exists()).thenReturn(false) // Document does not exist
+
+    // Mock addSnapshotListener with a compatible EventListener
+    `when`(mockCurrentUserDocRef.addSnapshotListener(any<EventListener<DocumentSnapshot>>()))
+        .thenAnswer { invocation ->
+          val listener = invocation.arguments[0] as EventListener<DocumentSnapshot>
+          listener.onEvent(mockUserDocumentSnapshot, null) // Simulate snapshot received
+          null
+        }
+
+    var failureCallbackCalled = false
+    val onFailure: (Exception) -> Unit = { exception ->
+      failureCallbackCalled = true
+      assertTrue(exception is NoSuchElementException)
+      assertEquals(expectedException.message, exception.message)
+    }
+
+    // Act
+    firestoreUserRepository.getFriendsList(
+        currentUserId,
+        onSuccess = {
+          fail("onSuccess should not be called when the user document does not exist")
+        },
+        onFailure = onFailure)
+
+    // Assert
+    assertTrue(failureCallbackCalled)
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  @Test
+  fun getRequestsFriendsList_shouldHandleUserDocNotExist() {
+    val expectedException = NoSuchElementException("User not found for ID: $currentUserId")
+
+    // Arrange: Mock Firestore behavior
+    `when`(mockCollectionReference.document(currentUserId)).thenReturn(mockCurrentUserDocRef)
+    `when`(mockUserDocumentSnapshot.exists()).thenReturn(false) // Document does not exist
+
+    // Mock addSnapshotListener with a compatible EventListener
+    `when`(mockCurrentUserDocRef.addSnapshotListener(any<EventListener<DocumentSnapshot>>()))
+        .thenAnswer { invocation ->
+          val listener = invocation.arguments[0] as EventListener<DocumentSnapshot>
+          listener.onEvent(mockUserDocumentSnapshot, null) // Simulate snapshot received
+          null
+        }
+
+    var failureCallbackCalled = false
+    val onFailure: (Exception) -> Unit = { exception ->
+      failureCallbackCalled = true
+      assertTrue(exception is NoSuchElementException)
+      assertEquals(expectedException.message, exception.message)
+    }
+
+    // Act
+    firestoreUserRepository.getRequestsFriendsList(
+        currentUserId,
+        onSuccess = {
+          fail("onSuccess should not be called when the user document does not exist")
+        },
+        onFailure = onFailure)
+
+    // Assert
+    assertTrue(failureCallbackCalled)
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  @Test
+  fun getUserName_shouldHandleUserDocNotExist() {
+    val expectedException = NoSuchElementException("User not found for ID: $currentUserId")
+
+    // Arrange: Mock Firestore behavior
+    `when`(mockCollectionReference.document(currentUserId)).thenReturn(mockCurrentUserDocRef)
+    `when`(mockUserDocumentSnapshot.exists()).thenReturn(false) // Document does not exist
+
+    // Mock addSnapshotListener with a compatible EventListener
+    `when`(mockCurrentUserDocRef.addSnapshotListener(any<EventListener<DocumentSnapshot>>()))
+        .thenAnswer { invocation ->
+          val listener = invocation.arguments[0] as EventListener<DocumentSnapshot>
+          listener.onEvent(mockUserDocumentSnapshot, null) // Simulate snapshot received
+          null
+        }
+
+    var failureCallbackCalled = false
+    val onFailure: (Exception) -> Unit = { exception ->
+      failureCallbackCalled = true
+      assertTrue(exception is NoSuchElementException)
+      assertEquals(expectedException.message, exception.message)
+    }
+
+    // Act
+    firestoreUserRepository.getUserName(
+        currentUserId,
+        onSuccess = {
+          fail("onSuccess should not be called when the user document does not exist")
+        },
+        onFailure = onFailure)
+
+    // Assert
+    assertTrue(failureCallbackCalled)
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  @Test
+  fun getProfilePictureUrl_shouldHandleUserDocNotExist() {
+    val expectedException = NoSuchElementException("User not found for ID: $currentUserId")
+
+    // Arrange: Mock Firestore behavior
+    `when`(mockCollectionReference.document(currentUserId)).thenReturn(mockCurrentUserDocRef)
+    `when`(mockUserDocumentSnapshot.exists()).thenReturn(false) // Document does not exist
+
+    // Mock addSnapshotListener with a compatible EventListener
+    `when`(mockCurrentUserDocRef.addSnapshotListener(any<EventListener<DocumentSnapshot>>()))
+        .thenAnswer { invocation ->
+          val listener = invocation.arguments[0] as EventListener<DocumentSnapshot>
+          listener.onEvent(mockUserDocumentSnapshot, null) // Simulate snapshot received
+          null
+        }
+
+    var failureCallbackCalled = false
+    val onFailure: (Exception) -> Unit = { exception ->
+      failureCallbackCalled = true
+      assertTrue(exception is NoSuchElementException)
+      assertEquals(expectedException.message, exception.message)
+    }
+
+    // Act
+    firestoreUserRepository.getProfilePictureUrl(
+        currentUserId,
+        onSuccess = {
+          fail("onSuccess should not be called when the user document does not exist")
+        },
+        onFailure = onFailure)
+
+    // Assert
+    assertTrue(failureCallbackCalled)
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  @Test
+  fun getStreak_shouldHandleUserDocNotExist() {
+    val expectedException = NoSuchElementException("User not found for ID: $currentUserId")
+
+    // Arrange: Mock Firestore behavior
+    `when`(mockCollectionReference.document(currentUserId)).thenReturn(mockCurrentUserDocRef)
+    `when`(mockUserDocumentSnapshot.exists()).thenReturn(false) // Document does not exist
+
+    // Mock addSnapshotListener with a compatible EventListener
+    `when`(mockCurrentUserDocRef.addSnapshotListener(any<EventListener<DocumentSnapshot>>()))
+        .thenAnswer { invocation ->
+          val listener = invocation.arguments[0] as EventListener<DocumentSnapshot>
+          listener.onEvent(mockUserDocumentSnapshot, null) // Simulate snapshot received
+          null
+        }
+
+    var failureCallbackCalled = false
+    val onFailure: (Exception) -> Unit = { exception ->
+      failureCallbackCalled = true
+      assertTrue(exception is NoSuchElementException)
+      assertEquals(expectedException.message, exception.message)
+    }
+
+    // Act
+    firestoreUserRepository.getStreak(
+        currentUserId,
+        onSuccess = {
+          fail("onSuccess should not be called when the user document does not exist")
+        },
+        onFailure = onFailure)
+
+    // Assert
+    assertTrue(failureCallbackCalled)
   }
 }

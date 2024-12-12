@@ -66,8 +66,6 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="incorrect_answer_text">Incorrect answer, try again.</string>
     <string name="choose_correct_answer_text">Choose the correct answer:</string>
     <string name="submit_text">Submit</string>
-    <string name="lets_go_text">Let’s Go!</string>
-    <string name="locked_text">Locked</string>
     <string name="in_sign_language_text"> in ASL sign language</string>
     <string name="letter_text">Letter</string>
     <string name="try_text">Try hand signs here !</string>
@@ -300,5 +298,11 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
 Let’s take a quick tour to help you get started with learning sign language effortlessly.</string>
     <string name="tutorial_screen2_text">Swipe to the right to view exercises by difficulty level.</string>
     <string name="tutorial_last_screen_text">You\'re ready to start! Enjoy learning sign language.</string>
+    <string name="try_fingerspell_button_text">Try it!</string>
+    <string name="fingerspell_title_text">Fingerspell: %1$s</string>
+    <string name="try_fingerspell_text">Use your camera to fingerspell the word: %1$s</string>
+    <string name="word_completed_text">Word completed!</string>
+
+
 
 </resources>

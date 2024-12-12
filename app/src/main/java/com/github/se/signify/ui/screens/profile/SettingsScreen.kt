@@ -51,7 +51,6 @@ import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.ui.common.AnnexScreenScaffold
-import com.github.se.signify.ui.common.NotImplementedYet
 import com.github.se.signify.ui.common.ProfilePicture
 
 @Composable
@@ -94,23 +93,8 @@ fun SettingsScreen(
       navigationActions = navigationActions,
       testTag = "SettingsScreen",
   ) {
-    Spacer(modifier = Modifier.height(32.dp))
+    Spacer(modifier = Modifier.height(64.dp))
 
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(16.dp).clickable { onThemeChange(!isDarkTheme) },
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween) {
-          val modeText =
-              if (isDarkTheme) stringResource(R.string.dark_mode_text)
-              else stringResource(R.string.light_mode_text)
-          Text(
-              text = modeText,
-              style = MaterialTheme.typography.bodyLarge,
-              color = MaterialTheme.colorScheme.onBackground)
-          Switch(checked = isDarkTheme, onCheckedChange = { onThemeChange(it) })
-        }
-    // Switch between English and French
-    LanguageSwitch(isFrench, onLanguageChange)
     // Editable Profile Picture
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
       Row(
@@ -149,7 +133,7 @@ fun SettingsScreen(
         ProfilePicture(selectedImageUrl)
       }
     }
-    Spacer(modifier = Modifier.height(32.dp))
+    Spacer(modifier = Modifier.height(64.dp))
 
     // Editable Username
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -187,11 +171,26 @@ fun SettingsScreen(
                         cursorColor = MaterialTheme.colorScheme.onBackground))
           }
     }
-    Spacer(modifier = Modifier.height(32.dp))
+    Spacer(modifier = Modifier.height(64.dp))
 
-    // Other Settings Section To be removed after all settings are completed !
-    NotImplementedYet(testTag = "OtherSettings", text = "Other settings:\nLanguage,\nTheme,\n...")
-    Spacer(modifier = Modifier.height(32.dp))
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(16.dp).clickable { onThemeChange(!isDarkTheme) },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween) {
+          val modeText =
+              if (isDarkTheme) stringResource(R.string.dark_mode_text)
+              else stringResource(R.string.light_mode_text)
+          Text(
+              text = modeText,
+              style = MaterialTheme.typography.bodyLarge,
+              color = MaterialTheme.colorScheme.onBackground)
+          Switch(checked = isDarkTheme, onCheckedChange = { onThemeChange(it) })
+        }
+    // Switch between English and French
+    LanguageSwitch(isFrench, onLanguageChange)
+
+    Spacer(modifier = Modifier.height(64.dp))
+
     val savedText = stringResource(R.string.saved_text)
     val saveText = stringResource(R.string.save_text)
     val cancelText = stringResource(R.string.cancel_text)
@@ -235,6 +234,7 @@ fun ActionButtons(onClickAction: () -> Unit, color: Color, text: String, modifie
             text = text, color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Bold)
       }
 }
+
 /**
  * A composable function that provides a toggle to switch between French (FR) and English (EN).
  *

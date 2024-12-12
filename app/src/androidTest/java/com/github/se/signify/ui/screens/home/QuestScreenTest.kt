@@ -1,5 +1,6 @@
 package com.github.se.signify.ui.screens.home
 
+import android.Manifest
 import android.content.Context
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
@@ -9,10 +10,13 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.R
 import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.common.user.UserRepository
+import com.github.se.signify.model.dependencyInjection.AppDependencyProvider
+import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.home.quest.Quest
 import com.github.se.signify.model.home.quest.QuestRepository
 import com.github.se.signify.model.navigation.NavigationActions
@@ -22,6 +26,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
+import org.mockito.Mockito.verifyNoInteractions
 import org.mockito.Mockito.`when`
 
 class QuestScreenTest {
@@ -30,11 +35,16 @@ class QuestScreenTest {
   private lateinit var questRepository: QuestRepository
   private lateinit var userRepository: UserRepository
   private lateinit var navigationActions: NavigationActions
+  private lateinit var handLandmarkViewModel: HandLandmarkViewModel
 
   val context: Context = ApplicationProvider.getApplicationContext()
   val quest_title: String = context.getString(R.string.quest_screen_title_text)
   val open_button: String = context.getString(R.string.open_quest_button_text)
   val closed_button: String = context.getString(R.string.closed_quest_button_text)
+  val close_dialog: String = context.getString(R.string.close_text)
+  val fingerspell_the_word_hello: String =
+      context.getString(R.string.fingerspell_title_text, "hello")
+  val use_your_cam_for_hello: String = context.getString(R.string.try_fingerspell_text, "hello")
 
   private val sampleQuest =
       Quest(
@@ -44,13 +54,18 @@ class QuestScreenTest {
           videoPath = "")
 
   @get:Rule val composeTestRule = createComposeRule()
+  @get:Rule
+  val cameraAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
 
   @Before
   fun setUp() {
+    val context = mock(Context::class.java)
+    val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
     userSession = MockUserSession()
     questRepository = mock(QuestRepository::class.java)
     userRepository = mock(UserRepository::class.java)
     navigationActions = mock(NavigationActions::class.java)
+    handLandmarkViewModel = HandLandmarkViewModel(handLandMarkImplementation, context)
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.QUEST.route)
   }
@@ -63,6 +78,7 @@ class QuestScreenTest {
           navigationActions = navigationActions,
           userRepository = userRepository,
           questRepository = questRepository,
+          handLandMarkViewModel = handLandmarkViewModel,
       )
     }
 
@@ -71,7 +87,13 @@ class QuestScreenTest {
 
   @Test
   fun questBoxDisplaysCorrectInformation() {
-    composeTestRule.setContent { QuestBox(quest = sampleQuest, isUnlocked = true) }
+    composeTestRule.setContent {
+      QuestBox(
+          quest = sampleQuest,
+          isUnlocked = true,
+          handLandMarkViewModel = handLandmarkViewModel,
+      )
+    }
 
     composeTestRule.onNodeWithTag("QuestCard").assertIsDisplayed()
     composeTestRule.onNodeWithTag("QuestHeader").assertIsDisplayed()
@@ -80,7 +102,13 @@ class QuestScreenTest {
 
   @Test
   fun questActionButtonHasClickAction() {
-    composeTestRule.setContent { QuestBox(quest = sampleQuest, isUnlocked = true) }
+    composeTestRule.setContent {
+      QuestBox(
+          quest = sampleQuest,
+          isUnlocked = true,
+          handLandMarkViewModel = handLandmarkViewModel,
+      )
+    }
 
     composeTestRule.onNodeWithTag("QuestActionButton").assertHasClickAction()
   }
@@ -93,6 +121,7 @@ class QuestScreenTest {
           navigationActions = navigationActions,
           questRepository = questRepository,
           userRepository = userRepository,
+          handLandMarkViewModel = handLandmarkViewModel,
       )
     }
 
@@ -105,7 +134,13 @@ class QuestScreenTest {
 
   @Test
   fun questBox_displaysCorrectInformationForUnlockedState() {
-    composeTestRule.setContent { QuestBox(quest = sampleQuest, isUnlocked = true) }
+    composeTestRule.setContent {
+      QuestBox(
+          quest = sampleQuest,
+          isUnlocked = true,
+          handLandMarkViewModel = handLandmarkViewModel,
+      )
+    }
 
     // Assert that the QuestBox is displayed with the correct content
     composeTestRule.onNodeWithTag("QuestCard").assertIsDisplayed()
@@ -115,7 +150,13 @@ class QuestScreenTest {
 
   @Test
   fun questBox_displaysLockedButtonWhenLocked() {
-    composeTestRule.setContent { QuestBox(quest = sampleQuest, isUnlocked = false) }
+    composeTestRule.setContent {
+      QuestBox(
+          quest = sampleQuest,
+          isUnlocked = false,
+          handLandMarkViewModel = handLandmarkViewModel,
+      )
+    }
 
     // Assert that the button shows "Locked" when the quest is not unlocked
     composeTestRule.onNodeWithText(closed_button).assertIsDisplayed()
@@ -124,7 +165,13 @@ class QuestScreenTest {
 
   @Test
   fun questBox_opensDialogWhenButtonClickedIfUnlocked() {
-    composeTestRule.setContent { QuestBox(quest = sampleQuest, isUnlocked = true) }
+    composeTestRule.setContent {
+      QuestBox(
+          quest = sampleQuest,
+          isUnlocked = true,
+          handLandMarkViewModel = handLandmarkViewModel,
+      )
+    }
 
     // Click the button to open the dialog
     composeTestRule.onNodeWithTag("QuestActionButton").performClick()
@@ -136,7 +183,13 @@ class QuestScreenTest {
 
   @Test
   fun questDescriptionDialog_displaysContentAndCloseButton() {
-    composeTestRule.setContent { QuestDescriptionDialog(quest = sampleQuest, onDismiss = {}) }
+    composeTestRule.setContent {
+      QuestDescriptionDialog(
+          quest = sampleQuest,
+          onDismiss = {},
+          handLandMarkViewModel = handLandmarkViewModel,
+      )
+    }
 
     // Assert dialog title and description are displayed
     composeTestRule.onNodeWithText(sampleQuest.title + " in ASL sign language").assertIsDisplayed()
@@ -154,6 +207,7 @@ class QuestScreenTest {
           navigationActions = navigationActions,
           questRepository = questRepository,
           userRepository = userRepository,
+          handLandMarkViewModel = handLandmarkViewModel,
       )
     }
 
@@ -166,7 +220,13 @@ class QuestScreenTest {
 
   @Test
   fun questBox_doesNotOpenDialogWhenLocked() {
-    composeTestRule.setContent { QuestBox(quest = sampleQuest, isUnlocked = false) }
+    composeTestRule.setContent {
+      QuestBox(
+          quest = sampleQuest,
+          isUnlocked = false,
+          handLandMarkViewModel = handLandmarkViewModel,
+      )
+    }
 
     // Try to click the button when it's locked
     composeTestRule.onNodeWithTag("QuestActionButton").performClick()
@@ -182,13 +242,139 @@ class QuestScreenTest {
     var dismissCalled = false
 
     composeTestRule.setContent {
-      QuestDescriptionDialog(quest = sampleQuest, onDismiss = { dismissCalled = true })
+      QuestDescriptionDialog(
+          quest = sampleQuest,
+          onDismiss = { dismissCalled = true },
+          handLandMarkViewModel = handLandmarkViewModel,
+      )
     }
 
     // Click the "Close" button
-    composeTestRule.onNodeWithText("Close").performClick()
+    composeTestRule.onNodeWithText(close_dialog).performClick()
 
     // Verify that onDismiss was called
     assert(dismissCalled)
+  }
+
+  @Test
+  fun handleGestureMatchingForWordTest() {
+    // Mocks for callback functions
+    val mockOnProgressUpdate = mock<(Int) -> Unit>()
+    val mockOnWordComplete = mock<() -> Unit>()
+
+    // Test inputs
+    val detectedGesture = "A"
+    val currentLetterIndex = 0
+    val word = "APPLE"
+
+    handleGestureMatchingForWord(
+        detectedGesture = detectedGesture,
+        currentLetterIndex = currentLetterIndex,
+        word = word,
+        onProgressUpdate = mockOnProgressUpdate,
+        onWordComplete = mockOnWordComplete)
+
+    // Verify that onProgressUpdate is called with the next letter index
+    verify(mockOnProgressUpdate).invoke(currentLetterIndex + 1)
+
+    // Ensure onWordComplete is not invoked, as we're only moving to the next letter
+    verifyNoInteractions(mockOnWordComplete)
+  }
+
+  @Test
+  fun handleGestureMatchingForWordTest_CompleteWord() {
+    // Mocks for callback functions
+    val mockOnProgressUpdate = mock<(Int) -> Unit>()
+    val mockOnWordComplete = mock<() -> Unit>()
+
+    // Test inputs
+    val detectedGesture = "E"
+    val currentLetterIndex = 4 // Last letter of "APPLE"
+    val word = "APPLE"
+
+    handleGestureMatchingForWord(
+        detectedGesture = detectedGesture,
+        currentLetterIndex = currentLetterIndex,
+        word = word,
+        onProgressUpdate = mockOnProgressUpdate,
+        onWordComplete = mockOnWordComplete)
+
+    // Verify that onWordComplete is called as the word is completed
+    verify(mockOnWordComplete).invoke()
+
+    // Ensure onProgressUpdate is not invoked, as the word is completed
+    verifyNoInteractions(mockOnProgressUpdate)
+  }
+
+  @Test
+  fun handleGestureMatchingForWordTest_WrongGesture() {
+    // Mocks for callback functions
+    val mockOnProgressUpdate = mock<(Int) -> Unit>()
+    val mockOnWordComplete = mock<() -> Unit>()
+
+    // Test inputs
+    val detectedGesture = "B" // Wrong gesture
+    val currentLetterIndex = 0
+    val word = "APPLE"
+
+    handleGestureMatchingForWord(
+        detectedGesture = detectedGesture,
+        currentLetterIndex = currentLetterIndex,
+        word = word,
+        onProgressUpdate = mockOnProgressUpdate,
+        onWordComplete = mockOnWordComplete)
+
+    // Ensure neither onProgressUpdate nor onWordComplete is invoked
+    verifyNoInteractions(mockOnProgressUpdate)
+    verifyNoInteractions(mockOnWordComplete)
+  }
+
+  @Test
+  fun wordLayerIsCorrectlyDisplayed() {
+    // Set up test input
+    val testWord = "APPLE"
+    val currentLetterIndex = 0
+
+    // Launch the composable
+    composeTestRule.setContent {
+      WordLayer(word = testWord, currentLetterIndex = currentLetterIndex)
+    }
+
+    // Assert the Box with the "sentenceLayer" tag exists
+    composeTestRule.onNodeWithTag("sentenceLayer").assertExists()
+
+    // Assert the Text with the "CurrentWordTag" tag exists
+    composeTestRule.onNodeWithTag("CurrentWordTag").assertExists()
+  }
+
+  @Test
+  fun fingerSpellDialog_displaysCorrectTitleAndText() {
+    composeTestRule.setContent {
+      FingerSpellDialog(
+          word = "hello", onDismiss = {}, handLandMarkViewModel = handLandmarkViewModel)
+    }
+
+    // Check if the dialog title is displayed
+    composeTestRule.onNodeWithText(fingerspell_the_word_hello).assertIsDisplayed()
+
+    // Check if the dialog instruction text is displayed
+    composeTestRule.onNodeWithText(use_your_cam_for_hello).assertIsDisplayed()
+  }
+
+  @Test
+  fun fingerSpellDialog_closeButtonClosesDialog() {
+    var isDismissed = false
+    composeTestRule.setContent {
+      FingerSpellDialog(
+          word = "test",
+          onDismiss = { isDismissed = true },
+          handLandMarkViewModel = handLandmarkViewModel)
+    }
+
+    // Perform click on the "Close" button
+    composeTestRule.onNodeWithText(close_dialog).performClick()
+
+    // Verify that the dialog is dismissed
+    assert(isDismissed)
   }
 }

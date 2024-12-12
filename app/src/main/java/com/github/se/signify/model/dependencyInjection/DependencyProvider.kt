@@ -1,5 +1,6 @@
 package com.github.se.signify.model.dependencyInjection
 
+import com.github.se.signify.model.authentication.AuthService
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.common.user.UserRepository
@@ -25,4 +26,6 @@ interface DependencyProvider {
   fun feedbackRepository(): FeedbackRepository
 
   fun userSession(): UserSession
+
+  fun provideAuthService(): AuthService
 }
