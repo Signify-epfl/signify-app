@@ -42,8 +42,6 @@ import org.jetbrains.kotlinx.kandy.echarts.layers.bars
 import org.jetbrains.kotlinx.kandy.echarts.layers.layout
 import org.jetbrains.kotlinx.kandy.echarts.layers.line
 
-// import org.jetbrains.kotlinx.kandy.letsplot.feature.layout
-
 /**
  * A scrollable list of letters. The letters learned by a user are highlighted.
  *
