@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -141,8 +140,7 @@ fun ExerciseScreen(
       Box(
           modifier =
               Modifier.fillMaxWidth()
-                  .padding(horizontal = 16.dp)
-                  .height(150.dp)
+                  .weight(3f)
                   .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
                   .border(
                       2.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(16.dp)),
@@ -163,10 +161,15 @@ fun ExerciseScreen(
         currentLetterIndex,
         currentWordIndex,
         currentSentenceIndex,
-    )
+        Modifier.weight(2f))
+    Spacer(modifier = Modifier.height(16.dp))
 
     // Camera placeholder/composable
-    CameraBox(handLandmarkViewModel)
+    Box(
+        modifier =
+            Modifier.fillMaxWidth().weight(5f).background(MaterialTheme.colorScheme.background)) {
+          CameraBox(handLandmarkViewModel)
+        }
   }
 }
 
@@ -241,13 +244,15 @@ fun onSuccess(
  * @param currentLetterIndex The index of the current letter within the current word.
  * @param currentWordIndex The index of the current word within the current sentence.
  * @param currentSentenceIndex The index of the current sentence in the list of sentences.
+ * @param modifier The modifier of the box.
  */
 @Composable
 fun SentenceLayer(
     sentences: List<String>,
     currentLetterIndex: Int,
     currentWordIndex: Int,
-    currentSentenceIndex: Int
+    currentSentenceIndex: Int,
+    modifier: Modifier
 ) {
   if (isIndexOutOfBounds(currentSentenceIndex, sentences.size)) return
 
@@ -260,9 +265,8 @@ fun SentenceLayer(
 
   Box(
       modifier =
-          Modifier.fillMaxWidth()
-              .height(150.dp)
-              .padding(horizontal = 16.dp)
+          modifier
+              .fillMaxWidth()
               .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
               .border(2.dp, MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
               .testTag("sentenceLayer"),
@@ -271,13 +275,13 @@ fun SentenceLayer(
             text =
                 buildBackgroundText(
                     wordsInSentence, nextSentence, currentWordIndex, isSingleWordSentence),
-            modifier = Modifier.offset(y = (-40).dp).testTag("FullSentenceTag"),
+            modifier = Modifier.offset(y = (-30).dp).testTag("FullSentenceTag"),
             color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.4f),
             style = TextStyle(fontSize = 24.sp))
 
         Text(
             text = buildForegroundText(currentWord, currentLetterIndex),
-            modifier = Modifier.testTag("CurrentWordTag"),
+            modifier = Modifier.offset(y = (10).dp).testTag("CurrentWordTag"),
             style = TextStyle(fontSize = 30.sp),
             color = MaterialTheme.colorScheme.onSecondary)
       }
