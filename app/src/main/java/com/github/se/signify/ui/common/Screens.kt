@@ -75,7 +75,7 @@ fun MainScreenScaffold(
     helpText: HelpText? = null,
     topBarButtons: List<@Composable () -> Unit> = emptyList(),
     floatingActionButton: @Composable () -> Unit = {},
-    content: @Composable() (ColumnScope.() -> Unit)
+    content: @Composable (ColumnScope.() -> Unit)
 ) {
   Scaffold(
       floatingActionButton = { floatingActionButton() },
@@ -124,7 +124,8 @@ fun TopBar(buttons: List<@Composable () -> Unit>, helpText: HelpText?) {
     TopLine()
 
     Row(
-        modifier = Modifier.fillMaxWidth().padding(12.dp),
+        modifier =
+            Modifier.fillMaxWidth().padding(12.dp).background(MaterialTheme.colorScheme.surface),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -179,7 +180,7 @@ fun TopLine() {
   Box(
       modifier =
           Modifier.fillMaxWidth()
-              .height(5.dp)
+              .height(3.dp)
               .background(MaterialTheme.colorScheme.primary)
               .testTag("TopLine"))
 }
@@ -279,14 +280,14 @@ fun BackButton(navigationActions: NavigationActions) {
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun BottomBar(navigationActions: NavigationActions, selected: TopLevelDestination) {
   Column {
-    SeparatorLine()
+    TopLine()
     BottomNavigationMenu(
         onTabSelect = { route -> navigationActions.navigateTo(route) },
         topLevelDestinations = LIST_TOP_LEVEL_DESTINATION,
         selected = selected,
     )
+    SeparatorLine()
   }
-  SeparatorLine()
 }
 
 @Composable
@@ -298,24 +299,24 @@ fun BottomNavigationMenu(
 ) {
   NavigationBar(
       modifier = Modifier.fillMaxWidth().height(60.dp).testTag("BottomNavigationMenu"),
-      containerColor = MaterialTheme.colorScheme.primaryContainer) {
-        topLevelDestinations.forEach { topLevelDestination ->
-          NavigationBarItem(
-              icon = {
-                Icon(
-                    painterResource(id = topLevelDestination.icon),
-                    contentDescription = null,
-                    modifier = Modifier.testTag("TabIcon_${topLevelDestination.route}"))
-              }, // Load the drawable icons
-              selected = topLevelDestination == selected,
-              onClick = { onTabSelect(topLevelDestination) },
-              modifier = Modifier.clip(RoundedCornerShape(50.dp)),
-              colors =
-                  NavigationBarItemDefaults.colors(
-                      selectedIconColor = MaterialTheme.colorScheme.primary,
-                      indicatorColor = Color.Transparent,
-                      unselectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                  ))
-        }
-      }
+  ) {
+    topLevelDestinations.forEach { topLevelDestination ->
+      NavigationBarItem(
+          icon = {
+            Icon(
+                painterResource(id = topLevelDestination.icon),
+                contentDescription = null,
+                modifier = Modifier.testTag("TabIcon_${topLevelDestination.route}"))
+          }, // Load the drawable icons
+          selected = topLevelDestination == selected,
+          onClick = { onTabSelect(topLevelDestination) },
+          modifier = Modifier.clip(RoundedCornerShape(50.dp)),
+          colors =
+              NavigationBarItemDefaults.colors(
+                  selectedIconColor = MaterialTheme.colorScheme.primary,
+                  indicatorColor = Color.Transparent,
+                  unselectedIconColor = MaterialTheme.colorScheme.onSurface,
+              ))
+    }
+  }
 }
