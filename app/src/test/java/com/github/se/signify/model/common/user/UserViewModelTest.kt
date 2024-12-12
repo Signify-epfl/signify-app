@@ -630,6 +630,35 @@ class UserViewModelTest {
     assertTrue(userViewModel.pastChallenges.value.isEmpty())
   }
 
+  @Test
+  fun incrementField_handlesFailureInFetchingUser() = runTest {
+    // Arrange
+    val exception = Exception("Failed to fetch user")
+    doAnswer {
+          val onFailure = it.getArgument<(Exception) -> Unit>(2)
+          onFailure(exception)
+          null
+        }
+        .whenever(userRepository)
+        .getUserById(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.incrementField(currentUserId, "challengesCompleted")
+
+    // Assert
+    verify(userRepository).getUserById(eq(currentUserId), any(), any())
+  }
+
+  @Test
+  fun incrementField_throwsExceptionForInvalidFieldName() {
+    // Act & Assert
+    try {
+      userViewModel.incrementField(currentUserId, "invalidField")
+    } catch (e: IllegalArgumentException) {
+      assertEquals("Invalid field name", e.message)
+    }
+  }
+
   @After
   fun tearDown() {
     Dispatchers.resetMain()

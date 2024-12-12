@@ -1,6 +1,5 @@
 package com.github.se.signify.ui.screens.challenge
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import com.github.se.signify.model.authentication.UserSession
@@ -25,7 +24,6 @@ class ChallengeHistoryScreenTest {
   private val challengesCompleted = 10
   private val challengesCreated = 5
   private val challengesWon = 3
-  private val pastChallenges = mutableStateListOf<Challenge>()
 
   @Before
   fun setUp(): Unit = runBlocking {
@@ -50,9 +48,9 @@ class ChallengeHistoryScreenTest {
 
     // Verify statistics are displayed correctly
     composeTestRule.onNodeWithTag("ChallengesText").assertIsDisplayed()
-    composeTestRule.onNodeWithText("${challengesCompleted}").assertIsDisplayed()
-    composeTestRule.onNodeWithText("${challengesCreated}").assertIsDisplayed()
-    composeTestRule.onNodeWithText("${challengesWon}").assertIsDisplayed()
+    composeTestRule.onNodeWithText("$challengesCompleted").assertIsDisplayed()
+    composeTestRule.onNodeWithText("$challengesCreated").assertIsDisplayed()
+    composeTestRule.onNodeWithText("$challengesWon").assertIsDisplayed()
   }
 
   @Test

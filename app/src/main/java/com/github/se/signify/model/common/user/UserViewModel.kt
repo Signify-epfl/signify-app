@@ -296,7 +296,7 @@ open class UserViewModel(
           repository.updateUserField(
               userId = userId,
               fieldName = fieldName,
-              value = (currentValue ?: 0) + 1,
+              value = (currentValue) + 1,
               onSuccess = { Log.d("UserViewModel", "Field $fieldName incremented successfully") },
               onFailure = { e ->
                 Log.e("UserViewModel", "Failed to increment field: ${e.message}")

@@ -11,6 +11,7 @@ import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.challenge.Challenge
 import com.github.se.signify.model.challenge.MockChallengeRepository
 import com.github.se.signify.model.common.user.UserRepository
+import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import org.junit.Before
@@ -31,6 +32,7 @@ class NewChallengeScreenTest {
   private lateinit var navigationActions: NavigationActions
   private lateinit var userRepository: UserRepository
   private lateinit var challengeRepository: MockChallengeRepository
+  private lateinit var userViewModel: UserViewModel
 
   private val ongoingChallenges =
       mutableStateListOf(
@@ -43,7 +45,17 @@ class NewChallengeScreenTest {
               challengeId = "challenge2",
               player1 = "testUserId",
               player2 = "Opponent2",
-              mode = "Chrono"))
+              mode = "Chrono"),
+          Challenge(
+              challengeId = "challenge3",
+              player1 = "testUserId",
+              player2 = "Opponent1",
+              mode = "Sprint",
+              player1Times = mutableListOf(1000L, 2000L, 1500L), // Total: 4500
+              player2Times = mutableListOf(1200L, 1800L, 1400L), // Total: 4400
+              player1RoundCompleted = listOf(true, true, true),
+              player2RoundCompleted = listOf(true, true, true),
+              roundWords = listOf("word1", "word2", "word3")))
 
   @Before
   fun setUp() {
@@ -61,6 +73,7 @@ class NewChallengeScreenTest {
         .getOngoingChallenges(eq(userSession.getUserId()!!), any(), any())
 
     challengeRepository.setChallenges(ongoingChallenges)
+    userViewModel = UserViewModel(userSession, userRepository)
 
     // Set up the Composable content
     composeTestRule.setContent {

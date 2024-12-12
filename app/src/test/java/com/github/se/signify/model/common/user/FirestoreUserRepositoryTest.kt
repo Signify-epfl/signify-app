@@ -16,6 +16,7 @@ import java.time.LocalDate
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import junit.framework.TestCase.fail
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -1036,7 +1037,7 @@ class FirestoreUserRepositoryTest {
       assertEquals(challengeId, challenges[0].challengeId)
     }
 
-    firestoreUserRepository.getPastChallenges(currentUserId, onSuccess, { fail(noFailure) })
+    firestoreUserRepository.getPastChallenges(currentUserId, onSuccess) { fail(noFailure) }
 
     shadowOf(Looper.getMainLooper()).idle()
 
@@ -1050,7 +1051,7 @@ class FirestoreUserRepositoryTest {
     var successCallbackCalled = false
     val onSuccess: () -> Unit = { successCallbackCalled = true }
 
-    firestoreUserRepository.updateUserField(currentUserId, customField, "value", onSuccess, {})
+    firestoreUserRepository.updateUserField(currentUserId, customField, "value", onSuccess) {}
 
     shadowOf(Looper.getMainLooper()).idle()
 
@@ -1232,5 +1233,50 @@ class FirestoreUserRepositoryTest {
 
     // Assert
     assertTrue(failureCallbackCalled)
+  }
+
+  @Test
+  fun `getChallengesCompleted should return the correct value`() = runTest {
+    // Arrange
+    val userId = "testUserId"
+    val field = "challengesCompleted"
+    val expectedValue = 0L
+    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
+    `when`(mockUserDocumentSnapshot.getLong(field)).thenReturn(expectedValue)
+
+    // Act
+    val result = firestoreUserRepository.getChallengesCompleted(userId)
+
+    // Assert
+    assertEquals(expectedValue.toInt(), result)
+  }
+
+  @Test
+  fun `getUserField should return 0 when Firestore document is missing`() = runTest {
+    // Arrange
+    val userId = "testUserId"
+    val field = "challengesCompleted"
+    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
+    `when`(mockUserDocumentSnapshot.getLong(field)).thenReturn(null)
+
+    // Act
+    val result = firestoreUserRepository.getChallengesCompleted(userId)
+
+    // Assert
+    assertEquals(0, result)
+  }
+
+  @Test
+  fun `getUserField should return 0 when Firestore operation fails`() = runTest {
+    // Arrange
+    val userId = "testUserId"
+    val exception = Exception("Firestore error")
+    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forException(exception))
+
+    // Act
+    val result = firestoreUserRepository.getChallengesCompleted(userId)
+
+    // Assert
+    assertEquals(0, result)
   }
 }

@@ -127,8 +127,8 @@ fun ChallengeHistoryScreen(
 @Composable
 fun PastChallengeCard(challenge: Challenge, userSession: UserSession) {
   val currentUserId = userSession.getUserId()
-  val player1Score = challenge.player1Times?.sum()?.div(1000) ?: 0
-  val player2Score = challenge.player2Times?.sum()?.div(1000) ?: 0
+  val player1Score = challenge.player1Times.sum().div(1000)
+  val player2Score = challenge.player2Times.sum().div(1000)
   val opponent = if (challenge.player1 == currentUserId) challenge.player2 else challenge.player1
   val mode = challenge.mode
   val winner = challenge.winner ?: "No Winner"
