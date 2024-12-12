@@ -36,7 +36,8 @@ class ScreensTest {
             Text(text = "Little text for the column", modifier = Modifier.testTag("Text"))
           })
     }
-    composeTestRule.onNodeWithTag("TopLine").assertIsDisplayed()
+
+    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
     composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
     composeTestRule.onNodeWithTag("MainScreenScaffold").assertIsDisplayed()
     composeTestRule.onNodeWithTag("HelpButton").assertIsDisplayed()
