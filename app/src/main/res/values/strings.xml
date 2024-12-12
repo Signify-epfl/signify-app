@@ -68,8 +68,6 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="incorrect_answer_text">Incorrect answer, try again.</string>
     <string name="choose_correct_answer_text">Choose the correct answer:</string>
     <string name="submit_text">Submit</string>
-    <string name="lets_go_text">Let’s Go!</string>
-    <string name="locked_text">Locked</string>
     <string name="in_sign_language_text"> in ASL sign language</string>
     <string name="letter_text">Letter</string>
     <string name="try_text">Try hand signs here !</string>
@@ -150,6 +148,105 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
         <item>silver</item>
         <item>pillow</item>
     </string-array>
+    <string-array name="challenge_word_list">
+        <item>apple</item>
+        <item>banana</item>
+        <item>cherry</item>
+        <item>orange</item>
+        <item>grape</item>
+        <item>melon</item>
+        <item>kiwi</item>
+        <item>pear</item>
+        <item>peach</item>
+        <item>plum</item>
+        <item>house</item>
+        <item>table</item>
+        <item>chair</item>
+        <item>lamp</item>
+        <item>door</item>
+        <item>window</item>
+        <item>floor</item>
+        <item>roof</item>
+        <item>wall</item>
+        <item>garden</item>
+        <item>book</item>
+        <item>pen</item>
+        <item>paper</item>
+        <item>desk</item>
+        <item>phone</item>
+        <item>clock</item>
+        <item>laptop</item>
+        <item>keyboard</item>
+        <item>mouse</item>
+        <item>screen</item>
+        <item>car</item>
+        <item>bike</item>
+        <item>train</item>
+        <item>bus</item>
+        <item>plane</item>
+        <item>boat</item>
+        <item>truck</item>
+        <item>road</item>
+        <item>bridge</item>
+        <item>river</item>
+        <item>mountain</item>
+        <item>valley</item>
+        <item>forest</item>
+        <item>beach</item>
+        <item>desert</item>
+        <item>ocean</item>
+        <item>sky</item>
+        <item>cloud</item>
+        <item>rain</item>
+        <item>snow</item>
+        <item>storm</item>
+        <item>sun</item>
+        <item>moon</item>
+        <item>star</item>
+        <item>tree</item>
+        <item>flower</item>
+        <item>leaf</item>
+        <item>grass</item>
+        <item>bird</item>
+        <item>dog</item>
+        <item>cat</item>
+        <item>fish</item>
+        <item>horse</item>
+        <item>cow</item>
+        <item>sheep</item>
+        <item>pig</item>
+        <item>rabbit</item>
+        <item>lion</item>
+        <item>tiger</item>
+        <item>bear</item>
+        <item>elephant</item>
+        <item>monkey</item>
+        <item>zebra</item>
+        <item>kangaroo</item>
+        <item>giraffe</item>
+        <item>coffee</item>
+        <item>milk</item>
+        <item>water</item>
+        <item>juice</item>
+        <item>bread</item>
+        <item>butter</item>
+        <item>cheese</item>
+        <item>egg</item>
+        <item>meat</item>
+        <item>chicken</item>
+        <item>fish</item>
+        <item>rice</item>
+        <item>pasta</item>
+        <item>salt</item>
+        <item>sugar</item>
+        <item>cake</item>
+        <item>cookie</item>
+        <item>icecream</item>
+        <item>chocolate</item>
+        <item>candy</item>
+        <item>honey</item>
+        <item>jam</item>
+    </string-array>
     <string-array name="real_sentences">
         <item>The cat sits on the mat</item>
         <item>Birds fly across the sky</item>
@@ -203,5 +300,11 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
 Let’s take a quick tour to help you get started with learning sign language effortlessly.</string>
     <string name="tutorial_screen2_text">Swipe to the right to view exercises by difficulty level.</string>
     <string name="tutorial_last_screen_text">You\'re ready to start! Enjoy learning sign language.</string>
+    <string name="try_fingerspell_button_text">Try it!</string>
+    <string name="fingerspell_title_text">Fingerspell: %1$s</string>
+    <string name="try_fingerspell_text">Use your camera to fingerspell the word: %1$s</string>
+    <string name="word_completed_text">Word completed!</string>
+
+
 
 </resources>

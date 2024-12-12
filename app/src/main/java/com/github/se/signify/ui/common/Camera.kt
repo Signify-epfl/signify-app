@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -75,7 +74,6 @@ fun CameraBox(handLandmarkViewModel: HandLandmarkViewModel, testTag: String = "c
     Box(
         modifier =
             Modifier.fillMaxWidth()
-                .padding(16.dp)
                 .height(350.dp)
                 .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp))
                 .border(
@@ -119,7 +117,6 @@ fun CameraBox(handLandmarkViewModel: HandLandmarkViewModel, testTag: String = "c
     Box(
         modifier =
             Modifier.fillMaxWidth()
-                .padding(16.dp)
                 .height(350.dp)
                 .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp))
                 .border(

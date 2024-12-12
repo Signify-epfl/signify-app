@@ -40,8 +40,6 @@ class SettingsScreenTest {
   private lateinit var context: Context
   private lateinit var contentResolver: ContentResolver
 
-  private val testUserID = "currentUserId"
-
   @Before
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)

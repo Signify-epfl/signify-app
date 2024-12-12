@@ -25,10 +25,5 @@ enum class Screen(val route: String, val requiresAuth: Boolean = true) {
 
   // For testing purposes
   REQUIRE_AUTH("RequireAuth", true),
-  DO_NOT_REQUIRE_AUTH("DoNotRequireAuth", false);
-
-  companion object {
-    // Generate dynamic route for a specific challenge ID
-    fun chronoChallengeWithId(challengeId: String) = "ChronoChallenge Screen/$challengeId"
-  }
+  DO_NOT_REQUIRE_AUTH("DoNotRequireAuth", false)
 }

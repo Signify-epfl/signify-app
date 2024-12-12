@@ -56,7 +56,6 @@ import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.ui.common.AnnexScreenScaffold
-import com.github.se.signify.ui.common.NotImplementedYet
 import com.github.se.signify.ui.common.ProfilePicture
 
 @Composable
@@ -79,9 +78,86 @@ fun SettingsScreen(
 
   val userName = userViewModel.userName.collectAsState()
   val profilePictureUrl = userViewModel.profilePictureUrl.collectAsState()
+  var newName by remember { mutableStateOf("") }
+  var selectedImageUrl by remember { mutableStateOf(profilePictureUrl.value) }
+  var selectedUri by remember { mutableStateOf<Uri?>(null) }
+  LaunchedEffect(profilePictureUrl.value) { selectedImageUrl = profilePictureUrl.value }
 
-  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "SettingsScreen") {
-    Spacer(modifier = Modifier.height(32.dp))
+  val galleryLauncher =
+      rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        if (uri != null) {
+          selectedImageUrl = uri.toString()
+          selectedUri = uri
+        }
+      }
+
+  AnnexScreenScaffold(
+      navigationActions = navigationActions,
+      testTag = "SettingsScreen",
+  ) {
+    Spacer(modifier = Modifier.height(64.dp))
+
+    // Editable Profile Picture
+    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+      Row(
+          modifier =
+              Modifier.border(
+                      2.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp))
+                  .clip(RoundedCornerShape(8.dp))
+                  .background(MaterialTheme.colorScheme.background)
+                  .padding(horizontal = 24.dp, vertical = 16.dp),
+          horizontalArrangement = Arrangement.Center,
+          verticalAlignment = Alignment.CenterVertically,
+      ) {
+        Column {
+          Icon(
+              modifier = Modifier.clickable { galleryLauncher.launch("image/*") },
+              imageVector = Icons.Outlined.Edit,
+              contentDescription = "Edit Profile Picture",
+              tint = MaterialTheme.colorScheme.onBackground,
+          )
+
+          Spacer(modifier = Modifier.height(16.dp))
+
+          Icon(
+              modifier =
+                  Modifier.clickable {
+                    selectedUri = null
+                    selectedImageUrl = null
+                  },
+              imageVector = Icons.Outlined.Delete,
+              contentDescription = "Delete Profile Picture",
+              tint = MaterialTheme.colorScheme.onBackground,
+          )
+        }
+
+        Spacer(modifier = Modifier.width(8.dp))
+        ProfilePicture(selectedImageUrl)
+      }
+    }
+    Spacer(modifier = Modifier.height(64.dp))
+    EditableUsernameField(userViewModel, userName.value)
+            Spacer(modifier = Modifier.width(8.dp))
+
+            TextField(
+                value = newName,
+                onValueChange = { newName = it },
+                placeholder = {
+                  Text(userName.value, color = MaterialTheme.colorScheme.onBackground)
+                },
+                modifier =
+                    Modifier.widthIn(max = 200.dp)
+                        .padding(vertical = 8.dp)
+                        .background(MaterialTheme.colorScheme.background),
+                colors =
+                    TextFieldDefaults.colors(
+                        focusedContainerColor = MaterialTheme.colorScheme.background,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                        focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                        cursorColor = MaterialTheme.colorScheme.onBackground))
+          }
+    }
+    Spacer(modifier = Modifier.height(64.dp))
 
     Row(
         modifier = Modifier.fillMaxWidth().padding(16.dp).clickable { onThemeChange(!isDarkTheme) },
@@ -99,32 +175,28 @@ fun SettingsScreen(
     // Switch between English and French
     LanguageSwitch(isFrench, onLanguageChange)
 
-    EditableProfilePicture(
-        userViewModel = userViewModel,
-        profilePictureUrl = profilePictureUrl.value,
-    )
+    Spacer(modifier = Modifier.height(64.dp))
 
-    Spacer(modifier = Modifier.height(32.dp))
+    val savedText = stringResource(R.string.saved_text)
+    val saveText = stringResource(R.string.save_text)
+    val cancelText = stringResource(R.string.cancel_text)
+    // Cancel and Save Buttons
+    Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+      ActionButtons(
+          {
+            Toast.makeText(context, "Changes canceled.", Toast.LENGTH_SHORT).show()
+            newName = ""
+            selectedImageUrl = profilePictureUrl.value
+          },
+          MaterialTheme.colorScheme.error,
+          cancelText,
+          Modifier.weight(1f))
 
-    EditableUsernameField(userViewModel, userName.value)
-
-    Spacer(modifier = Modifier.height(32.dp))
-
-    // Other Settings Section To be removed after all settings are completed !
-    NotImplementedYet(testTag = "OtherSettings", text = "Other settings:\nLanguage,\nTheme,\n...")
-    Spacer(modifier = Modifier.height(32.dp))
-  }
-}
-
-@Composable
-fun EditableProfilePicture(
-    userViewModel: UserViewModel,
-    profilePictureUrl: String?,
-) {
-
-  var showDeleteDialog = remember { mutableStateOf(false) }
-  var showEditDialog = remember { mutableStateOf(false) }
-  var selectedUri by remember { mutableStateOf<Uri?>(profilePictureUrl?.toUri()) }
+      ActionButtons(
+          {
+            if (newName.isNotBlank()) {
+              userViewModel.updateUserName(newName)
+            }
 
   val galleryLauncher =
       rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -327,6 +399,14 @@ fun ConfirmationDialog(
   }
 }
 
+/**
+ * A composable function that provides a toggle to switch between French (FR) and English (EN).
+ *
+ * @param isFrench A Boolean value representing the current language setting. `true` indicates
+ *   French, and `false` indicates English.
+ * @param onLanguageChange A callback function invoked when the language switch is toggled. The
+ *   callback receives a Boolean value indicating the new language state.
+ */
 @Composable
 fun LanguageSwitch(isFrench: Boolean, onLanguageChange: (Boolean) -> Unit) {
   Row(
