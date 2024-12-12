@@ -37,9 +37,12 @@ import com.github.se.signify.model.common.createDataFrame
 import com.github.se.signify.model.common.timeConversion
 import org.jetbrains.kotlinx.dataframe.math.mean
 import org.jetbrains.kotlinx.kandy.dsl.plot
+import org.jetbrains.kotlinx.kandy.echarts.features.title.Title
 import org.jetbrains.kotlinx.kandy.echarts.layers.bars
+import org.jetbrains.kotlinx.kandy.echarts.layers.layout
 import org.jetbrains.kotlinx.kandy.echarts.layers.line
-import org.jetbrains.kotlinx.kandy.letsplot.feature.layout
+
+// import org.jetbrains.kotlinx.kandy.letsplot.feature.layout
 
 /**
  * A scrollable list of letters. The letters learned by a user are highlighted.
@@ -197,8 +200,13 @@ fun CreateGraph(timePerLetter: List<Long>, modifier: Modifier) {
               .testTag(stringResource(R.string.graph_testtag)),
       contentAlignment = Alignment.Center) {
         df.plot {
-          layout.title = stringResource(R.string.graph_stats_title)
-          layout.subtitle = stringResource(R.string.graph_average_text) + "${timePerLetter.mean()}"
+          layout {
+            title =
+                Title(
+                    text = stringResource(R.string.graph_stats_title),
+                    subtext =
+                        stringResource(R.string.graph_average_text) + "${timePerLetter.mean()}")
+          }
           bars {
             x(TimePerLetter)
             y(TimePerLetterIndex)
