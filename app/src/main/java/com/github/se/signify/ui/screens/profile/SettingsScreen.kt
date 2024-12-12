@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.input.InputTransformation.Companion.keyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
@@ -135,6 +134,8 @@ fun EditableProfilePictureField(userViewModel: UserViewModel, profilePictureUrl:
   var showEditDialog = remember { mutableStateOf(false) }
   var selectedUri by remember { mutableStateOf<Uri?>(null) }
 
+  LaunchedEffect(profilePictureUrl.value) { selectedUri = profilePictureUrl.value?.toUri() }
+
   var enableDeleteButton: Boolean = profilePictureUrl.value != null
 
   val galleryLauncher =
@@ -176,7 +177,7 @@ fun EditableProfilePictureField(userViewModel: UserViewModel, profilePictureUrl:
       }
 
       Spacer(modifier = Modifier.width(8.dp))
-      ProfilePicture(profilePictureUrl.value)
+      ProfilePicture(selectedUri?.toString())
     }
 
     ConfirmationDialog(
@@ -192,7 +193,7 @@ fun EditableProfilePictureField(userViewModel: UserViewModel, profilePictureUrl:
     ConfirmationDialog(
         showEditDialog,
         onConfirm = { userViewModel.updateProfilePictureUrl(selectedUri) },
-        onDismiss = { selectedUri = profilePictureUrl.toString().toUri() },
+        onDismiss = { selectedUri = profilePictureUrl.value?.toUri() },
         title = stringResource(R.string.confirm_changes_title),
         message = stringResource(R.string.confirm_changes_message))
   }
