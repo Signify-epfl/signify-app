@@ -48,9 +48,6 @@ import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.TextButton
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlinx.coroutines.suspendCancellableCoroutine
 
 @Composable
 fun NewChallengeScreen(
@@ -64,24 +61,13 @@ fun NewChallengeScreen(
   val challengeViewModel: ChallengeViewModel =
       viewModel(factory = ChallengeViewModel.factory(userSession, challengeRepository))
 
+  val ongoingChallengeIds by userViewModel.ongoingChallengeIds.collectAsState()
+  LaunchedEffect(ongoingChallengeIds) { challengeViewModel.getChallenges(ongoingChallengeIds) }
+  val ongoingChallenges = challengeViewModel.challenges.collectAsState()
+
   LaunchedEffect(Unit) {
     userViewModel.getFriendsList()
     userViewModel.getOngoingChallenges()
-  }
-
-  val ongoingChallengeIds by userViewModel.ongoingChallengeIds.collectAsState()
-  var ongoingChallenges: List<Challenge> = emptyList()
-  LaunchedEffect(ongoingChallengeIds) {
-    val fetchedChallenges =
-        ongoingChallengeIds.mapNotNull { challengeId ->
-          suspendCancellableCoroutine<Challenge?> { continuation ->
-            challengeRepository.getChallengeById(
-                challengeId,
-                onSuccess = { challenge -> continuation.resume(challenge) },
-                onFailure = { exception -> continuation.resumeWithException(exception) })
-          }
-        }
-    ongoingChallenges = fetchedChallenges
   }
 
   AnnexScreenScaffold(
@@ -140,8 +126,8 @@ fun NewChallengeScreen(
                       LazyColumn(
                           verticalArrangement = Arrangement.spacedBy(16.dp),
                           modifier = Modifier.testTag("OngoingChallengesLazyColumn")) {
-                            items(ongoingChallenges.size) { index ->
-                              val challenge = ongoingChallenges[index]
+                            items(ongoingChallenges.value.size) { index ->
+                              val challenge = ongoingChallenges.value[index]
 
                               OngoingChallengeCard(
                                   challenge = challenge,
