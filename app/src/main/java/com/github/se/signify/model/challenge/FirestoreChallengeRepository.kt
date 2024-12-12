@@ -1,5 +1,7 @@
 package com.github.se.signify.model.challenge
 
+import com.google.android.gms.tasks.Tasks
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 
@@ -82,22 +84,25 @@ class FirestoreChallengeRepository(private val db: FirebaseFirestore) : Challeng
       onFailure: (Exception) -> Unit
   ) {
     val challenges = mutableListOf<Challenge>()
+    val tasks =
+        challengeIds.map { challengeId ->
+          db.collection(collectionPath).document(challengeId).get()
+        }
 
-    for (challengeId in challengeIds) {
-      db.collection(collectionPath)
-          .document(challengeId)
-          .get()
-          .addOnSuccessListener { challengeDoc ->
-            if (challengeDoc.exists()) {
-              val challenge = challengeDoc.toObject(Challenge::class.java)
+    Tasks.whenAllComplete(tasks)
+        .addOnSuccessListener { taskResults ->
+          taskResults.forEach { task ->
+            if (task.isSuccessful) {
+              val document = task.result as DocumentSnapshot
+              val challenge = document.toObject(Challenge::class.java)
               if (challenge != null) {
                 challenges.add(challenge)
               }
             }
-            onSuccess(challenges)
           }
-          .addOnFailureListener { e -> onFailure(e) }
-    }
+          onSuccess(challenges)
+        }
+        .addOnFailureListener { e -> onFailure(e) }
   }
 
   override fun updateChallenge(
