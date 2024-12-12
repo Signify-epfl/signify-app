@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.github.se.signify.model.authentication.UserSession
-import com.github.se.signify.model.challenge.Challenge
+import com.github.se.signify.model.challenge.ChallengeId
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -36,8 +36,8 @@ open class UserViewModel(
   private val _errorState = MutableStateFlow<String?>(null)
   val errorState: StateFlow<String?> = _errorState
 
-  private val _ongoingChallenges = MutableStateFlow<List<Challenge>>(emptyList())
-  val ongoingChallenges: StateFlow<List<Challenge>> = _ongoingChallenges
+  private val _ongoingChallenges = MutableStateFlow<List<ChallengeId>>(emptyList())
+  val ongoingChallenges: StateFlow<List<ChallengeId>> = _ongoingChallenges
 
   private val _unlockedQuests = MutableStateFlow("1")
   val unlockedQuests: StateFlow<String> = _unlockedQuests
@@ -177,7 +177,7 @@ open class UserViewModel(
   fun getOngoingChallenges() {
     repository.getOngoingChallenges(
         userSession.getUserId()!!,
-        onSuccess = { challenges -> _ongoingChallenges.value = challenges },
+        onSuccess = { _ongoingChallenges.value = it },
         onFailure = { e ->
           Log.e("UserViewModel", "Failed to fetch ongoing challenges: ${e.message}")
         })
@@ -189,8 +189,7 @@ open class UserViewModel(
         challengeId,
         onSuccess = {
           // Update ongoingChallenges after removal
-          _ongoingChallenges.value =
-              _ongoingChallenges.value.filter { it.challengeId != challengeId }
+          _ongoingChallenges.value = _ongoingChallenges.value.filter { it != challengeId }
         },
         onFailure = { e ->
           Log.e("UserViewModel", "Failed to remove challenge from ongoing: ${e.message}")

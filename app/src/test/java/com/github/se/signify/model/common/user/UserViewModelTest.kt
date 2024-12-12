@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.core.net.toUri
 import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
-import com.github.se.signify.model.challenge.Challenge
+import com.github.se.signify.model.challenge.ChallengeId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -395,11 +395,10 @@ class UserViewModelTest {
   @Test
   fun getOngoingChallengesUpdatesChallengesOnSuccess() = runTest {
     // Arrange
-    val challenges =
-        listOf(Challenge(challengeId = "challenge1"), Challenge(challengeId = "challenge2"))
+    val challengeIds: List<ChallengeId> = listOf("challenge1", "challenge2")
     doAnswer {
-          val onSuccess = it.getArgument<(List<Challenge>) -> Unit>(1)
-          onSuccess(challenges)
+          val onSuccess = it.getArgument<(List<ChallengeId>) -> Unit>(1)
+          onSuccess(challengeIds)
           null
         }
         .whenever(userRepository)
@@ -410,7 +409,7 @@ class UserViewModelTest {
 
     // Assert
     // Verifies that the ongoing challenges list is updated correctly in the ViewModel
-    assertEquals(challenges, userViewModel.ongoingChallenges.value)
+    assertEquals(challengeIds, userViewModel.ongoingChallenges.value)
   }
 
   @Test
