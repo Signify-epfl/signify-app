@@ -2,6 +2,7 @@ package com.github.se.signify.model.common.user
 
 import android.net.Uri
 import com.github.se.signify.model.challenge.Challenge
+import com.github.se.signify.model.challenge.ChallengeId
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FieldValue
@@ -335,7 +336,7 @@ class FirestoreUserRepository(
 
   override fun getOngoingChallenges(
       userId: String,
-      onSuccess: (List<Challenge>) -> Unit,
+      onSuccess: (List<ChallengeId>) -> Unit,
       onFailure: (Exception) -> Unit
   ) {
     val userDocRef = db.collection(collectionPath).document(userId)
@@ -355,8 +356,9 @@ class FirestoreUserRepository(
                     onSuccess(emptyList())
                     return@addOnSuccessListener
                   }
+          val validChallengeIds = challengeIds.filterIsInstance<ChallengeId>()
 
-          fetchChallengesByIds(challengeIds, onSuccess, onFailure)
+          onSuccess(validChallengeIds)
         }
         .addOnFailureListener { e -> onFailure(e) }
   }

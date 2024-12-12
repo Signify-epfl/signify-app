@@ -1,7 +1,7 @@
 package com.github.se.signify.model.common.user
 
 import android.net.Uri
-import com.github.se.signify.model.challenge.Challenge
+import com.github.se.signify.model.challenge.ChallengeId
 
 private val failureException: Exception = Exception("Simulated failure")
 
@@ -225,15 +225,14 @@ class MockUserRepository : UserRepository {
   // IDs.
   override fun getOngoingChallenges(
       userId: String,
-      onSuccess: (List<Challenge>) -> Unit,
+      onSuccess: (List<ChallengeId>) -> Unit,
       onFailure: (Exception) -> Unit
   ) {
     if (!checkFailure(onFailure)) return
     if (!checkUser(userId, onFailure)) return
 
     val user = users.getValue(userId)
-    val challenges = user.ongoingChallenges.map { Challenge(it) }
-    onSuccess(challenges)
+    onSuccess(user.ongoingChallenges)
   }
 
   override fun removeOngoingChallenge(

@@ -1,7 +1,7 @@
 package com.github.se.signify.model.common.user
 
 import android.net.Uri
-import com.github.se.signify.model.challenge.Challenge
+import com.github.se.signify.model.challenge.ChallengeId
 
 const val USER_NOT_FOUND_MESSAGE = "User not found"
 
@@ -84,7 +84,7 @@ interface UserRepository {
   // from the `ChallengeRepository`.
   fun getOngoingChallenges(
       userId: String,
-      onSuccess: (List<Challenge>) -> Unit,
+      onSuccess: (List<ChallengeId>) -> Unit,
       onFailure: (Exception) -> Unit
   )
 
