@@ -38,11 +38,17 @@ import org.robolectric.Shadows.shadowOf
 class FirestoreUserRepositoryTest {
 
   @Mock private lateinit var mockFireStore: FirebaseFirestore
+
   @Mock private lateinit var mockChallengeDocRef: DocumentReference // Mock for challenge
+
   @Mock private lateinit var mockCurrentUserDocRef: DocumentReference // Mock for current user
+
   @Mock private lateinit var mockFriendUserDocRef: DocumentReference // Mock for friend user
+
   @Mock private lateinit var mockCollectionReference: CollectionReference
+
   @Mock private lateinit var mockUserDocumentSnapshot: DocumentSnapshot
+
   @Mock private lateinit var mockToDoQuerySnapshot: QuerySnapshot
 
   private lateinit var firestoreUserRepository: FirestoreUserRepository
@@ -1051,8 +1057,8 @@ class FirestoreUserRepositoryTest {
     assertTrue(successCallbackCalled)
 
     verify(mockCurrentUserDocRef).update(eq(customField), eq("value"))
+  }
 
-    @Suppress("UNCHECKED_CAST")
   @Test
   fun getFriendsList_shouldHandleUserDocNotExist() {
     val expectedException = NoSuchElementException("User not found for ID: $currentUserId")
@@ -1088,7 +1094,6 @@ class FirestoreUserRepositoryTest {
     assertTrue(failureCallbackCalled)
   }
 
-  @Suppress("UNCHECKED_CAST")
   @Test
   fun getRequestsFriendsList_shouldHandleUserDocNotExist() {
     val expectedException = NoSuchElementException("User not found for ID: $currentUserId")
@@ -1124,7 +1129,6 @@ class FirestoreUserRepositoryTest {
     assertTrue(failureCallbackCalled)
   }
 
-  @Suppress("UNCHECKED_CAST")
   @Test
   fun getUserName_shouldHandleUserDocNotExist() {
     val expectedException = NoSuchElementException("User not found for ID: $currentUserId")
@@ -1160,7 +1164,6 @@ class FirestoreUserRepositoryTest {
     assertTrue(failureCallbackCalled)
   }
 
-  @Suppress("UNCHECKED_CAST")
   @Test
   fun getProfilePictureUrl_shouldHandleUserDocNotExist() {
     val expectedException = NoSuchElementException("User not found for ID: $currentUserId")
@@ -1196,7 +1199,6 @@ class FirestoreUserRepositoryTest {
     assertTrue(failureCallbackCalled)
   }
 
-  @Suppress("UNCHECKED_CAST")
   @Test
   fun getStreak_shouldHandleUserDocNotExist() {
     val expectedException = NoSuchElementException("User not found for ID: $currentUserId")
