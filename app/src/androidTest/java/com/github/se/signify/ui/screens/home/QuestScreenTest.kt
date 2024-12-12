@@ -15,6 +15,7 @@ import com.github.se.signify.R
 import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.common.user.UserRepository
+import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.model.dependencyInjection.AppDependencyProvider
 import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.home.quest.Quest
@@ -36,6 +37,7 @@ class QuestScreenTest {
   private lateinit var userRepository: UserRepository
   private lateinit var navigationActions: NavigationActions
   private lateinit var handLandmarkViewModel: HandLandmarkViewModel
+  private lateinit var userViewModel: UserViewModel
 
   val context: Context = ApplicationProvider.getApplicationContext()
   val quest_title: String = context.getString(R.string.quest_screen_title_text)
@@ -66,6 +68,7 @@ class QuestScreenTest {
     userRepository = mock(UserRepository::class.java)
     navigationActions = mock(NavigationActions::class.java)
     handLandmarkViewModel = HandLandmarkViewModel(handLandMarkImplementation, context)
+    userViewModel = mock(UserViewModel::class.java)
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.QUEST.route)
   }
@@ -92,7 +95,7 @@ class QuestScreenTest {
           quest = sampleQuest,
           isUnlocked = true,
           handLandMarkViewModel = handLandmarkViewModel,
-      )
+          userViewModel = userViewModel)
     }
 
     composeTestRule.onNodeWithTag("QuestCard").assertIsDisplayed()
@@ -107,6 +110,7 @@ class QuestScreenTest {
           quest = sampleQuest,
           isUnlocked = true,
           handLandMarkViewModel = handLandmarkViewModel,
+          userViewModel = userViewModel,
       )
     }
 
@@ -139,7 +143,7 @@ class QuestScreenTest {
           quest = sampleQuest,
           isUnlocked = true,
           handLandMarkViewModel = handLandmarkViewModel,
-      )
+          userViewModel = userViewModel)
     }
 
     // Assert that the QuestBox is displayed with the correct content
@@ -155,7 +159,7 @@ class QuestScreenTest {
           quest = sampleQuest,
           isUnlocked = false,
           handLandMarkViewModel = handLandmarkViewModel,
-      )
+          userViewModel = userViewModel)
     }
 
     // Assert that the button shows "Locked" when the quest is not unlocked
@@ -170,7 +174,7 @@ class QuestScreenTest {
           quest = sampleQuest,
           isUnlocked = true,
           handLandMarkViewModel = handLandmarkViewModel,
-      )
+          userViewModel = userViewModel)
     }
 
     // Click the button to open the dialog
@@ -188,7 +192,7 @@ class QuestScreenTest {
           quest = sampleQuest,
           onDismiss = {},
           handLandMarkViewModel = handLandmarkViewModel,
-      )
+          userViewModel = userViewModel)
     }
 
     // Assert dialog title and description are displayed
@@ -225,7 +229,7 @@ class QuestScreenTest {
           quest = sampleQuest,
           isUnlocked = false,
           handLandMarkViewModel = handLandmarkViewModel,
-      )
+          userViewModel = userViewModel)
     }
 
     // Try to click the button when it's locked
@@ -246,7 +250,7 @@ class QuestScreenTest {
           quest = sampleQuest,
           onDismiss = { dismissCalled = true },
           handLandMarkViewModel = handLandmarkViewModel,
-      )
+          userViewModel = userViewModel)
     }
 
     // Click the "Close" button
@@ -351,7 +355,11 @@ class QuestScreenTest {
   fun fingerSpellDialog_displaysCorrectTitleAndText() {
     composeTestRule.setContent {
       FingerSpellDialog(
-          word = "hello", onDismiss = {}, handLandMarkViewModel = handLandmarkViewModel)
+          word = "hello",
+          onDismiss = {},
+          handLandMarkViewModel = handLandmarkViewModel,
+          userViewModel = userViewModel,
+          "1")
     }
 
     // Check if the dialog title is displayed
@@ -368,7 +376,9 @@ class QuestScreenTest {
       FingerSpellDialog(
           word = "test",
           onDismiss = { isDismissed = true },
-          handLandMarkViewModel = handLandmarkViewModel)
+          handLandMarkViewModel = handLandmarkViewModel,
+          userViewModel = userViewModel,
+          "1")
     }
 
     // Perform click on the "Close" button
