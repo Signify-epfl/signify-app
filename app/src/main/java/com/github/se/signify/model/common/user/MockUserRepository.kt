@@ -305,6 +305,38 @@ class MockUserRepository : UserRepository {
     onSuccess(user.currentStreak)
   }
 
+  override fun markQuestAsCompleted(
+      userId: String,
+      questIndex: String,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
+
+    val user = users.getValue(userId)
+    // Add the quest index to the completedQuests list, avoiding duplicates
+    users[userId] =
+        user.copy(
+            completedQuests =
+                user.completedQuests.toMutableList().apply {
+                  if (!contains(questIndex)) add(questIndex)
+                })
+    onSuccess()
+  }
+
+  override fun getCompletedQuests(
+      userId: String,
+      onSuccess: (List<String>) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
+
+    val user = users.getValue(userId)
+    onSuccess(user.completedQuests)
+  }
+
   private fun checkFailure(onFailure: (Exception) -> Unit): Boolean {
     if (shouldFail) {
       onFailure(failureException)
