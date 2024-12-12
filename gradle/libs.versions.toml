@@ -9,6 +9,7 @@ json = "20240303"
 kotlin = "1.9.0"
 gms = "4.4.2"
 ktfmt = "0.17.0"
+leakcanaryAndroid = "2.10"
 sonar = "4.4.1.3373"
 
 # UI Compose
@@ -107,6 +108,7 @@ kaspresso-allure-support = { module = "com.kaspersky.android-components:kaspress
 kaspresso-compose-support = { module = "com.kaspersky.android-components:kaspresso-compose-support", version.ref = "kaspressoComposeSupport" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanaryAndroid" }
 maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "mapsCompose" }
 maps-compose-utils = { module = "com.google.maps.android:maps-compose-utils", version.ref = "mapsComposeUtils" }
 material = { module = "com.google.android.material:material", version.ref = "materialVersion" }

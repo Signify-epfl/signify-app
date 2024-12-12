@@ -249,7 +249,7 @@ dependencies {
     // Test Jetpack Compose UI
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    debugImplementation ("com.squareup.leakcanary:leakcanary-android:2.10")
+    debugImplementation (libs.leakcanary.android)
 
 
 }

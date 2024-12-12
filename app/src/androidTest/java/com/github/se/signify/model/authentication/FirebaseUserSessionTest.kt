@@ -1,7 +1,5 @@
-package com.github.se.signify.model.auth
+package com.github.se.signify.model.authentication
 
-import com.github.se.signify.model.authentication.FirebaseUserSession
-import com.github.se.signify.model.authentication.MockAuthService
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.runBlocking

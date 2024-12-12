@@ -1,9 +1,8 @@
-package com.github.se.signify.model.auth
+package com.github.se.signify.model.authentication
 
 import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
-import com.github.se.signify.model.authentication.MockAuthService
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.runBlocking
