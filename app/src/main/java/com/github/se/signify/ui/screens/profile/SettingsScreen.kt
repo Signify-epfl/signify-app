@@ -166,14 +166,13 @@ fun EditableProfilePictureField(userViewModel: UserViewModel, profilePictureUrl:
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Icon(
-            modifier =
-                Modifier.clickable(
-                    enabled = enableDeleteButton, onClick = { showDeleteDialog.value = true }),
-            imageVector = Icons.Outlined.Delete,
-            contentDescription = "Delete Profile Picture",
-            tint = MaterialTheme.colorScheme.onBackground,
-        )
+        if (enableDeleteButton) {
+          Icon(
+              modifier = Modifier.clickable { showDeleteDialog.value = true },
+              imageVector = Icons.Outlined.Delete,
+              contentDescription = "Delete Profile Picture",
+              tint = MaterialTheme.colorScheme.onBackground)
+        }
       }
 
       Spacer(modifier = Modifier.width(8.dp))
