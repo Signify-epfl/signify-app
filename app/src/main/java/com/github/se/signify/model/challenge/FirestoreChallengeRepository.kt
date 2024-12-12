@@ -82,7 +82,6 @@ class FirestoreChallengeRepository(private val db: FirebaseFirestore) : Challeng
       onFailure: (Exception) -> Unit
   ) {
     val challenges = mutableListOf<Challenge>()
-    val totalChallenges = challengeIds.size
 
     for (challengeId in challengeIds) {
       db.collection(collectionPath)
@@ -95,7 +94,7 @@ class FirestoreChallengeRepository(private val db: FirebaseFirestore) : Challeng
                 challenges.add(challenge)
               }
             }
-            checkAllChallengesFetched(challenges, totalChallenges, onSuccess)
+            onSuccess(challenges)
           }
           .addOnFailureListener { e -> onFailure(e) }
     }
@@ -126,15 +125,5 @@ class FirestoreChallengeRepository(private val db: FirebaseFirestore) : Challeng
         .update("playerTime", timeTaken)
         .addOnSuccessListener { onSuccess() }
         .addOnFailureListener { onFailure(it) }
-  }
-
-  private fun checkAllChallengesFetched(
-      challenges: List<Challenge>,
-      totalChallenges: Int,
-      onSuccess: (List<Challenge>) -> Unit
-  ) {
-    if (challenges.size == totalChallenges) {
-      onSuccess(challenges)
-    }
   }
 }
