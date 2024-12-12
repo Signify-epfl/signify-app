@@ -52,7 +52,6 @@ class MockChallengeRepository : ChallengeRepository {
             player1 = player1Id,
             player2 = player2Id,
             mode = mode.name,
-            status = "pending",
             round = 1,
             roundWords = roundWords,
             player1Times = mutableListOf(),
@@ -158,4 +157,19 @@ class MockChallengeRepository : ChallengeRepository {
       onFailure(Exception("Challenge with ID $challengeId not found"))
     }
   }
+    override fun updateWinner(
+        challengeId: String,
+        winnerId: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val challenge = challenges[challengeId]
+        if (challenge == null) {
+            onFailure(Exception("Challenge not found"))
+            return
+        }
+
+        challenges[challengeId] = challenge.copy(winner = winnerId)
+        onSuccess()
+    }
 }

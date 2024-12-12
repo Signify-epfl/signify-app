@@ -105,7 +105,7 @@
     <string name="won_challenge_text">Gagné</string>
     <string name="past_challenges_title">Challenges Précédents</string>
     <string name="no_past_challenges">Pas De Précédents Challenges</string>
-    
+
     <string name="help_home_screen_text">Ici, vous pouvez pratiquer la langue des signes, avec des retours en temps réel via votre caméra. Assurez-vous de vérifier votre quête quotidienne pour apprendre une nouvelle lettre chaque jour. Vous trouverez également des exercices en bas pour vous challenger à différents niveaux de difficulté.</string>
     <string name="help_profile_screen_text">Ici, vous pouvez modifier vos paramètres et personnaliser votre profil. Vous pourrez également ajouter vos amis pour apprendre ensemble. Vous trouverez un récapitulatif de vos progrès dans le tableau de statistiques.</string>
     <string name="description_challenge_text">Ici, vous pouvez défier vos amis à des face-à-face en langue des signes.</string>
