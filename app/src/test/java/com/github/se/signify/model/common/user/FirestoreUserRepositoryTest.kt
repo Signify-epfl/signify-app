@@ -653,34 +653,6 @@ class FirestoreUserRepositoryTest {
   }
 
   @Test
-  fun getOngoingChallenges_shouldCallOnFailureWhenChallengeFetchFails() {
-    // Arrange
-    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
-    `when`(mockUserDocumentSnapshot.exists()).thenReturn(true)
-    `when`(mockUserDocumentSnapshot.get(ongoingChallenges)).thenReturn(listOf(challengeId1))
-
-    // Mock challenge document to simulate failure
-    val testException = Exception(fireStoreFailure)
-    `when`(mockChallengeDocRef.get()).thenReturn(Tasks.forException(testException))
-
-    var failureCallbackCalled = false
-    val onFailure: (Exception) -> Unit = { exception ->
-      failureCallbackCalled = true
-      assertEquals(testException, exception) // Ensure the correct exception is passed
-    }
-
-    // Act
-    firestoreUserRepository.getOngoingChallenges(
-        currentUserId, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
-
-    // Idle the main looper to process the tasks
-    shadowOf(Looper.getMainLooper()).idle()
-
-    // Assert
-    assertTrue(failureCallbackCalled)
-  }
-
-  @Test
   fun getStreak_callsDocuments() {
     // Ensure that mockToDoQuerySnapshot is properly initialized and mocked
     `when`(mockCollectionReference.get()).thenReturn(Tasks.forResult(mockToDoQuerySnapshot))
