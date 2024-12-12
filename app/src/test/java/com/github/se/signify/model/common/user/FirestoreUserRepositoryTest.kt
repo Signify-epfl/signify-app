@@ -63,6 +63,9 @@ class FirestoreUserRepositoryTest {
   private val noSuccess = "Success callback should not be called"
   private val noFailure = "Failure callback should not be called"
   private val fireStoreFailure = "Test FireStore failure"
+  private val challengeId = "challengeId"
+  private val customField = "customField"
+  private val challengesCompletedField = "challengesCompleted"
 
   @Before
   fun setUp() {
@@ -981,5 +984,67 @@ class FirestoreUserRepositoryTest {
     assertTrue(failureCallbackCalled)
     // Verifies that the `update` operation was called with the expected data
     verify(mockCurrentUserDocRef).update(updatedDataCaptor.firstValue)
+  }
+
+  @Test
+  fun `incrementField should update Firestore successfully`() {
+    `when`(mockCurrentUserDocRef.update(anyString(), any())).thenReturn(Tasks.forResult(null))
+
+    firestoreUserRepository.incrementField(currentUserId, challengesCompletedField)
+
+    shadowOf(Looper.getMainLooper()).idle()
+
+    verify(mockCurrentUserDocRef).update(eq(challengesCompletedField), ArgumentMatchers.any())
+  }
+
+  @Test
+  fun `addPastChallenge should add challenge ID to Firestore`() {
+    `when`(mockCurrentUserDocRef.update(anyString(), any())).thenReturn(Tasks.forResult(null))
+
+    firestoreUserRepository.addPastChallenge(currentUserId, challengeId)
+
+    shadowOf(Looper.getMainLooper()).idle()
+
+    verify(mockCurrentUserDocRef).update(eq("pastChallenges"), ArgumentMatchers.any())
+  }
+
+  @Test
+  fun `getPastChallenges should return list of challenges`() {
+    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
+    `when`(mockUserDocumentSnapshot.exists()).thenReturn(true)
+    `when`(mockUserDocumentSnapshot.get("pastChallenges")).thenReturn(listOf(challengeId))
+    `when`(mockFireStore.collection("challenges").document(challengeId).get())
+        .thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
+    `when`(mockUserDocumentSnapshot.toObject(Challenge::class.java))
+        .thenReturn(Challenge(challengeId))
+
+    var successCallbackCalled = false
+    val onSuccess: (List<Challenge>) -> Unit = { challenges ->
+      successCallbackCalled = true
+      assertEquals(1, challenges.size)
+      assertEquals(challengeId, challenges[0].challengeId)
+    }
+
+    firestoreUserRepository.getPastChallenges(currentUserId, onSuccess, { fail(noFailure) })
+
+    shadowOf(Looper.getMainLooper()).idle()
+
+    assertTrue(successCallbackCalled)
+  }
+
+  @Test
+  fun `updateUserField should update specified field successfully`() {
+    `when`(mockCurrentUserDocRef.update(anyString(), any())).thenReturn(Tasks.forResult(null))
+
+    var successCallbackCalled = false
+    val onSuccess: () -> Unit = { successCallbackCalled = true }
+
+    firestoreUserRepository.updateUserField(currentUserId, customField, "value", onSuccess, {})
+
+    shadowOf(Looper.getMainLooper()).idle()
+
+    assertTrue(successCallbackCalled)
+
+    verify(mockCurrentUserDocRef).update(eq(customField), eq("value"))
   }
 }

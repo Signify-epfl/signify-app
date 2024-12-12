@@ -9,9 +9,8 @@ data class Challenge(
     val roundWords: List<String> = listOf(),
     val player1Times: MutableList<Long> = mutableListOf(),
     val player2Times: MutableList<Long> = mutableListOf(),
-    val player1RoundCompleted: List<Boolean> = mutableListOf(false, false, false),
-    val player2RoundCompleted: List<Boolean> = mutableListOf(false, false, false),
+    var player1RoundCompleted: List<Boolean> = mutableListOf(false, false, false),
+    var player2RoundCompleted: List<Boolean> = mutableListOf(false, false, false),
     var gameStatus: String = "not_started",
     var winner: String? = null // New field for winner
 )
-

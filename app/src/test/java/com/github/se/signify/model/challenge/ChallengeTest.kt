@@ -108,7 +108,7 @@ class ChallengeTest {
             player2RoundCompleted = mutableListOf(true, false, true),
             gameStatus = "in_progress")
 
-    val modifiedChallenge = challenge.copy( round = 3)
+    val modifiedChallenge = challenge.copy(round = 3)
 
     assertEquals("challenge123", modifiedChallenge.challengeId)
     assertEquals("player1", modifiedChallenge.player1)

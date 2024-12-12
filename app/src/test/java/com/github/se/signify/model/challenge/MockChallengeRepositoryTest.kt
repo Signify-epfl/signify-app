@@ -142,8 +142,7 @@ class MockChallengeRepositoryTest {
 
   @Test
   fun `reset clears all tracked calls and challenges`() {
-    mockRepository.setChallenges(
-        listOf(Challenge("challenge1", "player1", "player2", "Sprint")))
+    mockRepository.setChallenges(listOf(Challenge("challenge1", "player1", "player2", "Sprint")))
     mockRepository.sendChallengeRequest(
         "player1", "player2", ChallengeMode.SPRINT, "challenge1", listOf("A", "B", "C"), {}, {})
     mockRepository.deleteChallenge("challenge1", {}, {})
@@ -214,10 +213,7 @@ class MockChallengeRepositoryTest {
         player1Id, player2Id, mode, challengeId, listOf("A", "B", "C"), {}, {})
     val updatedChallenge =
         Challenge(
-            challengeId = challengeId,
-            player1 = player1Id,
-            player2 = player2Id,
-            mode = "Sprint")
+            challengeId = challengeId, player1 = player1Id, player2 = player2Id, mode = "Sprint")
 
     mockRepository.updateChallenge(
         updatedChallenge = updatedChallenge,
@@ -235,7 +231,8 @@ class MockChallengeRepositoryTest {
             challengeId = "nonExistentChallenge",
             player1 = player1Id,
             player2 = player2Id,
-            mode = "Sprint",)
+            mode = "Sprint",
+        )
 
     mockRepository.updateChallenge(
         updatedChallenge = updatedChallenge,
@@ -283,5 +280,49 @@ class MockChallengeRepositoryTest {
         timeTaken = 5000L,
         onSuccess = { fail("onSuccess should not be called") },
         onFailure = { exception -> assertEquals("Invalid player ID", exception.message) })
+  }
+
+  @Test
+  fun `updateWinner succeeds when challenge exists`() {
+    // Arrange: Add a challenge to the repository
+    mockRepository.sendChallengeRequest(
+        player1Id = player1Id,
+        player2Id = player2Id,
+        mode = mode,
+        challengeId = challengeId,
+        roundWords = listOf("A", "B", "C"),
+        onSuccess = {},
+        onFailure = { fail("onFailure should not be called") })
+
+    val winnerId = player1Id
+
+    // Act: Update the winner
+    mockRepository.updateWinner(
+        challengeId = challengeId,
+        winnerId = winnerId,
+        onSuccess = {
+          // Assert: Verify the winner was updated successfully
+          val updatedChallenge = mockRepository.getChallenge(challengeId)
+          assertNotNull(updatedChallenge)
+          assertEquals(winnerId, updatedChallenge?.winner)
+        },
+        onFailure = { fail("onFailure should not be called") })
+  }
+
+  @Test
+  fun `updateWinner fails when challenge does not exist`() {
+    // Arrange: Use a non-existent challenge ID
+    val nonExistentChallengeId = "nonExistentChallenge"
+    val winnerId = player1Id
+
+    // Act: Attempt to update the winner
+    mockRepository.updateWinner(
+        challengeId = nonExistentChallengeId,
+        winnerId = winnerId,
+        onSuccess = { fail("onSuccess should not be called") },
+        onFailure = { exception ->
+          // Assert: Verify the failure callback is called with the correct message
+          assertEquals("Challenge not found", exception.message)
+        })
   }
 }

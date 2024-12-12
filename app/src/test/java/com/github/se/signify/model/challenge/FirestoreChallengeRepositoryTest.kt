@@ -262,4 +262,44 @@ class FirestoreChallengeRepositoryTest {
     assertTrue(failureCalled)
     verify(mockChallengeDocRef).update("playerTime", timeTaken)
   }
+
+  @Test
+  fun updateWinner_shouldUpdateWinnerInFirestore() {
+    val winnerId = "winnerId"
+    `when`(mockChallengeDocRef.update("winner", winnerId)).thenReturn(Tasks.forResult(null))
+
+    var successCalled = false
+    firestoreChallengeRepository.updateWinner(
+        challengeId = challengeId,
+        winnerId = winnerId,
+        onSuccess = { successCalled = true },
+        onFailure = { fail("Failure callback should not be called") })
+
+    shadowOf(Looper.getMainLooper()).idle()
+
+    assertTrue(successCalled)
+    verify(mockChallengeDocRef).update("winner", winnerId)
+  }
+
+  @Test
+  fun updateWinner_shouldCallOnFailureOnFirestoreError() {
+    val winnerId = "winnerId"
+    val exception = Exception("Firestore error")
+    `when`(mockChallengeDocRef.update("winner", winnerId)).thenReturn(Tasks.forException(exception))
+
+    var failureCalled = false
+    firestoreChallengeRepository.updateWinner(
+        challengeId = challengeId,
+        winnerId = winnerId,
+        onSuccess = { fail("Success callback should not be called") },
+        onFailure = {
+          failureCalled = true
+          assertEquals(exception, it)
+        })
+
+    shadowOf(Looper.getMainLooper()).idle()
+
+    assertTrue(failureCalled)
+    verify(mockChallengeDocRef).update("winner", winnerId)
+  }
 }

@@ -112,21 +112,27 @@ interface UserRepository {
 
   fun getStreak(userId: String, onSuccess: (Long) -> Unit, onFailure: (Exception) -> Unit)
 
-    fun addPastChallenge(userId: String, challengeId: String)
-    fun getPastChallenges(
-        userId: String,
-        onSuccess: (List<Challenge>) -> Unit,
-        onFailure: (Exception) -> Unit
-    )
-    fun incrementField(userId: String, fieldName: String)
-    fun updateUserField(
-        userId: String,
-        fieldName: String,
-        value: Any,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    )
-    suspend fun getChallengesCompleted(userId: String): Int
-    suspend fun getChallengesCreated(userId: String): Int
-    suspend fun getChallengesWon(userId: String): Int
+  fun addPastChallenge(userId: String, challengeId: String)
+
+  fun getPastChallenges(
+      userId: String,
+      onSuccess: (List<Challenge>) -> Unit,
+      onFailure: (Exception) -> Unit
+  )
+
+  fun incrementField(userId: String, fieldName: String)
+
+  fun updateUserField(
+      userId: String,
+      fieldName: String,
+      value: Any,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  )
+
+  suspend fun getChallengesCompleted(userId: String): Int
+
+  suspend fun getChallengesCreated(userId: String): Int
+
+  suspend fun getChallengesWon(userId: String): Int
 }

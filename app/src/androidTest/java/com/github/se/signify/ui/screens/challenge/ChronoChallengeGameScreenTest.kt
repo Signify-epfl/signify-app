@@ -131,7 +131,6 @@ class ChronoChallengeGameScreenTest {
     composeTestRule.onNodeWithTag("NoWordAvailableText").assertIsDisplayed()
   }
 
-
   @Test
   fun chronoChallengeGameScreen_updatesElapsedTime_whenGameIsActive() {
     composeTestRule.setContent {

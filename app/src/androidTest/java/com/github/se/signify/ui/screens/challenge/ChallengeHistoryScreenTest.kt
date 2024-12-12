@@ -1,65 +1,94 @@
 package com.github.se.signify.ui.screens.challenge
 
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.performClick
-import com.github.se.signify.model.authentication.MockUserSession
+import com.github.se.signify.model.authentication.UserSession
+import com.github.se.signify.model.challenge.Challenge
 import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.navigation.NavigationActions
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
 class ChallengeHistoryScreenTest {
 
   @get:Rule val composeTestRule = createComposeRule()
 
-  private lateinit var userSession: MockUserSession
-  private lateinit var navigationActions: NavigationActions
+  private lateinit var userSession: UserSession
   private lateinit var userRepository: UserRepository
+  private lateinit var navigationActions: NavigationActions
+
+  private val challengesCompleted = 10
+  private val challengesCreated = 5
+  private val challengesWon = 3
+  private val pastChallenges = mutableStateListOf<Challenge>()
 
   @Before
-  fun setUp() {
-    navigationActions = mock(NavigationActions::class.java)
-    userSession = MockUserSession()
-    userRepository = mock(UserRepository::class.java)
+  fun setUp(): Unit = runBlocking {
+    userSession = mock()
+    userRepository = mock()
+    navigationActions = mock()
+
+    whenever(userSession.getUserId()).thenReturn("testUserId")
+    whenever(userRepository.getChallengesCompleted("testUserId")).thenReturn(challengesCompleted)
+    whenever(userRepository.getChallengesCreated("testUserId")).thenReturn(challengesCreated)
+    whenever(userRepository.getChallengesWon("testUserId")).thenReturn(challengesWon)
+  }
+
+  @Test
+  fun challengeHistoryScreen_displaysStatisticsCorrectly(): Unit = runBlocking {
     composeTestRule.setContent {
-      ChallengeHistoryScreen(navigationActions, userSession, userRepository)
+      ChallengeHistoryScreen(
+          navigationActions = navigationActions,
+          userSession = userSession,
+          userRepository = userRepository)
     }
-  }
 
-  @Test
-  fun challengeHistoryScreenDisplaysCorrectElements() {
-
-    // Verify top blue bar and back button is displayed
-    composeTestRule.onNodeWithTag("TopBar").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
-
-    // Verify challenges section is displayed
-    composeTestRule.onNodeWithTag("ChallengesColumn").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("ChallengesRow").assertIsDisplayed()
+    // Verify statistics are displayed correctly
     composeTestRule.onNodeWithTag("ChallengesText").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("ChallengesText").assertTextEquals("Number of challenges :")
-    composeTestRule.onNodeWithTag("Completed").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("Completed").assertTextEquals("Completed")
-    composeTestRule.onNodeWithTag("Created").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("Created").assertTextEquals("Created")
-    composeTestRule.onNodeWithTag("Won").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("Won").assertTextEquals("Won")
-
-    // Verify graph placeholder is displayed
-    composeTestRule.onNodeWithTag("GraphsAndStats").assertIsDisplayed()
+    composeTestRule.onNodeWithText("${challengesCompleted}").assertIsDisplayed()
+    composeTestRule.onNodeWithText("${challengesCreated}").assertIsDisplayed()
+    composeTestRule.onNodeWithText("${challengesWon}").assertIsDisplayed()
   }
 
   @Test
-  fun pressingBackArrowNavigatesToChallengeScreen() {
+  fun challengeHistoryScreen_displaysNoPastChallengesTextWhenEmpty(): Unit = runBlocking {
+    composeTestRule.setContent {
+      ChallengeHistoryScreen(
+          navigationActions = navigationActions,
+          userSession = userSession,
+          userRepository = userRepository)
+    }
 
-    composeTestRule.onNodeWithTag("BackButton").performClick()
+    // Verify the message for no past challenges is displayed
+    composeTestRule.onNodeWithTag("NoPastChallengesText").assertIsDisplayed()
+  }
 
-    verify(navigationActions).goBack()
+  @Test
+  fun pastChallengeCard_displaysCorrectDetails() {
+    val challenge =
+        Challenge(
+            challengeId = "challenge1",
+            player1 = "testUserId",
+            player2 = "opponent1",
+            player1Times = mutableListOf(1000L, 2000L),
+            player2Times = mutableListOf(1500L, 2500L),
+            mode = "Sprint",
+            winner = "testUserId")
+
+    composeTestRule.setContent {
+      PastChallengeCard(challenge = challenge, userSession = userSession)
+    }
+
+    // Verify the challenge details are displayed correctly
+    composeTestRule.onNodeWithText("Opponent: opponent1").assertIsDisplayed()
+    composeTestRule.onNodeWithText("Mode: Sprint").assertIsDisplayed()
+    composeTestRule.onNodeWithText("testUserId Score: 3 s").assertIsDisplayed()
+    composeTestRule.onNodeWithText("opponent1 Score: 4 s").assertIsDisplayed()
+    composeTestRule.onNodeWithText("Winner: testUserId").assertIsDisplayed()
   }
 }
