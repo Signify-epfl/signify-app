@@ -8,7 +8,18 @@ private val failureException: Exception = Exception("Simulated failure")
 class MockUserRepository : UserRepository {
   private val users = mutableMapOf<String, User>()
   private var shouldFail: Boolean = false
-
+    private val mockData = mutableMapOf(
+        "user1" to mapOf(
+            "challengesCompleted" to 5,
+            "challengesCreated" to 10,
+            "challengesWon" to 3
+        ),
+        "user2" to mapOf(
+            "challengesCompleted" to 8,
+            "challengesCreated" to 4,
+            "challengesWon" to 6
+        )
+    )
   fun succeed() {
     shouldFail = false
   }
@@ -358,6 +369,36 @@ class MockUserRepository : UserRepository {
         onSuccess()
     }
 
+    override fun getPastChallenges(
+        userId: String,
+        onSuccess: (List<Challenge>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        if (!checkFailure(onFailure)) return
+        if (!checkUser(userId, onFailure)) return
+
+        val user = users.getValue(userId)
+        val challenges = user.pastChallenges.map { Challenge(it) }
+        onSuccess(challenges)
+    }
+
+    override suspend fun getChallengesCompleted(userId: String): Int {
+        return getMockField(userId, "challengesCompleted")
+    }
+
+    override suspend fun getChallengesCreated(userId: String): Int {
+        return getMockField(userId, "challengesCreated")
+    }
+
+    override suspend fun getChallengesWon(userId: String): Int {
+        return getMockField(userId, "challengesWon")
+    }
+
+    private fun getMockField(userId: String, field: String): Int {
+        return mockData[userId]?.get(field) ?: 0
+    }
+
+
 
     private fun checkFailure(onFailure: (Exception) -> Unit): Boolean {
     if (shouldFail) {
@@ -366,6 +407,8 @@ class MockUserRepository : UserRepository {
     }
     return true
   }
+
+
 
   private fun checkUser(userId: String, onFailure: (Exception) -> Unit): Boolean {
     if (users[userId] == null) {

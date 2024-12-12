@@ -45,7 +45,8 @@
     <string name="add_friend_text">Ajouter un(e) ami(e)</string>
     <string name="user_not_found_text">Utilisateur pas trouvé(e)</string>
     <string name="camera_permission_denied_text">Permission de la caméra refusée</string>
-
+    <string name="past_challenges_title">Challenges Précédents</string>
+    <string name="no_past_challenges">Pas De Précédents Challenges</string>
 
     <string name="remove_friend_text">Supprimer un(e) ami(e)</string>
     <string name="my_profile_text">Mon profile</string>

@@ -144,8 +144,8 @@ fun NewChallengeScreen(
                                     userViewModel.removeOngoingChallenge(challenge.player2, challenge.challengeId)
                                     userViewModel.addPastChallenge(challenge.player2, challenge.challengeId)
                                     userViewModel.incrementField(winner, "challengesWon")
-                                    userViewModel.incrementField(challenge.player2, "challengesWon")
-                                    userViewModel.incrementField(challenge.player1, "challengesWon")
+                                    userViewModel.incrementField(challenge.player2, "challengesCompleted")
+                                    userViewModel.incrementField(challenge.player1, "challengesCompleted")
 
                                     challengeRepository.updateWinner(challenge.challengeId, winner,{},{})
                                 }
@@ -211,9 +211,9 @@ fun OngoingChallengeCard(
               .fillMaxWidth()
               .padding(horizontal = 8.dp, vertical = 4.dp)
               .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
-              .background(
-                  MaterialTheme.colorScheme
-                      .primary), // Explicitly set background color for better contrast
+                  .background(
+                      MaterialTheme.colorScheme
+                          .primary), // Explicitly set background color for better contrast
       shape = RoundedCornerShape(16.dp),
   ) {
     Row(

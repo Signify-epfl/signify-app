@@ -43,8 +43,8 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="graphs_and_stats_text">Graphs and Stats</string>
     <string name="user_not_found_text">User Not Found</string>
     <string name="camera_permission_denied_text">Camera permission denied</string>
-
-
+    <string name="past_challenges_title">Past Challenges</string>
+    <string name="no_past_challenges">No Past Challenges</string>
     <string name="no_friend_text">No Friends</string>
     <string name="request_friends_text">Friend Requests</string>
     <string name="no_new_friend_text">You have no new friends</string>

@@ -203,7 +203,7 @@ fun SignifyAppPreview(
         ChallengeHistoryScreen(
             navigationActions,
             dependencyProvider.userSession(),
-            dependencyProvider.statsRepository())
+            dependencyProvider.userRepository())
       }
     }
 

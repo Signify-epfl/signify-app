@@ -1,12 +1,14 @@
 package com.github.se.signify.model.common.user
 
 import android.net.Uri
+import android.util.Log
 import com.github.se.signify.model.challenge.Challenge
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
@@ -529,6 +531,33 @@ class FirestoreUserRepository(
         userRef.update("pastChallenges", FieldValue.arrayUnion(challengeId))
     }
 
+    override fun getPastChallenges(
+        userId: String,
+        onSuccess: (List<Challenge>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val userDocRef = db.collection(collectionPath).document(userId)
+
+        userDocRef
+            .get()
+            .addOnSuccessListener { document ->
+                if (!document.exists()) {
+                    onSuccess(emptyList())
+                    return@addOnSuccessListener
+                }
+
+                val challengeIds =
+                    document.get("pastChallenges") as? List<*>
+                        ?: run {
+                            onSuccess(emptyList())
+                            return@addOnSuccessListener
+                        }
+
+                fetchChallengesByIds(challengeIds, onSuccess, onFailure)
+            }
+            .addOnFailureListener { e -> onFailure(e) }
+    }
+
     override fun incrementField(userId: String, fieldName: String) {
         val userRef = db.collection(collectionPath).document(userId)
         userRef.update(fieldName, FieldValue.increment(1))
@@ -546,5 +575,28 @@ class FirestoreUserRepository(
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { e -> onFailure(e) }
     }
+    override suspend fun getChallengesCompleted(userId: String): Int {
+        return getUserField(userId, "challengesCompleted")
+    }
 
+    override suspend fun getChallengesCreated(userId: String): Int {
+        return getUserField(userId, "challengesCreated")
+    }
+
+    override suspend fun getChallengesWon(userId: String): Int {
+        return getUserField(userId, "challengesWon")
+    }
+
+    private suspend fun getUserField(userId: String, field: String): Int {
+        return try {
+            val document = db.collection("users").document(userId).get().await()
+            document.getLong(field)?.toInt() ?: 0
+        } catch (e: Exception) {
+            // Log the error and return 0 as fallback
+            Log.e("FirestoreUserRepository", "Error getting $field for user $userId", e)
+            0
+        }
+    }
 }
+
+

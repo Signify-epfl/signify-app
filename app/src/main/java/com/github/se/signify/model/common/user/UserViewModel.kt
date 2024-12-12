@@ -45,7 +45,11 @@ open class UserViewModel(
   private val _streak = MutableStateFlow(0L)
   val streak: StateFlow<Long> = _streak
 
-  private val logTag = "UserViewModel"
+    private val _pastChallenges = MutableStateFlow<List<Challenge>>(emptyList())
+    val pastChallenges: StateFlow<List<Challenge>> = _pastChallenges
+
+
+    private val logTag = "UserViewModel"
 
   init {
     repository.init {}
@@ -298,5 +302,16 @@ open class UserViewModel(
             onFailure = { e -> Log.e("UserViewModel", "Failed to fetch user: ${e.message}") }
         )
     }
+
+    fun getPastChallenges() {
+        repository.getPastChallenges(
+            userSession.getUserId()!!,
+            onSuccess = { pastChallengesList -> _pastChallenges.value = pastChallengesList },
+            onFailure = { e -> Log.e("UserViewModel", "Failed to get past challenges: ${e.message}") }
+        )
+    }
+
+
+
 
 }
