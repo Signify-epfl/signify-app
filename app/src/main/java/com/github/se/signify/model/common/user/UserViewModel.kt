@@ -45,6 +45,9 @@ open class UserViewModel(
   private val _streak = MutableStateFlow(0L)
   val streak: StateFlow<Long> = _streak
 
+  private val _completedQuests = MutableStateFlow<List<String>>(emptyList())
+  val completedQuests: StateFlow<List<String>> = _completedQuests
+
   private val logTag = "UserViewModel"
 
   init {
@@ -258,5 +261,30 @@ open class UserViewModel(
         userSession.getUserId()!!,
         onSuccess = { s -> _streak.value = s },
         onFailure = { e -> Log.e(logTag, "Failed to get user's streak: ${e.message}}") })
+  }
+
+  fun markQuestAsCompleted(questIndex: String) {
+    repository.markQuestAsCompleted(
+        userId = userSession.getUserId()!!,
+        questIndex = questIndex,
+        onSuccess = {
+          Log.d("UserViewModel", "Quest $questIndex marked as completed.")
+          fetchCompletedQuests() // Refresh the completed quests list
+        },
+        onFailure = { e ->
+          Log.e("UserViewModel", "Failed to mark quest $questIndex as completed: ${e.message}")
+        })
+  }
+
+  private fun fetchCompletedQuests() {
+    repository.getCompletedQuests(
+        userId = userSession.getUserId()!!,
+        onSuccess = { quests ->
+          _completedQuests.value = quests
+          Log.d("UserViewModel", "Fetched completed quests: $quests")
+        },
+        onFailure = { e ->
+          Log.e("UserViewModel", "Failed to fetch completed quests: ${e.message}")
+        })
   }
 }
