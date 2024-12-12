@@ -24,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -35,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -47,7 +49,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.github.se.signify.model.navigation.LIST_TOP_LEVEL_DESTINATION
 import com.github.se.signify.model.navigation.NavigationActions
-import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.model.navigation.TopLevelDestination
 
 data class HelpText(val title: String, val content: String)
@@ -56,6 +57,8 @@ data class HelpText(val title: String, val content: String)
  * The scaffold for all main screens.
  *
  * @param navigationActions The navigationActions of the bottom navigation menu.
+ * @param topLevelDestination The top level destination of the screen. This is used to highlight the
+ *   correct tab in the bottom navigation menu.
  * @param testTag The test tag of the column (test tag of the screen).
  * @param helpText The optional text for a help popup.
  * @param topBarButtons A list of optional buttons to display in the top bar. They should be
@@ -67,11 +70,12 @@ data class HelpText(val title: String, val content: String)
 @Composable
 fun MainScreenScaffold(
     navigationActions: NavigationActions,
+    topLevelDestination: TopLevelDestination,
     testTag: String,
     helpText: HelpText? = null,
     topBarButtons: List<@Composable () -> Unit> = emptyList(),
     floatingActionButton: @Composable () -> Unit = {},
-    content: @Composable (ColumnScope.() -> Unit)
+    content: @Composable() (ColumnScope.() -> Unit)
 ) {
   Scaffold(
       floatingActionButton = { floatingActionButton() },
@@ -81,7 +85,7 @@ fun MainScreenScaffold(
             helpText = helpText,
         )
       },
-      bottomBar = { BottomBar(navigationActions) },
+      bottomBar = { BottomBar(navigationActions, topLevelDestination) },
       content = { padding -> ScreenColumn(padding, testTag, content) })
 }
 
@@ -273,41 +277,45 @@ fun BackButton(navigationActions: NavigationActions) {
 
 @Composable
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-fun BottomBar(navigationActions: NavigationActions) {
-  BottomNavigationMenu(
-      onTabSelect = { route -> navigationActions.navigateTo(route) },
-      tabList = LIST_TOP_LEVEL_DESTINATION,
-      selectedItem = navigationActions.currentRoute())
+fun BottomBar(navigationActions: NavigationActions, selected: TopLevelDestination) {
+  Column {
+    SeparatorLine()
+    BottomNavigationMenu(
+        onTabSelect = { route -> navigationActions.navigateTo(route) },
+        topLevelDestinations = LIST_TOP_LEVEL_DESTINATION,
+        selected = selected,
+    )
+  }
+  SeparatorLine()
 }
 
 @Composable
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun BottomNavigationMenu(
     onTabSelect: (TopLevelDestination) -> Unit,
-    tabList: List<TopLevelDestination>,
-    selectedItem: String? = Screen.HOME.route, // Provide a default value
+    topLevelDestinations: List<TopLevelDestination>,
+    selected: TopLevelDestination, // Provide a default value
 ) {
-  Box(
-      modifier =
-          Modifier.border(2.dp, MaterialTheme.colorScheme.outlineVariant) // Top blue line
-              .padding(bottom = 2.dp)
-              .testTag("BottomNavigationMenu")) {
-        NavigationBar(
-            modifier = Modifier.fillMaxWidth().height(60.dp),
-            containerColor = MaterialTheme.colorScheme.background // Set background to white
-            ) {
-              tabList.forEach { tab ->
-                NavigationBarItem(
-                    icon = {
-                      Icon(
-                          painterResource(id = tab.icon),
-                          contentDescription = null,
-                          modifier = Modifier.testTag("TabIcon_${tab.route}"))
-                    }, // Load the drawable icons
-                    selected = tab.route == selectedItem,
-                    onClick = { onTabSelect(tab) },
-                    modifier = Modifier.clip(RoundedCornerShape(50.dp)))
-              }
-            }
+  NavigationBar(
+      modifier = Modifier.fillMaxWidth().height(60.dp).testTag("BottomNavigationMenu"),
+      containerColor = MaterialTheme.colorScheme.primaryContainer) {
+        topLevelDestinations.forEach { topLevelDestination ->
+          NavigationBarItem(
+              icon = {
+                Icon(
+                    painterResource(id = topLevelDestination.icon),
+                    contentDescription = null,
+                    modifier = Modifier.testTag("TabIcon_${topLevelDestination.route}"))
+              }, // Load the drawable icons
+              selected = topLevelDestination == selected,
+              onClick = { onTabSelect(topLevelDestination) },
+              modifier = Modifier.clip(RoundedCornerShape(50.dp)),
+              colors =
+                  NavigationBarItemDefaults.colors(
+                      selectedIconColor = MaterialTheme.colorScheme.primary,
+                      indicatorColor = Color.Transparent,
+                      unselectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                  ))
+        }
       }
 }

@@ -54,6 +54,7 @@ import com.github.se.signify.model.home.exercise.ExerciseLevel
 import com.github.se.signify.model.home.exercise.ExerciseLevelName
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.model.navigation.TopLevelDestinations
 import com.github.se.signify.ui.common.BasicButton
 import com.github.se.signify.ui.common.HelpText
 import com.github.se.signify.ui.common.LetterDictionary
@@ -77,6 +78,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
   val letterText = stringResource(id = R.string.letter_text)
   MainScreenScaffold(
       navigationActions = navigationActions,
+      topLevelDestination = TopLevelDestinations.HOME,
       testTag = "HomeScreen",
       helpText =
           HelpText(

@@ -29,6 +29,7 @@ class ScreensTest {
       val navigationActions = mock(NavigationActions::class.java)
       MainScreenScaffold(
           navigationActions = navigationActions,
+          topLevelDestination = LIST_TOP_LEVEL_DESTINATION.first(),
           testTag = "MainScreenScaffold",
           helpText = HelpText(title = "HelpTitle", content = "HelpText"),
           content = {
@@ -122,8 +123,8 @@ class ScreensTest {
     composeTestRule.setContent {
       BottomNavigationMenu(
           onTabSelect = { navigationActions.navigateTo(it) },
-          tabList = LIST_TOP_LEVEL_DESTINATION,
-          selectedItem = LIST_TOP_LEVEL_DESTINATION.first().route)
+          topLevelDestinations = LIST_TOP_LEVEL_DESTINATION,
+          selected = LIST_TOP_LEVEL_DESTINATION.first())
     }
 
     composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
@@ -165,7 +166,10 @@ class ScreensTest {
   @Test
   fun bottomBarDisplaysBottomNavigationMenu() {
     val navigationActions = mock(NavigationActions::class.java)
-    composeTestRule.setContent { BottomBar(navigationActions = navigationActions) }
+    composeTestRule.setContent {
+      BottomBar(
+          navigationActions = navigationActions, selected = LIST_TOP_LEVEL_DESTINATION.first())
+    }
     composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
   }
 
