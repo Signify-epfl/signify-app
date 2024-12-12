@@ -11,11 +11,11 @@ import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.dependencyInjection.AppDependencyProvider
+import com.github.se.signify.model.home.exercise.ExerciseCurrentInfo
 import com.github.se.signify.model.home.exercise.ExerciseLevel
 import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.profile.stats.StatsRepository
-import com.github.se.signify.model.profile.stats.StatsViewModel
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -36,7 +36,6 @@ class ExerciseScreenTest {
   private lateinit var handLandmarkViewModel: HandLandmarkViewModel
   private lateinit var userSession: UserSession
   private lateinit var statsRepository: StatsRepository
-  private lateinit var statsViewModel: StatsViewModel
 
   @Before
   fun setup() {
@@ -46,7 +45,6 @@ class ExerciseScreenTest {
     mockNavigationActions = mock(NavigationActions::class.java)
     userSession = MockUserSession()
     statsRepository = mock(StatsRepository::class.java)
-    statsViewModel = StatsViewModel(userSession, statsRepository)
   }
 
   @Test
@@ -82,24 +80,24 @@ class ExerciseScreenTest {
     // Mocks for callback functions
     val mockOnProgressUpdate = mock<(Int, Int, Int) -> Unit>()
     val mockOnAllSentencesComplete = mock<() -> Unit>()
+    val mockTimeTracking = mock<() -> Unit>()
 
     // Test inputs
     val detectedGesture = "A"
     val currentLetterIndex = 0
     val currentWordIndex = 0
     val currentSentenceIndex = 0
+    val exerciseCurrentInfo =
+        ExerciseCurrentInfo(currentLetterIndex, currentWordIndex, currentSentenceIndex)
     val sentencesList = listOf("apple is good", "banana is better")
 
     handleGestureMatching(
         detectedGesture = detectedGesture,
-        currentLetterIndex = currentLetterIndex,
-        currentWordIndex = currentWordIndex,
-        currentSentenceIndex = currentSentenceIndex,
+        exerciseCurrentInfo = exerciseCurrentInfo,
         sentencesList = sentencesList,
         onProgressUpdate = mockOnProgressUpdate,
         onAllSentencesComplete = mockOnAllSentencesComplete,
-        statsViewModel = statsViewModel,
-        startTimestamp = 0)
+        timeTracking = mockTimeTracking)
 
     // Verify that onProgressUpdate is called with the next letter index
     verify(mockOnProgressUpdate)
