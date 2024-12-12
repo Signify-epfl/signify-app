@@ -117,8 +117,8 @@ class MockChallengeRepository : ChallengeRepository {
       return
     }
 
-    val challenges = challengeIds.map { challenges[it] }
-    onSuccess(challenges.filterNotNull())
+    val result: List<Challenge> = challengeIds.mapNotNull { challenges[it] }
+    onSuccess(result)
   }
 
   override fun updateChallenge(
