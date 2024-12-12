@@ -5,7 +5,7 @@ import com.github.se.signify.R
 import com.github.se.signify.model.navigation.Screen
 
 /**
- * Enum class that regroup information of the different level of exercise
+ * Enum class that regroup information of the different level of exercise.
  *
  * @param id String to use for UI.
  * @param screen Corresponding route of the level.
@@ -54,3 +54,12 @@ object ExerciseLevelName {
     }
   }
 }
+
+/**
+ * Data class to regroup information about the current exercise sign to do.
+ *
+ * @param letterIndex The index of the current letter within the current word.
+ * @param wordIndex The index of the current word within the current sentence.
+ * @param sentenceIndex The index of the current sentence in the list of sentences.
+ */
+data class ExerciseCurrentInfo(val letterIndex: Int, val wordIndex: Int, val sentenceIndex: Int)

@@ -43,6 +43,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.common.calculateTimePerLetter
+import com.github.se.signify.model.home.exercise.ExerciseCurrentInfo
 import com.github.se.signify.model.home.exercise.ExerciseLevel
 import com.github.se.signify.model.home.exercise.ExerciseLevelName
 import com.github.se.signify.model.home.hand.HandLandmarkViewModel
@@ -97,33 +98,33 @@ fun ExerciseScreen(
   val detectedGesture = handLandmarkViewModel.getSolution()
   val exoCompletedText = stringResource(R.string.exercise_completed_text)
   if (!landmarksState.value.isNullOrEmpty()) {
-    val newStartTimestamp =
-        handleGestureMatching(
-            detectedGesture = detectedGesture,
-            currentLetterIndex = currentLetterIndex,
-            currentWordIndex = currentWordIndex,
-            currentSentenceIndex = currentSentenceIndex,
-            sentencesList = sentencesList,
-            onProgressUpdate = { newLetterIndex, newWordIndex, newSentenceIndex ->
-              currentLetterIndex = newLetterIndex
-              currentWordIndex = newWordIndex
-              currentSentenceIndex = newSentenceIndex
-            },
-            onAllSentencesComplete = {
-              when (exerciseLevel.id) {
-                ExerciseLevelName.EASY -> statsViewModel.updateEasyExerciseStats()
-                ExerciseLevelName.MEDIUM -> statsViewModel.updateMediumExerciseStats()
-                ExerciseLevelName.HARD -> statsViewModel.updateHardExerciseStats()
-              }
-              Toast.makeText(context, exoCompletedText, Toast.LENGTH_SHORT).show()
-              // Reload or reset sentencesList, or handle end of exercise as needed
-              currentSentenceIndex = 0
-              currentWordIndex = 0
-              currentLetterIndex = 0
-            },
-            statsViewModel = statsViewModel,
-            startTimestamp = startTimestamp)
-    startTimestamp = newStartTimestamp ?: startTimestamp
+    val exerciseCurrentInfo =
+        ExerciseCurrentInfo(
+            letterIndex = currentLetterIndex,
+            wordIndex = currentWordIndex,
+            sentenceIndex = currentSentenceIndex)
+    handleGestureMatching(
+        detectedGesture = detectedGesture,
+        exerciseCurrentInfo = exerciseCurrentInfo,
+        sentencesList = sentencesList,
+        onProgressUpdate = { newLetterIndex, newWordIndex, newSentenceIndex ->
+          currentLetterIndex = newLetterIndex
+          currentWordIndex = newWordIndex
+          currentSentenceIndex = newSentenceIndex
+        },
+        onAllSentencesComplete = {
+          when (exerciseLevel.id) {
+            ExerciseLevelName.EASY -> statsViewModel.updateEasyExerciseStats()
+            ExerciseLevelName.MEDIUM -> statsViewModel.updateMediumExerciseStats()
+            ExerciseLevelName.HARD -> statsViewModel.updateHardExerciseStats()
+          }
+          Toast.makeText(context, exoCompletedText, Toast.LENGTH_SHORT).show()
+          // Reload or reset sentencesList, or handle end of exercise as needed
+          currentSentenceIndex = 0
+          currentWordIndex = 0
+          currentLetterIndex = 0
+        },
+        timeTracking = { startTimestamp = calculateTimePerLetter(statsViewModel, startTimestamp) })
   }
 
   AnnexScreenScaffold(
@@ -176,44 +177,49 @@ fun ExerciseScreen(
  * updates the indices for the current letter, word, or sentence, and triggers the appropriate
  * callback based on the progression level.
  *
- * @param currentLetterIndex The index of the current letter within the current word.
- * @param currentWordIndex The index of the current word within the current sentence.
- * @param currentSentenceIndex The index of the current sentence in the list of sentences.
+ * @param exerciseCurrentInfo The information about the current letter, word and sentence index.
  * @param sentences The list of sentences used in the exercise.
  * @param onProgressUpdate Callback to trigger progression to the next letter, word, or sentence.
  *   Takes new indices (newLetterIndex, newWordIndex, newSentenceIndex) as parameters to update the
  *   progression state.
  * @param onAllSentencesComplete Callback to be called when all sentences have been completed.
+ * @param timeTracking Callback to track time.
  */
 fun onSuccess(
-    currentLetterIndex: Int,
-    currentWordIndex: Int,
-    currentSentenceIndex: Int,
+    exerciseCurrentInfo: ExerciseCurrentInfo,
     sentences: List<String>,
     onProgressUpdate: (newLetterIndex: Int, newWordIndex: Int, newSentenceIndex: Int) -> Unit,
     onAllSentencesComplete: () -> Unit,
-    statsViewModel: StatsViewModel,
-    startTimestamp: Long
-): Long {
+    timeTracking: () -> Unit
+) {
   // Retrieve the current sentence and split it into words
-  val currentSentence = sentences[currentSentenceIndex]
+  val currentSentence = sentences[exerciseCurrentInfo.sentenceIndex]
   val words = currentSentence.split(" ")
-  val currentWord = words[currentWordIndex]
+  val currentWord = words[exerciseCurrentInfo.wordIndex]
+
+  timeTracking()
 
   when {
     // Move to the next letter within the current word
-    currentLetterIndex < currentWord.length - 1 -> {
-      onProgressUpdate(currentLetterIndex + 1, currentWordIndex, currentSentenceIndex)
+    exerciseCurrentInfo.letterIndex < currentWord.length - 1 -> {
+      onProgressUpdate(
+          exerciseCurrentInfo.letterIndex + 1,
+          exerciseCurrentInfo.wordIndex,
+          exerciseCurrentInfo.sentenceIndex)
     }
 
     // Move to the next word in the sentence
-    currentWordIndex < words.size - 1 -> {
-      onProgressUpdate(0, currentWordIndex + 1, currentSentenceIndex) // Reset letter index
+    exerciseCurrentInfo.wordIndex < words.size - 1 -> {
+      onProgressUpdate(
+          0,
+          exerciseCurrentInfo.wordIndex + 1,
+          exerciseCurrentInfo.sentenceIndex) // Reset letter index
     }
 
     // Move to the next sentence
-    currentSentenceIndex < sentences.size - 1 -> {
-      onProgressUpdate(0, 0, currentSentenceIndex + 1) // Reset both letter and word indices
+    exerciseCurrentInfo.sentenceIndex < sentences.size - 1 -> {
+      onProgressUpdate(
+          0, 0, exerciseCurrentInfo.sentenceIndex + 1) // Reset both letter and word indices
     }
 
     // All sentences are completed
@@ -221,8 +227,6 @@ fun onSuccess(
       onAllSentencesComplete()
     }
   }
-
-  return calculateTimePerLetter(statsViewModel, startTimestamp)
 }
 
 /**
@@ -405,42 +409,38 @@ fun buildForegroundText(currentWord: String, currentLetterIndex: Int): Annotated
  * match, a log message is printed indicating the mismatch.
  *
  * @param detectedGesture The gesture detected by the hand landmark model as a string.
- * @param currentLetterIndex The index of the current letter within the current word.
- * @param currentWordIndex The index of the current word within the current sentence.
- * @param currentSentenceIndex The index of the current sentence in the list of sentences.
+ * @param exerciseCurrentInfo The information about the current letter, word and sentence index.
  * @param sentencesList The list of sentences used in the exercise.
  * @param onProgressUpdate Callback to handle the update of indices for progression. Takes
  *   parameters (newLetterIndex, newWordIndex, newSentenceIndex) to update the current position
  *   within the exercise.
  * @param onAllSentencesComplete Callback to handle completion of all sentences in the exercise.
+ * @param timeTracking Callback to track time.
  */
 fun handleGestureMatching(
     detectedGesture: String,
-    currentLetterIndex: Int,
-    currentWordIndex: Int,
-    currentSentenceIndex: Int,
+    exerciseCurrentInfo: ExerciseCurrentInfo,
     sentencesList: List<String>,
     onProgressUpdate: (newLetterIndex: Int, newWordIndex: Int, newSentenceIndex: Int) -> Unit,
     onAllSentencesComplete: () -> Unit,
-    statsViewModel: StatsViewModel,
-    startTimestamp: Long
-): Long? {
+    timeTracking: () -> Unit
+) {
   val currentLetter =
-      getCurrentLetter(sentencesList, currentLetterIndex, currentWordIndex, currentSentenceIndex)
+      getCurrentLetter(
+          sentencesList,
+          exerciseCurrentInfo.letterIndex,
+          exerciseCurrentInfo.wordIndex,
+          exerciseCurrentInfo.sentenceIndex)
   if (detectedGesture == currentLetter.uppercase()) {
-    return onSuccess(
-        currentLetterIndex = currentLetterIndex,
-        currentWordIndex = currentWordIndex,
-        currentSentenceIndex = currentSentenceIndex,
+    onSuccess(
+        exerciseCurrentInfo = exerciseCurrentInfo,
         sentences = sentencesList,
         onProgressUpdate = onProgressUpdate,
         onAllSentencesComplete = onAllSentencesComplete,
-        statsViewModel = statsViewModel,
-        startTimestamp = startTimestamp)
+        timeTracking = timeTracking)
   } else {
     Log.d(
         "ExerciseScreenEasy",
         "Detected gesture ($detectedGesture) does not match the current letter ($currentLetter)")
-    return null
   }
 }
