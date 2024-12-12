@@ -38,14 +38,12 @@ class NewChallengeScreenTest {
               challengeId = "challenge1",
               player1 = "testUserId",
               player2 = "Opponent1",
-              mode = "Sprint",
-              status = "pending"),
+              mode = "Sprint"),
           Challenge(
               challengeId = "challenge2",
               player1 = "testUserId",
               player2 = "Opponent2",
-              mode = "Chrono",
-              status = "active"))
+              mode = "Chrono"))
 
   @Before
   fun setUp() {
