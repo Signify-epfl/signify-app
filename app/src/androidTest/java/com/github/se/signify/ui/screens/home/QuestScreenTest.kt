@@ -25,7 +25,6 @@ import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.model.profile.stats.StatsRepository
 import com.github.se.signify.model.profile.stats.StatsViewModel
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.mock
@@ -74,13 +73,12 @@ class QuestScreenTest {
     statsRepository = mock(StatsRepository::class.java)
     navigationActions = mock(NavigationActions::class.java)
     handLandmarkViewModel = HandLandmarkViewModel(handLandMarkImplementation, context)
-    userViewModel = mock(UserViewModel::class.java)
-    statsViewModel = mock(StatsViewModel::class.java)
+    userViewModel = UserViewModel(userSession, userRepository)
+    statsViewModel = StatsViewModel(userSession, statsRepository)
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.QUEST.route)
   }
 
-  @Ignore("Temporarily disabled due to setup issues")
   @Test
   fun hasRequiredComponent() {
     composeTestRule.setContent {
@@ -96,7 +94,6 @@ class QuestScreenTest {
     composeTestRule.onNodeWithTag("QuestScreen").assertIsDisplayed()
   }
 
-  @Ignore("Temporarily disabled due to setup issues")
   @Test
   fun questBoxDisplaysCorrectInformation() {
     composeTestRule.setContent {
@@ -113,7 +110,6 @@ class QuestScreenTest {
     composeTestRule.onNodeWithTag("QuestActionButton").assertIsDisplayed()
   }
 
-  @Ignore("Temporarily disabled due to setup issues")
   @Test
   fun questActionButtonHasClickAction() {
     composeTestRule.setContent {
@@ -128,7 +124,6 @@ class QuestScreenTest {
     composeTestRule.onNodeWithTag("QuestActionButton").assertHasClickAction()
   }
 
-  @Ignore("Temporarily disabled due to setup issues")
   @Test
   fun questScreen_displaysBackButtonAndTitle() {
     composeTestRule.setContent {
@@ -148,7 +143,6 @@ class QuestScreenTest {
     composeTestRule.onNodeWithText(quest_title).assertIsDisplayed()
   }
 
-  @Ignore("Temporarily disabled due to setup issues")
   @Test
   fun questBox_displaysCorrectInformationForUnlockedState() {
     composeTestRule.setContent {
@@ -166,7 +160,6 @@ class QuestScreenTest {
     composeTestRule.onNodeWithText(open_button).assertIsDisplayed()
   }
 
-  @Ignore("Temporarily disabled due to setup issues")
   @Test
   fun questBox_displaysLockedButtonWhenLocked() {
     composeTestRule.setContent {
@@ -183,7 +176,6 @@ class QuestScreenTest {
     composeTestRule.onNodeWithTag("QuestActionButton").assertIsNotEnabled()
   }
 
-  @Ignore("Temporarily disabled due to setup issues")
   @Test
   fun questBox_opensDialogWhenButtonClickedIfUnlocked() {
     composeTestRule.setContent {
@@ -203,7 +195,6 @@ class QuestScreenTest {
     composeTestRule.onNodeWithText(sampleQuest.description).assertIsDisplayed()
   }
 
-  @Ignore("Temporarily disabled due to setup issues")
   @Test
   fun questDescriptionDialog_displaysContentAndCloseButton() {
     composeTestRule.setContent {
@@ -223,7 +214,6 @@ class QuestScreenTest {
     composeTestRule.onNodeWithText("Close").assertIsDisplayed().assertHasClickAction()
   }
 
-  @Ignore("Temporarily disabled due to setup issues")
   @Test
   fun questScreen_backButtonNavigatesBack() {
     composeTestRule.setContent {
@@ -243,7 +233,6 @@ class QuestScreenTest {
     verify(navigationActions).goBack()
   }
 
-  @Ignore("Temporarily disabled due to setup issues")
   @Test
   fun questBox_doesNotOpenDialogWhenLocked() {
     composeTestRule.setContent {
@@ -264,7 +253,6 @@ class QuestScreenTest {
         .assertDoesNotExist()
   }
 
-  @Ignore("Temporarily disabled due to setup issues")
   @Test
   fun questDescriptionDialog_callsOnDismissWhenClosed() {
     var dismissCalled = false
@@ -285,7 +273,6 @@ class QuestScreenTest {
     assert(dismissCalled)
   }
 
-  @Ignore("Temporarily disabled due to setup issues")
   @Test
   fun handleGestureMatchingForWordTest() {
     // Mocks for callback functions
@@ -311,7 +298,6 @@ class QuestScreenTest {
     verifyNoInteractions(mockOnWordComplete)
   }
 
-  @Ignore("Temporarily disabled due to setup issues")
   @Test
   fun handleGestureMatchingForWordTest_CompleteWord() {
     // Mocks for callback functions
@@ -337,7 +323,6 @@ class QuestScreenTest {
     verifyNoInteractions(mockOnProgressUpdate)
   }
 
-  @Ignore("Temporarily disabled due to setup issues")
   @Test
   fun handleGestureMatchingForWordTest_WrongGesture() {
     // Mocks for callback functions
@@ -361,7 +346,6 @@ class QuestScreenTest {
     verifyNoInteractions(mockOnWordComplete)
   }
 
-  @Ignore("Temporarily disabled due to setup issues")
   @Test
   fun wordLayerIsCorrectlyDisplayed() {
     // Set up test input
@@ -380,7 +364,6 @@ class QuestScreenTest {
     composeTestRule.onNodeWithTag("CurrentWordTag").assertExists()
   }
 
-  @Ignore("Temporarily disabled due to setup issues")
   @Test
   fun fingerSpellDialog_displaysCorrectTitleAndText() {
     composeTestRule.setContent {
@@ -400,7 +383,6 @@ class QuestScreenTest {
     composeTestRule.onNodeWithText(use_your_cam_for_hello).assertIsDisplayed()
   }
 
-  @Ignore("Temporarily disabled due to setup issues")
   @Test
   fun fingerSpellDialog_closeButtonClosesDialog() {
     var isDismissed = false
