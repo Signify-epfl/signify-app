@@ -31,7 +31,10 @@ fun saveUserToFirestore() {
             "pastChallenges" to emptyList<String>(), // Initialize the past challenges list
             "lastLoginDate" to LocalDate.now().toString(),
             "currentStreak" to 1L,
-            "highestStreak" to 1L)
+            "highestStreak" to 1L,
+            "challengesCreated" to 0,
+            "challengesCompleted" to 0,
+            "challengesWon" to 0)
 
     // Check if the user already exists in FireStore
     val usersCollection = db.collection(collectionPath)

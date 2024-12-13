@@ -33,4 +33,11 @@ interface ChallengeRepository {
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   )
+
+  fun updateWinner(
+      challengeId: String,
+      winnerId: String,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  )
 }

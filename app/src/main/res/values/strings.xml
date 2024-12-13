@@ -103,6 +103,8 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="completed_challenge_text">Completed</string>
     <string name="created_challenge_text">Created</string>
     <string name="won_challenge_text">Won</string>
+    <string name="past_challenges_title">Past Challenges</string>
+    <string name="no_past_challenges">No Past Challenges</string>
 
     <string name="bug_report_text">Bug Report</string>
     <string name="feature_suggestion_text">Feature Suggestion</string>

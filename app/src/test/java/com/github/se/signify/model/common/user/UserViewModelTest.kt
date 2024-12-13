@@ -37,6 +37,7 @@ class UserViewModelTest {
   private lateinit var currentUserId: String
   private val friendUserId = "friendUserId"
   private val challengeId = "challengeId"
+  private val testChallenge = Challenge(challengeId = "challenge1")
 
   private val testDispatcher = UnconfinedTestDispatcher()
 
@@ -539,6 +540,161 @@ class UserViewModelTest {
     // Assert
     // Confirms the repository method is called with the correct arguments on failure
     verify(userRepository).getStreak(eq(currentUserId), any(), any())
+  }
+
+  @Test
+  fun addPastChallengeHandlesFailureInFetchingUser() = runTest {
+    // Arrange
+    val exception = Exception("Failed to fetch user")
+    doAnswer {
+          val onFailure = it.getArgument<(Exception) -> Unit>(2)
+          onFailure(exception)
+          null
+        }
+        .whenever(userRepository)
+        .getUserById(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.addPastChallenge(currentUserId, "challenge2")
+
+    // Assert
+    verify(userRepository).getUserById(eq(currentUserId), any(), any())
+  }
+
+  @Test
+  fun incrementFieldHandlesInvalidFieldName() = runTest {
+    // Act & Assert
+    try {
+      userViewModel.incrementField(currentUserId, "invalidField")
+    } catch (e: IllegalArgumentException) {
+      assertEquals("Invalid field name", e.message)
+    }
+  }
+
+  @Test
+  fun incrementFieldHandlesFailureInFetchingUser() = runTest {
+    // Arrange
+    val exception = Exception("Failed to fetch user")
+    doAnswer {
+          val onFailure = it.getArgument<(Exception) -> Unit>(2)
+          onFailure(exception)
+          null
+        }
+        .whenever(userRepository)
+        .getUserById(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.incrementField(currentUserId, "challengesWon")
+
+    // Assert
+    verify(userRepository).getUserById(eq(currentUserId), any(), any())
+  }
+
+  // Test getPastChallenges
+  @Test
+  fun getPastChallengesUpdatesPastChallengesOnSuccess() = runTest {
+    // Arrange
+    val pastChallenges = listOf(testChallenge)
+    doAnswer {
+          val onSuccess = it.getArgument<(List<Challenge>) -> Unit>(1)
+          onSuccess(pastChallenges)
+          null
+        }
+        .whenever(userRepository)
+        .getPastChallenges(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.getPastChallenges()
+
+    // Assert
+    assertEquals(pastChallenges, userViewModel.pastChallenges.value)
+  }
+
+  @Test
+  fun getPastChallengesHandlesFailure() = runTest {
+    // Arrange
+    val exception = Exception("Failed to fetch past challenges")
+    doAnswer {
+          val onFailure = it.getArgument<(Exception) -> Unit>(2)
+          onFailure(exception)
+          null
+        }
+        .whenever(userRepository)
+        .getPastChallenges(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.getPastChallenges()
+
+    // Assert
+    verify(userRepository).getPastChallenges(eq(currentUserId), any(), any())
+    assertTrue(userViewModel.pastChallenges.value.isEmpty())
+  }
+
+  @Test
+  fun incrementField_handlesFailureInFetchingUser() = runTest {
+    // Arrange
+    val exception = Exception("Failed to fetch user")
+    doAnswer {
+          val onFailure = it.getArgument<(Exception) -> Unit>(2)
+          onFailure(exception)
+          null
+        }
+        .whenever(userRepository)
+        .getUserById(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.incrementField(currentUserId, "challengesCompleted")
+
+    // Assert
+    verify(userRepository).getUserById(eq(currentUserId), any(), any())
+  }
+
+  @Test
+  fun incrementField_throwsExceptionForInvalidFieldName() {
+    // Act & Assert
+    try {
+      userViewModel.incrementField(currentUserId, "invalidField")
+    } catch (e: IllegalArgumentException) {
+      assertEquals("Invalid field name", e.message)
+    }
+  }
+
+  @Test
+  fun removeOngoingChallenge_handlesFailure() = runTest {
+    // Arrange
+    val exception = Exception("Failed to remove ongoing challenge")
+    doAnswer {
+          val onFailure = it.getArgument<(Exception) -> Unit>(3)
+          onFailure(exception)
+          null
+        }
+        .whenever(userRepository)
+        .removeOngoingChallenge(eq(currentUserId), eq(challengeId), any(), any())
+
+    // Act
+    userViewModel.removeOngoingChallenge(currentUserId, challengeId)
+
+    // Assert
+    verify(userRepository).removeOngoingChallenge(eq(currentUserId), eq(challengeId), any(), any())
+  }
+
+  @Test
+  fun removeOngoingChallenge_updatesOngoingChallengesOnSuccess() = runTest {
+    // Arrange
+    doAnswer {
+          val onSuccess = it.getArgument<() -> Unit>(2)
+          onSuccess()
+          null
+        }
+        .whenever(userRepository)
+        .removeOngoingChallenge(eq(currentUserId), eq(challengeId), any(), any())
+
+    // Act
+    userViewModel.removeOngoingChallenge(currentUserId, challengeId)
+
+    // Assert
+    verify(userRepository).removeOngoingChallenge(eq(currentUserId), eq(challengeId), any(), any())
+    assertTrue(userViewModel.ongoingChallenges.value.none { it.challengeId == challengeId })
   }
 
   @After
