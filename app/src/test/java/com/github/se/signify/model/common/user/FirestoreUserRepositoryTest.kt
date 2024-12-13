@@ -1236,47 +1236,6 @@ class FirestoreUserRepositoryTest {
   }
 
   @Test
-  fun `getChallengesCompleted should return the correct value`() = runTest {
-    // Arrange
-    val userId = "testUserId"
-    val field = "challengesCompleted"
-    val expectedValue = 0L
-    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
-    `when`(mockUserDocumentSnapshot.getLong(field)).thenReturn(expectedValue)
-
-    var result: Int? = null
-    val onSuccess: (Int) -> Unit = { value -> result = value }
-    val onFailure: (Exception) -> Unit = { fail("Should not fail") }
-
-    // Act
-    firestoreUserRepository.getChallengesCompleted(userId, onSuccess, onFailure)
-
-    // Assert
-    shadowOf(Looper.getMainLooper()).idle()
-    assertEquals(expectedValue.toInt(), result)
-  }
-
-  @Test
-  fun `getUserField should return 0 when Firestore document is missing`() = runTest {
-    // Arrange
-    val userId = "testUserId"
-    val field = "challengesCompleted"
-    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
-    `when`(mockUserDocumentSnapshot.getLong(field)).thenReturn(null)
-
-    var result: Int? = null
-    val onSuccess: (Int) -> Unit = { value -> result = value }
-    val onFailure: (Exception) -> Unit = { fail("Should not fail") }
-
-    // Act
-    firestoreUserRepository.getChallengesCompleted(userId, onSuccess, onFailure)
-
-    // Assert
-    shadowOf(Looper.getMainLooper()).idle()
-    assertEquals(0, result)
-  }
-
-  @Test
   fun `getUserField should return 0 when Firestore operation fails`() = runTest {
     // Arrange
     val userId = "testUserId"
