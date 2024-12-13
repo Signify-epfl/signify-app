@@ -541,6 +541,103 @@ class UserViewModelTest {
     verify(userRepository).getStreak(eq(currentUserId), any(), any())
   }
 
+  @Test
+  fun markQuestAsCompleted_callsRepositoryAndUpdatesCompletedQuestsOnSuccess() = runTest {
+    // Arrange
+    val questIndex = "quest1"
+    val completedQuests = listOf("quest1", "quest2")
+    doAnswer {
+          val onSuccess = it.getArgument<() -> Unit>(2)
+          onSuccess()
+          null
+        }
+        .whenever(userRepository)
+        .markQuestAsCompleted(eq(currentUserId), eq(questIndex), any(), any())
+
+    doAnswer {
+          val onSuccess = it.getArgument<(List<String>) -> Unit>(1)
+          onSuccess(completedQuests)
+          null
+        }
+        .whenever(userRepository)
+        .getCompletedQuests(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.markQuestAsCompleted(questIndex)
+
+    // Assert
+    // Verify that the repository methods were called with the correct arguments
+    verify(userRepository).markQuestAsCompleted(eq(currentUserId), eq(questIndex), any(), any())
+    verify(userRepository).getCompletedQuests(eq(currentUserId), any(), any())
+    // Check that the completed quests list is updated in the ViewModel
+    assertEquals(completedQuests, userViewModel.completedQuests.value)
+  }
+
+  @Test
+  fun markQuestAsCompleted_handlesFailure() = runTest {
+    // Arrange
+    val questIndex = "quest1"
+    val exception = Exception("Failed to mark quest as completed")
+    doAnswer {
+          val onFailure = it.getArgument<(Exception) -> Unit>(3)
+          onFailure(exception)
+          null
+        }
+        .whenever(userRepository)
+        .markQuestAsCompleted(eq(currentUserId), eq(questIndex), any(), any())
+
+    // Act
+    userViewModel.markQuestAsCompleted(questIndex)
+
+    // Assert
+    // Verify that the repository method was called with the correct arguments
+    verify(userRepository).markQuestAsCompleted(eq(currentUserId), eq(questIndex), any(), any())
+  }
+
+  @Test
+  fun fetchCompletedQuests_callsRepositoryAndUpdatesCompletedQuestsOnSuccess() = runTest {
+    // Arrange
+    val completedQuests = listOf("quest1", "quest2")
+    doAnswer {
+          val onSuccess = it.getArgument<(List<String>) -> Unit>(1)
+          onSuccess(completedQuests)
+          null
+        }
+        .whenever(userRepository)
+        .getCompletedQuests(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.fetchCompletedQuests()
+
+    // Assert
+    // Verify that the repository method was called with the correct arguments
+    verify(userRepository).getCompletedQuests(eq(currentUserId), any(), any())
+    // Check that the completed quests list is updated in the ViewModel
+    assertEquals(completedQuests, userViewModel.completedQuests.value)
+  }
+
+  @Test
+  fun fetchCompletedQuests_handlesFailure() = runTest {
+    // Arrange
+    val exception = Exception("Failed to fetch completed quests")
+    doAnswer {
+          val onFailure = it.getArgument<(Exception) -> Unit>(2)
+          onFailure(exception)
+          null
+        }
+        .whenever(userRepository)
+        .getCompletedQuests(eq(currentUserId), any(), any())
+
+    // Act
+    userViewModel.fetchCompletedQuests()
+
+    // Assert
+    // Verify that the repository method was called with the correct arguments
+    verify(userRepository).getCompletedQuests(eq(currentUserId), any(), any())
+    // Ensure the completed quests list remains empty on failure
+    assertTrue(userViewModel.completedQuests.value.isEmpty())
+  }
+
   @After
   fun tearDown() {
     Dispatchers.resetMain()
