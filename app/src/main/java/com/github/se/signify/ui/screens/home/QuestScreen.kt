@@ -56,6 +56,8 @@ import com.github.se.signify.model.home.quest.Quest
 import com.github.se.signify.model.home.quest.QuestRepository
 import com.github.se.signify.model.home.quest.QuestViewModel
 import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.profile.stats.StatsRepository
+import com.github.se.signify.model.profile.stats.StatsViewModel
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.CameraBox
 
@@ -65,11 +67,14 @@ fun QuestScreen(
     userSession: UserSession,
     questRepository: QuestRepository,
     userRepository: UserRepository,
-    handLandMarkViewModel: HandLandmarkViewModel
+    handLandMarkViewModel: HandLandmarkViewModel,
+    statsRepository: StatsRepository
 ) {
   val questViewModel: QuestViewModel = viewModel(factory = QuestViewModel.factory(questRepository))
   val userViewModel: UserViewModel =
       viewModel(factory = UserViewModel.factory(userSession, userRepository))
+  val statsViewModel: StatsViewModel =
+      viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
 
   val quests = questViewModel.quest.collectAsState()
   LaunchedEffect(userSession.getUserId()) {
@@ -94,7 +99,8 @@ fun QuestScreen(
             quest = quests.value[index],
             isUnlocked,
             handLandMarkViewModel = handLandMarkViewModel,
-            userViewModel = userViewModel)
+            userViewModel = userViewModel,
+            statsViewModel = statsViewModel)
       }
     }
   }
@@ -106,7 +112,8 @@ fun QuestBox(
     quest: Quest,
     isUnlocked: Boolean,
     handLandMarkViewModel: HandLandmarkViewModel,
-    userViewModel: UserViewModel
+    userViewModel: UserViewModel,
+    statsViewModel: StatsViewModel
 ) {
   var isDialogVisible by remember { mutableStateOf(false) }
   Card(
@@ -146,7 +153,7 @@ fun QuestBox(
         onDismiss = { isDialogVisible = false },
         handLandMarkViewModel = handLandMarkViewModel,
         userViewModel = userViewModel,
-    )
+        statsViewModel = statsViewModel)
   }
 }
 
@@ -157,6 +164,7 @@ fun QuestDescriptionDialog(
     onDismiss: () -> Unit,
     handLandMarkViewModel: HandLandmarkViewModel,
     userViewModel: UserViewModel,
+    statsViewModel: StatsViewModel
 ) {
   val inSignLanguageText = stringResource(R.string.in_sign_language_text)
   val completedQuests by userViewModel.completedQuests.collectAsState(emptyList())
@@ -173,7 +181,8 @@ fun QuestDescriptionDialog(
         },
         handLandMarkViewModel = handLandMarkViewModel,
         userViewModel = userViewModel,
-        questIndex = quest.index)
+        questIndex = quest.index,
+        statsViewModel = statsViewModel)
   } else {
     AlertDialog(
         onDismissRequest = { onDismiss() },
@@ -272,7 +281,8 @@ fun FingerSpellDialog(
     onDismiss: () -> Unit,
     handLandMarkViewModel: HandLandmarkViewModel,
     userViewModel: UserViewModel,
-    questIndex: String
+    questIndex: String,
+    statsViewModel: StatsViewModel
 ) {
   val context = LocalContext.current
   var currentLetterIndex by rememberSaveable { mutableIntStateOf(0) }
@@ -290,6 +300,7 @@ fun FingerSpellDialog(
         onWordComplete = {
           // Mark the quest as completed
           userViewModel.markQuestAsCompleted(questIndex)
+          statsViewModel.updateDailyQuestStats()
           Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show()
           onDismiss() // Close dialog when word is completed
         })
