@@ -22,7 +22,6 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.github.se.signify.model.common.updateLanguage
-import com.github.se.signify.model.dependencyInjection.AppDependencyProvider
 import com.github.se.signify.model.dependencyInjection.DependencyProvider
 import com.github.se.signify.model.home.exercise.ExerciseLevel
 import com.github.se.signify.model.home.hand.HandLandmarkViewModel
@@ -46,6 +45,7 @@ import com.github.se.signify.ui.screens.profile.FriendsListScreen
 import com.github.se.signify.ui.screens.profile.MyStatsScreen
 import com.github.se.signify.ui.screens.profile.ProfileScreen
 import com.github.se.signify.ui.screens.profile.SettingsScreen
+import com.github.se.signify.ui.screens.tutorial.ProvideElementPositions
 import com.github.se.signify.ui.screens.tutorial.TutorialScreen
 import com.github.se.signify.ui.screens.welcome.WelcomeScreen
 import com.github.se.signify.ui.theme.SignifyTheme
@@ -54,6 +54,9 @@ class MainActivity : ComponentActivity() {
 
   private lateinit var sharedPreferencesTheme: SharedPreferences
   private lateinit var sharedPreferencesLanguage: SharedPreferences
+  // Now when launching the MainActivity, the builder will know which dependency provider to use
+  // (Test or Base)
+  private val dependencyProvider by lazy { (application as BaseApplication).dependencyProvider }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -75,7 +78,7 @@ class MainActivity : ComponentActivity() {
     val savedLanguage = sharedPreferencesLanguage.getBoolean(prefKeyLanguage, false)
 
     // Tutorial versioning logic
-    val currentTutorialVersion = 1 // Update this when the tutorial changes
+    val currentTutorialVersion = 2 // Update this when the tutorial changes
     val savedTutorialVersion = sharedPreferencesTheme.getInt(prefKeyTutorialVersion, 0)
 
     val isTutorialCompleted =
@@ -94,26 +97,28 @@ class MainActivity : ComponentActivity() {
 
       SignifyTheme(darkTheme = isDarkTheme) {
         Surface(modifier = Modifier.fillMaxSize()) {
-          SignifyAppPreview(
-              context = this,
-              dependencyProvider = AppDependencyProvider,
-              isDarkTheme = isDarkTheme,
-              onThemeChange = { isDark ->
-                isDarkTheme = isDark
-                // Save theme preference
-                sharedPreferencesTheme.edit().putBoolean(prefKeyIsDarkTheme, isDark).apply()
-              },
-              tutorialCompleted = tutorialCompleted,
-              onTutorialComplete = {
-                tutorialCompleted = true
-                sharedPreferencesTheme.edit().putBoolean(prefKeyTutorialCompleted, true).apply()
-              },
-              isFrenchLanguage = isFrenchLanguage,
-              onLanguageChange = { isFrench ->
-                isFrenchLanguage = isFrench
-                sharedPreferencesLanguage.edit().putBoolean(prefNameLanguage, isFrench).apply()
-                updateLanguage(this, if (isFrench) "fr" else "en")
-              })
+          ProvideElementPositions {
+            SignifyAppPreview(
+                context = this,
+                dependencyProvider = dependencyProvider,
+                isDarkTheme = isDarkTheme,
+                onThemeChange = { isDark ->
+                  isDarkTheme = isDark
+                  // Save theme preference
+                  sharedPreferencesTheme.edit().putBoolean(prefKeyIsDarkTheme, isDark).apply()
+                },
+                tutorialCompleted = tutorialCompleted,
+                onTutorialComplete = {
+                  tutorialCompleted = true
+                  sharedPreferencesTheme.edit().putBoolean(prefKeyTutorialCompleted, true).apply()
+                },
+                isFrenchLanguage = isFrenchLanguage,
+                onLanguageChange = { isFrench ->
+                  isFrenchLanguage = isFrench
+                  sharedPreferencesLanguage.edit().putBoolean(prefNameLanguage, isFrench).apply()
+                  updateLanguage(this, if (isFrench) "fr" else "en")
+                })
+          }
         }
       }
     }
@@ -159,7 +164,8 @@ fun SignifyAppPreview(
               } else {
                 navigationActions.navigateTo(Screen.TUTORIAL)
               }
-            })
+            },
+            dependencyProvider.provideAuthService())
       }
       composable(Screen.UNAUTHENTICATED.route) { UnauthenticatedScreen(navigationActions) }
     }
@@ -203,7 +209,7 @@ fun SignifyAppPreview(
         ChallengeHistoryScreen(
             navigationActions,
             dependencyProvider.userSession(),
-            dependencyProvider.statsRepository())
+            dependencyProvider.userRepository())
       }
     }
 

@@ -38,7 +38,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.painterResource
@@ -54,11 +56,14 @@ import com.github.se.signify.model.home.exercise.ExerciseLevel
 import com.github.se.signify.model.home.exercise.ExerciseLevelName
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.model.navigation.TopLevelDestinations
 import com.github.se.signify.ui.common.BasicButton
 import com.github.se.signify.ui.common.HelpText
 import com.github.se.signify.ui.common.LetterDictionary
 import com.github.se.signify.ui.common.MainScreenScaffold
 import com.github.se.signify.ui.common.TextButton
+import com.github.se.signify.ui.screens.tutorial.LocalElementPositions
+import com.github.se.signify.ui.screens.tutorial.saveElementPosition
 import kotlinx.coroutines.launch
 
 /**
@@ -72,11 +77,15 @@ import kotlinx.coroutines.launch
 fun HomeScreen(navigationActions: NavigationActions) {
   val defaultExercises = ExerciseLevel.entries
 
+  val elementPositions = LocalElementPositions.current
+  val density = LocalDensity.current
+
   val scrollState = rememberLazyListState()
   val coroutineScope = rememberCoroutineScope()
   val letterText = stringResource(id = R.string.letter_text)
   MainScreenScaffold(
       navigationActions = navigationActions,
+      topLevelDestination = TopLevelDestinations.HOME,
       testTag = "HomeScreen",
       helpText =
           HelpText(
@@ -84,9 +93,27 @@ fun HomeScreen(navigationActions: NavigationActions) {
               content = stringResource(R.string.help_home_screen_text)),
       topBarButtons =
           listOf<@Composable () -> Unit>(
-              { FeedbackButton(navigationActions) },
-              { QuizButton(navigationActions) },
-              { QuestsButton(navigationActions) }),
+              {
+                FeedbackButton(
+                    navigationActions,
+                    Modifier.onGloballyPositioned { coords ->
+                      saveElementPosition("FeedbackButton", coords, density, elementPositions)
+                    })
+              },
+              {
+                QuizButton(
+                    navigationActions,
+                    Modifier.onGloballyPositioned { coords ->
+                      saveElementPosition("QuizButton", coords, density, elementPositions)
+                    })
+              },
+              {
+                QuestsButton(
+                    navigationActions,
+                    Modifier.onGloballyPositioned { coords ->
+                      saveElementPosition("QuestsButton", coords, density, elementPositions)
+                    })
+              }),
       floatingActionButton = {
         FloatingActionButton(
             onClick = { coroutineScope.launch { scrollState.animateScrollToItem(0) } },
@@ -104,7 +131,13 @@ fun HomeScreen(navigationActions: NavigationActions) {
               item { Spacer(modifier = Modifier.height(32.dp)) }
 
               item {
-                CameraFeedbackButton(onClick = { navigationActions.navigateTo(Screen.PRACTICE) })
+                CameraFeedbackButton(
+                    onClick = { navigationActions.navigateTo(Screen.PRACTICE) },
+                    modifier =
+                        Modifier.onGloballyPositioned { coords ->
+                          saveElementPosition(
+                              "CameraFeedbackButton", coords, density, elementPositions)
+                        })
               }
 
               item { Spacer(modifier = Modifier.height(32.dp)) }
@@ -116,12 +149,23 @@ fun HomeScreen(navigationActions: NavigationActions) {
                     clickable = true,
                     onClick = { page, numbOfHeaders ->
                       coroutineScope.launch { scrollState.scrollToItem(page + numbOfHeaders) }
-                    })
+                    },
+                    modifier =
+                        Modifier.onGloballyPositioned { coords ->
+                          saveElementPosition("LetterDictionary", coords, density, elementPositions)
+                        })
               }
 
               item { Spacer(modifier = Modifier.height(32.dp)) }
 
-              item { ExerciseList(defaultExercises, navigationActions) }
+              item {
+                ExerciseList(
+                    defaultExercises,
+                    navigationActions,
+                    Modifier.onGloballyPositioned { coords ->
+                      saveElementPosition("ExerciseList", coords, density, elementPositions)
+                    })
+              }
 
               item { Spacer(modifier = Modifier.height(32.dp)) }
               items(('A'..'Z').toList()) { letter ->
@@ -145,14 +189,15 @@ fun HomeScreen(navigationActions: NavigationActions) {
  * @param onClick The action to perform when the button is clicked. Defaults to an empty action.
  */
 @Composable
-fun CameraFeedbackButton(onClick: () -> Unit = {}) {
+fun CameraFeedbackButton(modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
   val tryText = stringResource(id = R.string.try_text)
   TextButton(
       onClick = onClick,
       testTag = "CameraFeedbackButton",
       text = tryText,
       backgroundColor = MaterialTheme.colorScheme.primary,
-      textColor = MaterialTheme.colorScheme.onPrimary)
+      textColor = MaterialTheme.colorScheme.onPrimary,
+      modifier = modifier)
 }
 
 /**
@@ -166,10 +211,14 @@ fun CameraFeedbackButton(onClick: () -> Unit = {}) {
  *   between screens.
  */
 @Composable
-fun ExerciseList(exercises: List<ExerciseLevel>, navigationActions: NavigationActions) {
+fun ExerciseList(
+    exercises: List<ExerciseLevel>,
+    navigationActions: NavigationActions,
+    modifier: Modifier = Modifier
+) {
   val pagerState = rememberPagerState(initialPage = 0, pageCount = { exercises.size })
 
-  Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+  Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier.fillMaxWidth()) {
     HorizontalPager(
         beyondViewportPageCount = exercises.size,
         state = pagerState,
@@ -240,6 +289,7 @@ fun ExerciseButton(exercise: ExerciseLevel, navigationActions: NavigationActions
         Text(exerciseText, modifier = Modifier.testTag("${exercise.id}ExerciseButtonText"))
       }
 }
+
 /**
  * Composable function that displays information about a letter in a structured box. This includes
  * an image, an icon, and a tip text related to the given letter. The layout is styled with padding
@@ -291,33 +341,33 @@ fun SignTipBox(letter: Char, modifier: Modifier = Modifier) {
 
 @Composable
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-fun FeedbackButton(navigationActions: NavigationActions) {
+fun FeedbackButton(navigationActions: NavigationActions, modifier: Modifier = Modifier) {
   BasicButton(
       onClick = { navigationActions.navigateTo(Screen.FEEDBACK) },
       iconTestTag = "FeedbackIcon",
       icon = Icons.Outlined.Email,
       contentDescription = "Feedback",
-      modifier = Modifier.testTag("FeedbackButton"))
+      modifier = modifier.testTag("FeedbackButton"))
 }
 
 @Composable
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-fun QuizButton(navigationActions: NavigationActions) {
+fun QuizButton(navigationActions: NavigationActions, modifier: Modifier = Modifier) {
   BasicButton(
       onClick = { navigationActions.navigateTo(Screen.QUIZ) },
       iconTestTag = "QuizIcon",
       icon = Icons.Outlined.Star,
       contentDescription = "Quizzes",
-      modifier = Modifier.testTag("QuizButton"))
+      modifier = modifier.testTag("QuizButton"))
 }
 
 @Composable
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-fun QuestsButton(navigationActions: NavigationActions) {
+fun QuestsButton(navigationActions: NavigationActions, modifier: Modifier = Modifier) {
   BasicButton(
       onClick = { navigationActions.navigateTo(Screen.QUEST) },
       iconTestTag = "QuestIcon",
       icon = Icons.Outlined.DateRange,
       contentDescription = "Quests",
-      modifier = Modifier.testTag("QuestsButton"))
+      modifier = modifier.testTag("QuestsButton"))
 }

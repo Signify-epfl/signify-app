@@ -8,6 +8,12 @@ private val failureException: Exception = Exception("Simulated failure")
 class MockUserRepository : UserRepository {
   private val users = mutableMapOf<String, User>()
   private var shouldFail: Boolean = false
+  private val mockData =
+      mutableMapOf(
+          "user1" to
+              mapOf("challengesCompleted" to 5, "challengesCreated" to 10, "challengesWon" to 3),
+          "user2" to
+              mapOf("challengesCompleted" to 8, "challengesCreated" to 4, "challengesWon" to 6))
 
   fun succeed() {
     shouldFail = false
@@ -335,6 +341,89 @@ class MockUserRepository : UserRepository {
 
     val user = users.getValue(userId)
     onSuccess(user.completedQuests)
+  }
+
+  override fun addPastChallenge(
+      userId: String,
+      challengeId: String,
+  ) {
+    val user = users.getValue(userId)
+    users[userId] = user.copy(pastChallenges = user.pastChallenges + challengeId) // Add challenge
+  }
+
+  override fun updateUserField(
+      userId: String,
+      fieldName: String,
+      value: Any,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    val user = users[userId]
+    if (user == null) {
+      onFailure(Exception("User not found"))
+      return
+    }
+
+    val updatedUser =
+        when (fieldName) {
+          "challengesCreated" -> user.copy(challengesCreated = value as Int)
+          "challengesCompleted" -> user.copy(challengesCompleted = value as Int)
+          "challengesWon" -> user.copy(challengesWon = value as Int)
+          "pastChallenges" -> user.copy(pastChallenges = value as List<String>)
+          else -> throw IllegalArgumentException("Invalid field name")
+        }
+
+    users[userId] = updatedUser
+    onSuccess()
+  }
+
+  override fun getPastChallenges(
+      userId: String,
+      onSuccess: (List<Challenge>) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
+
+    val user = users.getValue(userId)
+    val challenges = user.pastChallenges.map { Challenge(it) }
+    onSuccess(challenges)
+  }
+
+  override suspend fun getChallengesCompleted(
+      userId: String,
+      onSuccess: (Int) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
+
+    val value = mockData[userId]?.get("challengesCompleted") ?: 0
+    onSuccess(value)
+  }
+
+  override suspend fun getChallengesCreated(
+      userId: String,
+      onSuccess: (Int) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
+
+    val value = mockData[userId]?.get("challengesCreated") ?: 0
+    onSuccess(value)
+  }
+
+  override suspend fun getChallengesWon(
+      userId: String,
+      onSuccess: (Int) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
+
+    val value = mockData[userId]?.get("challengesWon") ?: 0
+    onSuccess(value)
   }
 
   private fun checkFailure(onFailure: (Exception) -> Unit): Boolean {

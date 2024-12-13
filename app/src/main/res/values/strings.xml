@@ -27,8 +27,6 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="welcome_text">Welcome to Signify</string>
     <string name="dark_mode_text">Dark Mode</string>
     <string name="light_mode_text">Light Mode</string>
-    <string name="saved_text">Changes saved</string>
-    <string name="save_text">Save</string>
     <string name="cancel_text">Cancel</string>
     <string name="unknown_text">unknown</string>
     <string name="my_friends_text">My Friends</string>
@@ -44,6 +42,10 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="user_not_found_text">User Not Found</string>
     <string name="camera_permission_denied_text">Camera permission denied</string>
 
+    <string name="confirm_changes_title">Confirm Changes</string>
+    <string name="confirm_changes_message">Are you sure you want to save these changes?</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
 
     <string name="no_friend_text">No Friends</string>
     <string name="request_friends_text">Friend Requests</string>
@@ -101,6 +103,8 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="completed_challenge_text">Completed</string>
     <string name="created_challenge_text">Created</string>
     <string name="won_challenge_text">Won</string>
+    <string name="past_challenges_title">Past Challenges</string>
+    <string name="no_past_challenges">No Past Challenges</string>
 
     <string name="bug_report_text">Bug Report</string>
     <string name="feature_suggestion_text">Feature Suggestion</string>
@@ -294,14 +298,21 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="closed_quest_button_text">Locked</string>
     <string name="pref_key_tutorial_completed">tutorial_completed</string>
     <string name="pref_key_tutorial_version">pref_key_tutorial_version</string>
-    <string name="tutorial_screen1_text">Welcome to Signify!
-Let’s take a quick tour to help you get started with learning sign language effortlessly.</string>
-    <string name="tutorial_screen2_text">Swipe to the right to view exercises by difficulty level.</string>
-    <string name="tutorial_last_screen_text">You\'re ready to start! Enjoy learning sign language.</string>
     <string name="try_fingerspell_button_text">Try it!</string>
     <string name="fingerspell_title_text">Fingerspell: %1$s</string>
     <string name="try_fingerspell_text">Use your camera to fingerspell the word: %1$s</string>
     <string name="word_completed_text">Word completed!</string>
+
+    <string name="tutorial_welcomeText">Welcome to Signify!
+Let’s take a quick tour to help you get started with learning sign language effortlessly.</string>
+    <string name="tutorial_dictionaryText">Here’s the Letter Dictionary – explore and learn gestures for each letter of the alphabet with visual guides and helpful tips.</string>
+    <string name="tutorial_cameraFeedbackText">This is your free play area – explore and practice signing any letter without restrictions and see your progress in real-time.</string>
+    <string name="tutorial_exerciseText">Discover various exercises tailored to enhance your skills – each level is designed to challenge and improve your abilities.</string>
+    <string name="tutorial_questsText">Embark on exciting quests to make learning sign language even more engaging and rewarding.</string>
+    <string name="tutorial_quizText">Test your knowledge and track your progress with quizzes that challenge your understanding of sign language.</string>
+    <string name="tutorial_feedbackText">Have feedback for us ? Tap this button to share your experience and help us improve Signify.</string>
+    <string name="tutorial_completionText">You\'re ready to start ! Enjoy learning sign language.</string>
+    <string name="skip_tutorial">Skip Tutorial</string>
 
 
 

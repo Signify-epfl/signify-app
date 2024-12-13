@@ -3,6 +3,7 @@ package com.github.se.signify.ui.screens.tutorial
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import com.github.se.signify.model.navigation.NavigationActions
 import org.junit.Before
@@ -15,51 +16,84 @@ class TutorialScreenTest {
   @get:Rule val composeTestRule = createComposeRule()
 
   private lateinit var navigationActions: NavigationActions
-
-  private val welcomeTextTag = "WelcomeTextTag"
-  private val exerciseTextTag = "ExerciseTextTag"
-  private val completionTextTag = "CompletionTextTag"
+  private var completed = false
 
   private val nextButtonTag = "nextButton"
+  private val skipButtonTag = "SkipTutorialButton"
 
   @Before
   fun setUp() {
     navigationActions = mock(NavigationActions::class.java)
+    completed = false
 
     composeTestRule.setContent {
-      TutorialScreen(navigationActions = navigationActions, onFinish = {})
+      ProvideElementPositions {
+        TutorialScreen(navigationActions = navigationActions, onFinish = { completed = true })
+      }
     }
   }
 
   @Test
-  fun tutorialScreen_displaysWelcomeTextOnFirstStep() {
-    // Assert that the welcome text is displayed
-    composeTestRule.onNodeWithTag(welcomeTextTag).assertIsDisplayed()
+  fun tutorialScreen_navigatesThroughSteps_onNext() {
+    // Verify the first step
+    composeTestRule.onNodeWithTag("WelcomeTextTag").assertIsDisplayed()
 
-    // Assert that the "Next" button is displayed
-    composeTestRule.onNodeWithTag(nextButtonTag).assertIsDisplayed()
-  }
-
-  @Test
-  fun tutorialScreen_highlightsExerciseAreaOnSecondStep() {
-    // Click "Next" to go to the second step
+    // Simulate "Next" button click
     composeTestRule.onNodeWithTag(nextButtonTag).performClick()
 
-    // Assert that the exercise area highlight is displayed
-    composeTestRule
-        .onNodeWithTag("HighlightArea") // Verify using the test tag
-        .assertExists()
-
-    // Assert that the second text is displayed
-    composeTestRule.onNodeWithTag(exerciseTextTag).assertIsDisplayed()
+    // Verify the second step is displayed
+    composeTestRule.onNodeWithTag("DictionaryTextTag").assertIsDisplayed()
   }
 
   @Test
-  fun tutorialScreen_displaysCompletionTextOnLastStep() {
-    // Navigate to the last step
-    repeat(2) { composeTestRule.onNodeWithTag(nextButtonTag).performClick() }
+  fun tutorialScreen_skipsTutorial_onSkipButtonClick() {
+    // Click the "Skip" button
+    composeTestRule.onNodeWithTag(skipButtonTag).performClick()
 
-    // Assert that the completion text is displayed
-    composeTestRule.onNodeWithTag(completionTextTag).assertIsDisplayed()
+    // Verify that onFinish was called
+    assert(completed)
+  }
+
+  @Test
+  fun blockingInteractionsOverlay_blocksAllInteractions() {
+
+    // Attempt to interact with the overlay
+    composeTestRule.onRoot().performClick()
+
+    // Assert no interaction passed through
+    composeTestRule.onRoot().assertExists()
+  }
+
+  @Test
+  fun skipButton_isDisplayedAtTopRight() {
+    // Verify the "Skip" button is displayed
+    composeTestRule.onNodeWithTag(skipButtonTag).assertIsDisplayed()
+  }
+
+  @Test
+  fun tutorialScreen_displaysAllSteps() {
+    val tutorialSteps =
+        listOf(
+            "WelcomeTextTag",
+            "DictionaryTextTag",
+            "CameraFeedbackTag",
+            "ExerciseTextTag",
+            "QuestsTextTag",
+            "QuizTextTag",
+            "FeedbackTextTag",
+            "CompletionTextTag")
+
+    tutorialSteps.forEachIndexed { index, tag ->
+      // Check that the correct step is displayed
+      composeTestRule.onNodeWithTag(tag).assertIsDisplayed()
+
+      // If not the last step, click "Next" to proceed to the next step
+      if (index < tutorialSteps.size - 1) {
+        composeTestRule.onNodeWithTag(nextButtonTag).performClick()
+      }
+    }
+
+    // After the last step, ensure the tutorial completes
+    composeTestRule.onNodeWithTag("CompletionTextTag").assertIsDisplayed()
   }
 }

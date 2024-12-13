@@ -10,6 +10,7 @@ import androidx.compose.ui.test.performScrollTo
 import com.github.se.signify.model.home.exercise.ExerciseLevel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.ui.screens.tutorial.ProvideElementPositions
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -32,7 +33,9 @@ class HomeScreenTest {
 
   @Test
   fun allElementsAreDisplayed() {
-    composeTestRule.setContent { HomeScreen(navigationActions = navigationActions) }
+    composeTestRule.setContent {
+      ProvideElementPositions { HomeScreen(navigationActions = navigationActions) }
+    }
 
     // Assert that all elements are displayed in ChallengeScreen
     composeTestRule.onNodeWithTag("QuestsButton").assertIsDisplayed()
@@ -48,7 +51,9 @@ class HomeScreenTest {
   @Test
   fun allClickableElementsHaveClickActions() {
 
-    composeTestRule.setContent { HomeScreen(navigationActions = navigationActions) }
+    composeTestRule.setContent {
+      ProvideElementPositions { HomeScreen(navigationActions = navigationActions) }
+    }
 
     composeTestRule.onNodeWithTag("QuestsButton").assertHasClickAction()
     composeTestRule.onNodeWithTag("CameraFeedbackButton").assertHasClickAction()
@@ -59,7 +64,9 @@ class HomeScreenTest {
   @Test
   fun allClickableElementsPerformClick() {
 
-    composeTestRule.setContent { HomeScreen(navigationActions = navigationActions) }
+    composeTestRule.setContent {
+      ProvideElementPositions { HomeScreen(navigationActions = navigationActions) }
+    }
 
     composeTestRule.onNodeWithTag("QuestsButton").performClick()
     composeTestRule.onNodeWithTag("CameraFeedbackButton").performClick()
@@ -69,7 +76,9 @@ class HomeScreenTest {
 
   @Test
   fun questsButtonNavigatesToQuestScreen() {
-    composeTestRule.setContent { HomeScreen(navigationActions = navigationActions) }
+    composeTestRule.setContent {
+      ProvideElementPositions { HomeScreen(navigationActions = navigationActions) }
+    }
 
     composeTestRule.onNodeWithTag("QuestsButton").performClick()
 
@@ -78,7 +87,9 @@ class HomeScreenTest {
 
   @Test
   fun cameraFeedbackButtonNavigatesToPracticeScreen() {
-    composeTestRule.setContent { HomeScreen(navigationActions = navigationActions) }
+    composeTestRule.setContent {
+      ProvideElementPositions { HomeScreen(navigationActions = navigationActions) }
+    }
 
     composeTestRule.onNodeWithTag("CameraFeedbackButton").performClick()
 
@@ -131,7 +142,9 @@ class HomeScreenTest {
 
   @Test
   fun dictionaryIsDisplayedUsingButtons() {
-    composeTestRule.setContent { HomeScreen(navigationActions) }
+    composeTestRule.setContent {
+      ProvideElementPositions { HomeScreen(navigationActions = navigationActions) }
+    }
 
     ('A'..'Z').forEachIndexed { index, letter ->
       // Click on "LetterDictionaryForward" to navigate to the desired letter
@@ -152,7 +165,9 @@ class HomeScreenTest {
 
   @Test
   fun dictionaryIsDisplayedUsingPagersScrolling() {
-    composeTestRule.setContent { HomeScreen(navigationActions) }
+    composeTestRule.setContent {
+      ProvideElementPositions { HomeScreen(navigationActions = navigationActions) }
+    }
 
     ('A'..'Z').forEachIndexed { _, letter ->
       // Click on the specific letter box by scrolling to it

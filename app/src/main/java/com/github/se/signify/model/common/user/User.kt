@@ -13,4 +13,7 @@ data class User(
     val currentStreak: Long = 1L,
     val highestStreak: Long = 1L,
     val completedQuests: List<String> = emptyList(),
+    val challengesCreated: Int = 0,
+    val challengesCompleted: Int = 0,
+    val challengesWon: Int = 0
 )
