@@ -75,12 +75,12 @@ class TutorialScreenTest {
     val tutorialSteps =
         listOf(
             "WelcomeTextTag",
+            "DictionaryTextTag",
+            "CameraFeedbackTag",
             "ExerciseTextTag",
-            "ExerciseTextTag",
-            "ExerciseTextTag",
-            "ExerciseTextTag",
-            "ExerciseTextTag",
-            "ExerciseTextTag",
+            "QuestsTextTag",
+            "QuizTextTag",
+            "FeedbackTextTag",
             "CompletionTextTag")
 
     tutorialSteps.forEachIndexed { index, tag ->

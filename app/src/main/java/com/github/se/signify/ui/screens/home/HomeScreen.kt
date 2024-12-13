@@ -187,7 +187,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
  * @param onClick The action to perform when the button is clicked. Defaults to an empty action.
  */
 @Composable
-fun CameraFeedbackButton(onClick: () -> Unit = {}, modifier: Modifier = Modifier) {
+fun CameraFeedbackButton(modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
   val tryText = stringResource(id = R.string.try_text)
   TextButton(
       onClick = onClick,

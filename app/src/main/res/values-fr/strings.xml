@@ -299,7 +299,7 @@
     <string name="tutorial_cameraFeedbackText">Ceci est votre espace de libre exploration – entraînez-vous à signer n\'importe quelle lettre sans restrictions et suivez vos progrès en temps réel.</string>
     <string name="tutorial_exerciseText">Découvrez divers exercices conçus pour améliorer vos compétences – chaque niveau est conçu pour vous challenger et vous perfectionner.</string>
     <string name="tutorial_questsText">Partez pour des quêtes passionnantes pour rendre l\'apprentissage de la langue des signes encore plus captivant et enrichissant.</string>
-    <string name="tutorial_quizzText">Testez vos connaissances et suivez vos progrès avec des quiz qui mettent à l\'épreuve votre compréhension de la langue des signes.</string>
+    <string name="tutorial_quizText">Testez vos connaissances et suivez vos progrès avec des quiz qui mettent à l\'épreuve votre compréhension de la langue des signes.</string>
     <string name="tutorial_feedbackText">Vous avez des commentaires pour nous ? Appuyez sur ce bouton pour partager votre expérience et nous aider à améliorer Signify.</string>
     <string name="tutorial_completionText">Vous êtes prêt à commencer ! Profitez de votre apprentissage de la langue des signes.</string>
     <string name="skip_tutorial">Passer le tutoriel</string>

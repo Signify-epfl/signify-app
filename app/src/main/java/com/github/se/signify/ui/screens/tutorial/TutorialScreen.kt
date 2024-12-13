@@ -28,20 +28,21 @@ import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.screens.home.HomeScreen
 
+private val overlayColor
+  @Composable get() = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8F)
+
 @Composable
 fun TutorialScreen(navigationActions: NavigationActions, onFinish: () -> Unit) {
   var step by remember { mutableIntStateOf(0) }
 
   // Retrieving positions from CompositionLocal
-  val elementPositions = LocalElementPositions.current
+  val elementPositions: Map<String, ElementPosition> = LocalElementPositions.current.toMap()
   val dictionaryPos = elementPositions["LetterDictionary"]
   val cameraPos = elementPositions["CameraFeedbackButton"]
   val exercisesPos = elementPositions["ExerciseList"]
   val questsPos = elementPositions["QuestsButton"]
   val quizPos = elementPositions["QuizButton"]
   val feedbackPos = elementPositions["FeedbackButton"]
-
-  val overlayColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8F)
 
   // Define the tutorial steps in a list
   val tutorialSteps =
@@ -52,99 +53,28 @@ fun TutorialScreen(navigationActions: NavigationActions, onFinish: () -> Unit) {
               textTag = "WelcomeTextTag"),
           TutorialStep(
               text = stringResource(R.string.tutorial_dictionaryText),
-              highlightArea =
-                  if (dictionaryPos != null) {
-                    HighlightedArea.HighlightedBoxArea(
-                        elementPosition =
-                            ElementPosition(
-                                x = dictionaryPos.x,
-                                y = dictionaryPos.y,
-                                width = dictionaryPos.width,
-                                height = dictionaryPos.height),
-                        overlayColor = overlayColor)
-                  } else {
-                    HighlightedArea.FullScreenOverlayArea(overlayColor = overlayColor)
-                  },
-              textTag = "ExerciseTextTag"),
+              highlightArea = createHighlightedArea(dictionaryPos),
+              textTag = "DictionaryTextTag"),
           TutorialStep(
               text = stringResource(R.string.tutorial_cameraFeedbackText),
-              highlightArea =
-                  if (cameraPos != null) {
-                    HighlightedArea.HighlightedBoxArea(
-                        elementPosition =
-                            ElementPosition(
-                                x = cameraPos.x,
-                                y = cameraPos.y,
-                                width = cameraPos.width,
-                                height = cameraPos.height),
-                        overlayColor = overlayColor)
-                  } else {
-                    HighlightedArea.FullScreenOverlayArea(overlayColor = overlayColor)
-                  },
-              textTag = "ExerciseTextTag"),
+              highlightArea = createHighlightedArea(cameraPos),
+              textTag = "CameraFeedbackTag"),
           TutorialStep(
               text = stringResource(R.string.tutorial_exerciseText),
-              highlightArea =
-                  if (exercisesPos != null) {
-                    HighlightedArea.HighlightedBoxArea(
-                        elementPosition =
-                            ElementPosition(
-                                x = exercisesPos.x,
-                                y = exercisesPos.y,
-                                width = exercisesPos.width,
-                                height = exercisesPos.height),
-                        overlayColor = overlayColor)
-                  } else {
-                    HighlightedArea.FullScreenOverlayArea(overlayColor = overlayColor)
-                  },
+              highlightArea = createHighlightedArea(exercisesPos),
               textTag = "ExerciseTextTag"),
           TutorialStep(
               text = stringResource(R.string.tutorial_questsText),
-              highlightArea =
-                  if (questsPos != null) {
-                    HighlightedArea.HighlightedBoxArea(
-                        elementPosition =
-                            ElementPosition(
-                                x = questsPos.x,
-                                y = questsPos.y,
-                                width = questsPos.width,
-                                height = questsPos.height),
-                        overlayColor = overlayColor)
-                  } else {
-                    HighlightedArea.FullScreenOverlayArea(overlayColor = overlayColor)
-                  },
-              textTag = "ExerciseTextTag"),
+              highlightArea = createHighlightedArea(questsPos),
+              textTag = "QuestsTextTag"),
           TutorialStep(
-              text = stringResource(R.string.tutorial_quizzText),
-              highlightArea =
-                  if (quizPos != null) {
-                    HighlightedArea.HighlightedBoxArea(
-                        elementPosition =
-                            ElementPosition(
-                                x = quizPos.x,
-                                y = quizPos.y,
-                                width = quizPos.width,
-                                height = quizPos.height),
-                        overlayColor = overlayColor)
-                  } else {
-                    HighlightedArea.FullScreenOverlayArea(overlayColor = overlayColor)
-                  },
-              textTag = "ExerciseTextTag"),
+              text = stringResource(R.string.tutorial_quizText),
+              highlightArea = createHighlightedArea(quizPos),
+              textTag = "QuizTextTag"),
           TutorialStep(
               text = stringResource(R.string.tutorial_feedbackText),
-              highlightArea =
-                  if (feedbackPos != null) {
-                    HighlightedArea.HighlightedBoxArea(
-                        ElementPosition(
-                            x = feedbackPos.x,
-                            y = feedbackPos.y,
-                            width = feedbackPos.width,
-                            height = feedbackPos.height),
-                        overlayColor)
-                  } else {
-                    HighlightedArea.FullScreenOverlayArea(overlayColor)
-                  },
-              textTag = "ExerciseTextTag"),
+              highlightArea = createHighlightedArea(feedbackPos),
+              textTag = "FeedbackTextTag"),
           TutorialStep(
               text = stringResource(R.string.tutorial_completionText),
               highlightArea = HighlightedArea.FullScreenOverlayArea(overlayColor),
@@ -207,4 +137,19 @@ fun BlockingInteractionsOverlay() {
               indication = null,
               interactionSource =
                   remember { MutableInteractionSource() }) { /* Block all interactions */})
+}
+
+@Composable
+private fun createHighlightedArea(
+    position: ElementPosition?,
+): HighlightedArea {
+  return if (position != null) {
+    HighlightedArea.HighlightedBoxArea(
+        elementPosition =
+            ElementPosition(
+                x = position.x, y = position.y, width = position.width, height = position.height),
+        overlayColor = overlayColor)
+  } else {
+    HighlightedArea.FullScreenOverlayArea(overlayColor = overlayColor)
+  }
 }

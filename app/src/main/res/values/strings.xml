@@ -305,7 +305,7 @@ Let’s take a quick tour to help you get started with learning sign language ef
     <string name="tutorial_cameraFeedbackText">This is your free play area – explore and practice signing any letter without restrictions and see your progress in real-time.</string>
     <string name="tutorial_exerciseText">Discover various exercises tailored to enhance your skills – each level is designed to challenge and improve your abilities.</string>
     <string name="tutorial_questsText">Embark on exciting quests to make learning sign language even more engaging and rewarding.</string>
-    <string name="tutorial_quizzText">Test your knowledge and track your progress with quizzes that challenge your understanding of sign language.</string>
+    <string name="tutorial_quizText">Test your knowledge and track your progress with quizzes that challenge your understanding of sign language.</string>
     <string name="tutorial_feedbackText">Have feedback for us ? Tap this button to share your experience and help us improve Signify.</string>
     <string name="tutorial_completionText">You\'re ready to start ! Enjoy learning sign language.</string>
     <string name="skip_tutorial">Skip Tutorial</string>
