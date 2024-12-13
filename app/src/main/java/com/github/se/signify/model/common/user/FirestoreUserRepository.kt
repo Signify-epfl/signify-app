@@ -633,6 +633,7 @@ class FirestoreUserRepository(
         .addOnFailureListener { e -> onFailure(e) }
   }
 
+  @Suppress("UNCHECKED_CAST")
   override fun getCompletedQuests(
       userId: String,
       onSuccess: (List<String>) -> Unit,
