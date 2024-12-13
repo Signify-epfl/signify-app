@@ -48,12 +48,13 @@ fun LetterDictionary(
     coroutineScope: CoroutineScope,
     numbOfHeaders: Int,
     clickable: Boolean = false,
-    onClick: (Int, Int) -> Unit = { _, _ -> }
+    onClick: (Int, Int) -> Unit = { _, _ -> },
+    modifier: Modifier = Modifier
 ) {
   val letters = ('a'..'z').toList()
   val pagerState = rememberPagerState(initialPage = 0, pageCount = { letters.size })
 
-  Box(modifier = Modifier.fillMaxWidth().wrapContentHeight().testTag("LetterDictionary")) {
+  Box(modifier = modifier.fillMaxWidth().wrapContentHeight().testTag("LetterDictionary")) {
     // Back Arrow at the start
     IconButton(
         onClick = {
