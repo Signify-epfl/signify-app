@@ -48,6 +48,9 @@ open class UserViewModel(
   private val _pastChallenges = MutableStateFlow<List<Challenge>>(emptyList())
   val pastChallenges: StateFlow<List<Challenge>> = _pastChallenges
 
+  private val _completedQuests = MutableStateFlow<List<String>>(emptyList())
+  val completedQuests: StateFlow<List<String>> = _completedQuests
+
   private val logTag = "UserViewModel"
 
   init {
@@ -310,5 +313,30 @@ open class UserViewModel(
         userSession.getUserId()!!,
         onSuccess = { pastChallengesList -> _pastChallenges.value = pastChallengesList },
         onFailure = { e -> Log.e("UserViewModel", "Failed to get past challenges: ${e.message}") })
+  }
+
+  fun markQuestAsCompleted(questIndex: String) {
+    repository.markQuestAsCompleted(
+        userId = userSession.getUserId()!!,
+        questIndex = questIndex,
+        onSuccess = {
+          Log.d("UserViewModel", "Quest $questIndex marked as completed.")
+          fetchCompletedQuests() // Refresh the completed quests list
+        },
+        onFailure = { e ->
+          Log.e("UserViewModel", "Failed to mark quest $questIndex as completed: ${e.message}")
+        })
+  }
+
+  fun fetchCompletedQuests() {
+    repository.getCompletedQuests(
+        userId = userSession.getUserId()!!,
+        onSuccess = { quests ->
+          _completedQuests.value = quests
+          Log.d("UserViewModel", "Fetched completed quests: $quests")
+        },
+        onFailure = { e ->
+          Log.e("UserViewModel", "Failed to fetch completed quests: ${e.message}")
+        })
   }
 }

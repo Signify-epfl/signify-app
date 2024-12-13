@@ -618,4 +618,35 @@ class FirestoreUserRepository(
       onFailure(e)
     }
   }
+
+  override fun markQuestAsCompleted(
+      userId: String,
+      questIndex: String,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    val userRef = db.collection(collectionPath).document(userId)
+
+    userRef
+        .update("completedQuests", FieldValue.arrayUnion(questIndex))
+        .addOnSuccessListener { onSuccess() }
+        .addOnFailureListener { e -> onFailure(e) }
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  override fun getCompletedQuests(
+      userId: String,
+      onSuccess: (List<String>) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    val userRef = db.collection(collectionPath).document(userId)
+
+    userRef
+        .get()
+        .addOnSuccessListener { document ->
+          val completedQuests = document["completedQuests"] as? List<String> ?: emptyList()
+          onSuccess(completedQuests)
+        }
+        .addOnFailureListener { e -> onFailure(e) }
+  }
 }

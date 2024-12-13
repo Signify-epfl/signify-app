@@ -112,6 +112,19 @@ interface UserRepository {
 
   fun getStreak(userId: String, onSuccess: (Long) -> Unit, onFailure: (Exception) -> Unit)
 
+  fun markQuestAsCompleted(
+      userId: String,
+      questIndex: String,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  )
+
+  fun getCompletedQuests(
+      userId: String,
+      onSuccess: (List<String>) -> Unit,
+      onFailure: (Exception) -> Unit
+  )
+
   fun addPastChallenge(userId: String, challengeId: String)
 
   fun getPastChallenges(

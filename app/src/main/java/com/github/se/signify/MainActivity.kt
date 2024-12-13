@@ -251,7 +251,7 @@ fun SignifyAppPreview(
             dependencyProvider.questRepository(),
             dependencyProvider.userRepository(),
             handLandmarkViewModel,
-        )
+            dependencyProvider.statsRepository())
       }
       composable(Screen.QUIZ.route) {
         QuizScreen(

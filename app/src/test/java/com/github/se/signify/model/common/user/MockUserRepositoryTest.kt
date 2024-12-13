@@ -451,6 +451,89 @@ class MockUserRepositoryTest {
   }
 
   @Test
+  fun markQuestAsCompletedWorks() {
+    val userId = activeUser.uid
+    val questIndex = "quest1"
+
+    // Act
+    mockUserRepository.markQuestAsCompleted(
+        userId,
+        questIndex,
+        {
+          // Verify the quest is added to the completed quests list
+          mockUserRepository.getCompletedQuests(
+              userId,
+              { completedQuests -> assertTrue(completedQuests.contains(questIndex)) },
+              doNotFail)
+        },
+        doNotFail)
+  }
+
+  @Test
+  fun markQuestAsCompletedAvoidsDuplicates() {
+    val userId = activeUser.uid
+    val questIndex = "quest1"
+
+    // Add the quest twice
+    mockUserRepository.markQuestAsCompleted(userId, questIndex, {}, doNotFail)
+    mockUserRepository.markQuestAsCompleted(userId, questIndex, {}, doNotFail)
+
+    // Verify the quest is only added once
+    mockUserRepository.getCompletedQuests(
+        userId,
+        { completedQuests -> assertEquals(1, completedQuests.count { it == questIndex }) },
+        doNotFail)
+  }
+
+  @Test
+  fun markQuestAsCompletedFailsForInvalidUser() {
+    val invalidUserId = "invalidUserId"
+    val questIndex = "quest1"
+
+    mockUserRepository.markQuestAsCompleted(
+        invalidUserId,
+        questIndex,
+        doNotSucceed,
+        { exception ->
+          assertNotNull(exception)
+          assertEquals("User not found", exception.message)
+        })
+  }
+
+  @Test
+  fun getCompletedQuestsWorks() {
+    val userId = activeUser.uid
+    val questIndex1 = "quest1"
+    val questIndex2 = "quest2"
+
+    // Add completed quests
+    mockUserRepository.markQuestAsCompleted(userId, questIndex1, {}, doNotFail)
+    mockUserRepository.markQuestAsCompleted(userId, questIndex2, {}, doNotFail)
+
+    // Verify the completed quests list
+    mockUserRepository.getCompletedQuests(
+        userId,
+        { completedQuests ->
+          assertTrue(completedQuests.contains(questIndex1))
+          assertTrue(completedQuests.contains(questIndex2))
+        },
+        doNotFail)
+  }
+
+  @Test
+  fun getCompletedQuestsFailsForInvalidUser() {
+    val invalidUserId = "invalidUserId"
+
+    mockUserRepository.getCompletedQuests(
+        invalidUserId,
+        doNotSucceedAny,
+        { exception ->
+          assertNotNull(exception)
+          assertEquals("User not found", exception.message)
+        })
+  }
+
+  @Test
   fun addPastChallengeWorks() {
     val challengeId = "newPastChallenge"
     mockUserRepository.addPastChallenge(activeUser.uid, challengeId)
