@@ -72,9 +72,13 @@ fun QuestScreen(
       viewModel(factory = UserViewModel.factory(userSession, userRepository))
 
   val quests = questViewModel.quest.collectAsState()
-  LaunchedEffect(userSession.getUserId()) { userViewModel.checkAndUnlockNextQuest() }
+  LaunchedEffect(userSession.getUserId()) {
+    userViewModel.checkAndUnlockNextQuest()
+    userViewModel.fetchCompletedQuests()
+  }
 
   val unlockedQuests by userViewModel.unlockedQuests.collectAsState()
+
   AnnexScreenScaffold(
       navigationActions = navigationActions,
       testTag = "QuestScreen",
@@ -215,7 +219,7 @@ fun QuestDescriptionDialog(
                   Text(
                       text = "Completed",
                       fontSize = 16.sp,
-                      color = MaterialTheme.colorScheme.onBackground,
+                      color = MaterialTheme.colorScheme.primary,
                       modifier = Modifier.padding(16.dp))
                 } else {
                   Button(

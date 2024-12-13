@@ -276,7 +276,7 @@ open class UserViewModel(
         })
   }
 
-  private fun fetchCompletedQuests() {
+  fun fetchCompletedQuests() {
     repository.getCompletedQuests(
         userId = userSession.getUserId()!!,
         onSuccess = { quests ->
