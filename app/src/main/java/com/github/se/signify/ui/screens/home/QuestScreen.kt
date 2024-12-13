@@ -226,7 +226,7 @@ fun QuestDescriptionDialog(
               horizontalArrangement = Arrangement.SpaceBetween) {
                 if (isCompleted) {
                   Text(
-                      text = "Completed",
+                      text = stringResource(R.string.completed_quest_text),
                       fontSize = 16.sp,
                       color = MaterialTheme.colorScheme.primary,
                       modifier = Modifier.padding(16.dp))
