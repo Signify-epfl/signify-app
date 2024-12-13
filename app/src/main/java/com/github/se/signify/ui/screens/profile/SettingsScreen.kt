@@ -134,9 +134,11 @@ fun EditableProfilePictureField(userViewModel: UserViewModel, profilePictureUrl:
   var showEditDialog = remember { mutableStateOf(false) }
   var selectedUri by remember { mutableStateOf<Uri?>(null) }
 
-  LaunchedEffect(profilePictureUrl.value) { selectedUri = profilePictureUrl.value?.toUri() }
+  fun isDeleteEnabled(): Boolean {
+    return selectedUri != null
+  }
 
-  var enableDeleteButton: Boolean = profilePictureUrl.value != null
+  LaunchedEffect(profilePictureUrl.value) { selectedUri = profilePictureUrl.value?.toUri() }
 
   val galleryLauncher =
       rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -158,7 +160,9 @@ fun EditableProfilePictureField(userViewModel: UserViewModel, profilePictureUrl:
     ) {
       Column {
         Icon(
-            modifier = Modifier.clickable { galleryLauncher.launch("image/*") },
+            modifier =
+                Modifier.clickable { galleryLauncher.launch("image/*") }
+                    .testTag("editProfilePictureButton"),
             imageVector = Icons.Outlined.Edit,
             contentDescription = "Edit Profile Picture",
             tint = MaterialTheme.colorScheme.onBackground,
@@ -166,9 +170,11 @@ fun EditableProfilePictureField(userViewModel: UserViewModel, profilePictureUrl:
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (enableDeleteButton) {
+        if (isDeleteEnabled()) {
           Icon(
-              modifier = Modifier.clickable { showDeleteDialog.value = true },
+              modifier =
+                  Modifier.clickable { showDeleteDialog.value = true }
+                      .testTag("deleteProfilePictureButton"),
               imageVector = Icons.Outlined.Delete,
               contentDescription = "Delete Profile Picture",
               tint = MaterialTheme.colorScheme.onBackground)
@@ -214,6 +220,7 @@ fun EditableUsernameField(userViewModel: UserViewModel, userName: String) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center) {
           Icon(
+              modifier = Modifier.testTag("editUsernameButton"),
               imageVector = Icons.Outlined.Edit,
               contentDescription = "Edit Username",
               tint = MaterialTheme.colorScheme.onBackground)
@@ -269,65 +276,72 @@ fun ConfirmationDialog(
 ) {
   if (showDialog.value) {
 
-    Dialog(onDismissRequest = {}) {
-      Surface(
-          shape = RoundedCornerShape(16.dp),
-          color = MaterialTheme.colorScheme.surface,
-          modifier =
-              Modifier.widthIn(min = 280.dp, max = 400.dp) // Set the dialog width
-                  .padding(top = 150.dp)) {
-            Column(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally) {
-                  // Dialog Title
-                  Text(
-                      text = title,
-                      fontWeight = FontWeight.Bold,
-                      color = MaterialTheme.colorScheme.onSurface,
-                      modifier = Modifier.padding(bottom = 16.dp))
+    Dialog(
+        onDismissRequest = {
+          onDismiss()
+          showDialog.value = false
+        }) {
+          Surface(
+              shape = RoundedCornerShape(16.dp),
+              color = MaterialTheme.colorScheme.surface,
+              modifier =
+                  Modifier.widthIn(min = 280.dp, max = 400.dp) // Set the dialog width
+                      .padding(top = 150.dp)
+                      .testTag("confirmationPopup")) {
+                Column(
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally) {
+                      // Dialog Title
+                      Text(
+                          text = title,
+                          fontWeight = FontWeight.Bold,
+                          color = MaterialTheme.colorScheme.onSurface,
+                          modifier = Modifier.padding(bottom = 16.dp))
 
-                  // Dialog Message
-                  Text(
-                      text = message,
-                      color = MaterialTheme.colorScheme.onSurface,
-                      modifier = Modifier.padding(bottom = 16.dp))
+                      // Dialog Message
+                      Text(
+                          text = message,
+                          color = MaterialTheme.colorScheme.onSurface,
+                          modifier = Modifier.padding(bottom = 16.dp))
 
-                  // Buttons Row
-                  Row(
-                      horizontalArrangement = Arrangement.SpaceEvenly,
-                      modifier = Modifier.fillMaxWidth()) {
-                        val confirmText = stringResource(R.string.confirm)
-                        val cancelText = stringResource(R.string.cancel)
+                      // Buttons Row
+                      Row(
+                          horizontalArrangement = Arrangement.SpaceEvenly,
+                          modifier = Modifier.fillMaxWidth()) {
+                            val confirmText = stringResource(R.string.confirm)
+                            val cancelText = stringResource(R.string.cancel)
 
-                        // Confirm Button
-                        Button(
-                            onClick = {
-                              onConfirm()
-                              showDialog.value = false // Close the dialog
-                            },
-                            colors =
-                                ButtonDefaults.buttonColors(
-                                    containerColor = MaterialTheme.colorScheme.primary,
-                                    contentColor = MaterialTheme.colorScheme.onPrimary)) {
-                              Text(confirmText)
-                            }
+                            // Confirm Button
+                            Button(
+                                modifier = Modifier.testTag("confirmationPopupConfirm"),
+                                onClick = {
+                                  onConfirm()
+                                  showDialog.value = false // Close the dialog
+                                },
+                                colors =
+                                    ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.primary,
+                                        contentColor = MaterialTheme.colorScheme.onPrimary)) {
+                                  Text(confirmText)
+                                }
 
-                        // Cancel Button
-                        Button(
-                            onClick = {
-                              onDismiss()
-                              showDialog.value = false // Close the dialog
-                            },
-                            colors =
-                                ButtonDefaults.buttonColors(
-                                    containerColor = MaterialTheme.colorScheme.error,
-                                    contentColor = MaterialTheme.colorScheme.onError)) {
-                              Text(cancelText)
-                            }
-                      }
-                }
-          }
-    }
+                            // Cancel Button
+                            Button(
+                                modifier = Modifier.testTag("confirmationPopupCancel"),
+                                onClick = {
+                                  onDismiss()
+                                  showDialog.value = false // Close the dialog
+                                },
+                                colors =
+                                    ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.error,
+                                        contentColor = MaterialTheme.colorScheme.onError)) {
+                                  Text(cancelText)
+                                }
+                          }
+                    }
+              }
+        }
   }
 }
 
