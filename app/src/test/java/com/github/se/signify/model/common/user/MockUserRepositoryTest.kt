@@ -463,10 +463,32 @@ class MockUserRepositoryTest {
 
   @Test
   fun incrementFieldWorksForValidFields() {
-    mockUserRepository.incrementField(activeUser.uid, "challengesCreated")
-    mockUserRepository.incrementField(activeUser.uid, "challengesCompleted")
-    mockUserRepository.incrementField(activeUser.uid, "challengesWon")
+    // Increment the fields using `updateUserField`
+    mockUserRepository.getUserById(
+        activeUser.uid,
+        { user ->
+          mockUserRepository.updateUserField(
+              activeUser.uid,
+              "challengesCreated",
+              user.challengesCreated + 1,
+              onSuccess = {},
+              onFailure = { fail("Should not fail") })
+          mockUserRepository.updateUserField(
+              activeUser.uid,
+              "challengesCompleted",
+              user.challengesCompleted + 1,
+              onSuccess = {},
+              onFailure = { fail("Should not fail") })
+          mockUserRepository.updateUserField(
+              activeUser.uid,
+              "challengesWon",
+              user.challengesWon + 1,
+              onSuccess = {},
+              onFailure = { fail("Should not fail") })
+        },
+        onFailure = { fail("User not found") })
 
+    // Assert the updated values
     mockUserRepository.getUserById(
         activeUser.uid,
         {
@@ -474,20 +496,36 @@ class MockUserRepositoryTest {
           assertEquals(3, it.challengesCompleted)
           assertEquals(3, it.challengesWon)
         },
-        doNotFail)
+        onFailure = { fail("Should not fail") })
   }
 
   @Test
   fun incrementFieldFailsForInvalidField() {
-    mockUserRepository.incrementField(activeUser.uid, "invalidField")
+    mockUserRepository.getUserById(
+        activeUser.uid,
+        { user ->
+          try {
+            // Attempt to update an invalid field
+            mockUserRepository.updateUserField(
+                activeUser.uid,
+                "invalidField",
+                user.challengesCreated + 1,
+                onSuccess = { fail("Should not succeed") },
+                onFailure = { exception -> assertEquals("Invalid field name", exception.message) })
+          } catch (e: IllegalArgumentException) {
+            assertEquals("Invalid field name", e.message)
+          }
+        },
+        onFailure = { fail("User not found") })
 
+    // Assert that the valid fields remain unchanged
     mockUserRepository.getUserById(
         activeUser.uid,
         { user ->
           assertEquals(4, user.challengesCreated) // No change
           assertEquals(2, user.challengesCompleted) // No change
         },
-        doNotFail)
+        onFailure = { fail("Should not fail") })
   }
 
   @Test
@@ -530,30 +568,37 @@ class MockUserRepositoryTest {
 
   @Test
   fun getChallengesCreatedReturnsCorrectValue() = runTest {
-    val challengesCreated = mockUserRepository.getChallengesCreated(activeUser.uid)
-    assertEquals(0, challengesCreated)
+    var result: Int? = null
+    val onSuccess: (Int) -> Unit = { value -> result = value }
+    val onFailure: (Exception) -> Unit = { fail("Should not fail") }
+
+    mockUserRepository.getChallengesCreated(activeUser.uid, onSuccess, onFailure)
+
+    shadowOf(Looper.getMainLooper()).idle() // Simulate asynchronous execution
+    assertEquals(0, result)
   }
 
   @Test
   fun getChallengesCompletedReturnsCorrectValue() = runTest {
-    val challengesCompleted = mockUserRepository.getChallengesCompleted(activeUser.uid)
-    assertEquals(0, challengesCompleted)
+    var result: Int? = null
+    val onSuccess: (Int) -> Unit = { value -> result = value }
+    val onFailure: (Exception) -> Unit = { fail("Should not fail") }
+
+    mockUserRepository.getChallengesCompleted(activeUser.uid, onSuccess, onFailure)
+
+    shadowOf(Looper.getMainLooper()).idle()
+    assertEquals(0, result)
   }
 
   @Test
   fun getChallengesWonReturnsCorrectValue() = runTest {
-    val challengesWon = mockUserRepository.getChallengesWon(activeUser.uid)
-    assertEquals(0, challengesWon)
-  }
+    var result: Int? = null
+    val onSuccess: (Int) -> Unit = { value -> result = value }
+    val onFailure: (Exception) -> Unit = { fail("Should not fail") }
 
-  @Test
-  fun getChallengesFieldsReturnZeroForNonExistentUser() = runTest {
-    val challengesCreated = mockUserRepository.getChallengesCreated("nonExistentUser")
-    val challengesCompleted = mockUserRepository.getChallengesCompleted("nonExistentUser")
-    val challengesWon = mockUserRepository.getChallengesWon("nonExistentUser")
+    mockUserRepository.getChallengesWon(activeUser.uid, onSuccess, onFailure)
 
-    assertEquals(0, challengesCreated)
-    assertEquals(0, challengesCompleted)
-    assertEquals(0, challengesWon)
+    shadowOf(Looper.getMainLooper()).idle()
+    assertEquals(0, result)
   }
 }

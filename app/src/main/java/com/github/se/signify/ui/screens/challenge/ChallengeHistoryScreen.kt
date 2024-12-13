@@ -52,9 +52,29 @@ fun ChallengeHistoryScreen(
   val pastChallenges by userViewModel.pastChallenges.collectAsState()
 
   LaunchedEffect(Unit) {
-    challengesCompleted.intValue = userRepository.getChallengesCompleted(userSession.getUserId()!!)
-    challengesCreated.intValue = userRepository.getChallengesCreated(userSession.getUserId()!!)
-    challengesWon.intValue = userRepository.getChallengesWon(userSession.getUserId()!!)
+    userRepository.getChallengesCompleted(
+        userId = userSession.getUserId()!!,
+        onSuccess = { completed -> challengesCompleted.intValue = completed },
+        onFailure = { exception ->
+          Log.e("ChallengeStats", "Failed to fetch challenges completed: ${exception.message}")
+          challengesCompleted.intValue = 0 // Default value in case of failure
+        })
+
+    userRepository.getChallengesCreated(
+        userId = userSession.getUserId()!!,
+        onSuccess = { created -> challengesCreated.intValue = created },
+        onFailure = { exception ->
+          Log.e("ChallengeStats", "Failed to fetch challenges created: ${exception.message}")
+          challengesCreated.intValue = 0 // Default value in case of failure
+        })
+
+    userRepository.getChallengesWon(
+        userId = userSession.getUserId()!!,
+        onSuccess = { won -> challengesWon.intValue = won },
+        onFailure = { exception ->
+          Log.e("ChallengeStats", "Failed to fetch challenges won: ${exception.message}")
+          challengesWon.intValue = 0 // Default value in case of failure
+        })
     userViewModel.getPastChallenges()
   }
 

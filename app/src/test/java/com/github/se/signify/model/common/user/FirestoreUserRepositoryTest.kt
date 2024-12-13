@@ -1176,7 +1176,8 @@ class FirestoreUserRepositoryTest {
   fun `incrementField should update Firestore successfully`() {
     `when`(mockCurrentUserDocRef.update(anyString(), any())).thenReturn(Tasks.forResult(null))
 
-    firestoreUserRepository.incrementField(currentUserId, challengesCompletedField)
+    firestoreUserRepository.updateUserField(
+        currentUserId, challengesCompletedField, "challengesCompleted", {}, {})
 
     shadowOf(Looper.getMainLooper()).idle()
 
@@ -1243,10 +1244,15 @@ class FirestoreUserRepositoryTest {
     `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
     `when`(mockUserDocumentSnapshot.getLong(field)).thenReturn(expectedValue)
 
+    var result: Int? = null
+    val onSuccess: (Int) -> Unit = { value -> result = value }
+    val onFailure: (Exception) -> Unit = { fail("Should not fail") }
+
     // Act
-    val result = firestoreUserRepository.getChallengesCompleted(userId)
+    firestoreUserRepository.getChallengesCompleted(userId, onSuccess, onFailure)
 
     // Assert
+    shadowOf(Looper.getMainLooper()).idle()
     assertEquals(expectedValue.toInt(), result)
   }
 
@@ -1258,10 +1264,15 @@ class FirestoreUserRepositoryTest {
     `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
     `when`(mockUserDocumentSnapshot.getLong(field)).thenReturn(null)
 
+    var result: Int? = null
+    val onSuccess: (Int) -> Unit = { value -> result = value }
+    val onFailure: (Exception) -> Unit = { fail("Should not fail") }
+
     // Act
-    val result = firestoreUserRepository.getChallengesCompleted(userId)
+    firestoreUserRepository.getChallengesCompleted(userId, onSuccess, onFailure)
 
     // Assert
+    shadowOf(Looper.getMainLooper()).idle()
     assertEquals(0, result)
   }
 
@@ -1272,10 +1283,15 @@ class FirestoreUserRepositoryTest {
     val exception = Exception("Firestore error")
     `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forException(exception))
 
+    var result: Int? = null
+    val onSuccess: (Int) -> Unit = { value -> result = value }
+    val onFailure: (Exception) -> Unit = { result = 0 } // Set result to 0 on failure
+
     // Act
-    val result = firestoreUserRepository.getChallengesCompleted(userId)
+    firestoreUserRepository.getChallengesCompleted(userId, onSuccess, onFailure)
 
     // Assert
+    shadowOf(Looper.getMainLooper()).idle()
     assertEquals(0, result)
   }
 }

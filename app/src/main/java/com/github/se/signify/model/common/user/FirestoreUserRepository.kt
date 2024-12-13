@@ -565,11 +565,6 @@ class FirestoreUserRepository(
         .addOnFailureListener { e -> onFailure(e) }
   }
 
-  override fun incrementField(userId: String, fieldName: String) {
-    val userRef = db.collection(collectionPath).document(userId)
-    userRef.update(fieldName, FieldValue.increment(1))
-  }
-
   override fun updateUserField(
       userId: String,
       fieldName: String,
@@ -584,26 +579,43 @@ class FirestoreUserRepository(
         .addOnFailureListener { e -> onFailure(e) }
   }
 
-  override suspend fun getChallengesCompleted(userId: String): Int {
-    return getUserField(userId, "challengesCompleted")
+  override suspend fun getChallengesCompleted(
+      userId: String,
+      onSuccess: (Int) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    getUserField(userId, "challengesCompleted", onSuccess, onFailure)
   }
 
-  override suspend fun getChallengesCreated(userId: String): Int {
-    return getUserField(userId, "challengesCreated")
+  override suspend fun getChallengesCreated(
+      userId: String,
+      onSuccess: (Int) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    getUserField(userId, "challengesCreated", onSuccess, onFailure)
   }
 
-  override suspend fun getChallengesWon(userId: String): Int {
-    return getUserField(userId, "challengesWon")
+  override suspend fun getChallengesWon(
+      userId: String,
+      onSuccess: (Int) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    getUserField(userId, "challengesWon", onSuccess, onFailure)
   }
 
-  private suspend fun getUserField(userId: String, field: String): Int {
-    return try {
+  private suspend fun getUserField(
+      userId: String,
+      field: String,
+      onSuccess: (Int) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    try {
       val document = db.collection("users").document(userId).get().await()
-      document.getLong(field)?.toInt() ?: 0
+      val value = document.getLong(field)?.toInt() ?: 0
+      onSuccess(value)
     } catch (e: Exception) {
-      // Log the error and return 0 as fallback
       Log.e("FirestoreUserRepository", "Error getting $field for user $userId", e)
-      0
+      onFailure(e)
     }
   }
 }

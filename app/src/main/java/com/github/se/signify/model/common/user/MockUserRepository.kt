@@ -319,26 +319,6 @@ class MockUserRepository : UserRepository {
     users[userId] = user.copy(pastChallenges = user.pastChallenges + challengeId) // Add challenge
   }
 
-  override fun incrementField(
-      userId: String,
-      fieldName: String,
-  ) {
-
-    val user = users.getValue(userId)
-
-    // Increment the specific field
-    val updatedUser =
-        when (fieldName) {
-          "challengesCreated" -> user.copy(challengesCreated = (user.challengesCreated) + 1)
-          "challengesCompleted" -> user.copy(challengesCompleted = (user.challengesCompleted) + 1)
-          "challengesWon" -> user.copy(challengesWon = (user.challengesWon) + 1)
-          else -> {
-            return
-          }
-        }
-    users[userId] = updatedUser
-  }
-
   override fun updateUserField(
       userId: String,
       fieldName: String,
@@ -378,20 +358,40 @@ class MockUserRepository : UserRepository {
     onSuccess(challenges)
   }
 
-  override suspend fun getChallengesCompleted(userId: String): Int {
-    return getMockField(userId, "challengesCompleted")
+  override suspend fun getChallengesCompleted(
+      userId: String,
+      onSuccess: (Int) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
+
+    val value = mockData[userId]?.get("challengesCompleted") ?: 0
+    onSuccess(value)
   }
 
-  override suspend fun getChallengesCreated(userId: String): Int {
-    return getMockField(userId, "challengesCreated")
+  override suspend fun getChallengesCreated(
+      userId: String,
+      onSuccess: (Int) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
+
+    val value = mockData[userId]?.get("challengesCreated") ?: 0
+    onSuccess(value)
   }
 
-  override suspend fun getChallengesWon(userId: String): Int {
-    return getMockField(userId, "challengesWon")
-  }
+  override suspend fun getChallengesWon(
+      userId: String,
+      onSuccess: (Int) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    if (!checkFailure(onFailure)) return
+    if (!checkUser(userId, onFailure)) return
 
-  private fun getMockField(userId: String, field: String): Int {
-    return mockData[userId]?.get(field) ?: 0
+    val value = mockData[userId]?.get("challengesWon") ?: 0
+    onSuccess(value)
   }
 
   private fun checkFailure(onFailure: (Exception) -> Unit): Boolean {

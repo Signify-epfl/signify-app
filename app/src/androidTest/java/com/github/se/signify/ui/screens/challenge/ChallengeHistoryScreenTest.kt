@@ -10,6 +10,9 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mockito.doAnswer
+import org.mockito.kotlin.any
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
@@ -32,9 +35,29 @@ class ChallengeHistoryScreenTest {
     navigationActions = mock()
 
     whenever(userSession.getUserId()).thenReturn("testUserId")
-    whenever(userRepository.getChallengesCompleted("testUserId")).thenReturn(challengesCompleted)
-    whenever(userRepository.getChallengesCreated("testUserId")).thenReturn(challengesCreated)
-    whenever(userRepository.getChallengesWon("testUserId")).thenReturn(challengesWon)
+    doAnswer { invocation ->
+          val onSuccess = invocation.getArgument<(Int) -> Unit>(1) // Capture the onSuccess callback
+          onSuccess.invoke(
+              challengesCompleted) // Trigger the onSuccess callback with the test value
+        }
+        .whenever(userRepository)
+        .getChallengesCompleted(eq("testUserId"), any(), any())
+
+    // Mock the repository behavior for getChallengesCreated
+    doAnswer { invocation ->
+          val onSuccess = invocation.getArgument<(Int) -> Unit>(1) // Capture the onSuccess callback
+          onSuccess.invoke(challengesCreated) // Trigger the onSuccess callback with the test value
+        }
+        .whenever(userRepository)
+        .getChallengesCreated(eq("testUserId"), any(), any())
+
+    // Mock the repository behavior for getChallengesWon
+    doAnswer { invocation ->
+          val onSuccess = invocation.getArgument<(Int) -> Unit>(1) // Capture the onSuccess callback
+          onSuccess.invoke(challengesWon) // Trigger the onSuccess callback with the test value
+        }
+        .whenever(userRepository)
+        .getChallengesWon(eq("testUserId"), any(), any())
   }
 
   @Test

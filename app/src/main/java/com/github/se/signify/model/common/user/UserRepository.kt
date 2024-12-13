@@ -120,8 +120,6 @@ interface UserRepository {
       onFailure: (Exception) -> Unit
   )
 
-  fun incrementField(userId: String, fieldName: String)
-
   fun updateUserField(
       userId: String,
       fieldName: String,
@@ -130,9 +128,21 @@ interface UserRepository {
       onFailure: (Exception) -> Unit
   )
 
-  suspend fun getChallengesCompleted(userId: String): Int
+  suspend fun getChallengesCompleted(
+      userId: String,
+      onSuccess: (Int) -> Unit,
+      onFailure: (Exception) -> Unit
+  )
 
-  suspend fun getChallengesCreated(userId: String): Int
+  suspend fun getChallengesCreated(
+      userId: String,
+      onSuccess: (Int) -> Unit,
+      onFailure: (Exception) -> Unit
+  )
 
-  suspend fun getChallengesWon(userId: String): Int
+  suspend fun getChallengesWon(
+      userId: String,
+      onSuccess: (Int) -> Unit,
+      onFailure: (Exception) -> Unit
+  )
 }
