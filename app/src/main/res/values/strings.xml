@@ -27,8 +27,6 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="welcome_text">Welcome to Signify</string>
     <string name="dark_mode_text">Dark Mode</string>
     <string name="light_mode_text">Light Mode</string>
-    <string name="saved_text">Changes saved</string>
-    <string name="save_text">Save</string>
     <string name="cancel_text">Cancel</string>
     <string name="unknown_text">unknown</string>
     <string name="my_friends_text">My Friends</string>
@@ -49,6 +47,10 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="user_not_found_text">User Not Found</string>
     <string name="camera_permission_denied_text">Camera permission denied</string>
 
+    <string name="confirm_changes_title">Confirm Changes</string>
+    <string name="confirm_changes_message">Are you sure you want to save these changes?</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
 
     <string name="no_friend_text">No Friends</string>
     <string name="request_friends_text">Friend Requests</string>
