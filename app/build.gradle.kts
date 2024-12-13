@@ -149,6 +149,10 @@ android {
 
 
 dependencies {
+    // Dataframe and plot
+    implementation("org.jetbrains.kotlinx:dataframe:0.15.0")
+    implementation("org.jetbrains.kotlinx:kandy-lets-plot:0.7.0")
+
     // Core
     implementation(libs.core.ktx)
     implementation(libs.androidx.core.ktx)
