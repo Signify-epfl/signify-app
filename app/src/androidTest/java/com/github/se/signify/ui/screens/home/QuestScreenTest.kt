@@ -22,6 +22,8 @@ import com.github.se.signify.model.home.quest.Quest
 import com.github.se.signify.model.home.quest.QuestRepository
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.model.profile.stats.StatsRepository
+import com.github.se.signify.model.profile.stats.StatsViewModel
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
@@ -36,9 +38,11 @@ class QuestScreenTest {
   private lateinit var userSession: UserSession
   private lateinit var questRepository: QuestRepository
   private lateinit var userRepository: UserRepository
+  private lateinit var statsRepository: StatsRepository
   private lateinit var navigationActions: NavigationActions
   private lateinit var handLandmarkViewModel: HandLandmarkViewModel
   private lateinit var userViewModel: UserViewModel
+  private lateinit var statsViewModel: StatsViewModel
 
   val context: Context = ApplicationProvider.getApplicationContext()
   val quest_title: String = context.getString(R.string.quest_screen_title_text)
@@ -67,9 +71,11 @@ class QuestScreenTest {
     userSession = MockUserSession()
     questRepository = mock(QuestRepository::class.java)
     userRepository = mock(UserRepository::class.java)
+    statsRepository = mock(StatsRepository::class.java)
     navigationActions = mock(NavigationActions::class.java)
     handLandmarkViewModel = HandLandmarkViewModel(handLandMarkImplementation, context)
     userViewModel = mock(UserViewModel::class.java)
+    statsViewModel = mock(StatsViewModel::class.java)
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.QUEST.route)
   }
@@ -83,7 +89,7 @@ class QuestScreenTest {
           userRepository = userRepository,
           questRepository = questRepository,
           handLandMarkViewModel = handLandmarkViewModel,
-      )
+          statsRepository = statsRepository)
     }
 
     composeTestRule.onNodeWithTag("QuestScreen").assertIsDisplayed()
@@ -96,7 +102,8 @@ class QuestScreenTest {
           quest = sampleQuest,
           isUnlocked = true,
           handLandMarkViewModel = handLandmarkViewModel,
-          userViewModel = userViewModel)
+          userViewModel = userViewModel,
+          statsViewModel = statsViewModel)
     }
 
     composeTestRule.onNodeWithTag("QuestCard").assertIsDisplayed()
@@ -112,7 +119,7 @@ class QuestScreenTest {
           isUnlocked = true,
           handLandMarkViewModel = handLandmarkViewModel,
           userViewModel = userViewModel,
-      )
+          statsViewModel = statsViewModel)
     }
 
     composeTestRule.onNodeWithTag("QuestActionButton").assertHasClickAction()
@@ -127,7 +134,7 @@ class QuestScreenTest {
           questRepository = questRepository,
           userRepository = userRepository,
           handLandMarkViewModel = handLandmarkViewModel,
-      )
+          statsRepository = statsRepository)
     }
 
     // Check that the back button is displayed
@@ -144,7 +151,8 @@ class QuestScreenTest {
           quest = sampleQuest,
           isUnlocked = true,
           handLandMarkViewModel = handLandmarkViewModel,
-          userViewModel = userViewModel)
+          userViewModel = userViewModel,
+          statsViewModel = statsViewModel)
     }
 
     // Assert that the QuestBox is displayed with the correct content
@@ -160,7 +168,8 @@ class QuestScreenTest {
           quest = sampleQuest,
           isUnlocked = false,
           handLandMarkViewModel = handLandmarkViewModel,
-          userViewModel = userViewModel)
+          userViewModel = userViewModel,
+          statsViewModel = statsViewModel)
     }
 
     // Assert that the button shows "Locked" when the quest is not unlocked
@@ -176,7 +185,8 @@ class QuestScreenTest {
           quest = sampleQuest,
           isUnlocked = true,
           handLandMarkViewModel = handLandmarkViewModel,
-          userViewModel = userViewModel)
+          userViewModel = userViewModel,
+          statsViewModel = statsViewModel)
     }
 
     // Click the button to open the dialog
@@ -195,7 +205,8 @@ class QuestScreenTest {
           quest = sampleQuest,
           onDismiss = {},
           handLandMarkViewModel = handLandmarkViewModel,
-          userViewModel = userViewModel)
+          userViewModel = userViewModel,
+          statsViewModel = statsViewModel)
     }
 
     // Assert dialog title and description are displayed
@@ -215,7 +226,7 @@ class QuestScreenTest {
           questRepository = questRepository,
           userRepository = userRepository,
           handLandMarkViewModel = handLandmarkViewModel,
-      )
+          statsRepository = statsRepository)
     }
 
     // Click the back button
@@ -232,7 +243,8 @@ class QuestScreenTest {
           quest = sampleQuest,
           isUnlocked = false,
           handLandMarkViewModel = handLandmarkViewModel,
-          userViewModel = userViewModel)
+          userViewModel = userViewModel,
+          statsViewModel = statsViewModel)
     }
 
     // Try to click the button when it's locked
@@ -254,7 +266,8 @@ class QuestScreenTest {
           quest = sampleQuest,
           onDismiss = { dismissCalled = true },
           handLandMarkViewModel = handLandmarkViewModel,
-          userViewModel = userViewModel)
+          userViewModel = userViewModel,
+          statsViewModel = statsViewModel)
     }
 
     // Click the "Close" button
@@ -363,7 +376,8 @@ class QuestScreenTest {
           onDismiss = {},
           handLandMarkViewModel = handLandmarkViewModel,
           userViewModel = userViewModel,
-          "1")
+          "1",
+          statsViewModel = statsViewModel)
     }
 
     // Check if the dialog title is displayed
@@ -382,7 +396,8 @@ class QuestScreenTest {
           onDismiss = { isDismissed = true },
           handLandMarkViewModel = handLandmarkViewModel,
           userViewModel = userViewModel,
-          "1")
+          "1",
+          statsViewModel = statsViewModel)
     }
 
     // Perform click on the "Close" button
