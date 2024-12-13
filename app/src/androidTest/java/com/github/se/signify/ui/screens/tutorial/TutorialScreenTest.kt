@@ -42,7 +42,7 @@ class TutorialScreenTest {
     composeTestRule.onNodeWithTag(nextButtonTag).performClick()
 
     // Verify the second step is displayed
-    composeTestRule.onNodeWithTag("ExerciseTextTag").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("DictionaryTextTag").assertIsDisplayed()
   }
 
   @Test
