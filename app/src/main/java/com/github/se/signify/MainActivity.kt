@@ -45,6 +45,7 @@ import com.github.se.signify.ui.screens.profile.FriendsListScreen
 import com.github.se.signify.ui.screens.profile.MyStatsScreen
 import com.github.se.signify.ui.screens.profile.ProfileScreen
 import com.github.se.signify.ui.screens.profile.SettingsScreen
+import com.github.se.signify.ui.screens.tutorial.ProvideElementPositions
 import com.github.se.signify.ui.screens.tutorial.TutorialScreen
 import com.github.se.signify.ui.screens.welcome.WelcomeScreen
 import com.github.se.signify.ui.theme.SignifyTheme
@@ -77,7 +78,7 @@ class MainActivity : ComponentActivity() {
     val savedLanguage = sharedPreferencesLanguage.getBoolean(prefKeyLanguage, false)
 
     // Tutorial versioning logic
-    val currentTutorialVersion = 1 // Update this when the tutorial changes
+    val currentTutorialVersion = 2 // Update this when the tutorial changes
     val savedTutorialVersion = sharedPreferencesTheme.getInt(prefKeyTutorialVersion, 0)
 
     val isTutorialCompleted =
@@ -96,26 +97,28 @@ class MainActivity : ComponentActivity() {
 
       SignifyTheme(darkTheme = isDarkTheme) {
         Surface(modifier = Modifier.fillMaxSize()) {
-          SignifyAppPreview(
-              context = this,
-              dependencyProvider = dependencyProvider,
-              isDarkTheme = isDarkTheme,
-              onThemeChange = { isDark ->
-                isDarkTheme = isDark
-                // Save theme preference
-                sharedPreferencesTheme.edit().putBoolean(prefKeyIsDarkTheme, isDark).apply()
-              },
-              tutorialCompleted = tutorialCompleted,
-              onTutorialComplete = {
-                tutorialCompleted = true
-                sharedPreferencesTheme.edit().putBoolean(prefKeyTutorialCompleted, true).apply()
-              },
-              isFrenchLanguage = isFrenchLanguage,
-              onLanguageChange = { isFrench ->
-                isFrenchLanguage = isFrench
-                sharedPreferencesLanguage.edit().putBoolean(prefNameLanguage, isFrench).apply()
-                updateLanguage(this, if (isFrench) "fr" else "en")
-              })
+          ProvideElementPositions {
+            SignifyAppPreview(
+                context = this,
+                dependencyProvider = dependencyProvider,
+                isDarkTheme = isDarkTheme,
+                onThemeChange = { isDark ->
+                  isDarkTheme = isDark
+                  // Save theme preference
+                  sharedPreferencesTheme.edit().putBoolean(prefKeyIsDarkTheme, isDark).apply()
+                },
+                tutorialCompleted = tutorialCompleted,
+                onTutorialComplete = {
+                  tutorialCompleted = true
+                  sharedPreferencesTheme.edit().putBoolean(prefKeyTutorialCompleted, true).apply()
+                },
+                isFrenchLanguage = isFrenchLanguage,
+                onLanguageChange = { isFrench ->
+                  isFrenchLanguage = isFrench
+                  sharedPreferencesLanguage.edit().putBoolean(prefNameLanguage, isFrench).apply()
+                  updateLanguage(this, if (isFrench) "fr" else "en")
+                })
+          }
         }
       }
     }

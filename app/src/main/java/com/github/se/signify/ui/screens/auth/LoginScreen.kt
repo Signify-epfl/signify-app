@@ -86,7 +86,6 @@ fun LoginScreen(
             Toast.makeText(context, loginSuccessfullText, Toast.LENGTH_LONG).show()
             saveUserToFirestore()
             saveStatsToFirestore()
-            navigationActions.navigateTo(Screen.HOME)
             showTutorial()
           },
           onAuthError = {
@@ -165,11 +164,11 @@ fun LoginScreen(
             Log.d("LoginScreen", "Proceeding in offline state.")
             Toast.makeText(context, offlineModeText, Toast.LENGTH_LONG).show()
             showTutorial()
-            navigationActions.navigateTo(Screen.HOME)
           }
         }
       })
 }
+
 /**
  * A button for Google Sign-In, styled with a Google logo and text.
  *
@@ -214,6 +213,7 @@ fun GoogleSignInButton(onSignInClick: () -> Unit) {
         }
   }
 }
+
 /**
  * Remembers an authentication launcher for handling Google Sign-In results.
  *
@@ -234,6 +234,7 @@ fun rememberAuthLauncher(
         authService.handleAuthResult(activityResultWrapper, onAuthComplete, onAuthError)
       }
 }
+
 /**
  * A button for skipping the login process and proceeding in offline mode.
  *
