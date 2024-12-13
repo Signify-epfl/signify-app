@@ -155,7 +155,6 @@ fun QuestDescriptionDialog(
     userViewModel: UserViewModel,
 ) {
   val inSignLanguageText = stringResource(R.string.in_sign_language_text)
-  val context = LocalContext.current
   val completedQuests by userViewModel.completedQuests.collectAsState(emptyList())
   val isCompleted = completedQuests.contains(quest.index)
 
@@ -216,7 +215,7 @@ fun QuestDescriptionDialog(
                   Text(
                       text = "Completed",
                       fontSize = 16.sp,
-                      color = MaterialTheme.colorScheme.secondary,
+                      color = MaterialTheme.colorScheme.onBackground,
                       modifier = Modifier.padding(16.dp))
                 } else {
                   Button(
@@ -291,7 +290,6 @@ fun FingerSpellDialog(
           onDismiss() // Close dialog when word is completed
         })
   }
-
   // Ensure Camera is stopped when the dialog is dismissed
   DisposableEffect(Unit) {
     onDispose {
