@@ -94,7 +94,11 @@ fun calculateTimePerLetter(statsViewModel: StatsViewModel, startTimestamp: Long)
 const val TimePerLetter = "TimePerLetter"
 const val TimePerLetterIndex = "TimePerLetterIndex"
 const val TimePerLetterConst = "TimePerLetterConst"
-/** @param timePerLetter */
+/**
+ * Function that create a DataFrame for time tracking.
+ *
+ * @param timePerLetter The list of time in second
+ */
 fun createDataFrame(timePerLetter: List<Double>): DataFrame<*> {
   val indexList = listOf(1..timePerLetter.size)
   var timePerLetterAverage = emptyList<Double>()

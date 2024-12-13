@@ -43,6 +43,7 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="graph_stats_title">Time per Letter [s]</string>
     <string name="graph_average_text">average = </string>
     <string name="graph_testtag">graphTimePerLetter</string>
+    <string name="graph_unavailable">Not enough data for a graph</string>
 
     <string name="graphs_and_stats_text">Graphs and Stats</string>
     <string name="user_not_found_text">User Not Found</string>

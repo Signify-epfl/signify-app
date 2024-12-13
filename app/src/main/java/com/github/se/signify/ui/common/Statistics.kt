@@ -37,10 +37,9 @@ import com.github.se.signify.model.common.createDataFrame
 import com.github.se.signify.model.common.timeConversion
 import org.jetbrains.kotlinx.dataframe.math.mean
 import org.jetbrains.kotlinx.kandy.dsl.plot
-import org.jetbrains.kotlinx.kandy.echarts.features.title.Title
-import org.jetbrains.kotlinx.kandy.echarts.layers.bars
-import org.jetbrains.kotlinx.kandy.echarts.layers.layout
-import org.jetbrains.kotlinx.kandy.echarts.layers.line
+import org.jetbrains.kotlinx.kandy.letsplot.layers.bars
+import org.jetbrains.kotlinx.kandy.letsplot.layers.line
+import org.jetbrains.kotlinx.kandy.letsplot.feature.layout
 
 /**
  * A scrollable list of letters. The letters learned by a user are highlighted.
@@ -181,8 +180,10 @@ fun StreakCounter(days: Long) {
       }
 }
 /**
- * @param timePerLetter
- * @param modifier
+ * Function that create a graph with the tracking time of each letter done in exercise.
+ *
+ * @param timePerLetter The list of time in millisecond
+ * @param modifier The modifier for the weight
  */
 @Composable
 fun CreateGraph(timePerLetter: List<Long>, modifier: Modifier) {
@@ -197,22 +198,27 @@ fun CreateGraph(timePerLetter: List<Long>, modifier: Modifier) {
               .border(2.dp, MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
               .testTag(stringResource(R.string.graph_testtag)),
       contentAlignment = Alignment.Center) {
-        df.plot {
-          layout {
-            title =
-                Title(
-                    text = stringResource(R.string.graph_stats_title),
-                    subtext =
-                        stringResource(R.string.graph_average_text) + "${timePerLetter.mean()}")
-          }
-          bars {
-            x(TimePerLetter)
-            y(TimePerLetterIndex)
-          }
-          line {
-            x(TimePerLetterConst)
-            y(TimePerLetterIndex)
-          }
+        if (timePerLetter.isEmpty()) {
+            Text(
+                text = stringResource(R.string.graph_unavailable),
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.onErrorContainer,
+                fontWeight = FontWeight.Normal)
+        } else {
+            df.plot {
+                layout {
+                    title = stringResource(R.string.graph_stats_title)
+                    subtitle = stringResource(R.string.graph_average_text) + "${timePerLetter.mean()}"
+                }
+                bars {
+                    x(TimePerLetter)
+                    y(TimePerLetterIndex)
+                }
+                line {
+                    x(TimePerLetterConst)
+                    y(TimePerLetterIndex)
+                }
+            }
         }
       }
 }
