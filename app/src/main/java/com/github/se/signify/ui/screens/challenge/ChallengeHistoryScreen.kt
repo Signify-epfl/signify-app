@@ -31,6 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.challenge.Challenge
+import com.github.se.signify.model.challenge.ChallengeMode
 import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.model.navigation.NavigationActions
@@ -127,15 +128,38 @@ fun ChallengeHistoryScreen(
 @Composable
 fun PastChallengeCard(challenge: Challenge, userSession: UserSession) {
   val currentUserId = userSession.getUserId()
-  val player1Score = challenge.player1Times.sum().div(1000)
-  val player2Score = challenge.player2Times.sum().div(1000)
+
+  val player1Result =
+      when (challenge.mode) {
+        ChallengeMode.SPRINT.toString() ->
+            challenge.player1WordsCompleted.sum().toDouble() // Cast to Double
+        else -> challenge.player1Times.sum() / 1000.0 // Ensure division returns Double
+      }
+
+  val player2Result =
+      when (challenge.mode) {
+        ChallengeMode.SPRINT.toString() ->
+            challenge.player2WordsCompleted.sum().toDouble() // Cast to Double
+        else -> challenge.player2Times.sum() / 1000.0 // Ensure division returns Double
+      }
+
+  val winner =
+      when (challenge.mode) {
+        ChallengeMode.SPRINT.toString() -> {
+          if (player1Result > player2Result) challenge.player1
+          else if (player2Result == player1Result) "Draw" else challenge.player2
+        }
+        else -> {
+          if (player1Result < player2Result) challenge.player1
+          else if (player2Result == player1Result) "Draw" else challenge.player2
+        }
+      }
   val opponent = if (challenge.player1 == currentUserId) challenge.player2 else challenge.player1
   val mode = challenge.mode
-  val winner = challenge.winner ?: "No Winner"
 
   Log.d(
       "PastChallengeCard",
-      "Rendering card with Opponent=$opponent, Mode=$mode, Player1Score=$player1Score, Player2Score=$player2Score, Winner=$winner")
+      "Rendering card with Opponent=$opponent, Mode=$mode, Player1Score=$player1Result, Player2Score=$player2Result, Winner=$winner")
 
   Card(
       modifier =
@@ -147,8 +171,28 @@ fun PastChallengeCard(challenge: Challenge, userSession: UserSession) {
     Column(Modifier.padding(16.dp)) {
       Text(text = "Opponent: $opponent", fontSize = 16.sp)
       Text(text = "Mode: $mode", fontSize = 16.sp)
-      Text(text = "${challenge.player1} Score: $player1Score s", fontSize = 16.sp)
-      Text(text = "${challenge.player2} Score: $player2Score s", fontSize = 16.sp)
+      Text(
+          text =
+              when (challenge.mode) {
+                ChallengeMode.CHRONO.toString() -> {
+                  "${challenge.player1} Score: $player1Result s"
+                }
+                else -> {
+                  "${challenge.player1} Score: $player1Result words"
+                }
+              },
+          fontSize = 16.sp)
+      Text(
+          text =
+              when (challenge.mode) {
+                ChallengeMode.CHRONO.toString() -> {
+                  "${challenge.player2} Score: $player2Result s"
+                }
+                else -> {
+                  "${challenge.player2} Score: $player2Result words"
+                }
+              },
+          fontSize = 16.sp)
       Text(text = "Winner: $winner", fontSize = 16.sp)
     }
   }

@@ -4,6 +4,7 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.challenge.Challenge
+import com.github.se.signify.model.challenge.ChallengeMode
 import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.navigation.NavigationActions
 import kotlinx.coroutines.runBlocking
@@ -67,7 +68,7 @@ class ChallengeHistoryScreenTest {
   }
 
   @Test
-  fun pastChallengeCard_displaysCorrectDetails() {
+  fun pastChallengeCard_displaysCorrectDetailsChrono() {
     val challenge =
         Challenge(
             challengeId = "challenge1",
@@ -75,7 +76,7 @@ class ChallengeHistoryScreenTest {
             player2 = "opponent1",
             player1Times = mutableListOf(1000L, 2000L),
             player2Times = mutableListOf(1500L, 2500L),
-            mode = "Sprint",
+            mode = "CHRONO",
             winner = "testUserId")
 
     composeTestRule.setContent {
@@ -84,9 +85,33 @@ class ChallengeHistoryScreenTest {
 
     // Verify the challenge details are displayed correctly
     composeTestRule.onNodeWithText("Opponent: opponent1").assertIsDisplayed()
-    composeTestRule.onNodeWithText("Mode: Sprint").assertIsDisplayed()
-    composeTestRule.onNodeWithText("testUserId Score: 3 s").assertIsDisplayed()
-    composeTestRule.onNodeWithText("opponent1 Score: 4 s").assertIsDisplayed()
+    composeTestRule.onNodeWithText("Mode: ${ChallengeMode.CHRONO}").assertIsDisplayed()
+    composeTestRule.onNodeWithText("testUserId Score: 3.0 s").assertIsDisplayed()
+    composeTestRule.onNodeWithText("opponent1 Score: 4.0 s").assertIsDisplayed()
+    composeTestRule.onNodeWithText("Winner: testUserId").assertIsDisplayed()
+  }
+
+  @Test
+  fun pastChallengeCard_displaysCorrectDetailsSprint() {
+    val challenge =
+        Challenge(
+            challengeId = "challenge1",
+            player1 = "testUserId",
+            player2 = "opponent1",
+            player1WordsCompleted = mutableListOf(1, 2, 2),
+            player2WordsCompleted = mutableListOf(1, 1, 2),
+            mode = ChallengeMode.SPRINT.toString(),
+            winner = "testUserId")
+
+    composeTestRule.setContent {
+      PastChallengeCard(challenge = challenge, userSession = userSession)
+    }
+
+    // Verify the challenge details are displayed correctly
+    composeTestRule.onNodeWithText("Opponent: opponent1").assertIsDisplayed()
+    composeTestRule.onNodeWithText("Mode: ${ChallengeMode.SPRINT}").assertIsDisplayed()
+    composeTestRule.onNodeWithText("testUserId Score: 5.0 words").assertIsDisplayed()
+    composeTestRule.onNodeWithText("opponent1 Score: 4.0 words").assertIsDisplayed()
     composeTestRule.onNodeWithText("Winner: testUserId").assertIsDisplayed()
   }
 }

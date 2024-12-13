@@ -21,6 +21,7 @@ enum class Screen(val route: String, val requiresAuth: Boolean = true) {
   CREATE_CHALLENGE("CreateChallenge Screen"),
   CHALLENGE_HISTORY("ChallengeHistory Screen"),
   CHRONO_CHALLENGE("ChronoChallenge Screen/{challengeId}"),
+  SPRINT_CHALLENGE("SprintChallenge Screen/{challengeId}"),
   TUTORIAL("Tutorial Screen"),
 
   // For testing purposes
