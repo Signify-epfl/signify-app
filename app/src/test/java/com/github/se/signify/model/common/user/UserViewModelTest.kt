@@ -659,6 +659,44 @@ class UserViewModelTest {
     }
   }
 
+  @Test
+  fun removeOngoingChallenge_handlesFailure() = runTest {
+    // Arrange
+    val exception = Exception("Failed to remove ongoing challenge")
+    doAnswer {
+          val onFailure = it.getArgument<(Exception) -> Unit>(3)
+          onFailure(exception)
+          null
+        }
+        .whenever(userRepository)
+        .removeOngoingChallenge(eq(currentUserId), eq(challengeId), any(), any())
+
+    // Act
+    userViewModel.removeOngoingChallenge(currentUserId, challengeId)
+
+    // Assert
+    verify(userRepository).removeOngoingChallenge(eq(currentUserId), eq(challengeId), any(), any())
+  }
+
+  @Test
+  fun removeOngoingChallenge_updatesOngoingChallengesOnSuccess() = runTest {
+    // Arrange
+    doAnswer {
+          val onSuccess = it.getArgument<() -> Unit>(2)
+          onSuccess()
+          null
+        }
+        .whenever(userRepository)
+        .removeOngoingChallenge(eq(currentUserId), eq(challengeId), any(), any())
+
+    // Act
+    userViewModel.removeOngoingChallenge(currentUserId, challengeId)
+
+    // Assert
+    verify(userRepository).removeOngoingChallenge(eq(currentUserId), eq(challengeId), any(), any())
+    assertTrue(userViewModel.ongoingChallenges.value.none { it.challengeId == challengeId })
+  }
+
   @After
   fun tearDown() {
     Dispatchers.resetMain()
