@@ -1,6 +1,7 @@
 package com.github.se.signify.model.common.user
 
 import android.net.Uri
+import android.util.Log
 import com.github.se.signify.model.challenge.Challenge
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -9,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
+import kotlinx.coroutines.tasks.await
 
 class FirestoreUserRepository(
     private val db: FirebaseFirestore,
@@ -529,5 +531,122 @@ class FirestoreUserRepository(
         onFailure(NoSuchElementException("User not found for ID: $userId"))
       }
     }
+  }
+
+  override fun addPastChallenge(userId: String, challengeId: String) {
+    val userRef = db.collection(collectionPath).document(userId)
+    userRef.update("pastChallenges", FieldValue.arrayUnion(challengeId))
+  }
+
+  override fun getPastChallenges(
+      userId: String,
+      onSuccess: (List<Challenge>) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    val userDocRef = db.collection(collectionPath).document(userId)
+
+    userDocRef
+        .get()
+        .addOnSuccessListener { document ->
+          if (!document.exists()) {
+            onSuccess(emptyList())
+            return@addOnSuccessListener
+          }
+
+          val challengeIds =
+              document.get("pastChallenges") as? List<*>
+                  ?: run {
+                    onSuccess(emptyList())
+                    return@addOnSuccessListener
+                  }
+
+          fetchChallengesByIds(challengeIds, onSuccess, onFailure)
+        }
+        .addOnFailureListener { e -> onFailure(e) }
+  }
+
+  override fun updateUserField(
+      userId: String,
+      fieldName: String,
+      value: Any,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    val userRef = db.collection(collectionPath).document(userId)
+    userRef
+        .update(fieldName, value)
+        .addOnSuccessListener { onSuccess() }
+        .addOnFailureListener { e -> onFailure(e) }
+  }
+
+  override suspend fun getChallengesCompleted(
+      userId: String,
+      onSuccess: (Int) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    getUserField(userId, "challengesCompleted", onSuccess, onFailure)
+  }
+
+  override suspend fun getChallengesCreated(
+      userId: String,
+      onSuccess: (Int) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    getUserField(userId, "challengesCreated", onSuccess, onFailure)
+  }
+
+  override suspend fun getChallengesWon(
+      userId: String,
+      onSuccess: (Int) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    getUserField(userId, "challengesWon", onSuccess, onFailure)
+  }
+
+  private suspend fun getUserField(
+      userId: String,
+      field: String,
+      onSuccess: (Int) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    try {
+      val document = db.collection("users").document(userId).get().await()
+      val value = document.getLong(field)?.toInt() ?: 0
+      onSuccess(value)
+    } catch (e: Exception) {
+      Log.e("FirestoreUserRepository", "Error getting $field for user $userId", e)
+      onFailure(e)
+    }
+  }
+
+  override fun markQuestAsCompleted(
+      userId: String,
+      questIndex: String,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    val userRef = db.collection(collectionPath).document(userId)
+
+    userRef
+        .update("completedQuests", FieldValue.arrayUnion(questIndex))
+        .addOnSuccessListener { onSuccess() }
+        .addOnFailureListener { e -> onFailure(e) }
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  override fun getCompletedQuests(
+      userId: String,
+      onSuccess: (List<String>) -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    val userRef = db.collection(collectionPath).document(userId)
+
+    userRef
+        .get()
+        .addOnSuccessListener { document ->
+          val completedQuests = document["completedQuests"] as? List<String> ?: emptyList()
+          onSuccess(completedQuests)
+        }
+        .addOnFailureListener { e -> onFailure(e) }
   }
 }

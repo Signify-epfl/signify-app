@@ -17,6 +17,7 @@ class HomeScreenFeaturesEnd2endTest {
 
   @get:Rule
   val cameraAccess: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
+
   @get:Rule
   val bluetoothAccess: GrantPermissionRule =
       GrantPermissionRule.grant(Manifest.permission.BLUETOOTH)
@@ -30,6 +31,9 @@ class HomeScreenFeaturesEnd2endTest {
     composeTestRule.waitForIdle()
     // Skip the login as the Practice epic does not need it
     composeTestRule.onNodeWithTag("skipLoginButton").performClick()
+
+    // Skip the tutorial
+    composeTestRule.onNodeWithTag("SkipTutorialButton").performClick()
 
     // Wait for navigation to Home Screen
     composeTestRule.waitForIdle()

@@ -22,7 +22,6 @@ class FirestoreChallengeRepository(private val db: FirebaseFirestore) : Challeng
             player1 = player1Id,
             player2 = player2Id,
             mode = mode.name,
-            status = "pending",
             round = 1,
             roundWords = roundWords,
             player1Times = mutableListOf(),
@@ -101,5 +100,19 @@ class FirestoreChallengeRepository(private val db: FirebaseFirestore) : Challeng
         .update("playerTime", timeTaken)
         .addOnSuccessListener { onSuccess() }
         .addOnFailureListener { onFailure(it) }
+  }
+
+  override fun updateWinner(
+      challengeId: String,
+      winnerId: String,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  ) {
+    val challengeRef = db.collection(collectionPath).document(challengeId)
+
+    challengeRef
+        .update("winner", winnerId)
+        .addOnSuccessListener { onSuccess() }
+        .addOnFailureListener { exception -> onFailure(exception) }
   }
 }

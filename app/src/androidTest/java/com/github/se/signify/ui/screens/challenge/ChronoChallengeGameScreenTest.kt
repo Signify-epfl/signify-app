@@ -50,7 +50,6 @@ class ChronoChallengeGameScreenTest {
                       player1 = "user1",
                       player2 = "user2",
                       mode = "Chrono",
-                      status = "in_progress",
                       round = 1,
                       roundWords = listOf("apple", "banana", "cherry"),
                       player1Times = mutableListOf(),
@@ -110,7 +109,6 @@ class ChronoChallengeGameScreenTest {
                 player1 = "user1",
                 player2 = "user2",
                 mode = "Chrono",
-                status = "in_progress",
                 round = 1,
                 roundWords = emptyList(), // No words
                 player1Times = mutableListOf(),
@@ -131,37 +129,6 @@ class ChronoChallengeGameScreenTest {
 
     // Assert that the "No word available" text is displayed
     composeTestRule.onNodeWithTag("NoWordAvailableText").assertIsDisplayed()
-  }
-
-  @Test
-  fun chronoChallengeGameScreen_displaysChallengeCompletedText_whenChallengeIsCompleted() {
-    challengeRepository.setChallenges(
-        listOf(
-            Challenge(
-                challengeId = challengeId,
-                player1 = "user1",
-                player2 = "user2",
-                mode = "Chrono",
-                status = "completed",
-                round = 1,
-                roundWords = listOf("apple", "banana", "cherry"),
-                player1Times = mutableListOf(),
-                player2Times = mutableListOf(),
-                player1RoundCompleted = listOf(true, true, true),
-                player2RoundCompleted = listOf(true, true, true),
-                gameStatus = "completed")))
-
-    composeTestRule.setContent {
-      ChronoChallengeGameScreen(
-          navigationActions = mockNavigationActions,
-          userSession = MockUserSession(),
-          challengeRepository = challengeRepository,
-          handLandmarkViewModel = handLandmarkViewModel,
-          challengeId = challengeId)
-    }
-
-    // Assert that the challenge completed text is displayed
-    composeTestRule.onNodeWithTag("ChallengeCompletedText").assertIsDisplayed()
   }
 
   @Test

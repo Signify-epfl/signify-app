@@ -45,6 +45,12 @@ open class UserViewModel(
   private val _streak = MutableStateFlow(0L)
   val streak: StateFlow<Long> = _streak
 
+  private val _pastChallenges = MutableStateFlow<List<Challenge>>(emptyList())
+  val pastChallenges: StateFlow<List<Challenge>> = _pastChallenges
+
+  private val _completedQuests = MutableStateFlow<List<String>>(emptyList())
+  val completedQuests: StateFlow<List<String>> = _completedQuests
+
   private val logTag = "UserViewModel"
 
   init {
@@ -258,5 +264,79 @@ open class UserViewModel(
         userSession.getUserId()!!,
         onSuccess = { s -> _streak.value = s },
         onFailure = { e -> Log.e(logTag, "Failed to get user's streak: ${e.message}}") })
+  }
+
+  fun addPastChallenge(userId: String, challengeId: String) {
+    repository.getUserById(
+        userId = userId,
+        onSuccess = { user ->
+          // Update the pastChallenges list in Firestore
+          repository.updateUserField(
+              userId = userId,
+              fieldName = "pastChallenges",
+              value = user.pastChallenges + challengeId, // Add the new challengeId
+              onSuccess = { Log.d("UserViewModel", "Challenge added to pastChallenges") },
+              onFailure = { e ->
+                Log.e("UserViewModel", "Failed to add past challenge: ${e.message}")
+              })
+        },
+        onFailure = { e -> Log.e("UserViewModel", "Failed to fetch user: ${e.message}") })
+  }
+
+  fun incrementField(userId: String, fieldName: String) {
+    repository.getUserById(
+        userId = userId,
+        onSuccess = { user ->
+          val currentValue =
+              when (fieldName) {
+                "challengesCreated" -> user.challengesCreated
+                "challengesCompleted" -> user.challengesCompleted
+                "challengesWon" -> user.challengesWon
+                else -> throw IllegalArgumentException("Invalid field name")
+              }
+
+          // Update the field in Firestore
+          repository.updateUserField(
+              userId = userId,
+              fieldName = fieldName,
+              value = (currentValue) + 1,
+              onSuccess = { Log.d("UserViewModel", "Field $fieldName incremented successfully") },
+              onFailure = { e ->
+                Log.e("UserViewModel", "Failed to increment field: ${e.message}")
+              })
+        },
+        onFailure = { e -> Log.e("UserViewModel", "Failed to fetch user: ${e.message}") })
+  }
+
+  fun getPastChallenges() {
+    repository.getPastChallenges(
+        userSession.getUserId()!!,
+        onSuccess = { pastChallengesList -> _pastChallenges.value = pastChallengesList },
+        onFailure = { e -> Log.e("UserViewModel", "Failed to get past challenges: ${e.message}") })
+  }
+
+  fun markQuestAsCompleted(questIndex: String) {
+    repository.markQuestAsCompleted(
+        userId = userSession.getUserId()!!,
+        questIndex = questIndex,
+        onSuccess = {
+          Log.d("UserViewModel", "Quest $questIndex marked as completed.")
+          fetchCompletedQuests() // Refresh the completed quests list
+        },
+        onFailure = { e ->
+          Log.e("UserViewModel", "Failed to mark quest $questIndex as completed: ${e.message}")
+        })
+  }
+
+  fun fetchCompletedQuests() {
+    repository.getCompletedQuests(
+        userId = userSession.getUserId()!!,
+        onSuccess = { quests ->
+          _completedQuests.value = quests
+          Log.d("UserViewModel", "Fetched completed quests: $quests")
+        },
+        onFailure = { e ->
+          Log.e("UserViewModel", "Failed to fetch completed quests: ${e.message}")
+        })
   }
 }

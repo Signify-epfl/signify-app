@@ -14,7 +14,6 @@ class ChallengeTest {
     assertEquals("", challenge.player1)
     assertEquals("", challenge.player2)
     assertEquals("", challenge.mode)
-    assertEquals("pending", challenge.status)
     assertEquals(1, challenge.round)
     assertEquals(emptyList<Long>(), challenge.player1Times)
     assertEquals(emptyList<Long>(), challenge.player2Times)
@@ -36,7 +35,6 @@ class ChallengeTest {
             player1 = "player1",
             player2 = "player2",
             mode = "chrono",
-            status = "in_progress",
             round = 2,
             player1Times = player1Times,
             player2Times = player2Times,
@@ -48,7 +46,6 @@ class ChallengeTest {
     assertEquals("player1", challenge.player1)
     assertEquals("player2", challenge.player2)
     assertEquals("chrono", challenge.mode)
-    assertEquals("in_progress", challenge.status)
     assertEquals(2, challenge.round)
     assertEquals(player1Times, challenge.player1Times)
     assertEquals(player2Times, challenge.player2Times)
@@ -65,7 +62,6 @@ class ChallengeTest {
             player1 = "player1",
             player2 = "player2",
             mode = "chrono",
-            status = "in_progress",
             round = 2,
             player1Times = mutableListOf(5000L, 6000L, 7000L),
             player2Times = mutableListOf(4000L, 3000L, 8000L),
@@ -78,7 +74,6 @@ class ChallengeTest {
             player1 = "player1",
             player2 = "player2",
             mode = "chrono",
-            status = "in_progress",
             round = 2,
             player1Times = mutableListOf(5000L, 6000L, 7000L),
             player2Times = mutableListOf(4000L, 3000L, 8000L),
@@ -106,7 +101,6 @@ class ChallengeTest {
             player1 = "player1",
             player2 = "player2",
             mode = "chrono",
-            status = "in_progress",
             round = 2,
             player1Times = mutableListOf(5000L, 6000L, 7000L),
             player2Times = mutableListOf(4000L, 3000L, 8000L),
@@ -114,13 +108,12 @@ class ChallengeTest {
             player2RoundCompleted = mutableListOf(true, false, true),
             gameStatus = "in_progress")
 
-    val modifiedChallenge = challenge.copy(status = "completed", round = 3)
+    val modifiedChallenge = challenge.copy(round = 3)
 
     assertEquals("challenge123", modifiedChallenge.challengeId)
     assertEquals("player1", modifiedChallenge.player1)
     assertEquals("player2", modifiedChallenge.player2)
     assertEquals("chrono", modifiedChallenge.mode)
-    assertEquals("completed", modifiedChallenge.status) // Modified
     assertEquals(3, modifiedChallenge.round) // Modified
     assertEquals(challenge.player1Times, modifiedChallenge.player1Times)
     assertEquals(challenge.player2Times, modifiedChallenge.player2Times)

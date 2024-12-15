@@ -174,6 +174,8 @@ fun ChallengeModeAlertDialog(
                     roundWords = words)
                 userViewModel.addOngoingChallenge(userSession.getUserId()!!, challengeId)
                 userViewModel.addOngoingChallenge(friendId, challengeId)
+                userViewModel.incrementField(userSession.getUserId()!!, "challengesCreated")
+                userViewModel.incrementField(friendId, "challengesCreated")
                 onDismiss()
               }
             },
