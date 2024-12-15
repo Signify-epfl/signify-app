@@ -103,7 +103,7 @@ fun createDataFrame(timePerLetter: List<Double>): DataFrame<*> {
   val timePerLetterIndex = List(timePerLetter.size) { index -> index }
   val timePerLetterAverage = List(timePerLetter.size) { timePerLetter.mean() }
   return dataFrameOf(
-    TimePerLetter to timePerLetter,
-    TimePerLetterIndex to timePerLetterIndex,
-    TimePerLetterAverage to timePerLetterAverage)
+      TimePerLetter to timePerLetter,
+      TimePerLetterIndex to timePerLetterIndex,
+      TimePerLetterAverage to timePerLetterAverage)
 }

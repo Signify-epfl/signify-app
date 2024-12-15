@@ -48,7 +48,7 @@ fun MyStatsScreen(
     statsViewModel.getHardExerciseStats()
     statsViewModel.getDailyQuestStats()
     statsViewModel.getWeeklyQuestStats()
-      statsViewModel.getTimePerLetter()
+    statsViewModel.getTimePerLetter()
   }
 
   val userName = userViewModel.userName.collectAsState()

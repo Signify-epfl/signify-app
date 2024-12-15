@@ -40,9 +40,9 @@ import com.github.se.signify.model.common.createDataFrame
 import com.github.se.signify.model.common.timeConversion
 import org.jetbrains.kotlinx.dataframe.math.mean
 import org.jetbrains.kotlinx.kandy.dsl.plot
+import org.jetbrains.kotlinx.kandy.letsplot.feature.layout
 import org.jetbrains.kotlinx.kandy.letsplot.layers.bars
 import org.jetbrains.kotlinx.kandy.letsplot.layers.line
-import org.jetbrains.kotlinx.kandy.letsplot.feature.layout
 
 /**
  * A scrollable list of letters. The letters learned by a user are highlighted.
@@ -200,33 +200,33 @@ fun CreateGraph(timePerLetter: List<Long>, modifier: Modifier = Modifier) {
               .testTag(stringResource(R.string.graph_testtag)),
       contentAlignment = Alignment.Center) {
         if (timePerLetter.isEmpty()) {
-            Text(
-                text = stringResource(R.string.graph_unavailable),
-                fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.onErrorContainer,
-                fontWeight = FontWeight.Normal)
+          Text(
+              text = stringResource(R.string.graph_unavailable),
+              fontSize = 16.sp,
+              color = MaterialTheme.colorScheme.onErrorContainer,
+              fontWeight = FontWeight.Normal)
         } else {
-            val timePerLetterDouble = timePerLetter.map { time -> timeConversion(time) }
-            val df = createDataFrame(timePerLetterDouble)
-            val plot = df.plot {
+          val timePerLetterDouble = timePerLetter.map { time -> timeConversion(time) }
+          val df = createDataFrame(timePerLetterDouble)
+          val plot =
+              df.plot {
                 layout {
-                    title = stringResource(R.string.graph_stats_title)
-                    subtitle = stringResource(R.string.graph_average_text) + "${timePerLetter.mean()}"
+                  title = stringResource(R.string.graph_stats_title)
+                  subtitle = stringResource(R.string.graph_average_text) + "${timePerLetter.mean()}"
                 }
                 bars {
-                    x(TimePerLetter)
-                    y(TimePerLetterIndex)
+                  x(TimePerLetter)
+                  y(TimePerLetterIndex)
                 }
                 line {
-                    x(TimePerLetterAverage)
-                    y(TimePerLetterIndex)
+                  x(TimePerLetterAverage)
+                  y(TimePerLetterIndex)
                 }
-            }
-            Image(
-                painter = rememberAsyncImagePainter(plot),
-                contentDescription = stringResource(R.string.graph_stats_title),
-                modifier = Modifier.fillMaxSize()
-            )
+              }
+          Image(
+              painter = rememberAsyncImagePainter(plot),
+              contentDescription = stringResource(R.string.graph_stats_title),
+              modifier = Modifier.fillMaxSize())
         }
       }
 }

@@ -75,14 +75,14 @@ class UtilsTest {
     assertThrows(IllegalArgumentException::class.java) { timeConversion(-1000L) }
   }
 
-    @Test
-    fun createDataFrameHasCorrectBehaviour() {
-        val df = createDataFrame(listOf(10.0, 20.0, 30.0))
-        val expected = dataFrameOf(
+  @Test
+  fun createDataFrameHasCorrectBehaviour() {
+    val df = createDataFrame(listOf(10.0, 20.0, 30.0))
+    val expected =
+        dataFrameOf(
             TimePerLetter to listOf(10.0, 20.0, 30.0),
             TimePerLetterIndex to listOf(0, 1, 2),
-            TimePerLetterAverage to listOf(20.0, 20.0, 20.0)
-        )
-        assertEquals(expected, df)
-    }
+            TimePerLetterAverage to listOf(20.0, 20.0, 20.0))
+    assertEquals(expected, df)
+  }
 }

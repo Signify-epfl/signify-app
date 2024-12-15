@@ -7,7 +7,6 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performScrollToNode
-import com.github.se.signify.R
 import org.junit.Rule
 import org.junit.Test
 
@@ -76,9 +75,7 @@ class StatisticsTest {
 
   @Test
   fun createGraphIsDisplayed() {
-    composeTestRule.setContent {
-      CreateGraph(listOf(1000, 1024, 777, 222), Modifier)
-    }
+    composeTestRule.setContent { CreateGraph(listOf(1000, 1024, 777, 222), Modifier) }
 
     composeTestRule.onNodeWithTag("graphTimePerLetter").assertIsDisplayed()
   }
