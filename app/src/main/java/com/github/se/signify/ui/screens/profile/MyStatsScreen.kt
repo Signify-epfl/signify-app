@@ -48,6 +48,7 @@ fun MyStatsScreen(
     statsViewModel.getHardExerciseStats()
     statsViewModel.getDailyQuestStats()
     statsViewModel.getWeeklyQuestStats()
+      statsViewModel.getTimePerLetter()
   }
 
   val userName = userViewModel.userName.collectAsState()
@@ -109,6 +110,6 @@ fun MyStatsScreen(
         lineTextTestTag = "QuestsText")
     Spacer(modifier = Modifier.height(64.dp))
     // Graphs and Stats
-    CreateGraph(timePerLetter = timePerLetter.value, modifier = Modifier.weight(5f))
+    CreateGraph(timePerLetter = timePerLetter.value)
   }
 }

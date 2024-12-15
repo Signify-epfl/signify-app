@@ -1,6 +1,7 @@
 package com.github.se.signify.ui.common
 
 import androidx.annotation.VisibleForTesting
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,9 +31,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.github.se.signify.R
 import com.github.se.signify.model.common.TimePerLetter
-import com.github.se.signify.model.common.TimePerLetterConst
+import com.github.se.signify.model.common.TimePerLetterAverage
 import com.github.se.signify.model.common.TimePerLetterIndex
 import com.github.se.signify.model.common.createDataFrame
 import com.github.se.signify.model.common.timeConversion
@@ -186,14 +189,12 @@ fun StreakCounter(days: Long) {
  * @param modifier The modifier for the weight
  */
 @Composable
-fun CreateGraph(timePerLetter: List<Long>, modifier: Modifier) {
-  var timePerLetterDouble = emptyList<Double>()
-  timePerLetter.forEach { time -> timePerLetterDouble = timePerLetterDouble + timeConversion(time) }
-  val df = createDataFrame(timePerLetterDouble)
+fun CreateGraph(timePerLetter: List<Long>, modifier: Modifier = Modifier) {
   Box(
       modifier =
           modifier
               .fillMaxWidth()
+              .height(300.dp)
               .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp))
               .border(2.dp, MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
               .testTag(stringResource(R.string.graph_testtag)),
@@ -205,7 +206,9 @@ fun CreateGraph(timePerLetter: List<Long>, modifier: Modifier) {
                 color = MaterialTheme.colorScheme.onErrorContainer,
                 fontWeight = FontWeight.Normal)
         } else {
-            df.plot {
+            val timePerLetterDouble = timePerLetter.map { time -> timeConversion(time) }
+            val df = createDataFrame(timePerLetterDouble)
+            val plot = df.plot {
                 layout {
                     title = stringResource(R.string.graph_stats_title)
                     subtitle = stringResource(R.string.graph_average_text) + "${timePerLetter.mean()}"
@@ -215,10 +218,15 @@ fun CreateGraph(timePerLetter: List<Long>, modifier: Modifier) {
                     y(TimePerLetterIndex)
                 }
                 line {
-                    x(TimePerLetterConst)
+                    x(TimePerLetterAverage)
                     y(TimePerLetterIndex)
                 }
             }
+            Image(
+                painter = rememberAsyncImagePainter(plot),
+                contentDescription = stringResource(R.string.graph_stats_title),
+                modifier = Modifier.fillMaxSize()
+            )
         }
       }
 }
