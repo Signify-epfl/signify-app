@@ -7,7 +7,6 @@ import com.github.se.signify.model.profile.stats.StatsViewModel
 import java.util.Locale
 import org.jetbrains.kotlinx.dataframe.DataFrame
 import org.jetbrains.kotlinx.dataframe.api.dataFrameOf
-import org.jetbrains.kotlinx.dataframe.math.mean
 
 /**
  * Retrieves the drawable resource ID for a letter's image.
@@ -101,7 +100,8 @@ const val TimePerLetterAverage = "TimePerLetterAverage"
  */
 fun createDataFrame(timePerLetter: List<Double>): DataFrame<*> {
   val timePerLetterIndex = List(timePerLetter.size) { index -> index }
-  val timePerLetterAverage = List(timePerLetter.size) { timePerLetter.mean() }
+  val averageTime = timePerLetter.average()
+  val timePerLetterAverage = List(timePerLetter.size) { averageTime }
   return dataFrameOf(
       TimePerLetter to timePerLetter,
       TimePerLetterIndex to timePerLetterIndex,
