@@ -24,7 +24,7 @@ open class UserViewModel(
   private val _friendsRequests = MutableStateFlow<List<String>>(emptyList())
   val friendsRequests: StateFlow<List<String>> = _friendsRequests
 
-  private val _userName = MutableStateFlow("")
+  private val _userName = MutableStateFlow(" ")
   val userName: StateFlow<String> = _userName
 
   private val _profilePictureUrl = MutableStateFlow<String?>(null)
