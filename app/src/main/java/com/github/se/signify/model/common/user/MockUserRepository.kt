@@ -92,11 +92,15 @@ class MockUserRepository : UserRepository {
     if (!checkFailure(onFailure)) return
     if (!checkUser(userId, onFailure)) return
 
-    val user = users.getValue(userId)
-
-    // This was done to match the implementation of the UserRepositoryFireStore
-    // TODO: Make this non-nullable
-    onSuccess(user.name ?: "unknown")
+    val user = users[userId]
+    if (user != null) {
+      // Ensure user.name is non-nullable before passing it to onSuccess
+      user.name?.let { onSuccess(it) }
+          ?: onFailure(NoSuchElementException("Username is missing for user ID: $userId"))
+    } else {
+      // Handle the case where the user is not found
+      onFailure(NoSuchElementException("User not found for ID: $userId"))
+    }
   }
 
   override fun updateUserName(
