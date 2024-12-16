@@ -17,7 +17,9 @@ import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.common.ProfilePicture
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -89,6 +91,10 @@ class SettingsScreenTest {
 
     // Check if the back button is displayed
     composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
+
+    // Check if the logout button is displayed
+    composeTestRule.onNodeWithTag("logoutButton").assertIsDisplayed()
+
 
     composeTestRule.onRoot().printToLog("TAG")
   }
@@ -192,4 +198,15 @@ class SettingsScreenTest {
   fun testLanguageSwitch() {
     composeTestRule.onNodeWithTag("LanguageSwitch").assertIsDisplayed().performClick()
   }
+
+  @Test
+  fun logoutButton_callsLogoutAndNavigatesToWelcome() = runBlocking{
+
+    // Click the logout button
+    composeTestRule.onNodeWithTag("logoutButton").performClick()
+
+    // Verify navigation to Welcome screen
+    verify(navigationActions).navigateTo(Screen.WELCOME)
+  }
+
 }
