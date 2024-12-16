@@ -77,7 +77,8 @@ class MockUserRepositoryTest {
     mockUserRepository.getFriendsList(blankUser.uid, onSuccessAny, doNotFail)
     mockUserRepository.getRequestsFriendsList(blankUser.uid, onSuccessAny, doNotFail)
     mockUserRepository.getUserById(blankUser.uid, { success += 1 }, doNotFail)
-    mockUserRepository.getUserName(blankUser.uid, onSuccessAny, doNotFail)
+    mockUserRepository.getUserName(
+        blankUser.uid, doNotSucceedAny, { assertTrue(it is NoSuchElementException) })
     mockUserRepository.updateUserName(blankUser.uid, "newName", onSuccess, doNotFail)
     mockUserRepository.getProfilePictureUrl(blankUser.uid, onSuccessAny, doNotFail)
     mockUserRepository.updateProfilePictureUrl(
@@ -95,7 +96,7 @@ class MockUserRepositoryTest {
     mockUserRepository.getStreak(blankUser.uid, onSuccessAny, doNotFail)
 
     shadowOf(Looper.getMainLooper()).idle()
-    assertEquals(19, success)
+    assertEquals(18, success)
   }
 
   @Test
@@ -230,7 +231,9 @@ class MockUserRepositoryTest {
 
   @Test
   fun getUserNameWorks() {
-    mockUserRepository.getUserName(blankUser.uid, { assertEquals("unknown", it) }, doNotFail)
+    mockUserRepository.getUserName(blankUser.uid, doNotSucceedAny) {
+      assertTrue(it is NoSuchElementException)
+    }
 
     mockUserRepository.getUserName(activeUser.uid, { assertEquals(activeUser.name, it) }, doNotFail)
   }
