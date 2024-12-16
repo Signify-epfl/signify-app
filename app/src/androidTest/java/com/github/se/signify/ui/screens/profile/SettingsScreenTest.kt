@@ -95,7 +95,6 @@ class SettingsScreenTest {
     // Check if the logout button is displayed
     composeTestRule.onNodeWithTag("logoutButton").assertIsDisplayed()
 
-
     composeTestRule.onRoot().printToLog("TAG")
   }
 
@@ -200,7 +199,7 @@ class SettingsScreenTest {
   }
 
   @Test
-  fun logoutButton_callsLogoutAndNavigatesToWelcome() = runBlocking{
+  fun logoutButton_callsLogoutAndNavigatesToWelcome() = runBlocking {
 
     // Click the logout button
     composeTestRule.onNodeWithTag("logoutButton").performClick()
@@ -208,5 +207,4 @@ class SettingsScreenTest {
     // Verify navigation to Welcome screen
     verify(navigationActions).navigateTo(Screen.WELCOME)
   }
-
 }

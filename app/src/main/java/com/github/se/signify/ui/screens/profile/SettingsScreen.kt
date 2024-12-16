@@ -75,221 +75,200 @@ fun SettingsScreen(
     isFrench: Boolean,
     onLanguageChange: (Boolean) -> Unit
 ) {
-    val userViewModel: UserViewModel =
-        viewModel(factory = UserViewModel.factory(userSession, userRepository))
+  val userViewModel: UserViewModel =
+      viewModel(factory = UserViewModel.factory(userSession, userRepository))
 
-    LaunchedEffect(Unit) {
-        userViewModel.getUserName()
-        userViewModel.getProfilePictureUrl()
-    }
+  LaunchedEffect(Unit) {
+    userViewModel.getUserName()
+    userViewModel.getProfilePictureUrl()
+  }
 
-    val userName = userViewModel.userName.collectAsState()
-    val profilePictureUrl = userViewModel.profilePictureUrl.collectAsState()
+  val userName = userViewModel.userName.collectAsState()
+  val profilePictureUrl = userViewModel.profilePictureUrl.collectAsState()
 
-    val focusManager = LocalFocusManager.current
-    Box(
-        modifier =
-        Modifier
-            .fillMaxSize()
-            .clickable(
-                onClick = { focusManager.clearFocus() },
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() })
-    ) {
+  val focusManager = LocalFocusManager.current
+  Box(
+      modifier =
+          Modifier.fillMaxSize()
+              .clickable(
+                  onClick = { focusManager.clearFocus() },
+                  indication = null,
+                  interactionSource = remember { MutableInteractionSource() })) {
         AnnexScreenScaffold(
             navigationActions = navigationActions,
             testTag = "SettingsScreen",
         ) {
-            Spacer(modifier = Modifier.height(64.dp))
+          Spacer(modifier = Modifier.height(64.dp))
 
-            EditableProfilePictureField(userViewModel, profilePictureUrl)
+          EditableProfilePictureField(userViewModel, profilePictureUrl)
 
-            Spacer(modifier = Modifier.height(64.dp))
+          Spacer(modifier = Modifier.height(64.dp))
 
-            EditableUsernameField(userViewModel, userName.value)
+          EditableUsernameField(userViewModel, userName.value)
 
-            Spacer(modifier = Modifier.height(64.dp))
+          Spacer(modifier = Modifier.height(64.dp))
 
-            Row(
-                modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .clickable { onThemeChange(!isDarkTheme) },
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
+          Row(
+              modifier =
+                  Modifier.fillMaxWidth().padding(16.dp).clickable { onThemeChange(!isDarkTheme) },
+              verticalAlignment = Alignment.CenterVertically,
+              horizontalArrangement = Arrangement.SpaceBetween) {
                 val modeText =
                     if (isDarkTheme) stringResource(R.string.dark_mode_text)
                     else stringResource(R.string.light_mode_text)
                 Text(
                     text = modeText,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
+                    color = MaterialTheme.colorScheme.onBackground)
                 Switch(checked = isDarkTheme, onCheckedChange = { onThemeChange(it) })
-            }
-            // Switch between English and French
-            LanguageSwitch(isFrench, onLanguageChange)
+              }
+          // Switch between English and French
+          LanguageSwitch(isFrench, onLanguageChange)
 
-            Spacer(modifier = Modifier.height(64.dp))
+          Spacer(modifier = Modifier.height(64.dp))
 
-            // Logout Button
-            LogoutButton(userSession, navigationActions)
+          // Logout Button
+          LogoutButton(userSession, navigationActions)
         }
-    }
+      }
 }
 
 @Composable
 fun EditableProfilePictureField(userViewModel: UserViewModel, profilePictureUrl: State<String?>) {
-    var showDeleteDialog = remember { mutableStateOf(false) }
-    var showEditDialog = remember { mutableStateOf(false) }
-    var selectedUri by remember { mutableStateOf<Uri?>(null) }
+  var showDeleteDialog = remember { mutableStateOf(false) }
+  var showEditDialog = remember { mutableStateOf(false) }
+  var selectedUri by remember { mutableStateOf<Uri?>(null) }
 
-    fun isDeleteEnabled(): Boolean {
-        return selectedUri != null
-    }
+  fun isDeleteEnabled(): Boolean {
+    return selectedUri != null
+  }
 
-    LaunchedEffect(profilePictureUrl.value) { selectedUri = profilePictureUrl.value?.toUri() }
+  LaunchedEffect(profilePictureUrl.value) { selectedUri = profilePictureUrl.value?.toUri() }
 
-    val galleryLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            if (uri != null) {
-                selectedUri = uri
-                showEditDialog.value = true
-            }
+  val galleryLauncher =
+      rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        if (uri != null) {
+          selectedUri = uri
+          showEditDialog.value = true
         }
-    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Row(
-            modifier =
-            Modifier
-                .border(
-                    2.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp)
-                )
+      }
+  Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+    Row(
+        modifier =
+            Modifier.border(
+                    2.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp))
                 .clip(RoundedCornerShape(8.dp))
                 .background(MaterialTheme.colorScheme.background)
                 .padding(horizontal = 24.dp, vertical = 16.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Column {
-                Icon(
-                    modifier =
-                    Modifier
-                        .clickable { galleryLauncher.launch("image/*") }
-                        .testTag("editProfilePictureButton"),
-                    imageVector = Icons.Outlined.Edit,
-                    contentDescription = "Edit Profile Picture",
-                    tint = MaterialTheme.colorScheme.onBackground,
-                )
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+      Column {
+        Icon(
+            modifier =
+                Modifier.clickable { galleryLauncher.launch("image/*") }
+                    .testTag("editProfilePictureButton"),
+            imageVector = Icons.Outlined.Edit,
+            contentDescription = "Edit Profile Picture",
+            tint = MaterialTheme.colorScheme.onBackground,
+        )
 
-                Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-                if (isDeleteEnabled()) {
-                    Icon(
-                        modifier =
-                        Modifier
-                            .clickable { showDeleteDialog.value = true }
-                            .testTag("deleteProfilePictureButton"),
-                        imageVector = Icons.Outlined.Delete,
-                        contentDescription = "Delete Profile Picture",
-                        tint = MaterialTheme.colorScheme.onBackground)
-                }
-            }
-
-            Spacer(modifier = Modifier.width(8.dp))
-            ProfilePicture(selectedUri?.toString())
+        if (isDeleteEnabled()) {
+          Icon(
+              modifier =
+                  Modifier.clickable { showDeleteDialog.value = true }
+                      .testTag("deleteProfilePictureButton"),
+              imageVector = Icons.Outlined.Delete,
+              contentDescription = "Delete Profile Picture",
+              tint = MaterialTheme.colorScheme.onBackground)
         }
+      }
 
-        ConfirmationDialog(
-            showDeleteDialog,
-            onConfirm = {
-                selectedUri = null
-                userViewModel.updateProfilePictureUrl(null)
-            },
-            onDismiss = {},
-            title = stringResource(R.string.confirm_changes_title),
-            message = stringResource(R.string.confirm_changes_message)
-        )
-
-        ConfirmationDialog(
-            showEditDialog,
-            onConfirm = { userViewModel.updateProfilePictureUrl(selectedUri) },
-            onDismiss = { selectedUri = profilePictureUrl.value?.toUri() },
-            title = stringResource(R.string.confirm_changes_title),
-            message = stringResource(R.string.confirm_changes_message)
-        )
+      Spacer(modifier = Modifier.width(8.dp))
+      ProfilePicture(selectedUri?.toString())
     }
+
+    ConfirmationDialog(
+        showDeleteDialog,
+        onConfirm = {
+          selectedUri = null
+          userViewModel.updateProfilePictureUrl(null)
+        },
+        onDismiss = {},
+        title = stringResource(R.string.confirm_changes_title),
+        message = stringResource(R.string.confirm_changes_message))
+
+    ConfirmationDialog(
+        showEditDialog,
+        onConfirm = { userViewModel.updateProfilePictureUrl(selectedUri) },
+        onDismiss = { selectedUri = profilePictureUrl.value?.toUri() },
+        title = stringResource(R.string.confirm_changes_title),
+        message = stringResource(R.string.confirm_changes_message))
+  }
 }
 
 @Composable
 fun EditableUsernameField(userViewModel: UserViewModel, userName: String) {
-    var showConfirmationDialog = remember { mutableStateOf(false) }
-    var newName by remember { mutableStateOf("") }
+  var showConfirmationDialog = remember { mutableStateOf(false) }
+  var newName by remember { mutableStateOf("") }
 
-    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Row(
-            modifier =
-            Modifier
-                .border(
-                    2.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp)
-                )
+  Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+    Row(
+        modifier =
+            Modifier.border(
+                    2.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp))
                 .clip(RoundedCornerShape(8.dp))
                 .background(MaterialTheme.colorScheme.background)
                 .padding(horizontal = 24.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                modifier = Modifier.testTag("editUsernameButton"),
-                imageVector = Icons.Outlined.Edit,
-                contentDescription = "Edit Username",
-                tint = MaterialTheme.colorScheme.onBackground
-            )
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center) {
+          Icon(
+              modifier = Modifier.testTag("editUsernameButton"),
+              imageVector = Icons.Outlined.Edit,
+              contentDescription = "Edit Username",
+              tint = MaterialTheme.colorScheme.onBackground)
 
-            Spacer(modifier = Modifier.width(8.dp))
+          Spacer(modifier = Modifier.width(8.dp))
 
-            TextField(
-                value = newName,
-                onValueChange = { newName = it },
-                placeholder = { Text(userName, color = MaterialTheme.colorScheme.onBackground) },
-                modifier =
-                Modifier
-                    .widthIn(max = 200.dp)
-                    .padding(vertical = 8.dp)
-                    .background(MaterialTheme.colorScheme.background)
-                    .onFocusChanged { focusState ->
+          TextField(
+              value = newName,
+              onValueChange = { newName = it },
+              placeholder = { Text(userName, color = MaterialTheme.colorScheme.onBackground) },
+              modifier =
+                  Modifier.widthIn(max = 200.dp)
+                      .padding(vertical = 8.dp)
+                      .background(MaterialTheme.colorScheme.background)
+                      .onFocusChanged { focusState ->
                         if (!focusState.isFocused && newName != userName && newName.isNotEmpty()) {
-                            showConfirmationDialog.value = true
+                          showConfirmationDialog.value = true
                         }
-                    }
-                    .testTag("usernameTextField"),
-                colors =
-                TextFieldDefaults.colors(
-                    focusedContainerColor = MaterialTheme.colorScheme.background,
-                    unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                    focusedTextColor = MaterialTheme.colorScheme.onBackground,
-                    cursorColor = MaterialTheme.colorScheme.onBackground
-                ),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                keyboardActions =
-                KeyboardActions(
-                    onDone = {
+                      }
+                      .testTag("usernameTextField"),
+              colors =
+                  TextFieldDefaults.colors(
+                      focusedContainerColor = MaterialTheme.colorScheme.background,
+                      unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                      focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                      cursorColor = MaterialTheme.colorScheme.onBackground),
+              keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+              keyboardActions =
+                  KeyboardActions(
+                      onDone = {
                         if (newName != userName && newName.isNotEmpty()) {
-                            showConfirmationDialog.value = true
+                          showConfirmationDialog.value = true
                         }
-                    }),
-                singleLine = true
-            )
+                      }),
+              singleLine = true)
         }
-    }
-    ConfirmationDialog(
-        showConfirmationDialog,
-        onConfirm = { userViewModel.updateUserName(newName) },
-        onDismiss = { newName = "" },
-        title = stringResource(R.string.confirm_changes_title),
-        message = stringResource(R.string.confirm_changes_message)
-    )
+  }
+  ConfirmationDialog(
+      showConfirmationDialog,
+      onConfirm = { userViewModel.updateUserName(newName) },
+      onDismiss = { newName = "" },
+      title = stringResource(R.string.confirm_changes_title),
+      message = stringResource(R.string.confirm_changes_message))
 }
 
 @Composable
@@ -300,87 +279,75 @@ fun ConfirmationDialog(
     title: String,
     message: String
 ) {
-    if (showDialog.value) {
+  if (showDialog.value) {
 
-        Dialog(
-            onDismissRequest = {
-                onDismiss()
-                showDialog.value = false
-            }) {
-            Surface(
-                shape = RoundedCornerShape(16.dp),
-                color = MaterialTheme.colorScheme.surface,
-                modifier =
-                Modifier
-                    .widthIn(min = 280.dp, max = 400.dp) // Set the dialog width
-                    .padding(top = 150.dp)
-                    .testTag("confirmationPopup")
-            ) {
+    Dialog(
+        onDismissRequest = {
+          onDismiss()
+          showDialog.value = false
+        }) {
+          Surface(
+              shape = RoundedCornerShape(16.dp),
+              color = MaterialTheme.colorScheme.surface,
+              modifier =
+                  Modifier.widthIn(min = 280.dp, max = 400.dp) // Set the dialog width
+                      .padding(top = 150.dp)
+                      .testTag("confirmationPopup")) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    // Dialog Title
-                    Text(
-                        text = title,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally) {
+                      // Dialog Title
+                      Text(
+                          text = title,
+                          fontWeight = FontWeight.Bold,
+                          color = MaterialTheme.colorScheme.onSurface,
+                          modifier = Modifier.padding(bottom = 16.dp))
 
-                    // Dialog Message
-                    Text(
-                        text = message,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
+                      // Dialog Message
+                      Text(
+                          text = message,
+                          color = MaterialTheme.colorScheme.onSurface,
+                          modifier = Modifier.padding(bottom = 16.dp))
 
-                    // Buttons Row
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        val confirmText = stringResource(R.string.confirm)
-                        val cancelText = stringResource(R.string.cancel)
+                      // Buttons Row
+                      Row(
+                          horizontalArrangement = Arrangement.SpaceEvenly,
+                          modifier = Modifier.fillMaxWidth()) {
+                            val confirmText = stringResource(R.string.confirm)
+                            val cancelText = stringResource(R.string.cancel)
 
-                        // Confirm Button
-                        Button(
-                            modifier = Modifier.testTag("confirmationPopupConfirm"),
-                            onClick = {
-                                onConfirm()
-                                showDialog.value = false // Close the dialog
-                            },
-                            colors =
-                            ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.primary,
-                                contentColor = MaterialTheme.colorScheme.onPrimary
-                            )
-                        ) {
-                            Text(confirmText)
-                        }
+                            // Confirm Button
+                            Button(
+                                modifier = Modifier.testTag("confirmationPopupConfirm"),
+                                onClick = {
+                                  onConfirm()
+                                  showDialog.value = false // Close the dialog
+                                },
+                                colors =
+                                    ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.primary,
+                                        contentColor = MaterialTheme.colorScheme.onPrimary)) {
+                                  Text(confirmText)
+                                }
 
-                        // Cancel Button
-                        Button(
-                            modifier = Modifier.testTag("confirmationPopupCancel"),
-                            onClick = {
-                                onDismiss()
-                                showDialog.value = false // Close the dialog
-                            },
-                            colors =
-                            ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.error,
-                                contentColor = MaterialTheme.colorScheme.onError
-                            )
-                        ) {
-                            Text(cancelText)
-                        }
+                            // Cancel Button
+                            Button(
+                                modifier = Modifier.testTag("confirmationPopupCancel"),
+                                onClick = {
+                                  onDismiss()
+                                  showDialog.value = false // Close the dialog
+                                },
+                                colors =
+                                    ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.error,
+                                        contentColor = MaterialTheme.colorScheme.onError)) {
+                                  Text(cancelText)
+                                }
+                          }
                     }
-                }
-            }
+              }
         }
-    }
+  }
 }
 
 /**
@@ -393,43 +360,40 @@ fun ConfirmationDialog(
  */
 @Composable
 fun LanguageSwitch(isFrench: Boolean, onLanguageChange: (Boolean) -> Unit) {
-    Row(
-        modifier =
-        Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .clickable { onLanguageChange(!isFrench) }
-            .testTag("LanguageSwitch"),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween) {
+  Row(
+      modifier =
+          Modifier.fillMaxWidth()
+              .padding(16.dp)
+              .clickable { onLanguageChange(!isFrench) }
+              .testTag("LanguageSwitch"),
+      verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.SpaceBetween) {
         Text(
             text = if (isFrench) "FR" else "EN",
             style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onBackground
-        )
+            color = MaterialTheme.colorScheme.onBackground)
         Switch(checked = isFrench, onCheckedChange = { onLanguageChange(it) })
-    }
+      }
 }
 
 @Composable
 fun LogoutButton(userSession: UserSession, navigationActions: NavigationActions) {
-    Button(
-        onClick = {
-            // Perform logout and navigate to login/welcome screen
-            kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
-                userSession.logout()
-                navigationActions.navigateTo(Screen.WELCOME)
-            }
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .testTag("logoutButton"),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.error,
-            contentColor = MaterialTheme.colorScheme.onError
-        )
-    ) {
+  Button(
+      onClick = {
+        // Perform logout and navigate to login/welcome screen
+        kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
+          userSession.logout()
+          navigationActions.navigateTo(Screen.WELCOME)
+        }
+      },
+      modifier =
+          Modifier.fillMaxWidth()
+              .padding(horizontal = 16.dp, vertical = 8.dp)
+              .testTag("logoutButton"),
+      colors =
+          ButtonDefaults.buttonColors(
+              containerColor = MaterialTheme.colorScheme.error,
+              contentColor = MaterialTheme.colorScheme.onError)) {
         Text(text = stringResource(id = R.string.logout_button_text))
-    }
+      }
 }
