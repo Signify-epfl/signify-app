@@ -140,25 +140,19 @@ fun SignifyAppPreview(
   val navController = rememberNavController()
   val navigationActions = NavigationActions(navController, dependencyProvider.userSession())
   val handLandMarkImplementation = dependencyProvider.handLandMarkRepository()
-  // Check if the user is authenticated
-  val userSession = dependencyProvider.userSession()
-  val isAuthenticated = userSession.isLoggedIn()
-
-  // Dynamically set the start destination
-  val startDestination =
-      when {
-        isAuthenticated -> Route.HOME
-        else -> Route.WELCOME
-      }
-
   val handLandmarkViewModel: HandLandmarkViewModel =
       viewModel(factory = HandLandmarkViewModel.provideFactory(context, handLandMarkImplementation))
-  NavHost(navController = navController, startDestination = startDestination) {
+  NavHost(navController = navController, startDestination = Route.WELCOME) {
     navigation(
         startDestination = Screen.WELCOME.route,
         route = Route.WELCOME,
     ) {
-      composable(Screen.WELCOME.route) { WelcomeScreen(navigationActions) }
+      composable(Screen.WELCOME.route) {
+        WelcomeScreen(
+            navigationActions,
+            dependencyProvider.userSession(),
+        )
+      }
     }
 
     navigation(
