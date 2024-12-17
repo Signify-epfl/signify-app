@@ -316,6 +316,8 @@ Let’s take a quick tour to help you get started with learning sign language ef
     <string name="skip_tutorial">Skip Tutorial</string>
 
     <string name="logout_button_text">Logout</string>
+    <string name="confirm_logout_title">Confirm Logout</string>
+    <string name="confirm_logout_message">Are you sure you want to log out?</string>
 
 
 </resources>

@@ -119,14 +119,14 @@ class SettingsScreenTest {
   }
 
   @Test
-  fun testDialogAppearsAfterLosingFocus() {
+  fun testDialogDoNotAppearsAfterLosingFocus() {
     val newName = "Updated Username"
 
     composeTestRule.onNodeWithTag("usernameTextField").performTextInput(newName)
 
     composeTestRule.onRoot().performClick()
 
-    composeTestRule.onNodeWithTag("confirmationPopup").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("confirmationPopup").assertDoesNotExist()
   }
 
   @Test
@@ -199,12 +199,35 @@ class SettingsScreenTest {
   }
 
   @Test
-  fun logoutButton_callsLogoutAndNavigatesToWelcome() = runBlocking {
+  fun logoutButton_showsConfirmationDialog_onClick() {
 
-    // Click the logout button
+    // Act: Click the Logout button
     composeTestRule.onNodeWithTag("logoutButton").performClick()
 
-    // Verify navigation to Welcome screen
-    verify(navigationActions).navigateTo(Screen.WELCOME)
+    // Assert: Verify confirmation dialog appears
+    composeTestRule.onNodeWithTag("confirmationPopup").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("confirmationPopupConfirm").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("confirmationPopupCancel").assertIsDisplayed()
+  }
+
+  @Test
+  fun confirmationDialog_confirm_performsLogout_andNavigates() = runBlocking {
+    // Act: Trigger dialog and confirm logout
+    composeTestRule.onNodeWithTag("logoutButton").performClick()
+    composeTestRule.onNodeWithTag("confirmationPopupConfirm").performClick()
+
+    // Assert: Verify navigation triggered
+    verify(navigationActions).navigateTo(Screen.AUTH)
+  }
+
+  @Test
+  fun confirmationDialog_cancel_doesNotPerformLogout() {
+    // Act: Trigger dialog and cancel
+    composeTestRule.onNodeWithTag("logoutButton").performClick()
+    composeTestRule.onNodeWithTag("confirmationPopupCancel").performClick()
+
+    // Assert: Verify dialog is dismissed
+    verify(navigationActions, never()).navigateTo(eq(Screen.AUTH), eq(null))
+    composeTestRule.onNodeWithTag("confirmationPopup").assertDoesNotExist()
   }
 }
