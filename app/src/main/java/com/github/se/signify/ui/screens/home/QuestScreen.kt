@@ -56,6 +56,8 @@ import com.github.se.signify.model.home.quest.Quest
 import com.github.se.signify.model.home.quest.QuestRepository
 import com.github.se.signify.model.home.quest.QuestViewModel
 import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.profile.stats.StatsRepository
+import com.github.se.signify.model.profile.stats.StatsViewModel
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.CameraBox
 
@@ -65,16 +67,23 @@ fun QuestScreen(
     userSession: UserSession,
     questRepository: QuestRepository,
     userRepository: UserRepository,
-    handLandMarkViewModel: HandLandmarkViewModel
+    handLandMarkViewModel: HandLandmarkViewModel,
+    statsRepository: StatsRepository
 ) {
   val questViewModel: QuestViewModel = viewModel(factory = QuestViewModel.factory(questRepository))
   val userViewModel: UserViewModel =
       viewModel(factory = UserViewModel.factory(userSession, userRepository))
+  val statsViewModel: StatsViewModel =
+      viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
 
   val quests = questViewModel.quest.collectAsState()
-  LaunchedEffect(userSession.getUserId()) { userViewModel.checkAndUnlockNextQuest() }
+  LaunchedEffect(userSession.getUserId()) {
+    userViewModel.checkAndUnlockNextQuest()
+    userViewModel.fetchCompletedQuests()
+  }
 
   val unlockedQuests by userViewModel.unlockedQuests.collectAsState()
+
   AnnexScreenScaffold(
       navigationActions = navigationActions,
       testTag = "QuestScreen",
@@ -87,7 +96,11 @@ fun QuestScreen(
       items(quests.value.size) { index ->
         val isUnlocked = index < unlockedQuests.toInt()
         QuestBox(
-            quest = quests.value[index], isUnlocked, handLandMarkViewModel = handLandMarkViewModel)
+            quest = quests.value[index],
+            isUnlocked,
+            handLandMarkViewModel = handLandMarkViewModel,
+            userViewModel = userViewModel,
+            statsViewModel = statsViewModel)
       }
     }
   }
@@ -95,7 +108,13 @@ fun QuestScreen(
 
 @Composable
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-fun QuestBox(quest: Quest, isUnlocked: Boolean, handLandMarkViewModel: HandLandmarkViewModel) {
+fun QuestBox(
+    quest: Quest,
+    isUnlocked: Boolean,
+    handLandMarkViewModel: HandLandmarkViewModel,
+    userViewModel: UserViewModel,
+    statsViewModel: StatsViewModel
+) {
   var isDialogVisible by remember { mutableStateOf(false) }
   Card(
       modifier = Modifier.fillMaxWidth().padding(16.dp).testTag("QuestCard"),
@@ -132,7 +151,9 @@ fun QuestBox(quest: Quest, isUnlocked: Boolean, handLandMarkViewModel: HandLandm
     QuestDescriptionDialog(
         quest = quest,
         onDismiss = { isDialogVisible = false },
-        handLandMarkViewModel = handLandMarkViewModel)
+        handLandMarkViewModel = handLandMarkViewModel,
+        userViewModel = userViewModel,
+        statsViewModel = statsViewModel)
   }
 }
 
@@ -141,9 +162,14 @@ fun QuestBox(quest: Quest, isUnlocked: Boolean, handLandMarkViewModel: HandLandm
 fun QuestDescriptionDialog(
     quest: Quest,
     onDismiss: () -> Unit,
-    handLandMarkViewModel: HandLandmarkViewModel
+    handLandMarkViewModel: HandLandmarkViewModel,
+    userViewModel: UserViewModel,
+    statsViewModel: StatsViewModel
 ) {
   val inSignLanguageText = stringResource(R.string.in_sign_language_text)
+  val completedQuests by userViewModel.completedQuests.collectAsState(emptyList())
+  val isCompleted = completedQuests.contains(quest.index)
+
   var isFingerspellVisible by remember { mutableStateOf(false) }
 
   if (isFingerspellVisible) {
@@ -153,7 +179,10 @@ fun QuestDescriptionDialog(
           isFingerspellVisible = false
           onDismiss()
         },
-        handLandMarkViewModel = handLandMarkViewModel)
+        handLandMarkViewModel = handLandMarkViewModel,
+        userViewModel = userViewModel,
+        questIndex = quest.index,
+        statsViewModel = statsViewModel)
   } else {
     AlertDialog(
         onDismissRequest = { onDismiss() },
@@ -195,14 +224,22 @@ fun QuestDescriptionDialog(
           Row(
               modifier = Modifier.fillMaxWidth(),
               horizontalArrangement = Arrangement.SpaceBetween) {
-                Button(
-                    onClick = { isFingerspellVisible = true },
-                    colors =
-                        ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.secondary,
-                            contentColor = MaterialTheme.colorScheme.onSecondary)) {
-                      Text(stringResource(R.string.try_fingerspell_button_text))
-                    }
+                if (isCompleted) {
+                  Text(
+                      text = stringResource(R.string.completed_quest_text),
+                      fontSize = 16.sp,
+                      color = MaterialTheme.colorScheme.primary,
+                      modifier = Modifier.padding(16.dp))
+                } else {
+                  Button(
+                      onClick = { isFingerspellVisible = true },
+                      colors =
+                          ButtonDefaults.buttonColors(
+                              containerColor = MaterialTheme.colorScheme.secondary,
+                              contentColor = MaterialTheme.colorScheme.onSecondary)) {
+                        Text(stringResource(R.string.try_fingerspell_button_text))
+                      }
+                }
 
                 Button(
                     onClick = onDismiss,
@@ -242,7 +279,10 @@ fun QuestTitle() {
 fun FingerSpellDialog(
     word: String,
     onDismiss: () -> Unit,
-    handLandMarkViewModel: HandLandmarkViewModel
+    handLandMarkViewModel: HandLandmarkViewModel,
+    userViewModel: UserViewModel,
+    questIndex: String,
+    statsViewModel: StatsViewModel
 ) {
   val context = LocalContext.current
   var currentLetterIndex by rememberSaveable { mutableIntStateOf(0) }
@@ -258,6 +298,9 @@ fun FingerSpellDialog(
         word = word,
         onProgressUpdate = { newIndex -> currentLetterIndex = newIndex },
         onWordComplete = {
+          // Mark the quest as completed
+          userViewModel.markQuestAsCompleted(questIndex)
+          statsViewModel.updateDailyQuestStats()
           Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show()
           onDismiss() // Close dialog when word is completed
         })

@@ -24,8 +24,6 @@
     <string name="welcome_text">Bienvenu(e) sur Signify</string>
     <string name="dark_mode_text">Mode Sombre</string>
     <string name="light_mode_text">Mode Clair</string>
-    <string name="saved_text">Modifications enregistrées</string>
-    <string name="save_text">Ok</string>
     <string name="cancel_text">Annuler</string>
     <string name="unknown_text">Inconnue</string>
     <string name="my_friends_text">Mes Amis</string>
@@ -46,6 +44,10 @@
     <string name="user_not_found_text">Utilisateur pas trouvé(e)</string>
     <string name="camera_permission_denied_text">Permission de la caméra refusée</string>
 
+    <string name="confirm_changes_title">Confirmer les modifications</string>
+    <string name="confirm_changes_message">Êtes-vous sûr de vouloir enregistrer ces modifications ?</string>
+    <string name="confirm">Confirmer</string>
+    <string name="cancel">Annuler</string>
 
     <string name="remove_friend_text">Supprimer un(e) ami(e)</string>
     <string name="my_profile_text">Mon profile</string>
@@ -103,6 +105,8 @@
     <string name="completed_challenge_text">Complété</string>
     <string name="created_challenge_text">Crée</string>
     <string name="won_challenge_text">Gagné</string>
+    <string name="past_challenges_title">Challenges Précédents</string>
+    <string name="no_past_challenges">Pas De Précédents Challenges</string>
 
     <string name="help_home_screen_text">Ici, vous pouvez pratiquer la langue des signes, avec des retours en temps réel via votre caméra. Assurez-vous de vérifier votre quête quotidienne pour apprendre une nouvelle lettre chaque jour. Vous trouverez également des exercices en bas pour vous challenger à différents niveaux de difficulté.</string>
     <string name="help_profile_screen_text">Ici, vous pouvez modifier vos paramètres et personnaliser votre profil. Vous pourrez également ajouter vos amis pour apprendre ensemble. Vous trouverez un récapitulatif de vos progrès dans le tableau de statistiques.</string>
@@ -286,10 +290,6 @@
     <string name="pref_key_is_french">is_french</string>
     <string name="pref_key_tutorial_completed">tutorial_completed</string>
     <string name="pref_key_tutorial_version">pref_key_tutorial_version</string>
-    <string name="tutorial_screen1_text">Bienvenue chez Signify !
-Faisons un rapide tour d’horizon pour vous aider à démarrer l’apprentissage de la langue des signes sans effort.</string>
-    <string name="tutorial_screen2_text">Faites glisser votre doigt vers la droite pour afficher les exercices par niveau de difficulté.</string>
-    <string name="tutorial_last_screen_text">Vous êtes prêt à commencer! Profitez de l\'apprentissage de la langue des signes.</string>
     <string name="quest_screen_title_text">Un jour, Un mot</string>
     <string name="open_quest_button_text">C’est parti!</string>
     <string name="closed_quest_button_text">Verrouillé</string>
@@ -297,5 +297,17 @@ Faisons un rapide tour d’horizon pour vous aider à démarrer l’apprentissag
     <string name="fingerspell_title_text">Épeler avec les mains : %1$s</string>
     <string name="try_fingerspell_text">Utilisez votre caméra pour épeler ce mot avec vos gestes : %1$s</string>
     <string name="word_completed_text">Bravo, mot réussi !</string>
+
+    <string name="tutorial_welcomeText">Bienvenue sur Signify ! Faisons un petit tour pour vous aider à commencer à apprendre la langue des signes.</string>
+    <string name="tutorial_dictionaryText">Voici le Dictionnaire des Lettres – explorez et apprenez les gestes pour chaque lettre de l\'alphabet avec des guides visuels et des conseils utiles.</string>
+    <string name="tutorial_cameraFeedbackText">Ceci est votre espace de libre exploration – entraînez-vous à signer n\'importe quelle lettre sans restrictions et suivez vos progrès en temps réel.</string>
+    <string name="tutorial_exerciseText">Découvrez divers exercices conçus pour améliorer vos compétences – chaque niveau est conçu pour vous challenger et vous perfectionner.</string>
+    <string name="tutorial_questsText">Partez pour des quêtes passionnantes pour rendre l\'apprentissage de la langue des signes encore plus captivant et enrichissant.</string>
+    <string name="tutorial_quizText">Testez vos connaissances et suivez vos progrès avec des quiz qui mettent à l\'épreuve votre compréhension de la langue des signes.</string>
+    <string name="tutorial_feedbackText">Vous avez des commentaires pour nous ? Appuyez sur ce bouton pour partager votre expérience et nous aider à améliorer Signify.</string>
+    <string name="tutorial_completionText">Vous êtes prêt à commencer ! Profitez de votre apprentissage de la langue des signes.</string>
+    <string name="skip_tutorial">Passer le tutoriel</string>
+    <string name="completed_quest_text">Completé</string>
+
 
 </resources>

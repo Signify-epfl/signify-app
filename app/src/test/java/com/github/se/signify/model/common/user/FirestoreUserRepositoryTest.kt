@@ -16,6 +16,7 @@ import java.time.LocalDate
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import junit.framework.TestCase.fail
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -64,6 +65,9 @@ class FirestoreUserRepositoryTest {
   private val noSuccess = "Success callback should not be called"
   private val noFailure = "Failure callback should not be called"
   private val fireStoreFailure = "Test FireStore failure"
+  private val challengeId = "challengeId"
+  private val customField = "customField"
+  private val challengesCompletedField = "challengesCompleted"
 
   @Before
   fun setUp() {
@@ -1138,5 +1142,211 @@ class FirestoreUserRepositoryTest {
 
     // Assert
     assertTrue(failureCallbackCalled)
+  }
+
+  @Test
+  fun markQuestAsCompleted_shouldUpdateCompletedQuests() {
+    // Arrange: Mock Firestore behavior
+    val questIndex = "quest1"
+    `when`(mockCurrentUserDocRef.update(eq("completedQuests"), any<FieldValue>()))
+        .thenReturn(Tasks.forResult(null)) // Simulate successful update
+
+    var successCallbackCalled = false
+    val onSuccess: () -> Unit = { successCallbackCalled = true }
+
+    // Act
+    firestoreUserRepository.markQuestAsCompleted(
+        currentUserId, questIndex, onSuccess = onSuccess, onFailure = { fail(noFailure) })
+
+    // Idle the main looper
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert: Ensure success callback is invoked and Firestore update is called
+    assertTrue(successCallbackCalled)
+    verify(mockCurrentUserDocRef)
+        .update(eq("completedQuests"), ArgumentMatchers.any(FieldValue::class.java))
+  }
+
+  @Test
+  fun markQuestAsCompleted_shouldCallOnFailureWhenUpdateFails() {
+    // Arrange: Mock Firestore behavior to simulate failure
+    val questIndex = "quest1"
+    val testException = Exception(fireStoreFailure)
+    `when`(mockCurrentUserDocRef.update(eq("completedQuests"), any<FieldValue>()))
+        .thenReturn(Tasks.forException(testException))
+
+    var failureCallbackCalled = false
+    val onFailure: (Exception) -> Unit = { exception ->
+      failureCallbackCalled = true
+      assertEquals(testException, exception)
+    }
+
+    // Act
+    firestoreUserRepository.markQuestAsCompleted(
+        currentUserId, questIndex, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
+
+    // Idle the main looper
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert: Ensure failure callback is invoked and Firestore update is attempted
+    assertTrue(failureCallbackCalled)
+    verify(mockCurrentUserDocRef)
+        .update(eq("completedQuests"), ArgumentMatchers.any(FieldValue::class.java))
+  }
+
+  @Test
+  fun getCompletedQuests_shouldReturnCompletedQuests() {
+    // Arrange: Mock Firestore behavior
+    val completedQuests = listOf("quest1", "quest2")
+    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
+    `when`(mockUserDocumentSnapshot.exists()).thenReturn(true)
+    `when`(mockUserDocumentSnapshot.get("completedQuests")).thenReturn(completedQuests)
+
+    var successCallbackCalled = false
+    val onSuccess: (List<String>) -> Unit = { quests ->
+      successCallbackCalled = true
+      assertEquals(completedQuests, quests)
+    }
+
+    // Act
+    firestoreUserRepository.getCompletedQuests(
+        currentUserId, onSuccess = onSuccess, onFailure = { fail(noFailure) })
+
+    // Idle the main looper
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert: Ensure success callback is invoked with the correct data
+    assertTrue(successCallbackCalled)
+  }
+
+  @Test
+  fun getCompletedQuests_shouldHandleEmptyList() {
+    // Arrange: Mock Firestore behavior to return an empty list
+    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
+    `when`(mockUserDocumentSnapshot.exists()).thenReturn(true)
+    `when`(mockUserDocumentSnapshot.get("completedQuests")).thenReturn(null)
+
+    var successCallbackCalled = false
+    val onSuccess: (List<String>) -> Unit = { quests ->
+      successCallbackCalled = true
+      assertTrue(quests.isEmpty())
+    }
+
+    // Act
+    firestoreUserRepository.getCompletedQuests(
+        currentUserId, onSuccess = onSuccess, onFailure = { fail(noFailure) })
+
+    // Idle the main looper
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert: Ensure success callback is invoked with an empty list
+    assertTrue(successCallbackCalled)
+  }
+
+  @Test
+  fun getCompletedQuests_shouldHandleUserDocNotExist() {
+    // Arrange: Mock Firestore behavior to return an empty list
+    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
+    `when`(mockUserDocumentSnapshot["completedQuests"]).thenReturn(null)
+
+    var successCallbackCalled = false
+    val onSuccess: (List<String>) -> Unit = { quests ->
+      successCallbackCalled = true
+      assertTrue(quests.isEmpty()) // Verify that the returned list is empty
+    }
+
+    // Act
+    firestoreUserRepository.getCompletedQuests(
+        currentUserId,
+        onSuccess = onSuccess,
+        onFailure = { fail("Failure callback should not be called") })
+
+    // Idle the main looper
+    shadowOf(Looper.getMainLooper()).idle()
+
+    // Assert: Ensure success callback is invoked
+    assertTrue(successCallbackCalled)
+  }
+
+  @Test
+  fun `incrementField should update Firestore successfully`() {
+    `when`(mockCurrentUserDocRef.update(anyString(), any())).thenReturn(Tasks.forResult(null))
+
+    firestoreUserRepository.updateUserField(
+        currentUserId, challengesCompletedField, "challengesCompleted", {}, {})
+
+    shadowOf(Looper.getMainLooper()).idle()
+
+    verify(mockCurrentUserDocRef).update(eq(challengesCompletedField), ArgumentMatchers.any())
+  }
+
+  @Test
+  fun `addPastChallenge should add challenge ID to Firestore`() {
+    `when`(mockCurrentUserDocRef.update(anyString(), any())).thenReturn(Tasks.forResult(null))
+
+    firestoreUserRepository.addPastChallenge(currentUserId, challengeId)
+
+    shadowOf(Looper.getMainLooper()).idle()
+
+    verify(mockCurrentUserDocRef).update(eq("pastChallenges"), ArgumentMatchers.any())
+  }
+
+  @Test
+  fun `getPastChallenges should return list of challenges`() {
+    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
+    `when`(mockUserDocumentSnapshot.exists()).thenReturn(true)
+    `when`(mockUserDocumentSnapshot.get("pastChallenges")).thenReturn(listOf(challengeId))
+    `when`(mockFireStore.collection("challenges").document(challengeId).get())
+        .thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
+    `when`(mockUserDocumentSnapshot.toObject(Challenge::class.java))
+        .thenReturn(Challenge(challengeId))
+
+    var successCallbackCalled = false
+    val onSuccess: (List<Challenge>) -> Unit = { challenges ->
+      successCallbackCalled = true
+      assertEquals(1, challenges.size)
+      assertEquals(challengeId, challenges[0].challengeId)
+    }
+
+    firestoreUserRepository.getPastChallenges(currentUserId, onSuccess) { fail(noFailure) }
+
+    shadowOf(Looper.getMainLooper()).idle()
+
+    assertTrue(successCallbackCalled)
+  }
+
+  @Test
+  fun `updateUserField should update specified field successfully`() {
+    `when`(mockCurrentUserDocRef.update(anyString(), any())).thenReturn(Tasks.forResult(null))
+
+    var successCallbackCalled = false
+    val onSuccess: () -> Unit = { successCallbackCalled = true }
+
+    firestoreUserRepository.updateUserField(currentUserId, customField, "value", onSuccess) {}
+
+    shadowOf(Looper.getMainLooper()).idle()
+
+    assertTrue(successCallbackCalled)
+
+    verify(mockCurrentUserDocRef).update(eq(customField), eq("value"))
+  }
+
+  @Test
+  fun `getUserField should return 0 when Firestore operation fails`() = runTest {
+    // Arrange
+    val userId = "testUserId"
+    val exception = Exception("Firestore error")
+    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forException(exception))
+
+    var result: Int? = null
+    val onSuccess: (Int) -> Unit = { value -> result = value }
+    val onFailure: (Exception) -> Unit = { result = 0 } // Set result to 0 on failure
+
+    // Act
+    firestoreUserRepository.getChallengesCompleted(userId, onSuccess, onFailure)
+
+    // Assert
+    shadowOf(Looper.getMainLooper()).idle()
+    assertEquals(0, result)
   }
 }

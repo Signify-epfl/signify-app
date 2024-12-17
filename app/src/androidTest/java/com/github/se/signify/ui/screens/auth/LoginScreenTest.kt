@@ -8,6 +8,7 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.toPackage
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.github.se.signify.model.authentication.FirebaseAuthService
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
@@ -34,7 +35,7 @@ class LoginScreenTest : TestCase() {
 
     `when`(navigationActions.currentRoute()).thenReturn(Screen.AUTH.route)
     Intents.init()
-    composeTestRule.setContent { LoginScreen(navigationActions, {}) }
+    composeTestRule.setContent { LoginScreen(navigationActions, {}, FirebaseAuthService()) }
   }
 
   @After
