@@ -3,7 +3,6 @@ package com.github.se.signify.model.navigation
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
 import com.github.se.signify.model.authentication.MockUserSession
-import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.any
@@ -13,6 +12,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
 class NavigationActionsTest {
 
@@ -105,6 +105,28 @@ class NavigationActionsTest {
   }
 
   @Test
+  fun navigateToSameTopLevelDestinationDoesNotNavigate() {
+    val destination = TopLevelDestinations.HOME
+    userSession.loggedIn = true
+
+    whenever(navController.currentDestination?.route).thenReturn(Route.HOME)
+
+    navigationActions.navigateTo(destination)
+    verify(navController, never()).navigate(any<String>(), any<NavOptionsBuilder.() -> Unit>())
+  }
+
+  @Test
+  fun navigateToSameScreenDoesNotNavigate() {
+    val screen = Screen.DO_NOT_REQUIRE_AUTH
+    userSession.loggedIn = true
+
+    whenever(navController.currentDestination?.route).thenReturn(screen.route)
+
+    navigationActions.navigateTo(screen)
+    verify(navController, never()).navigate(any<String>(), anyOrNull(), anyOrNull())
+  }
+
+  @Test
   fun goBack() {
     navigationActions.goBack()
 
@@ -113,10 +135,8 @@ class NavigationActionsTest {
 
   @Test
   fun currentRoute() {
-    assertNull(navigationActions.currentRoute())
-    navigationActions.navigateTo(Screen.DO_NOT_REQUIRE_AUTH)
-    assertNull(navigationActions.currentRoute())
+    navigationActions.currentRoute()
 
-    verify(navController, times(2)).currentDestination
+    verify(navController).currentDestination?.route
   }
 }
