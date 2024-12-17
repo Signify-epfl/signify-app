@@ -60,8 +60,10 @@ import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.ProfilePicture
+import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen(
@@ -124,14 +126,17 @@ fun SettingsScreen(
           LanguageSwitch(isFrench, onLanguageChange)
 
           Spacer(modifier = Modifier.height(64.dp))
+
+          // Logout Button
+          LogoutButton(userSession, navigationActions)
         }
       }
 }
 
 @Composable
 fun EditableProfilePictureField(userViewModel: UserViewModel, profilePictureUrl: State<String?>) {
-  var showDeleteDialog = remember { mutableStateOf(false) }
-  var showEditDialog = remember { mutableStateOf(false) }
+  val showDeleteDialog = remember { mutableStateOf(false) }
+  val showEditDialog = remember { mutableStateOf(false) }
   var selectedUri by remember { mutableStateOf<Uri?>(null) }
 
   fun isDeleteEnabled(): Boolean {
@@ -206,7 +211,7 @@ fun EditableProfilePictureField(userViewModel: UserViewModel, profilePictureUrl:
 
 @Composable
 fun EditableUsernameField(userViewModel: UserViewModel, userName: String) {
-  var showConfirmationDialog = remember { mutableStateOf(false) }
+  val showConfirmationDialog = remember { mutableStateOf(false) }
   var newName by remember { mutableStateOf("") }
 
   Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -369,4 +374,38 @@ fun LanguageSwitch(isFrench: Boolean, onLanguageChange: (Boolean) -> Unit) {
             color = MaterialTheme.colorScheme.onBackground)
         Switch(checked = isFrench, onCheckedChange = { onLanguageChange(it) })
       }
+}
+
+@Composable
+fun LogoutButton(userSession: UserSession, navigationActions: NavigationActions) {
+
+  // State to manage the visibility of the confirmation dialog
+  val showLogoutDialog = remember { mutableStateOf(false) }
+
+  // Logout Button UI
+  Button(
+      onClick = { showLogoutDialog.value = true }, // Show confirmation dialog on click
+      modifier =
+          Modifier.fillMaxWidth()
+              .padding(horizontal = 16.dp, vertical = 8.dp)
+              .testTag("logoutButton"),
+      colors =
+          ButtonDefaults.buttonColors(
+              containerColor = MaterialTheme.colorScheme.error,
+              contentColor = MaterialTheme.colorScheme.onError)) {
+        Text(text = stringResource(id = R.string.logout_button_text))
+      }
+  // Confirmation Dialog for Logout
+  ConfirmationDialog(
+      showDialog = showLogoutDialog,
+      onConfirm = {
+        // Perform logout and navigate to login/welcome screen
+        kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
+          userSession.logout()
+          navigationActions.navigateTo(Screen.AUTH)
+        }
+      },
+      onDismiss = { showLogoutDialog.value = false }, // Close dialog without action
+      title = stringResource(id = R.string.confirm_logout_title),
+      message = stringResource(id = R.string.confirm_logout_message))
 }
