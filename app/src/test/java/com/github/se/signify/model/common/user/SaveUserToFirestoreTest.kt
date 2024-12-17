@@ -1,6 +1,7 @@
 package com.github.se.signify.model.common.user
 
 import android.os.Looper
+import android.util.Log
 import androidx.test.core.app.ApplicationProvider
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
@@ -17,7 +18,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
+import org.mockito.MockedStatic
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.mockStatic
+import org.mockito.Mockito.times
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.any
@@ -38,6 +42,7 @@ class SaveUserToFirestoreTest {
   @Mock private lateinit var mockDocumentSnapshot: DocumentSnapshot
   @Mock private lateinit var mockGetTask: Task<DocumentSnapshot>
 
+  @Suppress("UNCHECKED_CAST")
   @Before
   fun setUp() {
     MockitoAnnotations.openMocks(this)
@@ -124,5 +129,77 @@ class SaveUserToFirestoreTest {
     // Verify that the error is logged
     // (Since we cannot easily verify logs, we focus on ensuring no Firestore interaction occurs)
     verify(mockFirestore, never()).collection(any())
+  }
+
+  @Test
+  fun saveUserToFireStore_shouldLogErrorWhenEmailIsNull() {
+
+    // Mock static FirebaseAuth, FirebaseFirestore, and Log
+    val logMock: MockedStatic<Log> = mockStatic(Log::class.java)
+    val firebaseAuthMock: MockedStatic<FirebaseAuth> = mockStatic(FirebaseAuth::class.java)
+    val firebaseFirestoreMock: MockedStatic<FirebaseFirestore> =
+        mockStatic(FirebaseFirestore::class.java)
+
+    try {
+      // Arrange
+      `when`(FirebaseAuth.getInstance()).thenReturn(mockAuth)
+      `when`(mockAuth.currentUser).thenReturn(mockCurrentUser)
+      `when`(mockCurrentUser.email).thenReturn(null)
+
+      // Prevent Firestore from initializing
+      val mockFirestore = mock(FirebaseFirestore::class.java)
+      `when`(FirebaseFirestore.getInstance()).thenReturn(mockFirestore)
+
+      // Act
+      saveUserToFirestore()
+
+      // Verify Log.e is called with the correct message
+      logMock.verify(
+          { Log.e(eq("FireStore"), eq("Cannot save user: email is null or blank")) }, times(1))
+
+      // Ensure Firestore is NOT accessed
+      verify(mockFirestore, never()).collection(any())
+    } finally {
+      // Clean up static mocks
+      logMock.close()
+      firebaseAuthMock.close()
+      firebaseFirestoreMock.close()
+    }
+  }
+
+  @Test
+  fun saveUserToFireStore_shouldLogErrorWhenEmailIsBlank() {
+
+    // Mock static FirebaseAuth, FirebaseFirestore, and Log
+    val logMock: MockedStatic<Log> = mockStatic(Log::class.java)
+    val firebaseAuthMock: MockedStatic<FirebaseAuth> = mockStatic(FirebaseAuth::class.java)
+    val firebaseFirestoreMock: MockedStatic<FirebaseFirestore> =
+        mockStatic(FirebaseFirestore::class.java)
+
+    try {
+      // Arrange
+      `when`(FirebaseAuth.getInstance()).thenReturn(mockAuth)
+      `when`(mockAuth.currentUser).thenReturn(mockCurrentUser)
+      `when`(mockCurrentUser.email).thenReturn("   ") // Simulate blank email
+
+      // Prevent Firestore from initializing
+      val mockFirestore = mock(FirebaseFirestore::class.java)
+      `when`(FirebaseFirestore.getInstance()).thenReturn(mockFirestore)
+
+      // Act
+      saveUserToFirestore()
+
+      // Verify Log.e is called with the correct message
+      logMock.verify(
+          { Log.e(eq("FireStore"), eq("Cannot save user: email is null or blank")) }, times(1))
+
+      // Ensure Firestore is NOT accessed
+      verify(mockFirestore, never()).collection(any())
+    } finally {
+      // Clean up static mocks
+      logMock.close()
+      firebaseAuthMock.close()
+      firebaseFirestoreMock.close()
+    }
   }
 }
