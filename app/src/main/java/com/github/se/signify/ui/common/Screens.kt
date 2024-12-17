@@ -309,6 +309,7 @@ fun BottomNavigationMenu(
                 modifier = Modifier.testTag("TabIcon_${topLevelDestination.route}"))
           }, // Load the drawable icons
           selected = topLevelDestination == selected,
+          enabled = topLevelDestination != selected,
           onClick = { onTabSelect(topLevelDestination) },
           modifier = Modifier.clip(RoundedCornerShape(50.dp)),
           colors =
