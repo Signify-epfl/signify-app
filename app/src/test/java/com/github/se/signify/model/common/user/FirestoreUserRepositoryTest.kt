@@ -1292,20 +1292,16 @@ class FirestoreUserRepositoryTest {
   }
 
   @Test
-  fun `getPastChallenges should return list of challenges`() {
+  fun `getPastChallenges should return list of challengeIds`() {
     `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
     `when`(mockUserDocumentSnapshot.exists()).thenReturn(true)
     `when`(mockUserDocumentSnapshot.get("pastChallenges")).thenReturn(listOf(challengeId))
-    `when`(mockFireStore.collection("challenges").document(challengeId).get())
-        .thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
-    `when`(mockUserDocumentSnapshot.toObject(Challenge::class.java))
-        .thenReturn(Challenge(challengeId))
 
     var successCallbackCalled = false
-    val onSuccess: (List<Challenge>) -> Unit = { challenges ->
+    val onSuccess: (List<ChallengeId>) -> Unit = {
       successCallbackCalled = true
-      assertEquals(1, challenges.size)
-      assertEquals(challengeId, challenges[0].challengeId)
+      assertEquals(1, it.size)
+      assertEquals(challengeId, it[0])
     }
 
     firestoreUserRepository.getPastChallenges(currentUserId, onSuccess) { fail(noFailure) }

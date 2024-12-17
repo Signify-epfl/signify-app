@@ -37,7 +37,6 @@ class UserViewModelTest {
   private lateinit var currentUserId: String
   private val friendUserId = "friendUserId"
   private val challengeId = "challengeId"
-  private val testChallenge = Challenge(challengeId = "challenge1")
 
   private val testDispatcher = UnconfinedTestDispatcher()
 
@@ -686,13 +685,12 @@ class UserViewModelTest {
     verify(userRepository).getUserById(eq(currentUserId), any(), any())
   }
 
-  // Test getPastChallenges
   @Test
-  fun getPastChallengesUpdatesPastChallengesOnSuccess() = runTest {
+  fun getPastChallengesWorks() = runTest {
     // Arrange
-    val pastChallenges = listOf(testChallenge)
+    val pastChallenges = listOf(challengeId)
     doAnswer {
-          val onSuccess = it.getArgument<(List<Challenge>) -> Unit>(1)
+          val onSuccess = it.getArgument<(List<ChallengeId>) -> Unit>(1)
           onSuccess(pastChallenges)
           null
         }
@@ -775,7 +773,7 @@ class UserViewModelTest {
   }
 
   @Test
-  fun removeOngoingChallenge_updatesOngoingChallengesOnSuccess() = runTest {
+  fun removeOngoingChallengeInvokesCorrectCall() = runTest {
     // Arrange
     doAnswer {
           val onSuccess = it.getArgument<() -> Unit>(2)
@@ -790,7 +788,7 @@ class UserViewModelTest {
 
     // Assert
     verify(userRepository).removeOngoingChallenge(eq(currentUserId), eq(challengeId), any(), any())
-    assertTrue(userViewModel.ongoingChallenges.value.none { it.challengeId == challengeId })
+    assertTrue(userViewModel.ongoingChallengeIds.value.none { it == challengeId })
   }
 
   @After

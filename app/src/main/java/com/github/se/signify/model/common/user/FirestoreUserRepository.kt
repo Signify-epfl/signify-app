@@ -2,7 +2,7 @@ package com.github.se.signify.model.common.user
 
 import android.net.Uri
 import android.util.Log
-import com.github.se.signify.model.challenge.Challenge
+import com.github.se.signify.model.challenge.ChallengeId
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FieldValue
@@ -505,7 +505,7 @@ class FirestoreUserRepository(
 
   override fun getPastChallenges(
       userId: String,
-      onSuccess: (List<Challenge>) -> Unit,
+      onSuccess: (List<ChallengeId>) -> Unit,
       onFailure: (Exception) -> Unit
   ) {
     val userDocRef = db.collection(collectionPath).document(userId)
@@ -514,7 +514,8 @@ class FirestoreUserRepository(
         .get()
         .addOnSuccessListener { document ->
           if (!document.exists()) {
-            onSuccess(emptyList())
+            // Call onFailure when user's document is not found
+            onFailure(NoSuchElementException("User not found for ID: $userId"))
             return@addOnSuccessListener
           }
 
@@ -524,8 +525,9 @@ class FirestoreUserRepository(
                     onSuccess(emptyList())
                     return@addOnSuccessListener
                   }
+          val validChallengeIds = challengeIds.filterIsInstance<ChallengeId>()
 
-          fetchChallengesByIds(challengeIds, onSuccess, onFailure)
+          onSuccess(validChallengeIds)
         }
         .addOnFailureListener { e -> onFailure(e) }
   }

@@ -642,6 +642,18 @@ class MockUserRepositoryTest {
   }
 
   @Test
+  fun getPastChallengesWorks() {
+    mockUserRepository.getPastChallenges(blankUser.uid, { assertTrue(it.isEmpty()) }, doNotFail)
+
+    mockUserRepository.getPastChallenges(
+        activeUser.uid,
+        { challenges ->
+          assertEquals(activeUser.pastChallenges.toSet(), challenges.map { it }.toSet())
+        },
+        doNotFail)
+  }
+
+  @Test
   fun getPastChallengesFailsForMissingUser() {
     mockUserRepository.getPastChallenges("nonExistentUser", doNotSucceedAny) { exception ->
       assertEquals("User not found", exception.message)

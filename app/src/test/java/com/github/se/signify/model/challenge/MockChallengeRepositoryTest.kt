@@ -212,8 +212,8 @@ class MockChallengeRepositoryTest {
     val playerId = "player1"
     val challenges =
         listOf(
-            Challenge("challenge1", playerId, "player2", "Sprint", "pending"),
-            Challenge("challenge2", playerId, "player3", "Chrono", "active"))
+            Challenge("challenge1", playerId, "player2", "Sprint", gameStatus = "pending"),
+            Challenge("challenge2", playerId, "player3", "Chrono", gameStatus = "active"))
     mockRepository.setChallenges(challenges)
 
     var result = emptyList<Challenge>()
@@ -230,8 +230,8 @@ class MockChallengeRepositoryTest {
     val playerId = "player1"
     val challenges =
         listOf(
-            Challenge("challenge1", playerId, "player2", "Sprint", "pending"),
-            Challenge("challenge2", playerId, "player3", "Chrono", "active"))
+            Challenge("challenge1", playerId, "player2", "Sprint", gameStatus = "pending"),
+            Challenge("challenge2", playerId, "player3", "Chrono", gameStatus = "active"))
     mockRepository.setChallenges(challenges)
 
     var result = emptyList<Challenge>()
@@ -250,8 +250,8 @@ class MockChallengeRepositoryTest {
     val playerId = "player1"
     val challenges =
         listOf(
-            Challenge("challenge1", playerId, "player2", "Sprint", "pending"),
-            Challenge("challenge2", playerId, "player3", "Chrono", "active"))
+            Challenge("challenge1", playerId, "player2", "Sprint", gameStatus = "pending"),
+            Challenge("challenge2", playerId, "player3", "Chrono", gameStatus = "active"))
     mockRepository.setChallenges(challenges)
 
     mockRepository.getChallenges(

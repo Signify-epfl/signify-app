@@ -378,15 +378,14 @@ class MockUserRepository : UserRepository {
 
   override fun getPastChallenges(
       userId: String,
-      onSuccess: (List<Challenge>) -> Unit,
+      onSuccess: (List<ChallengeId>) -> Unit,
       onFailure: (Exception) -> Unit
   ) {
     if (!checkFailure(onFailure)) return
     if (!checkUser(userId, onFailure)) return
 
     val user = users.getValue(userId)
-    val challenges = user.pastChallenges.map { Challenge(it) }
-    onSuccess(challenges)
+    onSuccess(user.pastChallenges)
   }
 
   override suspend fun getChallengesCompleted(

@@ -45,8 +45,8 @@ open class UserViewModel(
   private val _streak = MutableStateFlow(0L)
   val streak: StateFlow<Long> = _streak
 
-  private val _pastChallenges = MutableStateFlow<List<Challenge>>(emptyList())
-  val pastChallenges: StateFlow<List<Challenge>> = _pastChallenges
+  private val _pastChallenges = MutableStateFlow<List<ChallengeId>>(emptyList())
+  val pastChallenges: StateFlow<List<ChallengeId>> = _pastChallenges
 
   private val _completedQuests = MutableStateFlow<List<String>>(emptyList())
   val completedQuests: StateFlow<List<String>> = _completedQuests

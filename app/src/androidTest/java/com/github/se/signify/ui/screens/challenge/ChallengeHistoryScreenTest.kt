@@ -4,6 +4,7 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.challenge.Challenge
+import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.navigation.NavigationActions
 import kotlinx.coroutines.runBlocking
@@ -22,6 +23,7 @@ class ChallengeHistoryScreenTest {
 
   private lateinit var userSession: UserSession
   private lateinit var userRepository: UserRepository
+  private lateinit var challengeRepository: ChallengeRepository
   private lateinit var navigationActions: NavigationActions
 
   private val challengesCompleted = 10
@@ -32,6 +34,7 @@ class ChallengeHistoryScreenTest {
   fun setUp(): Unit = runBlocking {
     userSession = mock()
     userRepository = mock()
+    challengeRepository = mock()
     navigationActions = mock()
 
     whenever(userSession.getUserId()).thenReturn("testUserId")
@@ -66,7 +69,9 @@ class ChallengeHistoryScreenTest {
       ChallengeHistoryScreen(
           navigationActions = navigationActions,
           userSession = userSession,
-          userRepository = userRepository)
+          userRepository = userRepository,
+          challengeRepository = challengeRepository,
+      )
     }
 
     // Verify statistics are displayed correctly
@@ -82,7 +87,9 @@ class ChallengeHistoryScreenTest {
       ChallengeHistoryScreen(
           navigationActions = navigationActions,
           userSession = userSession,
-          userRepository = userRepository)
+          userRepository = userRepository,
+          challengeRepository = challengeRepository,
+      )
     }
 
     // Verify the message for no past challenges is displayed
