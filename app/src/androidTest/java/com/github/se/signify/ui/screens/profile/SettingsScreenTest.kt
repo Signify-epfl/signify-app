@@ -205,6 +205,9 @@ class SettingsScreenTest {
     composeTestRule.onNodeWithTag("logoutButton").performClick()
     composeTestRule.onNodeWithTag("confirmationPopupConfirm").performClick()
 
+    // Wait for coroutines and Compose updates
+    composeTestRule.waitForIdle()
+
     // Assert: Verify navigation triggered
     verify(navigationActions).navigateTo(Screen.AUTH)
   }
