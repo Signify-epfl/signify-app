@@ -42,6 +42,8 @@ class SaveUserToFirestoreTest {
   @Mock private lateinit var mockDocumentSnapshot: DocumentSnapshot
   @Mock private lateinit var mockGetTask: Task<DocumentSnapshot>
 
+  private val errorMessage = "Cannot save user: email is null or blank"
+
   @Suppress("UNCHECKED_CAST")
   @Before
   fun setUp() {
@@ -154,8 +156,7 @@ class SaveUserToFirestoreTest {
       saveUserToFirestore()
 
       // Verify Log.e is called with the correct message
-      logMock.verify(
-          { Log.e(eq("FireStore"), eq("Cannot save user: email is null or blank")) }, times(1))
+      logMock.verify({ Log.e(eq("FireStore"), eq(errorMessage)) }, times(1))
 
       // Ensure Firestore is NOT accessed
       verify(mockFirestore, never()).collection(any())
@@ -190,8 +191,7 @@ class SaveUserToFirestoreTest {
       saveUserToFirestore()
 
       // Verify Log.e is called with the correct message
-      logMock.verify(
-          { Log.e(eq("FireStore"), eq("Cannot save user: email is null or blank")) }, times(1))
+      logMock.verify({ Log.e(eq("FireStore"), eq(errorMessage)) }, times(1))
 
       // Ensure Firestore is NOT accessed
       verify(mockFirestore, never()).collection(any())

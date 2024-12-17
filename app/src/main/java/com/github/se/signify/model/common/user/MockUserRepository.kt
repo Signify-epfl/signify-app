@@ -92,15 +92,12 @@ class MockUserRepository : UserRepository {
     if (!checkFailure(onFailure)) return
     if (!checkUser(userId, onFailure)) return
 
-    val user = users[userId]
-    if (user != null) {
-      // Ensure user.name is non-nullable before passing it to onSuccess
-      user.name?.let { onSuccess(it) }
-          ?: onFailure(NoSuchElementException("Username is missing for user ID: $userId"))
-    } else {
-      // Handle the case where the user is not found
-      onFailure(NoSuchElementException("User not found for ID: $userId"))
-    }
+    val user =
+        users[userId] ?: return onFailure(NoSuchElementException("User not found for ID: $userId"))
+
+    // Ensure user.name is non-nullable before passing it to onSuccess
+    user.name?.let { onSuccess(it) }
+        ?: onFailure(NoSuchElementException("Username is missing for user ID: $userId"))
   }
 
   override fun updateUserName(
@@ -355,6 +352,7 @@ class MockUserRepository : UserRepository {
     users[userId] = user.copy(pastChallenges = user.pastChallenges + challengeId) // Add challenge
   }
 
+  @Suppress("UNCHECKED_CAST")
   override fun updateUserField(
       userId: String,
       fieldName: String,

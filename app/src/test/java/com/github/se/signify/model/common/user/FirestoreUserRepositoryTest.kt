@@ -1406,11 +1406,7 @@ class FirestoreUserRepositoryTest {
 
     // Act
     firestoreUserRepository.getUserName(
-        currentUserId,
-        onSuccess = {
-          fail("onSuccess should not be called when the username is missing or empty")
-        },
-        onFailure = onFailure)
+        currentUserId, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
 
     // Assert
     assertTrue(failureCallbackCalled)
@@ -1444,11 +1440,7 @@ class FirestoreUserRepositoryTest {
 
     // Act
     firestoreUserRepository.getUserName(
-        currentUserId,
-        onSuccess = {
-          fail("onSuccess should not be called when the username is missing or empty")
-        },
-        onFailure = onFailure)
+        currentUserId, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
 
     // Assert
     assertTrue(failureCallbackCalled)
@@ -1480,9 +1472,7 @@ class FirestoreUserRepositoryTest {
 
     // Act
     firestoreUserRepository.getUserName(
-        currentUserId,
-        onSuccess = onSuccess,
-        onFailure = { fail("onFailure should not be called when the userName is valid") })
+        currentUserId, onSuccess = onSuccess, onFailure = { fail(noFailure) })
 
     // Assert
     assertTrue(successCallbackCalled)
