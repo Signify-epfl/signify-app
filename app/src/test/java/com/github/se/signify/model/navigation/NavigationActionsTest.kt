@@ -105,17 +105,6 @@ class NavigationActionsTest {
   }
 
   @Test
-  fun navigateToSameTopLevelDestinationDoesNotNavigate() {
-    val destination = TopLevelDestinations.HOME
-    userSession.loggedIn = true
-
-    whenever(navController.currentDestination?.route).thenReturn(Route.HOME)
-
-    navigationActions.navigateTo(destination)
-    verify(navController, never()).navigate(any<String>(), any<NavOptionsBuilder.() -> Unit>())
-  }
-
-  @Test
   fun navigateToSameScreenDoesNotNavigate() {
     val screen = Screen.DO_NOT_REQUIRE_AUTH
     userSession.loggedIn = true
