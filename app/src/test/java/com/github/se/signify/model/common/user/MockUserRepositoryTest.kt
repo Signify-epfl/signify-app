@@ -687,4 +687,22 @@ class MockUserRepositoryTest {
     shadowOf(Looper.getMainLooper()).idle()
     assertEquals(0, result)
   }
+
+  @Test
+  fun getUserNameFailsWhenUserNotFound() {
+    val invalidUserId = "nonExistingUserId"
+    val expectedMessage = "User not found"
+    var capturedException: Exception? = null
+
+    // Invoke the getUserName function
+    mockUserRepository.getUserName(
+        userId = invalidUserId,
+        onSuccess = { fail("Should not succeed for invalid user ID") },
+        onFailure = { exception -> capturedException = exception })
+
+    // Assertions
+    shadowOf(Looper.getMainLooper()).idle() // Ensure all async tasks are completed
+    assertNotNull("Expected an exception to be captured", capturedException)
+    assertEquals("Exception message should match", expectedMessage, capturedException?.message)
+  }
 }
