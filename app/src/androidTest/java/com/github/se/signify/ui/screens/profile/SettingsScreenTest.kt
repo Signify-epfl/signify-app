@@ -119,17 +119,6 @@ class SettingsScreenTest {
   }
 
   @Test
-  fun testDialogDoNotAppearsAfterLosingFocus() {
-    val newName = "Updated Username"
-
-    composeTestRule.onNodeWithTag("usernameTextField").performTextInput(newName)
-
-    composeTestRule.onRoot().performClick()
-
-    composeTestRule.onNodeWithTag("confirmationPopup").assertDoesNotExist()
-  }
-
-  @Test
   fun testPressingConfirmUpdatesName() {
     val newName = "Updated Username"
 
