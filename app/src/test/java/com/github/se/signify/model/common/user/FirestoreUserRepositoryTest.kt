@@ -1387,6 +1387,44 @@ class FirestoreUserRepositoryTest {
     // Arrange: Mock Firestore behavior
     `when`(mockCollectionReference.document(currentUserId)).thenReturn(mockCurrentUserDocRef)
     `when`(mockUserDocumentSnapshot.exists()).thenReturn(true) // Document exists
+    `when`(mockUserDocumentSnapshot["name"]).thenReturn("") // No userName field
+
+    // Simulate Firestore snapshot
+    `when`(mockCurrentUserDocRef.addSnapshotListener(any<EventListener<DocumentSnapshot>>()))
+        .thenAnswer { invocation ->
+          val listener = invocation.arguments[0] as EventListener<DocumentSnapshot>
+          listener.onEvent(mockUserDocumentSnapshot, null) // Pass snapshot with missing userName
+          null
+        }
+
+    var failureCallbackCalled = false
+    val onFailure: (Exception) -> Unit = { exception ->
+      failureCallbackCalled = true
+      assertTrue(exception is NoSuchElementException)
+      assertEquals(expectedException.message, exception.message)
+    }
+
+    // Act
+    firestoreUserRepository.getUserName(
+        currentUserId,
+        onSuccess = {
+          fail("onSuccess should not be called when the username is missing or empty")
+        },
+        onFailure = onFailure)
+
+    // Assert
+    assertTrue(failureCallbackCalled)
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  @Test
+  fun getUserName_shouldHandleNullUserName() {
+    val expectedException =
+        NoSuchElementException("Username is missing or empty for ID: $currentUserId")
+
+    // Arrange: Mock Firestore behavior
+    `when`(mockCollectionReference.document(currentUserId)).thenReturn(mockCurrentUserDocRef)
+    `when`(mockUserDocumentSnapshot.exists()).thenReturn(true) // Document exists
     `when`(mockUserDocumentSnapshot["name"]).thenReturn(null) // No userName field
 
     // Simulate Firestore snapshot
