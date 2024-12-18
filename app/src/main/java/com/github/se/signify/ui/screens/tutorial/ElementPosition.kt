@@ -5,9 +5,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.layout.positionInWindow
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 
 data class ElementPosition(val x: Dp, val y: Dp, val width: Dp, val height: Dp)
 
@@ -44,15 +43,12 @@ fun saveElementPosition(
     density: androidx.compose.ui.unit.Density,
     map: MutableMap<String, ElementPosition>
 ) {
-  val position = coordinates.positionInWindow()
+  val position = coordinates.positionInRoot()
   val size = coordinates.size
   map[key] =
       ElementPosition(
           x = with(density) { position.x.toDp() },
-          y =
-              with(density) {
-                position.y.toDp() - 24.dp
-              }, // take into account the top padding of the screen
+          y = with(density) { position.y.toDp() },
           width = with(density) { size.width.toDp() },
           height = with(density) { size.height.toDp() })
 }
