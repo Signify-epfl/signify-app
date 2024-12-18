@@ -22,10 +22,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -360,20 +364,55 @@ fun ConfirmationDialog(
  */
 @Composable
 fun LanguageSwitch(isFrench: Boolean, onLanguageChange: (Boolean) -> Unit) {
-  Row(
-      modifier =
-          Modifier.fillMaxWidth()
-              .padding(16.dp)
-              .clickable { onLanguageChange(!isFrench) }
-              .testTag("LanguageSwitch"),
-      verticalAlignment = Alignment.CenterVertically,
-      horizontalArrangement = Arrangement.SpaceBetween) {
-        Text(
-            text = if (isFrench) "FR" else "EN",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onBackground)
-        Switch(checked = isFrench, onCheckedChange = { onLanguageChange(it) })
-      }
+  var expanded by remember { mutableStateOf(false) }
+  var selectedLanguage by remember { mutableStateOf(if (isFrench) "FR" else "EN") }
+
+  Column {
+    Row(
+        modifier =
+            Modifier.testTag("LanguageRow")
+                .fillMaxWidth()
+                .clickable { expanded = !expanded }
+                .padding(16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween) {
+          Text(
+              text = selectedLanguage,
+              style = MaterialTheme.typography.bodyLarge,
+              color = MaterialTheme.colorScheme.onBackground)
+
+          Icon(
+              imageVector =
+                  if (expanded) Icons.Filled.KeyboardArrowDown
+                  else Icons.AutoMirrored.Filled.KeyboardArrowRight,
+              contentDescription = "Expand language menu",
+              tint = MaterialTheme.colorScheme.onBackground)
+        }
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = { expanded = false },
+        modifier = Modifier.fillMaxWidth()) {
+          DropdownMenuItem(
+              text = { Text(stringResource(R.string.english_text)) },
+              onClick = {
+                selectedLanguage = "EN"
+                onLanguageChange(false)
+                expanded = false
+              })
+          DropdownMenuItem(
+              text = { Text(stringResource(R.string.french_text)) },
+              onClick = {
+                selectedLanguage = "FR"
+                onLanguageChange(true)
+                expanded = false
+              })
+          DropdownMenuItem(
+              text = { Text(stringResource(R.string.no_other_supported_languages_text)) },
+              onClick = {
+                selectedLanguage = "N/A"
+                expanded = false
+              })
+        }
+  }
 }
 
 @Composable

@@ -7,6 +7,7 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
@@ -184,7 +185,24 @@ class SettingsScreenTest {
 
   @Test
   fun testLanguageSwitch() {
-    composeTestRule.onNodeWithTag("LanguageSwitch").assertIsDisplayed().performClick()
+    composeTestRule.onNodeWithTag("LanguageRow").assertIsDisplayed()
+
+    composeTestRule.onNodeWithTag("LanguageRow").performClick()
+
+    composeTestRule.onNodeWithText("English").assertIsDisplayed()
+    composeTestRule.onNodeWithText("French").assertIsDisplayed()
+    composeTestRule.onNodeWithText("No other supported languages").assertIsDisplayed()
+
+    composeTestRule.onNodeWithText("English").performClick()
+    composeTestRule.onNodeWithTag("LanguageRow").assertTextEquals("EN")
+
+    composeTestRule.onNodeWithTag("LanguageRow").performClick()
+    composeTestRule.onNodeWithText("French").performClick()
+    composeTestRule.onNodeWithTag("LanguageRow").assertTextEquals("FR")
+
+    composeTestRule.onNodeWithTag("LanguageRow").performClick()
+    composeTestRule.onNodeWithText("No other supported languages").performClick()
+    composeTestRule.onNodeWithTag("LanguageRow").assertTextEquals("N/A")
   }
 
   @Test
