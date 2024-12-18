@@ -1,7 +1,6 @@
 package com.github.se.signify.ui.screens.challenge
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -94,7 +93,6 @@ fun SprintChallengeGameScreen(
       }
       isGameActive = false
       updateSprintChallenge(
-          context = context,
           currentUserId = currentUserId,
           challengeRepository = challengeRepository,
           challenge = currentChallenge,
@@ -231,7 +229,6 @@ fun DisplayLoadingTextSprint() {
 }
 
 fun updateSprintChallenge(
-    context: Context,
     currentUserId: String,
     challengeRepository: ChallengeRepository,
     challenge: Challenge?,

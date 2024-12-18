@@ -69,8 +69,6 @@ fun NewChallengeScreen(
     userViewModel.getFriendsList()
     userViewModel.getOngoingChallenges()
   }
-
-  val ongoingChallenges by userViewModel.ongoingChallenges.collectAsState()
   var done = false
 
   AnnexScreenScaffold(

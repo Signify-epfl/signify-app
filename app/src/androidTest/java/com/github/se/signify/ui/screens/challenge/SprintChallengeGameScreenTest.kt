@@ -219,7 +219,7 @@ class SprintChallengeGameScreenTest {
   @Test
   fun updateSprintChallenge_updatesPlayer1RoundCompleted_whenPlayer1CompletesRound() {
     updateSprintChallenge(
-        context, currentUserId, mockChallengeRepository, testChallenge, 3, mockNavigationActions)
+        currentUserId, mockChallengeRepository, testChallenge, 3, mockNavigationActions)
 
     val updatedChallenge = mockChallengeRepository.getChallenge(testChallenge.challengeId)
     assert(updatedChallenge?.player1RoundCompleted?.contains(true) == true)
@@ -228,7 +228,7 @@ class SprintChallengeGameScreenTest {
   @Test
   fun updateSprintChallenge_updatesPlayer2RoundCompleted_whenPlayer2CompletesRound() {
     updateSprintChallenge(
-        context, "player2", mockChallengeRepository, testChallenge, 2, mockNavigationActions)
+        "player2", mockChallengeRepository, testChallenge, 2, mockNavigationActions)
 
     val updatedChallenge = mockChallengeRepository.getChallenge(testChallenge.challengeId)
     assert(updatedChallenge?.player2RoundCompleted?.contains(true) == true)
@@ -237,7 +237,7 @@ class SprintChallengeGameScreenTest {
   @Test
   fun updateSprintChallenge_addsWordsCompletedToPlayer1_whenPlayer1CompletesWord() {
     updateSprintChallenge(
-        context, currentUserId, mockChallengeRepository, testChallenge, 5, mockNavigationActions)
+        currentUserId, mockChallengeRepository, testChallenge, 5, mockNavigationActions)
 
     val updatedChallenge = mockChallengeRepository.getChallenge(testChallenge.challengeId)
     assert(updatedChallenge?.player1WordsCompleted?.contains(5) == true)
@@ -246,7 +246,7 @@ class SprintChallengeGameScreenTest {
   @Test
   fun updateSprintChallenge_addsWordsCompletedToPlayer2_whenPlayer2CompletesWord() {
     updateSprintChallenge(
-        context, "player2", mockChallengeRepository, testChallenge, 4, mockNavigationActions)
+        "player2", mockChallengeRepository, testChallenge, 4, mockNavigationActions)
 
     val updatedChallenge = mockChallengeRepository.getChallenge(testChallenge.challengeId)
     assert(updatedChallenge?.player2WordsCompleted?.contains(4) == true)
@@ -256,12 +256,7 @@ class SprintChallengeGameScreenTest {
   fun updateSprintChallenge_setsGameStatusToCompleted_whenRoundIsSix() {
     val challengeAtRoundSix = testChallenge.copy(round = 6)
     updateSprintChallenge(
-        context,
-        currentUserId,
-        mockChallengeRepository,
-        challengeAtRoundSix,
-        3,
-        mockNavigationActions)
+        currentUserId, mockChallengeRepository, challengeAtRoundSix, 3, mockNavigationActions)
 
     val updatedChallenge = mockChallengeRepository.getChallenge(challengeAtRoundSix.challengeId)
     assert(updatedChallenge?.gameStatus == "completed")
@@ -270,7 +265,7 @@ class SprintChallengeGameScreenTest {
   @Test
   fun updateSprintChallenge_setsGameStatusToInProgress_whenRoundIsNotSix() {
     updateSprintChallenge(
-        context, currentUserId, mockChallengeRepository, testChallenge, 3, mockNavigationActions)
+        currentUserId, mockChallengeRepository, testChallenge, 3, mockNavigationActions)
 
     val updatedChallenge = mockChallengeRepository.getChallenge(testChallenge.challengeId)
     assert(updatedChallenge?.gameStatus == "in_progress")
