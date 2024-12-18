@@ -27,7 +27,8 @@ fun saveStatsToFirestore() {
             "weeklyQuest" to 0,
             "completedChallenge" to 0,
             "createdChallenge" to 0,
-            "wonChallenge" to 0)
+            "wonChallenge" to 0,
+            "timePerLetter" to emptyList<Long>())
 
     // Check if the stats document already exists for this user
     val statsDocRef = db.collection(collectionPath).document(userId)

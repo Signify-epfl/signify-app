@@ -22,8 +22,8 @@ import com.github.se.signify.model.profile.stats.StatsRepository
 import com.github.se.signify.model.profile.stats.StatsViewModel
 import com.github.se.signify.ui.common.AccountInformation
 import com.github.se.signify.ui.common.AnnexScreenScaffold
+import com.github.se.signify.ui.common.CreateGraph
 import com.github.se.signify.ui.common.LearnedLetterList
-import com.github.se.signify.ui.common.NotImplementedYet
 import com.github.se.signify.ui.common.StatisticsTable
 
 @Composable
@@ -48,6 +48,7 @@ fun MyStatsScreen(
     statsViewModel.getHardExerciseStats()
     statsViewModel.getDailyQuestStats()
     statsViewModel.getWeeklyQuestStats()
+    statsViewModel.getTimePerLetter()
   }
 
   val userName = userViewModel.userName.collectAsState()
@@ -59,6 +60,7 @@ fun MyStatsScreen(
   val hard = statsViewModel.hard.collectAsState()
   val daily = statsViewModel.daily.collectAsState()
   val weekly = statsViewModel.weekly.collectAsState()
+  val timePerLetter = statsViewModel.timePerLetter.collectAsState()
   var updatedProfilePicture by remember { mutableStateOf(profilePictureUrl.value) }
 
   LaunchedEffect(profilePictureUrl.value) { updatedProfilePicture = profilePictureUrl.value }
@@ -107,8 +109,7 @@ fun MyStatsScreen(
         statsNumberList = listOf("${daily.value}", "${weekly.value}"),
         lineTextTestTag = "QuestsText")
     Spacer(modifier = Modifier.height(64.dp))
-    val graphsAndStatsText = stringResource(R.string.graphs_and_stats_text)
     // Graphs and Stats
-    NotImplementedYet(testTag = "GraphsAndStats", text = graphsAndStatsText)
+    CreateGraph(timePerLetter = timePerLetter.value)
   }
 }

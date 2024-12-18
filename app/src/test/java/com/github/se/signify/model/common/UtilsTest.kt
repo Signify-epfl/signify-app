@@ -2,6 +2,8 @@ package com.github.se.signify.model.common
 
 import com.github.se.signify.R
 import junit.framework.TestCase.assertEquals
+import org.jetbrains.kotlinx.dataframe.api.dataFrameOf
+import org.junit.Assert.assertThrows
 import org.junit.Test
 
 class UtilsTest {
@@ -64,5 +66,23 @@ class UtilsTest {
           expectedResId,
           actualResId)
     }
+  }
+
+  @Test
+  fun timeConversionHasCorrectBehaviour() {
+    assertEquals(5.0, timeConversion(5000L))
+    assertEquals(0.01, timeConversion(10L))
+    assertThrows(IllegalArgumentException::class.java) { timeConversion(-1000L) }
+  }
+
+  @Test
+  fun createDataFrameHasCorrectBehaviour() {
+    val df = createDataFrame(listOf(10.0, 20.0, 30.0))
+    val expected =
+        dataFrameOf(
+            TimePerLetter to listOf(10.0, 20.0, 30.0),
+            TimePerLetterIndex to listOf(0, 1, 2),
+            TimePerLetterAverage to listOf(20.0, 20.0, 20.0))
+    assertEquals(expected, df)
   }
 }
