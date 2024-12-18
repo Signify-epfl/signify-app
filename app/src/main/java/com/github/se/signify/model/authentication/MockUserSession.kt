@@ -11,7 +11,7 @@ package com.github.se.signify.model.authentication
 class MockUserSession(private val authService: AuthService = MockAuthService()) : UserSession {
 
   /** Tracks the login state of the user. */
-  var loggedIn = false
+  var loggedIn = true
 
   /**
    * Retrieves the unique user ID based on the user's email address.
@@ -31,8 +31,7 @@ class MockUserSession(private val authService: AuthService = MockAuthService()) 
    * @return The current login state (`true` if logged in, `false` otherwise).
    */
   override suspend fun login(): Boolean {
-    loggedIn = true
-    return true
+    return loggedIn
   }
 
   /**
