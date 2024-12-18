@@ -317,6 +317,7 @@ fun BottomNavigationMenu(
                   selectedIconColor = MaterialTheme.colorScheme.primary,
                   indicatorColor = Color.Transparent,
                   unselectedIconColor = MaterialTheme.colorScheme.onSurface,
+                  disabledIconColor = MaterialTheme.colorScheme.primary,
               ))
     }
   }
