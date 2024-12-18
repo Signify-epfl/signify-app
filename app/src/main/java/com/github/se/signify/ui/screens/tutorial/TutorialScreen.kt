@@ -117,7 +117,7 @@ fun TutorialScreen(navigationActions: NavigationActions, onFinish: () -> Unit) {
 fun SkipButton(
     onSkip: () -> Unit, // Action to perform when the button is clicked
 ) {
-  Box(modifier = Modifier.fillMaxSize().padding(16.dp), contentAlignment = Alignment.TopEnd) {
+  Box(modifier = Modifier.fillMaxSize().padding(top = 24.dp), contentAlignment = Alignment.TopEnd) {
     TextButton(onClick = onSkip, modifier = Modifier.testTag("SkipTutorialButton")) {
       Text(
           text = stringResource(R.string.skip_tutorial),

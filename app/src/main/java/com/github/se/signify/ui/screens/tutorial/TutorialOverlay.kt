@@ -35,7 +35,7 @@ fun TutorialOverlay(
     Column(
         modifier =
             Modifier.align(Alignment.BottomCenter)
-                .padding(start = 32.dp, end = 32.dp, bottom = 150.dp),
+                .padding(start = 32.dp, end = 32.dp, bottom = 32.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
