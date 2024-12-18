@@ -78,7 +78,7 @@ class MainActivity : ComponentActivity() {
     val savedLanguage = sharedPreferencesLanguage.getBoolean(prefKeyLanguage, false)
 
     // Tutorial versioning logic
-    val currentTutorialVersion = 2 // Update this when the tutorial changes
+    val currentTutorialVersion = 3 // Update this when the tutorial changes
     val savedTutorialVersion = sharedPreferencesTheme.getInt(prefKeyTutorialVersion, 0)
 
     val isTutorialCompleted =
