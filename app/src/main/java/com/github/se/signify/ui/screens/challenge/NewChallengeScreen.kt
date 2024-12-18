@@ -1,7 +1,5 @@
 package com.github.se.signify.ui.screens.challenge
 
-import android.annotation.SuppressLint
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -71,7 +69,6 @@ fun NewChallengeScreen(
     userViewModel.getFriendsList()
     userViewModel.getOngoingChallenges()
   }
-
 
   val ongoingChallenges by userViewModel.ongoingChallenges.collectAsState()
   var done = false
