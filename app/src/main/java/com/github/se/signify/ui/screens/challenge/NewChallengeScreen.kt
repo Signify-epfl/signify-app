@@ -1,7 +1,6 @@
 package com.github.se.signify.ui.screens.challenge
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -41,6 +40,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.challenge.Challenge
+import com.github.se.signify.model.challenge.ChallengeMode
 import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.challenge.ChallengeViewModel
 import com.github.se.signify.model.common.user.UserRepository
@@ -69,6 +69,7 @@ fun NewChallengeScreen(
   }
 
   val ongoingChallenges by userViewModel.ongoingChallenges.collectAsState()
+  var done = false
 
   AnnexScreenScaffold(
       navigationActions = navigationActions,
@@ -132,13 +133,28 @@ fun NewChallengeScreen(
                                   challenge.player1RoundCompleted.all { it } &&
                                       challenge.player2RoundCompleted.all { it }
 
-                              if (isBothCompleted) {
+                              if (isBothCompleted && !done) {
                                 // Determine the winner
-                                val player1Time = challenge.player1Times.sum()
-                                val player2Time = challenge.player2Times.sum()
+                                done = true
+
                                 val winner =
-                                    if (player1Time < player2Time) challenge.player1
-                                    else challenge.player2
+                                    when (challenge.mode) {
+                                      ChallengeMode.SPRINT.toString() -> {
+                                        val player1Result = challenge.player1WordsCompleted.sum()
+                                        val player2Result = challenge.player2WordsCompleted.sum()
+                                        if (player1Result > player2Result) challenge.player1
+                                        else if (player2Result == player1Result) "Draw"
+                                        else challenge.player2
+                                      }
+                                      ChallengeMode.CHRONO.toString() -> {
+                                        val player1Result = challenge.player1Times.sum() / 1000
+                                        val player2Result = challenge.player2Times.sum() / 1000
+                                        if (player1Result < player2Result) challenge.player1
+                                        else if (player2Result == player1Result) "Draw"
+                                        else challenge.player2
+                                      }
+                                      else -> ""
+                                    }
 
                                 // Update the challenge in pastChallenges
                                 userViewModel.removeOngoingChallenge(
@@ -168,11 +184,13 @@ fun NewChallengeScreen(
                                     challengeViewModel.deleteChallenge(challenge.challengeId)
                                   },
                                   onPlayClick = {
-                                    Log.d(
-                                        "Navigation",
-                                        "Navigating with challengeId: ${challenge.challengeId}")
+                                    val destination =
+                                        when (challenge.mode) {
+                                          ChallengeMode.CHRONO.toString() -> Screen.CHRONO_CHALLENGE
+                                          else -> Screen.SPRINT_CHALLENGE
+                                        }
                                     navigationActions.navigateTo(
-                                        Screen.CHRONO_CHALLENGE,
+                                        destination,
                                         params = mapOf("challengeId" to challenge.challengeId))
                                   },
                                   userSession = userSession,
@@ -205,14 +223,32 @@ fun OngoingChallengeCard(
       }
 
   // Calculate the personal total time if the challenge is completed
-  val totalTime =
+  val displayText =
       if (isChallengeCompleted) {
-        if (currentUserId == challenge.player1) {
-          challenge.player1Times.sum() / 1000
-        } else {
-          challenge.player2Times.sum() / 1000
+        when (challenge.mode) {
+          "SPRINT" -> {
+            val totalWords =
+                if (currentUserId == challenge.player1) {
+                  challenge.player1WordsCompleted.sum()
+                } else {
+                  challenge.player2WordsCompleted.sum()
+                }
+            "Your Total Words: $totalWords"
+          }
+          "CHRONO" -> {
+            val totalTime =
+                if (currentUserId == challenge.player1) {
+                  challenge.player1Times.sum() / 1000
+                } else {
+                  challenge.player2Times.sum() / 1000
+                }
+            "Your Total Time: ${totalTime}s"
+          }
+          else -> ""
         }
-      } else null
+      } else {
+        null
+      }
 
   Card(
       modifier =
@@ -247,12 +283,9 @@ fun OngoingChallengeCard(
                 text = "${stringResource(R.string.mode_text)}: ${challenge.mode}",
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSurface)
-            if (isChallengeCompleted) {
-              val totalTimeText = stringResource(R.string.total_time_text)
+            if (displayText != null) {
               Text(
-                  text = "$totalTimeText ${totalTime}s",
-                  fontSize = 14.sp,
-                  color = MaterialTheme.colorScheme.onSurface)
+                  text = displayText, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
             }
           }
 
