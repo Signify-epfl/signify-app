@@ -13,7 +13,7 @@ import com.github.se.signify.model.home.feedback.FirestoreFeedbackRepository
 import com.github.se.signify.model.home.hand.HandLandmarkConfig
 import com.github.se.signify.model.home.hand.HandLandmarkImplementation
 import com.github.se.signify.model.home.hand.HandLandmarkRepository
-import com.github.se.signify.model.home.quest.FirestoreQuestRepository
+import com.github.se.signify.model.home.quest.MockQuestRepository
 import com.github.se.signify.model.home.quest.QuestRepository
 import com.github.se.signify.model.home.quiz.FirestoreQuizRepository
 import com.github.se.signify.model.home.quiz.QuizRepository
@@ -35,7 +35,7 @@ object MockDependencyProvider : DependencyProvider {
   }
 
   override fun questRepository(): QuestRepository {
-    return FirestoreQuestRepository(Firebase.firestore) // TO BE REPLACED BY THE ACTUAL MOCK
+    return MockQuestRepository()
   }
 
   override fun statsRepository(): StatsRepository {
