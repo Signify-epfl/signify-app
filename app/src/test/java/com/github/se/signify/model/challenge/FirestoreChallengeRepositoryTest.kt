@@ -181,6 +181,49 @@ class FirestoreChallengeRepositoryTest {
   }
 
   @Test
+  fun getChallenges_shouldReturnChallengesOnSuccess() {
+    val mockDocumentSnapshot = Mockito.mock(DocumentSnapshot::class.java)
+    val challenge = Challenge(challengeId = challengeId)
+    `when`(mockDocumentSnapshot.toObject(Challenge::class.java)).thenReturn(challenge)
+
+    val mockChallengeDocRef = Mockito.mock(DocumentReference::class.java)
+    `when`(mockChallengeDocRef.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot))
+    `when`(mockChallengesCollection.document(eq(challengeId))).thenReturn(mockChallengeDocRef)
+
+    var successChallenges: List<Challenge>? = null
+    firestoreChallengeRepository.getChallenges(
+        challengeIds = listOf(challengeId),
+        onSuccess = { successChallenges = it },
+        onFailure = { fail("Failure callback should not be called") })
+
+    shadowOf(Looper.getMainLooper()).idle()
+
+    assertEquals(listOf(challenge), successChallenges)
+    verify(mockChallengeDocRef).get()
+  }
+
+  @Test
+  fun getChallenges_returnsEmptyListWhenChallengeIdsAreInvalid() {
+    val mockDocumentSnapshot = Mockito.mock(DocumentSnapshot::class.java)
+    `when`(mockDocumentSnapshot.toObject(Challenge::class.java)).thenReturn(null)
+
+    val mockChallengeDocRef = Mockito.mock(DocumentReference::class.java)
+    `when`(mockChallengeDocRef.get()).thenReturn(Tasks.forResult(mockDocumentSnapshot))
+    `when`(mockChallengesCollection.document(eq(challengeId))).thenReturn(mockChallengeDocRef)
+
+    var successChallenges: List<Challenge>? = null
+    firestoreChallengeRepository.getChallenges(
+        challengeIds = listOf(challengeId),
+        onSuccess = { successChallenges = it },
+        onFailure = { fail("Failure callback should not be called") })
+
+    shadowOf(Looper.getMainLooper()).idle()
+
+    assertEquals(emptyList<Challenge>(), successChallenges)
+    verify(mockChallengeDocRef).get()
+  }
+
+  @Test
   fun updateChallenge_shouldUpdateChallengeInFirestore() {
     val updatedChallenge = Challenge(challengeId = challengeId)
     `when`(mockChallengeDocRef.set(updatedChallenge)).thenReturn(Tasks.forResult(null))

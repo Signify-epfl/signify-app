@@ -9,6 +9,7 @@ import androidx.compose.ui.test.performClick
 import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.challenge.Challenge
+import com.github.se.signify.model.challenge.ChallengeId
 import com.github.se.signify.model.challenge.MockChallengeRepository
 import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.navigation.NavigationActions
@@ -54,8 +55,8 @@ class NewChallengeScreenTest {
 
     // Mock UserRepository to provide ongoing challenges list
     doAnswer { invocation ->
-          val onSuccess = invocation.arguments[1] as (List<Challenge>) -> Unit
-          onSuccess(ongoingChallenges)
+          val onSuccess = invocation.getArgument<(List<ChallengeId>) -> Unit>(1)
+          onSuccess.invoke(ongoingChallenges.map { it.challengeId })
         }
         .whenever(userRepository)
         .getOngoingChallenges(eq(userSession.getUserId()!!), any(), any())

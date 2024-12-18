@@ -1,6 +1,5 @@
 package com.github.se.signify.ui.screens.challenge
 
-import android.annotation.SuppressLint
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -50,7 +49,6 @@ import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.TextButton
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "SuspiciousIndentation")
 @Composable
 fun NewChallengeScreen(
     navigationActions: NavigationActions,
@@ -63,12 +61,14 @@ fun NewChallengeScreen(
   val challengeViewModel: ChallengeViewModel =
       viewModel(factory = ChallengeViewModel.factory(userSession, challengeRepository))
 
+  val ongoingChallengeIds by userViewModel.ongoingChallengeIds.collectAsState()
+  LaunchedEffect(ongoingChallengeIds) { challengeViewModel.getChallenges(ongoingChallengeIds) }
+  val ongoingChallenges by challengeViewModel.challenges.collectAsState()
+
   LaunchedEffect(Unit) {
     userViewModel.getFriendsList()
     userViewModel.getOngoingChallenges()
   }
-
-  val ongoingChallenges by userViewModel.ongoingChallenges.collectAsState()
 
   AnnexScreenScaffold(
       navigationActions = navigationActions,

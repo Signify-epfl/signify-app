@@ -2,7 +2,7 @@ package com.github.se.signify.model.common.user
 
 import android.os.Looper
 import androidx.test.core.app.ApplicationProvider
-import com.github.se.signify.model.challenge.Challenge
+import com.github.se.signify.model.challenge.ChallengeId
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
@@ -640,9 +640,9 @@ class FirestoreUserRepositoryTest {
     `when`(mockUserDocumentSnapshot.get(ongoingChallenges)).thenReturn(null)
 
     var successCallbackCalled = false
-    val onSuccess: (List<Challenge>) -> Unit = { challenges ->
+    val onSuccess: (List<ChallengeId>) -> Unit = { challengeIds ->
       successCallbackCalled = true
-      assertTrue(challenges.isEmpty()) // Ensure the challenges list is empty
+      assertTrue(challengeIds.isEmpty()) // Ensure the challenges list is empty
     }
 
     // Act
@@ -654,34 +654,6 @@ class FirestoreUserRepositoryTest {
 
     // Assert
     assertTrue(successCallbackCalled)
-  }
-
-  @Test
-  fun getOngoingChallenges_shouldCallOnFailureWhenChallengeFetchFails() {
-    // Arrange
-    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
-    `when`(mockUserDocumentSnapshot.exists()).thenReturn(true)
-    `when`(mockUserDocumentSnapshot.get(ongoingChallenges)).thenReturn(listOf(challengeId1))
-
-    // Mock challenge document to simulate failure
-    val testException = Exception(fireStoreFailure)
-    `when`(mockChallengeDocRef.get()).thenReturn(Tasks.forException(testException))
-
-    var failureCallbackCalled = false
-    val onFailure: (Exception) -> Unit = { exception ->
-      failureCallbackCalled = true
-      assertEquals(testException, exception) // Ensure the correct exception is passed
-    }
-
-    // Act
-    firestoreUserRepository.getOngoingChallenges(
-        currentUserId, onSuccess = { fail(noSuccess) }, onFailure = onFailure)
-
-    // Idle the main looper to process the tasks
-    shadowOf(Looper.getMainLooper()).idle()
-
-    // Assert
-    assertTrue(failureCallbackCalled)
   }
 
   @Test
@@ -850,9 +822,9 @@ class FirestoreUserRepositoryTest {
     `when`(mockUserDocumentSnapshot.get(ongoingChallenges)).thenReturn(null)
 
     var successCallbackCalled = false
-    val onSuccess: (List<Challenge>) -> Unit = { challenges ->
+    val onSuccess: (List<ChallengeId>) -> Unit = { challengeIds ->
       successCallbackCalled = true
-      assertTrue(challenges.isEmpty())
+      assertTrue(challengeIds.isEmpty())
     }
 
     // Act
@@ -1320,20 +1292,16 @@ class FirestoreUserRepositoryTest {
   }
 
   @Test
-  fun `getPastChallenges should return list of challenges`() {
+  fun `getPastChallenges should return list of challengeIds`() {
     `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
     `when`(mockUserDocumentSnapshot.exists()).thenReturn(true)
     `when`(mockUserDocumentSnapshot.get("pastChallenges")).thenReturn(listOf(challengeId))
-    `when`(mockFireStore.collection("challenges").document(challengeId).get())
-        .thenReturn(Tasks.forResult(mockUserDocumentSnapshot))
-    `when`(mockUserDocumentSnapshot.toObject(Challenge::class.java))
-        .thenReturn(Challenge(challengeId))
 
     var successCallbackCalled = false
-    val onSuccess: (List<Challenge>) -> Unit = { challenges ->
+    val onSuccess: (List<ChallengeId>) -> Unit = {
       successCallbackCalled = true
-      assertEquals(1, challenges.size)
-      assertEquals(challengeId, challenges[0].challengeId)
+      assertEquals(1, it.size)
+      assertEquals(challengeId, it[0])
     }
 
     firestoreUserRepository.getPastChallenges(currentUserId, onSuccess) { fail(noFailure) }
