@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.core.net.toUri
 import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
-import com.github.se.signify.model.challenge.Challenge
+import com.github.se.signify.model.challenge.ChallengeId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -37,7 +37,6 @@ class UserViewModelTest {
   private lateinit var currentUserId: String
   private val friendUserId = "friendUserId"
   private val challengeId = "challengeId"
-  private val testChallenge = Challenge(challengeId = "challenge1")
 
   private val testDispatcher = UnconfinedTestDispatcher()
 
@@ -396,11 +395,10 @@ class UserViewModelTest {
   @Test
   fun getOngoingChallengesUpdatesChallengesOnSuccess() = runTest {
     // Arrange
-    val challenges =
-        listOf(Challenge(challengeId = "challenge1"), Challenge(challengeId = "challenge2"))
+    val challengeIds: List<ChallengeId> = listOf("challenge1", "challenge2")
     doAnswer {
-          val onSuccess = it.getArgument<(List<Challenge>) -> Unit>(1)
-          onSuccess(challenges)
+          val onSuccess = it.getArgument<(List<ChallengeId>) -> Unit>(1)
+          onSuccess(challengeIds)
           null
         }
         .whenever(userRepository)
@@ -411,7 +409,7 @@ class UserViewModelTest {
 
     // Assert
     // Verifies that the ongoing challenges list is updated correctly in the ViewModel
-    assertEquals(challenges, userViewModel.ongoingChallenges.value)
+    assertEquals(challengeIds, userViewModel.ongoingChallengeIds.value)
   }
 
   @Test
@@ -687,13 +685,12 @@ class UserViewModelTest {
     verify(userRepository).getUserById(eq(currentUserId), any(), any())
   }
 
-  // Test getPastChallenges
   @Test
-  fun getPastChallengesUpdatesPastChallengesOnSuccess() = runTest {
+  fun getPastChallengesWorks() = runTest {
     // Arrange
-    val pastChallenges = listOf(testChallenge)
+    val pastChallenges = listOf(challengeId)
     doAnswer {
-          val onSuccess = it.getArgument<(List<Challenge>) -> Unit>(1)
+          val onSuccess = it.getArgument<(List<ChallengeId>) -> Unit>(1)
           onSuccess(pastChallenges)
           null
         }
@@ -776,7 +773,7 @@ class UserViewModelTest {
   }
 
   @Test
-  fun removeOngoingChallenge_updatesOngoingChallengesOnSuccess() = runTest {
+  fun removeOngoingChallengeInvokesCorrectCall() = runTest {
     // Arrange
     doAnswer {
           val onSuccess = it.getArgument<() -> Unit>(2)
@@ -791,7 +788,7 @@ class UserViewModelTest {
 
     // Assert
     verify(userRepository).removeOngoingChallenge(eq(currentUserId), eq(challengeId), any(), any())
-    assertTrue(userViewModel.ongoingChallenges.value.none { it.challengeId == challengeId })
+    assertTrue(userViewModel.ongoingChallengeIds.value.none { it == challengeId })
   }
 
   @After

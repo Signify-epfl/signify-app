@@ -32,6 +32,8 @@ import com.github.se.signify.R
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.challenge.Challenge
 import com.github.se.signify.model.challenge.ChallengeMode
+import com.github.se.signify.model.challenge.ChallengeRepository
+import com.github.se.signify.model.challenge.ChallengeViewModel
 import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.model.navigation.NavigationActions
@@ -42,17 +44,27 @@ import com.github.se.signify.ui.common.StatisticsTable
 fun ChallengeHistoryScreen(
     navigationActions: NavigationActions,
     userSession: UserSession,
-    userRepository: UserRepository
+    userRepository: UserRepository,
+    challengeRepository: ChallengeRepository
 ) {
   val userViewModel: UserViewModel =
       viewModel(factory = UserViewModel.factory(userSession, userRepository))
+  val challengeViewModel: ChallengeViewModel =
+      viewModel(factory = ChallengeViewModel.factory(userSession, challengeRepository))
 
   val challengesCompleted = remember { mutableIntStateOf(0) }
   val challengesCreated = remember { mutableIntStateOf(0) }
   val challengesWon = remember { mutableIntStateOf(0) }
-  val pastChallenges by userViewModel.pastChallenges.collectAsState()
+
+  val pastChallengeIds by userViewModel.pastChallenges.collectAsState()
+  LaunchedEffect(pastChallengeIds) { challengeViewModel.getChallenges(pastChallengeIds) }
+  val pastChallenges by challengeViewModel.challenges.collectAsState()
 
   LaunchedEffect(Unit) {
+    userViewModel.getFriendsList()
+    userViewModel.getPastChallenges()
+
+    // TODO: Move this to `UserViewModel`
     userRepository.getChallengesCompleted(
         userId = userSession.getUserId()!!,
         onSuccess = { completed -> challengesCompleted.intValue = completed },
@@ -76,7 +88,6 @@ fun ChallengeHistoryScreen(
           Log.e("ChallengeStats", "Failed to fetch challenges won: ${exception.message}")
           challengesWon.intValue = 0 // Default value in case of failure
         })
-    userViewModel.getPastChallenges()
   }
 
   AnnexScreenScaffold(

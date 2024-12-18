@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.github.se.signify.model.authentication.UserSession
-import com.github.se.signify.model.challenge.Challenge
+import com.github.se.signify.model.challenge.ChallengeId
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -36,8 +36,8 @@ open class UserViewModel(
   private val _errorState = MutableStateFlow<String?>(null)
   val errorState: StateFlow<String?> = _errorState
 
-  private val _ongoingChallenges = MutableStateFlow<List<Challenge>>(emptyList())
-  val ongoingChallenges: StateFlow<List<Challenge>> = _ongoingChallenges
+  private val _ongoingChallengeIds = MutableStateFlow<List<ChallengeId>>(emptyList())
+  val ongoingChallengeIds: StateFlow<List<ChallengeId>> = _ongoingChallengeIds
 
   private val _unlockedQuests = MutableStateFlow("1")
   val unlockedQuests: StateFlow<String> = _unlockedQuests
@@ -45,8 +45,8 @@ open class UserViewModel(
   private val _streak = MutableStateFlow(0L)
   val streak: StateFlow<Long> = _streak
 
-  private val _pastChallenges = MutableStateFlow<List<Challenge>>(emptyList())
-  val pastChallenges: StateFlow<List<Challenge>> = _pastChallenges
+  private val _pastChallenges = MutableStateFlow<List<ChallengeId>>(emptyList())
+  val pastChallenges: StateFlow<List<ChallengeId>> = _pastChallenges
 
   private val _completedQuests = MutableStateFlow<List<String>>(emptyList())
   val completedQuests: StateFlow<List<String>> = _completedQuests
@@ -183,7 +183,7 @@ open class UserViewModel(
   fun getOngoingChallenges() {
     repository.getOngoingChallenges(
         userSession.getUserId()!!,
-        onSuccess = { challenges -> _ongoingChallenges.value = challenges },
+        onSuccess = { _ongoingChallengeIds.value = it },
         onFailure = { e ->
           Log.e("UserViewModel", "Failed to fetch ongoing challenges: ${e.message}")
         })
@@ -195,8 +195,7 @@ open class UserViewModel(
         challengeId,
         onSuccess = {
           // Update ongoingChallenges after removal
-          _ongoingChallenges.value =
-              _ongoingChallenges.value.filter { it.challengeId != challengeId }
+          _ongoingChallengeIds.value = _ongoingChallengeIds.value.filter { it != challengeId }
         },
         onFailure = { e ->
           Log.e("UserViewModel", "Failed to remove challenge from ongoing: ${e.message}")

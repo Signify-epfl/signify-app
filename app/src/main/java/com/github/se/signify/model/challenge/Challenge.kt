@@ -1,7 +1,9 @@
 package com.github.se.signify.model.challenge
 
+typealias ChallengeId = String
+
 data class Challenge(
-    val challengeId: String = "",
+    val challengeId: ChallengeId = "",
     val player1: String = "",
     val player2: String = "",
     val mode: String = "", // "chrono" or other types
