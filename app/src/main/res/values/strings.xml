@@ -313,9 +313,11 @@ Let’s take a quick tour to help you get started with learning sign language ef
     <string name="tutorial_feedbackText">Have feedback for us ? Tap this button to share your experience and help us improve Signify.</string>
     <string name="tutorial_completionText">You\'re ready to start ! Enjoy learning sign language.</string>
     <string name="completed_quest_text">Completed</string>
-
     <string name="skip_tutorial">Skip Tutorial</string>
 
+    <string name="logout_button_text">Logout</string>
+    <string name="confirm_logout_title">Confirm Logout</string>
+    <string name="confirm_logout_message">Are you sure you want to log out?</string>
 
 
 </resources>
