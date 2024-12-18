@@ -130,7 +130,12 @@ class FirestoreUserRepository(
 
       if (documentSnapshot != null && documentSnapshot.exists()) {
         val userName = documentSnapshot[usernamePath] as? String
-        onSuccess(userName ?: "unknown")
+        if (!userName.isNullOrEmpty()) {
+          onSuccess(userName)
+        } else {
+          // Handle case where usernamePath is null or empty
+          onFailure(NoSuchElementException("Username is missing or empty for ID: $userId"))
+        }
       } else {
         // Call onFailure when user's document is not found
         onFailure(NoSuchElementException("User not found for ID: $userId"))
