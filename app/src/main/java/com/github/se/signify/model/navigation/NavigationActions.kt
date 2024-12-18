@@ -60,6 +60,8 @@ open class NavigationActions(
           screen.route
         }
 
+    if (currentRoute() == route) return
+
     navController.navigate(route)
   }
 
