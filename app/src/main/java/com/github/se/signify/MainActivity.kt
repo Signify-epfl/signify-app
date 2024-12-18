@@ -54,6 +54,9 @@ class MainActivity : ComponentActivity() {
 
   private lateinit var sharedPreferencesTheme: SharedPreferences
   private lateinit var sharedPreferencesLanguage: SharedPreferences
+  private lateinit var sharedPreferenceChangeListener:
+      SharedPreferences.OnSharedPreferenceChangeListener
+
   // Now when launching the MainActivity, the builder will know which dependency provider to use
   // (Test or Base)
   private val dependencyProvider by lazy { (application as BaseApplication).dependencyProvider }
@@ -76,6 +79,8 @@ class MainActivity : ComponentActivity() {
     // Load the saved theme state (default is false for light mode)
     val savedTheme = sharedPreferencesTheme.getBoolean(prefKeyIsDarkTheme, false)
     val savedLanguage = sharedPreferencesLanguage.getBoolean(prefKeyLanguage, false)
+
+    updateLanguage(this, if (savedLanguage) "fr" else "en")
 
     // Tutorial versioning logic
     val currentTutorialVersion = 2 // Update this when the tutorial changes
@@ -115,7 +120,7 @@ class MainActivity : ComponentActivity() {
                 isFrenchLanguage = isFrenchLanguage,
                 onLanguageChange = { isFrench ->
                   isFrenchLanguage = isFrench
-                  sharedPreferencesLanguage.edit().putBoolean(prefNameLanguage, isFrench).apply()
+                  sharedPreferencesLanguage.edit().putBoolean(prefKeyLanguage, isFrench).apply()
                   updateLanguage(this, if (isFrench) "fr" else "en")
                 })
           }
