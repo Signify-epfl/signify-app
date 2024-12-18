@@ -25,17 +25,8 @@ class HomeScreenFeaturesEnd2endTest {
   @Test
   fun exerciseAndPracticeHomeScreenEnd2endTest() {
     composeTestRule.onNodeWithText("Welcome to Signify").assertIsDisplayed()
-    // Wait for the transition to Login Screen
+    // Wait for the transition to Home Screen
     composeTestRule.mainClock.advanceTimeBy(7_000)
-    composeTestRule.onNodeWithTag("LoginScreen").assertIsDisplayed()
-    composeTestRule.waitForIdle()
-    // Skip the login as the Practice epic does not need it
-    composeTestRule.onNodeWithTag("skipLoginButton").performClick()
-
-    // Skip the tutorial
-    composeTestRule.onNodeWithTag("SkipTutorialButton").performClick()
-
-    // Wait for navigation to Home Screen
     composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
     // The "user" searches for the letters d - o - g so that he can navigate to the ASL Recognition
@@ -99,16 +90,8 @@ class HomeScreenFeaturesEnd2endTest {
   @Test
   fun featuresHomeScreenEnd2endTest() {
     composeTestRule.onNodeWithText("Welcome to Signify").assertIsDisplayed()
-    // Wait for the transition to Login Screen
+    // Wait for the transition to Home Screen
     composeTestRule.mainClock.advanceTimeBy(7_000)
-    composeTestRule.onNodeWithTag("LoginScreen").assertIsDisplayed()
-    composeTestRule.waitForIdle()
-    // Simulate the Google sign-in process
-    composeTestRule.onNodeWithTag("loginButton").performClick()
-
-    // Wait for navigation to Home Screen
-    // This "Tasks" needs to be mocked before putting into the end2end. As for now there is nothing
-    // to be shown.
     composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("QuestsButton").performClick()

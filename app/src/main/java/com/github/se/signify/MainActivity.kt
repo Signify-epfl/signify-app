@@ -147,7 +147,12 @@ fun SignifyAppPreview(
         startDestination = Screen.WELCOME.route,
         route = Route.WELCOME,
     ) {
-      composable(Screen.WELCOME.route) { WelcomeScreen(navigationActions) }
+      composable(Screen.WELCOME.route) {
+        WelcomeScreen(
+            navigationActions,
+            dependencyProvider.userSession(),
+        )
+      }
     }
 
     navigation(
