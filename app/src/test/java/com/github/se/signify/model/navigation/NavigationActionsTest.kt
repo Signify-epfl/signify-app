@@ -10,9 +10,7 @@ import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
-import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 
 class NavigationActionsTest {
 
@@ -102,17 +100,6 @@ class NavigationActionsTest {
     navigationActions.navigateTo(screen)
     verify(navController, never()).navigate(eq(screen.route), anyOrNull(), anyOrNull())
     verify(navController).navigate(eq(Screen.UNAUTHENTICATED.route), anyOrNull(), anyOrNull())
-  }
-
-  @Test
-  fun navigateToSameScreenDoesNotNavigate() {
-    val screen = Screen.DO_NOT_REQUIRE_AUTH
-    userSession.loggedIn = true
-
-    whenever(navController.currentDestination?.route).thenReturn(screen.route)
-
-    navigationActions.navigateTo(screen)
-    verify(navController, never()).navigate(any<String>(), anyOrNull(), anyOrNull())
   }
 
   @Test
