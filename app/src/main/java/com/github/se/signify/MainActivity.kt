@@ -77,6 +77,8 @@ class MainActivity : ComponentActivity() {
     val savedTheme = sharedPreferencesTheme.getBoolean(prefKeyIsDarkTheme, false)
     val savedLanguage = sharedPreferencesLanguage.getBoolean(prefKeyLanguage, false)
 
+    updateLanguage(this, if (savedLanguage) "fr" else "en")
+
     // Tutorial versioning logic
     val currentTutorialVersion = 3 // Update this when the tutorial changes
     val savedTutorialVersion = sharedPreferencesTheme.getInt(prefKeyTutorialVersion, 0)
@@ -115,7 +117,7 @@ class MainActivity : ComponentActivity() {
                 isFrenchLanguage = isFrenchLanguage,
                 onLanguageChange = { isFrench ->
                   isFrenchLanguage = isFrench
-                  sharedPreferencesLanguage.edit().putBoolean(prefNameLanguage, isFrench).apply()
+                  sharedPreferencesLanguage.edit().putBoolean(prefKeyLanguage, isFrench).apply()
                   updateLanguage(this, if (isFrench) "fr" else "en")
                 })
           }
