@@ -311,7 +311,8 @@ fun BottomNavigationMenu(
           selected = topLevelDestination == selected,
           enabled = topLevelDestination != selected,
           onClick = { onTabSelect(topLevelDestination) },
-          modifier = Modifier.clip(RoundedCornerShape(50.dp)),
+          modifier =
+              Modifier.clip(RoundedCornerShape(50.dp)).testTag("Tab_${topLevelDestination.route}"),
           colors =
               NavigationBarItemDefaults.colors(
                   selectedIconColor = MaterialTheme.colorScheme.primary,
