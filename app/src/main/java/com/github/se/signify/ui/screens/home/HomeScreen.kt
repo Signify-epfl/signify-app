@@ -75,7 +75,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(navigationActions: NavigationActions) {
   val defaultExercises = ExerciseLevel.entries
-
   val elementPositions = LocalElementPositions.current
   val density = LocalDensity.current
 
@@ -106,13 +105,35 @@ fun HomeScreen(navigationActions: NavigationActions) {
                   saveElementPosition("QuestsButton", coords, density, elementPositions)
                 })
           })
+  var numOfHeaders = 0
+  // Define other headers dynamically
+  val additionalHeaders =
+      listOf<@Composable () -> Unit>(
+          { Spacer(modifier = Modifier.height(32.dp)) },
+          {
+            CameraFeedbackButton(
+                onClick = { navigationActions.navigateTo(Screen.PRACTICE) },
+                modifier =
+                    Modifier.onGloballyPositioned { coords ->
+                      saveElementPosition("CameraFeedbackButton", coords, density, elementPositions)
+                    })
+          },
+          {
+            LetterDictionary(
+                coroutineScope = coroutineScope,
+                numbOfHeaders = numOfHeaders, // Dynamically computed later
+                clickable = true,
+                onClick = { page, numbOfHeaders ->
+                  coroutineScope.launch { scrollState.scrollToItem(page + numbOfHeaders) }
+                },
+                modifier =
+                    Modifier.onGloballyPositioned { coords ->
+                      saveElementPosition("LetterDictionary", coords, density, elementPositions)
+                    })
+          })
 
   // Calculate headers dynamically
-  val numOfHeaders =
-      calculateNumOfHeadersOfTopBarButtons(
-          topBarButtons = topBarButtons,
-          extraHeaders = 4 // For CameraFeedbackButton, LetterDictionary, etc.
-          )
+  numOfHeaders = calculateNumOfHeadersOfTopBarButtons(topBarButtons, additionalHeaders)
 
   MainScreenScaffold(
       navigationActions = navigationActions,
@@ -134,32 +155,8 @@ fun HomeScreen(navigationActions: NavigationActions) {
       },
       content = {
         LazyColumn(state = scrollState, modifier = Modifier.weight(1f)) {
+          additionalHeaders.forEach { composable -> item { composable() } }
           item { Spacer(modifier = Modifier.height(32.dp)) }
-          item {
-            CameraFeedbackButton(
-                onClick = { navigationActions.navigateTo(Screen.PRACTICE) },
-                modifier =
-                    Modifier.onGloballyPositioned { coords ->
-                      saveElementPosition("CameraFeedbackButton", coords, density, elementPositions)
-                    })
-          }
-          item { Spacer(modifier = Modifier.height(32.dp)) }
-          item {
-            LetterDictionary(
-                coroutineScope = coroutineScope,
-                numbOfHeaders = numOfHeaders,
-                clickable = true,
-                onClick = { page, numbOfHeaders ->
-                  coroutineScope.launch { scrollState.scrollToItem(page + numbOfHeaders) }
-                },
-                modifier =
-                    Modifier.onGloballyPositioned { coords ->
-                      saveElementPosition("LetterDictionary", coords, density, elementPositions)
-                    })
-          }
-
-          item { Spacer(modifier = Modifier.height(32.dp)) }
-
           item {
             ExerciseList(
                 defaultExercises,
@@ -168,7 +165,6 @@ fun HomeScreen(navigationActions: NavigationActions) {
                   saveElementPosition("ExerciseList", coords, density, elementPositions)
                 })
           }
-
           item { Spacer(modifier = Modifier.height(32.dp)) }
           items(('A'..'Z').toList()) { letter ->
             Text(
@@ -379,13 +375,14 @@ fun QuestsButton(navigationActions: NavigationActions, modifier: Modifier = Modi
  * Computes the total number of headers dynamically based on the defined structure.
  *
  * @param topBarButtons The list of top bar buttons which are considered as headers.
- * @param extraHeaders Additional header counts (e.g., from LazyColumn or other components).
+ * @param additionalComponents A list of additional composables or header items to count
+ *   dynamically.
  * @return The total number of headers.
  */
 fun calculateNumOfHeadersOfTopBarButtons(
     topBarButtons: List<@Composable () -> Unit>,
-    extraHeaders: Int = 0
+    additionalComponents: List<@Composable () -> Unit>
 ): Int {
-  // Count headers in topBarButtons and add any additional headers
-  return topBarButtons.size + extraHeaders
+  // Count headers in both topBarButtons and additionalComponents dynamically
+  return topBarButtons.size + additionalComponents.size
 }
