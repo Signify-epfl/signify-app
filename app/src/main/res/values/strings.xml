@@ -315,7 +315,9 @@ Let’s take a quick tour to help you get started with learning sign language ef
     <string name="completed_quest_text">Completed</string>
 
     <string name="skip_tutorial">Skip Tutorial</string>
-
+    <string name="french_text">French</string>
+    <string name="english_text">English</string>
+    <string name="no_other_supported_languages_text">No other supported languages</string>
 
 
 </resources>

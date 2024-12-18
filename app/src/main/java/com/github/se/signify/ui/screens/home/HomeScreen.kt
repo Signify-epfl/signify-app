@@ -42,7 +42,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -83,6 +82,38 @@ fun HomeScreen(navigationActions: NavigationActions) {
   val scrollState = rememberLazyListState()
   val coroutineScope = rememberCoroutineScope()
   val letterText = stringResource(id = R.string.letter_text)
+
+  val topBarButtons =
+      listOf<@Composable () -> Unit>(
+          {
+            FeedbackButton(
+                navigationActions,
+                Modifier.onGloballyPositioned { coords ->
+                  saveElementPosition("FeedbackButton", coords, density, elementPositions)
+                })
+          },
+          {
+            QuizButton(
+                navigationActions,
+                Modifier.onGloballyPositioned { coords ->
+                  saveElementPosition("QuizButton", coords, density, elementPositions)
+                })
+          },
+          {
+            QuestsButton(
+                navigationActions,
+                Modifier.onGloballyPositioned { coords ->
+                  saveElementPosition("QuestsButton", coords, density, elementPositions)
+                })
+          })
+
+  // Calculate headers dynamically
+  val numOfHeaders =
+      calculateNumOfHeadersOfTopBarButtons(
+          topBarButtons = topBarButtons,
+          extraHeaders = 4 // For CameraFeedbackButton, LetterDictionary, etc.
+          )
+
   MainScreenScaffold(
       navigationActions = navigationActions,
       topLevelDestination = TopLevelDestinations.HOME,
@@ -91,29 +122,7 @@ fun HomeScreen(navigationActions: NavigationActions) {
           HelpText(
               title = stringResource(R.string.home_text),
               content = stringResource(R.string.help_home_screen_text)),
-      topBarButtons =
-          listOf<@Composable () -> Unit>(
-              {
-                FeedbackButton(
-                    navigationActions,
-                    Modifier.onGloballyPositioned { coords ->
-                      saveElementPosition("FeedbackButton", coords, density, elementPositions)
-                    })
-              },
-              {
-                QuizButton(
-                    navigationActions,
-                    Modifier.onGloballyPositioned { coords ->
-                      saveElementPosition("QuizButton", coords, density, elementPositions)
-                    })
-              },
-              {
-                QuestsButton(
-                    navigationActions,
-                    Modifier.onGloballyPositioned { coords ->
-                      saveElementPosition("QuestsButton", coords, density, elementPositions)
-                    })
-              }),
+      topBarButtons = topBarButtons,
       floatingActionButton = {
         FloatingActionButton(
             onClick = { coroutineScope.launch { scrollState.animateScrollToItem(0) } },
@@ -124,61 +133,54 @@ fun HomeScreen(navigationActions: NavigationActions) {
             }
       },
       content = {
-        LazyColumn(
-            state = scrollState, modifier = Modifier.weight(1f)
-            // Ensures LazyColumn takes up the remaining space without infinite height constraints
-            ) {
-              item { Spacer(modifier = Modifier.height(32.dp)) }
-
-              item {
-                CameraFeedbackButton(
-                    onClick = { navigationActions.navigateTo(Screen.PRACTICE) },
-                    modifier =
-                        Modifier.onGloballyPositioned { coords ->
-                          saveElementPosition(
-                              "CameraFeedbackButton", coords, density, elementPositions)
-                        })
-              }
-
-              item { Spacer(modifier = Modifier.height(32.dp)) }
-
-              item {
-                LetterDictionary(
-                    coroutineScope = coroutineScope,
-                    numbOfHeaders = integerResource(R.integer.scroll_offset),
-                    clickable = true,
-                    onClick = { page, numbOfHeaders ->
-                      coroutineScope.launch { scrollState.scrollToItem(page + numbOfHeaders) }
-                    },
-                    modifier =
-                        Modifier.onGloballyPositioned { coords ->
-                          saveElementPosition("LetterDictionary", coords, density, elementPositions)
-                        })
-              }
-
-              item { Spacer(modifier = Modifier.height(32.dp)) }
-
-              item {
-                ExerciseList(
-                    defaultExercises,
-                    navigationActions,
+        LazyColumn(state = scrollState, modifier = Modifier.weight(1f)) {
+          item { Spacer(modifier = Modifier.height(32.dp)) }
+          item {
+            CameraFeedbackButton(
+                onClick = { navigationActions.navigateTo(Screen.PRACTICE) },
+                modifier =
                     Modifier.onGloballyPositioned { coords ->
-                      saveElementPosition("ExerciseList", coords, density, elementPositions)
+                      saveElementPosition("CameraFeedbackButton", coords, density, elementPositions)
                     })
-              }
+          }
+          item { Spacer(modifier = Modifier.height(32.dp)) }
+          item {
+            LetterDictionary(
+                coroutineScope = coroutineScope,
+                numbOfHeaders = numOfHeaders,
+                clickable = true,
+                onClick = { page, numbOfHeaders ->
+                  coroutineScope.launch { scrollState.scrollToItem(page + numbOfHeaders) }
+                },
+                modifier =
+                    Modifier.onGloballyPositioned { coords ->
+                      saveElementPosition("LetterDictionary", coords, density, elementPositions)
+                    })
+          }
 
-              item { Spacer(modifier = Modifier.height(32.dp)) }
-              items(('A'..'Z').toList()) { letter ->
-                Text(
-                    text = "$letterText $letter",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(vertical = 8.dp).testTag("LetterTextDict_$letter"))
-                SignTipBox(letter = letter)
-                Spacer(modifier = Modifier.height(16.dp))
-              }
-            }
+          item { Spacer(modifier = Modifier.height(32.dp)) }
+
+          item {
+            ExerciseList(
+                defaultExercises,
+                navigationActions,
+                Modifier.onGloballyPositioned { coords ->
+                  saveElementPosition("ExerciseList", coords, density, elementPositions)
+                })
+          }
+
+          item { Spacer(modifier = Modifier.height(32.dp)) }
+          items(('A'..'Z').toList()) { letter ->
+            Text(
+                text = "$letterText $letter",
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(vertical = 8.dp).testTag("LetterTextDict_$letter"))
+            SignTipBox(letter = letter)
+            Spacer(modifier = Modifier.height(16.dp))
+          }
+        }
       })
 }
 
@@ -319,7 +321,9 @@ fun SignTipBox(letter: Char, modifier: Modifier = Modifier) {
               Image(
                   painter = painterResource(id = imageResId),
                   contentDescription = "Image for letter $letter",
-                  modifier = Modifier.size(200.dp))
+                  modifier =
+                      Modifier.size(200.dp)
+                          .border(2.dp, color = MaterialTheme.colorScheme.background))
 
               Spacer(modifier = Modifier.height(16.dp))
               // Displaying the description text with the icon, e.g., `letter_a.png`
@@ -370,4 +374,18 @@ fun QuestsButton(navigationActions: NavigationActions, modifier: Modifier = Modi
       icon = Icons.Outlined.DateRange,
       contentDescription = "Quests",
       modifier = modifier.testTag("QuestsButton"))
+}
+/**
+ * Computes the total number of headers dynamically based on the defined structure.
+ *
+ * @param topBarButtons The list of top bar buttons which are considered as headers.
+ * @param extraHeaders Additional header counts (e.g., from LazyColumn or other components).
+ * @return The total number of headers.
+ */
+fun calculateNumOfHeadersOfTopBarButtons(
+    topBarButtons: List<@Composable () -> Unit>,
+    extraHeaders: Int = 0
+): Int {
+  // Count headers in topBarButtons and add any additional headers
+  return topBarButtons.size + extraHeaders
 }

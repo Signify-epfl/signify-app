@@ -147,103 +147,103 @@
         <item>pillow</item>
     </string-array>
     <string-array name="challenge_word_list">
-        <item>pomme</item>
-        <item>banane</item>
-        <item>cerise</item>
+        <item>apple</item>
+        <item>banana</item>
+        <item>cherry</item>
         <item>orange</item>
-        <item>raisin</item>
+        <item>grape</item>
         <item>melon</item>
         <item>kiwi</item>
-        <item>poire</item>
-        <item>peche</item>
-        <item>prune</item>
-        <item>maison</item>
+        <item>pear</item>
+        <item>peach</item>
+        <item>plum</item>
+        <item>house</item>
         <item>table</item>
-        <item>chaise</item>
-        <item>lampe</item>
-        <item>porte</item>
-        <item>fenetre</item>
-        <item>plancher</item>
-        <item>toit</item>
-        <item>mur</item>
-        <item>jardin</item>
-        <item>livre</item>
-        <item>stylo</item>
-        <item>papier</item>
-        <item>bureau</item>
+        <item>chair</item>
+        <item>lamp</item>
+        <item>door</item>
+        <item>window</item>
+        <item>floor</item>
+        <item>roof</item>
+        <item>wall</item>
+        <item>garden</item>
+        <item>book</item>
+        <item>pen</item>
+        <item>paper</item>
+        <item>desk</item>
         <item>telephone</item>
-        <item>horloge</item>
-        <item>ordinateur</item>
-        <item>clavier</item>
-        <item>souris</item>
-        <item>ecran</item>
-        <item>voiture</item>
-        <item>velo</item>
+        <item>clock</item>
+        <item>computer</item>
+        <item>keyboard</item>
+        <item>mouse</item>
+        <item>screen</item>
+        <item>car</item>
+        <item>bicycle</item>
         <item>train</item>
         <item>bus</item>
-        <item>avion</item>
-        <item>bateau</item>
-        <item>camion</item>
-        <item>route</item>
-        <item>pont</item>
-        <item>riviere</item>
-        <item>montagne</item>
-        <item>vallee</item>
-        <item>foret</item>
-        <item>plage</item>
+        <item>plane</item>
+        <item>boat</item>
+        <item>truck</item>
+        <item>road</item>
+        <item>bridge</item>
+        <item>river</item>
+        <item>mountain</item>
+        <item>valley</item>
+        <item>forest</item>
+        <item>beach</item>
         <item>desert</item>
         <item>ocean</item>
-        <item>ciel</item>
-        <item>nuage</item>
-        <item>pluie</item>
-        <item>neige</item>
-        <item>tempete</item>
-        <item>soleil</item>
-        <item>lune</item>
-        <item>etoile</item>
-        <item>arbre</item>
-        <item>fleur</item>
-        <item>feuille</item>
-        <item>herbe</item>
-        <item>oiseau</item>
-        <item>chien</item>
-        <item>chat</item>
-        <item>poisson</item>
-        <item>cheval</item>
-        <item>vache</item>
-        <item>mouton</item>
-        <item>cochon</item>
-        <item>lapin</item>
+        <item>sky</item>
+        <item>cloud</item>
+        <item>rain</item>
+        <item>snow</item>
+        <item>storm</item>
+        <item>sun</item>
+        <item>moon</item>
+        <item>star</item>
+        <item>tree</item>
+        <item>flower</item>
+        <item>leaf</item>
+        <item>grass</item>
+        <item>bird</item>
+        <item>dog</item>
+        <item>cat</item>
+        <item>fish</item>
+        <item>horse</item>
+        <item>cow</item>
+        <item>sheep</item>
+        <item>pig</item>
+        <item>rabbit</item>
         <item>lion</item>
-        <item>tigre</item>
-        <item>ours</item>
+        <item>tiger</item>
+        <item>bear</item>
         <item>elephant</item>
-        <item>singe</item>
-        <item>zebre</item>
-        <item>kangourou</item>
-        <item>girafe</item>
-        <item>cafe</item>
-        <item>lait</item>
-        <item>eau</item>
-        <item>jus</item>
-        <item>pain</item>
-        <item>beurre</item>
-        <item>fromage</item>
-        <item>oeuf</item>
-        <item>viande</item>
-        <item>poulet</item>
-        <item>poisson</item>
-        <item>riz</item>
-        <item>pates</item>
-        <item>sel</item>
-        <item>sucre</item>
-        <item>gateau</item>
+        <item>monkey</item>
+        <item>zebra</item>
+        <item>kangaroo</item>
+        <item>giraffe</item>
+        <item>coffee</item>
+        <item>milk</item>
+        <item>water</item>
+        <item>juice</item>
+        <item>bread</item>
+        <item>butter</item>
+        <item>cheese</item>
+        <item>egg</item>
+        <item>meat</item>
+        <item>chicken</item>
+        <item>fish</item>
+        <item>rice</item>
+        <item>pasta</item>
+        <item>salt</item>
+        <item>sugar</item>
+        <item>cake</item>
         <item>biscuit</item>
-        <item>glace</item>
-        <item>chocolat</item>
-        <item>bonbon</item>
-        <item>miel</item>
-        <item>confiture</item>
+        <item>ice cream</item>
+        <item>chocolate</item>
+        <item>candy</item>
+        <item>honey</item>
+        <item>jam</item>
     </string-array>
     <string-array name="real_sentences">
         <item>The cat sits on the mat</item>
@@ -309,5 +309,7 @@
     <string name="skip_tutorial">Passer le tutoriel</string>
     <string name="completed_quest_text">Completé</string>
 
-
+    <string name="french_text">Français</string>
+    <string name="english_text">Anglais</string>
+    <string name="no_other_supported_languages_text">Aucune autre langue n’est supportée</string>
 </resources>
