@@ -62,9 +62,8 @@ fun ChallengeHistoryScreen(
   LaunchedEffect(Unit) {
     userViewModel.getFriendsList()
     userViewModel.getPastChallenges()
-  }
 
-  LaunchedEffect(Unit) {
+    // TODO: Move this to `UserViewModel`
     userRepository.getChallengesCompleted(
         userId = userSession.getUserId()!!,
         onSuccess = { completed -> challengesCompleted.intValue = completed },
@@ -88,7 +87,6 @@ fun ChallengeHistoryScreen(
           Log.e("ChallengeStats", "Failed to fetch challenges won: ${exception.message}")
           challengesWon.intValue = 0 // Default value in case of failure
         })
-    userViewModel.getPastChallenges()
   }
 
   AnnexScreenScaffold(
