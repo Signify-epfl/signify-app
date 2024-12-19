@@ -49,6 +49,8 @@ import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.TextButton
 
+private const val msToSecondsDivision = 1000
+
 @Composable
 fun NewChallengeScreen(
     navigationActions: NavigationActions,
@@ -137,24 +139,18 @@ fun NewChallengeScreen(
                                 // Determine the winner
                                 done = true
 
+                                val player1Result =
+                                    calculatePlayerResult(challenge, isPlayer1 = true)
+                                val player2Result =
+                                    calculatePlayerResult(challenge, isPlayer1 = false)
+
                                 val winner =
-                                    when (challenge.mode) {
-                                      ChallengeMode.SPRINT.toString() -> {
-                                        val player1Result = challenge.player1WordsCompleted.sum()
-                                        val player2Result = challenge.player2WordsCompleted.sum()
-                                        if (player1Result > player2Result) challenge.player1
-                                        else if (player2Result == player1Result) "Draw"
-                                        else challenge.player2
-                                      }
-                                      ChallengeMode.CHRONO.toString() -> {
-                                        val player1Result = challenge.player1Times.sum() / 1000
-                                        val player2Result = challenge.player2Times.sum() / 1000
-                                        if (player1Result < player2Result) challenge.player1
-                                        else if (player2Result == player1Result) "Draw"
-                                        else challenge.player2
-                                      }
-                                      else -> ""
-                                    }
+                                    determineWinner(
+                                        challenge.mode,
+                                        challenge.player1,
+                                        challenge.player2,
+                                        player1Result,
+                                        player2Result)
 
                                 // Update the challenge in pastChallenges
                                 userViewModel.removeOngoingChallenge(
@@ -226,7 +222,7 @@ fun OngoingChallengeCard(
   val displayText =
       if (isChallengeCompleted) {
         when (challenge.mode) {
-          "SPRINT" -> {
+          ChallengeMode.SPRINT.toString() -> {
             val totalWords =
                 if (currentUserId == challenge.player1) {
                   challenge.player1WordsCompleted.sum()
@@ -235,12 +231,12 @@ fun OngoingChallengeCard(
                 }
             "Your Total Words: $totalWords"
           }
-          "CHRONO" -> {
+          ChallengeMode.CHRONO.toString() -> {
             val totalTime =
                 if (currentUserId == challenge.player1) {
-                  challenge.player1Times.sum() / 1000
+                  challenge.player1Times.sum() / msToSecondsDivision
                 } else {
-                  challenge.player2Times.sum() / 1000
+                  challenge.player2Times.sum() / msToSecondsDivision
                 }
             "Your Total Time: ${totalTime}s"
           }
