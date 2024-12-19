@@ -15,6 +15,18 @@ class MockUserRepository : UserRepository {
           "user2" to
               mapOf("challengesCompleted" to 8, "challengesCreated" to 4, "challengesWon" to 6))
 
+  private val mockUsers =
+      listOf(
+          User(
+              uid = "mock-token",
+              name = "Active user",
+              friends = listOf("user3"),
+              friendRequests = listOf("user4", "user5"),
+              lastLoginDate = "2024-11-29"),
+          User(uid = "user3", name = "User 3", friends = listOf("mock-token")),
+          User(uid = "user4", name = "User 4"),
+          User(uid = "user5", name = "User 5"))
+
   fun succeed() {
     shouldFail = false
   }
@@ -44,7 +56,7 @@ class MockUserRepository : UserRepository {
 
   override fun init(onSuccess: () -> Unit) {
     if (!checkFailure {}) return
-
+    setUsers(mockUsers)
     onSuccess()
   }
 
@@ -168,7 +180,6 @@ class MockUserRepository : UserRepository {
 
     val currentUser = users.getValue(currentUserId)
     val friendUser = users.getValue(friendUserId)
-
     users[currentUserId] =
         currentUser.copy(
             friendRequests = currentUser.friendRequests - friendUserId,
