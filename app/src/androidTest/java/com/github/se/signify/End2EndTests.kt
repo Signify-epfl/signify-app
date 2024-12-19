@@ -179,7 +179,6 @@ class CombinedEnd2endTest {
     composeTestRule.onNodeWithTag("OngoingChallengesTitle").assertIsDisplayed()
 
     // Navigate back to Challenge Screen
-    composeTestRule.mainClock.advanceTimeBy(1000) // Adjust the delay as needed
     composeTestRule.onNodeWithTag("BackButton").performClick()
     composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag("ChallengeScreen").assertIsDisplayed()
