@@ -290,9 +290,6 @@ class SprintChallengeGameScreenTest {
 
     // Press the SKIP button
     composeTestRule.onNodeWithTag("SkipWordButton").performClick()
-
-    composeTestRule.waitForIdle()
-
     // Assert that timeLeft is reduced by 5 seconds
     composeTestRule.onNodeWithTag("TimerTextSprint").assertTextEquals("Time Left: 55 seconds")
   }
