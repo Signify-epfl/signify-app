@@ -125,7 +125,7 @@ fun FriendCard(friendId: String, content: @Composable () -> Unit) {
       modifier =
           Modifier.fillMaxWidth()
               .padding(8.dp)
-              .border(1.dp, Color.Gray, RoundedCornerShape(16.dp))
+              .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
               .testTag("FriendCard_$friendId"), // Add test tag for each friend card
       shape = RoundedCornerShape(16.dp),
   ) {

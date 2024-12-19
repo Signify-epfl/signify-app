@@ -31,6 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.challenge.Challenge
+import com.github.se.signify.model.challenge.ChallengeMode
 import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.challenge.ChallengeViewModel
 import com.github.se.signify.model.common.user.UserRepository
@@ -158,15 +159,18 @@ fun ChallengeHistoryScreen(
 @Composable
 fun PastChallengeCard(challenge: Challenge, userSession: UserSession) {
   val currentUserId = userSession.getUserId()
-  val player1Score = challenge.player1Times.sum().div(1000)
-  val player2Score = challenge.player2Times.sum().div(1000)
   val opponent = if (challenge.player1 == currentUserId) challenge.player2 else challenge.player1
   val mode = challenge.mode
-  val winner = challenge.winner ?: "No Winner"
+  val player1Result = calculatePlayerResult(challenge, isPlayer1 = true)
+  val player2Result = calculatePlayerResult(challenge, isPlayer1 = false)
+
+  val winner =
+      determineWinner(
+          challenge.mode, challenge.player1, challenge.player2, player1Result, player2Result)
 
   Log.d(
       "PastChallengeCard",
-      "Rendering card with Opponent=$opponent, Mode=$mode, Player1Score=$player1Score, Player2Score=$player2Score, Winner=$winner")
+      "Rendering card with Opponent=$opponent, Mode=$mode, Player1Score=$player1Result, Player2Score=$player2Result, Winner=$winner")
 
   Card(
       modifier =
@@ -178,9 +182,57 @@ fun PastChallengeCard(challenge: Challenge, userSession: UserSession) {
     Column(Modifier.padding(16.dp)) {
       Text(text = "Opponent: $opponent", fontSize = 16.sp)
       Text(text = "Mode: $mode", fontSize = 16.sp)
-      Text(text = "${challenge.player1} Score: $player1Score s", fontSize = 16.sp)
-      Text(text = "${challenge.player2} Score: $player2Score s", fontSize = 16.sp)
+      PlayerScoreText(player = challenge.player1, result = player1Result, mode = mode)
+      PlayerScoreText(player = challenge.player2, result = player2Result, mode = mode)
       Text(text = "Winner: $winner", fontSize = 16.sp)
     }
   }
+}
+
+fun calculatePlayerResult(challenge: Challenge, isPlayer1: Boolean): Double {
+  return when (challenge.mode) {
+    ChallengeMode.SPRINT.toString() -> {
+      if (isPlayer1) challenge.player1WordsCompleted.sum().toDouble()
+      else challenge.player2WordsCompleted.sum().toDouble()
+    }
+    else -> {
+      if (isPlayer1) challenge.player1Times.sum() / 1000.0
+      else challenge.player2Times.sum() / 1000.0
+    }
+  }
+}
+
+fun determineWinner(
+    mode: String,
+    player1: String,
+    player2: String,
+    player1Result: Double,
+    player2Result: Double
+): String {
+  return when (mode) {
+    ChallengeMode.SPRINT.toString() -> {
+      when {
+        player1Result > player2Result -> player1
+        player2Result > player1Result -> player2
+        else -> "Draw"
+      }
+    }
+    else -> {
+      when {
+        player1Result < player2Result -> player1
+        player2Result < player1Result -> player2
+        else -> "Draw"
+      }
+    }
+  }
+}
+
+@Composable
+fun PlayerScoreText(player: String, result: Double, mode: String) {
+  val scoreText =
+      when (mode) {
+        ChallengeMode.CHRONO.toString() -> "$player Score: $result s"
+        else -> "$player Score: $result words"
+      }
+  Text(text = scoreText, fontSize = 16.sp)
 }

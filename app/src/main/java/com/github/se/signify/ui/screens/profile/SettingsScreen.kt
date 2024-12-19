@@ -421,12 +421,6 @@ fun LanguageSwitch(isFrench: Boolean, onLanguageChange: (Boolean) -> Unit) {
                 onLanguageChange(true)
                 expanded = false
               })
-          DropdownMenuItem(
-              text = { Text(stringResource(R.string.no_other_supported_languages_text)) },
-              onClick = {
-                selectedLanguage = "N/A"
-                expanded = false
-              })
         }
   }
 }
