@@ -27,7 +27,6 @@ import androidx.compose.material.icons.automirrored.outlined.ExitToApp
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
@@ -51,6 +50,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -206,14 +206,17 @@ fun EditableProfilePictureField(
         },
         onDismiss = {},
         title = stringResource(R.string.confirm_changes_title),
-        message = stringResource(R.string.confirm_changes_message))
+        message = stringResource(R.string.confirm_changes_message),
+        confirmColor = MaterialTheme.colorScheme.error,
+    )
 
     ConfirmationDialog(
         showEditDialog,
         onConfirm = { userViewModel.updateProfilePictureUrl(selectedUri) },
         onDismiss = { selectedUri = profilePictureUrl.value?.toUri() },
         title = stringResource(R.string.confirm_changes_title),
-        message = stringResource(R.string.confirm_changes_message))
+        message = stringResource(R.string.confirm_changes_message),
+    )
   }
 }
 
@@ -286,7 +289,8 @@ fun ConfirmationDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
     title: String,
-    message: String
+    message: String,
+    confirmColor: Color = MaterialTheme.colorScheme.primary,
 ) {
   if (showDialog.value) {
 
@@ -332,12 +336,10 @@ fun ConfirmationDialog(
                                   onConfirm()
                                   showDialog.value = false // Close the dialog
                                 },
-                                colors =
-                                    ButtonDefaults.buttonColors(
-                                        containerColor = MaterialTheme.colorScheme.primary,
-                                        contentColor = MaterialTheme.colorScheme.onPrimary)) {
-                                  Text(confirmText)
-                                }
+                                colors = ButtonDefaults.buttonColors(containerColor = confirmColor),
+                            ) {
+                              Text(confirmText)
+                            }
 
                             // Cancel Button
                             Button(
@@ -348,10 +350,10 @@ fun ConfirmationDialog(
                                 },
                                 colors =
                                     ButtonDefaults.buttonColors(
-                                        containerColor = MaterialTheme.colorScheme.error,
-                                        contentColor = MaterialTheme.colorScheme.onError)) {
-                                  Text(cancelText)
-                                }
+                                        containerColor = MaterialTheme.colorScheme.onSurface),
+                            ) {
+                              Text(cancelText)
+                            }
                           }
                     }
               }
@@ -447,5 +449,7 @@ fun LogoutButton(userSession: UserSession, navigationActions: NavigationActions)
       },
       onDismiss = { showLogoutDialog.value = false }, // Close dialog without action
       title = stringResource(id = R.string.confirm_logout_title),
-      message = stringResource(id = R.string.confirm_logout_message))
+      message = stringResource(id = R.string.confirm_logout_message),
+      confirmColor = MaterialTheme.colorScheme.error,
+  )
 }
