@@ -7,7 +7,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -91,9 +90,6 @@ fun SprintChallengeGameScreen(
       while (timeLeft > 0) {
         delay(1000L)
         timeLeft--
-        if (timeLeft < 0) {
-          timeLeft = 0
-        }
       }
       isGameActive = false
       updateSprintChallenge(
@@ -147,32 +143,12 @@ fun SprintChallengeGameScreen(
 
           Spacer(modifier = Modifier.height(16.dp))
 
-          Row(
-              verticalAlignment = Alignment.CenterVertically,
-              horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                Text(
-                    text = "Words Completed: $completedWordCount",
-                    fontSize = 20.sp,
-                    modifier = Modifier.testTag("CompletedWordsCounterSprint"))
+          Text(
+              text = "Words Completed: $completedWordCount",
+              fontSize = 20.sp,
+              modifier = Modifier.testTag("CompletedWordsCounterSprint"))
 
-                androidx.compose.material3.Button(
-                    onClick = {
-                      // Skip word logic
-                      currentChallenge?.let {
-                        timeLeft =
-                            (timeLeft - 5).coerceAtLeast(0) // Ensure timeLeft does not go below 0
-                        currentWord = it.roundWords.random()
-                        currentLetterIndex = 0
-                      }
-                    },
-                    modifier = Modifier.size(100.dp, 40.dp).testTag("SkipWordButton"),
-                    enabled = timeLeft > 0 // Disable button when timeLeft is 0
-                    ) {
-                      Text("SKIP")
-                    }
-              }
-
-          Spacer(modifier = Modifier.height(16.dp))
+          Spacer(modifier = Modifier.height(32.dp))
 
           CameraBox(handLandmarkViewModel = handLandMarkViewModel, testTag = "CameraBoxSprint")
         }

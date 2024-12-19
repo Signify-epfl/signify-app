@@ -27,8 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -73,7 +71,7 @@ fun NewChallengeScreen(
     userViewModel.getFriendsList()
     userViewModel.getOngoingChallenges()
   }
-  val done = remember { mutableStateOf(false) }
+  var done = false
 
   AnnexScreenScaffold(
       navigationActions = navigationActions,
@@ -137,9 +135,9 @@ fun NewChallengeScreen(
                                   challenge.player1RoundCompleted.all { it } &&
                                       challenge.player2RoundCompleted.all { it }
 
-                              if (isBothCompleted && !done.value) {
+                              if (isBothCompleted && !done) {
                                 // Determine the winner
-                                done.value = true
+                                done = true
 
                                 val player1Result =
                                     calculatePlayerResult(challenge, isPlayer1 = true)
@@ -155,24 +153,22 @@ fun NewChallengeScreen(
                                         player2Result)
 
                                 // Update the challenge in pastChallenges
-                                synchronized(this) { // Synchronize updates to avoid race conditions
-                                  userViewModel.removeOngoingChallenge(
-                                      challenge.player1, challenge.challengeId)
-                                  userViewModel.addPastChallenge(
-                                      challenge.player1, challenge.challengeId)
-                                  userViewModel.removeOngoingChallenge(
-                                      challenge.player2, challenge.challengeId)
-                                  userViewModel.addPastChallenge(
-                                      challenge.player2, challenge.challengeId)
-                                  userViewModel.incrementField(winner, "challengesWon")
-                                  userViewModel.incrementField(
-                                      challenge.player2, "challengesCompleted")
-                                  userViewModel.incrementField(
-                                      challenge.player1, "challengesCompleted")
+                                userViewModel.removeOngoingChallenge(
+                                    challenge.player1, challenge.challengeId)
+                                userViewModel.addPastChallenge(
+                                    challenge.player1, challenge.challengeId)
+                                userViewModel.removeOngoingChallenge(
+                                    challenge.player2, challenge.challengeId)
+                                userViewModel.addPastChallenge(
+                                    challenge.player2, challenge.challengeId)
+                                userViewModel.incrementField(winner, "challengesWon")
+                                userViewModel.incrementField(
+                                    challenge.player2, "challengesCompleted")
+                                userViewModel.incrementField(
+                                    challenge.player1, "challengesCompleted")
 
-                                  challengeRepository.updateWinner(
-                                      challenge.challengeId, winner, {}, {})
-                                }
+                                challengeRepository.updateWinner(
+                                    challenge.challengeId, winner, {}, {})
                               }
                               OngoingChallengeCard(
                                   challenge = challenge,
