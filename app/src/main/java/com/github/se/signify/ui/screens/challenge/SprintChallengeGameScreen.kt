@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -55,105 +56,134 @@ fun SprintChallengeGameScreen(
     handLandMarkViewModel: HandLandmarkViewModel,
     challengeId: String
 ) {
-  val context = LocalContext.current
-  val currentUserId = userSession.getUserId() ?: return
+    val context = LocalContext.current
+    val currentUserId = userSession.getUserId() ?: return
 
-  // State variables
-  var currentChallenge by remember { mutableStateOf<Challenge?>(null) }
-  var currentWord by remember { mutableStateOf("") }
-  var currentLetterIndex by remember { mutableIntStateOf(0) }
-  var completedWordCount by remember { mutableIntStateOf(0) }
-  var timeLeft by remember { mutableIntStateOf(60) }
-  var isGameActive by remember { mutableStateOf(false) }
+    // State variables
+    var currentChallenge by remember { mutableStateOf<Challenge?>(null) }
+    var currentWord by remember { mutableStateOf("") }
+    var currentLetterIndex by remember { mutableIntStateOf(0) }
+    var completedWordCount by remember { mutableIntStateOf(0) }
+    var timeLeft by remember { mutableIntStateOf(60) }
+    var isGameActive by remember { mutableStateOf(false) }
 
-  // Fetch challenge
-  LaunchedEffect(challengeId) {
-    challengeRepository.getChallengeById(
-        challengeId = challengeId,
-        onSuccess = { challenge ->
-          currentChallenge = challenge
-          if (challenge.roundWords.isNotEmpty()) {
-            currentWord = challenge.roundWords.random()
-            isGameActive = true
-          } else {
-            Toast.makeText(context, "No words available for this sprint", Toast.LENGTH_SHORT).show()
-          }
-        },
-        onFailure = {
-          Toast.makeText(context, "Failed to load challenge", Toast.LENGTH_SHORT).show()
-        })
-  }
-
-  // Timer logic
-  LaunchedEffect(isGameActive) {
-    if (isGameActive) {
-      while (timeLeft > 0) {
-        delay(1000L)
-        timeLeft--
-      }
-      isGameActive = false
-      updateSprintChallenge(
-          currentUserId = currentUserId,
-          challengeRepository = challengeRepository,
-          challenge = currentChallenge,
-          wordsCompleted = completedWordCount,
-          navigationActions = navigationActions)
+    // Fetch challenge
+    LaunchedEffect(challengeId) {
+        challengeRepository.getChallengeById(
+            challengeId = challengeId,
+            onSuccess = { challenge ->
+                currentChallenge = challenge
+                if (challenge.roundWords.isNotEmpty()) {
+                    currentWord = challenge.roundWords.random()
+                    isGameActive = true
+                } else {
+                    Toast.makeText(context, "No words available for this sprint", Toast.LENGTH_SHORT).show()
+                }
+            },
+            onFailure = {
+                Toast.makeText(context, "Failed to load challenge", Toast.LENGTH_SHORT).show()
+            })
     }
-  }
 
-  // Gesture recognition updates
-  val landmarksState by handLandMarkViewModel.landMarks().collectAsState()
-  val detectedGesture = handLandMarkViewModel.getSolution()
-
-  LaunchedEffect(landmarksState) {
-    if (!landmarksState.isNullOrEmpty() && isGameActive) {
-      val currentLetter = currentWord.getOrNull(currentLetterIndex)?.uppercaseChar()
-      if (currentLetter != null &&
-          detectedGesture.equals(currentLetter.toString(), ignoreCase = true)) {
-        currentLetterIndex++
-        if (currentLetterIndex == currentWord.length) {
-          completedWordCount++
-          currentWord = currentChallenge?.roundWords?.random() ?: ""
-          currentLetterIndex = 0
+    // Timer logic
+    LaunchedEffect(isGameActive) {
+        if (isGameActive) {
+            while (timeLeft > 0) {
+                delay(1000L)
+                timeLeft--
+                if (timeLeft < 0){
+                    timeLeft = 0
+                }
+            }
+            isGameActive = false
+            updateSprintChallenge(
+                currentUserId = currentUserId,
+                challengeRepository = challengeRepository,
+                challenge = currentChallenge,
+                wordsCompleted = completedWordCount,
+                navigationActions = navigationActions
+            )
         }
-      }
     }
-  }
 
-  // UI rendering
-  if (currentChallenge == null) {
-    DisplayLoadingTextSprint()
-    return
-  }
+    // Gesture recognition updates
+    val landmarksState by handLandMarkViewModel.landMarks().collectAsState()
+    val detectedGesture = handLandMarkViewModel.getSolution()
 
-  AnnexScreenScaffold(navigationActions = navigationActions, testTag = "SprintChallengeScreen") {
-    Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top) {
-          SprintTimer(timeLeft = timeLeft)
-
-          Spacer(modifier = Modifier.height(16.dp))
-
-          SprintWordDisplay(currentWord = currentWord, currentLetterIndex = currentLetterIndex)
-
-          Spacer(modifier = Modifier.height(16.dp))
-
-          CurrentGestureDisplay(currentWord, currentLetterIndex)
-
-          Spacer(modifier = Modifier.height(16.dp))
-
-          Text(
-              text = "Words Completed: $completedWordCount",
-              fontSize = 20.sp,
-              modifier = Modifier.testTag("CompletedWordsCounterSprint"))
-
-          Spacer(modifier = Modifier.height(32.dp))
-
-          CameraBox(handLandmarkViewModel = handLandMarkViewModel, testTag = "CameraBoxSprint")
+    LaunchedEffect(landmarksState) {
+        if (!landmarksState.isNullOrEmpty() && isGameActive) {
+            val currentLetter = currentWord.getOrNull(currentLetterIndex)?.uppercaseChar()
+            if (currentLetter != null &&
+                detectedGesture.equals(currentLetter.toString(), ignoreCase = true)) {
+                currentLetterIndex++
+                if (currentLetterIndex == currentWord.length) {
+                    completedWordCount++
+                    currentWord = currentChallenge?.roundWords?.random() ?: ""
+                    currentLetterIndex = 0
+                }
+            }
         }
-  }
+    }
+
+    // UI rendering
+    if (currentChallenge == null) {
+        DisplayLoadingTextSprint()
+        return
+    }
+
+    AnnexScreenScaffold(navigationActions = navigationActions, testTag = "SprintChallengeScreen") {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            SprintTimer(timeLeft = timeLeft)
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            SprintWordDisplay(currentWord = currentWord, currentLetterIndex = currentLetterIndex)
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            CurrentGestureDisplay(currentWord, currentLetterIndex)
+
+            Spacer(modifier = Modifier.height(8.dp)) // Reduced padding between sections
+
+            // Words Completed Row with Skip Button
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Text(
+                    text = "Words Completed: $completedWordCount",
+                    fontSize = 20.sp,
+                    modifier = Modifier.testTag("CompletedWordsCounterSprint")
+                )
+
+                androidx.compose.material3.Button(
+                    onClick = {
+                        // Skip word logic
+                        currentChallenge?.let {
+                            timeLeft = (timeLeft - 5).coerceAtLeast(0) // Ensure timeLeft does not go below 0
+                            currentWord = it.roundWords.random()
+                            currentLetterIndex = 0
+                        }
+                    },
+                    modifier = Modifier.size(100.dp, 40.dp).testTag("SkipWordButton"),
+                    enabled = timeLeft > 0 // Disable button when timeLeft is 0
+                ) {
+                    Text("SKIP")
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp)) // Reduced padding before CameraBox
+
+            CameraBox(handLandmarkViewModel = handLandMarkViewModel, testTag = "CameraBoxSprint")
+        }
+    }
 }
+
+
 
 @SuppressLint("DiscouragedApi")
 @Composable
