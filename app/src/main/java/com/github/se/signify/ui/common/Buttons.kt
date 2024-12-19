@@ -52,8 +52,6 @@ fun BasicButton(
       modifier =
           modifier
               .size(30.dp)
-              .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(30))
-              .border(2.dp, MaterialTheme.colorScheme.background, shape = RoundedCornerShape(30))
               .clickable { onClick() },
       contentAlignment = Alignment.Center) {
         Icon(
