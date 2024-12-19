@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,11 +32,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -136,7 +136,6 @@ fun ChallengeScreen(
                 Box(
                     modifier =
                         Modifier.fillMaxWidth()
-                            .height(250.dp)
                             .testTag("OngoingChallengesListBox")) {
                       LazyColumn(
                           verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -356,7 +355,7 @@ fun OngoingChallengeCard(
 fun ChallengeHistoryButton(navigationActions: NavigationActions) {
   BasicButton(
       onClick = { navigationActions.navigateTo(Screen.CHALLENGE_HISTORY) },
-      icon = ImageVector.vectorResource(R.drawable.historyicon),
+      painter = painterResource(id = R.drawable.historyicon),
       iconTestTag = "ChallengeHistoryIcon",
       contentDescription = "Challenge History",
   )
