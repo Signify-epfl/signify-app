@@ -1,10 +1,15 @@
 package com.github.se.signify
 
 import android.Manifest
+import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performImeAction
+import androidx.compose.ui.test.performTextInput
 import androidx.test.rule.GrantPermissionRule
 import org.junit.Rule
 import org.junit.Test
@@ -121,12 +126,56 @@ class CombinedEnd2endTest {
      */
     composeTestRule.onNodeWithTag("BackButton").performClick()
     /**
-     * The User is back to the HomeScreen. He wants to Add a Friend. /!\ THIRD END2END TEST: Friends
-     * feature/!\
+     * He wants to change the settings. /!\ THIRD END2END TEST: Settings feature/!\
      */
 
+    composeTestRule.waitForIdle()
+    composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
+
+    // Step 2: Navigate to the Profile screen
+    composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Tab_Profile").performClick()
+    composeTestRule.onNodeWithTag("ProfileScreen").assertIsDisplayed()
+
+    // Step 3: Open the Settings screen
+    composeTestRule.onNodeWithTag("SettingsButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("SettingsButton").performClick()
+    composeTestRule.waitForIdle()
+    composeTestRule.onNodeWithTag("SettingsScreen", useUnmergedTree = true).assertIsDisplayed()
+
+    // Step 4: Update the username
+    composeTestRule.onNodeWithTag("usernameTextField", useUnmergedTree = true).assertIsDisplayed()
+    composeTestRule
+      .onNodeWithTag("usernameTextField", useUnmergedTree = true)
+      .performClick()
+      .performTextInput("NewUsername123")
+
+    // Step 5: Simulate the "Done" action on the keyboard
+    composeTestRule.onNodeWithTag("usernameTextField").performImeAction()
+    composeTestRule.onNodeWithText("Confirm", useUnmergedTree = true).performClick()
+
+    // Step 6: Verify the username has been updated
+    composeTestRule
+      .onNodeWithTag("usernameTextField", useUnmergedTree = true)
+      .assertTextContains("NewUsername123", substring = true)
+
+    // Step 7: Update the profile photo
+    composeTestRule.onNodeWithTag("DefaultProfilePicture", useUnmergedTree = true).assertIsDisplayed()
+    composeTestRule
+      .onNodeWithTag("editProfilePictureButton", useUnmergedTree = true)
+      .assertIsDisplayed()
+      .assertHasClickAction()
+
+    // Step 8: Return to the Profile screen
+    composeTestRule.onNodeWithTag("BackButton", useUnmergedTree = true).performClick()
+    composeTestRule.onNodeWithTag("ProfileScreen").assertIsDisplayed()
+
+    // Step 9: Navigate back to the Home screen
+    composeTestRule.onNodeWithTag("Tab_Home").performClick()
+    composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
+
     /** /!\ END OF THIRD END2END TEST/!\ */
-    /** He wants to change the settings. /!\ THIRD END2END TEST: Settings feature/!\ */
+    /** The User is back to the HomeScreen. He wants to Add a Friend. /!\ Fourth END2END TEST: Friends/!\ */
     /** /!\ END OF FOURTH END2END TEST/!\ */
   }
 }
