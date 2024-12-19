@@ -53,7 +53,7 @@ class CombinedEnd2endTest {
     // Wait for transition to HomeScreen
     composeTestRule.mainClock.advanceTimeBy(
         7_000) // This line skips the animation of the WelcomeScreen which is 7 seconds in an
-               // emulator to be time efficient.
+    // emulator to be time efficient.
     composeTestRule.waitForIdle()
     /**
      * -----------------------------------------
@@ -116,8 +116,8 @@ class CombinedEnd2endTest {
     composeTestRule.onNodeWithTag("SubmitButton").performClick()
     /**
      * He gets a Toast confirming that it was the correct answer. He goes back to the HomeScreen.
-     * TODO("Confirm that a toast was sent!")
-     * /!\ END OF SECOND END2END TEST/!\
+     *
+     * TODO("Confirm that a toast was sent!") /!\ END OF SECOND END2END TEST/!\
      */
     composeTestRule.onNodeWithTag("BackButton").performClick()
     /**
