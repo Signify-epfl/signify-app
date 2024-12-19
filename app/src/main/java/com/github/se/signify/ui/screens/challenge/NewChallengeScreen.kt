@@ -1,7 +1,5 @@
 package com.github.se.signify.ui.screens.challenge
 
-import android.annotation.SuppressLint
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -352,12 +350,11 @@ fun OngoingChallengeCard(
   }
 
   // Confirmation dialog
-  ConfirmationDialog(showDialog = showDialog, onClickAction = onDeleteClick)
+  DeletionConfirmationDialog(showDialog = showDialog, onClickAction = onDeleteClick)
 }
 
-@SuppressLint("SuspiciousIndentation")
 @Composable
-fun ConfirmationDialog(showDialog: MutableState<Boolean>, onClickAction: () -> Unit) {
+fun DeletionConfirmationDialog(showDialog: MutableState<Boolean>, onClickAction: () -> Unit) {
   if (showDialog.value) {
     val context = LocalContext.current
 
@@ -382,29 +379,34 @@ fun ConfirmationDialog(showDialog: MutableState<Boolean>, onClickAction: () -> U
                         val removedFriendText = stringResource(R.string.removed_challenge_text)
                         val yesText = stringResource(R.string.yes_button_text)
                         val noText = stringResource(R.string.no_button_text)
-                        Button(
+                        DialogButton(
                             onClick = {
                               onClickAction()
                               Toast.makeText(context, removedFriendText, Toast.LENGTH_SHORT).show()
-                              showDialog.value = false // Close the dialog
+                              showDialog.value = false
                             },
-                            colors =
-                                ButtonDefaults.buttonColors(
-                                    containerColor = MaterialTheme.colorScheme.error,
-                                    contentColor = MaterialTheme.colorScheme.onError)) {
-                              Text(yesText)
-                            }
-                        Button(
-                            onClick = { showDialog.value = false }, // Close the dialog
-                            colors =
-                                ButtonDefaults.buttonColors(
-                                    containerColor = MaterialTheme.colorScheme.primary,
-                                    contentColor = MaterialTheme.colorScheme.onPrimary)) {
-                              Text(noText)
-                            }
+                            contentColor = MaterialTheme.colorScheme.onError,
+                            containerColor = MaterialTheme.colorScheme.error,
+                            text = yesText)
+                        DialogButton(
+                            onClick = { showDialog.value = false },
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            text = noText)
                       }
                 }
           }
     }
   }
+}
+
+@Composable
+fun DialogButton(onClick: () -> Unit, containerColor: Color, contentColor: Color, text: String) {
+  Button(
+      onClick = { onClick() },
+      colors =
+          ButtonDefaults.buttonColors(
+              containerColor = containerColor, contentColor = contentColor)) {
+        Text(text)
+      }
 }
