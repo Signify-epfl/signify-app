@@ -14,6 +14,7 @@ import com.github.se.signify.model.challenge.MockChallengeRepository
 import com.github.se.signify.model.dependencyInjection.AppDependencyProvider
 import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -148,5 +149,115 @@ class ChronoChallengeGameScreenTest {
     // Wait to ensure the elapsed time has some time to change
     composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag("ElapsedTimeText").assertIsDisplayed()
+  }
+
+  @Test
+  fun findNextIndexReturnsCorrectIndexForPlayer1() {
+    // Arrange
+    val challenge =
+        Challenge(
+            challengeId = "testChallenge",
+            player1 = "user1",
+            player2 = "user2",
+            mode = "Chrono",
+            round = 1,
+            roundWords = listOf("apple", "banana", "cherry"),
+            player1RoundCompleted = listOf(true, true, false),
+            player2RoundCompleted = listOf(false, false, false),
+            gameStatus = "in_progress")
+
+    // Act
+    val result = findNextIndex(challenge, "user1")
+
+    // Assert
+    assertEquals(2, result) // The first incomplete round for player1 is at index 2
+  }
+
+  @Test
+  fun findNextIndexReturnsCorrectIndexForPlayer2() {
+    // Arrange
+    val challenge =
+        Challenge(
+            challengeId = "testChallenge",
+            player1 = "user1",
+            player2 = "user2",
+            mode = "Chrono",
+            round = 1,
+            roundWords = listOf("apple", "banana", "cherry"),
+            player1RoundCompleted = listOf(true, true, false),
+            player2RoundCompleted = listOf(false, true, true),
+            gameStatus = "in_progress")
+
+    // Act
+    val result = findNextIndex(challenge, "user2")
+
+    // Assert
+    assertEquals(0, result) // The first incomplete round for player2 is at index 0
+  }
+
+  @Test
+  fun findNextIndexReturnsMinus1whenAllRoundsAreCompletedForPlayer1() {
+    // Arrange
+    val challenge =
+        Challenge(
+            challengeId = "testChallenge",
+            player1 = "user1",
+            player2 = "user2",
+            mode = "Chrono",
+            round = 1,
+            roundWords = listOf("apple", "banana", "cherry"),
+            player1RoundCompleted = listOf(true, true, true),
+            player2RoundCompleted = listOf(false, false, false),
+            gameStatus = "in_progress")
+
+    // Act
+    val result = findNextIndex(challenge, "user1")
+
+    // Assert
+    assertEquals(-1, result) // All rounds for player1 are completed
+  }
+
+  @Test
+  fun findNextIndexReturnsMinus1ForInvalidUser() {
+    // Arrange
+    val challenge =
+        Challenge(
+            challengeId = "testChallenge",
+            player1 = "user1",
+            player2 = "user2",
+            mode = "Chrono",
+            round = 1,
+            roundWords = listOf("apple", "banana", "cherry"),
+            player1RoundCompleted = listOf(false, false, false),
+            player2RoundCompleted = listOf(false, false, false),
+            gameStatus = "in_progress")
+
+    // Act
+    val result = findNextIndex(challenge, "invalidUser")
+
+    // Assert
+    assertEquals(0, result) // Invalid user should return -1
+  }
+
+  @Test
+  fun findNextIndexReturnsMinus1ForEmptyCompletedList() {
+    // Arrange
+    val challenge =
+        Challenge(
+            challengeId = "testChallenge",
+            player1 = "user1",
+            player2 = "user2",
+            mode = "Chrono",
+            round = 1,
+            roundWords = listOf("apple", "banana", "cherry"),
+            player1RoundCompleted = emptyList(),
+            player2RoundCompleted = emptyList(),
+            gameStatus = "in_progress")
+
+    // Act
+    val result = findNextIndex(challenge, "user1")
+
+    // Assert
+    assertEquals(-1, result)
   }
 }
