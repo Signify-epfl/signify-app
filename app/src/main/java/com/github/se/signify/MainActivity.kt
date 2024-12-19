@@ -28,6 +28,7 @@ import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Route
 import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.model.navigation.TopLevelDestinations
 import com.github.se.signify.ui.screens.auth.LoginScreen
 import com.github.se.signify.ui.screens.auth.UnauthenticatedScreen
 import com.github.se.signify.ui.screens.challenge.ChallengeHistoryScreen
@@ -167,7 +168,7 @@ fun SignifyAppPreview(
             showTutorial = {
               // Navigate to Tutorial or Home depending on completion
               if (tutorialCompleted) {
-                navigationActions.navigateTo(Screen.HOME)
+                navigationActions.navigateTo(TopLevelDestinations.HOME)
               } else {
                 navigationActions.navigateTo(Screen.TUTORIAL)
               }
