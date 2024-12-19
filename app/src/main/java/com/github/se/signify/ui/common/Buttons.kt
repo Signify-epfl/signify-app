@@ -43,11 +43,11 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun BasicButton(
     onClick: () -> Unit,
-    icon: ImageVector? = null,
-    painter: Painter? = null,
     iconTestTag: String,
     contentDescription: String,
     modifier: Modifier = Modifier,
+    icon: ImageVector? = null,
+    painter: Painter? = null,
     tint: Color = MaterialTheme.colorScheme.primary,
 ) {
   Box(

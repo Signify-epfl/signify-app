@@ -176,11 +176,11 @@ fun EditableProfilePictureField(
     Column {
       BasicButton(
           onClick = { galleryLauncher.launch("image/*") },
-          icon = Icons.Outlined.Edit,
           iconTestTag = "editProfilePictureButtonIcon",
           contentDescription = "Edit Profile Picture",
-          tint = MaterialTheme.colorScheme.onBackground,
           modifier = Modifier.testTag("editProfilePictureButton"),
+          icon = Icons.Outlined.Edit,
+          tint = MaterialTheme.colorScheme.onBackground,
       )
 
       Spacer(modifier = Modifier.height(16.dp))
@@ -188,11 +188,11 @@ fun EditableProfilePictureField(
       if (isDeleteEnabled()) {
         BasicButton(
             onClick = { showDeleteDialog.value = true },
-            icon = Icons.Outlined.Delete,
             iconTestTag = "deleteProfilePictureButtonIcon",
             contentDescription = "Delete Profile Picture",
-            tint = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.testTag("deleteProfilePictureButton"),
+            icon = Icons.Outlined.Delete,
+            tint = MaterialTheme.colorScheme.onBackground,
         )
       }
     }
@@ -242,10 +242,10 @@ fun EditableUsernameField(
 
           BasicButton(
               onClick = { focusRequester.requestFocus() },
-              icon = Icons.Outlined.Edit,
               iconTestTag = "editUsernameButtonIcon",
               contentDescription = "Edit Username",
               modifier = Modifier.testTag("editUsernameButton"),
+              icon = Icons.Outlined.Edit,
               tint = MaterialTheme.colorScheme.onBackground)
 
           Spacer(modifier = Modifier.width(8.dp))
@@ -435,10 +435,10 @@ fun LogoutButton(userSession: UserSession, navigationActions: NavigationActions)
   // Logout Button UI
   BasicButton(
       onClick = { showLogoutDialog.value = true }, // Show confirmation dialog on click
-      icon = Icons.AutoMirrored.Outlined.ExitToApp,
       iconTestTag = "logoutButtonIcon",
       contentDescription = "Logout",
       modifier = Modifier.testTag("logoutButton"),
+      icon = Icons.AutoMirrored.Outlined.ExitToApp,
       tint = MaterialTheme.colorScheme.error,
   )
 

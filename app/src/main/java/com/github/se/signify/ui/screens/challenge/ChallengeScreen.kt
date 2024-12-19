@@ -359,8 +359,8 @@ fun OngoingChallengeCard(
 fun ChallengeHistoryButton(navigationActions: NavigationActions) {
   BasicButton(
       onClick = { navigationActions.navigateTo(Screen.CHALLENGE_HISTORY) },
-      painter = painterResource(id = R.drawable.historyicon),
       iconTestTag = "ChallengeHistoryIcon",
       contentDescription = "Challenge History",
-      modifier = Modifier.testTag("ChallengeHistoryButton"))
+      modifier = Modifier.testTag("ChallengeHistoryButton"),
+      painter = painterResource(id = R.drawable.historyicon))
 }
