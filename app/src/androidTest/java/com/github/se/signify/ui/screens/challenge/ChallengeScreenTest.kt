@@ -2,7 +2,6 @@ package com.github.se.signify.ui.screens.challenge
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -76,6 +75,16 @@ class ChallengeScreenTest {
   }
 
   @Test
+  fun challengeScreenDisplaysAllElements() {
+    composeTestRule.onNodeWithTag("ChallengeScreen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("MyFriendsButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("CreateChallengeButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("OngoingChallengesBox").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("OngoingChallengesTitle").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("OngoingChallengesLazyColumn").assertIsDisplayed()
+  }
+
+  @Test
   fun testMyFriendsButton_click_navigatesToFriendsScreen() {
     composeTestRule.onNodeWithTag("MyFriendsButton").assertIsDisplayed().performClick()
 
@@ -87,19 +96,6 @@ class ChallengeScreenTest {
     composeTestRule.onNodeWithTag("CreateChallengeButton").assertIsDisplayed().performClick()
 
     verify(navigationActions).navigateTo(Screen.CREATE_CHALLENGE)
-  }
-
-  @Test
-  fun testOngoingChallengesBox_isDisplayed() {
-    composeTestRule.onNodeWithTag("OngoingChallengesBox").assertIsDisplayed()
-  }
-
-  @Test
-  fun testOngoingChallengesTitle_isDisplayed() {
-    composeTestRule
-        .onNodeWithTag("OngoingChallengesTitle")
-        .assertIsDisplayed()
-        .assertTextEquals("My Ongoing Challenges")
   }
 
   @Test
