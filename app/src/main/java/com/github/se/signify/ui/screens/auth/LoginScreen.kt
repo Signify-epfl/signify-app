@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION") // We were told to use deprecated Google Authentication API
-
 package com.github.se.signify.ui.screens.auth
 
 /**
@@ -57,7 +55,7 @@ import com.github.se.signify.model.authentication.FirebaseAuthService
 import com.github.se.signify.model.authentication.MockAuthService
 import com.github.se.signify.model.common.user.saveUserToFirestore
 import com.github.se.signify.model.navigation.NavigationActions
-import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.model.navigation.TopLevelDestinations
 import com.github.se.signify.model.profile.stats.saveStatsToFirestore
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.AuthResult
@@ -153,7 +151,7 @@ fun LoginScreen(
           GoogleSignInButton(
               onSignInClick = {
                 if (authService.isMocked()) {
-                  navigationActions.navigateTo(Screen.HOME)
+                  navigationActions.navigateTo(TopLevelDestinations.HOME)
                   //  /!\ Add mocks here Like quiz, challenge, etc. /!\
                 } else {
                   authLauncher.launch(authService.getSignInIntent(context, token))
