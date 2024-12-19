@@ -105,13 +105,14 @@ fun SettingsScreen(
         ) {
           Spacer(modifier = Modifier.height(64.dp))
 
-          Row {
-            EditableUsernameField(userViewModel, userName.value)
+          Row(
+              modifier = Modifier.fillMaxWidth(),
+              verticalAlignment = Alignment.CenterVertically,
+              horizontalArrangement = Arrangement.SpaceBetween) {
+                EditableUsernameField(userViewModel, userName.value, Modifier.weight(1f))
 
-            EditableProfilePictureField(userViewModel, profilePictureUrl)
-          }
-
-          Spacer(modifier = Modifier.height(64.dp))
+                EditableProfilePictureField(userViewModel, profilePictureUrl, Modifier.weight(1f))
+              }
 
           Spacer(modifier = Modifier.height(64.dp))
 
@@ -143,7 +144,11 @@ fun SettingsScreen(
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
-fun EditableProfilePictureField(userViewModel: UserViewModel, profilePictureUrl: State<String?>) {
+fun EditableProfilePictureField(
+    userViewModel: UserViewModel,
+    profilePictureUrl: State<String?>,
+    modifier: Modifier = Modifier,
+) {
   val showDeleteDialog = remember { mutableStateOf(false) }
   val showEditDialog = remember { mutableStateOf(false) }
   var selectedUri by remember { mutableStateOf<Uri?>(null) }
@@ -161,7 +166,7 @@ fun EditableProfilePictureField(userViewModel: UserViewModel, profilePictureUrl:
           showEditDialog.value = true
         }
       }
-  Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+  Column(modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
     Row(
         modifier =
             Modifier.border(
@@ -220,11 +225,15 @@ fun EditableProfilePictureField(userViewModel: UserViewModel, profilePictureUrl:
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
-fun EditableUsernameField(userViewModel: UserViewModel, userName: String) {
+fun EditableUsernameField(
+    userViewModel: UserViewModel,
+    userName: String,
+    modifier: Modifier = Modifier,
+) {
   val showConfirmationDialog = remember { mutableStateOf(false) }
   var newName by remember { mutableStateOf("") }
 
-  Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+  Column(modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
     Row(
         modifier =
             Modifier.border(
