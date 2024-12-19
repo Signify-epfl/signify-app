@@ -46,8 +46,9 @@ import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.ui.common.AnnexScreenScaffold
+import com.github.se.signify.model.navigation.TopLevelDestinations
 import com.github.se.signify.ui.common.HelpText
+import com.github.se.signify.ui.common.MainScreenScaffold
 import com.github.se.signify.ui.common.TextButton
 
 private const val msToSecondsDivision = 1000
@@ -74,8 +75,9 @@ fun ChallengeScreen(
   }
   var done = false
 
-  AnnexScreenScaffold(
+  MainScreenScaffold(
       navigationActions = navigationActions,
+      topLevelDestination = TopLevelDestinations.CHALLENGE,
       testTag = "NewChallengeScreen",
       helpText =
           HelpText(
