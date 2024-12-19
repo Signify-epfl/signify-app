@@ -19,8 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -36,6 +34,8 @@ import com.github.se.signify.model.challenge.ChallengeViewModel
 import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.profile.stats.StatsRepository
+import com.github.se.signify.model.profile.stats.StatsViewModel
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.StatisticsTable
 
@@ -44,16 +44,19 @@ fun ChallengeHistoryScreen(
     navigationActions: NavigationActions,
     userSession: UserSession,
     userRepository: UserRepository,
-    challengeRepository: ChallengeRepository
+    challengeRepository: ChallengeRepository,
+    statsRepository: StatsRepository
 ) {
   val userViewModel: UserViewModel =
       viewModel(factory = UserViewModel.factory(userSession, userRepository))
   val challengeViewModel: ChallengeViewModel =
       viewModel(factory = ChallengeViewModel.factory(userSession, challengeRepository))
+    val statsViewModel: StatsViewModel =
+        viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
 
-  val challengesCompleted = remember { mutableIntStateOf(0) }
-  val challengesCreated = remember { mutableIntStateOf(0) }
-  val challengesWon = remember { mutableIntStateOf(0) }
+  val challengesCompleted = statsViewModel.completed.collectAsState()
+  val challengesCreated = statsViewModel.created.collectAsState()
+  val challengesWon = statsViewModel.won.collectAsState()
 
   val pastChallengeIds by userViewModel.pastChallenges.collectAsState()
   LaunchedEffect(pastChallengeIds) { challengeViewModel.getChallenges(pastChallengeIds) }
@@ -62,31 +65,9 @@ fun ChallengeHistoryScreen(
   LaunchedEffect(Unit) {
     userViewModel.getFriendsList()
     userViewModel.getPastChallenges()
-
-    // TODO: Move this to `UserViewModel`
-    userRepository.getChallengesCompleted(
-        userId = userSession.getUserId()!!,
-        onSuccess = { completed -> challengesCompleted.intValue = completed },
-        onFailure = { exception ->
-          Log.e("ChallengeStats", "Failed to fetch challenges completed: ${exception.message}")
-          challengesCompleted.intValue = 0 // Default value in case of failure
-        })
-
-    userRepository.getChallengesCreated(
-        userId = userSession.getUserId()!!,
-        onSuccess = { created -> challengesCreated.intValue = created },
-        onFailure = { exception ->
-          Log.e("ChallengeStats", "Failed to fetch challenges created: ${exception.message}")
-          challengesCreated.intValue = 0 // Default value in case of failure
-        })
-
-    userRepository.getChallengesWon(
-        userId = userSession.getUserId()!!,
-        onSuccess = { won -> challengesWon.intValue = won },
-        onFailure = { exception ->
-          Log.e("ChallengeStats", "Failed to fetch challenges won: ${exception.message}")
-          challengesWon.intValue = 0 // Default value in case of failure
-        })
+      statsViewModel.getCompletedChallengeStats()
+      statsViewModel.getCreatedChallengeStats()
+      statsViewModel.getWonChallengeStats()
   }
 
   AnnexScreenScaffold(
@@ -105,9 +86,9 @@ fun ChallengeHistoryScreen(
         statsTexts = challengeCategories,
         statsNumberList =
             listOf(
-                "${challengesCompleted.intValue}",
-                "${challengesCreated.intValue}",
-                "${challengesWon.intValue}"),
+                "${challengesCompleted.value}",
+                "${challengesCreated.value}",
+                "${challengesWon.value}"),
         columnTestTag = "ChallengesColumn",
         rowTestTag = "ChallengesRow",
         lineTextTestTag = "ChallengesText")

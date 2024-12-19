@@ -36,6 +36,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.fastCbrt
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
 import com.github.se.signify.model.authentication.UserSession
@@ -46,6 +47,9 @@ import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.model.profile.stats.Stats
+import com.github.se.signify.model.profile.stats.StatsRepository
+import com.github.se.signify.model.profile.stats.StatsViewModel
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.TextButton
 
@@ -55,11 +59,14 @@ fun NewChallengeScreen(
     userSession: UserSession,
     userRepository: UserRepository,
     challengeRepository: ChallengeRepository,
+    statsRepository: StatsRepository
 ) {
   val userViewModel: UserViewModel =
       viewModel(factory = UserViewModel.factory(userSession, userRepository))
   val challengeViewModel: ChallengeViewModel =
       viewModel(factory = ChallengeViewModel.factory(userSession, challengeRepository))
+    val statsViewModel: StatsViewModel =
+        viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
 
   val ongoingChallengeIds by userViewModel.ongoingChallengeIds.collectAsState()
   LaunchedEffect(ongoingChallengeIds) { challengeViewModel.getChallenges(ongoingChallengeIds) }
@@ -141,19 +148,12 @@ fun NewChallengeScreen(
                                     else challenge.player2
 
                                 // Update the challenge in pastChallenges
-                                userViewModel.removeOngoingChallenge(
-                                    challenge.player1, challenge.challengeId)
-                                userViewModel.addPastChallenge(
-                                    challenge.player1, challenge.challengeId)
-                                userViewModel.removeOngoingChallenge(
-                                    challenge.player2, challenge.challengeId)
-                                userViewModel.addPastChallenge(
-                                    challenge.player2, challenge.challengeId)
-                                userViewModel.incrementField(winner, "challengesWon")
-                                userViewModel.incrementField(
-                                    challenge.player2, "challengesCompleted")
-                                userViewModel.incrementField(
-                                    challenge.player1, "challengesCompleted")
+                                  listOf(challenge.player1, challenge.player2).forEach { player ->
+                                      userViewModel.removeOngoingChallenge(player, challenge.challengeId)
+                                      userViewModel.addPastChallenge(player, challenge.challengeId)
+                                      statsViewModel.updateCompletedChallengeStats(player)
+                                  }
+                                  statsViewModel.updateWonChallengeStats(winner)
 
                                 challengeRepository.updateWinner(
                                     challenge.challengeId, winner, {}, {})

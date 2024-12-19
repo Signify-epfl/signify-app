@@ -26,7 +26,7 @@ class StatsViewModel(
     _updateStatsEvent.value = UpdateStatsEvent.Idle
   }
 
-  private val UNKNOWN_ERROR_MESSAGE = "Unknown error"
+  private val unknownErrorMessage = "Unknown error"
 
   private val _updateStatsEvent = MutableStateFlow<UpdateStatsEvent>(UpdateStatsEvent.Idle)
   val updateStatsEvent: StateFlow<UpdateStatsEvent> = _updateStatsEvent
@@ -90,7 +90,7 @@ class StatsViewModel(
         },
         onFailure = { e ->
           logError("Error fetching letters learned:", e)
-          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: unknownErrorMessage)
         })
   }
 
@@ -105,7 +105,7 @@ class StatsViewModel(
         },
         onFailure = { e ->
           logError("Error fetching easy exercise stats:", e)
-          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: unknownErrorMessage)
         })
   }
 
@@ -120,7 +120,7 @@ class StatsViewModel(
         },
         onFailure = { e ->
           logError("Error fetching medium exercise stats:", e)
-          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: unknownErrorMessage)
         })
   }
 
@@ -135,7 +135,7 @@ class StatsViewModel(
         },
         onFailure = { e ->
           logError("Error fetching hard exercise stats:", e)
-          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: unknownErrorMessage)
         })
   }
 
@@ -150,7 +150,7 @@ class StatsViewModel(
         },
         onFailure = { e ->
           logError("Error fetching daily quest stats:", e)
-          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: unknownErrorMessage)
         })
   }
 
@@ -165,7 +165,7 @@ class StatsViewModel(
         },
         onFailure = { e ->
           logError("Error fetching weekly quest stats:", e)
-          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: unknownErrorMessage)
         })
   }
 
@@ -179,7 +179,7 @@ class StatsViewModel(
         },
         onFailure = { e ->
           logError("Error fetching completed challenge Stats:", e)
-          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: unknownErrorMessage)
         })
   }
 
@@ -194,7 +194,7 @@ class StatsViewModel(
         },
         onFailure = { e ->
           logError("Error fetching created challenge Stats:", e)
-          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: unknownErrorMessage)
         })
   }
 
@@ -209,7 +209,7 @@ class StatsViewModel(
         },
         onFailure = { e ->
           logError("Error fetching won challenge Stats:", e)
-          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: unknownErrorMessage)
         })
   }
 
@@ -225,7 +225,7 @@ class StatsViewModel(
         },
         onFailure = { e ->
           logError("Error updating letters learned:", e)
-          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: unknownErrorMessage)
         })
   }
 
@@ -240,7 +240,7 @@ class StatsViewModel(
         },
         onFailure = { e ->
           logError("Error updating easy exercise stats:", e)
-          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: unknownErrorMessage)
         })
   }
 
@@ -255,7 +255,7 @@ class StatsViewModel(
         },
         onFailure = { e ->
           logError("Error updating medium exercise stats:", e)
-          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: unknownErrorMessage)
         })
   }
 
@@ -270,7 +270,7 @@ class StatsViewModel(
         },
         onFailure = { e ->
           logError("Error updating hard exercise stats:", e)
-          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: unknownErrorMessage)
         })
   }
 
@@ -285,7 +285,7 @@ class StatsViewModel(
         },
         onFailure = { e ->
           logError("Error updating daily quest stats:", e)
-          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: unknownErrorMessage)
         })
   }
 
@@ -300,22 +300,22 @@ class StatsViewModel(
         },
         onFailure = { e ->
           logError("Error updating weekly quest stats:", e)
-          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: unknownErrorMessage)
         })
   }
 
-  fun updateCompletedChallengeStats() {
+  fun updateCompletedChallengeStats(userId: String) {
     _updateStatsEvent.value = UpdateStatsEvent.Loading
 
     repository.updateCompletedChallengeStats(
-        userSession.getUserId()!!,
+        userId,
         onSuccess = {
           logSuccess("Completed challenge stats updated successfully.")
           _updateStatsEvent.value = UpdateStatsEvent.Success
         },
         onFailure = { e ->
           logError("Error updating completed challenge stats:", e)
-          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: unknownErrorMessage)
         })
   }
 
@@ -330,22 +330,22 @@ class StatsViewModel(
         },
         onFailure = { e ->
           logError("Error updating created challenge stats:", e)
-          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: unknownErrorMessage)
         })
   }
 
-  fun updateWonChallengeStats() {
+  fun updateWonChallengeStats(winnerId: String) {
     _updateStatsEvent.value = UpdateStatsEvent.Loading
 
     repository.updateWonChallengeStats(
-        userSession.getUserId()!!,
+        winnerId,
         onSuccess = {
           logSuccess("Won challenge stats updated successfully.")
           _updateStatsEvent.value = UpdateStatsEvent.Success
         },
         onFailure = { e ->
           logError("Error updating won challenge stats:", e)
-          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: UNKNOWN_ERROR_MESSAGE)
+          _updateStatsEvent.value = UpdateStatsEvent.Failure(e.message ?: unknownErrorMessage)
         })
   }
 }

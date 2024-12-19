@@ -551,30 +551,6 @@ class FirestoreUserRepository(
         .addOnFailureListener { e -> onFailure(e) }
   }
 
-  override suspend fun getChallengesCompleted(
-      userId: String,
-      onSuccess: (Int) -> Unit,
-      onFailure: (Exception) -> Unit
-  ) {
-    getUserField(userId, "challengesCompleted", onSuccess, onFailure)
-  }
-
-  override suspend fun getChallengesCreated(
-      userId: String,
-      onSuccess: (Int) -> Unit,
-      onFailure: (Exception) -> Unit
-  ) {
-    getUserField(userId, "challengesCreated", onSuccess, onFailure)
-  }
-
-  override suspend fun getChallengesWon(
-      userId: String,
-      onSuccess: (Int) -> Unit,
-      onFailure: (Exception) -> Unit
-  ) {
-    getUserField(userId, "challengesWon", onSuccess, onFailure)
-  }
-
   private suspend fun getUserField(
       userId: String,
       field: String,

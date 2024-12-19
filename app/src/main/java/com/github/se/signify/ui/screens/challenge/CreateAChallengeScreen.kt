@@ -42,6 +42,8 @@ import com.github.se.signify.model.challenge.ChallengeViewModel
 import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.profile.stats.StatsRepository
+import com.github.se.signify.model.profile.stats.StatsViewModel
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.TextButton
 
@@ -51,11 +53,14 @@ fun CreateAChallengeScreen(
     userSession: UserSession,
     userRepository: UserRepository,
     challengeRepository: ChallengeRepository,
+    statsRepository: StatsRepository
 ) {
   val userViewModel: UserViewModel =
       viewModel(factory = UserViewModel.factory(userSession, userRepository))
   val challengeViewModel: ChallengeViewModel =
       viewModel(factory = ChallengeViewModel.factory(userSession, challengeRepository))
+    val statsViewModel: StatsViewModel =
+        viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
 
   // Fetch friends list when this screen is first displayed
   LaunchedEffect(Unit) { userViewModel.getFriendsList() }
@@ -115,7 +120,8 @@ fun CreateAChallengeScreen(
         onDismiss = { showDialog = false },
         userSession = userSession,
         userViewModel = userViewModel,
-        challengeViewModel = challengeViewModel)
+        challengeViewModel = challengeViewModel,
+        statsViewModel = statsViewModel)
   }
 }
 
@@ -154,7 +160,8 @@ fun ChallengeModeAlertDialog(
     onDismiss: () -> Unit,
     userSession: UserSession,
     userViewModel: UserViewModel,
-    challengeViewModel: ChallengeViewModel
+    challengeViewModel: ChallengeViewModel,
+    statsViewModel: StatsViewModel
 ) {
   val context = LocalContext.current
   val selectedMode = remember { mutableStateOf<ChallengeMode?>(null) }
@@ -174,8 +181,7 @@ fun ChallengeModeAlertDialog(
                     roundWords = words)
                 userViewModel.addOngoingChallenge(userSession.getUserId()!!, challengeId)
                 userViewModel.addOngoingChallenge(friendId, challengeId)
-                userViewModel.incrementField(userSession.getUserId()!!, "challengesCreated")
-                userViewModel.incrementField(friendId, "challengesCreated")
+                  statsViewModel.updateCreatedChallengeStats()
                 onDismiss()
               }
             },
