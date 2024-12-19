@@ -56,7 +56,6 @@ import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.TextButton
-import com.github.se.signify.ui.theme.Surface
 
 private const val msToSecondsDivision = 1000
 
