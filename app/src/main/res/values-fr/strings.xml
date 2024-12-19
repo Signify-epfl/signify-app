@@ -89,6 +89,7 @@
     <string name="challenge_completed_text">Défi déjà terminé, veuillez attendre le résultat</string>
     <string name="challenge_title_text">Sélectionnez un ami à défier</string>
     <string name="challenge_screen_title">Défis</string>
+    <string name="challenge_text">Défier</string>
     <string name="send_challenge_text">Envoyer un Défi</string>
     <string name="pick_a_mode_string">Choisir un mode</string>
     <string name="invalid_challenge_text">Chaîne de défi invalide</string>

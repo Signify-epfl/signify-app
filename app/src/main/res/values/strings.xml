@@ -88,6 +88,7 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="challenge_completed_text">Challenge already completed, wait for result</string>
     <string name="challenge_title_text">Select a Friend to Challenge</string>
     <string name="challenge_screen_title">Challenges</string>
+    <string name="challenge_text">Challenge</string>
     <string name="send_challenge_text">Send Challenge</string>
     <string name="pick_a_mode_string">Pick a Mode</string>
     <string name="invalid_challenge_text">Invalid challenge string</string>
