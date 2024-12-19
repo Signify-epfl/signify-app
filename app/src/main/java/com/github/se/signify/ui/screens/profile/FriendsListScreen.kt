@@ -184,7 +184,7 @@ fun FriendsListScreen(
 
           val numberRequests =
               if (friendsRequests.value.size > 1) friendsRequestsString
-              else stringResource(R.string.friends_text)
+              else stringResource(R.string.friends_requests_text)
 
           TextButton(
               { selectedList = friendsRequestsString },
