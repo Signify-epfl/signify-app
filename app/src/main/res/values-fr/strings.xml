@@ -57,7 +57,9 @@
     <string name="accept_text">Accepter</string>
     <string name="decline_text">Décliner</string>
     <string name="confirm_friend_removal_text">Êtes-vous sûr de vouloir supprimer cet ami ?</string>
+    <string name="confirm_challenge_deletion_text">Êtes-vous sûr(e) de vouloir supprimer ce défi ?</string>
     <string name="removed_friend_text">Ami(e) supprimé(e)</string>
+    <string name="removed_challenge_text">Défi supprimé</string>
     <string name="yes_button_text">Oui</string>
     <string name="no_button_text">Non</string>
     <string name="quiz_time_text">L’heure du quiz!</string>
