@@ -238,16 +238,15 @@ fun EditableUsernameField(
         modifier = Modifier.background(MaterialTheme.colorScheme.background),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center) {
-        val focusRequester = remember { FocusRequester() }
+          val focusRequester = remember { FocusRequester() }
 
           BasicButton(
-                onClick = { focusRequester.requestFocus() },
+              onClick = { focusRequester.requestFocus() },
               icon = Icons.Outlined.Edit,
               iconTestTag = "editUsernameButtonIcon",
               contentDescription = "Edit Username",
               modifier = Modifier.testTag("editUsernameButton"),
-              tint = MaterialTheme.colorScheme.onBackground
-          )
+              tint = MaterialTheme.colorScheme.onBackground)
 
           Spacer(modifier = Modifier.width(8.dp))
 

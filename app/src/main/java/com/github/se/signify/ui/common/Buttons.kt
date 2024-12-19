@@ -49,10 +49,7 @@ fun BasicButton(
     tint: Color = MaterialTheme.colorScheme.primary,
 ) {
   Box(
-      modifier =
-          modifier
-              .size(30.dp)
-              .clickable { onClick() },
+      modifier = modifier.size(30.dp).clickable { onClick() },
       contentAlignment = Alignment.Center) {
         Icon(
             icon,
