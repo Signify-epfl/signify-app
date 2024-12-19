@@ -101,7 +101,7 @@ fun SettingsScreen(
             navigationActions = navigationActions,
             testTag = "SettingsScreen",
         ) {
-          Spacer(modifier = Modifier.height(64.dp))
+          Spacer(modifier = Modifier.height(32.dp))
 
           Row(
               modifier = Modifier.fillMaxWidth(),
@@ -109,14 +109,15 @@ fun SettingsScreen(
               horizontalArrangement = Arrangement.SpaceBetween) {
                 EditableUsernameField(userViewModel, userName.value, Modifier.weight(1f))
 
+                Spacer(modifier = Modifier.width(16.dp))
+
                 EditableProfilePictureField(userViewModel, profilePictureUrl, Modifier.weight(1f))
               }
 
           Spacer(modifier = Modifier.height(64.dp))
 
           Row(
-              modifier =
-                  Modifier.fillMaxWidth().padding(16.dp).clickable { onThemeChange(!isDarkTheme) },
+              modifier = Modifier.fillMaxWidth().clickable { onThemeChange(!isDarkTheme) },
               verticalAlignment = Alignment.CenterVertically,
               horizontalArrangement = Arrangement.SpaceBetween) {
                 val modeText =
@@ -129,10 +130,10 @@ fun SettingsScreen(
                 Switch(checked = isDarkTheme, onCheckedChange = { onThemeChange(it) })
               }
 
+          Spacer(modifier = Modifier.height(16.dp))
+
           // Switch between English and French
           LanguageSwitch(isFrench, onLanguageChange)
-
-          Spacer(modifier = Modifier.height(64.dp))
 
           // Logout Button
           LogoutButton(userSession, navigationActions)
@@ -166,9 +167,7 @@ fun EditableProfilePictureField(
       }
   Column(modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
     Row(
-        modifier =
-            Modifier.background(MaterialTheme.colorScheme.background)
-                .padding(16.dp),
+        modifier = Modifier.background(MaterialTheme.colorScheme.background),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -195,7 +194,6 @@ fun EditableProfilePictureField(
         }
       }
 
-      Spacer(modifier = Modifier.width(8.dp))
       ProfilePicture(selectedUri?.toString())
     }
 
@@ -230,9 +228,7 @@ fun EditableUsernameField(
 
   Column(modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
     Row(
-        modifier =
-            Modifier.background(MaterialTheme.colorScheme.background)
-                .padding(horizontal = 24.dp, vertical = 8.dp),
+        modifier = Modifier.background(MaterialTheme.colorScheme.background),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center) {
           Icon(
@@ -379,10 +375,7 @@ fun LanguageSwitch(isFrench: Boolean, onLanguageChange: (Boolean) -> Unit) {
   Column {
     Row(
         modifier =
-            Modifier.testTag("LanguageRow")
-                .fillMaxWidth()
-                .clickable { expanded = !expanded }
-                .padding(16.dp),
+            Modifier.testTag("LanguageRow").fillMaxWidth().clickable { expanded = !expanded },
         horizontalArrangement = Arrangement.SpaceBetween) {
           Text(
               text = selectedLanguage,
@@ -434,10 +427,7 @@ fun LogoutButton(userSession: UserSession, navigationActions: NavigationActions)
   // Logout Button UI
   Button(
       onClick = { showLogoutDialog.value = true }, // Show confirmation dialog on click
-      modifier =
-          Modifier.fillMaxWidth()
-              .padding(horizontal = 16.dp, vertical = 8.dp)
-              .testTag("logoutButton"),
+      modifier = Modifier.fillMaxWidth().testTag("logoutButton"),
       colors =
           ButtonDefaults.buttonColors(
               containerColor = MaterialTheme.colorScheme.error,
