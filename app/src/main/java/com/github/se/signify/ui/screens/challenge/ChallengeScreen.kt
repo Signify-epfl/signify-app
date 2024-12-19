@@ -362,5 +362,5 @@ fun ChallengeHistoryButton(navigationActions: NavigationActions) {
       painter = painterResource(id = R.drawable.historyicon),
       iconTestTag = "ChallengeHistoryIcon",
       contentDescription = "Challenge History",
-  )
+      modifier = Modifier.testTag("ChallengeHistoryButton"))
 }

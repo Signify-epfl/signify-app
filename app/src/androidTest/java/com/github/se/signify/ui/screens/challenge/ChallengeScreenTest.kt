@@ -92,6 +92,12 @@ class ChallengeScreenTest {
   }
 
   @Test
+  fun challengeHistoryButtonNavigatesToChallengeHistoryScreen() {
+    composeTestRule.onNodeWithTag("ChallengeHistoryButton").assertIsDisplayed().performClick()
+    verify(navigationActions).navigateTo(Screen.CHALLENGE_HISTORY)
+  }
+
+  @Test
   fun testCreateChallengeButton_click_navigatesToCreateChallengeScreen() {
     composeTestRule.onNodeWithTag("CreateChallengeButton").assertIsDisplayed().performClick()
 
