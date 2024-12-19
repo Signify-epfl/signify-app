@@ -182,8 +182,7 @@ fun SignifyAppPreview(
         startDestination = Screen.CHALLENGE.route,
         route = Route.CHALLENGE,
     ) {
-      composable(Screen.CHALLENGE.route) { ChallengeScreen(navigationActions) }
-      composable(Screen.NEW_CHALLENGE.route) {
+      composable(Screen.CHALLENGE.route) {
         ChallengeScreen(
             navigationActions,
             dependencyProvider.userSession(),
