@@ -317,7 +317,6 @@ Let’s take a quick tour to help you get started with learning sign language ef
   
     <string name="french_text">French</string>
     <string name="english_text">English</string>
-    <string name="no_other_supported_languages_text">No other supported languages</string>
 
     <string name="logout_button_text">Logout</string>
     <string name="confirm_logout_title">Confirm Logout</string>
