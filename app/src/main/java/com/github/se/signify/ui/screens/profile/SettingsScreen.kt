@@ -168,38 +168,38 @@ fun EditableProfilePictureField(
           showEditDialog.value = true
         }
       }
-  Column(modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-    Row(
-        modifier = Modifier.background(MaterialTheme.colorScheme.background),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-      Column {
+  Row(
+      modifier = modifier.background(MaterialTheme.colorScheme.background),
+      horizontalArrangement = Arrangement.Center,
+      verticalAlignment = Alignment.CenterVertically,
+  ) {
+    Column {
+      BasicButton(
+          onClick = { galleryLauncher.launch("image/*") },
+          icon = Icons.Outlined.Edit,
+          iconTestTag = "editProfilePictureButtonIcon",
+          contentDescription = "Edit Profile Picture",
+          tint = MaterialTheme.colorScheme.onBackground,
+          modifier = Modifier.testTag("editProfilePictureButton"),
+      )
+
+      Spacer(modifier = Modifier.height(16.dp))
+
+      if (isDeleteEnabled()) {
         BasicButton(
-            onClick = { galleryLauncher.launch("image/*") },
-            icon = Icons.Outlined.Edit,
-            iconTestTag = "editProfilePictureButtonIcon",
-            contentDescription = "Edit Profile Picture",
+            onClick = { showDeleteDialog.value = true },
+            icon = Icons.Outlined.Delete,
+            iconTestTag = "deleteProfilePictureButtonIcon",
+            contentDescription = "Delete Profile Picture",
             tint = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.testTag("editProfilePictureButton"),
+            modifier = Modifier.testTag("deleteProfilePictureButton"),
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        if (isDeleteEnabled()) {
-          BasicButton(
-              onClick = { showDeleteDialog.value = true },
-              icon = Icons.Outlined.Delete,
-              iconTestTag = "deleteProfilePictureButtonIcon",
-              contentDescription = "Delete Profile Picture",
-              tint = MaterialTheme.colorScheme.onBackground,
-              modifier = Modifier.testTag("deleteProfilePictureButton"),
-          )
-        }
       }
-
-      ProfilePicture(selectedUri?.toString())
     }
+
+    Spacer(modifier = Modifier.width(8.dp))
+
+    ProfilePicture(selectedUri?.toString())
 
     ConfirmationDialog(
         showDeleteDialog,
@@ -386,7 +386,10 @@ fun LanguageSwitch(isFrench: Boolean, onLanguageChange: (Boolean) -> Unit) {
   Column {
     Row(
         modifier =
-            Modifier.testTag("LanguageRow").fillMaxWidth().clickable { expanded = !expanded },
+            Modifier.testTag("LanguageRow")
+                .fillMaxWidth()
+                .clickable { expanded = !expanded }
+                .padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween) {
           Text(
               text = selectedLanguage,
