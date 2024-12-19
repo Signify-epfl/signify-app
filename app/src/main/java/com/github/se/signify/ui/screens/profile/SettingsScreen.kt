@@ -104,11 +104,13 @@ fun SettingsScreen(
         ) {
           Spacer(modifier = Modifier.height(64.dp))
 
-          EditableProfilePictureField(userViewModel, profilePictureUrl)
+          Row {
+            EditableUsernameField(userViewModel, userName.value)
+
+            EditableProfilePictureField(userViewModel, profilePictureUrl)
+          }
 
           Spacer(modifier = Modifier.height(64.dp))
-
-          EditableUsernameField(userViewModel, userName.value)
 
           Spacer(modifier = Modifier.height(64.dp))
 
@@ -126,6 +128,7 @@ fun SettingsScreen(
                     color = MaterialTheme.colorScheme.onBackground)
                 Switch(checked = isDarkTheme, onCheckedChange = { onThemeChange(it) })
               }
+
           // Switch between English and French
           LanguageSwitch(isFrench, onLanguageChange)
 
