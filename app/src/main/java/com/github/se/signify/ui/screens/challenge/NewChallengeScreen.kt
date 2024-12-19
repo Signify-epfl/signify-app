@@ -301,7 +301,7 @@ fun OngoingChallengeCard(
                       Icon(
                           imageVector = Icons.Default.Delete,
                           contentDescription = "Delete Challenge",
-                          tint = Color.Gray, // Explicitly set color for visibility
+                          tint = MaterialTheme.colorScheme.error,
                           modifier = Modifier.size(30.dp) // Icon size for better visibility
                           )
                     }
