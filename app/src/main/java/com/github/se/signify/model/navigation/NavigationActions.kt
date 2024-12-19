@@ -1,7 +1,6 @@
 package com.github.se.signify.model.navigation
 
 import android.util.Log
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.github.se.signify.model.authentication.UserSession
 
@@ -27,9 +26,9 @@ open class NavigationActions(
         }
 
     navController.navigate(route) {
-      // Pop up to the start destination of the graph to
+      // Clear the stack at each navigation to the main screens
       // avoid building up a large stack of destinations
-      popUpTo(navController.graph.findStartDestination().id) {
+      popUpTo(0) {
         saveState = true
         inclusive = true
       }
