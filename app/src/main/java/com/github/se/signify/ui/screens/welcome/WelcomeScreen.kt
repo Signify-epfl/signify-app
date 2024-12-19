@@ -30,12 +30,20 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
+import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.model.navigation.TopLevelDestinations
 import kotlinx.coroutines.delay
 
 @Composable
-fun WelcomeScreen(navigationActions: NavigationActions) {
+fun WelcomeScreen(
+    navigationActions: NavigationActions,
+    userSession: UserSession,
+) {
+
+  // Check if the user is authenticated
+  val isAuthenticated = userSession.isLoggedIn()
 
   // List of image resource ids for hand sign animation
   val images =
@@ -69,7 +77,12 @@ fun WelcomeScreen(navigationActions: NavigationActions) {
       currentImage += 1
     }
     delay(2000) // Pause after the last image
-    navigationActions.navigateTo(Screen.AUTH)
+
+    if (isAuthenticated) {
+      navigationActions.navigateTo(TopLevelDestinations.HOME)
+    } else {
+      navigationActions.navigateTo(Screen.AUTH)
+    }
   }
 
   Column(

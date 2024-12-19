@@ -19,6 +19,12 @@ interface ChallengeRepository {
       onFailure: (Exception) -> Unit
   )
 
+  fun getChallenges(
+      challengeIds: List<ChallengeId>,
+      onSuccess: (List<Challenge>) -> Unit,
+      onFailure: (Exception) -> Unit
+  )
+
   fun updateChallenge(
       updatedChallenge: Challenge,
       onSuccess: () -> Unit,

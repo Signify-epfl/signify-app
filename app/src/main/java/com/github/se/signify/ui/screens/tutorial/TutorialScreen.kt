@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.model.navigation.NavigationActions
-import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.model.navigation.TopLevelDestinations
 import com.github.se.signify.ui.screens.home.HomeScreen
 
 private val overlayColor
@@ -96,7 +96,7 @@ fun TutorialScreen(navigationActions: NavigationActions, onFinish: () -> Unit) {
           highlightArea = currentStep.highlightArea,
           onNext = {
             if (isLastStep) {
-              navigationActions.navigateTo(Screen.HOME)
+              navigationActions.navigateTo(TopLevelDestinations.HOME)
               onFinish()
             } else {
               step++
@@ -107,7 +107,7 @@ fun TutorialScreen(navigationActions: NavigationActions, onFinish: () -> Unit) {
 
     SkipButton(
         onSkip = {
-          navigationActions.navigateTo(Screen.HOME)
+          navigationActions.navigateTo(TopLevelDestinations.HOME)
           onFinish()
         })
   }
@@ -117,7 +117,7 @@ fun TutorialScreen(navigationActions: NavigationActions, onFinish: () -> Unit) {
 fun SkipButton(
     onSkip: () -> Unit, // Action to perform when the button is clicked
 ) {
-  Box(modifier = Modifier.fillMaxSize().padding(16.dp), contentAlignment = Alignment.TopEnd) {
+  Box(modifier = Modifier.fillMaxSize().padding(top = 24.dp), contentAlignment = Alignment.TopEnd) {
     TextButton(onClick = onSkip, modifier = Modifier.testTag("SkipTutorialButton")) {
       Text(
           text = stringResource(R.string.skip_tutorial),

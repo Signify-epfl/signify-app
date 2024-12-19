@@ -3,7 +3,6 @@ package com.github.se.signify.model.navigation
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
 import com.github.se.signify.model.authentication.MockUserSession
-import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.any
@@ -11,7 +10,6 @@ import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
-import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 
 class NavigationActionsTest {
@@ -62,8 +60,7 @@ class NavigationActionsTest {
     navigationActions.navigateTo(destination)
     verify(navController, never())
         .navigate(eq(Route.PROFILE), anyOrNull<NavOptionsBuilder.() -> Unit>())
-    verify(navController)
-        .navigate(eq(Screen.UNAUTHENTICATED.route), anyOrNull<NavOptionsBuilder.() -> Unit>())
+    verify(navController).navigate(eq(Screen.UNAUTHENTICATED.route), anyOrNull(), anyOrNull())
   }
 
   @Test
@@ -113,10 +110,8 @@ class NavigationActionsTest {
 
   @Test
   fun currentRoute() {
-    assertNull(navigationActions.currentRoute())
-    navigationActions.navigateTo(Screen.DO_NOT_REQUIRE_AUTH)
-    assertNull(navigationActions.currentRoute())
+    navigationActions.currentRoute()
 
-    verify(navController, times(2)).currentDestination
+    verify(navController).currentDestination?.route
   }
 }

@@ -16,15 +16,15 @@ open class ChallengeViewModel(
     private val userSession: UserSession,
     private val repository: ChallengeRepository,
 ) : ViewModel() {
-  private val _challenge = MutableStateFlow<Challenge?>(null)
-  val challenge: StateFlow<Challenge?> = _challenge
+  private val _challenges = MutableStateFlow<List<Challenge>>(emptyList())
+  val challenges: StateFlow<List<Challenge>> = _challenges
 
   private val logTag = "ChallengeViewModel"
 
   fun sendChallengeRequest(
       friendId: String,
       mode: ChallengeMode,
-      challengeId: String,
+      challengeId: ChallengeId,
       roundWords: List<String>
   ) {
     repository.sendChallengeRequest(
@@ -37,11 +37,18 @@ open class ChallengeViewModel(
         onFailure = { e -> Log.e("CreateAChallenge", "Failed to create challenge: ${e.message}") })
   }
 
-  fun deleteChallenge(challengeId: String) {
+  fun deleteChallenge(challengeId: ChallengeId) {
     repository.deleteChallenge(
         challengeId,
         onSuccess = { Log.d(logTag, "Challenge deleted successfully.") },
         onFailure = { e -> Log.e(logTag, "Failed to delete challenge: ${e.message}") })
+  }
+
+  fun getChallenges(challengeIds: List<ChallengeId>) {
+    repository.getChallenges(
+        challengeIds,
+        onSuccess = { _challenges.value = it },
+        onFailure = { e -> Log.e(logTag, "Failed to get challenges: ${e.message}") })
   }
 
   companion object {

@@ -14,14 +14,17 @@ import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.R
 import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
+import com.github.se.signify.model.common.user.MockUserRepository
 import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.model.dependencyInjection.AppDependencyProvider
 import com.github.se.signify.model.home.hand.HandLandmarkViewModel
+import com.github.se.signify.model.home.quest.MockQuestRepository
 import com.github.se.signify.model.home.quest.Quest
 import com.github.se.signify.model.home.quest.QuestRepository
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.model.profile.stats.MockStatsRepository
 import com.github.se.signify.model.profile.stats.StatsRepository
 import com.github.se.signify.model.profile.stats.StatsViewModel
 import org.junit.Before
@@ -68,9 +71,9 @@ class QuestScreenTest {
     val context = mock(Context::class.java)
     val handLandMarkImplementation = AppDependencyProvider.handLandMarkRepository()
     userSession = MockUserSession()
-    questRepository = mock(QuestRepository::class.java)
-    userRepository = mock(UserRepository::class.java)
-    statsRepository = mock(StatsRepository::class.java)
+    questRepository = MockQuestRepository()
+    userRepository = MockUserRepository()
+    statsRepository = MockStatsRepository()
     navigationActions = mock(NavigationActions::class.java)
     handLandmarkViewModel = HandLandmarkViewModel(handLandMarkImplementation, context)
     userViewModel = UserViewModel(userSession, userRepository)

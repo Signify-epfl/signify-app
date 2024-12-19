@@ -1,7 +1,7 @@
 package com.github.se.signify.model.common.user
 
 import android.net.Uri
-import com.github.se.signify.model.challenge.Challenge
+import com.github.se.signify.model.challenge.ChallengeId
 
 private val failureException: Exception = Exception("Simulated failure")
 
@@ -92,11 +92,12 @@ class MockUserRepository : UserRepository {
     if (!checkFailure(onFailure)) return
     if (!checkUser(userId, onFailure)) return
 
-    val user = users.getValue(userId)
+    val user =
+        users[userId] ?: return onFailure(NoSuchElementException("User not found for ID: $userId"))
 
-    // This was done to match the implementation of the UserRepositoryFireStore
-    // TODO: Make this non-nullable
-    onSuccess(user.name ?: "unknown")
+    // Ensure user.name is non-nullable before passing it to onSuccess
+    user.name?.let { onSuccess(it) }
+        ?: onFailure(NoSuchElementException("Username is missing for user ID: $userId"))
   }
 
   override fun updateUserName(
@@ -231,15 +232,14 @@ class MockUserRepository : UserRepository {
   // IDs.
   override fun getOngoingChallenges(
       userId: String,
-      onSuccess: (List<Challenge>) -> Unit,
+      onSuccess: (List<ChallengeId>) -> Unit,
       onFailure: (Exception) -> Unit
   ) {
     if (!checkFailure(onFailure)) return
     if (!checkUser(userId, onFailure)) return
 
     val user = users.getValue(userId)
-    val challenges = user.ongoingChallenges.map { Challenge(it) }
-    onSuccess(challenges)
+    onSuccess(user.ongoingChallenges)
   }
 
   override fun removeOngoingChallenge(
@@ -351,6 +351,7 @@ class MockUserRepository : UserRepository {
     users[userId] = user.copy(pastChallenges = user.pastChallenges + challengeId) // Add challenge
   }
 
+  @Suppress("UNCHECKED_CAST")
   override fun updateUserField(
       userId: String,
       fieldName: String,
@@ -379,15 +380,14 @@ class MockUserRepository : UserRepository {
 
   override fun getPastChallenges(
       userId: String,
-      onSuccess: (List<Challenge>) -> Unit,
+      onSuccess: (List<ChallengeId>) -> Unit,
       onFailure: (Exception) -> Unit
   ) {
     if (!checkFailure(onFailure)) return
     if (!checkUser(userId, onFailure)) return
 
     val user = users.getValue(userId)
-    val challenges = user.pastChallenges.map { Challenge(it) }
-    onSuccess(challenges)
+    onSuccess(user.pastChallenges)
   }
 
   override suspend fun getChallengesCompleted(

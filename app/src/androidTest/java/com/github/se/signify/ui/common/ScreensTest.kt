@@ -21,6 +21,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
+import org.mockito.kotlin.never
 
 class ScreensTest {
   @Test
@@ -172,6 +173,48 @@ class ScreensTest {
           navigationActions = navigationActions, selected = LIST_TOP_LEVEL_DESTINATION.first())
     }
     composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
+  }
+
+  @Test
+  fun bottomNavigationMenuNavigates() {
+    val navigationActions = mock(NavigationActions::class.java)
+    val topLevelDestination = LIST_TOP_LEVEL_DESTINATION.first()
+    composeTestRule.setContent {
+      BottomNavigationMenu(
+          onTabSelect = { navigationActions.navigateTo(it) },
+          topLevelDestinations = LIST_TOP_LEVEL_DESTINATION,
+          selected = LIST_TOP_LEVEL_DESTINATION[1])
+    }
+
+    composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
+    composeTestRule
+        .onNodeWithTag("Tab_${topLevelDestination.route}")
+        .assertIsDisplayed()
+        .performClick()
+
+    // Assert that the click action was never triggered
+    verify(navigationActions).navigateTo(topLevelDestination)
+  }
+
+  @Test
+  fun bottomNavigationMenuDisablesCurrentDestination() {
+    val navigationActions = mock(NavigationActions::class.java)
+    val topLevelDestination = LIST_TOP_LEVEL_DESTINATION.first()
+    composeTestRule.setContent {
+      BottomNavigationMenu(
+          onTabSelect = { navigationActions.navigateTo(it) },
+          topLevelDestinations = LIST_TOP_LEVEL_DESTINATION,
+          selected = topLevelDestination)
+    }
+
+    composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
+    composeTestRule
+        .onNodeWithTag("Tab_${topLevelDestination.route}")
+        .assertIsDisplayed()
+        .performClick()
+
+    // Assert that the click action was never triggered
+    verify(navigationActions, never()).navigateTo(topLevelDestination)
   }
 
   @Test

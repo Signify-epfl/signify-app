@@ -77,7 +77,8 @@ class MockUserRepositoryTest {
     mockUserRepository.getFriendsList(blankUser.uid, onSuccessAny, doNotFail)
     mockUserRepository.getRequestsFriendsList(blankUser.uid, onSuccessAny, doNotFail)
     mockUserRepository.getUserById(blankUser.uid, { success += 1 }, doNotFail)
-    mockUserRepository.getUserName(blankUser.uid, onSuccessAny, doNotFail)
+    mockUserRepository.getUserName(
+        blankUser.uid, doNotSucceedAny, { assertTrue(it is NoSuchElementException) })
     mockUserRepository.updateUserName(blankUser.uid, "newName", onSuccess, doNotFail)
     mockUserRepository.getProfilePictureUrl(blankUser.uid, onSuccessAny, doNotFail)
     mockUserRepository.updateProfilePictureUrl(
@@ -95,7 +96,7 @@ class MockUserRepositoryTest {
     mockUserRepository.getStreak(blankUser.uid, onSuccessAny, doNotFail)
 
     shadowOf(Looper.getMainLooper()).idle()
-    assertEquals(19, success)
+    assertEquals(18, success)
   }
 
   @Test
@@ -230,7 +231,9 @@ class MockUserRepositoryTest {
 
   @Test
   fun getUserNameWorks() {
-    mockUserRepository.getUserName(blankUser.uid, { assertEquals("unknown", it) }, doNotFail)
+    mockUserRepository.getUserName(blankUser.uid, doNotSucceedAny) {
+      assertTrue(it is NoSuchElementException)
+    }
 
     mockUserRepository.getUserName(activeUser.uid, { assertEquals(activeUser.name, it) }, doNotFail)
   }
@@ -364,7 +367,7 @@ class MockUserRepositoryTest {
         {
           mockUserRepository.getOngoingChallenges(
               activeUser.uid,
-              { challenges -> assertTrue(challenges.any { it.challengeId == challengeId }) },
+              { challengeIds -> assertTrue(challengeIds.any { it == challengeId }) },
               doNotFail)
         },
         doNotFail)
@@ -377,8 +380,7 @@ class MockUserRepositoryTest {
     mockUserRepository.getOngoingChallenges(
         activeUser.uid,
         { challenges ->
-          assertEquals(
-              activeUser.ongoingChallenges.toSet(), challenges.map { it.challengeId }.toSet())
+          assertEquals(activeUser.ongoingChallenges.toSet(), challenges.map { it }.toSet())
         },
         doNotFail)
   }
@@ -400,7 +402,7 @@ class MockUserRepositoryTest {
         {
           mockUserRepository.getOngoingChallenges(
               user.uid,
-              { challenges -> assertFalse(challenges.any { it.challengeId == challengeId }) },
+              { challenges -> assertFalse(challenges.any { it == challengeId }) },
               doNotFail)
         },
         doNotFail)
@@ -643,6 +645,18 @@ class MockUserRepositoryTest {
   }
 
   @Test
+  fun getPastChallengesWorks() {
+    mockUserRepository.getPastChallenges(blankUser.uid, { assertTrue(it.isEmpty()) }, doNotFail)
+
+    mockUserRepository.getPastChallenges(
+        activeUser.uid,
+        { challenges ->
+          assertEquals(activeUser.pastChallenges.toSet(), challenges.map { it }.toSet())
+        },
+        doNotFail)
+  }
+
+  @Test
   fun getPastChallengesFailsForMissingUser() {
     mockUserRepository.getPastChallenges("nonExistentUser", doNotSucceedAny) { exception ->
       assertEquals("User not found", exception.message)
@@ -683,5 +697,23 @@ class MockUserRepositoryTest {
 
     shadowOf(Looper.getMainLooper()).idle()
     assertEquals(0, result)
+  }
+
+  @Test
+  fun getUserNameFailsWhenUserNotFound() {
+    val invalidUserId = "nonExistingUserId"
+    val expectedMessage = "User not found"
+    var capturedException: Exception? = null
+
+    // Invoke the getUserName function
+    mockUserRepository.getUserName(
+        userId = invalidUserId,
+        onSuccess = { fail("Should not succeed for invalid user ID") },
+        onFailure = { exception -> capturedException = exception })
+
+    // Assertions
+    shadowOf(Looper.getMainLooper()).idle() // Ensure all async tasks are completed
+    assertNotNull("Expected an exception to be captured", capturedException)
+    assertEquals("Exception message should match", expectedMessage, capturedException?.message)
   }
 }

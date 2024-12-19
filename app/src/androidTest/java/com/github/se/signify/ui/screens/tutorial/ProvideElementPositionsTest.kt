@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.LayoutCoordinates
-import androidx.compose.ui.layout.positionInWindow
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.Density
@@ -59,7 +59,7 @@ class ProvideElementPositionsTest {
     val density = Density(1f)
 
     // Mocking coordinates and size
-    `when`(mockCoordinates.positionInWindow()).thenReturn(Offset(50f, 100f))
+    `when`(mockCoordinates.positionInRoot()).thenReturn(Offset(50f, 100f))
     `when`(mockCoordinates.size).thenReturn(IntSize(200, 400))
 
     // Save a position
@@ -69,7 +69,7 @@ class ProvideElementPositionsTest {
     val expectedPosition =
         ElementPosition(
             x = 50.dp,
-            y = 76.dp, // 100 px - 24.dp padding
+            y = 100.dp, // No padding in this example
             width = 200.dp,
             height = 400.dp)
 
@@ -88,13 +88,13 @@ class ProvideElementPositionsTest {
     val density = Density(1f)
 
     // Mock initial position
-    `when`(mockCoordinates.positionInWindow()).thenReturn(Offset(30f, 60f))
+    `when`(mockCoordinates.positionInRoot()).thenReturn(Offset(30f, 60f))
     `when`(mockCoordinates.size).thenReturn(IntSize(100, 200))
     saveElementPosition(
         "testKey", mockCoordinates, density, positions ?: error("Positions not initialized"))
 
     // Mock updated position
-    `when`(mockCoordinates.positionInWindow()).thenReturn(Offset(90f, 120f))
+    `when`(mockCoordinates.positionInRoot()).thenReturn(Offset(90f, 120f))
     `when`(mockCoordinates.size).thenReturn(IntSize(300, 600))
     saveElementPosition(
         "testKey", mockCoordinates, density, positions ?: error("Positions not initialized"))
@@ -102,7 +102,7 @@ class ProvideElementPositionsTest {
     val expectedPosition =
         ElementPosition(
             x = 90.dp,
-            y = 96.dp, // 120 px - 24.dp padding
+            y = 120.dp, // No padding in this example
             width = 300.dp,
             height = 600.dp)
 

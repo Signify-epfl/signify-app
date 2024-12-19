@@ -208,6 +208,59 @@ class MockChallengeRepositoryTest {
   }
 
   @Test
+  fun `getChallenges succeeds when all challenges exist`() {
+    val playerId = "player1"
+    val challenges =
+        listOf(
+            Challenge("challenge1", playerId, "player2", "Sprint", gameStatus = "pending"),
+            Challenge("challenge2", playerId, "player3", "Chrono", gameStatus = "active"))
+    mockRepository.setChallenges(challenges)
+
+    var result = emptyList<Challenge>()
+    mockRepository.getChallenges(
+        challengeIds = challenges.map { it.challengeId },
+        onSuccess = { result = it },
+        onFailure = { fail("onFailure should not be called") })
+
+    assertEquals(challenges.toSet(), result.toSet())
+  }
+
+  @Test
+  fun `getChallenges succeeds with partial challenges`() {
+    val playerId = "player1"
+    val challenges =
+        listOf(
+            Challenge("challenge1", playerId, "player2", "Sprint", gameStatus = "pending"),
+            Challenge("challenge2", playerId, "player3", "Chrono", gameStatus = "active"))
+    mockRepository.setChallenges(challenges)
+
+    var result = emptyList<Challenge>()
+    mockRepository.getChallenges(
+        challengeIds = challenges.map { it.challengeId },
+        onSuccess = { result = it },
+        onFailure = { fail("onFailure should not be called") })
+
+    assertEquals(challenges.toSet(), result.toSet())
+  }
+
+  @Test
+  fun `getChallenges fails when shouldSuccees is false`() {
+    mockRepository.shouldSucceed = false
+
+    val playerId = "player1"
+    val challenges =
+        listOf(
+            Challenge("challenge1", playerId, "player2", "Sprint", gameStatus = "pending"),
+            Challenge("challenge2", playerId, "player3", "Chrono", gameStatus = "active"))
+    mockRepository.setChallenges(challenges)
+
+    mockRepository.getChallenges(
+        challengeIds = challenges.map { it.challengeId },
+        onSuccess = { fail("onSuccess should not be called") },
+        onFailure = { exception -> assertEquals("Simulated failure", exception.message) })
+  }
+
+  @Test
   fun `updateChallenge succeeds when challenge exists`() {
     mockRepository.sendChallengeRequest(
         player1Id, player2Id, mode, challengeId, listOf("A", "B", "C"), {}, {})

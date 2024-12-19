@@ -7,6 +7,7 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
@@ -17,7 +18,9 @@ import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.common.ProfilePicture
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -90,6 +93,9 @@ class SettingsScreenTest {
     // Check if the back button is displayed
     composeTestRule.onNodeWithTag("BackButton").assertIsDisplayed()
 
+    // Check if the logout button is displayed
+    composeTestRule.onNodeWithTag("logoutButton").assertIsDisplayed()
+
     composeTestRule.onRoot().printToLog("TAG")
   }
 
@@ -109,17 +115,6 @@ class SettingsScreenTest {
     composeTestRule.onNodeWithTag("usernameTextField").performTextInput(newName)
 
     composeTestRule.onNodeWithTag("usernameTextField").performImeAction()
-
-    composeTestRule.onNodeWithTag("confirmationPopup").assertIsDisplayed()
-  }
-
-  @Test
-  fun testDialogAppearsAfterLosingFocus() {
-    val newName = "Updated Username"
-
-    composeTestRule.onNodeWithTag("usernameTextField").performTextInput(newName)
-
-    composeTestRule.onRoot().performClick()
 
     composeTestRule.onNodeWithTag("confirmationPopup").assertIsDisplayed()
   }
@@ -190,6 +185,54 @@ class SettingsScreenTest {
 
   @Test
   fun testLanguageSwitch() {
-    composeTestRule.onNodeWithTag("LanguageSwitch").assertIsDisplayed().performClick()
+    composeTestRule.onNodeWithTag("LanguageRow").assertIsDisplayed()
+
+    composeTestRule.onNodeWithTag("LanguageRow").performClick()
+
+    composeTestRule.onNodeWithText("English").assertIsDisplayed()
+    composeTestRule.onNodeWithText("French").assertIsDisplayed()
+
+    composeTestRule.onNodeWithText("English").performClick()
+    composeTestRule.onNodeWithTag("LanguageRow").assertTextEquals("EN")
+
+    composeTestRule.onNodeWithTag("LanguageRow").performClick()
+    composeTestRule.onNodeWithText("French").performClick()
+    composeTestRule.onNodeWithTag("LanguageRow").assertTextEquals("FR")
+  }
+
+  @Test
+  fun logoutButton_showsConfirmationDialog_onClick() {
+
+    // Act: Click the Logout button
+    composeTestRule.onNodeWithTag("logoutButton").performClick()
+
+    // Assert: Verify confirmation dialog appears
+    composeTestRule.onNodeWithTag("confirmationPopup").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("confirmationPopupConfirm").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("confirmationPopupCancel").assertIsDisplayed()
+  }
+
+  @Test
+  fun confirmationDialog_confirm_performsLogout_andNavigates() = runBlocking {
+    // Act: Trigger dialog and confirm logout
+    composeTestRule.onNodeWithTag("logoutButton").performClick()
+    composeTestRule.onNodeWithTag("confirmationPopupConfirm").performClick()
+
+    // Wait for coroutines and Compose updates
+    composeTestRule.waitForIdle()
+
+    // Assert: Verify navigation triggered
+    verify(navigationActions).navigateTo(Screen.AUTH)
+  }
+
+  @Test
+  fun confirmationDialog_cancel_doesNotPerformLogout() {
+    // Act: Trigger dialog and cancel
+    composeTestRule.onNodeWithTag("logoutButton").performClick()
+    composeTestRule.onNodeWithTag("confirmationPopupCancel").performClick()
+
+    // Assert: Verify dialog is dismissed
+    verify(navigationActions, never()).navigateTo(eq(Screen.AUTH), eq(null))
+    composeTestRule.onNodeWithTag("confirmationPopup").assertDoesNotExist()
   }
 }

@@ -15,7 +15,13 @@ fun saveUserToFirestore() {
   val currentUser = auth.currentUser
 
   if (currentUser != null) {
-    val email = currentUser.email ?: "unknown"
+    val email = currentUser.email
+
+    if (email.isNullOrBlank()) {
+      Log.e(logTag, "Cannot save user: email is null or blank")
+      return
+    }
+
     val userId = email.split("@")[0]
     val name = currentUser.displayName
 

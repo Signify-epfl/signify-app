@@ -309,13 +309,16 @@ fun BottomNavigationMenu(
                 modifier = Modifier.testTag("TabIcon_${topLevelDestination.route}"))
           }, // Load the drawable icons
           selected = topLevelDestination == selected,
+          enabled = topLevelDestination != selected,
           onClick = { onTabSelect(topLevelDestination) },
-          modifier = Modifier.clip(RoundedCornerShape(50.dp)),
+          modifier =
+              Modifier.clip(RoundedCornerShape(50.dp)).testTag("Tab_${topLevelDestination.route}"),
           colors =
               NavigationBarItemDefaults.colors(
                   selectedIconColor = MaterialTheme.colorScheme.primary,
                   indicatorColor = Color.Transparent,
                   unselectedIconColor = MaterialTheme.colorScheme.onSurface,
+                  disabledIconColor = MaterialTheme.colorScheme.primary,
               ))
     }
   }

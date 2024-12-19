@@ -1,7 +1,9 @@
 package com.github.se.signify.model.challenge
 
+typealias ChallengeId = String
+
 data class Challenge(
-    val challengeId: String = "",
+    val challengeId: ChallengeId = "",
     val player1: String = "",
     val player2: String = "",
     val mode: String = "", // "chrono" or other types
@@ -13,6 +15,8 @@ data class Challenge(
         mutableListOf(false, false, false), // Track if player 1 completed each round
     var player2RoundCompleted: List<Boolean> =
         mutableListOf(false, false, false), // Track if player 2 completed each round
+    var player1WordsCompleted: MutableList<Int> = mutableListOf(),
+    var player2WordsCompleted: MutableList<Int> = mutableListOf(),
     var gameStatus: String =
         "not_started", // Possible values: "not_started", "in_progress", "completed"
     var winner: String? = null
