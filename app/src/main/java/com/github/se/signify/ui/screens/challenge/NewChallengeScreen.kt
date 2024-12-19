@@ -335,11 +335,12 @@ fun ConfirmationDialog(showDialog: MutableState<Boolean>, onClickAction: () -> U
       Surface(
           shape = RoundedCornerShape(16.dp),
           color = MaterialTheme.colorScheme.surface,
-          modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+          modifier = Modifier.fillMaxWidth().padding(16.dp).testTag("ConfirmationDialog")) {
             Column(
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally) {
-                  val confirmingDeleteChallengeText = "Are you sure you wanna delete this challenge"
+                  val confirmingDeleteChallengeText =
+                      stringResource(R.string.confirm_challenge_deletion_text)
                   Text(
                       text = confirmingDeleteChallengeText,
                       fontWeight = FontWeight.Bold,
@@ -348,7 +349,7 @@ fun ConfirmationDialog(showDialog: MutableState<Boolean>, onClickAction: () -> U
                   Row(
                       horizontalArrangement = Arrangement.SpaceEvenly,
                       modifier = Modifier.fillMaxWidth()) {
-                        val removedFriendText = "Challenge deleted"
+                        val removedFriendText = stringResource(R.string.removed_challenge_text)
                         val yesText = stringResource(R.string.yes_button_text)
                         val noText = stringResource(R.string.no_button_text)
                         Button(
