@@ -21,7 +21,8 @@ class MockUserRepository : UserRepository {
               uid = "mock-token",
               name = "Active user",
               friends = listOf("user3"),
-              friendRequests = listOf("user4", "user5")),
+              friendRequests = listOf("user4", "user5"),
+              lastLoginDate = "2024-11-29"),
           User(uid = "user3", name = "User 3", friends = listOf("mock-token")),
           User(uid = "user4", name = "User 4"),
           User(uid = "user5", name = "User 5"))
