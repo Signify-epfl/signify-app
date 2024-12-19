@@ -1,6 +1,7 @@
 package com.github.se.signify.end2end
 
 import android.Manifest
+import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -37,7 +38,10 @@ class SettingsEnd2EndTest {
     val profileScreenTag = "ProfileScreen"
     val settingsButtonTag = "SettingsButton"
     val settingsScreenTag = "SettingsScreen"
+    val confirmButtonText = "Confirm"
     val usernameTextFieldTag = "usernameTextField"
+    val defaultPictureTag = "DefaultProfilePicture"
+    val editPictureButtonTag = "editProfilePictureButton"
     val newUsername = "NewUsername123"
     val backButtonTag = "BackButton"
     val homeTabTag = "Tab_Home"
@@ -68,19 +72,25 @@ class SettingsEnd2EndTest {
 
     // Step 5: Simulate the "Done" action on the keyboard
     composeTestRule.onNodeWithTag(usernameTextFieldTag).performImeAction()
+    composeTestRule.onNodeWithText(confirmButtonText, useUnmergedTree = true).performClick()
 
     // Step 6: Verify the username has been updated
     composeTestRule
         .onNodeWithTag(usernameTextFieldTag, useUnmergedTree = true)
         .assertTextContains(newUsername, substring = true)
 
-    // TODO: Implement update and delete profile photo functionality in the test
+    // Step 7: Update the profile photo
+    composeTestRule.onNodeWithTag(defaultPictureTag, useUnmergedTree = true).assertIsDisplayed()
+    composeTestRule
+        .onNodeWithTag(editPictureButtonTag, useUnmergedTree = true)
+        .assertIsDisplayed()
+        .assertHasClickAction()
 
-    // Step 7: Return to the Profile screen
+    // Step 8: Return to the Profile screen
     composeTestRule.onNodeWithTag(backButtonTag, useUnmergedTree = true).performClick()
     composeTestRule.onNodeWithTag(profileScreenTag).assertIsDisplayed()
 
-    // Step 8: Navigate back to the Home screen
+    // Step 9: Navigate back to the Home screen
     composeTestRule.onNodeWithTag(homeTabTag).performClick()
     composeTestRule.onNodeWithTag(homeScreenTag).assertIsDisplayed()
   }
