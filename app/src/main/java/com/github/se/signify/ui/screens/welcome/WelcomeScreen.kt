@@ -39,6 +39,17 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.selects.onTimeout
 import kotlinx.coroutines.selects.select
 
+// List of image resource ids for hand sign animation
+private val images =
+    listOf(
+        R.drawable.letter_s,
+        R.drawable.letter_i,
+        R.drawable.letter_g,
+        R.drawable.letter_n,
+        R.drawable.letter_i,
+        R.drawable.letter_f,
+        R.drawable.letter_y)
+
 private const val letterDelay = 1000L
 private const val finalDelay = 1600L
 
@@ -58,17 +69,6 @@ fun WelcomeScreen(
         isAuthenticated -> Screen.HOME
         else -> Screen.AUTH
       }
-
-  // List of image resource ids for hand sign animation
-  val images =
-      listOf(
-          R.drawable.letter_s,
-          R.drawable.letter_i,
-          R.drawable.letter_g,
-          R.drawable.letter_n,
-          R.drawable.letter_i,
-          R.drawable.letter_f,
-          R.drawable.letter_y)
 
   // Welcome text to display
   val welcomeText = stringResource(R.string.welcome_text)
@@ -125,6 +125,10 @@ fun WelcomeScreen(
               text = welcomeText, highlightIndex = highlightIndices.elementAt(currentImage))
         }
       }
+}
+
+fun welcomeScreenDuration(): Long {
+  return images.size * letterDelay + finalDelay
 }
 
 @Composable
