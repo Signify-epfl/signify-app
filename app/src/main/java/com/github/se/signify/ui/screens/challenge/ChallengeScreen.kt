@@ -117,10 +117,10 @@ fun ChallengeScreen(
     Box(
         modifier =
             Modifier.fillMaxWidth()
-                .padding(16.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .border(2.dp, MaterialTheme.colorScheme.onPrimary)
                 .background(MaterialTheme.colorScheme.primary)
+                .padding(16.dp)
                 .testTag("OngoingChallengesBox")) {
           Column(
               horizontalAlignment = Alignment.CenterHorizontally,
