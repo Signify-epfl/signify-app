@@ -9,10 +9,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -31,6 +31,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -82,7 +83,7 @@ fun ChallengeScreen(
   MainScreenScaffold(
       navigationActions = navigationActions,
       topLevelDestination = TopLevelDestinations.CHALLENGE,
-      testTag = "NewChallengeScreen",
+      testTag = "ChallengeScreen",
       helpText =
           HelpText(
               title = stringResource(R.string.challenge_screen_title),
@@ -116,9 +117,10 @@ fun ChallengeScreen(
     Box(
         modifier =
             Modifier.fillMaxWidth()
+                .padding(16.dp)
+                .clip(RoundedCornerShape(16.dp))
                 .border(2.dp, MaterialTheme.colorScheme.onPrimary)
                 .background(MaterialTheme.colorScheme.primary)
-                .padding(16.dp)
                 .testTag("OngoingChallengesBox")) {
           Column(
               horizontalAlignment = Alignment.CenterHorizontally,
@@ -136,6 +138,7 @@ fun ChallengeScreen(
                 Box(
                     modifier =
                         Modifier.fillMaxWidth()
+                            .heightIn(min = 400.dp, max = 800.dp)
                             .testTag("OngoingChallengesListBox")) {
                       LazyColumn(
                           verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -207,6 +210,7 @@ fun ChallengeScreen(
                     }
               }
         }
+    Spacer(modifier = Modifier.height(16.dp))
   }
 }
 
