@@ -13,12 +13,12 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class FriendsListScreenFeaturesEnd2endTest {
+class FriendsListAndChallengeFeaturesEnd2endTest {
 
   @get:Rule val composeTestRule = createAndroidComposeRule<MainActivity>()
 
   @Test
-  fun friendsListScreenEnd2endTest() {
+  fun friendsList_Challenge_ScreenEnd2endTest() {
 
     composeTestRule.onNodeWithText("Welcome to Signify").assertIsDisplayed()
     // Wait for the transition to Login Screen
@@ -27,6 +27,54 @@ class FriendsListScreenFeaturesEnd2endTest {
     // Wait for navigation to HomeScreen
     composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
+
+    // Navigate to Challenge Screen
+    composeTestRule.onNodeWithTag("Tab_Challenge").performClick()
+    composeTestRule.onNodeWithTag("ChallengeScreen").assertIsDisplayed()
+
+    // Navigate to New Challenge Screen
+    composeTestRule.onNodeWithTag("ChallengeButton").performClick()
+    composeTestRule.onNodeWithTag("NewChallengeScreen").assertIsDisplayed()
+
+    // Verify that we have a friend
+    composeTestRule.onNodeWithTag("MyFriendsButton").performClick()
+    composeTestRule.onNodeWithTag("FriendsListScreen").assertIsDisplayed()
+    composeTestRule.onNodeWithText("user3").assertIsDisplayed()
+
+    // Navigate to Create a Challenge Screen
+    composeTestRule.onNodeWithTag("BackButton").performClick()
+    composeTestRule.onNodeWithTag("NewChallengeScreen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("CreateChallengeButton").performClick()
+    composeTestRule.onNodeWithTag("CreateAChallengeContent").assertIsDisplayed()
+
+    // Create a Sprint challenge with user3
+    composeTestRule.onNodeWithTag("ChallengeButton_user3").performClick()
+    composeTestRule.onNodeWithTag("SprintModeButton").performClick()
+    composeTestRule.onNodeWithTag("SendChallengeButton").performClick()
+
+    // Navigate back to New Challenge Screen
+    composeTestRule.onNodeWithTag("BackButton").performClick()
+    composeTestRule.onNodeWithTag("NewChallengeScreen").assertIsDisplayed()
+
+    // Verify the created challenge is displayed
+    // composeTestRule.onNodeWithText("Opponent").assertIsDisplayed()
+    // composeTestRule.onNodeWithText("user3").assertIsDisplayed()
+    // composeTestRule.onNodeWithText("Mode : SPRINT").assertIsDisplayed()
+
+    // Navigate back to Challenge Screen
+    composeTestRule.onNodeWithTag("BackButton").performClick()
+    composeTestRule.onNodeWithTag("ChallengeScreen").assertIsDisplayed()
+
+    // Navigate to History Challenge Screen
+    composeTestRule.onNodeWithTag("HistoryButton").performClick()
+    composeTestRule.onNodeWithTag("ChallengeHistoryScreen").assertIsDisplayed()
+
+    // Verify the number of created challenges is 1
+    // TODO : check the number of created
+
+    // Navigate back to Challenge Screen
+    composeTestRule.onNodeWithTag("BackButton").performClick()
+    composeTestRule.onNodeWithTag("ChallengeScreen").assertIsDisplayed()
 
     // Navigate to Profile Screen
     composeTestRule.onNodeWithTag("Tab_Profile").performClick()
