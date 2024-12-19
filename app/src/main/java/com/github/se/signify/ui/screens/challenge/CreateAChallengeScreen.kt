@@ -191,8 +191,8 @@ fun ChallengeModeAlertDialog(
             onClick = onDismiss,
             testTag = "CancelButton",
             text = stringResource(R.string.cancel_text),
-            backgroundColor = MaterialTheme.colorScheme.surface,
-            textColor = MaterialTheme.colorScheme.onSurface,
+            backgroundColor = MaterialTheme.colorScheme.onSurface,
+            textColor = MaterialTheme.colorScheme.surface,
         )
       },
       title = {

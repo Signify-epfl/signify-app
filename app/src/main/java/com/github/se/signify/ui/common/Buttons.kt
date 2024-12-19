@@ -45,19 +45,15 @@ fun BasicButton(
     iconTestTag: String,
     contentDescription: String,
     modifier: Modifier = Modifier,
+    tint: Color = MaterialTheme.colorScheme.primary,
 ) {
   Box(
-      modifier =
-          modifier
-              .size(30.dp)
-              .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(30))
-              .border(2.dp, MaterialTheme.colorScheme.background, shape = RoundedCornerShape(30))
-              .clickable { onClick() },
+      modifier = modifier.size(30.dp).clickable { onClick() },
       contentAlignment = Alignment.Center) {
         Icon(
             icon,
             contentDescription = contentDescription,
-            tint = MaterialTheme.colorScheme.primary,
+            tint = tint,
             modifier = Modifier.size(30.dp).testTag(iconTestTag))
       }
 }
