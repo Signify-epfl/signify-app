@@ -22,7 +22,6 @@ import com.github.se.signify.model.profile.stats.StatsRepository
 import com.github.se.signify.model.profile.stats.StatsViewModel
 import com.github.se.signify.ui.common.AccountInformation
 import com.github.se.signify.ui.common.AnnexScreenScaffold
-import com.github.se.signify.ui.common.CreateGraph
 import com.github.se.signify.ui.common.LearnedLetterList
 import com.github.se.signify.ui.common.StatisticsTable
 
@@ -108,8 +107,5 @@ fun MyStatsScreen(
         statsTexts = listOf(dailyQuestsText, weeklyQuestsText),
         statsNumberList = listOf("${daily.value}", "${weekly.value}"),
         lineTextTestTag = "QuestsText")
-    Spacer(modifier = Modifier.height(64.dp))
-    // Graphs and Stats
-    CreateGraph(timePerLetter = timePerLetter.value)
   }
 }
