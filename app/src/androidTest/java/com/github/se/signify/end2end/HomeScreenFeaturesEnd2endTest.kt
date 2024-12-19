@@ -103,6 +103,11 @@ class HomeScreenFeaturesEnd2endTest {
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("QuizButton").performClick()
     composeTestRule.onNodeWithTag("QuizTitle").assertIsDisplayed()
+
+    // Simulate choosing the correct solution based on mocked data
+    composeTestRule.onNodeWithTag("OptionRadioButton_apple").performClick()
+    composeTestRule.onNodeWithTag("SubmitButton").performClick()
+
     // After finishing the task go back
     composeTestRule.onNodeWithTag("BackButton").performClick()
 

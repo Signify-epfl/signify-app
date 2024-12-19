@@ -152,7 +152,7 @@ fun QuizContent(
                             unselectedColor =
                                 MaterialTheme.colorScheme.onSurfaceVariant // Added unselected color
                             ),
-                    modifier = Modifier.testTag("OptionRadioButton"))
+                    modifier = Modifier.testTag("OptionRadioButton_$option"))
                 Text(
                     text = option,
                     color = MaterialTheme.colorScheme.primary,
