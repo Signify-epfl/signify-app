@@ -46,6 +46,7 @@ fun BasicButton(
     iconTestTag: String,
     contentDescription: String,
     modifier: Modifier = Modifier,
+    tint: Color = MaterialTheme.colorScheme.primary,
 ) {
   Box(
       modifier =
@@ -58,7 +59,7 @@ fun BasicButton(
         Icon(
             icon,
             contentDescription = contentDescription,
-            tint = MaterialTheme.colorScheme.primary,
+            tint = tint,
             modifier = Modifier.size(30.dp).testTag(iconTestTag))
       }
 }
