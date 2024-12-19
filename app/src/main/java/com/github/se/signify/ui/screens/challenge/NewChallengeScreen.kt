@@ -1,6 +1,5 @@
 package com.github.se.signify.ui.screens.challenge
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -28,6 +27,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,6 +41,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.challenge.Challenge
+import com.github.se.signify.model.challenge.ChallengeMode
 import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.challenge.ChallengeViewModel
 import com.github.se.signify.model.common.user.UserRepository
@@ -48,6 +50,8 @@ import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.TextButton
+
+private const val msToSecondsDivision = 1000
 
 @Composable
 fun NewChallengeScreen(
@@ -69,6 +73,7 @@ fun NewChallengeScreen(
     userViewModel.getFriendsList()
     userViewModel.getOngoingChallenges()
   }
+  val done = remember { mutableStateOf(false) }
 
   AnnexScreenScaffold(
       navigationActions = navigationActions,
@@ -132,31 +137,42 @@ fun NewChallengeScreen(
                                   challenge.player1RoundCompleted.all { it } &&
                                       challenge.player2RoundCompleted.all { it }
 
-                              if (isBothCompleted) {
+                              if (isBothCompleted && !done.value) {
                                 // Determine the winner
-                                val player1Time = challenge.player1Times.sum()
-                                val player2Time = challenge.player2Times.sum()
+                                done.value = true
+
+                                val player1Result =
+                                    calculatePlayerResult(challenge, isPlayer1 = true)
+                                val player2Result =
+                                    calculatePlayerResult(challenge, isPlayer1 = false)
+
                                 val winner =
-                                    if (player1Time < player2Time) challenge.player1
-                                    else challenge.player2
+                                    determineWinner(
+                                        challenge.mode,
+                                        challenge.player1,
+                                        challenge.player2,
+                                        player1Result,
+                                        player2Result)
 
                                 // Update the challenge in pastChallenges
-                                userViewModel.removeOngoingChallenge(
-                                    challenge.player1, challenge.challengeId)
-                                userViewModel.addPastChallenge(
-                                    challenge.player1, challenge.challengeId)
-                                userViewModel.removeOngoingChallenge(
-                                    challenge.player2, challenge.challengeId)
-                                userViewModel.addPastChallenge(
-                                    challenge.player2, challenge.challengeId)
-                                userViewModel.incrementField(winner, "challengesWon")
-                                userViewModel.incrementField(
-                                    challenge.player2, "challengesCompleted")
-                                userViewModel.incrementField(
-                                    challenge.player1, "challengesCompleted")
+                                synchronized(this) { // Synchronize updates to avoid race conditions
+                                  userViewModel.removeOngoingChallenge(
+                                      challenge.player1, challenge.challengeId)
+                                  userViewModel.addPastChallenge(
+                                      challenge.player1, challenge.challengeId)
+                                  userViewModel.removeOngoingChallenge(
+                                      challenge.player2, challenge.challengeId)
+                                  userViewModel.addPastChallenge(
+                                      challenge.player2, challenge.challengeId)
+                                  userViewModel.incrementField(winner, "challengesWon")
+                                  userViewModel.incrementField(
+                                      challenge.player2, "challengesCompleted")
+                                  userViewModel.incrementField(
+                                      challenge.player1, "challengesCompleted")
 
-                                challengeRepository.updateWinner(
-                                    challenge.challengeId, winner, {}, {})
+                                  challengeRepository.updateWinner(
+                                      challenge.challengeId, winner, {}, {})
+                                }
                               }
                               OngoingChallengeCard(
                                   challenge = challenge,
@@ -168,11 +184,13 @@ fun NewChallengeScreen(
                                     challengeViewModel.deleteChallenge(challenge.challengeId)
                                   },
                                   onPlayClick = {
-                                    Log.d(
-                                        "Navigation",
-                                        "Navigating with challengeId: ${challenge.challengeId}")
+                                    val destination =
+                                        when (challenge.mode) {
+                                          ChallengeMode.CHRONO.toString() -> Screen.CHRONO_CHALLENGE
+                                          else -> Screen.SPRINT_CHALLENGE
+                                        }
                                     navigationActions.navigateTo(
-                                        Screen.CHRONO_CHALLENGE,
+                                        destination,
                                         params = mapOf("challengeId" to challenge.challengeId))
                                   },
                                   userSession = userSession,
@@ -205,14 +223,32 @@ fun OngoingChallengeCard(
       }
 
   // Calculate the personal total time if the challenge is completed
-  val totalTime =
+  val displayText =
       if (isChallengeCompleted) {
-        if (currentUserId == challenge.player1) {
-          challenge.player1Times.sum() / 1000
-        } else {
-          challenge.player2Times.sum() / 1000
+        when (challenge.mode) {
+          ChallengeMode.SPRINT.toString() -> {
+            val totalWords =
+                if (currentUserId == challenge.player1) {
+                  challenge.player1WordsCompleted.sum()
+                } else {
+                  challenge.player2WordsCompleted.sum()
+                }
+            "Your Total Words: $totalWords"
+          }
+          ChallengeMode.CHRONO.toString() -> {
+            val totalTime =
+                if (currentUserId == challenge.player1) {
+                  challenge.player1Times.sum() / msToSecondsDivision
+                } else {
+                  challenge.player2Times.sum() / msToSecondsDivision
+                }
+            "Your Total Time: ${totalTime}s"
+          }
+          else -> ""
         }
-      } else null
+      } else {
+        null
+      }
 
   Card(
       modifier =
@@ -247,12 +283,9 @@ fun OngoingChallengeCard(
                 text = "${stringResource(R.string.mode_text)}: ${challenge.mode}",
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSurface)
-            if (isChallengeCompleted) {
-              val totalTimeText = stringResource(R.string.total_time_text)
+            if (displayText != null) {
               Text(
-                  text = "$totalTimeText ${totalTime}s",
-                  fontSize = 14.sp,
-                  color = MaterialTheme.colorScheme.onSurface)
+                  text = displayText, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
             }
           }
 

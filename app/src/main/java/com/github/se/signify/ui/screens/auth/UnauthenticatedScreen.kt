@@ -23,9 +23,8 @@ import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.model.navigation.TopLevelDestinations
+import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.HelpText
-import com.github.se.signify.ui.common.MainScreenScaffold
 import com.github.se.signify.ui.common.TextButton
 
 /**
@@ -42,9 +41,8 @@ fun UnauthenticatedScreen(navigationActions: NavigationActions) {
   val offlineModeText = stringResource(R.string.offline_mode_text)
   val offModeText = stringResource(R.string.off_mode_text)
 
-  MainScreenScaffold(
+  AnnexScreenScaffold(
       navigationActions = navigationActions,
-      topLevelDestination = TopLevelDestinations.HOME,
       testTag = "UnauthenticatedScreen",
       helpText =
           HelpText(title = offModeText, content = stringResource(R.string.help_offline_mode_text)),

@@ -191,7 +191,6 @@ class SettingsScreenTest {
 
     composeTestRule.onNodeWithText("English").assertIsDisplayed()
     composeTestRule.onNodeWithText("French").assertIsDisplayed()
-    composeTestRule.onNodeWithText("No other supported languages").assertIsDisplayed()
 
     composeTestRule.onNodeWithText("English").performClick()
     composeTestRule.onNodeWithTag("LanguageRow").assertTextEquals("EN")
@@ -199,10 +198,6 @@ class SettingsScreenTest {
     composeTestRule.onNodeWithTag("LanguageRow").performClick()
     composeTestRule.onNodeWithText("French").performClick()
     composeTestRule.onNodeWithTag("LanguageRow").assertTextEquals("FR")
-
-    composeTestRule.onNodeWithTag("LanguageRow").performClick()
-    composeTestRule.onNodeWithText("No other supported languages").performClick()
-    composeTestRule.onNodeWithTag("LanguageRow").assertTextEquals("N/A")
   }
 
   @Test

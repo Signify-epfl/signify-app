@@ -125,7 +125,7 @@ fun FriendCard(friendId: String, content: @Composable () -> Unit) {
       modifier =
           Modifier.fillMaxWidth()
               .padding(8.dp)
-              .border(1.dp, Color.Gray, RoundedCornerShape(16.dp))
+              .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
               .testTag("FriendCard_$friendId"), // Add test tag for each friend card
       shape = RoundedCornerShape(16.dp),
   ) {
@@ -191,8 +191,8 @@ fun ChallengeModeAlertDialog(
             onClick = onDismiss,
             testTag = "CancelButton",
             text = stringResource(R.string.cancel_text),
-            backgroundColor = MaterialTheme.colorScheme.surface,
-            textColor = MaterialTheme.colorScheme.onSurface,
+            backgroundColor = MaterialTheme.colorScheme.onSurface,
+            textColor = MaterialTheme.colorScheme.surface,
         )
       },
       title = {
