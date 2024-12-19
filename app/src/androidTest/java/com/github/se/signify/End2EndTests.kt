@@ -3,7 +3,9 @@ package com.github.se.signify
 import android.Manifest
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.rule.GrantPermissionRule
 import org.junit.Rule
@@ -24,7 +26,12 @@ import org.junit.Test
  *     - Verifies a confirmation (e.g., Toast) for the correct answer.
  *     - Tests navigation back to the Home Screen.
  * 3. **Friends Feature Test:**
- *     - (Placeholder for adding a friend feature test, not yet implemented).
+ *         - Simulate the user creating a challenge with a friend
+ *         - Simulates the user navigating to the Friends List screen through the Profile screen.
+ *         - Verifies that the friends list and friend requests are displayed correctly.
+ *         - Simulates accepting and declining friend requests and ensures the changes are reflected
+ *           in the friends list.
+ *         - Verifies that removing a friend updates the list of friends accordingly.
  * 4. **Settings Feature Test:**
  *     - (Placeholder for changing settings feature test, not yet implemented).
  *
@@ -120,13 +127,112 @@ class CombinedEnd2endTest {
      * TODO("Confirm that a toast was sent!") /!\ END OF SECOND END2END TEST/!\
      */
     composeTestRule.onNodeWithTag("BackButton").performClick()
+  }
+
+  @Test
+  fun secondCombinedEnd2endTest() {
     /**
-     * The User is back to the HomeScreen. He wants to Add a Friend. /!\ THIRD END2END TEST: Friends
-     * feature/!\
+     * The User wants to send a challenge to a friend. After this, he will manage his friends list
+     * and friend requests list. /!\ THIRD END2END TEST: Friends related features/!\
      */
+    composeTestRule.onNodeWithText("Welcome to Signify").assertIsDisplayed()
+    // Wait for the transition to Login Screen
+    composeTestRule.mainClock.advanceTimeBy(7_000)
+
+    // Wait for navigation to HomeScreen
+    composeTestRule.waitForIdle()
+    composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
+
+    // Navigate to Challenge Screen
+    composeTestRule.onNodeWithTag("Tab_Challenge").performClick()
+    composeTestRule.waitForIdle()
+    composeTestRule.onNodeWithTag("ChallengeScreen").assertIsDisplayed()
+
+    // Navigate to New Challenge Screen
+    composeTestRule.onNodeWithTag("ChallengeButton").performClick()
+    composeTestRule.waitForIdle()
+    composeTestRule.onNodeWithTag("NewChallengeScreen").assertIsDisplayed()
+
+    // Verify that we have a friend
+    composeTestRule.onNodeWithTag("MyFriendsButton").performClick()
+    composeTestRule.waitForIdle()
+    composeTestRule.onNodeWithTag("FriendsListScreen").assertIsDisplayed()
+    composeTestRule.onNodeWithText("user3").assertIsDisplayed()
+
+    // Navigate to Create a Challenge Screen
+    composeTestRule.onNodeWithTag("BackButton").performClick()
+    composeTestRule.waitForIdle()
+    composeTestRule.onNodeWithTag("NewChallengeScreen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("CreateChallengeButton").performClick()
+    composeTestRule.onNodeWithTag("CreateAChallengeContent").assertIsDisplayed()
+
+    // Create a Sprint challenge with user3
+    composeTestRule.onNodeWithTag("ChallengeButton_user3").performClick()
+    composeTestRule.onNodeWithTag("SprintModeButton").performClick()
+    composeTestRule.onNodeWithTag("SendChallengeButton").performClick()
+
+    // Navigate back to New Challenge Screen
+    composeTestRule.onNodeWithTag("BackButton").performClick()
+    composeTestRule.waitForIdle()
+    composeTestRule.onNodeWithTag("NewChallengeScreen").assertIsDisplayed()
+    composeTestRule.waitForIdle()
+    composeTestRule.onNodeWithTag("OngoingChallengesTitle").assertIsDisplayed()
+
+    // Navigate back to Challenge Screen
+    composeTestRule.mainClock.advanceTimeBy(1000) // Adjust the delay as needed
+    composeTestRule.onNodeWithTag("BackButton").performClick()
+    composeTestRule.waitForIdle()
+    composeTestRule.onNodeWithTag("ChallengeScreen").assertIsDisplayed()
+
+    // Navigate to Profile Screen
+    composeTestRule.waitForIdle()
+    composeTestRule.onNodeWithTag("Tab_Profile").performClick()
+    composeTestRule.onNodeWithTag("ProfileScreen").assertIsDisplayed()
+
+    // Navigate to Friends List Screen
+    composeTestRule.onNodeWithTag("MyFriendsButton").performClick()
+    composeTestRule.onNodeWithTag("FriendsListScreen").assertIsDisplayed()
+
+    // Verify friends list is displayed
+    composeTestRule.onNodeWithText("user3").assertIsDisplayed()
+
+    // Verify friend requests list is displayed
+    composeTestRule.onNodeWithTag("RequestsButton").performClick()
+    composeTestRule.onNodeWithText("user4").assertIsDisplayed()
+    composeTestRule.onNodeWithText("user5").assertIsDisplayed()
+
+    // Accept the request of user 4
+    composeTestRule.onAllNodesWithContentDescription("Accept")[0].performClick()
+    composeTestRule.onNodeWithText("user4").assertDoesNotExist()
+
+    // Verify user 4 is now a friend
+    composeTestRule.onNodeWithTag("FriendsButton").performClick()
+    composeTestRule.onNodeWithText("user4").assertIsDisplayed()
+
+    // Decline the request of friend 5
+    composeTestRule.onNodeWithTag("RequestsButton").performClick()
+    composeTestRule.onAllNodesWithContentDescription("Decline")[0].performClick()
+    composeTestRule.onNodeWithText("user5").assertDoesNotExist()
+
+    // Verify user 5 is not a friend
+    composeTestRule.onNodeWithTag("FriendsButton").performClick()
+    composeTestRule.onNodeWithText("user5").assertDoesNotExist()
+
+    // Remove user 3 from the list of friends
+    composeTestRule.onAllNodesWithContentDescription("Remove")[0].performClick()
+
+    // Navigate back to Profile Screen
+    composeTestRule.onNodeWithTag("BackButton").performClick()
+    composeTestRule.waitForIdle()
+    composeTestRule.onNodeWithTag("ProfileScreen").assertIsDisplayed()
+
+    // Navigate back to Home Screen
+    composeTestRule.onNodeWithTag("Tab_Home").performClick()
 
     /** /!\ END OF THIRD END2END TEST/!\ */
-    /** He wants to change the settings. /!\ THIRD END2END TEST: Settings feature/!\ */
+
+    /** Now, the user wants to change the settings. /!\ THIRD END2END TEST: Settings feature/!\ */
+
     /** /!\ END OF FOURTH END2END TEST/!\ */
   }
 }
