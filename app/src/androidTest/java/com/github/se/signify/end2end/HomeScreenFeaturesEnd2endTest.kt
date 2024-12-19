@@ -9,7 +9,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.MainActivity
-import com.github.se.signify.ui.screens.welcome.welcomeScreenDuration
 import org.junit.Rule
 import org.junit.Test
 
@@ -27,7 +26,7 @@ class HomeScreenFeaturesEnd2endTest {
   fun exerciseAndPracticeHomeScreenEnd2endTest() {
     composeTestRule.onNodeWithText("Welcome to Signify").assertIsDisplayed()
     // Wait for the transition to Home Screen
-    composeTestRule.mainClock.advanceTimeBy(welcomeScreenDuration())
+    composeTestRule.mainClock.advanceTimeBy(7_000)
     composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
     // The "user" searches for the letters d - o - g so that he can navigate to the ASL Recognition
@@ -64,7 +63,7 @@ class HomeScreenFeaturesEnd2endTest {
     composeTestRule.onNodeWithTag("EasyExerciseButtonText", useUnmergedTree = true).performClick()
     composeTestRule.onNodeWithTag("ExerciseScreenEasy", useUnmergedTree = true).assertIsDisplayed()
     // Advance by 7 seconds, at this point the user finished the easy exercise
-    composeTestRule.mainClock.advanceTimeBy(welcomeScreenDuration())
+    composeTestRule.mainClock.advanceTimeBy(7_000)
     composeTestRule.onNodeWithTag("BackButton").performClick()
     composeTestRule
         .onNodeWithTag("MediumExerciseButtonText", useUnmergedTree = true)
@@ -73,7 +72,7 @@ class HomeScreenFeaturesEnd2endTest {
     composeTestRule
         .onNodeWithTag("ExerciseScreenMedium", useUnmergedTree = true)
         .assertIsDisplayed()
-    composeTestRule.mainClock.advanceTimeBy(welcomeScreenDuration())
+    composeTestRule.mainClock.advanceTimeBy(7_000)
     // Advance by 7 seconds, at this point the user finished the medium exercise
     composeTestRule.onNodeWithTag("BackButton").performClick()
 
@@ -82,7 +81,7 @@ class HomeScreenFeaturesEnd2endTest {
         .performScrollTo()
         .performClick()
     composeTestRule.onNodeWithTag("ExerciseScreenHard", useUnmergedTree = true).assertIsDisplayed()
-    composeTestRule.mainClock.advanceTimeBy(welcomeScreenDuration())
+    composeTestRule.mainClock.advanceTimeBy(7_000)
     composeTestRule.waitForIdle()
     // Advance by 7 seconds, at this point the user finished the Hard exercise
     composeTestRule.onNodeWithTag("BackButton").performClick()
@@ -92,7 +91,7 @@ class HomeScreenFeaturesEnd2endTest {
   fun featuresHomeScreenEnd2endTest() {
     composeTestRule.onNodeWithText("Welcome to Signify").assertIsDisplayed()
     // Wait for the transition to Home Screen
-    composeTestRule.mainClock.advanceTimeBy(welcomeScreenDuration())
+    composeTestRule.mainClock.advanceTimeBy(7_000)
     composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("QuestsButton").performClick()

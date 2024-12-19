@@ -28,6 +28,7 @@ import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Route
 import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.model.navigation.TopLevelDestinations
 import com.github.se.signify.ui.screens.auth.LoginScreen
 import com.github.se.signify.ui.screens.auth.UnauthenticatedScreen
 import com.github.se.signify.ui.screens.challenge.ChallengeHistoryScreen
@@ -35,6 +36,7 @@ import com.github.se.signify.ui.screens.challenge.ChallengeScreen
 import com.github.se.signify.ui.screens.challenge.ChronoChallengeGameScreen
 import com.github.se.signify.ui.screens.challenge.CreateAChallengeScreen
 import com.github.se.signify.ui.screens.challenge.NewChallengeScreen
+import com.github.se.signify.ui.screens.challenge.SprintChallengeGameScreen
 import com.github.se.signify.ui.screens.home.ASLRecognition
 import com.github.se.signify.ui.screens.home.ExerciseScreen
 import com.github.se.signify.ui.screens.home.FeedbackScreen
@@ -167,7 +169,7 @@ fun SignifyAppPreview(
             showTutorial = {
               // Navigate to Tutorial or Home depending on completion
               if (tutorialCompleted) {
-                navigationActions.navigateTo(Screen.HOME)
+                navigationActions.navigateTo(TopLevelDestinations.HOME)
               } else {
                 navigationActions.navigateTo(Screen.TUTORIAL)
               }
@@ -203,6 +205,19 @@ fun SignifyAppPreview(
                 userSession = dependencyProvider.userSession(),
                 challengeRepository = dependencyProvider.challengeRepository(),
                 handLandmarkViewModel = handLandmarkViewModel,
+                challengeId = challengeId)
+          }
+      composable(
+          route = Screen.SPRINT_CHALLENGE.route,
+          arguments = listOf(navArgument("challengeId") { type = NavType.StringType })) {
+              backStackEntry ->
+            val challengeId =
+                backStackEntry.arguments?.getString("challengeId") ?: return@composable
+            SprintChallengeGameScreen(
+                navigationActions = navigationActions,
+                userSession = dependencyProvider.userSession(),
+                challengeRepository = dependencyProvider.challengeRepository(),
+                handLandMarkViewModel = handLandmarkViewModel,
                 challengeId = challengeId)
           }
       composable(Screen.CREATE_CHALLENGE.route) {

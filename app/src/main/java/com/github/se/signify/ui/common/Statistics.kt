@@ -158,13 +158,13 @@ fun StreakCounter(days: Long) {
         Icon(
             painter = painterResource(id = R.drawable.flame),
             contentDescription = "Streak Icon",
-            tint = MaterialTheme.colorScheme.secondary,
+            tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier.size(32.dp).testTag("FlameIcon"))
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = "$days",
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.secondary,
+            color = MaterialTheme.colorScheme.primary,
             fontSize = 20.sp,
             modifier = Modifier.testTag("NumberOfDays"))
       }
