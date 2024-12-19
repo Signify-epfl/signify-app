@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.se.signify.R
 import com.github.se.signify.model.navigation.NavigationActions
-import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.model.navigation.TopLevelDestinations
 import com.github.se.signify.ui.screens.home.HomeScreen
 
 private val overlayColor
@@ -96,7 +96,7 @@ fun TutorialScreen(navigationActions: NavigationActions, onFinish: () -> Unit) {
           highlightArea = currentStep.highlightArea,
           onNext = {
             if (isLastStep) {
-              navigationActions.navigateTo(Screen.HOME)
+              navigationActions.navigateTo(TopLevelDestinations.HOME)
               onFinish()
             } else {
               step++
@@ -107,7 +107,7 @@ fun TutorialScreen(navigationActions: NavigationActions, onFinish: () -> Unit) {
 
     SkipButton(
         onSkip = {
-          navigationActions.navigateTo(Screen.HOME)
+          navigationActions.navigateTo(TopLevelDestinations.HOME)
           onFinish()
         })
   }

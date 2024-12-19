@@ -184,7 +184,7 @@ fun FriendsListScreen(
 
           val numberRequests =
               if (friendsRequests.value.size > 1) friendsRequestsString
-              else stringResource(R.string.friends_text)
+              else stringResource(R.string.friends_requests_text)
 
           TextButton(
               { selectedList = friendsRequestsString },
@@ -508,15 +508,15 @@ fun ConfirmationDialog(showDialog: MutableState<Boolean>, onClickAction: () -> U
                             colors =
                                 ButtonDefaults.buttonColors(
                                     containerColor = MaterialTheme.colorScheme.error,
-                                    contentColor = MaterialTheme.colorScheme.onError)) {
+                                )) {
                               Text(yesText)
                             }
                         Button(
                             onClick = { showDialog.value = false }, // Close the dialog
                             colors =
                                 ButtonDefaults.buttonColors(
-                                    containerColor = MaterialTheme.colorScheme.primary,
-                                    contentColor = MaterialTheme.colorScheme.onPrimary)) {
+                                    containerColor = MaterialTheme.colorScheme.onSurface,
+                                )) {
                               Text(noText)
                             }
                       }

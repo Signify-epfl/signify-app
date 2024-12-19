@@ -311,10 +311,9 @@
     <string name="skip_tutorial">Passer le tutoriel</string>
     <string name="completed_quest_text">Completé</string>
   
-     <string name="french_text">Français</string>
+    <string name="french_text">Français</string>
     <string name="english_text">Anglais</string>
-    <string name="no_other_supported_languages_text">Aucune autre langue n’est supportée</string>
-  
+
     <string name="logout_button_text">Se déconnecter</string>
     <string name="confirm_logout_title">Confirmer la déconnexion</string>
     <string name="confirm_logout_message">Êtes-vous sûr de vouloir vous déconnecter ?</string>
