@@ -49,6 +49,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
@@ -173,25 +175,26 @@ fun EditableProfilePictureField(
         verticalAlignment = Alignment.CenterVertically,
     ) {
       Column {
-        Icon(
-            modifier =
-                Modifier.clickable { galleryLauncher.launch("image/*") }
-                    .testTag("editProfilePictureButton"),
-            imageVector = Icons.Outlined.Edit,
+        BasicButton(
+            onClick = { galleryLauncher.launch("image/*") },
+            icon = Icons.Outlined.Edit,
+            iconTestTag = "editProfilePictureButtonIcon",
             contentDescription = "Edit Profile Picture",
             tint = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.testTag("editProfilePictureButton"),
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         if (isDeleteEnabled()) {
-          Icon(
-              modifier =
-                  Modifier.clickable { showDeleteDialog.value = true }
-                      .testTag("deleteProfilePictureButton"),
-              imageVector = Icons.Outlined.Delete,
+          BasicButton(
+              onClick = { showDeleteDialog.value = true },
+              icon = Icons.Outlined.Delete,
+              iconTestTag = "deleteProfilePictureButtonIcon",
               contentDescription = "Delete Profile Picture",
-              tint = MaterialTheme.colorScheme.onBackground)
+              tint = MaterialTheme.colorScheme.onBackground,
+              modifier = Modifier.testTag("deleteProfilePictureButton"),
+          )
         }
       }
 
@@ -235,11 +238,16 @@ fun EditableUsernameField(
         modifier = Modifier.background(MaterialTheme.colorScheme.background),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center) {
-          Icon(
-              modifier = Modifier.testTag("editUsernameButton"),
-              imageVector = Icons.Outlined.Edit,
+        val focusRequester = remember { FocusRequester() }
+
+          BasicButton(
+                onClick = { focusRequester.requestFocus() },
+              icon = Icons.Outlined.Edit,
+              iconTestTag = "editUsernameButtonIcon",
               contentDescription = "Edit Username",
-              tint = MaterialTheme.colorScheme.onBackground)
+              modifier = Modifier.testTag("editUsernameButton"),
+              tint = MaterialTheme.colorScheme.onBackground
+          )
 
           Spacer(modifier = Modifier.width(8.dp))
 
@@ -256,6 +264,7 @@ fun EditableUsernameField(
                           showConfirmationDialog.value = true
                         }
                       }
+                      .focusRequester(focusRequester)
                       .testTag("usernameTextField"),
               colors =
                   TextFieldDefaults.colors(
