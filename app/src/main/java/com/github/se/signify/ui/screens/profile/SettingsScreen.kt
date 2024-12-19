@@ -3,6 +3,7 @@ package com.github.se.signify.ui.screens.profile
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -140,6 +141,7 @@ fun SettingsScreen(
       }
 }
 
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
 fun EditableProfilePictureField(userViewModel: UserViewModel, profilePictureUrl: State<String?>) {
   val showDeleteDialog = remember { mutableStateOf(false) }
@@ -216,6 +218,7 @@ fun EditableProfilePictureField(userViewModel: UserViewModel, profilePictureUrl:
   }
 }
 
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
 fun EditableUsernameField(userViewModel: UserViewModel, userName: String) {
   val showConfirmationDialog = remember { mutableStateOf(false) }
@@ -278,6 +281,7 @@ fun EditableUsernameField(userViewModel: UserViewModel, userName: String) {
       message = stringResource(R.string.confirm_changes_message))
 }
 
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
 fun ConfirmationDialog(
     showDialog: MutableState<Boolean>,
@@ -365,6 +369,7 @@ fun ConfirmationDialog(
  * @param onLanguageChange A callback function invoked when the language switch is toggled. The
  *   callback receives a Boolean value indicating the new language state.
  */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
 fun LanguageSwitch(isFrench: Boolean, onLanguageChange: (Boolean) -> Unit) {
   var expanded by remember { mutableStateOf(false) }
@@ -418,6 +423,7 @@ fun LanguageSwitch(isFrench: Boolean, onLanguageChange: (Boolean) -> Unit) {
   }
 }
 
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
 fun LogoutButton(userSession: UserSession, navigationActions: NavigationActions) {
 
