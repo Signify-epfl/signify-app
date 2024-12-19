@@ -23,9 +23,11 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.outlined.ExitToApp
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
@@ -65,6 +67,7 @@ import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.ui.common.AnnexScreenScaffold
+import com.github.se.signify.ui.common.BasicButton
 import com.github.se.signify.ui.common.ProfilePicture
 import kotlinx.coroutines.launch
 
@@ -100,44 +103,42 @@ fun SettingsScreen(
         AnnexScreenScaffold(
             navigationActions = navigationActions,
             testTag = "SettingsScreen",
-        ) {
-          Spacer(modifier = Modifier.height(32.dp))
+            topBarButtons = listOf { LogoutButton(userSession, navigationActions) }) {
+              Spacer(modifier = Modifier.height(32.dp))
 
-          Row(
-              modifier = Modifier.fillMaxWidth(),
-              verticalAlignment = Alignment.CenterVertically,
-              horizontalArrangement = Arrangement.SpaceBetween) {
-                EditableUsernameField(userViewModel, userName.value, Modifier.weight(1f))
+              Row(
+                  modifier = Modifier.fillMaxWidth(),
+                  verticalAlignment = Alignment.CenterVertically,
+                  horizontalArrangement = Arrangement.SpaceBetween) {
+                    EditableUsernameField(userViewModel, userName.value, Modifier.weight(1f))
 
-                Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(modifier = Modifier.width(16.dp))
 
-                EditableProfilePictureField(userViewModel, profilePictureUrl, Modifier.weight(1f))
-              }
+                    EditableProfilePictureField(
+                        userViewModel, profilePictureUrl, Modifier.weight(1f))
+                  }
 
-          Spacer(modifier = Modifier.height(64.dp))
+              Spacer(modifier = Modifier.height(64.dp))
 
-          Row(
-              modifier = Modifier.fillMaxWidth().clickable { onThemeChange(!isDarkTheme) },
-              verticalAlignment = Alignment.CenterVertically,
-              horizontalArrangement = Arrangement.SpaceBetween) {
-                val modeText =
-                    if (isDarkTheme) stringResource(R.string.dark_mode_text)
-                    else stringResource(R.string.light_mode_text)
-                Text(
-                    text = modeText,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground)
-                Switch(checked = isDarkTheme, onCheckedChange = { onThemeChange(it) })
-              }
+              Row(
+                  modifier = Modifier.fillMaxWidth().clickable { onThemeChange(!isDarkTheme) },
+                  verticalAlignment = Alignment.CenterVertically,
+                  horizontalArrangement = Arrangement.SpaceBetween) {
+                    val modeText =
+                        if (isDarkTheme) stringResource(R.string.dark_mode_text)
+                        else stringResource(R.string.light_mode_text)
+                    Text(
+                        text = modeText,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onBackground)
+                    Switch(checked = isDarkTheme, onCheckedChange = { onThemeChange(it) })
+                  }
 
-          Spacer(modifier = Modifier.height(16.dp))
+              Spacer(modifier = Modifier.height(16.dp))
 
-          // Switch between English and French
-          LanguageSwitch(isFrench, onLanguageChange)
-
-          // Logout Button
-          LogoutButton(userSession, navigationActions)
-        }
+              // Switch between English and French
+              LanguageSwitch(isFrench, onLanguageChange)
+            }
       }
 }
 
@@ -425,15 +426,15 @@ fun LogoutButton(userSession: UserSession, navigationActions: NavigationActions)
   val showLogoutDialog = remember { mutableStateOf(false) }
 
   // Logout Button UI
-  Button(
+  BasicButton(
       onClick = { showLogoutDialog.value = true }, // Show confirmation dialog on click
-      modifier = Modifier.fillMaxWidth().testTag("logoutButton"),
-      colors =
-          ButtonDefaults.buttonColors(
-              containerColor = MaterialTheme.colorScheme.error,
-              contentColor = MaterialTheme.colorScheme.onError)) {
-        Text(text = stringResource(id = R.string.logout_button_text))
-      }
+      icon = Icons.AutoMirrored.Outlined.ExitToApp,
+      iconTestTag = "logoutButtonIcon",
+      contentDescription = "Logout",
+      modifier = Modifier.testTag("logoutButton"),
+      tint = MaterialTheme.colorScheme.error,
+  )
+
   // Confirmation Dialog for Logout
   ConfirmationDialog(
       showDialog = showLogoutDialog,
