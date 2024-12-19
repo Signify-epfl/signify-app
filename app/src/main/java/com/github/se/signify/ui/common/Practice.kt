@@ -2,7 +2,6 @@ package com.github.se.signify.ui.common
 
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -84,9 +83,7 @@ fun LetterDictionary(
             Box(
                 contentAlignment = Alignment.Center,
                 modifier =
-                    Modifier.border(
-                            2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
+                    Modifier.background(MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
                         .then(
                             if (clickable) Modifier.clickable { onClick(page, numbOfHeaders) }
                             else Modifier)
