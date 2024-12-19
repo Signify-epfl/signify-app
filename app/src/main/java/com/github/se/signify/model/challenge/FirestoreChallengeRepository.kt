@@ -28,6 +28,8 @@ class FirestoreChallengeRepository(private val db: FirebaseFirestore) : Challeng
             roundWords = roundWords,
             player1Times = mutableListOf(),
             player2Times = mutableListOf(),
+            player1RoundCompleted = mutableListOf(false, false, false),
+            player2RoundCompleted = mutableListOf(false, false, false),
             gameStatus = "not_started")
 
     val batch = db.batch()
