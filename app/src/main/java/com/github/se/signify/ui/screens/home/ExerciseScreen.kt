@@ -20,6 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -48,6 +49,7 @@ import com.github.se.signify.model.profile.stats.StatsRepository
 import com.github.se.signify.model.profile.stats.StatsViewModel
 import com.github.se.signify.ui.common.AnnexScreenScaffold
 import com.github.se.signify.ui.common.CameraBox
+import kotlinx.coroutines.launch
 
 /**
  * Composable function for a common exercise screen layout, handling gesture detection, sentence
@@ -90,7 +92,12 @@ fun ExerciseScreen(
   val landmarksState = handLandmarkViewModel.landMarks().collectAsState()
   val detectedGesture = handLandmarkViewModel.getSolution()
   val exoCompletedText = stringResource(R.string.exercise_completed_text)
-  if (!landmarksState.value.isNullOrEmpty()) {
+
+  val scope = rememberCoroutineScope()
+  var isCooldownActive by rememberSaveable { mutableStateOf(false) }
+  val cooldownDuration = 500L // 0.5-second cooldown
+
+  if (!landmarksState.value.isNullOrEmpty() && !isCooldownActive) {
     handleGestureMatching(
         detectedGesture = detectedGesture,
         currentLetterIndex = currentLetterIndex,
@@ -101,6 +108,13 @@ fun ExerciseScreen(
           currentLetterIndex = newLetterIndex
           currentWordIndex = newWordIndex
           currentSentenceIndex = newSentenceIndex
+
+          isCooldownActive = true
+
+          scope.launch {
+            kotlinx.coroutines.delay(cooldownDuration)
+            isCooldownActive = false
+          }
         },
         onAllSentencesComplete = {
           when (exerciseLevel.id) {
