@@ -131,6 +131,10 @@ fun welcomeScreenDuration(): Long {
   return images.size * letterDelay + finalDelay
 }
 
+fun welcomeScreenTitleLength(): Int {
+  return images.size
+}
+
 @Composable
 fun HighlightedText(text: String, highlightIndex: Int) {
   Text(
