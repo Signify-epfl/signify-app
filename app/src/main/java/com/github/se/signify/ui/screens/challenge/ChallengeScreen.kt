@@ -73,158 +73,209 @@ fun ChallengeScreen(
     userRepository: UserRepository,
     challengeRepository: ChallengeRepository,
 ) {
-  val userViewModel: UserViewModel =
-      viewModel(factory = UserViewModel.factory(userSession, userRepository))
-  val challengeViewModel: ChallengeViewModel =
-      viewModel(factory = ChallengeViewModel.factory(userSession, challengeRepository))
+    val userViewModel: UserViewModel =
+        viewModel(factory = UserViewModel.factory(userSession, userRepository))
+    val challengeViewModel: ChallengeViewModel =
+        viewModel(factory = ChallengeViewModel.factory(userSession, challengeRepository))
 
-  val ongoingChallengeIds by userViewModel.ongoingChallengeIds.collectAsState()
-  LaunchedEffect(ongoingChallengeIds) { challengeViewModel.getChallenges(ongoingChallengeIds) }
-  val ongoingChallenges by challengeViewModel.challenges.collectAsState()
+    val ongoingChallengeIds by userViewModel.ongoingChallengeIds.collectAsState()
+    LaunchedEffect(ongoingChallengeIds) { challengeViewModel.getChallenges(ongoingChallengeIds) }
+    val ongoingChallenges by challengeViewModel.challenges.collectAsState()
 
-  LaunchedEffect(Unit) {
-    userViewModel.getFriendsList()
-    userViewModel.getOngoingChallenges()
-  }
-  val done = remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        userViewModel.getFriendsList()
+        userViewModel.getOngoingChallenges()
+    }
+    val done = remember { mutableStateOf(false) }
+    val showInfoDialog = remember { mutableStateOf(false) }
 
-  MainScreenScaffold(
-      navigationActions = navigationActions,
-      topLevelDestination = TopLevelDestinations.CHALLENGE,
-      testTag = "ChallengeScreen",
-      helpText =
-          HelpText(
-              title = stringResource(R.string.challenge_screen_title),
-              content = stringResource(R.string.description_challenge_text)),
-      topBarButtons = listOf { ChallengeHistoryButton(navigationActions) },
-  ) {
-    Spacer(modifier = Modifier.height(32.dp))
+    MainScreenScaffold(
+        navigationActions = navigationActions,
+        topLevelDestination = TopLevelDestinations.CHALLENGE,
+        testTag = "ChallengeScreen",
+        helpText =
+        HelpText(
+            title = stringResource(R.string.challenge_screen_title),
+            content = stringResource(R.string.description_challenge_text)),
+        topBarButtons = listOf { ChallengeHistoryButton(navigationActions) },
+    ) {
+        Spacer(modifier = Modifier.height(32.dp))
 
-    // My Friends button
-    TextButton(
-        onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
-        testTag = "MyFriendsButton",
-        text = stringResource(R.string.my_friends_text),
-        backgroundColor = MaterialTheme.colorScheme.primary,
-        textColor = MaterialTheme.colorScheme.onPrimary)
+        // My Friends button
+        TextButton(
+            onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
+            testTag = "MyFriendsButton",
+            text = stringResource(R.string.my_friends_text),
+            backgroundColor = MaterialTheme.colorScheme.primary,
+            textColor = MaterialTheme.colorScheme.onPrimary
+        )
 
-    Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
-    // Create a challenge button
-    val createAChallengeText = stringResource(R.string.create_a_challenge_text)
-    TextButton(
-        onClick = { navigationActions.navigateTo(Screen.CREATE_CHALLENGE) },
-        testTag = "CreateChallengeButton",
-        text = createAChallengeText,
-        backgroundColor = MaterialTheme.colorScheme.primary,
-        textColor = MaterialTheme.colorScheme.onPrimary)
+        // Create a challenge button
+        val createAChallengeText = stringResource(R.string.create_a_challenge_text)
+        TextButton(
+            onClick = { navigationActions.navigateTo(Screen.CREATE_CHALLENGE) },
+            testTag = "CreateChallengeButton",
+            text = createAChallengeText,
+            backgroundColor = MaterialTheme.colorScheme.primary,
+            textColor = MaterialTheme.colorScheme.onPrimary
+        )
 
-    Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
-    // Ongoing Challenges Section
-    Box(
-        modifier =
-            Modifier.fillMaxWidth()
+        // Ongoing Challenges Section
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
                 .border(2.dp, MaterialTheme.colorScheme.onPrimary)
                 .background(MaterialTheme.colorScheme.primary)
                 .padding(16.dp)
-                .testTag("OngoingChallengesBox")) {
-          Column(
-              horizontalAlignment = Alignment.CenterHorizontally,
-              modifier = Modifier.testTag("OngoingChallengesContent")) {
+                .testTag("OngoingChallengesBox")
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.testTag("OngoingChallengesContent")
+            ) {
                 val myOnGoingChallengeText = stringResource(R.string.my_ongoing_challenges_text)
                 Text(
                     text = myOnGoingChallengeText,
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier.testTag("OngoingChallengesTitle"))
+                    modifier = Modifier.testTag("OngoingChallengesTitle")
+                )
 
                 Spacer(modifier = Modifier.height(24.dp))
 
                 // Scrollable Ongoing Challenges List
                 Box(
-                    modifier =
-                        Modifier.fillMaxWidth()
-                            .heightIn(min = 400.dp, max = 800.dp)
-                            .testTag("OngoingChallengesListBox")) {
-                      LazyColumn(
-                          verticalArrangement = Arrangement.spacedBy(16.dp),
-                          modifier = Modifier.testTag("OngoingChallengesLazyColumn")) {
-                            items(ongoingChallenges.size) { index ->
-                              val challenge = ongoingChallenges[index]
-                              val isBothCompleted =
-                                  challenge.player1RoundCompleted.all { it } &&
-                                      challenge.player2RoundCompleted.all { it }
-
-                              if (isBothCompleted && !done.value) {
-                                // Determine the winner
-                                done.value = true
-
-                                val player1Result =
-                                    calculatePlayerResult(challenge, isPlayer1 = true)
-                                val player2Result =
-                                    calculatePlayerResult(challenge, isPlayer1 = false)
-
-                                val winner =
-                                    determineWinner(
-                                        challenge.mode,
-                                        challenge.player1,
-                                        challenge.player2,
-                                        player1Result,
-                                        player2Result,
-                                        stringResource(R.string.draw))
-
-                                // Update the challenge in pastChallenges
-                                synchronized(this) { // Synchronize updates to avoid race conditions
-                                  userViewModel.removeOngoingChallenge(
-                                      challenge.player1, challenge.challengeId)
-                                  userViewModel.addPastChallenge(
-                                      challenge.player1, challenge.challengeId)
-                                  userViewModel.removeOngoingChallenge(
-                                      challenge.player2, challenge.challengeId)
-                                  userViewModel.addPastChallenge(
-                                      challenge.player2, challenge.challengeId)
-                                  userViewModel.incrementField(winner, "challengesWon")
-                                  userViewModel.incrementField(
-                                      challenge.player2, "challengesCompleted")
-                                  userViewModel.incrementField(
-                                      challenge.player1, "challengesCompleted")
-
-                                  challengeRepository.updateWinner(
-                                      challenge.challengeId, winner, {}, {})
-                                }
-                              }
-                              OngoingChallengeCard(
-                                  challenge = challenge,
-                                  onDeleteClick = {
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 300.dp, max = 700.dp) // Reduced height
+                        .testTag("OngoingChallengesListBox")
+                ) {
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        modifier = Modifier.testTag("OngoingChallengesLazyColumn")
+                    ) {
+                        items(ongoingChallenges.size) { index ->
+                            val challenge = ongoingChallenges[index]
+                            OngoingChallengeCard(
+                                challenge = challenge,
+                                onDeleteClick = {
                                     userViewModel.removeOngoingChallenge(
-                                        userSession.getUserId()!!, challenge.challengeId)
+                                        userSession.getUserId()!!, challenge.challengeId
+                                    )
                                     userViewModel.removeOngoingChallenge(
-                                        challenge.player2, challenge.challengeId)
+                                        challenge.player2, challenge.challengeId
+                                    )
                                     challengeViewModel.deleteChallenge(challenge.challengeId)
-                                  },
-                                  onPlayClick = {
+                                },
+                                onPlayClick = {
                                     val destination =
                                         when (challenge.mode) {
-                                          ChallengeMode.CHRONO.toString() -> Screen.CHRONO_CHALLENGE
-                                          else -> Screen.SPRINT_CHALLENGE
+                                            ChallengeMode.CHRONO.toString() -> Screen.CHRONO_CHALLENGE
+                                            else -> Screen.SPRINT_CHALLENGE
                                         }
                                     navigationActions.navigateTo(
                                         destination,
-                                        params = mapOf("challengeId" to challenge.challengeId))
-                                  },
-                                  userSession = userSession,
-                                  modifier = Modifier.testTag("OngoingChallengeCard$index"))
-                            }
-                          }
+                                        params = mapOf("challengeId" to challenge.challengeId)
+                                    )
+                                },
+                                userSession = userSession,
+                                modifier = Modifier.testTag("OngoingChallengeCard$index")
+                            )
+                        }
                     }
-              }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Info Button
+                Button(
+                    onClick = { showInfoDialog.value = true },
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .testTag("InfoButton"),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    )
+                ) {
+                    Text(text = stringResource(R.string.info_button_text))
+                }
+            }
         }
 
-    Spacer(modifier = Modifier.height(16.dp))
-  }
+        Spacer(modifier = Modifier.height(16.dp))
+    }
+
+    if (showInfoDialog.value) {
+        ChallengeInfoDialog(showDialog = showInfoDialog)
+    }
 }
+
+@Composable
+fun ChallengeInfoDialog(showDialog: MutableState<Boolean>) {
+    Dialog(onDismissRequest = { showDialog.value = false }) {
+        Surface(
+            shape = RoundedCornerShape(16.dp),
+            color = MaterialTheme.colorScheme.surface,
+            modifier = Modifier.padding(16.dp).testTag("ChallengeInfoDialog")
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = stringResource(R.string.challenge_info_title),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = stringResource(R.string.sprint_mode_info),
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = stringResource(R.string.chrono_mode_info),
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = stringResource(R.string.result_info),
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = { showDialog.value = false },
+                    modifier = Modifier.testTag("CloseInfoButton"),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    )
+                ) {
+                    Text(text = stringResource(R.string.close_button_text))
+                }
+            }
+        }
+    }
+}
+
 
 @Composable
 fun OngoingChallengeCard(

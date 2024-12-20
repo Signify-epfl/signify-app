@@ -117,6 +117,12 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="skip">SKIP</string>
     <string name="your_total_time">Your Total Time:</string>
     <string name="your_total_words">Your Total Words:</string>
+    <string name="info_button_text">Info</string>
+    <string name="challenge_info_title">How Challenges Work</string>
+    <string name="sprint_mode_info">Sprint Mode: Best-of-3, type the maximum words in 1 minute.</string>
+    <string name="chrono_mode_info">Chrono Mode: Best-of-3, type a word as fast as possible each round.</string>
+    <string name="result_info">Results are displayed in the History screen (top-left button) when both players finished their round.</string>
+    <string name="close_button_text">Close</string>
 
     <string name="bug_report_text">Bug Report</string>
     <string name="feature_suggestion_text">Feature Suggestion</string>

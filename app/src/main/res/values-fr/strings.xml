@@ -119,6 +119,12 @@
     <string name="skip">PASSER</string>
     <string name="your_total_time">Votre temps total:</string>
     <string name="your_total_words">Nombre de mots total:</string>
+    <string name="info_button_text">Info</string>
+    <string name="challenge_info_title">Comment fonctionnent les challenges?</string>
+    <string name="sprint_mode_info">Sprint Mode: Best-of-3, écris un maximum de mot en 1 minute.</string>
+    <string name="chrono_mode_info">Chrono Mode: Best-of-3, écris le mot aussi vite que possible.</string>
+    <string name="result_info">Les résultats sont affichés dans l\'historique (boutton en haut à gauche) lorsque les deux joueurs ont terminés leurs trois parties </string>
+    <string name="close_button_text">Fermer</string>
 
     <string name="help_home_screen_text">Ici, vous pouvez pratiquer la langue des signes, avec des retours en temps réel via votre caméra. Assurez-vous de vérifier votre quête quotidienne pour apprendre une nouvelle lettre chaque jour. Vous trouverez également des exercices en bas pour vous challenger à différents niveaux de difficulté.</string>
     <string name="help_profile_screen_text">Ici, vous pouvez modifier vos paramètres et personnaliser votre profil. Vous pourrez également ajouter vos amis pour apprendre ensemble. Vous trouverez un récapitulatif de vos progrès dans le tableau de statistiques.</string>
