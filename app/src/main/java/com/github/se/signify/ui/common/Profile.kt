@@ -2,6 +2,7 @@ package com.github.se.signify.ui.common
 
 import android.net.Uri
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,18 +38,28 @@ fun ProfilePicture(profilePictureUrl: String?) {
         modifier =
             Modifier.size(120.dp)
                 .clip(CircleShape)
+                .border(
+                    2.dp, MaterialTheme.colorScheme.primary, CircleShape) // Add a border outline
                 .background(MaterialTheme.colorScheme.background)
                 .testTag("ProfilePicture"),
-        contentScale = ContentScale.Crop) // Crop the image to fit within the bounds
+        contentScale = ContentScale.Crop // Crop the image to fit within the bounds
+        )
   } else {
     // Default placeholder for no image
     Icon(
         imageVector = Icons.Default.Person,
         contentDescription = "Default Profile Picture",
-        modifier = Modifier.size(120.dp).testTag("DefaultProfilePicture"),
+        modifier =
+            Modifier.size(120.dp)
+                .clip(CircleShape)
+                .border(
+                    2.dp, MaterialTheme.colorScheme.primary, CircleShape) // Add a border outline
+                .background(MaterialTheme.colorScheme.background)
+                .testTag("DefaultProfilePicture"),
         tint = MaterialTheme.colorScheme.onBackground)
   }
 }
+
 /**
  * A recap of a user's account information.
  *
