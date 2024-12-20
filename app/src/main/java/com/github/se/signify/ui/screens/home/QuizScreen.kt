@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -96,8 +95,6 @@ fun QuizScreen(navigationActions: NavigationActions, quizRepository: QuizReposit
                 })
             selectedOption = null
           })
-    } else {
-      NoQuizAvailable()
     }
   }
 }
@@ -179,19 +176,4 @@ fun QuizContent(
     val submitText = stringResource(R.string.submit_text)
     Text(text = submitText)
   }
-}
-
-@Composable
-fun NoQuizAvailable() {
-  val noQuizAvailableText = stringResource(R.string.no_quiz_available)
-  Column(
-      modifier = Modifier.fillMaxSize().testTag("NoQuizContainer"),
-      verticalArrangement = Arrangement.Center,
-      horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
-            text = noQuizAvailableText,
-            fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onBackground, // Updated from onSurface
-            modifier = Modifier.padding(bottom = 16.dp).testTag("NoQuizzesText"))
-      }
 }
