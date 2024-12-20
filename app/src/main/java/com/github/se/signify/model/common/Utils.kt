@@ -3,10 +3,7 @@ package com.github.se.signify.model.common
 import android.content.Context
 import android.content.res.Configuration
 import com.github.se.signify.R
-import com.github.se.signify.model.profile.stats.StatsViewModel
 import java.util.Locale
-import org.jetbrains.kotlinx.dataframe.DataFrame
-import org.jetbrains.kotlinx.dataframe.api.dataFrameOf
 
 /**
  * Retrieves the drawable resource ID for a letter's image.
@@ -64,46 +61,4 @@ fun updateLanguage(context: Context, languageCode: String) {
   val config = Configuration()
   config.locale = locale
   context.resources.updateConfiguration(config, context.resources.displayMetrics)
-}
-/**
- * Convert a time in millisecond to second
- *
- * @param time in millisecond
- * @return the time in second
- * @throws IllegalArgumentException if the time is negative.
- */
-fun timeConversion(time: Long): Double {
-  require(time >= 0) { "Time must be >= 0" }
-  return time / 1000.0
-}
-/**
- * Function that calculate the time taken to complete an exercise and call the update for the stats
- * repository
- *
- * @param statsViewModel used to update the stats repository
- * @param startTimestamp to calculate the time taken to do the exercise
- * @return the new startTimestamp
- */
-fun calculateTimePerLetter(statsViewModel: StatsViewModel, startTimestamp: Long): Long {
-  val endTimestamp = System.currentTimeMillis()
-  statsViewModel.updateTimePerLetter(endTimestamp - startTimestamp)
-  return endTimestamp
-}
-
-const val TimePerLetter = "TimePerLetter"
-const val TimePerLetterIndex = "TimePerLetterIndex"
-const val TimePerLetterAverage = "TimePerLetterAverage"
-/**
- * Function that create a DataFrame for time tracking.
- *
- * @param timePerLetter The list of time in second
- */
-fun createDataFrame(timePerLetter: List<Double>): DataFrame<*> {
-  val timePerLetterIndex = List(timePerLetter.size) { index -> index }
-  val averageTime = timePerLetter.average()
-  val timePerLetterAverage = List(timePerLetter.size) { averageTime }
-  return dataFrameOf(
-      TimePerLetter to timePerLetter,
-      TimePerLetterIndex to timePerLetterIndex,
-      TimePerLetterAverage to timePerLetterAverage)
 }

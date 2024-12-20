@@ -18,7 +18,6 @@ class StatsTest {
     assertEquals(0, stats.completedChallenge)
     assertEquals(0, stats.createdChallenge)
     assertEquals(0, stats.wonChallenge)
-    assertEquals(emptyList<Long>(), stats.timePerLetter)
   }
 
   @Test
@@ -33,8 +32,7 @@ class StatsTest {
             weeklyQuest = 0,
             completedChallenge = 1,
             createdChallenge = 1,
-            wonChallenge = 1,
-            timePerLetter = listOf(1000L, 1024L, 777L))
+            wonChallenge = 1)
 
     assertEquals(listOf('A', 'B', 'C'), stats.lettersLearned)
     assertEquals(5, stats.easyExercise)
@@ -45,6 +43,5 @@ class StatsTest {
     assertEquals(1, stats.completedChallenge)
     assertEquals(1, stats.createdChallenge)
     assertEquals(1, stats.wonChallenge)
-    assertEquals(listOf(1000L, 1024L, 777L), stats.timePerLetter)
   }
 }
