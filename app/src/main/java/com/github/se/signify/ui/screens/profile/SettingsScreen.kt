@@ -133,7 +133,10 @@ fun SettingsScreen(
                         text = modeText,
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onBackground)
-                    Switch(checked = isDarkTheme, onCheckedChange = { onThemeChange(it) })
+                    Switch(
+                        checked = isDarkTheme,
+                        onCheckedChange = { onThemeChange(it) },
+                        modifier = Modifier.testTag("SwitchTag"))
                   }
 
               Spacer(modifier = Modifier.height(16.dp))

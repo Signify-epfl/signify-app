@@ -22,23 +22,27 @@ import org.junit.Test
  *
  * The following End-to-End scenarios are tested:
  * 1. **ASL Recognition Test:**
- *     - Simulates a user searching for letters in the Letter Dictionary ("D", "O", "G").
- *     - Displays the corresponding Sign Tips for each letter.
- *     - Tests navigation to the ASL Recognition Screen where the user can practice hand signs.
+ *         - Simulates a user searching for letters in the Letter Dictionary ("D", "O", "G").
+ *         - Displays the corresponding Sign Tips for each letter.
+ *         - Tests navigation to the ASL Recognition Screen where the user can practice hand signs.
  * 2. **Quiz Feature Test:**
- *     - Simulates a user starting a quiz from the Home Screen.
- *     - Selects an answer option (e.g., "apple") and submits it.
- *     - Verifies a confirmation (e.g., Toast) for the correct answer.
- *     - Tests navigation back to the Home Screen.
+ *         - Simulates a user starting a quiz from the Home Screen.
+ *         - Selects an answer option (e.g., "apple") and submits it.
+ *         - Verifies a confirmation (e.g., Toast) for the correct answer.
+ *         - Tests navigation back to the Home Screen.
  * 3. **Friends Feature Test:**
- *         - Simulate the user creating a challenge with a friend
- *         - Simulates the user navigating to the Friends List screen through the Profile screen.
- *         - Verifies that the friends list and friend requests are displayed correctly.
- *         - Simulates accepting and declining friend requests and ensures the changes are reflected
- *           in the friends list.
- *         - Verifies that removing a friend updates the list of friends accordingly.
+ *                 - Simulate the user creating a challenge with a friend
+ *                 - Simulates the user navigating to the Friends List screen through the Profile screen.
+ *                 - Verifies that the friends list and friend requests are displayed correctly.
+ *                 - Simulates accepting and declining friend requests and ensures the changes are
+ *                   reflected in the friends list.
+ *                 - Verifies that removing a friend updates the list of friends accordingly.
  * 4. **Settings Feature Test:**
- *     - (Placeholder for changing settings feature test, not yet implemented).
+ *             - Simulates navigating to the Settings Screen from the Profile Screen.
+ *     * - Tests updating the username and verifying the changes.
+ *     * - Simulates deleting the profile picture and verifies the changes.
+ *     * - Switches themes and verifies the changes.
+ *     * - Ensures navigation back to the Home Screen.
  *
  * **Test Details:**
  * - The tests make use of Compose Test API to find and interact with UI components by their tags.
@@ -46,8 +50,7 @@ import org.junit.Test
  * - Animations and transitions are skipped or advanced where possible to improve test efficiency.
  *
  * **Note:** The ASL Recognition test assumes the user knows how to perform the hand signs and skips
- * actual hand detection as it is complex to simulate. Placeholder comments are added for features
- * that are yet to be implemented.
+ * actual hand detection as it is complex to simulate.
  */
 class CombinedEnd2endTest {
   @get:Rule val composeTestRule = createAndroidComposeRule<MainActivity>()
@@ -129,8 +132,6 @@ class CombinedEnd2endTest {
     composeTestRule.onNodeWithTag("SubmitButton").performClick()
     /**
      * He gets a Toast confirming that it was the correct answer. He goes back to the HomeScreen.
-     *
-     * TODO("Confirm that a toast was sent!") /!\ END OF SECOND END2END TEST/!\
      */
     composeTestRule.onNodeWithTag("BackButton").performClick()
   }
@@ -225,9 +226,9 @@ class CombinedEnd2endTest {
 
     /** /!\ END OF THIRD END2END TEST/!\ */
 
-    /** Now, the user wants to change the settings. /!\ THIRD END2END TEST: Settings feature/!\ */
+    /** Now, the user wants to change the settings. /!\ Fourth END2END TEST: Settings feature/!\ */
 
-    /** He wants to change the settings. /!\ THIRD END2END TEST: Settings feature/!\ */
+    /** He wants to change the settings. /!\ Fourth END2END TEST: Settings feature/!\ */
     composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
 
@@ -253,33 +254,45 @@ class CombinedEnd2endTest {
     composeTestRule.onNodeWithTag("usernameTextField").performImeAction()
     composeTestRule.onNodeWithText("Confirm", useUnmergedTree = true).performClick()
 
+    composeTestRule.waitForIdle()
+
     // Step 6: Verify the username has been updated
     composeTestRule
         .onNodeWithTag("usernameTextField", useUnmergedTree = true)
         .assertTextContains("NewUsername123", substring = true)
 
     // Step 7: Update the profile photo
-    composeTestRule
-        .onNodeWithTag("DefaultProfilePicture", useUnmergedTree = true)
-        .assertIsDisplayed()
+    composeTestRule.onNodeWithTag("ProfilePicture", useUnmergedTree = true).assertIsDisplayed()
     composeTestRule
         .onNodeWithTag("editProfilePictureButton", useUnmergedTree = true)
         .assertIsDisplayed()
         .assertHasClickAction()
+    composeTestRule
+        .onNodeWithTag("deleteProfilePictureButton", useUnmergedTree = true)
+        .assertIsDisplayed()
+        .performClick()
+    composeTestRule.onNodeWithText("Confirm", useUnmergedTree = true).performClick()
+    composeTestRule
+        .onNodeWithTag("DefaultProfilePicture", useUnmergedTree = true)
+        .assertIsDisplayed()
 
-    // Step 8: Return to the Profile screen
+    // Step 8: Switch to dark theme
+    composeTestRule.onNodeWithTag("SwitchTag").assertIsDisplayed()
+    composeTestRule.onNodeWithText("Light Mode").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("SwitchTag").performClick()
+    composeTestRule.waitForIdle()
+    composeTestRule.onNodeWithText("Dark Mode").assertIsDisplayed()
+
+    // Step 9: Return to the Profile screen
     composeTestRule.onNodeWithTag("BackButton", useUnmergedTree = true).performClick()
+    composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag("ProfileScreen").assertIsDisplayed()
 
-    // Step 9: Navigate back to the Home screen
+    // Step 10: Navigate back to the Home screen
     composeTestRule.onNodeWithTag("Tab_Home").performClick()
+    composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
 
-    /** /!\ END OF THIRD END2END TEST/!\ */
-    /**
-     * The User is back to the HomeScreen. He wants to Add a Friend. /!\ Fourth END2END TEST:
-     * Friends/!\
-     */
     /** /!\ END OF FOURTH END2END TEST/!\ */
   }
 }
