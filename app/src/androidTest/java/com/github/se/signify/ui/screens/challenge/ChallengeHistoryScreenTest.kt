@@ -142,8 +142,8 @@ class ChallengeHistoryScreenTest {
     // Verify the challenge details are displayed correctly
     composeTestRule.onNodeWithText("Opponent: opponent1").assertIsDisplayed()
     composeTestRule.onNodeWithText("Mode: ${ChallengeMode.SPRINT}").assertIsDisplayed()
-    composeTestRule.onNodeWithText("testUserId Score: 5.0 words").assertIsDisplayed()
-    composeTestRule.onNodeWithText("opponent1 Score: 4.0 words").assertIsDisplayed()
+    composeTestRule.onNodeWithText("testUserId Score: 5.0 Words").assertIsDisplayed()
+    composeTestRule.onNodeWithText("opponent1 Score: 4.0 Words").assertIsDisplayed()
     composeTestRule.onNodeWithText("Winner: testUserId").assertIsDisplayed()
   }
 
@@ -188,7 +188,8 @@ class ChallengeHistoryScreenTest {
             player1 = "player1",
             player2 = "player2",
             player1Result = 15.0,
-            player2Result = 10.0)
+            player2Result = 10.0,
+            "Draw")
 
     assert(winner == "player1") // Higher score wins
   }
@@ -201,7 +202,8 @@ class ChallengeHistoryScreenTest {
             player1 = "player1",
             player2 = "player2",
             player1Result = 12.0,
-            player2Result = 12.0)
+            player2Result = 12.0,
+            "Draw")
 
     assert(winner == "Draw") // Same score
   }
@@ -214,7 +216,8 @@ class ChallengeHistoryScreenTest {
             player1 = "player1",
             player2 = "player2",
             player1Result = 5.0,
-            player2Result = 10.0)
+            player2Result = 10.0,
+            "Draw")
 
     assert(winner == "player1") // Lower time wins
   }
@@ -227,7 +230,8 @@ class ChallengeHistoryScreenTest {
             player1 = "player1",
             player2 = "player2",
             player1Result = 7.0,
-            player2Result = 7.0)
+            player2Result = 7.0,
+            "Draw")
 
     assert(winner == "Draw") // Same time
   }
@@ -239,7 +243,7 @@ class ChallengeHistoryScreenTest {
       PlayerScoreText(player = "player1", result = 12.0, mode = ChallengeMode.SPRINT.toString())
     }
 
-    composeTestRule.onNodeWithText("player1 Score: 12.0 words").assertIsDisplayed()
+    composeTestRule.onNodeWithText("player1 Score: 12.0 Words").assertIsDisplayed()
   }
 
   @Test
