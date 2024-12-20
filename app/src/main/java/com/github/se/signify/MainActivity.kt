@@ -44,7 +44,6 @@ import com.github.se.signify.ui.screens.home.HomeScreen
 import com.github.se.signify.ui.screens.home.QuestScreen
 import com.github.se.signify.ui.screens.home.QuizScreen
 import com.github.se.signify.ui.screens.profile.FriendsListScreen
-import com.github.se.signify.ui.screens.profile.MyStatsScreen
 import com.github.se.signify.ui.screens.profile.ProfileScreen
 import com.github.se.signify.ui.screens.profile.SettingsScreen
 import com.github.se.signify.ui.screens.tutorial.ProvideElementPositions
@@ -301,13 +300,6 @@ fun SignifyAppPreview(
             navigationActions,
             dependencyProvider.userSession(),
             dependencyProvider.userRepository())
-      }
-      composable(Screen.STATS.route) {
-        MyStatsScreen(
-            navigationActions,
-            dependencyProvider.userSession(),
-            dependencyProvider.userRepository(),
-            dependencyProvider.statsRepository())
       }
       composable(Screen.SETTINGS.route) {
         SettingsScreen(

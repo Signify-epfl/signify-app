@@ -135,14 +135,6 @@ fun ProfileScreen(
               statsTexts = listOf(dailyQuestsText, weeklyQuestsText),
               statsNumberList = listOf("${daily.value}", "${weekly.value}"),
               lineTextTestTag = "QuestsText")
-        // Statistics Button
-        /*val myStatsText = stringResource(R.string.my_stats_text)
-        SquareButton(
-            iconId = R.drawable.statisticsicon,
-            text = myStatsText,
-            onClick = { navigationActions.navigateTo(Screen.STATS) },
-            size = 200,
-            modifier = Modifier.testTag("MyStatsButton"))*/
       },
   )
 }
