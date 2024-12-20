@@ -167,23 +167,26 @@ fun ChallengeScreen(
                                         player2Result)
 
                                 // Update the challenge in pastChallenges
-                                userViewModel.removeOngoingChallenge(
-                                    challenge.player1, challenge.challengeId)
-                                userViewModel.addPastChallenge(
-                                    challenge.player1, challenge.challengeId)
-                                userViewModel.removeOngoingChallenge(
-                                    challenge.player2, challenge.challengeId)
-                                userViewModel.addPastChallenge(
-                                    challenge.player2, challenge.challengeId)
-                                userViewModel.incrementField(winner, "challengesWon")
-                                userViewModel.incrementField(
-                                    challenge.player2, "challengesCompleted")
-                                userViewModel.incrementField(
-                                    challenge.player1, "challengesCompleted")
+                                synchronized(this) { // Synchronize updates to avoid race conditions
+                                  userViewModel.removeOngoingChallenge(
+                                      challenge.player1, challenge.challengeId)
+                                  userViewModel.addPastChallenge(
+                                      challenge.player1, challenge.challengeId)
+                                  userViewModel.removeOngoingChallenge(
+                                      challenge.player2, challenge.challengeId)
+                                  userViewModel.addPastChallenge(
+                                      challenge.player2, challenge.challengeId)
+                                  userViewModel.incrementField(winner, "challengesWon")
+                                  userViewModel.incrementField(
+                                      challenge.player2, "challengesCompleted")
+                                  userViewModel.incrementField(
+                                      challenge.player1, "challengesCompleted")
 
-                                challengeRepository.updateWinner(
-                                    challenge.challengeId, winner, {}, {})
+                                  challengeRepository.updateWinner(
+                                      challenge.challengeId, winner, {}, {})
+                                }
                               }
+
                               OngoingChallengeCard(
                                   challenge = challenge,
                                   onDeleteClick = {

@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
@@ -120,5 +121,35 @@ class ChallengeScreenTest {
 
     // Click the delete button for the first ongoing challenge
     composeTestRule.onNodeWithTag("DeleteButton$challengeId").assertIsDisplayed().performClick()
+  }
+
+  @Test
+  fun testDeleteButton_showsConfirmationDialog() {
+    val challengeId = ongoingChallenges[0].challengeId
+
+    // Click the delete button for the first ongoing challenge
+    composeTestRule.onNodeWithTag("DeleteButton$challengeId").performClick()
+
+    // Check if the confirmation dialog is displayed
+    composeTestRule.onNodeWithTag("ConfirmationDialog").assertIsDisplayed()
+  }
+
+  @Test
+  fun testConfirmationDialog_buttonsFunctionality() {
+    val challengeId = ongoingChallenges[0].challengeId
+    composeTestRule.onNodeWithTag("DeleteButton$challengeId").performClick()
+
+    // Verify the "No" button is displayed and click it
+    composeTestRule.onNodeWithText("No").assertIsDisplayed().performClick()
+
+    // Ensure the dialog is dismissed
+    composeTestRule.onNodeWithTag("ConfirmationDialog").assertDoesNotExist()
+
+    // Click delete and verify "Yes" button dismisses the dialog
+    composeTestRule.onNodeWithTag("DeleteButton$challengeId").performClick()
+    composeTestRule.onNodeWithText("Yes").assertIsDisplayed().performClick()
+
+    // Verify the dialog is dismissed
+    composeTestRule.onNodeWithTag("ConfirmationDialog").assertDoesNotExist()
   }
 }
