@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -56,7 +57,8 @@ fun ProfileScreen(
           HelpText(
               title = stringResource(R.string.profile_text),
               content = stringResource(R.string.help_profile_screen_text)),
-      topBarButtons = listOf { SettingsButton(navigationActions) },
+      topBarButtons =
+          listOf({ SettingsButton(navigationActions) }, { FriendsButton(navigationActions) }),
       content = {
         LaunchedEffect(Unit) {
           userViewModel.getUserName()
@@ -89,16 +91,6 @@ fun ProfileScreen(
         LearnedLetterList(lettersLearned = lettersLearned.value)
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Friends List button
-        val myFriendsText = stringResource(R.string.my_friends_text)
-        SquareButton(
-            iconId = R.drawable.friendsicon,
-            text = myFriendsText,
-            onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
-            size = 200,
-            modifier = Modifier.testTag("MyFriendsButton"))
-        Spacer(modifier = Modifier.height(32.dp))
-
         // Statistics Button
         val myStatsText = stringResource(R.string.my_stats_text)
         SquareButton(
@@ -120,4 +112,16 @@ fun SettingsButton(navigationActions: NavigationActions) {
       contentDescription = "Settings",
       modifier = Modifier.testTag("SettingsButton"),
       icon = Icons.Outlined.Settings)
+}
+
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+@Composable
+fun FriendsButton(navigationActions: NavigationActions) {
+  BasicButton(
+      onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
+      iconTestTag = "MyFriendsIcon",
+      contentDescription = "My Friends",
+      modifier = Modifier.testTag("MyFriendsButton"),
+      painter = painterResource(id = R.drawable.friendsicon),
+  )
 }
