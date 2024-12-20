@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -38,6 +39,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.se.signify.R
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.challenge.Challenge
 import com.github.se.signify.model.challenge.ChallengeRepository
@@ -146,12 +148,13 @@ fun SprintChallengeGameScreen(
           CurrentGestureDisplay(currentWord, currentLetterIndex)
 
           Spacer(modifier = Modifier.height(16.dp))
-
+        val wordsCompletedText = stringResource(R.string.words_completed)
+        val skipText = stringResource(R.string.skip)
           Row(
               verticalAlignment = Alignment.CenterVertically,
               horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 Text(
-                    text = "Words Completed: $completedWordCount",
+                    text = "$wordsCompletedText $completedWordCount",
                     fontSize = 20.sp,
                     modifier = Modifier.testTag("CompletedWordsCounterSprint"))
 
@@ -168,7 +171,7 @@ fun SprintChallengeGameScreen(
                     modifier = Modifier.size(100.dp, 40.dp).testTag("SkipWordButton"),
                     enabled = timeLeft > 0 // Disable button when timeLeft is 0
                     ) {
-                      Text("SKIP")
+                      Text(skipText)
                     }
               }
 
@@ -208,8 +211,9 @@ fun CurrentGestureDisplay(currentWord: String, currentLetterIndex: Int) {
 
 @Composable
 fun SprintTimer(timeLeft: Int) {
+    val timeLeftText = stringResource(R.string.time_left)
   Text(
-      text = "Time Left: $timeLeft seconds",
+      text = "$timeLeftText $timeLeft seconds",
       fontSize = 24.sp,
       modifier = Modifier.testTag("TimerTextSprint"))
 }

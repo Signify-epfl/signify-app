@@ -223,6 +223,8 @@ fun OngoingChallengeCard(
       }
 
   // Calculate the personal total time if the challenge is completed
+    val resultTextTime = stringResource(R.string.your_total_time)
+    val resultTextWords = stringResource(R.string.your_total_words)
   val displayText =
       if (isChallengeCompleted) {
         when (challenge.mode) {
@@ -233,7 +235,7 @@ fun OngoingChallengeCard(
                 } else {
                   challenge.player2WordsCompleted.sum()
                 }
-            "Your Total Words: $totalWords"
+            "$resultTextWords $totalWords"
           }
           ChallengeMode.CHRONO.toString() -> {
             val totalTime =
@@ -242,7 +244,7 @@ fun OngoingChallengeCard(
                 } else {
                   challenge.player2Times.sum() / msToSecondsDivision
                 }
-            "Your Total Time: ${totalTime}s"
+            "$resultTextTime ${totalTime}s"
           }
           else -> ""
         }

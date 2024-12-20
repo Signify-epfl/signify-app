@@ -159,7 +159,7 @@ fun ChallengeModeAlertDialog(
   val context = LocalContext.current
   val selectedMode = remember { mutableStateOf<ChallengeMode?>(null) }
   val challengeId = remember { "${selectedMode.value ?: "challenge"}${System.currentTimeMillis()}" }
-
+    val sendChallengeText = stringResource(R.string.send_challenge)
   AlertDialog(
       onDismissRequest = onDismiss,
       confirmButton = {
@@ -180,7 +180,7 @@ fun ChallengeModeAlertDialog(
               }
             },
             testTag = "SendChallengeButton",
-            text = "Send Challenge",
+            text =sendChallengeText,
             backgroundColor = MaterialTheme.colorScheme.primary,
             textColor = MaterialTheme.colorScheme.onPrimary,
             enabled = selectedMode.value != null,

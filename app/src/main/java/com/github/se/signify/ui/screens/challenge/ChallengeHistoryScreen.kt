@@ -163,6 +163,8 @@ fun PastChallengeCard(challenge: Challenge, userSession: UserSession) {
   val mode = challenge.mode
   val player1Result = calculatePlayerResult(challenge, isPlayer1 = true)
   val player2Result = calculatePlayerResult(challenge, isPlayer1 = false)
+    val opponentText = stringResource(R.string.opponent)
+    val winnerText = stringResource(R.string.winner)
 
   val winner =
       determineWinner(
@@ -180,11 +182,11 @@ fun PastChallengeCard(challenge: Challenge, userSession: UserSession) {
       shape = RoundedCornerShape(16.dp),
   ) {
     Column(Modifier.padding(16.dp)) {
-      Text(text = "Opponent: $opponent", fontSize = 16.sp)
+      Text(text = "$opponentText: $opponent", fontSize = 16.sp)
       Text(text = "Mode: $mode", fontSize = 16.sp)
       PlayerScoreText(player = challenge.player1, result = player1Result, mode = mode)
       PlayerScoreText(player = challenge.player2, result = player2Result, mode = mode)
-      Text(text = "Winner: $winner", fontSize = 16.sp)
+      Text(text = "$winnerText: $winner", fontSize = 16.sp)
     }
   }
 }
@@ -202,6 +204,7 @@ fun calculatePlayerResult(challenge: Challenge, isPlayer1: Boolean): Double {
   }
 }
 
+@Composable
 fun determineWinner(
     mode: String,
     player1: String,
@@ -209,19 +212,21 @@ fun determineWinner(
     player1Result: Double,
     player2Result: Double
 ): String {
-  return when (mode) {
+    val drawText = stringResource(R.string.draw)
+
+    return when (mode) {
     ChallengeMode.SPRINT.toString() -> {
       when {
         player1Result > player2Result -> player1
         player2Result > player1Result -> player2
-        else -> "Draw"
+        else -> drawText
       }
     }
     else -> {
       when {
         player1Result < player2Result -> player1
         player2Result < player1Result -> player2
-        else -> "Draw"
+        else -> drawText
       }
     }
   }
@@ -229,10 +234,12 @@ fun determineWinner(
 
 @Composable
 fun PlayerScoreText(player: String, result: Double, mode: String) {
-  val scoreText =
+    val wordsText = stringResource(R.string.words)
+
+    val scoreText =
       when (mode) {
         ChallengeMode.CHRONO.toString() -> "$player Score: $result s"
-        else -> "$player Score: $result words"
+        else -> "$player Score: $result $wordsText"
       }
   Text(text = scoreText, fontSize = 16.sp)
 }
