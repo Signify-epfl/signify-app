@@ -125,10 +125,7 @@ class CombinedEnd2endTest {
      * TODO("Confirm that a toast was sent!") /!\ END OF SECOND END2END TEST/!\
      */
     composeTestRule.onNodeWithTag("BackButton").performClick()
-    /**
-     * He wants to change the settings. /!\ THIRD END2END TEST: Settings feature/!\
-     */
-
+    /** He wants to change the settings. /!\ THIRD END2END TEST: Settings feature/!\ */
     composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
 
@@ -146,9 +143,9 @@ class CombinedEnd2endTest {
     // Step 4: Update the username
     composeTestRule.onNodeWithTag("usernameTextField", useUnmergedTree = true).assertIsDisplayed()
     composeTestRule
-      .onNodeWithTag("usernameTextField", useUnmergedTree = true)
-      .performClick()
-      .performTextInput("NewUsername123")
+        .onNodeWithTag("usernameTextField", useUnmergedTree = true)
+        .performClick()
+        .performTextInput("NewUsername123")
 
     // Step 5: Simulate the "Done" action on the keyboard
     composeTestRule.onNodeWithTag("usernameTextField").performImeAction()
@@ -156,15 +153,17 @@ class CombinedEnd2endTest {
 
     // Step 6: Verify the username has been updated
     composeTestRule
-      .onNodeWithTag("usernameTextField", useUnmergedTree = true)
-      .assertTextContains("NewUsername123", substring = true)
+        .onNodeWithTag("usernameTextField", useUnmergedTree = true)
+        .assertTextContains("NewUsername123", substring = true)
 
     // Step 7: Update the profile photo
-    composeTestRule.onNodeWithTag("DefaultProfilePicture", useUnmergedTree = true).assertIsDisplayed()
     composeTestRule
-      .onNodeWithTag("editProfilePictureButton", useUnmergedTree = true)
-      .assertIsDisplayed()
-      .assertHasClickAction()
+        .onNodeWithTag("DefaultProfilePicture", useUnmergedTree = true)
+        .assertIsDisplayed()
+    composeTestRule
+        .onNodeWithTag("editProfilePictureButton", useUnmergedTree = true)
+        .assertIsDisplayed()
+        .assertHasClickAction()
 
     // Step 8: Return to the Profile screen
     composeTestRule.onNodeWithTag("BackButton", useUnmergedTree = true).performClick()
@@ -175,7 +174,10 @@ class CombinedEnd2endTest {
     composeTestRule.onNodeWithTag("HomeScreen").assertIsDisplayed()
 
     /** /!\ END OF THIRD END2END TEST/!\ */
-    /** The User is back to the HomeScreen. He wants to Add a Friend. /!\ Fourth END2END TEST: Friends/!\ */
+    /**
+     * The User is back to the HomeScreen. He wants to Add a Friend. /!\ Fourth END2END TEST:
+     * Friends/!\
+     */
     /** /!\ END OF FOURTH END2END TEST/!\ */
   }
 }
