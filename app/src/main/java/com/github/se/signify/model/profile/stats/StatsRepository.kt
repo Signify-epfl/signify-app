@@ -37,6 +37,12 @@ interface StatsRepository {
 
   fun getWonChallengeStats(userId: String, onSuccess: (Int) -> Unit, onFailure: (Exception) -> Unit)
 
+  fun getTimePerLetter(
+      userId: String,
+      onSuccess: (List<Long>) -> Unit,
+      onFailure: (Exception) -> Unit
+  )
+
   fun updateLettersLearned(
       userId: String,
       newLetter: Char,
@@ -71,4 +77,11 @@ interface StatsRepository {
   )
 
   fun updateWonChallengeStats(userId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit)
+
+  fun updateTimePerLetter(
+      userId: String,
+      newTimePerLetter: List<Long>,
+      onSuccess: () -> Unit,
+      onFailure: (Exception) -> Unit
+  )
 }

@@ -9,16 +9,17 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -41,6 +42,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
 import com.github.se.signify.model.authentication.UserSession
+import com.github.se.signify.model.common.calculateTimePerLetter
+import com.github.se.signify.model.home.exercise.ExerciseCurrentInfo
 import com.github.se.signify.model.home.exercise.ExerciseLevel
 import com.github.se.signify.model.home.exercise.ExerciseLevelName
 import com.github.se.signify.model.home.hand.HandLandmarkViewModel
@@ -82,6 +85,9 @@ fun ExerciseScreen(
         List(3) { realSentences.filter { exerciseLevel.wordFilter?.invoke(it) ?: true }.random() })
   }
 
+  LaunchedEffect(Unit) { statsViewModel.getTimePerLetter() }
+  var startTimestamp by rememberSaveable { mutableLongStateOf(System.currentTimeMillis()) }
+
   var currentSentenceIndex by rememberSaveable { mutableIntStateOf(0) }
   var currentWordIndex by rememberSaveable { mutableIntStateOf(0) }
   var currentLetterIndex by rememberSaveable { mutableIntStateOf(0) }
@@ -98,11 +104,14 @@ fun ExerciseScreen(
   val cooldownDuration = 500L // 0.5-second cooldown
 
   if (!landmarksState.value.isNullOrEmpty() && !isCooldownActive) {
+    val exerciseCurrentInfo =
+        ExerciseCurrentInfo(
+            letterIndex = currentLetterIndex,
+            wordIndex = currentWordIndex,
+            sentenceIndex = currentSentenceIndex)
     handleGestureMatching(
         detectedGesture = detectedGesture,
-        currentLetterIndex = currentLetterIndex,
-        currentWordIndex = currentWordIndex,
-        currentSentenceIndex = currentSentenceIndex,
+        exerciseCurrentInfo = exerciseCurrentInfo,
         sentencesList = sentencesList,
         onProgressUpdate = { newLetterIndex, newWordIndex, newSentenceIndex ->
           currentLetterIndex = newLetterIndex
@@ -127,7 +136,8 @@ fun ExerciseScreen(
           currentSentenceIndex = 0
           currentWordIndex = 0
           currentLetterIndex = 0
-        })
+        },
+        timeTracking = { startTimestamp = calculateTimePerLetter(statsViewModel, startTimestamp) })
   }
 
   AnnexScreenScaffold(
@@ -144,8 +154,7 @@ fun ExerciseScreen(
       Box(
           modifier =
               Modifier.fillMaxWidth()
-                  .padding(horizontal = 16.dp)
-                  .height(150.dp)
+                  .weight(3f)
                   .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
                   .border(
                       2.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(16.dp)),
@@ -166,10 +175,15 @@ fun ExerciseScreen(
         currentLetterIndex,
         currentWordIndex,
         currentSentenceIndex,
-    )
+        Modifier.weight(2f))
+    Spacer(modifier = Modifier.height(16.dp))
 
     // Camera placeholder/composable
-    CameraBox(handLandmarkViewModel)
+    Box(
+        modifier =
+            Modifier.fillMaxWidth().weight(5f).background(MaterialTheme.colorScheme.background)) {
+          CameraBox(handLandmarkViewModel)
+        }
   }
 }
 
@@ -180,42 +194,49 @@ fun ExerciseScreen(
  * updates the indices for the current letter, word, or sentence, and triggers the appropriate
  * callback based on the progression level.
  *
- * @param currentLetterIndex The index of the current letter within the current word.
- * @param currentWordIndex The index of the current word within the current sentence.
- * @param currentSentenceIndex The index of the current sentence in the list of sentences.
+ * @param exerciseCurrentInfo The information about the current letter, word and sentence index.
  * @param sentences The list of sentences used in the exercise.
  * @param onProgressUpdate Callback to trigger progression to the next letter, word, or sentence.
  *   Takes new indices (newLetterIndex, newWordIndex, newSentenceIndex) as parameters to update the
  *   progression state.
  * @param onAllSentencesComplete Callback to be called when all sentences have been completed.
+ * @param timeTracking Callback to track time.
  */
 fun onSuccess(
-    currentLetterIndex: Int,
-    currentWordIndex: Int,
-    currentSentenceIndex: Int,
+    exerciseCurrentInfo: ExerciseCurrentInfo,
     sentences: List<String>,
     onProgressUpdate: (newLetterIndex: Int, newWordIndex: Int, newSentenceIndex: Int) -> Unit,
-    onAllSentencesComplete: () -> Unit
+    onAllSentencesComplete: () -> Unit,
+    timeTracking: () -> Unit
 ) {
   // Retrieve the current sentence and split it into words
-  val currentSentence = sentences[currentSentenceIndex]
+  val currentSentence = sentences[exerciseCurrentInfo.sentenceIndex]
   val words = currentSentence.split(" ")
-  val currentWord = words[currentWordIndex]
+  val currentWord = words[exerciseCurrentInfo.wordIndex]
+
+  timeTracking()
 
   when {
     // Move to the next letter within the current word
-    currentLetterIndex < currentWord.length - 1 -> {
-      onProgressUpdate(currentLetterIndex + 1, currentWordIndex, currentSentenceIndex)
+    exerciseCurrentInfo.letterIndex < currentWord.length - 1 -> {
+      onProgressUpdate(
+          exerciseCurrentInfo.letterIndex + 1,
+          exerciseCurrentInfo.wordIndex,
+          exerciseCurrentInfo.sentenceIndex)
     }
 
     // Move to the next word in the sentence
-    currentWordIndex < words.size - 1 -> {
-      onProgressUpdate(0, currentWordIndex + 1, currentSentenceIndex) // Reset letter index
+    exerciseCurrentInfo.wordIndex < words.size - 1 -> {
+      onProgressUpdate(
+          0,
+          exerciseCurrentInfo.wordIndex + 1,
+          exerciseCurrentInfo.sentenceIndex) // Reset letter index
     }
 
     // Move to the next sentence
-    currentSentenceIndex < sentences.size - 1 -> {
-      onProgressUpdate(0, 0, currentSentenceIndex + 1) // Reset both letter and word indices
+    exerciseCurrentInfo.sentenceIndex < sentences.size - 1 -> {
+      onProgressUpdate(
+          0, 0, exerciseCurrentInfo.sentenceIndex + 1) // Reset both letter and word indices
     }
 
     // All sentences are completed
@@ -237,13 +258,15 @@ fun onSuccess(
  * @param currentLetterIndex The index of the current letter within the current word.
  * @param currentWordIndex The index of the current word within the current sentence.
  * @param currentSentenceIndex The index of the current sentence in the list of sentences.
+ * @param modifier The modifier of the box.
  */
 @Composable
 fun SentenceLayer(
     sentences: List<String>,
     currentLetterIndex: Int,
     currentWordIndex: Int,
-    currentSentenceIndex: Int
+    currentSentenceIndex: Int,
+    modifier: Modifier
 ) {
   if (isIndexOutOfBounds(currentSentenceIndex, sentences.size)) return
 
@@ -256,9 +279,8 @@ fun SentenceLayer(
 
   Box(
       modifier =
-          Modifier.fillMaxWidth()
-              .height(150.dp)
-              .padding(horizontal = 16.dp)
+          modifier
+              .fillMaxWidth()
               .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
               .border(2.dp, MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
               .testTag("sentenceLayer"),
@@ -267,13 +289,13 @@ fun SentenceLayer(
             text =
                 buildBackgroundText(
                     wordsInSentence, nextSentence, currentWordIndex, isSingleWordSentence),
-            modifier = Modifier.offset(y = (-40).dp).testTag("FullSentenceTag"),
+            modifier = Modifier.offset(y = (-30).dp).testTag("FullSentenceTag"),
             color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.4f),
             style = TextStyle(fontSize = 24.sp))
 
         Text(
             text = buildForegroundText(currentWord, currentLetterIndex),
-            modifier = Modifier.testTag("CurrentWordTag"),
+            modifier = Modifier.offset(y = (10).dp).testTag("CurrentWordTag"),
             style = TextStyle(fontSize = 30.sp),
             color = MaterialTheme.colorScheme.onSecondary)
       }
@@ -405,34 +427,35 @@ fun buildForegroundText(currentWord: String, currentLetterIndex: Int): Annotated
  * match, a log message is printed indicating the mismatch.
  *
  * @param detectedGesture The gesture detected by the hand landmark model as a string.
- * @param currentLetterIndex The index of the current letter within the current word.
- * @param currentWordIndex The index of the current word within the current sentence.
- * @param currentSentenceIndex The index of the current sentence in the list of sentences.
+ * @param exerciseCurrentInfo The information about the current letter, word and sentence index.
  * @param sentencesList The list of sentences used in the exercise.
  * @param onProgressUpdate Callback to handle the update of indices for progression. Takes
  *   parameters (newLetterIndex, newWordIndex, newSentenceIndex) to update the current position
  *   within the exercise.
  * @param onAllSentencesComplete Callback to handle completion of all sentences in the exercise.
+ * @param timeTracking Callback to track time.
  */
 fun handleGestureMatching(
     detectedGesture: String,
-    currentLetterIndex: Int,
-    currentWordIndex: Int,
-    currentSentenceIndex: Int,
+    exerciseCurrentInfo: ExerciseCurrentInfo,
     sentencesList: List<String>,
     onProgressUpdate: (newLetterIndex: Int, newWordIndex: Int, newSentenceIndex: Int) -> Unit,
-    onAllSentencesComplete: () -> Unit
+    onAllSentencesComplete: () -> Unit,
+    timeTracking: () -> Unit
 ) {
   val currentLetter =
-      getCurrentLetter(sentencesList, currentLetterIndex, currentWordIndex, currentSentenceIndex)
+      getCurrentLetter(
+          sentencesList,
+          exerciseCurrentInfo.letterIndex,
+          exerciseCurrentInfo.wordIndex,
+          exerciseCurrentInfo.sentenceIndex)
   if (detectedGesture == currentLetter.uppercase()) {
     onSuccess(
-        currentLetterIndex = currentLetterIndex,
-        currentWordIndex = currentWordIndex,
-        currentSentenceIndex = currentSentenceIndex,
+        exerciseCurrentInfo = exerciseCurrentInfo,
         sentences = sentencesList,
         onProgressUpdate = onProgressUpdate,
-        onAllSentencesComplete = onAllSentencesComplete)
+        onAllSentencesComplete = onAllSentencesComplete,
+        timeTracking = timeTracking)
   } else {
     Log.d(
         "ExerciseScreenEasy",

@@ -11,6 +11,7 @@ import androidx.test.rule.GrantPermissionRule
 import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.dependencyInjection.AppDependencyProvider
+import com.github.se.signify.model.home.exercise.ExerciseCurrentInfo
 import com.github.se.signify.model.home.exercise.ExerciseLevel
 import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
@@ -79,22 +80,24 @@ class ExerciseScreenTest {
     // Mocks for callback functions
     val mockOnProgressUpdate = mock<(Int, Int, Int) -> Unit>()
     val mockOnAllSentencesComplete = mock<() -> Unit>()
+    val mockTimeTracking = mock<() -> Unit>()
 
     // Test inputs
     val detectedGesture = "A"
     val currentLetterIndex = 0
     val currentWordIndex = 0
     val currentSentenceIndex = 0
+    val exerciseCurrentInfo =
+        ExerciseCurrentInfo(currentLetterIndex, currentWordIndex, currentSentenceIndex)
     val sentencesList = listOf("apple is good", "banana is better")
 
     handleGestureMatching(
         detectedGesture = detectedGesture,
-        currentLetterIndex = currentLetterIndex,
-        currentWordIndex = currentWordIndex,
-        currentSentenceIndex = currentSentenceIndex,
+        exerciseCurrentInfo = exerciseCurrentInfo,
         sentencesList = sentencesList,
         onProgressUpdate = mockOnProgressUpdate,
-        onAllSentencesComplete = mockOnAllSentencesComplete)
+        onAllSentencesComplete = mockOnAllSentencesComplete,
+        timeTracking = mockTimeTracking)
 
     // Verify that onProgressUpdate is called with the next letter index
     verify(mockOnProgressUpdate)

@@ -22,8 +22,7 @@ class MockStatsRepositoryTest(
 
   companion object {
     private val mockStatsRepository = MockStatsRepository()
-    private val userId = "testUser"
-
+    private const val USER_ID = "testUser"
     private val initialStats =
         Stats(
             lettersLearned = listOf('A', 'B'),
@@ -34,12 +33,13 @@ class MockStatsRepositoryTest(
             weeklyQuest = 1,
             completedChallenge = 4,
             createdChallenge = 2,
-            wonChallenge = 3)
+            wonChallenge = 3,
+            timePerLetter = listOf(1000L, 1024L, 777L))
 
     @JvmStatic
     @Parameterized.Parameters
     fun data(): Collection<Array<Any>> {
-      mockStatsRepository.setStatsForUser(userId, initialStats)
+      mockStatsRepository.setStatsForUser(USER_ID, initialStats)
 
       return listOf(
           arrayOf(
@@ -104,7 +104,7 @@ class MockStatsRepositoryTest(
   @Before
   fun resetStats() {
     mockStatsRepository.reset()
-    mockStatsRepository.setStatsForUser(userId, initialStats)
+    mockStatsRepository.setStatsForUser(USER_ID, initialStats)
   }
 
   @Test
@@ -122,7 +122,7 @@ class MockStatsRepositoryTest(
 
   @Test
   fun `wasMethodCalled should return true for called methods`() {
-    mockStatsRepository.getEasyExerciseStats(userId, {}, {})
+    mockStatsRepository.getEasyExerciseStats(USER_ID, {}, {})
     assertTrue(mockStatsRepository.wasMethodCalled("getEasyExerciseStats"))
   }
 
@@ -133,20 +133,20 @@ class MockStatsRepositoryTest(
 
   @Test
   fun `getMethodCalls should return list of called methods`() {
-    mockStatsRepository.getEasyExerciseStats(userId, {}, {})
-    mockStatsRepository.updateEasyExerciseStats(userId, {}, {})
+    mockStatsRepository.getEasyExerciseStats(USER_ID, {}, {})
+    mockStatsRepository.updateEasyExerciseStats(USER_ID, {}, {})
     val methodCalls = mockStatsRepository.getMethodCalls()
     assertEquals(listOf("getEasyExerciseStats", "updateEasyExerciseStats"), methodCalls)
   }
 
   @Test
   fun `reset should clear stats and method calls`() {
-    mockStatsRepository.getEasyExerciseStats(userId, {}, {})
-    mockStatsRepository.updateEasyExerciseStats(userId, {}, {})
+    mockStatsRepository.getEasyExerciseStats(USER_ID, {}, {})
+    mockStatsRepository.updateEasyExerciseStats(USER_ID, {}, {})
 
     mockStatsRepository.reset()
 
-    assertNull(mockStatsRepository.getStatsForUser(userId))
+    assertNull(mockStatsRepository.getStatsForUser(USER_ID))
     assertTrue(mockStatsRepository.getMethodCalls().isEmpty())
     assertTrue(mockStatsRepository.wasMethodCalled("getEasyExerciseStats").not())
     assertTrue(mockStatsRepository.wasMethodCalled("updateEasyExerciseStats").not())
@@ -155,7 +155,7 @@ class MockStatsRepositoryTest(
   @Test
   fun `getStat should return the correct value`() {
     getAction(
-        userId, { stat -> assertEquals(expectedValueGet, stat) }, { fail("This should not fail") })
+        USER_ID, { stat -> assertEquals(expectedValueGet, stat) }, { fail("This should not fail") })
     assertTrue(mockStatsRepository.wasMethodCalled(getStatName))
   }
 
@@ -163,7 +163,7 @@ class MockStatsRepositoryTest(
   fun `getStat should fail`() {
     mockStatsRepository.shouldSucceed = false
     getAction(
-        userId,
+        USER_ID,
         { fail("This should not succeed") },
         { exception -> assertEquals("Simulated failure", exception.message) })
     assertTrue(mockStatsRepository.wasMethodCalled(getStatName))
@@ -171,12 +171,12 @@ class MockStatsRepositoryTest(
 
   @Test
   fun `updateStat should return the correct value`() {
-    updateAction(userId, {}, { fail("This should not fail") })
+    updateAction(USER_ID, {}, { fail("This should not fail") })
 
     assertTrue(mockStatsRepository.wasMethodCalled(updateStatName))
 
     getAction(
-        userId,
+        USER_ID,
         { stat -> assertEquals(expectedValueUpdate, stat) },
         { fail("This should not fail") })
   }
@@ -185,7 +185,7 @@ class MockStatsRepositoryTest(
   fun `updateStat should fail and not modify`() {
     mockStatsRepository.shouldSucceed = false
     updateAction(
-        userId,
+        USER_ID,
         { fail("This should not succeed") },
         { exception -> assertEquals("Simulated failure", exception.message) })
 
@@ -194,13 +194,13 @@ class MockStatsRepositoryTest(
     mockStatsRepository.shouldSucceed = true
 
     getAction(
-        userId, { stat -> assertEquals(expectedValueGet, stat) }, { fail("This should not fail") })
+        USER_ID, { stat -> assertEquals(expectedValueGet, stat) }, { fail("This should not fail") })
   }
 
   @Test
   fun `getLettersLearned should return correct value on success`() {
     mockStatsRepository.getLettersLearned(
-        userId,
+        USER_ID,
         onSuccess = { lettersLearned -> assertEquals(initialStats.lettersLearned, lettersLearned) },
         onFailure = { fail("This should not fail") })
     assertTrue(mockStatsRepository.wasMethodCalled("getLettersLearned"))
@@ -210,7 +210,7 @@ class MockStatsRepositoryTest(
   fun `getLettersLearned should fail when shouldSucceed is false`() {
     mockStatsRepository.shouldSucceed = false
     mockStatsRepository.getLettersLearned(
-        userId,
+        USER_ID,
         onSuccess = { fail("This should not succeed") },
         onFailure = { exception -> assertEquals("Simulated failure", exception.message) })
     assertTrue(mockStatsRepository.wasMethodCalled("getLettersLearned"))
@@ -220,12 +220,12 @@ class MockStatsRepositoryTest(
   fun `updateLettersLearned should add a new letter on success`() {
     val newLetter = 'D'
     mockStatsRepository.updateLettersLearned(
-        userId, newLetter, onSuccess = {}, onFailure = { fail("This should not fail") })
+        USER_ID, newLetter, onSuccess = {}, onFailure = { fail("This should not fail") })
 
     assertTrue(mockStatsRepository.wasMethodCalled("updateLettersLearned"))
 
     mockStatsRepository.getLettersLearned(
-        userId,
+        USER_ID,
         onSuccess = { lettersLearned ->
           assertEquals(initialStats.lettersLearned + newLetter, lettersLearned)
         },
@@ -238,7 +238,7 @@ class MockStatsRepositoryTest(
     mockStatsRepository.shouldSucceed = false
 
     mockStatsRepository.updateLettersLearned(
-        userId,
+        USER_ID,
         newLetter,
         onSuccess = { fail("This should not succeed") },
         onFailure = { exception -> assertEquals("Simulated failure", exception.message) })
@@ -247,8 +247,63 @@ class MockStatsRepositoryTest(
 
     mockStatsRepository.shouldSucceed = true
     mockStatsRepository.getLettersLearned(
-        userId,
+        USER_ID,
         onSuccess = { lettersLearned -> assertEquals(initialStats.lettersLearned, lettersLearned) },
+        onFailure = { fail("This should not fail") })
+  }
+
+  @Test
+  fun getTimePerLetterShouldReturnCorrectValueOnSuccess() {
+    mockStatsRepository.getTimePerLetter(
+        USER_ID,
+        onSuccess = { timePerLetter -> assertEquals(initialStats.timePerLetter, timePerLetter) },
+        onFailure = { fail("This should not fail") })
+    assertTrue(mockStatsRepository.wasMethodCalled("getTimePerLetter"))
+  }
+
+  @Test
+  fun getTimePerLetterShouldFailWhenShouldSucceedIsFalse() {
+    mockStatsRepository.shouldSucceed = false
+    mockStatsRepository.getTimePerLetter(
+        USER_ID,
+        onSuccess = { fail("This should not succeed") },
+        onFailure = { exception -> assertEquals("Simulated failure", exception.message) })
+    assertTrue(mockStatsRepository.wasMethodCalled("getTimePerLetter"))
+  }
+
+  @Test
+  fun updateTimePerLetterShouldAddANewTimeOnSuccess() {
+    val newTimePerLetter = listOf(1000L, 1024L, 777L, 222L)
+    mockStatsRepository.updateTimePerLetter(
+        USER_ID, newTimePerLetter, onSuccess = {}, onFailure = { fail("This should not fail") })
+
+    assertTrue(mockStatsRepository.wasMethodCalled("updateTimePerLetter"))
+
+    mockStatsRepository.getTimePerLetter(
+        USER_ID,
+        onSuccess = { timePerLetter ->
+          assertEquals(initialStats.timePerLetter + 222L, timePerLetter)
+        },
+        onFailure = { fail("This should not fail") })
+  }
+
+  @Test
+  fun updateTimePerLetterShouldNotModifyTimeOnFailure() {
+    val newTimePerLetter = listOf(1000L, 1024L, 777L, 222L)
+    mockStatsRepository.shouldSucceed = false
+
+    mockStatsRepository.updateTimePerLetter(
+        USER_ID,
+        newTimePerLetter,
+        onSuccess = { fail("This should not succeed") },
+        onFailure = { exception -> assertEquals("Simulated failure", exception.message) })
+
+    assertTrue(mockStatsRepository.wasMethodCalled("updateTimePerLetter"))
+
+    mockStatsRepository.shouldSucceed = true
+    mockStatsRepository.getTimePerLetter(
+        USER_ID,
+        onSuccess = { time -> assertEquals(initialStats.timePerLetter, time) },
         onFailure = { fail("This should not fail") })
   }
 }
