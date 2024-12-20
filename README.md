@@ -47,6 +47,7 @@ For the first milestone we provide also the following file with the figma wirefr
 
 For the second milestone we provide also the following file with the figma wireframe and mockup: [Signify Figma M2](https://www.figma.com/design/sqe0iMKLsNpGi72ohKHbhI/Signify-App-M2?node-id=0-1&node-type=canvas&t=kf898URWQxbvH1FA-0)
 
+For the last milestone we provide also the following file with the figma wireframe and mockup: [Signofy Figma M3](https://www.figma.com/design/zaiPChlhLnYnNAvkWd53FN/Signify-App-M3?node-id=0-1&p=f&t=yEW6zUL2IyGV45x8-0)
 ## Contributing
 
 All steps of the development of new features and bug fixes are organized through the [scrum board](https://github.com/orgs/Signify-epfl/projects/2) on Github.  
