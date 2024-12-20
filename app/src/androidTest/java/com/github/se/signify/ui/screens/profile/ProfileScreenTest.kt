@@ -60,7 +60,7 @@ class ProfileScreenTest {
     composeTestRule.onNodeWithTag("BottomNavigationMenu").assertIsDisplayed()
     composeTestRule.onNodeWithTag("SettingsButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("HelpButton").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("MyFriendsButton").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("MyFriendsButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("MyStatsButton").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("MyStatsButton").performScrollTo().assertTextEquals("My Stats")
   }
