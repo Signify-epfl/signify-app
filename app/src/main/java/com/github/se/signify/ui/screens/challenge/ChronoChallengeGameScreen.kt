@@ -340,6 +340,6 @@ fun findNextIndex(challenge: Challenge, currentUserId: String): Int {
         !it
       } // Find the first incomplete round for player2
     }
-    else -> 0 // Return -1 if the user is neither player1 nor player2
+    else -> 0 // Return 0 if the user is neither player1 nor player2
   }
 }
