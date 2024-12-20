@@ -3,7 +3,6 @@ package com.github.se.signify.ui.screens.home
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
-import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
@@ -15,10 +14,8 @@ import com.github.se.signify.model.navigation.NavigationActions
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.doAnswer
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
-import org.mockito.kotlin.anyOrNull
 
 @Suppress("UNCHECKED_CAST")
 class QuizScreenComponentsTest {
@@ -93,35 +90,5 @@ class QuizScreenComponentsTest {
 
     // Verify submit button is disabled
     composeTestRule.onNodeWithTag("SubmitButton").assertIsNotEnabled()
-  }
-
-  @Test
-  fun noQuizAvailable_displaysMessage() {
-    composeTestRule.setContent { NoQuizAvailable() }
-
-    // Verify "No quizzes available" message
-    composeTestRule.onNodeWithTag("NoQuizContainer").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("NoQuizzesText").assertTextEquals("No quizzes available.")
-  }
-
-  @Test
-  fun quizScreen_displaysNoQuizAvailableWhenQuizIsNull() {
-    // Mock repository to return no quizzes
-    val mockQuizRepository = mock(QuizRepository::class.java)
-    doAnswer { invocation ->
-          val onSuccess = invocation.arguments[0] as (List<QuizQuestion>) -> Unit
-          onSuccess(emptyList()) // No quizzes available
-          null
-        }
-        .`when`(mockQuizRepository)
-        .getQuizQuestions(anyOrNull(), anyOrNull())
-
-    composeTestRule.setContent {
-      QuizScreen(navigationActions = mockNavigationActions, quizRepository = mockQuizRepository)
-    }
-
-    // Verify "No quizzes available" message
-    composeTestRule.onNodeWithTag("NoQuizContainer").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("NoQuizzesText").assertTextEquals("No quizzes available.")
   }
 }

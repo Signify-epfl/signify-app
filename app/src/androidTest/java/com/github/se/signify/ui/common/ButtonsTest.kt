@@ -13,8 +13,12 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.github.se.signify.R
+import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.navigation.Screen
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 
 class ButtonsTest {
   @Test
@@ -22,10 +26,10 @@ class ButtonsTest {
     composeTestRule.setContent {
       BasicButton(
           onClick = {},
-          icon = Icons.Outlined.Info,
           iconTestTag = "UtilIcon",
           contentDescription = "Info",
           modifier = Modifier.testTag("UtilButton"),
+          icon = Icons.Outlined.Info,
       )
     }
     // Assert that the button is displayed
@@ -40,10 +44,10 @@ class ButtonsTest {
     composeTestRule.setContent {
       BasicButton(
           onClick = { clicked = true },
-          icon = Icons.Outlined.Info,
           iconTestTag = "UtilIcon",
           contentDescription = "Info",
-          modifier = Modifier.testTag("UtilButton"))
+          modifier = Modifier.testTag("UtilButton"),
+          icon = Icons.Outlined.Info)
     }
     // Assert that the button has a click action
     composeTestRule.onNodeWithTag("UtilButton").assertHasClickAction()
@@ -129,5 +133,31 @@ class ButtonsTest {
     composeTestRule.onNodeWithText(label).performClick()
     // Assert that the click action was triggered
     assert(clicked)
+  }
+
+  @Test
+  fun friendsButtonIsDisplayed() {
+    composeTestRule.setContent {
+      FriendsButton(
+          navigationActions = mock(),
+      )
+    }
+
+    // Assert that the button is displayed
+    composeTestRule.onNodeWithTag("MyFriendsButton").assertIsDisplayed()
+  }
+
+  @Test
+  fun friendsButtonNavigatesToFriendsScreen() {
+    val navigationActions: NavigationActions = mock()
+    composeTestRule.setContent {
+      FriendsButton(
+          navigationActions = navigationActions,
+      )
+    }
+
+    composeTestRule.onNodeWithTag("MyFriendsButton").assertHasClickAction()
+    composeTestRule.onNodeWithTag("MyFriendsButton").performClick()
+    verify(navigationActions).navigateTo(Screen.FRIENDS)
   }
 }

@@ -35,7 +35,6 @@ import com.github.se.signify.ui.screens.challenge.ChallengeHistoryScreen
 import com.github.se.signify.ui.screens.challenge.ChallengeScreen
 import com.github.se.signify.ui.screens.challenge.ChronoChallengeGameScreen
 import com.github.se.signify.ui.screens.challenge.CreateAChallengeScreen
-import com.github.se.signify.ui.screens.challenge.NewChallengeScreen
 import com.github.se.signify.ui.screens.challenge.SprintChallengeGameScreen
 import com.github.se.signify.ui.screens.home.ASLRecognition
 import com.github.se.signify.ui.screens.home.ExerciseScreen
@@ -44,7 +43,6 @@ import com.github.se.signify.ui.screens.home.HomeScreen
 import com.github.se.signify.ui.screens.home.QuestScreen
 import com.github.se.signify.ui.screens.home.QuizScreen
 import com.github.se.signify.ui.screens.profile.FriendsListScreen
-import com.github.se.signify.ui.screens.profile.MyStatsScreen
 import com.github.se.signify.ui.screens.profile.ProfileScreen
 import com.github.se.signify.ui.screens.profile.SettingsScreen
 import com.github.se.signify.ui.screens.tutorial.ProvideElementPositions
@@ -183,9 +181,8 @@ fun SignifyAppPreview(
         startDestination = Screen.CHALLENGE.route,
         route = Route.CHALLENGE,
     ) {
-      composable(Screen.CHALLENGE.route) { ChallengeScreen(navigationActions) }
-      composable(Screen.NEW_CHALLENGE.route) {
-        NewChallengeScreen(
+      composable(Screen.CHALLENGE.route) {
+        ChallengeScreen(
             navigationActions,
             dependencyProvider.userSession(),
             dependencyProvider.userRepository(),
@@ -301,13 +298,6 @@ fun SignifyAppPreview(
             navigationActions,
             dependencyProvider.userSession(),
             dependencyProvider.userRepository())
-      }
-      composable(Screen.STATS.route) {
-        MyStatsScreen(
-            navigationActions,
-            dependencyProvider.userSession(),
-            dependencyProvider.userRepository(),
-            dependencyProvider.statsRepository())
       }
       composable(Screen.SETTINGS.route) {
         SettingsScreen(

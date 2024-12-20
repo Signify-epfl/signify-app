@@ -140,17 +140,17 @@ class ScreensTest {
               BasicButton(
                   onClick = {},
                   iconTestTag = "ButtonIcon1",
-                  icon = Icons.Outlined.Email,
                   contentDescription = "Button 1",
-                  modifier = Modifier.testTag("Button1"))
+                  modifier = Modifier.testTag("Button1"),
+                  icon = Icons.Outlined.Email)
             },
             {
               BasicButton(
                   onClick = {},
                   iconTestTag = "ButtonIcon2",
-                  icon = Icons.Outlined.Email,
                   contentDescription = "Button 2",
-                  modifier = Modifier.testTag("Button2"))
+                  modifier = Modifier.testTag("Button2"),
+                  icon = Icons.Outlined.Email)
             })
 
     composeTestRule.setContent {

@@ -170,6 +170,7 @@ fun ScreenColumn(
               .testTag(testTag),
       horizontalAlignment = Alignment.CenterHorizontally) {
         content()
+        Spacer(modifier = Modifier.height(32.dp))
       }
 }
 
@@ -202,10 +203,10 @@ fun HelpButton(helpText: HelpText) {
   var isHelpBoxVisible by remember { mutableStateOf(false) }
   BasicButton(
       onClick = { isHelpBoxVisible = !isHelpBoxVisible },
-      icon = Icons.Outlined.Info,
       iconTestTag = "HelpIcon",
       contentDescription = "Help",
       modifier = Modifier.testTag("HelpButton"),
+      icon = Icons.Outlined.Info,
   )
 
   // Show popup when the help button is clicked
@@ -269,10 +270,10 @@ fun HelpPopup(onDismiss: () -> Unit, helpText: HelpText) {
 fun BackButton(navigationActions: NavigationActions) {
   BasicButton(
       onClick = { navigationActions.goBack() },
-      icon = Icons.AutoMirrored.Filled.ArrowBack,
       iconTestTag = "BackIcon",
       contentDescription = "Back",
       modifier = Modifier.testTag("BackButton"),
+      icon = Icons.AutoMirrored.Filled.ArrowBack,
   )
 }
 

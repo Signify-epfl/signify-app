@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -28,12 +29,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.se.signify.R
+import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.navigation.Screen
 
 /**
  * A button with an icon.
  *
  * @param onClick A unit to be executed when the button is clicked.
- * @param icon The icon to display.
+ * @param icon An icon to display.
+ * @param painter A painter to display. If this is not null, [icon] should be null.
  * @param iconTestTag The testTag of the icon.
  * @param contentDescription The description text of the icon.
  * @param modifier Modifier to be applied to the button. This should be avoided.
@@ -41,20 +46,33 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun BasicButton(
     onClick: () -> Unit,
-    icon: ImageVector,
     iconTestTag: String,
     contentDescription: String,
     modifier: Modifier = Modifier,
+    icon: ImageVector? = null,
+    painter: Painter? = null,
     tint: Color = MaterialTheme.colorScheme.primary,
 ) {
   Box(
       modifier = modifier.size(30.dp).clickable { onClick() },
       contentAlignment = Alignment.Center) {
-        Icon(
-            icon,
-            contentDescription = contentDescription,
-            tint = tint,
-            modifier = Modifier.size(30.dp).testTag(iconTestTag))
+        val iconModifier = Modifier.size(30.dp).testTag(iconTestTag)
+        if (icon != null) {
+          Icon(
+              imageVector = icon,
+              contentDescription = contentDescription,
+              tint = tint,
+              modifier = iconModifier,
+          )
+        }
+        if (painter != null) {
+          Icon(
+              painter = painter,
+              contentDescription = contentDescription,
+              tint = tint,
+              modifier = iconModifier,
+          )
+        }
       }
 }
 /**
@@ -132,4 +150,20 @@ fun SquareButton(
               modifier = Modifier.size((size * 0.7).dp))
         }
       }
+}
+
+/**
+ * A button that navigates to the friends list screen.
+ *
+ * @param navigationActions The app's navigation actions.
+ */
+@Composable
+fun FriendsButton(navigationActions: NavigationActions) {
+  BasicButton(
+      onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
+      iconTestTag = "MyFriendsIcon",
+      contentDescription = "My Friends",
+      modifier = Modifier.testTag("MyFriendsButton"),
+      painter = painterResource(id = R.drawable.friendsicon),
+  )
 }

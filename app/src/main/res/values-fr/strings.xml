@@ -94,7 +94,8 @@
     <string name="total_time_text">Votre temps total :</string>
     <string name="challenge_completed_text">Défi déjà terminé, veuillez attendre le résultat</string>
     <string name="challenge_title_text">Sélectionnez un ami à défier</string>
-    <string name="challenge_text">Défi</string>
+    <string name="challenge_screen_title">Défis</string>
+    <string name="challenge_text">Défier</string>
     <string name="send_challenge_text">Envoyer un Défi</string>
     <string name="pick_a_mode_string">Choisir un mode</string>
     <string name="invalid_challenge_text">Chaîne de défi invalide</string>
@@ -105,7 +106,6 @@
     <string name="challenge_done_text">Défi terminé ! Allez dans l’historique pour voir les résultats.</string>
     <string name="score_saved_text">Score enregistré avec succès</string>
     <string name="score_failed_text">Échec de l’enregistrement du score</string>
-    <string name="history_text">Historique</string>
     <string name="number_challenges_text">Nombres de défis</string>
 
     <string name="completed_challenge_text">Complété</string>
