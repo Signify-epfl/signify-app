@@ -15,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -30,6 +29,7 @@ import com.github.se.signify.model.profile.stats.StatsRepository
 import com.github.se.signify.model.profile.stats.StatsViewModel
 import com.github.se.signify.ui.common.AccountInformation
 import com.github.se.signify.ui.common.BasicButton
+import com.github.se.signify.ui.common.FriendsButton
 import com.github.se.signify.ui.common.HelpText
 import com.github.se.signify.ui.common.LearnedLetterList
 import com.github.se.signify.ui.common.MainScreenScaffold
@@ -112,16 +112,4 @@ fun SettingsButton(navigationActions: NavigationActions) {
       contentDescription = "Settings",
       modifier = Modifier.testTag("SettingsButton"),
       icon = Icons.Outlined.Settings)
-}
-
-@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-@Composable
-fun FriendsButton(navigationActions: NavigationActions) {
-  BasicButton(
-      onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
-      iconTestTag = "MyFriendsIcon",
-      contentDescription = "My Friends",
-      modifier = Modifier.testTag("MyFriendsButton"),
-      painter = painterResource(id = R.drawable.friendsicon),
-  )
 }
