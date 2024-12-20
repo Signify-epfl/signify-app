@@ -29,6 +29,7 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="light_mode_text">Light Mode</string>
     <string name="cancel_text">Cancel</string>
     <string name="unknown_text">unknown</string>
+    <string name="my_friends_text">My Friends</string>
     <string name="my_stats_text">My Stats</string>
     <string name="completed_exercise_count_text">Number of exercises achieved :</string>
     <string name="completed_quest_count_text">Number of quests achieved :</string>
