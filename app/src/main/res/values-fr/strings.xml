@@ -39,7 +39,6 @@
     <string name="graph_average_text">moyenne = </string>
     <string name="graph_testtag">graphTimePerLetter</string>
     <string name="graph_unavailable">Pas assez de données pour un graphique</string>
-    <string name="graphs_and_stats_text">Graphiques Et Statistiques</string>
 
     <string name="no_friend_text">Pas d’ami(e)s</string>
     <string name="request_friends_text">Demandes d’Ami(e)s</string>

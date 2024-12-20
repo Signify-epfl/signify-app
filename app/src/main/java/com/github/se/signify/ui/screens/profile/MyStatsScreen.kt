@@ -59,7 +59,6 @@ fun MyStatsScreen(
   val hard = statsViewModel.hard.collectAsState()
   val daily = statsViewModel.daily.collectAsState()
   val weekly = statsViewModel.weekly.collectAsState()
-  val timePerLetter = statsViewModel.timePerLetter.collectAsState()
   var updatedProfilePicture by remember { mutableStateOf(profilePictureUrl.value) }
 
   LaunchedEffect(profilePictureUrl.value) { updatedProfilePicture = profilePictureUrl.value }
