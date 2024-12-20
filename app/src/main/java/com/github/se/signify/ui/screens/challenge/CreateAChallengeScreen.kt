@@ -59,8 +59,8 @@ fun CreateAChallengeScreen(
       viewModel(factory = UserViewModel.factory(userSession, userRepository))
   val challengeViewModel: ChallengeViewModel =
       viewModel(factory = ChallengeViewModel.factory(userSession, challengeRepository))
-    val statsViewModel: StatsViewModel =
-        viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
+  val statsViewModel: StatsViewModel =
+      viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
 
   // Fetch friends list when this screen is first displayed
   LaunchedEffect(Unit) { userViewModel.getFriendsList() }
@@ -181,7 +181,7 @@ fun ChallengeModeAlertDialog(
                     roundWords = words)
                 userViewModel.addOngoingChallenge(userSession.getUserId()!!, challengeId)
                 userViewModel.addOngoingChallenge(friendId, challengeId)
-                  statsViewModel.updateCreatedChallengeStats()
+                statsViewModel.updateCreatedChallengeStats()
                 onDismiss()
               }
             },
@@ -197,8 +197,8 @@ fun ChallengeModeAlertDialog(
             onClick = onDismiss,
             testTag = "CancelButton",
             text = stringResource(R.string.cancel_text),
-            backgroundColor = MaterialTheme.colorScheme.surface,
-            textColor = MaterialTheme.colorScheme.onSurface,
+            backgroundColor = MaterialTheme.colorScheme.onSurface,
+            textColor = MaterialTheme.colorScheme.surface,
         )
       },
       title = {

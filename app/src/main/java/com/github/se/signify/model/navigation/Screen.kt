@@ -11,16 +11,16 @@ enum class Screen(val route: String, val requiresAuth: Boolean = true) {
   EXERCISE_HARD("Hard Exercise Screen", false),
   QUEST("Quest Screen"),
   FEEDBACK("Feedback Screen"),
-  QUIZ("Quiz Screen", false),
+  QUIZ("Quiz Screen"),
   PROFILE("Profile Screen"),
   FRIENDS("Friends Screen"),
   SETTINGS("Settings Screen"),
   STATS("Stats Screen"),
   CHALLENGE("Challenge Screen"),
-  NEW_CHALLENGE("NewChallenge Screen"),
   CREATE_CHALLENGE("CreateChallenge Screen"),
   CHALLENGE_HISTORY("ChallengeHistory Screen"),
   CHRONO_CHALLENGE("ChronoChallenge Screen/{challengeId}"),
+  SPRINT_CHALLENGE("SprintChallenge Screen/{challengeId}"),
   TUTORIAL("Tutorial Screen", false),
 
   // For testing purposes

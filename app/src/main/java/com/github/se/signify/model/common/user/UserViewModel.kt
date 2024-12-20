@@ -152,7 +152,11 @@ open class UserViewModel(
     repository.acceptFriendRequest(
         userSession.getUserId()!!,
         friendUserId,
-        onSuccess = { Log.d(logTag, "Friend request accepted successfully.") },
+        onSuccess = {
+          Log.d(logTag, "Friend request accepted successfully.")
+          getFriendsList()
+          getRequestsFriendsList()
+        },
         onFailure = { e -> Log.e(logTag, "Failed to accept friend request: ${e.message}") })
   }
 
@@ -160,7 +164,11 @@ open class UserViewModel(
     repository.declineFriendRequest(
         userSession.getUserId()!!,
         friendUserId,
-        onSuccess = { Log.d(logTag, "Friend request declined successfully.") },
+        onSuccess = {
+          Log.d(logTag, "Friend request declined successfully.")
+          getFriendsList()
+          getRequestsFriendsList()
+        },
         onFailure = { e -> Log.e(logTag, "Failed to decline friend request: ${e.message}") })
   }
 
@@ -168,7 +176,10 @@ open class UserViewModel(
     repository.removeFriend(
         userSession.getUserId()!!,
         friendUserId,
-        onSuccess = { Log.d(logTag, "Friend removed successfully.") },
+        onSuccess = {
+          Log.d(logTag, "Friend removed successfully.")
+          getFriendsList()
+        },
         onFailure = { e -> Log.e(logTag, "Failed to remove friend: ${e.message}") })
   }
 

@@ -18,14 +18,12 @@ open class NavigationActions(
    * @param destination The top level destination to navigate to.
    */
   open fun navigateTo(destination: TopLevelDestination) {
-    val route =
-        if (destination.requiresAuth && !userSession.isLoggedIn()) {
-          Screen.UNAUTHENTICATED.route
-        } else {
-          destination.route
-        }
+    if (destination.requiresAuth && !userSession.isLoggedIn()) {
+      onUnauthenticated()
+      return
+    }
 
-    navController.navigate(route) {
+    navController.navigate(destination.route) {
       // Clear the stack at each navigation to the main screens
       // avoid building up a large stack of destinations
       popUpTo(0) {
@@ -48,6 +46,7 @@ open class NavigationActions(
       onUnauthenticated()
       return
     }
+
     val route =
         if (params != null) {
           var routeWithParams = screen.route

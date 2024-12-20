@@ -60,7 +60,9 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="accept_text">Accept</string>
     <string name="decline_text">Decline</string>
     <string name="confirm_friend_removal_text">Are you sure you want to remove this friend?</string>
+    <string name="confirm_challenge_deletion_text">Are you sure you want to delete this challenge?</string>
     <string name="removed_friend_text">Friend removed</string>
+    <string name="removed_challenge_text">Challenge deleted</string>
     <string name="yes_button_text">Yes</string>
     <string name="no_button_text">No</string>
     <string name="quiz_time_text">Quiz Time !</string>
@@ -87,6 +89,7 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="total_time_text">Your Total Time:</string>
     <string name="challenge_completed_text">Challenge already completed, wait for result</string>
     <string name="challenge_title_text">Select a Friend to Challenge</string>
+    <string name="challenge_screen_title">Challenges</string>
     <string name="challenge_text">Challenge</string>
     <string name="send_challenge_text">Send Challenge</string>
     <string name="pick_a_mode_string">Pick a Mode</string>
@@ -98,7 +101,6 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="challenge_done_text">Challenge Completed! Go to History to see the results.</string>
     <string name="score_saved_text">Score saved successfully</string>
     <string name="score_failed_text">Failed to save score</string>
-    <string name="history_text">History</string>
     <string name="number_challenges_text">Number of challenges :</string>
     <string name="completed_challenge_text">Completed</string>
     <string name="created_challenge_text">Created</string>
