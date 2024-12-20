@@ -17,6 +17,7 @@ import com.github.se.signify.model.challenge.ChallengeMode
 import com.github.se.signify.model.challenge.MockChallengeRepository
 import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.profile.stats.MockStatsRepository
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -36,6 +37,7 @@ class CreateAChallengeScreenTest {
   private lateinit var navigationActions: NavigationActions
   private lateinit var userRepository: UserRepository
   private lateinit var challengeRepository: MockChallengeRepository
+  private lateinit var statsRepository: MockStatsRepository
   private val friends = mutableStateListOf("Alice", "Bob", "Charlie")
 
   @Before
@@ -44,6 +46,7 @@ class CreateAChallengeScreenTest {
     navigationActions = mock(NavigationActions::class.java)
     userRepository = mock(UserRepository::class.java)
     challengeRepository = MockChallengeRepository()
+    statsRepository = MockStatsRepository()
 
     // Mock getFriendsList to return friends list
     doAnswer { invocation ->
@@ -59,7 +62,8 @@ class CreateAChallengeScreenTest {
           navigationActions = navigationActions,
           userSession = userSession,
           userRepository = userRepository,
-          challengeRepository = challengeRepository)
+          challengeRepository = challengeRepository,
+          statsRepository = statsRepository)
     }
 
     composeTestRule.waitForIdle() // Wait for UI to be fully loaded

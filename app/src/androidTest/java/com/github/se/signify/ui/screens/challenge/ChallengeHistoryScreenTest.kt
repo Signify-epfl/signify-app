@@ -10,6 +10,7 @@ import com.github.se.signify.model.challenge.ChallengeMode
 import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.profile.stats.StatsRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -28,6 +29,7 @@ class ChallengeHistoryScreenTest {
   private lateinit var userRepository: UserRepository
   private lateinit var challengeRepository: ChallengeRepository
   private lateinit var navigationActions: NavigationActions
+  private lateinit var statsRepository: StatsRepository
 
   private val challengesCompleted = 10
   private val challengesCreated = 5
@@ -39,6 +41,7 @@ class ChallengeHistoryScreenTest {
     userRepository = mock()
     challengeRepository = mock()
     navigationActions = mock()
+    statsRepository = mock()
 
     whenever(userSession.getUserId()).thenReturn("testUserId")
     doAnswer { invocation ->
@@ -46,24 +49,24 @@ class ChallengeHistoryScreenTest {
           onSuccess.invoke(
               challengesCompleted) // Trigger the onSuccess callback with the test value
         }
-        .whenever(userRepository)
-        .getChallengesCompleted(eq("testUserId"), any(), any())
+        .whenever(statsRepository)
+        .getCompletedChallengeStats(eq("testUserId"), any(), any())
 
     // Mock the repository behavior for getChallengesCreated
     doAnswer { invocation ->
           val onSuccess = invocation.getArgument<(Int) -> Unit>(1) // Capture the onSuccess callback
           onSuccess.invoke(challengesCreated) // Trigger the onSuccess callback with the test value
         }
-        .whenever(userRepository)
-        .getChallengesCreated(eq("testUserId"), any(), any())
+        .whenever(statsRepository)
+        .getCreatedChallengeStats(eq("testUserId"), any(), any())
 
     // Mock the repository behavior for getChallengesWon
     doAnswer { invocation ->
           val onSuccess = invocation.getArgument<(Int) -> Unit>(1) // Capture the onSuccess callback
           onSuccess.invoke(challengesWon) // Trigger the onSuccess callback with the test value
         }
-        .whenever(userRepository)
-        .getChallengesWon(eq("testUserId"), any(), any())
+        .whenever(statsRepository)
+        .getWonChallengeStats(eq("testUserId"), any(), any())
   }
 
   @Test
@@ -74,7 +77,7 @@ class ChallengeHistoryScreenTest {
           userSession = userSession,
           userRepository = userRepository,
           challengeRepository = challengeRepository,
-      )
+          statsRepository = statsRepository)
     }
 
     // Verify statistics are displayed correctly
@@ -92,7 +95,7 @@ class ChallengeHistoryScreenTest {
           userSession = userSession,
           userRepository = userRepository,
           challengeRepository = challengeRepository,
-      )
+          statsRepository = statsRepository)
     }
 
     // Verify the message for no past challenges is displayed

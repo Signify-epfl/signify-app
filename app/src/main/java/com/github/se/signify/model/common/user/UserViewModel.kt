@@ -293,31 +293,6 @@ open class UserViewModel(
         onFailure = { e -> Log.e("UserViewModel", "Failed to fetch user: ${e.message}") })
   }
 
-  fun incrementField(userId: String, fieldName: String) {
-    repository.getUserById(
-        userId = userId,
-        onSuccess = { user ->
-          val currentValue =
-              when (fieldName) {
-                "challengesCreated" -> user.challengesCreated
-                "challengesCompleted" -> user.challengesCompleted
-                "challengesWon" -> user.challengesWon
-                else -> throw IllegalArgumentException("Invalid field name")
-              }
-
-          // Update the field in Firestore
-          repository.updateUserField(
-              userId = userId,
-              fieldName = fieldName,
-              value = (currentValue) + 1,
-              onSuccess = { Log.d("UserViewModel", "Field $fieldName incremented successfully") },
-              onFailure = { e ->
-                Log.e("UserViewModel", "Failed to increment field: ${e.message}")
-              })
-        },
-        onFailure = { e -> Log.e("UserViewModel", "Failed to fetch user: ${e.message}") })
-  }
-
   fun getPastChallenges() {
     repository.getPastChallenges(
         userSession.getUserId()!!,

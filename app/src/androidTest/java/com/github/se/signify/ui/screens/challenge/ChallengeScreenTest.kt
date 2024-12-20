@@ -16,6 +16,7 @@ import com.github.se.signify.model.challenge.MockChallengeRepository
 import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
+import com.github.se.signify.model.profile.stats.MockStatsRepository
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -34,6 +35,7 @@ class ChallengeScreenTest {
   private lateinit var navigationActions: NavigationActions
   private lateinit var userRepository: UserRepository
   private lateinit var challengeRepository: MockChallengeRepository
+  private lateinit var statsRepository: MockStatsRepository
 
   private val ongoingChallenges =
       mutableStateListOf(
@@ -54,6 +56,7 @@ class ChallengeScreenTest {
     userSession = MockUserSession()
     userRepository = Mockito.mock(UserRepository::class.java)
     challengeRepository = MockChallengeRepository()
+    statsRepository = MockStatsRepository()
 
     // Mock UserRepository to provide ongoing challenges list
     doAnswer { invocation ->
@@ -77,7 +80,8 @@ class ChallengeScreenTest {
           navigationActions = navigationActions,
           userSession = userSession,
           userRepository = userRepository,
-          challengeRepository = challengeRepository)
+          challengeRepository = challengeRepository,
+          statsRepository = statsRepository)
     }
     composeTestRule.onNodeWithTag("ChallengeScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("MyFriendsButton").assertIsDisplayed()

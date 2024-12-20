@@ -99,7 +99,7 @@ class StatsViewModelTest(
               "getCompletedChallengeStats",
               "updateCompletedChallengeStats",
               { statsViewModel.getCompletedChallengeStats() },
-              { statsViewModel.updateCompletedChallengeStats() },
+              { statsViewModel.updateCompletedChallengeStats(userId) },
               initialStats.completedChallenge,
               initialStats.completedChallenge + 1,
               { statsViewModel.completed.value }),
@@ -115,7 +115,7 @@ class StatsViewModelTest(
               "getWonChallengeStats",
               "updateWonChallengeStats",
               { statsViewModel.getWonChallengeStats() },
-              { statsViewModel.updateWonChallengeStats() },
+              { statsViewModel.updateWonChallengeStats(userId) },
               initialStats.wonChallenge,
               initialStats.wonChallenge + 1,
               { statsViewModel.won.value }))

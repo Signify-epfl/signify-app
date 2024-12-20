@@ -138,22 +138,4 @@ interface UserRepository {
       onSuccess: () -> Unit,
       onFailure: (Exception) -> Unit
   )
-
-  suspend fun getChallengesCompleted(
-      userId: String,
-      onSuccess: (Int) -> Unit,
-      onFailure: (Exception) -> Unit
-  )
-
-  suspend fun getChallengesCreated(
-      userId: String,
-      onSuccess: (Int) -> Unit,
-      onFailure: (Exception) -> Unit
-  )
-
-  suspend fun getChallengesWon(
-      userId: String,
-      onSuccess: (Int) -> Unit,
-      onFailure: (Exception) -> Unit
-  )
 }

@@ -186,7 +186,8 @@ fun SignifyAppPreview(
             navigationActions,
             dependencyProvider.userSession(),
             dependencyProvider.userRepository(),
-            dependencyProvider.challengeRepository())
+            dependencyProvider.challengeRepository(),
+            dependencyProvider.statsRepository())
       }
 
       composable(
@@ -222,7 +223,8 @@ fun SignifyAppPreview(
             navigationActions,
             dependencyProvider.userSession(),
             dependencyProvider.userRepository(),
-            dependencyProvider.challengeRepository())
+            dependencyProvider.challengeRepository(),
+            dependencyProvider.statsRepository())
       }
       composable(Screen.CHALLENGE_HISTORY.route) {
         ChallengeHistoryScreen(
@@ -230,7 +232,7 @@ fun SignifyAppPreview(
             dependencyProvider.userSession(),
             dependencyProvider.userRepository(),
             dependencyProvider.challengeRepository(),
-        )
+            dependencyProvider.statsRepository())
       }
     }
 

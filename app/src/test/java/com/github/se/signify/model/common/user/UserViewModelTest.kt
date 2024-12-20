@@ -657,35 +657,6 @@ class UserViewModelTest {
   }
 
   @Test
-  fun incrementFieldHandlesInvalidFieldName() = runTest {
-    // Act & Assert
-    try {
-      userViewModel.incrementField(currentUserId, "invalidField")
-    } catch (e: IllegalArgumentException) {
-      assertEquals("Invalid field name", e.message)
-    }
-  }
-
-  @Test
-  fun incrementFieldHandlesFailureInFetchingUser() = runTest {
-    // Arrange
-    val exception = Exception("Failed to fetch user")
-    doAnswer {
-          val onFailure = it.getArgument<(Exception) -> Unit>(2)
-          onFailure(exception)
-          null
-        }
-        .whenever(userRepository)
-        .getUserById(eq(currentUserId), any(), any())
-
-    // Act
-    userViewModel.incrementField(currentUserId, "challengesWon")
-
-    // Assert
-    verify(userRepository).getUserById(eq(currentUserId), any(), any())
-  }
-
-  @Test
   fun getPastChallengesWorks() = runTest {
     // Arrange
     val pastChallenges = listOf(challengeId)
@@ -722,35 +693,6 @@ class UserViewModelTest {
     // Assert
     verify(userRepository).getPastChallenges(eq(currentUserId), any(), any())
     assertTrue(userViewModel.pastChallenges.value.isEmpty())
-  }
-
-  @Test
-  fun incrementField_handlesFailureInFetchingUser() = runTest {
-    // Arrange
-    val exception = Exception("Failed to fetch user")
-    doAnswer {
-          val onFailure = it.getArgument<(Exception) -> Unit>(2)
-          onFailure(exception)
-          null
-        }
-        .whenever(userRepository)
-        .getUserById(eq(currentUserId), any(), any())
-
-    // Act
-    userViewModel.incrementField(currentUserId, "challengesCompleted")
-
-    // Assert
-    verify(userRepository).getUserById(eq(currentUserId), any(), any())
-  }
-
-  @Test
-  fun incrementField_throwsExceptionForInvalidFieldName() {
-    // Act & Assert
-    try {
-      userViewModel.incrementField(currentUserId, "invalidField")
-    } catch (e: IllegalArgumentException) {
-      assertEquals("Invalid field name", e.message)
-    }
   }
 
   @Test

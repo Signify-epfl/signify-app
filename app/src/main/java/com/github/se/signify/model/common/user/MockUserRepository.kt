@@ -379,9 +379,6 @@ class MockUserRepository : UserRepository {
 
     val updatedUser =
         when (fieldName) {
-          "challengesCreated" -> user.copy(challengesCreated = value as Int)
-          "challengesCompleted" -> user.copy(challengesCompleted = value as Int)
-          "challengesWon" -> user.copy(challengesWon = value as Int)
           "pastChallenges" -> user.copy(pastChallenges = value as List<String>)
           else -> throw IllegalArgumentException("Invalid field name")
         }
@@ -400,42 +397,6 @@ class MockUserRepository : UserRepository {
 
     val user = users.getValue(userId)
     onSuccess(user.pastChallenges)
-  }
-
-  override suspend fun getChallengesCompleted(
-      userId: String,
-      onSuccess: (Int) -> Unit,
-      onFailure: (Exception) -> Unit
-  ) {
-    if (!checkFailure(onFailure)) return
-    if (!checkUser(userId, onFailure)) return
-
-    val value = mockData[userId]?.get("challengesCompleted") ?: 0
-    onSuccess(value)
-  }
-
-  override suspend fun getChallengesCreated(
-      userId: String,
-      onSuccess: (Int) -> Unit,
-      onFailure: (Exception) -> Unit
-  ) {
-    if (!checkFailure(onFailure)) return
-    if (!checkUser(userId, onFailure)) return
-
-    val value = mockData[userId]?.get("challengesCreated") ?: 0
-    onSuccess(value)
-  }
-
-  override suspend fun getChallengesWon(
-      userId: String,
-      onSuccess: (Int) -> Unit,
-      onFailure: (Exception) -> Unit
-  ) {
-    if (!checkFailure(onFailure)) return
-    if (!checkUser(userId, onFailure)) return
-
-    val value = mockData[userId]?.get("challengesWon") ?: 0
-    onSuccess(value)
   }
 
   private fun checkFailure(onFailure: (Exception) -> Unit): Boolean {

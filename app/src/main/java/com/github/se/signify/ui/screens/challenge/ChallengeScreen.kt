@@ -59,6 +59,8 @@ import com.github.se.signify.model.common.user.UserViewModel
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.model.navigation.TopLevelDestinations
+import com.github.se.signify.model.profile.stats.StatsRepository
+import com.github.se.signify.model.profile.stats.StatsViewModel
 import com.github.se.signify.ui.common.BasicButton
 import com.github.se.signify.ui.common.FriendsButton
 import com.github.se.signify.ui.common.HelpText
@@ -73,11 +75,14 @@ fun ChallengeScreen(
     userSession: UserSession,
     userRepository: UserRepository,
     challengeRepository: ChallengeRepository,
+    statsRepository: StatsRepository
 ) {
   val userViewModel: UserViewModel =
       viewModel(factory = UserViewModel.factory(userSession, userRepository))
   val challengeViewModel: ChallengeViewModel =
       viewModel(factory = ChallengeViewModel.factory(userSession, challengeRepository))
+  val statsViewModel: StatsViewModel =
+      viewModel(factory = StatsViewModel.factory(userSession, statsRepository))
 
   val ongoingChallengeIds by userViewModel.ongoingChallengeIds.collectAsState()
   LaunchedEffect(ongoingChallengeIds) { challengeViewModel.getChallenges(ongoingChallengeIds) }
@@ -179,11 +184,9 @@ fun ChallengeScreen(
                                       challenge.player2, challenge.challengeId)
                                   userViewModel.addPastChallenge(
                                       challenge.player2, challenge.challengeId)
-                                  userViewModel.incrementField(winner, "challengesWon")
-                                  userViewModel.incrementField(
-                                      challenge.player2, "challengesCompleted")
-                                  userViewModel.incrementField(
-                                      challenge.player1, "challengesCompleted")
+                                  statsViewModel.updateWonChallengeStats(winner)
+                                  statsViewModel.updateCompletedChallengeStats(challenge.player1)
+                                  statsViewModel.updateCompletedChallengeStats(challenge.player2)
 
                                   challengeRepository.updateWinner(
                                       challenge.challengeId, winner, {}, {})
