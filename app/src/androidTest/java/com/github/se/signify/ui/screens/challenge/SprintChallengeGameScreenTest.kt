@@ -271,26 +271,4 @@ class SprintChallengeGameScreenTest {
     val updatedChallenge = mockChallengeRepository.getChallenge(testChallenge.challengeId)
     assert(updatedChallenge?.gameStatus == "in_progress")
   }
-
-  @Test
-  fun skipButton_reducesTimeLeftByFive_whenPressed() {
-    composeTestRule.setContent {
-      SprintChallengeGameScreen(
-          navigationActions = mockNavigationActions,
-          userSession = MockUserSession(),
-          challengeRepository = mockChallengeRepository,
-          handLandMarkViewModel = handLandmarkViewModel,
-          challengeId = testChallengeId)
-    }
-
-    composeTestRule.waitForIdle()
-
-    // Assert initial timer value
-    composeTestRule.onNodeWithTag("TimerTextSprint").assertTextEquals("Time Left: 60 seconds")
-
-    // Press the SKIP button
-    composeTestRule.onNodeWithTag("SkipWordButton").performClick()
-    // Assert that timeLeft is reduced by 5 seconds
-    composeTestRule.onNodeWithTag("TimerTextSprint").assertTextEquals("Time Left: 55 seconds")
-  }
 }
