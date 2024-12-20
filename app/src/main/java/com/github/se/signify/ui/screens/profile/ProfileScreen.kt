@@ -64,21 +64,21 @@ fun ProfileScreen(
           userViewModel.getProfilePictureUrl()
           userViewModel.updateStreak()
           userViewModel.getStreak()
-            statsViewModel.getEasyExerciseStats()
-            statsViewModel.getMediumExerciseStats()
-            statsViewModel.getHardExerciseStats()
-            statsViewModel.getDailyQuestStats()
-            statsViewModel.getWeeklyQuestStats()
+          statsViewModel.getEasyExerciseStats()
+          statsViewModel.getMediumExerciseStats()
+          statsViewModel.getHardExerciseStats()
+          statsViewModel.getDailyQuestStats()
+          statsViewModel.getWeeklyQuestStats()
         }
         val userName = userViewModel.userName.collectAsState()
         val profilePictureUrl = userViewModel.profilePictureUrl.collectAsState()
         val streak = userViewModel.streak.collectAsState()
         val lettersLearned = statsViewModel.lettersLearned.collectAsState()
-          val easy = statsViewModel.easy.collectAsState()
-          val medium = statsViewModel.medium.collectAsState()
-          val hard = statsViewModel.hard.collectAsState()
-          val daily = statsViewModel.daily.collectAsState()
-          val weekly = statsViewModel.weekly.collectAsState()
+        val easy = statsViewModel.easy.collectAsState()
+        val medium = statsViewModel.medium.collectAsState()
+        val hard = statsViewModel.hard.collectAsState()
+        val daily = statsViewModel.daily.collectAsState()
+        val weekly = statsViewModel.weekly.collectAsState()
         var updatedProfilePicture by remember { mutableStateOf(profilePictureUrl.value) }
 
         LaunchedEffect(profilePictureUrl.value) { updatedProfilePicture = profilePictureUrl.value }
@@ -110,31 +110,31 @@ fun ProfileScreen(
             modifier = Modifier.testTag("MyFriendsButton"))
         Spacer(modifier = Modifier.height(32.dp))
 
-          // Number of exercises achieved
-          val exercisesText = stringResource(R.string.completed_exercise_count_text)
-          val easyExercisesText = stringResource(R.string.easy_exercises_text)
-          val mediumExercisesText = stringResource(R.string.medium_exercises_text)
-          val hardExercisesText = stringResource(R.string.hard_exercises_text)
-          StatisticsTable(
-              columnTestTag = "ExercisesColumn",
-              rowTestTag = "ExercisesRow",
-              lineText = exercisesText,
-              statsTexts = listOf(easyExercisesText, mediumExercisesText, hardExercisesText),
-              statsNumberList = listOf("${easy.value}", "${medium.value}", "${hard.value}"),
-              lineTextTestTag = "ExercisesText")
-          Spacer(modifier = Modifier.height(32.dp))
+        // Number of exercises achieved
+        val exercisesText = stringResource(R.string.completed_exercise_count_text)
+        val easyExercisesText = stringResource(R.string.easy_exercises_text)
+        val mediumExercisesText = stringResource(R.string.medium_exercises_text)
+        val hardExercisesText = stringResource(R.string.hard_exercises_text)
+        StatisticsTable(
+            columnTestTag = "ExercisesColumn",
+            rowTestTag = "ExercisesRow",
+            lineText = exercisesText,
+            statsTexts = listOf(easyExercisesText, mediumExercisesText, hardExercisesText),
+            statsNumberList = listOf("${easy.value}", "${medium.value}", "${hard.value}"),
+            lineTextTestTag = "ExercisesText")
+        Spacer(modifier = Modifier.height(32.dp))
 
-          // Number of quests achieved
-          val questsText = stringResource(R.string.completed_quest_count_text)
-          val dailyQuestsText = stringResource(R.string.daily_quests_text)
-          val weeklyQuestsText = stringResource(R.string.weekly_quests_text)
-          StatisticsTable(
-              columnTestTag = "QuestsColumn",
-              rowTestTag = "QuestsRow",
-              lineText = questsText,
-              statsTexts = listOf(dailyQuestsText, weeklyQuestsText),
-              statsNumberList = listOf("${daily.value}", "${weekly.value}"),
-              lineTextTestTag = "QuestsText")
+        // Number of quests achieved
+        val questsText = stringResource(R.string.completed_quest_count_text)
+        val dailyQuestsText = stringResource(R.string.daily_quests_text)
+        val weeklyQuestsText = stringResource(R.string.weekly_quests_text)
+        StatisticsTable(
+            columnTestTag = "QuestsColumn",
+            rowTestTag = "QuestsRow",
+            lineText = questsText,
+            statsTexts = listOf(dailyQuestsText, weeklyQuestsText),
+            statsNumberList = listOf("${daily.value}", "${weekly.value}"),
+            lineTextTestTag = "QuestsText")
       },
   )
 }

@@ -132,7 +132,10 @@ class ProfileScreenTest {
     composeTestRule.onNodeWithTag("ExercisesColumn").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("ExercisesRow").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("ExercisesText").performScrollTo().assertIsDisplayed()
-    composeTestRule.onNodeWithTag("ExercisesText").performScrollTo().assertTextEquals("Number of exercises achieved :")
+    composeTestRule
+        .onNodeWithTag("ExercisesText")
+        .performScrollTo()
+        .assertTextEquals("Number of exercises achieved :")
     composeTestRule.onNodeWithTag("Easy").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("Easy").performScrollTo().assertTextEquals("Easy")
     composeTestRule.onNodeWithTag("Medium").performScrollTo().assertIsDisplayed()
@@ -144,7 +147,10 @@ class ProfileScreenTest {
     composeTestRule.onNodeWithTag("QuestsColumn").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("QuestsRow").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("QuestsText").performScrollTo().assertIsDisplayed()
-    composeTestRule.onNodeWithTag("QuestsText").performScrollTo().assertTextEquals("Number of quests achieved :")
+    composeTestRule
+        .onNodeWithTag("QuestsText")
+        .performScrollTo()
+        .assertTextEquals("Number of quests achieved :")
     composeTestRule.onNodeWithTag("Daily").performScrollTo().assertIsDisplayed()
     composeTestRule.onNodeWithTag("Daily").performScrollTo().assertTextEquals("Daily")
     composeTestRule.onNodeWithTag("Weekly").performScrollTo().assertIsDisplayed()
