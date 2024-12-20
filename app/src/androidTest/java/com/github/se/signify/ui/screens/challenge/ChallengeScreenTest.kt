@@ -254,45 +254,48 @@ class ChallengeScreenTest {
     composeTestRule.onNodeWithText("Round: 0/3").assertIsDisplayed()
   }
 
-
-    @Test
-    fun challengeScreen_displaysInfoButton() {
-        composeTestRule.setContent {
-            ChallengeScreen(
-                navigationActions = navigationActions,
-                userSession = userSession,
-                userRepository = userRepository,
-                challengeRepository = challengeRepository)
-        }
-
-        // Assert that the Info button is displayed
-        composeTestRule.onNodeWithTag("InfoButton").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("InfoButton").assertTextEquals("Info")
+  @Test
+  fun challengeScreen_displaysInfoButton() {
+    composeTestRule.setContent {
+      ChallengeScreen(
+          navigationActions = navigationActions,
+          userSession = userSession,
+          userRepository = userRepository,
+          challengeRepository = challengeRepository)
     }
 
-    @Test
-    fun challengeScreen_displaysInfoDialog_whenInfoButtonIsClicked() {
-        composeTestRule.setContent {
-            ChallengeScreen(
-                navigationActions = navigationActions,
-                userSession = userSession,
-                userRepository = userRepository,
-                challengeRepository = challengeRepository)
-        }
+    // Assert that the Info button is displayed
+    composeTestRule.onNodeWithTag("InfoButton").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("InfoButton").assertTextEquals("Info")
+  }
 
-        // Click the Info button
-        composeTestRule.onNodeWithTag("InfoButton").performClick()
-
-        // Assert that the Info dialog is displayed
-        composeTestRule.onNodeWithTag("ChallengeInfoDialog").assertIsDisplayed()
-
-        // Assert that the dialog contains the correct text
-        composeTestRule.onNodeWithText("How Challenges Work").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Sprint Mode: Best-of-3, type the maximum words in 1 minute.")
-            .assertIsDisplayed()
-        composeTestRule.onNodeWithText("Chrono Mode: Best-of-3, type a word as fast as possible each round.")
-            .assertIsDisplayed()
-        composeTestRule.onNodeWithText("Results are displayed in the History screen (top-left button) when both players finished their round.")
-            .assertIsDisplayed()
+  @Test
+  fun challengeScreen_displaysInfoDialog_whenInfoButtonIsClicked() {
+    composeTestRule.setContent {
+      ChallengeScreen(
+          navigationActions = navigationActions,
+          userSession = userSession,
+          userRepository = userRepository,
+          challengeRepository = challengeRepository)
     }
+
+    // Click the Info button
+    composeTestRule.onNodeWithTag("InfoButton").performClick()
+
+    // Assert that the Info dialog is displayed
+    composeTestRule.onNodeWithTag("ChallengeInfoDialog").assertIsDisplayed()
+
+    // Assert that the dialog contains the correct text
+    composeTestRule.onNodeWithText("How Challenges Work").assertIsDisplayed()
+    composeTestRule
+        .onNodeWithText("Sprint Mode: Best-of-3, type the maximum words in 1 minute.")
+        .assertIsDisplayed()
+    composeTestRule
+        .onNodeWithText("Chrono Mode: Best-of-3, type a word as fast as possible each round.")
+        .assertIsDisplayed()
+    composeTestRule
+        .onNodeWithText(
+            "Results are displayed in the History screen (top-left button) when both players finished their round.")
+        .assertIsDisplayed()
+  }
 }

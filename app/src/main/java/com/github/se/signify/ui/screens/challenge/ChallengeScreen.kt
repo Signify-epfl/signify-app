@@ -88,7 +88,7 @@ fun ChallengeScreen(
     userViewModel.getOngoingChallenges()
   }
   val done = remember { mutableStateOf(false) }
-    val showInfoDialog = remember { mutableStateOf(false) }
+  val showInfoDialog = remember { mutableStateOf(false) }
 
   MainScreenScaffold(
       navigationActions = navigationActions,
@@ -213,90 +213,81 @@ fun ChallengeScreen(
                             }
                           }
                     }
-              Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-              // Info Button
-              Button(
-                  onClick = { showInfoDialog.value = true },
-                  modifier = Modifier
-                      .align(Alignment.CenterHorizontally)
-                      .testTag("InfoButton"),
-                  colors = ButtonDefaults.buttonColors(
-                      containerColor = MaterialTheme.colorScheme.primary,
-                      contentColor = MaterialTheme.colorScheme.onPrimary
-                  )
-              ) {
-                  Text(text = stringResource(R.string.info_button_text))
+                // Info Button
+                Button(
+                    onClick = { showInfoDialog.value = true },
+                    modifier = Modifier.align(Alignment.CenterHorizontally).testTag("InfoButton"),
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary)) {
+                      Text(text = stringResource(R.string.info_button_text))
+                    }
               }
-          }
-              }
-      Spacer(modifier = Modifier.height(16.dp))
+        }
+    Spacer(modifier = Modifier.height(16.dp))
   }
 
-    if (showInfoDialog.value) {
-        ChallengeInfoDialog(showDialog = showInfoDialog)
-    }
+  if (showInfoDialog.value) {
+    ChallengeInfoDialog(showDialog = showInfoDialog)
+  }
 }
 
 @Composable
 fun ChallengeInfoDialog(showDialog: MutableState<Boolean>) {
-    Dialog(onDismissRequest = { showDialog.value = false }) {
-        Surface(
-            shape = RoundedCornerShape(16.dp),
-            color = MaterialTheme.colorScheme.surface,
-            modifier = Modifier.padding(16.dp).testTag("ChallengeInfoDialog")
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+  Dialog(onDismissRequest = { showDialog.value = false }) {
+    Surface(
+        shape = RoundedCornerShape(16.dp),
+        color = MaterialTheme.colorScheme.surface,
+        modifier = Modifier.padding(16.dp).testTag("ChallengeInfoDialog")) {
+          Column(
+              modifier = Modifier.padding(16.dp),
+              horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     text = stringResource(R.string.challenge_info_title),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                    color = MaterialTheme.colorScheme.onSurface)
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
                     text = stringResource(R.string.sprint_mode_info),
                     fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                    color = MaterialTheme.colorScheme.onSurface)
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
                     text = stringResource(R.string.chrono_mode_info),
                     fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                    color = MaterialTheme.colorScheme.onSurface)
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
                     text = stringResource(R.string.result_info),
                     fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                    color = MaterialTheme.colorScheme.onSurface)
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
                     onClick = { showDialog.value = false },
                     modifier = Modifier.testTag("CloseInfoButton"),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = MaterialTheme.colorScheme.onPrimary
-                    )
-                ) {
-                    Text(text = stringResource(R.string.close_button_text))
-                }
-            }
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary)) {
+                      Text(text = stringResource(R.string.close_button_text))
+                    }
+              }
         }
-    }
+  }
 }
+
 @Composable
 fun OngoingChallengeCard(
     challenge: Challenge,
