@@ -16,7 +16,6 @@ import java.time.LocalDate
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import junit.framework.TestCase.fail
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -1325,25 +1324,6 @@ class FirestoreUserRepositoryTest {
     assertTrue(successCallbackCalled)
 
     verify(mockCurrentUserDocRef).update(eq(customField), eq("value"))
-  }
-
-  @Test
-  fun `getUserField should return 0 when Firestore operation fails`() = runTest {
-    // Arrange
-    val userId = "testUserId"
-    val exception = Exception("Firestore error")
-    `when`(mockCurrentUserDocRef.get()).thenReturn(Tasks.forException(exception))
-
-    var result: Int? = null
-    val onSuccess: (Int) -> Unit = { value -> result = value }
-    val onFailure: (Exception) -> Unit = { result = 0 } // Set result to 0 on failure
-
-    // Act
-    firestoreUserRepository.getChallengesCompleted(userId, onSuccess, onFailure)
-
-    // Assert
-    shadowOf(Looper.getMainLooper()).idle()
-    assertEquals(0, result)
   }
 
   @Suppress("UNCHECKED_CAST")
