@@ -139,7 +139,7 @@ class CombinedEnd2endTest {
      */
     composeTestRule.onNodeWithText("Welcome to Signify").assertIsDisplayed()
     // Wait for the transition to Login Screen
-    composeTestRule.mainClock.advanceTimeBy(7_000)
+    composeTestRule.mainClock.advanceTimeBy(welcomeScreenDuration())
 
     // Wait for navigation to HomeScreen
     composeTestRule.waitForIdle()
@@ -150,12 +150,7 @@ class CombinedEnd2endTest {
     composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag("ChallengeScreen").assertIsDisplayed()
 
-    // Navigate to New Challenge Screen
-    composeTestRule.onNodeWithTag("ChallengeButton").performClick()
-    composeTestRule.waitForIdle()
-    composeTestRule.onNodeWithTag("NewChallengeScreen").assertIsDisplayed()
-
-    // Verify that we have a friend
+    // Verify that the user has a friend
     composeTestRule.onNodeWithTag("MyFriendsButton").performClick()
     composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag("FriendsListScreen").assertIsDisplayed()
@@ -164,7 +159,7 @@ class CombinedEnd2endTest {
     // Navigate to Create a Challenge Screen
     composeTestRule.onNodeWithTag("BackButton").performClick()
     composeTestRule.waitForIdle()
-    composeTestRule.onNodeWithTag("NewChallengeScreen").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("ChallengeScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("CreateChallengeButton").performClick()
     composeTestRule.onNodeWithTag("CreateAChallengeContent").assertIsDisplayed()
 
@@ -173,20 +168,14 @@ class CombinedEnd2endTest {
     composeTestRule.onNodeWithTag("SprintModeButton").performClick()
     composeTestRule.onNodeWithTag("SendChallengeButton").performClick()
 
-    // Navigate back to New Challenge Screen
-    composeTestRule.onNodeWithTag("BackButton").performClick()
-    composeTestRule.waitForIdle()
-    composeTestRule.onNodeWithTag("NewChallengeScreen").assertIsDisplayed()
-    composeTestRule.waitForIdle()
-    composeTestRule.onNodeWithTag("OngoingChallengesTitle").assertIsDisplayed()
-
     // Navigate back to Challenge Screen
     composeTestRule.onNodeWithTag("BackButton").performClick()
     composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag("ChallengeScreen").assertIsDisplayed()
+    composeTestRule.waitForIdle()
+    composeTestRule.onNodeWithTag("OngoingChallengesTitle").assertIsDisplayed()
 
     // Navigate to Profile Screen
-    composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag("Tab_Profile").performClick()
     composeTestRule.onNodeWithTag("ProfileScreen").assertIsDisplayed()
 
