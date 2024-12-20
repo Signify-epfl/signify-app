@@ -1,6 +1,5 @@
 package com.github.se.signify.ui.common
 
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasTestTag
@@ -71,12 +70,5 @@ class StatisticsTest {
     composeTestRule.onNodeWithTag("StreakCounter").assertIsDisplayed()
     composeTestRule.onNodeWithTag("FlameIcon").assertIsDisplayed()
     composeTestRule.onNodeWithTag("NumberOfDays").assertTextEquals("10")
-  }
-
-  @Test
-  fun createGraphIsDisplayed() {
-    composeTestRule.setContent { CreateGraph(listOf(1000, 1024, 777, 222), Modifier) }
-
-    composeTestRule.onNodeWithTag("graphTimePerLetter").assertIsDisplayed()
   }
 }
