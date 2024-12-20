@@ -565,7 +565,7 @@ class FirestoreUserRepository(
       Log.e("FirestoreUserRepository", "Error getting $field for user $userId", e)
       onFailure(e)
     }
-  }//just for commit
+  }
 
   override fun markQuestAsCompleted(
       userId: String,
