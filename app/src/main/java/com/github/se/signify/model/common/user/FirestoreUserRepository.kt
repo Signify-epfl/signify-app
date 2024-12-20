@@ -1,7 +1,6 @@
 package com.github.se.signify.model.common.user
 
 import android.net.Uri
-import android.util.Log
 import com.github.se.signify.model.challenge.ChallengeId
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -10,7 +9,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
-import kotlinx.coroutines.tasks.await
 
 class FirestoreUserRepository(
     private val db: FirebaseFirestore,
@@ -549,22 +547,6 @@ class FirestoreUserRepository(
         .update(fieldName, value)
         .addOnSuccessListener { onSuccess() }
         .addOnFailureListener { e -> onFailure(e) }
-  }
-
-  private suspend fun getUserField(
-      userId: String,
-      field: String,
-      onSuccess: (Int) -> Unit,
-      onFailure: (Exception) -> Unit
-  ) {
-    try {
-      val document = db.collection("users").document(userId).get().await()
-      val value = document.getLong(field)?.toInt() ?: 0
-      onSuccess(value)
-    } catch (e: Exception) {
-      Log.e("FirestoreUserRepository", "Error getting $field for user $userId", e)
-      onFailure(e)
-    }
   }
 
   override fun markQuestAsCompleted(
