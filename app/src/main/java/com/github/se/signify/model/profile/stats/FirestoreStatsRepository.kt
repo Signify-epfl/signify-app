@@ -147,22 +147,6 @@ class FirestoreStatsRepository(private val db: FirebaseFirestore) : StatsReposit
         .addOnFailureListener(onFailure)
   }
 
-  override fun getTimePerLetter(
-      userId: String,
-      onSuccess: (List<Long>) -> Unit,
-      onFailure: (Exception) -> Unit
-  ) {
-    getDocument(userId)
-        .get()
-        .addOnSuccessListener { document ->
-          val timePerLetter = document["timePerLetter"] as? List<*>
-          // Convert to List<Long> if the list is not null and contains valid Long elements
-          val longList = timePerLetter?.filterIsInstance<Long>() ?: emptyList()
-          onSuccess(longList)
-        }
-        .addOnFailureListener(onFailure)
-  }
-
   override fun updateLettersLearned(
       userId: String,
       newLetter: Char,
@@ -259,18 +243,6 @@ class FirestoreStatsRepository(private val db: FirebaseFirestore) : StatsReposit
   ) {
     getDocument(userId)
         .update("wonChallenge", FieldValue.increment(1))
-        .addOnSuccessListener { onSuccess() }
-        .addOnFailureListener(onFailure)
-  }
-
-  override fun updateTimePerLetter(
-      userId: String,
-      newTimePerLetter: List<Long>,
-      onSuccess: () -> Unit,
-      onFailure: (Exception) -> Unit
-  ) {
-    getDocument(userId)
-        .update("timePerLetter", newTimePerLetter)
         .addOnSuccessListener { onSuccess() }
         .addOnFailureListener(onFailure)
   }

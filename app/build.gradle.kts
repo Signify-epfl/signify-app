@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.ktfmt)
     alias(libs.plugins.gms)
-    alias(libs.plugins.dataframe)
     id("org.sonarqube") version "5.1.0.4882"
 }
 
@@ -101,23 +100,6 @@ android {
             excludes += "META-INF/LICENSE.txt"
             excludes += "META-INF/NOTICE"
             excludes += "META-INF/NOTICE.txt"
-            excludes += "LICENSE-EDL-1.0.txt"
-            excludes += "license/**"
-            excludes += "LICENSE-EPL-1.0.txt"
-            pickFirsts += listOf(
-                "META-INF/AL2.0",
-                "META-INF/LGPL2.1",
-                "META-INF/ASL-2.0.txt",
-                "META-INF/LICENSE.md",
-                "META-INF/NOTICE.md",
-                "META-INF/LGPL-3.0.txt",
-            )
-            excludes += listOf(
-                "META-INF/kotlin-jupyter-libraries/libraries.json",
-                "META-INF/{INDEX.LIST,DEPENDENCIES}",
-                "{draftv3,draftv4}/schema",
-                "arrow-git.properties",
-            )
         }
     }
 
@@ -167,16 +149,6 @@ android {
 
 
 dependencies {
-    // Dataframe and plot
-    implementation(libs.kotlinx.dataframe.get().toString()) {
-        exclude(group = "commons-logging")
-        exclude(group = "io.swagger", module = "swagger-parser-safe-url-resolver")
-    }
-    implementation(libs.kotlinx.kandy.lets.plot.get().toString()) {
-        exclude(group = "commons-logging")
-        exclude(group = "io.swagger", module = "swagger-parser-safe-url-resolver")
-    }
-
     // Core
     implementation(libs.core.ktx)
     implementation(libs.androidx.core.ktx)
@@ -282,9 +254,7 @@ dependencies {
 
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions.jvmTarget = "11"
-}
+
 
 tasks.withType<Test> {
     // Configure Jacoco for each tests
