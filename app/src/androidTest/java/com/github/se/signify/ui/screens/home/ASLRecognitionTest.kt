@@ -56,8 +56,6 @@ class ASLRecognitionTest : LifecycleOwner {
       ASLRecognition(
           handLandmarkViewModel = handLandmarkViewModel, navigationActions = navigationActions)
     }
-
-    composeTestRule.waitForIdle()
   }
 
   @Test
