@@ -65,7 +65,9 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="accept_text">Accept</string>
     <string name="decline_text">Decline</string>
     <string name="confirm_friend_removal_text">Are you sure you want to remove this friend?</string>
+    <string name="confirm_challenge_deletion_text">Are you sure you want to delete this challenge?</string>
     <string name="removed_friend_text">Friend removed</string>
+    <string name="removed_challenge_text">Challenge deleted</string>
     <string name="yes_button_text">Yes</string>
     <string name="no_button_text">No</string>
     <string name="quiz_time_text">Quiz Time !</string>
