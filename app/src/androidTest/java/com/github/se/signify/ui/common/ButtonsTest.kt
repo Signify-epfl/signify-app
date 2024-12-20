@@ -22,10 +22,10 @@ class ButtonsTest {
     composeTestRule.setContent {
       BasicButton(
           onClick = {},
-          icon = Icons.Outlined.Info,
           iconTestTag = "UtilIcon",
           contentDescription = "Info",
           modifier = Modifier.testTag("UtilButton"),
+          icon = Icons.Outlined.Info,
       )
     }
     // Assert that the button is displayed
@@ -40,10 +40,10 @@ class ButtonsTest {
     composeTestRule.setContent {
       BasicButton(
           onClick = { clicked = true },
-          icon = Icons.Outlined.Info,
           iconTestTag = "UtilIcon",
           contentDescription = "Info",
-          modifier = Modifier.testTag("UtilButton"))
+          modifier = Modifier.testTag("UtilButton"),
+          icon = Icons.Outlined.Info)
     }
     // Assert that the button has a click action
     composeTestRule.onNodeWithTag("UtilButton").assertHasClickAction()

@@ -17,7 +17,6 @@ enum class Screen(val route: String, val requiresAuth: Boolean = true) {
   SETTINGS("Settings Screen"),
   STATS("Stats Screen"),
   CHALLENGE("Challenge Screen"),
-  NEW_CHALLENGE("NewChallenge Screen"),
   CREATE_CHALLENGE("CreateChallenge Screen"),
   CHALLENGE_HISTORY("ChallengeHistory Screen"),
   CHRONO_CHALLENGE("ChronoChallenge Screen/{challengeId}"),
