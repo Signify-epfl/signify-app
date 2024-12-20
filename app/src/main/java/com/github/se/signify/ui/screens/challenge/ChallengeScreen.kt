@@ -172,7 +172,8 @@ fun ChallengeScreen(
                                         challenge.player1,
                                         challenge.player2,
                                         player1Result,
-                                        player2Result)
+                                        player2Result,
+                                        stringResource(R.string.draw))
 
                                 // Update the challenge in pastChallenges
                                 synchronized(this) { // Synchronize updates to avoid race conditions
@@ -245,7 +246,8 @@ fun OngoingChallengeCard(
       } else {
         challenge.player2RoundCompleted.all { it }
       }
-
+  val resultTextTime = stringResource(R.string.your_total_time)
+  val resultTextWords = stringResource(R.string.your_total_words)
   // Calculate the personal total time if the challenge is completed
   val displayText =
       if (isChallengeCompleted) {
@@ -257,7 +259,7 @@ fun OngoingChallengeCard(
                 } else {
                   challenge.player2WordsCompleted.sum()
                 }
-            "Your Total Words: $totalWords"
+            "$resultTextWords $totalWords"
           }
           ChallengeMode.CHRONO.toString() -> {
             val totalTime =
@@ -266,7 +268,7 @@ fun OngoingChallengeCard(
                 } else {
                   challenge.player2Times.sum() / msToSecondsDivision
                 }
-            "Your Total Time: ${totalTime}s"
+            "$resultTextTime ${totalTime}s"
           }
           else -> ""
         }
@@ -285,6 +287,10 @@ fun OngoingChallengeCard(
                       .primary), // Explicitly set background color for better contrast
       shape = RoundedCornerShape(16.dp),
   ) {
+    var round = findNextIndex(challenge, currentUserId!!)
+    if (round == -1) {
+      round = 3
+    }
     Row(
         modifier = Modifier.fillMaxWidth().padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -299,12 +305,15 @@ fun OngoingChallengeCard(
                 }
             val opponentText = stringResource(R.string.opponent_text)
             Text(
-                text = "$opponentText $opponentName",
+                text = "$opponentText: $opponentName",
                 fontSize = 18.sp,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold)
+                color = MaterialTheme.colorScheme.onSurface)
             Text(
                 text = "${stringResource(R.string.mode_text)}: ${challenge.mode}",
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onSurface)
+            Text(
+                text = "Round: $round/3",
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSurface)
             if (displayText != null) {

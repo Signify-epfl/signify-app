@@ -10,6 +10,7 @@ import com.github.se.signify.model.authentication.MockUserSession
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.challenge.Challenge
 import com.github.se.signify.model.challenge.ChallengeId
+import com.github.se.signify.model.challenge.ChallengeMode
 import com.github.se.signify.model.challenge.MockChallengeRepository
 import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.navigation.NavigationActions
@@ -64,6 +65,12 @@ class ChallengeScreenTest {
     challengeRepository.setChallenges(ongoingChallenges)
 
     // Set up the Composable content
+
+    composeTestRule.waitForIdle()
+  }
+
+  @Test
+  fun challengeScreenDisplaysAllElements() {
     composeTestRule.setContent {
       ChallengeScreen(
           navigationActions = navigationActions,
@@ -71,12 +78,6 @@ class ChallengeScreenTest {
           userRepository = userRepository,
           challengeRepository = challengeRepository)
     }
-
-    composeTestRule.waitForIdle()
-  }
-
-  @Test
-  fun challengeScreenDisplaysAllElements() {
     composeTestRule.onNodeWithTag("ChallengeScreen").assertIsDisplayed()
     composeTestRule.onNodeWithTag("MyFriendsButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("CreateChallengeButton").assertIsDisplayed()
@@ -87,6 +88,13 @@ class ChallengeScreenTest {
 
   @Test
   fun testMyFriendsButton_click_navigatesToFriendsScreen() {
+    composeTestRule.setContent {
+      ChallengeScreen(
+          navigationActions = navigationActions,
+          userSession = userSession,
+          userRepository = userRepository,
+          challengeRepository = challengeRepository)
+    }
     composeTestRule.onNodeWithTag("MyFriendsButton").assertIsDisplayed().performClick()
 
     verify(navigationActions).navigateTo(Screen.FRIENDS)
@@ -94,12 +102,26 @@ class ChallengeScreenTest {
 
   @Test
   fun challengeHistoryButtonNavigatesToChallengeHistoryScreen() {
+    composeTestRule.setContent {
+      ChallengeScreen(
+          navigationActions = navigationActions,
+          userSession = userSession,
+          userRepository = userRepository,
+          challengeRepository = challengeRepository)
+    }
     composeTestRule.onNodeWithTag("ChallengeHistoryButton").assertIsDisplayed().performClick()
     verify(navigationActions).navigateTo(Screen.CHALLENGE_HISTORY)
   }
 
   @Test
   fun testCreateChallengeButton_click_navigatesToCreateChallengeScreen() {
+    composeTestRule.setContent {
+      ChallengeScreen(
+          navigationActions = navigationActions,
+          userSession = userSession,
+          userRepository = userRepository,
+          challengeRepository = challengeRepository)
+    }
     composeTestRule.onNodeWithTag("CreateChallengeButton").assertIsDisplayed().performClick()
 
     verify(navigationActions).navigateTo(Screen.CREATE_CHALLENGE)
@@ -107,6 +129,13 @@ class ChallengeScreenTest {
 
   @Test
   fun testOngoingChallengesLazyColumn_displaysAllChallenges() {
+    composeTestRule.setContent {
+      ChallengeScreen(
+          navigationActions = navigationActions,
+          userSession = userSession,
+          userRepository = userRepository,
+          challengeRepository = challengeRepository)
+    }
     composeTestRule.onNodeWithTag("OngoingChallengesLazyColumn").assertIsDisplayed()
 
     ongoingChallenges.forEachIndexed { index, _ ->
@@ -117,6 +146,13 @@ class ChallengeScreenTest {
 
   @Test
   fun testDeleteButton_click() {
+    composeTestRule.setContent {
+      ChallengeScreen(
+          navigationActions = navigationActions,
+          userSession = userSession,
+          userRepository = userRepository,
+          challengeRepository = challengeRepository)
+    }
     val challengeId = ongoingChallenges[0].challengeId
 
     // Click the delete button for the first ongoing challenge
@@ -125,6 +161,13 @@ class ChallengeScreenTest {
 
   @Test
   fun testDeleteButton_showsConfirmationDialog() {
+    composeTestRule.setContent {
+      ChallengeScreen(
+          navigationActions = navigationActions,
+          userSession = userSession,
+          userRepository = userRepository,
+          challengeRepository = challengeRepository)
+    }
     val challengeId = ongoingChallenges[0].challengeId
 
     // Click the delete button for the first ongoing challenge
@@ -136,6 +179,13 @@ class ChallengeScreenTest {
 
   @Test
   fun testConfirmationDialog_buttonsFunctionality() {
+    composeTestRule.setContent {
+      ChallengeScreen(
+          navigationActions = navigationActions,
+          userSession = userSession,
+          userRepository = userRepository,
+          challengeRepository = challengeRepository)
+    }
     val challengeId = ongoingChallenges[0].challengeId
     composeTestRule.onNodeWithTag("DeleteButton$challengeId").performClick()
 
@@ -151,5 +201,55 @@ class ChallengeScreenTest {
 
     // Verify the dialog is dismissed
     composeTestRule.onNodeWithTag("ConfirmationDialog").assertDoesNotExist()
+  }
+
+  @Test
+  fun onGoingChallengeCard_displaysCorrectDetailsSprint() {
+    val challenge =
+        Challenge(
+            challengeId = "challenge1",
+            player1 = "testUserId",
+            player2 = "opponent1",
+            player1WordsCompleted = mutableListOf(1, 2, 2),
+            player2WordsCompleted = mutableListOf(1, 1, 2),
+            player1RoundCompleted = listOf(false, false, false),
+            player2RoundCompleted = listOf(false, false, false),
+            mode = ChallengeMode.SPRINT.toString(),
+            winner = "testUserId")
+
+    composeTestRule.setContent {
+      OngoingChallengeCard(challenge = challenge, {}, {}, userSession = userSession)
+    }
+
+    // Verify the challenge details are displayed correctly
+    composeTestRule.onNodeWithText("Opponent: testUserId").assertIsDisplayed()
+
+    composeTestRule.onNodeWithText("Mode: ${ChallengeMode.SPRINT}").assertIsDisplayed()
+    composeTestRule.onNodeWithText("Round: 0/3").assertIsDisplayed()
+  }
+
+  @Test
+  fun onGoingChallengeCard_displaysCorrectDetailsChrono() {
+    val challenge =
+        Challenge(
+            challengeId = "challenge1",
+            player1 = "testUserId",
+            player2 = "opponent1",
+            player1WordsCompleted = mutableListOf(1, 2, 2),
+            player2WordsCompleted = mutableListOf(1, 1, 2),
+            player1RoundCompleted = listOf(false, false, false),
+            player2RoundCompleted = listOf(false, false, false),
+            mode = ChallengeMode.CHRONO.toString(),
+            winner = "testUserId")
+
+    composeTestRule.setContent {
+      OngoingChallengeCard(challenge = challenge, {}, {}, userSession = userSession)
+    }
+
+    // Verify the challenge details are displayed correctly
+    composeTestRule.onNodeWithText("Opponent: testUserId").assertIsDisplayed()
+
+    composeTestRule.onNodeWithText("Mode: ${ChallengeMode.CHRONO}").assertIsDisplayed()
+    composeTestRule.onNodeWithText("Round: 0/3").assertIsDisplayed()
   }
 }

@@ -107,6 +107,16 @@ You’ll also find exercises at the bottom to challenge yourself at varying leve
     <string name="won_challenge_text">Won</string>
     <string name="past_challenges_title">Past Challenges</string>
     <string name="no_past_challenges">No Past Challenges</string>
+    <string name="opponent">Opponent</string>
+    <string name="winner">Winner</string>
+    <string name="draw">Draw</string>
+    <string name="words">Words</string>
+    <string name="send_challenge">Send Challenge</string>
+    <string name="words_completed">Words Completed:</string>
+    <string name="time_left">Time left : </string>
+    <string name="skip">SKIP</string>
+    <string name="your_total_time">Your Total Time:</string>
+    <string name="your_total_words">Your Total Words:</string>
 
     <string name="bug_report_text">Bug Report</string>
     <string name="feature_suggestion_text">Feature Suggestion</string>
