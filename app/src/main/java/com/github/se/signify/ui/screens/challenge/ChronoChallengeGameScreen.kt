@@ -82,12 +82,7 @@ fun ChronoChallengeGameScreen(
         onSuccess = { challenge ->
           currentChallenge = challenge
           if (challenge.roundWords.isNotEmpty() && challenge.round > 0 && challenge.round <= 6) {
-            currentWord =
-                if (challenge.round <= 3) {
-                  challenge.roundWords[challenge.round - 1]
-                } else {
-                  challenge.roundWords[(challenge.round - 1) % 3]
-                }
+            currentWord = challenge.roundWords[findNextIndex(challenge, currentUserId)]
             currentLetterIndex = 0
             typedWord = ""
             isGameActive = true
@@ -299,25 +294,21 @@ fun onWordCompletion(
     scoreFailedText: String = ""
 ) {
   challenge?.let {
+    val nextRoundIndex = findNextIndex(it, currentUserId)
+
     val updatedChallenge =
         it.copy(
             gameStatus = if (it.round == 6) "completed" else "in_progress",
             round = it.round + 1,
             player1RoundCompleted =
                 it.player1RoundCompleted.toMutableList().apply {
-                  if (currentUserId == it.player1) {
-                    val nextIndex = this.indexOfFirst { roundCompleted -> !roundCompleted }
-                    if (nextIndex != -1)
-                        this[nextIndex] = true // Mark the next incomplete round as complete
-                  }
+                  if (currentUserId == it.player1 && nextRoundIndex != -1)
+                      this[nextRoundIndex] = true
                 },
             player2RoundCompleted =
                 it.player2RoundCompleted.toMutableList().apply {
-                  if (currentUserId == it.player2) {
-                    val nextIndex = this.indexOfFirst { roundCompleted -> !roundCompleted }
-                    if (nextIndex != -1)
-                        this[nextIndex] = true // Mark the next incomplete round as complete
-                  }
+                  if (currentUserId == it.player2 && nextRoundIndex != -1)
+                      this[nextRoundIndex] = true
                 },
             player1Times =
                 it.player1Times.toMutableList().apply {
@@ -334,5 +325,21 @@ fun onWordCompletion(
           navigationActions.navigateTo(Screen.CHALLENGE)
         },
         onFailure = { Toast.makeText(context, scoreFailedText, Toast.LENGTH_SHORT).show() })
+  }
+}
+
+fun findNextIndex(challenge: Challenge, currentUserId: String): Int {
+  return when (currentUserId) {
+    challenge.player1 -> {
+      challenge.player1RoundCompleted.indexOfFirst {
+        !it
+      } // Find the first incomplete round for player1
+    }
+    challenge.player2 -> {
+      challenge.player2RoundCompleted.indexOfFirst {
+        !it
+      } // Find the first incomplete round for player2
+    }
+    else -> 0 // Return 0 if the user is neither player1 nor player2
   }
 }

@@ -345,9 +345,9 @@ fun FeedbackButton(navigationActions: NavigationActions, modifier: Modifier = Mo
   BasicButton(
       onClick = { navigationActions.navigateTo(Screen.FEEDBACK) },
       iconTestTag = "FeedbackIcon",
-      icon = Icons.Outlined.Email,
       contentDescription = "Feedback",
-      modifier = modifier.testTag("FeedbackButton"))
+      modifier = modifier.testTag("FeedbackButton"),
+      icon = Icons.Outlined.Email)
 }
 
 @Composable
@@ -356,9 +356,9 @@ fun QuizButton(navigationActions: NavigationActions, modifier: Modifier = Modifi
   BasicButton(
       onClick = { navigationActions.navigateTo(Screen.QUIZ) },
       iconTestTag = "QuizIcon",
-      icon = Icons.Outlined.Star,
       contentDescription = "Quizzes",
-      modifier = modifier.testTag("QuizButton"))
+      modifier = modifier.testTag("QuizButton"),
+      icon = Icons.Outlined.Star)
 }
 
 @Composable
@@ -367,9 +367,9 @@ fun QuestsButton(navigationActions: NavigationActions, modifier: Modifier = Modi
   BasicButton(
       onClick = { navigationActions.navigateTo(Screen.QUEST) },
       iconTestTag = "QuestIcon",
-      icon = Icons.Outlined.DateRange,
       contentDescription = "Quests",
-      modifier = modifier.testTag("QuestsButton"))
+      modifier = modifier.testTag("QuestsButton"),
+      icon = Icons.Outlined.DateRange)
 }
 /**
  * Computes the total number of headers dynamically based on the defined structure.
