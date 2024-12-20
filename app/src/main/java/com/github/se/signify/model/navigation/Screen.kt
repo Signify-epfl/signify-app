@@ -11,7 +11,7 @@ enum class Screen(val route: String, val requiresAuth: Boolean = true) {
   EXERCISE_HARD("Hard Exercise Screen", false),
   QUEST("Quest Screen"),
   FEEDBACK("Feedback Screen"),
-  QUIZ("Quiz Screen", false),
+  QUIZ("Quiz Screen"),
   PROFILE("Profile Screen"),
   FRIENDS("Friends Screen"),
   SETTINGS("Settings Screen"),
