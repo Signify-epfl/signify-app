@@ -74,6 +74,7 @@ class MockUserRepositoryTest {
     val onSuccessAny: (Any?) -> Unit = { onSuccess() }
 
     mockUserRepository.init(onSuccess)
+    mockUserRepository.setUsers(users)
     mockUserRepository.getFriendsList(blankUser.uid, onSuccessAny, doNotFail)
     mockUserRepository.getRequestsFriendsList(blankUser.uid, onSuccessAny, doNotFail)
     mockUserRepository.getUserById(blankUser.uid, { success += 1 }, doNotFail)

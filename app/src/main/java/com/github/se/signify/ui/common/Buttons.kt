@@ -29,6 +29,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.se.signify.R
+import com.github.se.signify.model.navigation.NavigationActions
+import com.github.se.signify.model.navigation.Screen
 
 /**
  * A button with an icon.
@@ -147,4 +150,20 @@ fun SquareButton(
               modifier = Modifier.size((size * 0.7).dp))
         }
       }
+}
+
+/**
+ * A button that navigates to the friends list screen.
+ *
+ * @param navigationActions The app's navigation actions.
+ */
+@Composable
+fun FriendsButton(navigationActions: NavigationActions) {
+  BasicButton(
+      onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
+      iconTestTag = "MyFriendsIcon",
+      contentDescription = "My Friends",
+      modifier = Modifier.testTag("MyFriendsButton"),
+      painter = painterResource(id = R.drawable.friendsicon),
+  )
 }

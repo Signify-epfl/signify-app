@@ -60,6 +60,7 @@ import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
 import com.github.se.signify.model.navigation.TopLevelDestinations
 import com.github.se.signify.ui.common.BasicButton
+import com.github.se.signify.ui.common.FriendsButton
 import com.github.se.signify.ui.common.HelpText
 import com.github.se.signify.ui.common.MainScreenScaffold
 import com.github.se.signify.ui.common.TextButton
@@ -96,18 +97,10 @@ fun ChallengeScreen(
           HelpText(
               title = stringResource(R.string.challenge_screen_title),
               content = stringResource(R.string.description_challenge_text)),
-      topBarButtons = listOf { ChallengeHistoryButton(navigationActions) },
+      topBarButtons =
+          listOf(
+              { ChallengeHistoryButton(navigationActions) }, { FriendsButton(navigationActions) }),
   ) {
-    Spacer(modifier = Modifier.height(32.dp))
-
-    // My Friends button
-    TextButton(
-        onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
-        testTag = "MyFriendsButton",
-        text = stringResource(R.string.my_friends_text),
-        backgroundColor = MaterialTheme.colorScheme.primary,
-        textColor = MaterialTheme.colorScheme.onPrimary)
-
     Spacer(modifier = Modifier.height(32.dp))
 
     // Create a challenge button
