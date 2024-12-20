@@ -29,10 +29,10 @@ import com.github.se.signify.model.profile.stats.StatsRepository
 import com.github.se.signify.model.profile.stats.StatsViewModel
 import com.github.se.signify.ui.common.AccountInformation
 import com.github.se.signify.ui.common.BasicButton
+import com.github.se.signify.ui.common.FriendsButton
 import com.github.se.signify.ui.common.HelpText
 import com.github.se.signify.ui.common.LearnedLetterList
 import com.github.se.signify.ui.common.MainScreenScaffold
-import com.github.se.signify.ui.common.SquareButton
 import com.github.se.signify.ui.common.StatisticsTable
 import com.google.firebase.auth.FirebaseAuth
 
@@ -57,7 +57,8 @@ fun ProfileScreen(
           HelpText(
               title = stringResource(R.string.profile_text),
               content = stringResource(R.string.help_profile_screen_text)),
-      topBarButtons = listOf { SettingsButton(navigationActions) },
+      topBarButtons =
+          listOf({ SettingsButton(navigationActions) }, { FriendsButton(navigationActions) }),
       content = {
         LaunchedEffect(Unit) {
           userViewModel.getUserName()
@@ -98,16 +99,6 @@ fun ProfileScreen(
 
         // Letters learned
         LearnedLetterList(lettersLearned = lettersLearned.value)
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // Friends List button
-        val myFriendsText = stringResource(R.string.my_friends_text)
-        SquareButton(
-            iconId = R.drawable.friendsicon,
-            text = myFriendsText,
-            onClick = { navigationActions.navigateTo(Screen.FRIENDS) },
-            size = 200,
-            modifier = Modifier.testTag("MyFriendsButton"))
         Spacer(modifier = Modifier.height(32.dp))
 
         // Number of exercises achieved
