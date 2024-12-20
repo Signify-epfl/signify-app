@@ -36,6 +36,8 @@ class LoginScreenTest : TestCase() {
     `when`(navigationActions.currentRoute()).thenReturn(Screen.AUTH.route)
     Intents.init()
     composeTestRule.setContent { LoginScreen(navigationActions, {}, FirebaseAuthService()) }
+
+    composeTestRule.waitForIdle()
   }
 
   @After
@@ -47,7 +49,6 @@ class LoginScreenTest : TestCase() {
   fun googleSignInReturnsValidActivityResult() {
 
     composeTestRule.onNodeWithTag("loginButton").performClick()
-    composeTestRule.waitForIdle()
     // assert that an Intent resolving to Google Mobile Services has been sent (for sign-in)
     intended(toPackage("com.google.android.gms"))
   }
