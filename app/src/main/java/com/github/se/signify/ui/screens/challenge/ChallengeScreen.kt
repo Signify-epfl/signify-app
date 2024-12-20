@@ -297,6 +297,7 @@ fun OngoingChallengeCard(
                   challenge.player1
                 }
             val opponentText = stringResource(R.string.opponent_text)
+            val roundText = stringResource(R.string.round)
             Text(
                 text = "$opponentText: $opponentName",
                 fontSize = 18.sp,
@@ -306,7 +307,7 @@ fun OngoingChallengeCard(
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSurface)
             Text(
-                text = "Round: $round/3",
+                text = "$roundText $round/3",
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSurface)
             if (displayText != null) {

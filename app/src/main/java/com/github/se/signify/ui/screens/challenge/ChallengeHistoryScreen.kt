@@ -245,11 +245,11 @@ fun determineWinner(
 @Composable
 fun PlayerScoreText(player: String, result: Double, mode: String) {
   val wordsText = stringResource(R.string.words)
-
+  val scoreString = stringResource(R.string.score)
   val scoreText =
       when (mode) {
-        ChallengeMode.CHRONO.toString() -> "$player Score: $result s"
-        else -> "$player Score: $result $wordsText"
+        ChallengeMode.CHRONO.toString() -> "$player $scoreString $result s"
+        else -> "$player $scoreString $result $wordsText"
       }
   Text(text = scoreText, fontSize = 16.sp)
 }

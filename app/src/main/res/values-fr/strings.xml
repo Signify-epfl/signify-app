@@ -119,6 +119,8 @@
     <string name="skip">PASSER</string>
     <string name="your_total_time">Votre temps total:</string>
     <string name="your_total_words">Nombre de mots total:</string>
+    <string name="score">Score:</string>
+    <string name="round">Round:</string>
 
     <string name="help_home_screen_text">Ici, vous pouvez pratiquer la langue des signes, avec des retours en temps réel via votre caméra. Assurez-vous de vérifier votre quête quotidienne pour apprendre une nouvelle lettre chaque jour. Vous trouverez également des exercices en bas pour vous challenger à différents niveaux de difficulté.</string>
     <string name="help_profile_screen_text">Ici, vous pouvez modifier vos paramètres et personnaliser votre profil. Vous pourrez également ajouter vos amis pour apprendre ensemble. Vous trouverez un récapitulatif de vos progrès dans le tableau de statistiques.</string>
