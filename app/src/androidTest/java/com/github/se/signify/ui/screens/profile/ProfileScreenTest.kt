@@ -61,8 +61,6 @@ class ProfileScreenTest {
     composeTestRule.onNodeWithTag("SettingsButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("HelpButton").assertIsDisplayed()
     composeTestRule.onNodeWithTag("MyFriendsButton").assertIsDisplayed()
-    composeTestRule.onNodeWithTag("MyStatsButton").performScrollTo().assertIsDisplayed()
-    composeTestRule.onNodeWithTag("MyStatsButton").performScrollTo().assertTextEquals("My Stats")
   }
 
   @Test
@@ -71,7 +69,6 @@ class ProfileScreenTest {
     composeTestRule.onNodeWithTag("SettingsButton").assertHasClickAction()
     composeTestRule.onNodeWithTag("HelpButton").assertHasClickAction()
     composeTestRule.onNodeWithTag("MyFriendsButton").assertHasClickAction()
-    composeTestRule.onNodeWithTag("MyStatsButton").assertHasClickAction()
   }
 
   @Test
@@ -80,7 +77,6 @@ class ProfileScreenTest {
     composeTestRule.onNodeWithTag("SettingsButton").performClick()
     composeTestRule.onNodeWithTag("HelpButton").performClick()
     composeTestRule.onNodeWithTag("MyFriendsButton").performClick()
-    composeTestRule.onNodeWithTag("MyStatsButton").performClick()
   }
 
   @Test
@@ -124,5 +120,36 @@ class ProfileScreenTest {
     // Assert that the help dialog is displayed when the help button is clicked
     composeTestRule.onNodeWithTag("HelpButton").performClick()
     composeTestRule.onNodeWithTag("HelpPopupContent").assertIsDisplayed()
+  }
+
+  @Test
+  fun statsAreDisplayed() {
+    // Verify exercises achieved section is displayed
+    composeTestRule.onNodeWithTag("ExercisesColumn").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("ExercisesRow").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("ExercisesText").performScrollTo().assertIsDisplayed()
+    composeTestRule
+        .onNodeWithTag("ExercisesText")
+        .performScrollTo()
+        .assertTextEquals("Number of exercises achieved :")
+    composeTestRule.onNodeWithTag("Easy").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Easy").performScrollTo().assertTextEquals("Easy")
+    composeTestRule.onNodeWithTag("Medium").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Medium").performScrollTo().assertTextEquals("Medium")
+    composeTestRule.onNodeWithTag("Hard").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Hard").performScrollTo().assertTextEquals("Hard")
+
+    // Verify quests achieved section is displayed
+    composeTestRule.onNodeWithTag("QuestsColumn").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("QuestsRow").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("QuestsText").performScrollTo().assertIsDisplayed()
+    composeTestRule
+        .onNodeWithTag("QuestsText")
+        .performScrollTo()
+        .assertTextEquals("Number of quests achieved :")
+    composeTestRule.onNodeWithTag("Daily").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Daily").performScrollTo().assertTextEquals("Daily")
+    composeTestRule.onNodeWithTag("Weekly").performScrollTo().assertIsDisplayed()
+    composeTestRule.onNodeWithTag("Weekly").performScrollTo().assertTextEquals("Weekly")
   }
 }
