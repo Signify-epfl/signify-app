@@ -10,7 +10,6 @@ import com.github.se.signify.model.challenge.ChallengeMode
 import com.github.se.signify.model.challenge.ChallengeRepository
 import com.github.se.signify.model.common.user.UserRepository
 import com.github.se.signify.model.navigation.NavigationActions
-import com.github.se.signify.model.profile.stats.MockStatsRepository
 import com.github.se.signify.model.profile.stats.StatsRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -42,7 +41,7 @@ class ChallengeHistoryScreenTest {
     userRepository = mock()
     challengeRepository = mock()
     navigationActions = mock()
-      statsRepository = mock()
+    statsRepository = mock()
 
     whenever(userSession.getUserId()).thenReturn("testUserId")
     doAnswer { invocation ->
@@ -78,8 +77,7 @@ class ChallengeHistoryScreenTest {
           userSession = userSession,
           userRepository = userRepository,
           challengeRepository = challengeRepository,
-          statsRepository = statsRepository
-      )
+          statsRepository = statsRepository)
     }
 
     // Verify statistics are displayed correctly
@@ -97,8 +95,7 @@ class ChallengeHistoryScreenTest {
           userSession = userSession,
           userRepository = userRepository,
           challengeRepository = challengeRepository,
-          statsRepository = statsRepository
-      )
+          statsRepository = statsRepository)
     }
 
     // Verify the message for no past challenges is displayed

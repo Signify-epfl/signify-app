@@ -63,7 +63,7 @@ class CreateAChallengeScreenTest {
           userSession = userSession,
           userRepository = userRepository,
           challengeRepository = challengeRepository,
-        statsRepository = statsRepository)
+          statsRepository = statsRepository)
     }
 
     composeTestRule.waitForIdle() // Wait for UI to be fully loaded
