@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,6 +24,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -118,6 +120,7 @@ fun ChallengeHistoryScreen(
     Box(
         modifier =
             Modifier.fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
                 .border(2.dp, MaterialTheme.colorScheme.onPrimary)
                 .background(MaterialTheme.colorScheme.primary)
                 .padding(16.dp)
@@ -140,7 +143,9 @@ fun ChallengeHistoryScreen(
             } else {
               Box(
                   modifier =
-                      Modifier.fillMaxWidth().height(300.dp).testTag("PastChallengesListBox")) {
+                      Modifier.fillMaxWidth()
+                          .heightIn(min = 400.dp, max = 800.dp)
+                          .testTag("PastChallengesListBox")) {
                     LazyColumn(
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                         modifier = Modifier.testTag("PastChallengesList")) {
@@ -153,6 +158,7 @@ fun ChallengeHistoryScreen(
             }
           }
         }
+    Spacer(modifier = Modifier.height(16.dp))
   }
 }
 

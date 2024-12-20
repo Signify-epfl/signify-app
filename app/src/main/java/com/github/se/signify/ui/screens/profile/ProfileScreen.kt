@@ -117,7 +117,7 @@ fun SettingsButton(navigationActions: NavigationActions) {
   BasicButton(
       onClick = { navigationActions.navigateTo(Screen.SETTINGS) },
       iconTestTag = "SettingsIcon",
-      icon = Icons.Outlined.Settings,
       contentDescription = "Settings",
-      modifier = Modifier.testTag("SettingsButton"))
+      modifier = Modifier.testTag("SettingsButton"),
+      icon = Icons.Outlined.Settings)
 }

@@ -35,7 +35,6 @@ import com.github.se.signify.ui.screens.challenge.ChallengeHistoryScreen
 import com.github.se.signify.ui.screens.challenge.ChallengeScreen
 import com.github.se.signify.ui.screens.challenge.ChronoChallengeGameScreen
 import com.github.se.signify.ui.screens.challenge.CreateAChallengeScreen
-import com.github.se.signify.ui.screens.challenge.NewChallengeScreen
 import com.github.se.signify.ui.screens.challenge.SprintChallengeGameScreen
 import com.github.se.signify.ui.screens.home.ASLRecognition
 import com.github.se.signify.ui.screens.home.ExerciseScreen
@@ -183,9 +182,8 @@ fun SignifyAppPreview(
         startDestination = Screen.CHALLENGE.route,
         route = Route.CHALLENGE,
     ) {
-      composable(Screen.CHALLENGE.route) { ChallengeScreen(navigationActions) }
-      composable(Screen.NEW_CHALLENGE.route) {
-        NewChallengeScreen(
+      composable(Screen.CHALLENGE.route) {
+        ChallengeScreen(
             navigationActions,
             dependencyProvider.userSession(),
             dependencyProvider.userRepository(),
