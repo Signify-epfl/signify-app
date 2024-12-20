@@ -18,23 +18,31 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.se.signify.R
 import com.github.se.signify.model.authentication.UserSession
@@ -71,7 +79,7 @@ fun NewChallengeScreen(
     userViewModel.getFriendsList()
     userViewModel.getOngoingChallenges()
   }
-  var done = false
+  val done = remember { mutableStateOf(false) }
 
   AnnexScreenScaffold(
       navigationActions = navigationActions,
@@ -135,9 +143,9 @@ fun NewChallengeScreen(
                                   challenge.player1RoundCompleted.all { it } &&
                                       challenge.player2RoundCompleted.all { it }
 
-                              if (isBothCompleted && !done) {
+                              if (isBothCompleted && !done.value) {
                                 // Determine the winner
-                                done = true
+                                done.value = true
 
                                 val player1Result =
                                     calculatePlayerResult(challenge, isPlayer1 = true)
@@ -153,22 +161,24 @@ fun NewChallengeScreen(
                                         player2Result)
 
                                 // Update the challenge in pastChallenges
-                                userViewModel.removeOngoingChallenge(
-                                    challenge.player1, challenge.challengeId)
-                                userViewModel.addPastChallenge(
-                                    challenge.player1, challenge.challengeId)
-                                userViewModel.removeOngoingChallenge(
-                                    challenge.player2, challenge.challengeId)
-                                userViewModel.addPastChallenge(
-                                    challenge.player2, challenge.challengeId)
-                                userViewModel.incrementField(winner, "challengesWon")
-                                userViewModel.incrementField(
-                                    challenge.player2, "challengesCompleted")
-                                userViewModel.incrementField(
-                                    challenge.player1, "challengesCompleted")
+                                synchronized(this) { // Synchronize updates to avoid race conditions
+                                  userViewModel.removeOngoingChallenge(
+                                      challenge.player1, challenge.challengeId)
+                                  userViewModel.addPastChallenge(
+                                      challenge.player1, challenge.challengeId)
+                                  userViewModel.removeOngoingChallenge(
+                                      challenge.player2, challenge.challengeId)
+                                  userViewModel.addPastChallenge(
+                                      challenge.player2, challenge.challengeId)
+                                  userViewModel.incrementField(winner, "challengesWon")
+                                  userViewModel.incrementField(
+                                      challenge.player2, "challengesCompleted")
+                                  userViewModel.incrementField(
+                                      challenge.player1, "challengesCompleted")
 
-                                challengeRepository.updateWinner(
-                                    challenge.challengeId, winner, {}, {})
+                                  challengeRepository.updateWinner(
+                                      challenge.challengeId, winner, {}, {})
+                                }
                               }
                               OngoingChallengeCard(
                                   challenge = challenge,
@@ -208,6 +218,8 @@ fun OngoingChallengeCard(
     modifier: Modifier = Modifier
 ) {
   val context = LocalContext.current
+  // State to control dialog visibility
+  val showDialog = remember { mutableStateOf(false) }
 
   // Determine if the current player has completed all rounds
   val currentUserId = userSession.getUserId()
@@ -323,18 +335,79 @@ fun OngoingChallengeCard(
                       .size(48.dp) // Set size to ensure consistency between buttons
               ) {
                 IconButton(
-                    onClick = onDeleteClick,
+                    onClick = { showDialog.value = true },
                     modifier =
                         Modifier.fillMaxSize() // Make the button fill the Box size
                             .testTag("DeleteButton${challenge.challengeId}")) {
                       Icon(
                           imageVector = Icons.Default.Delete,
                           contentDescription = "Delete Challenge",
-                          tint = Color.Gray, // Explicitly set color for visibility
+                          tint = MaterialTheme.colorScheme.error,
                           modifier = Modifier.size(30.dp) // Icon size for better visibility
                           )
                     }
               }
         }
   }
+
+  // Confirmation dialog
+  DeletionConfirmationDialog(showDialog = showDialog, onClickAction = onDeleteClick)
+}
+
+@Composable
+fun DeletionConfirmationDialog(showDialog: MutableState<Boolean>, onClickAction: () -> Unit) {
+  if (showDialog.value) {
+    val context = LocalContext.current
+
+    Dialog(onDismissRequest = { showDialog.value = false }) {
+      Surface(
+          shape = RoundedCornerShape(16.dp),
+          color = MaterialTheme.colorScheme.surface,
+          modifier = Modifier.fillMaxWidth().padding(16.dp).testTag("ConfirmationDialog")) {
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally) {
+                  val confirmingDeleteChallengeText =
+                      stringResource(R.string.confirm_challenge_deletion_text)
+                  Text(
+                      text = confirmingDeleteChallengeText,
+                      fontWeight = FontWeight.Bold,
+                      color = MaterialTheme.colorScheme.onSurface,
+                      modifier = Modifier.padding(bottom = 16.dp))
+                  Row(
+                      horizontalArrangement = Arrangement.SpaceEvenly,
+                      modifier = Modifier.fillMaxWidth()) {
+                        val removedFriendText = stringResource(R.string.removed_challenge_text)
+                        val yesText = stringResource(R.string.yes_button_text)
+                        val noText = stringResource(R.string.no_button_text)
+                        DialogButton(
+                            onClick = {
+                              onClickAction()
+                              Toast.makeText(context, removedFriendText, Toast.LENGTH_SHORT).show()
+                              showDialog.value = false
+                            },
+                            contentColor = MaterialTheme.colorScheme.onError,
+                            containerColor = MaterialTheme.colorScheme.error,
+                            text = yesText)
+                        DialogButton(
+                            onClick = { showDialog.value = false },
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            text = noText)
+                      }
+                }
+          }
+    }
+  }
+}
+
+@Composable
+fun DialogButton(onClick: () -> Unit, containerColor: Color, contentColor: Color, text: String) {
+  Button(
+      onClick = { onClick() },
+      colors =
+          ButtonDefaults.buttonColors(
+              containerColor = containerColor, contentColor = contentColor)) {
+        Text(text)
+      }
 }

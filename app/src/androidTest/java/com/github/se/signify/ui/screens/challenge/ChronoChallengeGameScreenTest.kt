@@ -14,6 +14,7 @@ import com.github.se.signify.model.challenge.MockChallengeRepository
 import com.github.se.signify.model.dependencyInjection.AppDependencyProvider
 import com.github.se.signify.model.home.hand.HandLandmarkViewModel
 import com.github.se.signify.model.navigation.NavigationActions
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -32,6 +33,17 @@ class ChronoChallengeGameScreenTest {
   private lateinit var handLandmarkViewModel: HandLandmarkViewModel
   private lateinit var challengeRepository: MockChallengeRepository
   private val challengeId = "challenge123"
+  private val challengeTest =
+      Challenge(
+          challengeId = "testChallenge",
+          player1 = "user1",
+          player2 = "user2",
+          mode = "Chrono",
+          round = 1,
+          roundWords = listOf("apple", "banana", "cherry"),
+          player1RoundCompleted = listOf(true, true, false),
+          player2RoundCompleted = listOf(false, false, false),
+          gameStatus = "in_progress")
 
   @Before
   fun setup() {
@@ -148,5 +160,54 @@ class ChronoChallengeGameScreenTest {
     // Wait to ensure the elapsed time has some time to change
     composeTestRule.waitForIdle()
     composeTestRule.onNodeWithTag("ElapsedTimeText").assertIsDisplayed()
+  }
+
+  @Test
+  fun findNextIndexReturnsCorrectIndexForPlayer1() {
+
+    val result = findNextIndex(challengeTest, "user1")
+
+    // Assert
+    assertEquals(2, result) // The first incomplete round for player1 is at index 2
+  }
+
+  @Test
+  fun findNextIndexReturnsCorrectIndexForPlayer2() {
+    // Arrange
+    val challengeTest2 = challengeTest.copy(player2RoundCompleted = listOf(false, true, true))
+    val result = findNextIndex(challengeTest2, "user2")
+    assertEquals(0, result) // The first incomplete round for player2 is at index 0
+  }
+
+  @Test
+  fun findNextIndexReturnsMinus1whenAllRoundsAreCompletedForPlayer1() {
+    // Arrange
+    val challengeTest3 = challengeTest.copy(player1RoundCompleted = listOf(true, true, true))
+    val result = findNextIndex(challengeTest3, "user1")
+
+    // Assert
+    assertEquals(-1, result) // All rounds for player1 are completed
+  }
+
+  @Test
+  fun findNextIndexReturnsZeroForInvalidUser() {
+
+    // Act
+    val result = findNextIndex(challengeTest, "invalidUser")
+
+    // Assert
+    assertEquals(0, result) // Invalid user should return -1
+  }
+
+  @Test
+  fun findNextIndexReturnsMinus1ForEmptyCompletedList() {
+    // Arrange
+    val challengeTest4 = challengeTest.copy(player1RoundCompleted = emptyList())
+
+    // Act
+    val result = findNextIndex(challengeTest4, "user1")
+
+    // Assert
+    assertEquals(-1, result)
   }
 }
