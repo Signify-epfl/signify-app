@@ -26,7 +26,6 @@
     <string name="light_mode_text">Mode Clair</string>
     <string name="cancel_text">Annuler</string>
     <string name="unknown_text">Inconnue</string>
-    <string name="my_friends_text">Mes Amis</string>
     <string name="my_stats_text">Mes Stats</string>
     <string name="completed_exercise_count_text">Nombre d’exercices réalisés</string>
     <string name="completed_quest_count_text">Nombre de quêtes réalisées</string>
