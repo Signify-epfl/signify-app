@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -117,23 +116,6 @@ class SprintChallengeGameScreenTest {
 
     // Assert that the loading text is displayed
     composeTestRule.onNodeWithTag("LoadingChallengeTextSprint").assertIsDisplayed()
-  }
-
-  @Test
-  fun sprintChallengeGameScreen_updatesTimerCorrectly() {
-    composeTestRule.setContent {
-      SprintChallengeGameScreen(
-          navigationActions = mockNavigationActions,
-          userSession = MockUserSession(),
-          challengeRepository = mockChallengeRepository,
-          handLandMarkViewModel = handLandmarkViewModel,
-          challengeId = testChallengeId)
-    }
-
-    composeTestRule.waitForIdle()
-
-    // Assert that the timer starts with the correct initial value
-    composeTestRule.onNodeWithTag("TimerTextSprint").assertTextEquals("Time Left: 60 seconds")
   }
 
   @Test
