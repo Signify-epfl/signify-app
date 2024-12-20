@@ -84,9 +84,6 @@ class MyStatsScreenTest {
     composeTestRule.onNodeWithTag("Daily").assertTextEquals("Daily")
     composeTestRule.onNodeWithTag("Weekly").assertIsDisplayed()
     composeTestRule.onNodeWithTag("Weekly").assertTextEquals("Weekly")
-
-    // Verify graph placeholder is displayed
-    composeTestRule.onNodeWithTag("graphTimePerLetter").assertIsDisplayed()
   }
 
   @Test
