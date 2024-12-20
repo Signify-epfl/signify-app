@@ -20,6 +20,7 @@ class MockUserRepository : UserRepository {
           User(
               uid = "mock-token",
               name = "Active user",
+              profileImageUrl = "link/to/my/profile/image",
               friends = listOf("user3"),
               friendRequests = listOf("user4", "user5"),
               lastLoginDate = "2024-11-29"),
