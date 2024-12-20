@@ -1,6 +1,7 @@
 package com.github.se.signify.ui.screens.welcome
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,9 +34,26 @@ import com.github.se.signify.R
 import com.github.se.signify.model.authentication.UserSession
 import com.github.se.signify.model.navigation.NavigationActions
 import com.github.se.signify.model.navigation.Screen
-import com.github.se.signify.model.navigation.TopLevelDestinations
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.selects.onTimeout
+import kotlinx.coroutines.selects.select
 
+// List of image resource ids for hand sign animation
+private val images =
+    listOf(
+        R.drawable.letter_s,
+        R.drawable.letter_i,
+        R.drawable.letter_g,
+        R.drawable.letter_n,
+        R.drawable.letter_i,
+        R.drawable.letter_f,
+        R.drawable.letter_y)
+
+private const val letterDelay = 1000L
+private const val finalDelay = 1600L
+
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun WelcomeScreen(
     navigationActions: NavigationActions,
@@ -45,16 +63,12 @@ fun WelcomeScreen(
   // Check if the user is authenticated
   val isAuthenticated = userSession.isLoggedIn()
 
-  // List of image resource ids for hand sign animation
-  val images =
-      listOf(
-          R.drawable.letter_s,
-          R.drawable.letter_i,
-          R.drawable.letter_g,
-          R.drawable.letter_n,
-          R.drawable.letter_i,
-          R.drawable.letter_f,
-          R.drawable.letter_y)
+  // Dynamically set the start destination
+  val nextDestination =
+      when {
+        isAuthenticated -> Screen.HOME
+        else -> Screen.AUTH
+      }
 
   // Welcome text to display
   val welcomeText = stringResource(R.string.welcome_text)
@@ -70,26 +84,34 @@ fun WelcomeScreen(
   // State to keep track of the current image index
   var currentImage by remember { mutableIntStateOf(0) }
 
+  val tapChannel = remember { Channel<Unit>(Channel.CONFLATED) }
+
   // LaunchedEffect to change the image every 1 second
   LaunchedEffect(Unit) {
     while (currentImage < images.size - 1) {
-      delay(600) // delay between images
+      select {
+        // Skip delay and jump to the next image
+        tapChannel.onReceive {}
+        // Delay between images
+        onTimeout(letterDelay) {}
+      }
       currentImage += 1
     }
-    delay(2000) // Pause after the last image
-
-    if (isAuthenticated) {
-      navigationActions.navigateTo(TopLevelDestinations.HOME)
-    } else {
-      navigationActions.navigateTo(Screen.AUTH)
+    select {
+      // Skip delay and jump to the next image
+      tapChannel.onReceive {}
+      // Pause after the last image
+      onTimeout(finalDelay) {}
     }
+    navigationActions.navigateTo(nextDestination)
   }
 
   Column(
       modifier =
           Modifier.fillMaxSize()
               .testTag("WelcomeScreen")
-              .background(color = MaterialTheme.colorScheme.primary),
+              .background(color = MaterialTheme.colorScheme.primary)
+              .clickable { tapChannel.trySend(Unit) }, // Detect user taps
       horizontalAlignment = Alignment.CenterHorizontally,
       verticalArrangement = Arrangement.Center) {
         Icon(
@@ -103,6 +125,14 @@ fun WelcomeScreen(
               text = welcomeText, highlightIndex = highlightIndices.elementAt(currentImage))
         }
       }
+}
+
+fun welcomeScreenDuration(): Long {
+  return images.size * letterDelay + finalDelay
+}
+
+fun welcomeScreenTitleLength(): Int {
+  return images.size
 }
 
 @Composable

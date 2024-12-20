@@ -6,6 +6,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.rule.GrantPermissionRule
+import com.github.se.signify.ui.screens.welcome.welcomeScreenDuration
 import org.junit.Rule
 import org.junit.Test
 
@@ -52,7 +53,8 @@ class CombinedEnd2endTest {
     composeTestRule.onNodeWithTag("WelcomeScreen").assertIsDisplayed()
     // Wait for transition to HomeScreen
     composeTestRule.mainClock.advanceTimeBy(
-        7_000) // This line skips the animation of the WelcomeScreen which is 7 seconds in an
+        welcomeScreenDuration()) // This line skips the animation of the WelcomeScreen which is 7
+    // seconds in an
     // emulator to be time efficient.
     composeTestRule.waitForIdle()
     /**
