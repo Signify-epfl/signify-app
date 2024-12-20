@@ -54,7 +54,7 @@ class CombinedEnd2endTest {
     // Wait for transition to HomeScreen
     composeTestRule.mainClock.advanceTimeBy(
         welcomeScreenDuration()) // This line skips the animation of the WelcomeScreen which is 7
-                                 // seconds in an
+    // seconds in an
     // emulator to be time efficient.
     composeTestRule.waitForIdle()
     /**
