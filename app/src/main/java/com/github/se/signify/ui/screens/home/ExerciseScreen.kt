@@ -104,11 +104,11 @@ fun ExerciseScreen(
   val cooldownDuration = 500L // 0.5-second cooldown
 
   if (!landmarksState.value.isNullOrEmpty() && !isCooldownActive) {
-      val exerciseCurrentInfo =
-          ExerciseCurrentInfo(
-              letterIndex = currentLetterIndex,
-              wordIndex = currentWordIndex,
-              sentenceIndex = currentSentenceIndex)
+    val exerciseCurrentInfo =
+        ExerciseCurrentInfo(
+            letterIndex = currentLetterIndex,
+            wordIndex = currentWordIndex,
+            sentenceIndex = currentSentenceIndex)
     handleGestureMatching(
         detectedGesture = detectedGesture,
         exerciseCurrentInfo = exerciseCurrentInfo,
